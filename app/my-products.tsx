@@ -1,0 +1,843 @@
+// My Products Page
+// Shows all products the user has purchased from their order history
+
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  ActivityIndicator,
+  StatusBar,
+  Modal,
+  Platform,
+} from 'react-native';
+import { CardGridSkeleton } from '@/components/skeletons';
+import CachedImage from '@/components/ui/CachedImage';
+import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter, useNavigation } from 'expo-router';
+import { ThemedText } from '@/components/ThemedText';
+import ordersService from '@/services/ordersApi';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSafeNavigation } from '@/hooks/useSafeNavigation';
+import { HeaderBackButton } from '@/components/navigation/SafeBackButton';
+import { useReorder } from '@/hooks/useReorder';
+import { useCart } from '@/contexts/CartContext';
+import { useRegion } from '@/contexts/RegionContext';
+import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+
+type ProductStatus = 'all' | 'delivered' | 'in_transit' | 'cancelled';
+
+interface PurchasedProduct {
+  id: string;
+  productId: string;
+  orderId: string;
+  name: string;
+  image: string;
+  variant?: {
+    type: string;
+    value: string;
+  };
+  price: number;
+  quantity: number;
+  orderDate: string;
+  deliveryStatus: 'delivered' | 'in_transit' | 'cancelled' | 'pending';
+  canReorder: boolean;
+  canReview: boolean;
+}
+
+const MyProductsPage = () => {
+  const router = useRouter();
+  const navigation = useNavigation();
+  const { state: authState } = useAuth();
+  const { goBack } = useSafeNavigation();
+  const { getCurrencySymbol } = useRegion();
+  const currencySymbol = getCurrencySymbol();
+  const [products, setProducts] = useState<PurchasedProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [activeTab, setActiveTab] = useState<ProductStatus>('all');
+  const [reorderingProductId, setReorderingProductId] = useState<string | null>(null);
+  const [showReorderModal, setShowReorderModal] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [reorderModalData, setReorderModalData] = useState<{
+    addedCount: number;
+    skippedCount: number;
+    skippedItems: Array<{ productId: string; reason: string }>;
+  } | null>(null);
+
+  const { reorderFull, reordering, validation, error: reorderError } = useReorder();
+  const { refreshCart } = useCart();
+
+  const handleBackPress = useCallback(() => {
+    goBack('/profile' as any);
+  }, [goBack]);
+
+  const mapOrderStatusToDelivery = (status: string): 'delivered' | 'in_transit' | 'cancelled' | 'pending' => {
+    const statusMap: Record<string, 'delivered' | 'in_transit' | 'cancelled' | 'pending'> = {
+      'delivered': 'delivered',
+      'shipped': 'in_transit',
+      'dispatched': 'in_transit',
+      'processing': 'in_transit',
+      'cancelled': 'cancelled',
+      'refunded': 'cancelled',
+      'pending': 'pending',
+      'confirmed': 'pending',
+    };
+    return statusMap[status] || 'pending';
+  };
+
+  const fetchProducts = useCallback(async (pageNum = 1, append = false) => {
+    try {
+      if (pageNum === 1) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
+
+      if (authState.isLoading) {
+        return;
+      }
+
+      if (!authState.isAuthenticated || !authState.token) {
+        setProducts([]);
+        setLoading(false);
+        return;
+      }
+
+      const params: any = {
+        page: pageNum,
+        limit: 20
+      };
+
+      if (activeTab !== 'all') {
+        params.status = activeTab;
+      }
+
+      const response = await ordersService.getOrders(params);
+
+      if (response.data?.orders) {
+        const mappedProducts: PurchasedProduct[] = response.data.orders.flatMap(order =>
+          order.items.map(item => ({
+            id: item.id,
+            productId: item.product.id,
+            orderId: order.orderNumber,
+            name: item.product.name,
+            image: item.product.images[0]?.url,
+            variant: item.variant ? {
+              type: Object.keys(item.variant.attributes || {})[0] || 'Variant',
+              value: Object.values(item.variant.attributes || {})[0]?.toString() || item.variant.name
+            } : undefined,
+            price: item.unitPrice,
+            quantity: item.quantity,
+            orderDate: order.createdAt,
+            deliveryStatus: mapOrderStatusToDelivery(order.status),
+            canReorder: order.status === 'delivered',
+            canReview: order.status === 'delivered'
+          }))
+        );
+        if (append) {
+          setProducts(prev => [...prev, ...mappedProducts]);
+        } else {
+          setProducts(mappedProducts);
+        }
+        setPage(pageNum);
+        setHasMore((response.data.orders?.length || 0) >= 20);
+      } else {
+        if (!append) setProducts([]);
+        setHasMore(false);
+      }
+    } catch (error: any) {
+      if (!append) setProducts([]);
+      setHasMore(false);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+      setLoadingMore(false);
+    }
+  }, [activeTab, authState.isLoading, authState.isAuthenticated, authState.token]);
+
+  useEffect(() => {
+    // Only fetch when auth is ready
+    if (!authState.isLoading && authState.isAuthenticated) {
+      fetchProducts();
+    }
+  }, [fetchProducts, authState.isLoading, authState.isAuthenticated]);
+
+  const handleRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchProducts(1, false);
+  }, [fetchProducts]);
+
+  const handleLoadMore = useCallback(() => {
+    if (!loadingMore && hasMore && !loading) {
+      fetchProducts(page + 1, true);
+    }
+  }, [loadingMore, hasMore, loading, page, fetchProducts]);
+
+  const filteredProducts = products.filter((product) => {
+    if (activeTab === 'all') return true;
+    return product.deliveryStatus === activeTab;
+  });
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'delivered':
+        return Colors.success;
+      case 'in_transit':
+        return Colors.warning;
+      case 'cancelled':
+        return Colors.error;
+      case 'pending':
+        return Colors.text.tertiary;
+      default:
+        return Colors.text.tertiary;
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'delivered':
+        return 'Delivered';
+      case 'in_transit':
+        return 'In Transit';
+      case 'cancelled':
+        return 'Cancelled';
+      case 'pending':
+        return 'Pending';
+      default:
+        return status;
+    }
+  };
+
+  const handleReorder = useCallback(async (product: PurchasedProduct) => {
+    if (reordering) {
+
+      return;
+    }
+
+    try {
+      setReorderingProductId(product.orderId);
+
+      // Show confirmation dialog
+      platformAlertConfirm(
+        'Reorder Confirmation',
+        `Would you like to reorder all items from order #${product.orderId}?`,
+        async () => {
+          try {
+
+            const success = await reorderFull(product.orderId);
+
+            if (success && validation) {
+              // Refresh cart to show new items
+              await refreshCart();
+
+              // Show result modal with details
+              setReorderModalData({
+                addedCount: validation.items.filter(item => item.isAvailable).length,
+                skippedCount: validation.unavailableItems.length,
+                skippedItems: validation.unavailableItems.map(item => ({
+                  productId: item.productId,
+                  reason: item.reason
+                }))
+              });
+              setShowReorderModal(true);
+
+              // If all items were added, navigate to cart
+              if (validation.unavailableItems.length === 0) {
+                setTimeout(() => {
+                  setShowReorderModal(false);
+                  router.push('/cart' as any);
+                }, 2000);
+              }
+            } else {
+              // Show error
+              platformAlertSimple(
+                'Reorder Failed',
+                reorderError || 'Unable to reorder this order. Please try again.'
+              );
+            }
+          } catch (error) {
+            platformAlertSimple(
+              'Error',
+              'An unexpected error occurred while reordering.'
+            );
+          } finally {
+            setReorderingProductId(null);
+          }
+        },
+        'Reorder'
+      );
+    } catch (error) {
+      setReorderingProductId(null);
+    }
+  }, [reordering, reorderFull, validation, reorderError, refreshCart, router]);
+
+  const handleReview = (product: PurchasedProduct) => {
+    // TODO: Navigate to review page
+
+    router.push('/ReviewPage' as any);
+  };
+
+  const renderProduct = ({ item }: { item: PurchasedProduct }) => {
+    const productLabel = `${item.name}${item.variant ? `, ${item.variant.type}: ${item.variant.value}` : ''}. Price: ${item.price} rupees. Quantity: ${item.quantity}. Order number ${item.orderId}, placed on ${new Date(item.orderDate).toLocaleDateString()}. Status: ${getStatusText(item.deliveryStatus)}`;
+
+    return (
+      <Pressable
+        style={styles.productCard}
+        onPress={() => router.push(`/product-page?cardId=${item.productId}&cardType=product` as any)}
+       
+        accessibilityLabel={productLabel}
+        accessibilityRole="button"
+        accessibilityHint="Double tap to view product details"
+      >
+        <CachedImage
+          source={item.image}
+          style={styles.productImage}
+          accessibilityLabel={`Product image for ${item.name}`}
+          accessible={true}
+        />
+
+        <View style={styles.productInfo}>
+          <Text style={styles.productName} numberOfLines={2}>
+            {item.name}
+          </Text>
+
+          {item.variant && (
+            <Text style={styles.productVariant}>
+              {item.variant.type}: {item.variant.value}
+            </Text>
+          )}
+
+          <View
+            style={styles.productDetails}
+            accessibilityLabel={`Price: ${item.price} rupees. Quantity: ${item.quantity}`}
+            accessibilityRole="text"
+          >
+            <Text style={styles.productPrice}>{currencySymbol}{item.price}</Text>
+            <Text style={styles.productQuantity}>Qty: {item.quantity}</Text>
+          </View>
+
+          <Text
+            style={styles.orderInfo}
+            accessibilityLabel={`Order number ${item.orderId}, placed on ${new Date(item.orderDate).toLocaleDateString()}`}
+          >
+            Order #{item.orderId} • {new Date(item.orderDate).toLocaleDateString()}
+          </Text>
+
+          <View
+            style={styles.statusBadge}
+            accessibilityLabel={`Delivery status: ${getStatusText(item.deliveryStatus)}`}
+            accessibilityRole="text"
+          >
+            <View
+              style={[
+                styles.statusDot,
+                { backgroundColor: getStatusColor(item.deliveryStatus) },
+              ]}
+            />
+            <Text
+              style={[
+                styles.statusText,
+                { color: getStatusColor(item.deliveryStatus) },
+              ]}
+            >
+              {getStatusText(item.deliveryStatus)}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.actionsContainer}>
+          {item.canReorder && (
+            <Pressable
+              style={[
+                styles.actionButton,
+                reorderingProductId === item.orderId && styles.actionButtonDisabled
+              ]}
+              onPress={() => handleReorder(item)}
+              disabled={reorderingProductId === item.orderId}
+              accessibilityLabel={reorderingProductId === item.orderId ? 'Reordering product' : 'Reorder this product'}
+              accessibilityRole="button"
+              accessibilityHint="Double tap to add all items from this order to your cart"
+              accessibilityState={{ disabled: reorderingProductId === item.orderId }}
+            >
+              {reorderingProductId === item.orderId ? (
+                <ActivityIndicator size="small" color="#00C06A" />
+              ) : (
+                <>
+                  <Ionicons name="repeat-outline" size={20} color="#00C06A" />
+                  <Text style={styles.actionText}>Reorder</Text>
+                </>
+              )}
+            </Pressable>
+          )}
+
+          {item.canReview && (
+            <Pressable
+              style={styles.actionButton}
+              onPress={() => handleReview(item)}
+              accessibilityLabel="Write a review for this product"
+              accessibilityRole="button"
+              accessibilityHint="Double tap to submit a product review"
+            >
+              <Ionicons name="star-outline" size={20} color={Colors.warning} />
+              <Text style={styles.actionText}>Review</Text>
+            </Pressable>
+          )}
+        </View>
+      </Pressable>
+    );
+  };
+
+  const renderEmptyState = () => (
+    <View style={styles.emptyContainer}>
+      <Ionicons name="cube-outline" size={80} color={Colors.border.default} />
+      <Text style={styles.emptyTitle}>No Products Yet</Text>
+      <Text style={styles.emptyText}>
+        Products you purchase will appear here
+      </Text>
+      <Pressable
+        style={styles.shopButton}
+        onPress={() => router.push('/(tabs)/explore' as any)}
+      >
+        <Text style={styles.shopButtonText}>Start Shopping</Text>
+      </Pressable>
+    </View>
+  );
+
+  const tabs: { key: ProductStatus; label: string }[] = [
+    { key: 'all', label: 'All' },
+    { key: 'delivered', label: 'Delivered' },
+    { key: 'in_transit', label: 'In Transit' },
+    { key: 'cancelled', label: 'Cancelled' },
+  ];
+
+  if (loading && !refreshing) {
+    return <CardGridSkeleton />;
+  }
+
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#00796B" />
+
+      {/* Header */}
+      <LinearGradient colors={['#00796B', '#00C06A']} style={styles.header}>
+        <View style={styles.headerContent}>
+          <HeaderBackButton
+            onPress={handleBackPress}
+            iconColor="#FFFFFF"
+            style={styles.backButton}
+          />
+          <Text style={styles.headerTitle}>My Products</Text>
+          <View style={styles.headerRight} />
+        </View>
+
+        {/* Tab Navigation */}
+        <View style={styles.tabsContainer}>
+          {tabs.map((tab) => (
+            <Pressable
+              key={tab.key}
+              style={[
+                styles.tab,
+                activeTab === tab.key && styles.activeTab,
+              ]}
+              onPress={() => setActiveTab(tab.key)}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === tab.key && styles.activeTabText,
+                ]}
+              >
+                {tab.label}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+      </LinearGradient>
+
+      {/* Products List */}
+      <FlatList
+        data={filteredProducts}
+        renderItem={renderProduct}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.listContainer}
+        removeClippedSubviews={Platform.OS !== 'web'}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+        initialNumToRender={8}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        ListEmptyComponent={renderEmptyState}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.3}
+        ListFooterComponent={
+          loadingMore ? (
+            <View style={{ paddingVertical: 20, alignItems: 'center' }}>
+              <ActivityIndicator size="small" color="#00C06A" />
+            </View>
+          ) : null
+        }
+      />
+
+      {/* Reorder Result Modal */}
+      <Modal
+        visible={showReorderModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowReorderModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              {reorderModalData?.skippedCount === 0 ? (
+                <Ionicons name="checkmark-circle" size={48} color={Colors.success} />
+              ) : (
+                <Ionicons name="alert-circle" size={48} color={Colors.warning} />
+              )}
+              <Text style={styles.modalTitle}>
+                {reorderModalData?.skippedCount === 0
+                  ? 'Reorder Successful!'
+                  : 'Reorder Completed'}
+              </Text>
+            </View>
+
+            <View style={styles.modalBody}>
+              {reorderModalData && reorderModalData.addedCount > 0 && (
+                <View style={styles.modalRow}>
+                  <Ionicons name="checkmark-circle-outline" size={20} color={Colors.success} />
+                  <Text style={styles.modalSuccessText}>
+                    {reorderModalData.addedCount} item(s) added to cart
+                  </Text>
+                </View>
+              )}
+
+              {reorderModalData && reorderModalData.skippedCount > 0 && (
+                <>
+                  <View style={styles.modalRow}>
+                    <Ionicons name="close-circle-outline" size={20} color={Colors.error} />
+                    <Text style={styles.modalErrorText}>
+                      {reorderModalData.skippedCount} item(s) unavailable
+                    </Text>
+                  </View>
+
+                  <View style={styles.skippedItemsList}>
+                    {reorderModalData.skippedItems.map((item, index) => (
+                      <Text key={index} style={styles.skippedItemText}>
+                        {item.reason}
+                      </Text>
+                    ))}
+                  </View>
+                </>
+              )}
+            </View>
+
+            <View style={styles.modalActions}>
+              {reorderModalData?.addedCount && reorderModalData.addedCount > 0 ? (
+                <>
+                  <Pressable
+                    style={[styles.modalButton, styles.modalButtonSecondary]}
+                    onPress={() => setShowReorderModal(false)}
+                  >
+                    <Text style={styles.modalButtonTextSecondary}>Continue Shopping</Text>
+                  </Pressable>
+                  <Pressable
+                    style={[styles.modalButton, styles.modalButtonPrimary]}
+                    onPress={() => {
+                      setShowReorderModal(false);
+                      router.push('/cart' as any);
+                    }}
+                  >
+                    <Text style={styles.modalButtonTextPrimary}>View Cart</Text>
+                  </Pressable>
+                </>
+              ) : (
+                <Pressable
+                  style={[styles.modalButton, styles.modalButtonPrimary]}
+                  onPress={() => setShowReorderModal(false)}
+                >
+                  <Text style={styles.modalButtonTextPrimary}>Close</Text>
+                </Pressable>
+              )}
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background.secondary,
+  },
+  header: {
+    paddingTop: 50,
+    paddingBottom: Spacing.base,
+    paddingHorizontal: Spacing.base,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: Spacing.base,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: BorderRadius.xl,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerTitle: {
+    ...Typography.h3,
+    fontWeight: '700',
+    color: Colors.text.inverse,
+  },
+  headerRight: {
+    width: 40,
+  },
+  tabsContainer: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+  },
+  tab: {
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.xl,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  activeTab: {
+    backgroundColor: Colors.background.primary,
+  },
+  tabText: {
+    ...Typography.body,
+    fontWeight: '600',
+    color: 'rgba(255, 255, 255, 0.7)',
+  },
+  activeTabText: {
+    color: '#00C06A',
+  },
+  listContainer: {
+    padding: Spacing.base,
+  },
+  productCard: {
+    backgroundColor: Colors.background.primary,
+    borderRadius: BorderRadius.md,
+    padding: Spacing.md,
+    marginBottom: Spacing.md,
+    flexDirection: 'row',
+    ...Shadows.medium,
+  },
+  productImage: {
+    width: 80,
+    height: 80,
+    borderRadius: BorderRadius.sm,
+    backgroundColor: Colors.background.secondary,
+  },
+  productInfo: {
+    flex: 1,
+    marginLeft: Spacing.md,
+  },
+  productName: {
+    ...Typography.bodyLarge,
+    fontWeight: '600',
+    color: Colors.text.primary,
+    marginBottom: Spacing.xs,
+  },
+  productVariant: {
+    ...Typography.bodySmall,
+    color: Colors.text.tertiary,
+    marginBottom: Spacing.xs,
+  },
+  productDetails: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: Spacing.xs,
+  },
+  productPrice: {
+    ...Typography.bodyLarge,
+    fontWeight: '700',
+    color: '#00C06A',
+    marginRight: Spacing.md,
+  },
+  productQuantity: {
+    ...Typography.bodySmall,
+    color: Colors.text.tertiary,
+  },
+  orderInfo: {
+    ...Typography.bodySmall,
+    color: Colors.text.tertiary,
+    marginBottom: Spacing.sm,
+  },
+  statusBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginRight: 6,
+  },
+  statusText: {
+    ...Typography.bodySmall,
+    fontWeight: '600',
+  },
+  actionsContainer: {
+    justifyContent: 'center',
+    gap: Spacing.sm,
+  },
+  actionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 6,
+    borderRadius: 6,
+    backgroundColor: Colors.background.secondary,
+    minWidth: 70,
+    justifyContent: 'center',
+  },
+  actionButtonDisabled: {
+    opacity: 0.5,
+  },
+  actionText: {
+    ...Typography.bodySmall,
+    fontWeight: '600',
+    color: Colors.text.tertiary,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: Spacing.md,
+    ...Typography.bodyLarge,
+    color: Colors.text.tertiary,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+  },
+  emptyTitle: {
+    ...Typography.h3,
+    fontWeight: '700',
+    color: Colors.text.primary,
+    marginTop: Spacing.base,
+    marginBottom: Spacing.sm,
+  },
+  emptyText: {
+    ...Typography.body,
+    color: Colors.text.tertiary,
+    textAlign: 'center',
+    marginBottom: Spacing.xl,
+  },
+  shopButton: {
+    backgroundColor: '#00C06A',
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.sm,
+  },
+  shopButtonText: {
+    ...Typography.bodyLarge,
+    fontWeight: '600',
+    color: Colors.text.inverse,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: Spacing.lg,
+  },
+  modalContent: {
+    backgroundColor: Colors.background.primary,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.xl,
+    width: '100%',
+    maxWidth: 400,
+    ...Shadows.strong,
+  },
+  modalHeader: {
+    alignItems: 'center',
+    marginBottom: Spacing.lg,
+  },
+  modalTitle: {
+    ...Typography.h3,
+    fontWeight: '700',
+    color: Colors.text.primary,
+    marginTop: Spacing.md,
+    textAlign: 'center',
+  },
+  modalBody: {
+    marginBottom: Spacing.xl,
+  },
+  modalRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: Spacing.md,
+    gap: Spacing.sm,
+  },
+  modalSuccessText: {
+    ...Typography.bodyLarge,
+    color: Colors.success,
+    fontWeight: '600',
+  },
+  modalErrorText: {
+    ...Typography.bodyLarge,
+    color: Colors.error,
+    fontWeight: '600',
+  },
+  skippedItemsList: {
+    marginTop: Spacing.sm,
+    paddingLeft: 28,
+  },
+  skippedItemText: {
+    ...Typography.body,
+    color: Colors.text.tertiary,
+    marginBottom: Spacing.xs,
+  },
+  modalActions: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.sm,
+    alignItems: 'center',
+  },
+  modalButtonPrimary: {
+    backgroundColor: '#00C06A',
+  },
+  modalButtonSecondary: {
+    backgroundColor: Colors.background.secondary,
+    borderWidth: 1,
+    borderColor: Colors.border.default,
+  },
+  modalButtonTextPrimary: {
+    ...Typography.bodyLarge,
+    fontWeight: '600',
+    color: Colors.text.inverse,
+  },
+  modalButtonTextSecondary: {
+    ...Typography.bodyLarge,
+    fontWeight: '600',
+    color: Colors.text.tertiary,
+  },
+});
+
+export default MyProductsPage;

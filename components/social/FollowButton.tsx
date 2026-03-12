@@ -1,0 +1,122 @@
+import React, { useState, useEffect } from 'react';
+import { Pressable, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { checkFollowStatus, toggleFollow } from '../../services/activityFeedApi';
+
+interface FollowButtonProps {
+  userId: string;
+  onFollowChange?: (isFollowing: boolean) => void;
+  style?: any;
+}
+
+const FollowButton: React.FC<FollowButtonProps> = ({ userId, onFollowChange, style }) => {
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingStatus, setIsCheckingStatus] = useState(true);
+
+  useEffect(() => {
+    loadFollowStatus();
+  }, [userId]);
+
+  const loadFollowStatus = async () => {
+    try {
+      setIsCheckingStatus(true);
+      const status = await checkFollowStatus(userId);
+      setIsFollowing(status);
+    } catch (error) {
+      // silently handle
+    } finally {
+      setIsCheckingStatus(false);
+    }
+  };
+
+  const handleToggleFollow = async () => {
+    if (isLoading) return;
+
+    try {
+      setIsLoading(true);
+      const result = await toggleFollow(userId);
+      setIsFollowing(result.following);
+
+      if (onFollowChange) {
+        onFollowChange(result.following);
+      }
+    } catch (error) {
+      // silently handle
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isCheckingStatus) {
+    return (
+      <Pressable
+        style={[styles.button, styles.buttonLoading, style]}
+        disabled
+      >
+        <ActivityIndicator size="small" color="#666" />
+      </Pressable>
+    );
+  }
+
+  return (
+    <Pressable
+      style={[
+        styles.button,
+        isFollowing ? styles.buttonFollowing : styles.buttonNotFollowing,
+        style
+      ]}
+      onPress={handleToggleFollow}
+      disabled={isLoading}
+    >
+      {isLoading ? (
+        <ActivityIndicator size="small" color={isFollowing ? '#666' : '#fff'} />
+      ) : (
+        <Text
+          style={[
+            styles.buttonText,
+            isFollowing ? styles.buttonTextFollowing : styles.buttonTextNotFollowing
+          ]}
+        >
+          {isFollowing ? 'Following' : 'Follow'}
+        </Text>
+      )}
+    </Pressable>
+  );
+};
+
+const styles = StyleSheet.create({
+  button: {
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 20,
+    minWidth: 100,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  buttonLoading: {
+    backgroundColor: '#f0f0f0',
+    borderWidth: 1,
+    borderColor: '#e0e0e0'
+  },
+  buttonNotFollowing: {
+    backgroundColor: '#007AFF',
+    borderWidth: 0
+  },
+  buttonFollowing: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ccc'
+  },
+  buttonText: {
+    fontSize: 14,
+    fontWeight: '600'
+  },
+  buttonTextNotFollowing: {
+    color: '#fff'
+  },
+  buttonTextFollowing: {
+    color: '#666'
+  }
+});
+
+export default FollowButton;

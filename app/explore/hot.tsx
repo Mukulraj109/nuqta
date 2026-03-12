@@ -1,0 +1,557 @@
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Dimensions,
+  ScrollView,
+  FlatList,
+  StatusBar,
+  ActivityIndicator,
+  RefreshControl,
+  Alert,
+} from 'react-native';
+import { CardGridSkeleton } from '@/components/skeletons';
+import CachedImage from '@/components/ui/CachedImage';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter, Stack } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import exploreApi, { HotProduct } from '@/services/exploreApi';
+import { useRegion } from '@/contexts/RegionContext';
+import apiClient from '@/services/apiClient';
+import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+
+const { width } = Dimensions.get('window');
+
+const sortOptions = [
+  { id: 'trending', label: 'Trending' },
+  { id: 'nearby', label: 'Nearby' },
+  { id: 'cashback', label: 'Highest Cashback' },
+  { id: 'price', label: 'Price: Low to High' },
+];
+
+const ExploreHotPage = () => {
+  const router = useRouter();
+  const { getCurrencySymbol } = useRegion();
+  const currencySymbol = getCurrencySymbol();
+  const [selectedSort, setSelectedSort] = useState('trending');
+  // hotItems is derived from rawHotItems + selectedSort via useMemo (instant sort, no API refetch)
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Raw data from API — sorting is done via useMemo (no refetch on sort change)
+  const [rawHotItems, setRawHotItems] = useState<HotProduct[]>([]);
+
+  // Fetch hot deals from API — no dependency on selectedSort (sort is client-side only)
+  const fetchHotDeals = useCallback(async (isRefresh = false) => {
+    try {
+      if (isRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
+      setError(null);
+
+      const response = await exploreApi.getHotDeals({ limit: 20 });
+
+      if (response.success && response.data) {
+        const products = response.data.products || [];
+        setRawHotItems(products);
+      } else {
+        setError(response.error || 'Failed to fetch hot deals');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  // Initial fetch
+  useEffect(() => {
+    fetchHotDeals();
+  }, [fetchHotDeals]);
+
+  const onRefresh = useCallback(() => {
+    fetchHotDeals(true);
+  }, [fetchHotDeals]);
+
+  // Sorted view of raw data — instant sort without API refetch
+  const hotItems = useMemo(() => {
+    if (selectedSort === 'price') {
+      return [...rawHotItems].sort((a, b) => a.price - b.price);
+    }
+    if (selectedSort === 'cashback') {
+      return [...rawHotItems].sort((a, b) => {
+        const aDiscount = ((a.originalPrice - a.price) / a.originalPrice) * 100;
+        const bDiscount = ((b.originalPrice - b.price) / b.originalPrice) * 100;
+        return bDiscount - aDiscount;
+      });
+    }
+    return rawHotItems;
+  }, [rawHotItems, selectedSort]);
+
+  // Wishlist state
+  const [wishlistedIds, setWishlistedIds] = useState<Set<string>>(new Set());
+
+  const handleToggleWishlist = async (productId: string) => {
+    const isWishlisted = wishlistedIds.has(productId);
+
+    // Optimistic update
+    setWishlistedIds(prev => {
+      const next = new Set(prev);
+      if (isWishlisted) {
+        next.delete(productId);
+      } else {
+        next.add(productId);
+      }
+      return next;
+    });
+
+    try {
+      if (isWishlisted) {
+        await apiClient.delete(`/wishlists/items/${productId}`);
+      } else {
+        await apiClient.post('/wishlists/items', {
+          itemType: 'product',
+          itemId: productId,
+        });
+      }
+    } catch (err) {
+      // Revert on error
+      setWishlistedIds(prev => {
+        const next = new Set(prev);
+        if (isWishlisted) {
+          next.add(productId);
+        } else {
+          next.delete(productId);
+        }
+        return next;
+      });
+    }
+  };
+
+  const navigateTo = (path: string) => {
+    router.push(path as any);
+  };
+
+  const renderHotItem = useCallback(({ item }: { item: HotProduct }) => (
+    <Pressable
+      style={styles.itemCard}
+      onPress={() => navigateTo(`/product-page?cardId=${item.id}&cardType=product`)}
+    >
+      <View style={styles.imageContainer}>
+        {item.image && <CachedImage source={item.image} style={styles.itemImage} />}
+        {item.offer && (
+          <View style={styles.offerBadge}>
+            <Text style={styles.offerText}>{item.offer}</Text>
+          </View>
+        )}
+        {item.buyers && item.buyers > 0 && (
+          <View style={styles.hotBadge}>
+            <Ionicons name="flame" size={12} color={Colors.text.inverse} />
+            <Text style={styles.hotText}>{item.buyers} bought</Text>
+          </View>
+        )}
+        <Pressable
+          style={styles.wishlistButton}
+          onPress={(e) => {
+            e.stopPropagation();
+            handleToggleWishlist(item.id);
+          }}
+        >
+          <Ionicons
+            name={wishlistedIds.has(item.id) ? 'heart' : 'heart-outline'}
+            size={20}
+            color={wishlistedIds.has(item.id) ? Colors.error : Colors.text.inverse}
+          />
+        </Pressable>
+      </View>
+      <View style={styles.itemContent}>
+        <Text style={styles.itemName} numberOfLines={1}>{item.name}</Text>
+        {item.store && (
+          <View style={styles.storeRow}>
+            <Ionicons name="storefront" size={12} color={Colors.text.tertiary} />
+            <Text style={styles.storeName}>{item.store}</Text>
+          </View>
+        )}
+        <View style={styles.priceRow}>
+          {item.price > 0 && <Text style={styles.price}>{currencySymbol}{item.price.toLocaleString()}</Text>}
+          {item.originalPrice > 0 && item.originalPrice !== item.price && (
+            <Text style={styles.originalPrice}>{currencySymbol}{item.originalPrice.toLocaleString()}</Text>
+          )}
+        </View>
+        <View style={styles.bottomRow}>
+          {item.rating > 0 && (
+            <View style={styles.ratingBadge}>
+              <Ionicons name="star" size={12} color={Colors.warning} />
+              <Text style={styles.ratingText}>{item.rating}</Text>
+              {item.reviews > 0 && <Text style={styles.reviewsText}>({item.reviews})</Text>}
+            </View>
+          )}
+          {item.distance && (
+            <View style={styles.distanceBadge}>
+              <Ionicons name="location" size={12} color={Colors.text.tertiary} />
+              <Text style={styles.distanceText}>{item.distance}</Text>
+            </View>
+          )}
+        </View>
+      </View>
+    </Pressable>
+  ), [navigateTo, handleToggleWishlist, wishlistedIds, currencySymbol]);
+
+  return (
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <StatusBar barStyle="dark-content" backgroundColor={Colors.background.primary} />
+
+      {/* Header */}
+      <View style={styles.header}>
+        <Pressable
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Ionicons name="arrow-back" size={24} color={Colors.nileBlue} />
+        </Pressable>
+        <View style={styles.headerCenter}>
+          <Text style={styles.headerTitle}>What's Hot</Text>
+          <Text style={styles.headerSubtitle}>{hotItems.length} items trending</Text>
+        </View>
+        <Pressable
+          style={[styles.filterButton, selectedSort !== 'trending' && { backgroundColor: Colors.nileBlue }]}
+          onPress={() => setSelectedSort('trending')}
+        >
+          <Ionicons name="options" size={22} color={selectedSort !== 'trending' ? Colors.text.inverse : Colors.nileBlue} />
+        </Pressable>
+      </View>
+
+      {/* Sort Options */}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.sortScroll}
+        contentContainerStyle={styles.sortContainer}
+      >
+        {sortOptions.map((option) => (
+          <Pressable
+            key={option.id}
+            style={[
+              styles.sortChip,
+              selectedSort === option.id && styles.sortChipActive,
+            ]}
+            onPress={() => setSelectedSort(option.id)}
+          >
+            <Text
+              style={[
+                styles.sortLabel,
+                selectedSort === option.id && styles.sortLabelActive,
+              ]}
+            >
+              {option.label}
+            </Text>
+          </Pressable>
+        ))}
+      </ScrollView>
+
+      {/* Hot Items Grid */}
+      {loading && !refreshing ? (
+        <CardGridSkeleton />
+      ) : error ? (
+        <View style={[styles.itemsScroll, styles.errorContainer]}>
+          <Ionicons name="alert-circle" size={48} color={Colors.error} />
+          <Text style={styles.errorText}>{error}</Text>
+          <Pressable style={styles.retryButton} onPress={() => fetchHotDeals()}>
+            <Text style={styles.retryButtonText}>Try Again</Text>
+          </Pressable>
+        </View>
+      ) : (
+        <FlatList
+          data={hotItems}
+          keyExtractor={(item) => item.id}
+          numColumns={2}
+          style={styles.itemsScroll}
+          contentContainerStyle={[styles.itemsContainer, { paddingBottom: 120 }]}
+          showsVerticalScrollIndicator={false}
+          columnWrapperStyle={styles.grid}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[Colors.gold]} />
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Ionicons name="flame-outline" size={48} color={Colors.text.tertiary} />
+              <Text style={styles.emptyText}>No hot deals available</Text>
+              <Text style={styles.emptySubtext}>Check back later for trending items</Text>
+            </View>
+          }
+          renderItem={renderHotItem}
+        />
+      )}
+      </SafeAreaView>
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background.primary,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.background.secondary,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: BorderRadius.xl,
+    backgroundColor: Colors.background.secondary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerCenter: {
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1a3a52',
+  },
+  headerSubtitle: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginTop: 2,
+  },
+  filterButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sortScroll: {
+    maxHeight: 50,
+  },
+  sortContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    gap: 8,
+  },
+  sortChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: '#F3F4F6',
+    marginRight: 8,
+  },
+  sortChipActive: {
+    backgroundColor: '#1a3a52',
+  },
+  sortLabel: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: '#6B7280',
+  },
+  sortLabelActive: {
+    color: '#FFFFFF',
+  },
+  itemsScroll: {
+    flex: 1,
+  },
+  itemsContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    minHeight: 200,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: '#6B7280',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+  },
+  errorText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: '#EF4444',
+    textAlign: 'center',
+    paddingHorizontal: 20,
+  },
+  retryButton: {
+    marginTop: 16,
+    paddingHorizontal: 24,
+    paddingVertical: 10,
+    backgroundColor: '#ffcd57',
+    borderRadius: 20,
+  },
+  retryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 60,
+  },
+  emptyText: {
+    marginTop: 12,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#374151',
+  },
+  emptySubtext: {
+    marginTop: 4,
+    fontSize: 14,
+    color: '#9CA3AF',
+  },
+  grid: {
+    justifyContent: 'space-between',
+  },
+  itemCard: {
+    width: (width - 44) / 2,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    overflow: 'hidden',
+  },
+  imageContainer: {
+    height: 140,
+    position: 'relative',
+  },
+  itemImage: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#F3F4F6',
+  },
+  offerBadge: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    backgroundColor: '#ffcd57',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  offerText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  hotBadge: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#EF4444',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    gap: 4,
+  },
+  hotText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  wishlistButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  itemContent: {
+    padding: 12,
+  },
+  itemName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1a3a52',
+  },
+  storeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 4,
+  },
+  storeName: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 8,
+  },
+  price: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#1a3a52',
+  },
+  originalPrice: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    textDecorationLine: 'line-through',
+  },
+  bottomRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+  ratingBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
+  ratingText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#F59E0B',
+  },
+  reviewsText: {
+    fontSize: 10,
+    color: '#9CA3AF',
+  },
+  distanceBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
+  distanceText: {
+    fontSize: 11,
+    color: '#6B7280',
+  },
+});
+
+export default ExploreHotPage;

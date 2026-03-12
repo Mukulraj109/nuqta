@@ -1,0 +1,357 @@
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  Pressable,
+  RefreshControl,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import gamificationAPI from '@/services/gamificationApi';
+import { useRegion } from '@/contexts/RegionContext';
+
+interface CouponMetadata {
+  source?: string;
+  isProductSpecific?: boolean;
+  storeName?: string;
+  storeId?: string;
+  productName?: string | null;
+  productId?: string | null;
+  productImage?: string | null;
+}
+
+interface SpinHistoryItem {
+  id: string;
+  completedAt: string;
+  prize: string;
+  segment: number;
+  reward: {
+    coins?: number;
+    cashback?: number;
+    discount?: number;
+    voucher?: any;
+  };
+  metadata?: {
+    couponMetadata?: CouponMetadata | null;
+  };
+}
+
+interface SpinHistoryProps {
+  limit?: number;
+}
+
+export default function SpinHistory({ limit = 10 }: SpinHistoryProps) {
+  const { getCurrencySymbol } = useRegion();
+  const currencySymbol = getCurrencySymbol();
+  const [history, setHistory] = useState<SpinHistoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadHistory();
+  }, []);
+
+  const loadHistory = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await gamificationAPI.getSpinWheelHistory(limit);
+
+      if (response.success && response.data) {
+        setHistory(response.data.history);
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to load history');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadHistory();
+    setRefreshing(false);
+  };
+
+  const getRewardIcon = (item: SpinHistoryItem) => {
+    if (item.reward.coins) return 'star';
+    if (item.reward.cashback) return 'cash';
+    if (item.reward.discount) return 'pricetag';
+    if (item.reward.voucher) return 'ticket';
+    return 'close-circle';
+  };
+
+  const getRewardColor = (item: SpinHistoryItem) => {
+    if (item.reward.coins) return '#FFD700';
+    if (item.reward.cashback) return '#ffcd57';
+    if (item.reward.discount) return '#F59E0B';
+    if (item.reward.voucher) return '#8B5CF6';
+    return '#9CA3AF';
+  };
+
+  const getRewardText = (item: SpinHistoryItem) => {
+    if (item.reward.coins) return `${item.reward.coins} Coins`;
+    if (item.reward.cashback) return `${currencySymbol}${item.reward.cashback} Cashback`;
+    if (item.reward.discount) return `${item.reward.discount}% Off`;
+    if (item.reward.voucher) return 'Voucher';
+    return 'Try Again';
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffDays < 7) return `${diffDays}d ago`;
+
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
+    });
+  };
+
+  if (loading) {
+    return (
+      <ThemedView style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#8B5CF6" />
+        <ThemedText style={styles.loadingText}>Loading history...</ThemedText>
+      </ThemedView>
+    );
+  }
+
+  if (error) {
+    return (
+      <ThemedView style={styles.errorContainer}>
+        <Ionicons name="alert-circle" size={48} color="#EF4444" />
+        <ThemedText style={styles.errorText}>{error}</ThemedText>
+        <Pressable
+          style={styles.retryButton}
+          onPress={loadHistory}
+         
+        >
+          <ThemedText style={styles.retryButtonText}>Try Again</ThemedText>
+        </Pressable>
+      </ThemedView>
+    );
+  }
+
+  if (history.length === 0) {
+    return (
+      <ThemedView style={styles.emptyContainer}>
+        <Ionicons name="time-outline" size={64} color="#9CA3AF" />
+        <ThemedText style={styles.emptyTitle}>No Spin History</ThemedText>
+        <ThemedText style={styles.emptyText}>
+          Your spin history will appear here after you start playing!
+        </ThemedText>
+      </ThemedView>
+    );
+  }
+
+  return (
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor="#8B5CF6"
+          colors={['#8B5CF6']}
+        />
+      }
+    >
+      <View style={styles.header}>
+        <ThemedText style={styles.headerTitle}>Recent Spins</ThemedText>
+        <ThemedText style={styles.headerSubtitle}>
+          {history.length} spin{history.length !== 1 ? 's' : ''}
+        </ThemedText>
+      </View>
+
+      {history.map((item) => (
+        <View key={item.id} style={styles.historyItem}>
+          <View style={[styles.iconContainer, { backgroundColor: `${getRewardColor(item)}20` }]}>
+            <Ionicons
+              name={getRewardIcon(item) as any}
+              size={24}
+              color={getRewardColor(item)}
+            />
+          </View>
+
+          <View style={styles.itemContent}>
+            <ThemedText style={styles.itemTitle}>{getRewardText(item)}</ThemedText>
+
+            {/* Coupon Applicability Info */}
+            {item.metadata?.couponMetadata && (item.reward.discount || item.reward.cashback || item.reward.voucher) && (
+              <View style={styles.applicabilityInfo}>
+                <Ionicons
+                  name={item.metadata.couponMetadata.isProductSpecific ? "cube-outline" : "storefront-outline"}
+                  size={12}
+                  color="#6B7280"
+                />
+                <ThemedText style={styles.applicabilityText}>
+                  {item.metadata.couponMetadata.isProductSpecific
+                    ? `${item.metadata.couponMetadata.productName} from ${item.metadata.couponMetadata.storeName}`
+                    : `Any product from ${item.metadata.couponMetadata.storeName}`}
+                </ThemedText>
+              </View>
+            )}
+
+            <ThemedText style={styles.itemDate}>{formatDate(item.completedAt)}</ThemedText>
+          </View>
+
+          {(item.reward.coins || item.reward.cashback) && (
+            <View style={styles.rewardBadge}>
+              <ThemedText style={[styles.rewardValue, { color: getRewardColor(item) }]}>
+                +{item.reward.coins || item.reward.cashback}
+              </ThemedText>
+            </View>
+          )}
+        </View>
+      ))}
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  contentContainer: {
+    padding: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: '#6B7280',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32,
+  },
+  errorText: {
+    marginTop: 16,
+    marginBottom: 24,
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+  },
+  retryButton: {
+    backgroundColor: '#8B5CF6',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32,
+  },
+  emptyTitle: {
+    marginTop: 16,
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#111827',
+  },
+  emptyText: {
+    marginTop: 8,
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  header: {
+    marginBottom: 16,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#111827',
+    marginBottom: 4,
+  },
+  headerSubtitle: {
+    fontSize: 13,
+    color: '#6B7280',
+  },
+  historyItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  iconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  itemContent: {
+    flex: 1,
+  },
+  itemTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#111827',
+    marginBottom: 4,
+  },
+  applicabilityInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 2,
+    marginBottom: 4,
+  },
+  applicabilityText: {
+    fontSize: 11,
+    color: '#6B7280',
+    flex: 1,
+  },
+  itemDate: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  rewardBadge: {
+    backgroundColor: '#F3F4F6',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+  },
+  rewardValue: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+});

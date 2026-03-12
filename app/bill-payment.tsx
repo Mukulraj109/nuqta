@@ -1,0 +1,936 @@
+/**
+ * Bill Payment Page
+ * Pay utility bills with cashback - fully wired to backend APIs
+ */
+
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  TextInput,
+  SafeAreaView,
+  StatusBar,
+  Platform,
+  ActivityIndicator,
+} from 'react-native';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRegion } from '@/contexts/RegionContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { CachedImage } from '@/components/ui/CachedImage';
+import { platformAlert } from '@/utils/platformAlert';
+
+import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { BRAND } from '@/constants/brand';
+import {
+  getBillTypes,
+  getProviders,
+  fetchBill,
+  payBill,
+  getPaymentHistory,
+  BillTypeInfo,
+  BillProviderInfo,
+  FetchedBillInfo,
+  BillPaymentRecord,
+} from '@/services/billPaymentApi';
+
+type PageStep = 'types' | 'providers' | 'input' | 'bill';
+
+export default function BillPaymentPage() {
+  const router = useRouter();
+  const params = useLocalSearchParams();
+  const initialType = (params.type as string) || '';
+  const { getCurrencySymbol } = useRegion();
+  const currencySymbol = getCurrencySymbol();
+  const { isAuthenticated, authLoading } = useAuth();
+
+  // Data state
+  const [billTypes, setBillTypes] = useState<BillTypeInfo[]>([]);
+  const [providers, setProviders] = useState<BillProviderInfo[]>([]);
+  const [recentPayments, setRecentPayments] = useState<BillPaymentRecord[]>([]);
+  const [fetchedBill, setFetchedBill] = useState<FetchedBillInfo | null>(null);
+
+  // UI state
+  const [selectedType, setSelectedType] = useState(initialType);
+  const [selectedProvider, setSelectedProvider] = useState<BillProviderInfo | null>(null);
+  const [consumerNumber, setConsumerNumber] = useState('');
+  const [loadingTypes, setLoadingTypes] = useState(true);
+  const [loadingProviders, setLoadingProviders] = useState(false);
+  const [loadingBill, setLoadingBill] = useState(false);
+  const [loadingPay, setLoadingPay] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+
+  // Pagination for history
+  const [historyPage, setHistoryPage] = useState(1);
+  const [hasMoreHistory, setHasMoreHistory] = useState(false);
+  const [loadingMoreHistory, setLoadingMoreHistory] = useState(false);
+
+  // ============================================
+  // DATA FETCHING
+  // ============================================
+
+  // Fetch bill types on mount
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        setLoadingTypes(true);
+        const res = await getBillTypes();
+        if (!cancelled && res.success && res.data) {
+          setBillTypes(res.data);
+          // Auto-select initial type if passed via params
+          if (initialType && res.data.some((t) => t.id === initialType)) {
+            setSelectedType(initialType);
+          }
+        }
+      } catch {
+        // Types are non-critical, silent fail
+      } finally {
+        if (!cancelled) setLoadingTypes(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  // Fetch providers when type changes
+  useEffect(() => {
+    if (!selectedType) {
+      setProviders([]);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        setLoadingProviders(true);
+        setSelectedProvider(null);
+        setFetchedBill(null);
+        setConsumerNumber('');
+        const res = await getProviders(selectedType, 1, 50);
+        if (!cancelled && res.success && res.data) {
+          setProviders(res.data.providers);
+        }
+      } catch {
+        setProviders([]);
+      } finally {
+        if (!cancelled) setLoadingProviders(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [selectedType]);
+
+  // Fetch payment history
+  const loadHistory = useCallback(async (page: number, append = false) => {
+    if (authLoading || !isAuthenticated) return;
+    try {
+      if (page === 1) setLoadingHistory(true);
+      else setLoadingMoreHistory(true);
+      const res = await getPaymentHistory(page, 10);
+      if (res.success && res.data) {
+        if (append) {
+          setRecentPayments((prev) => [...prev, ...res.data!.payments]);
+        } else {
+          setRecentPayments(res.data.payments);
+        }
+        setHasMoreHistory(res.data.pagination.hasNextPage);
+        setHistoryPage(page);
+      }
+    } catch {
+      // Silent fail for history
+    } finally {
+      setLoadingHistory(false);
+      setLoadingMoreHistory(false);
+    }
+  }, [authLoading, isAuthenticated]);
+
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      loadHistory(1);
+    }
+  }, [authLoading, isAuthenticated, loadHistory]);
+
+  // ============================================
+  // HANDLERS
+  // ============================================
+
+  const handleFetchBill = useCallback(async () => {
+    if (!selectedProvider || !consumerNumber.trim()) return;
+    try {
+      setLoadingBill(true);
+      const res = await fetchBill(selectedProvider._id, consumerNumber.trim());
+      if (res.success && res.data) {
+        setFetchedBill(res.data);
+      } else {
+        platformAlert('Error', res.message || 'Could not fetch bill details');
+      }
+    } catch {
+      platformAlert('Error', 'Failed to fetch bill. Please try again.');
+    } finally {
+      setLoadingBill(false);
+    }
+  }, [selectedProvider, consumerNumber]);
+
+  const handlePayBill = useCallback(async () => {
+    if (!fetchedBill || !selectedProvider) return;
+    try {
+      setLoadingPay(true);
+      const res = await payBill(
+        selectedProvider._id,
+        consumerNumber.trim(),
+        fetchedBill.amount
+      );
+      if (res.success) {
+        platformAlert('Success', `Bill paid successfully! Cashback: ${currencySymbol}${fetchedBill.cashbackAmount.toLocaleString()}`);
+        // Reset form & refresh history
+        setFetchedBill(null);
+        setConsumerNumber('');
+        setSelectedProvider(null);
+        loadHistory(1);
+      } else {
+        platformAlert('Error', res.message || 'Payment failed');
+      }
+    } catch {
+      platformAlert('Error', 'Payment failed. Please try again.');
+    } finally {
+      setLoadingPay(false);
+    }
+  }, [fetchedBill, selectedProvider, consumerNumber, currencySymbol, loadHistory]);
+
+  const handleLoadMoreHistory = useCallback(() => {
+    if (!hasMoreHistory || loadingMoreHistory) return;
+    loadHistory(historyPage + 1, true);
+  }, [hasMoreHistory, loadingMoreHistory, historyPage, loadHistory]);
+
+  // ============================================
+  // HELPER: bill type icon/color from backend data or local meta
+  // ============================================
+
+  const getBillTypeMeta = useCallback(
+    (typeId: string) => {
+      const found = billTypes.find((t) => t.id === typeId);
+      return found || { icon: 'receipt-outline', color: Colors.gold, label: typeId };
+    },
+    [billTypes]
+  );
+
+  // ============================================
+  // RENDER HELPERS
+  // ============================================
+
+  const renderBillTypeCard = useCallback(
+    (type: BillTypeInfo) => {
+      const isActive = selectedType === type.id;
+      return (
+        <Pressable
+          key={type.id}
+          style={[styles.billTypeCard, isActive && styles.billTypeCardActive]}
+          onPress={() => {
+            setSelectedType(type.id);
+          }}
+        >
+          <View style={[styles.billTypeIcon, { backgroundColor: type.color + '20' }]}>
+            <Ionicons name={type.icon as any} size={24} color={type.color} />
+          </View>
+          <Text style={styles.billTypeName}>{type.label}</Text>
+          {type.providerCount > 0 && (
+            <Text style={styles.billTypeCount}>{type.providerCount}</Text>
+          )}
+        </Pressable>
+      );
+    },
+    [selectedType]
+  );
+
+  const renderProviderCard = useCallback(
+    (provider: BillProviderInfo) => {
+      const isActive = selectedProvider?._id === provider._id;
+      return (
+        <Pressable
+          key={provider._id}
+          style={[styles.providerCard, isActive && styles.providerCardActive]}
+          onPress={() => {
+            setSelectedProvider(provider);
+            setFetchedBill(null);
+            setConsumerNumber('');
+          }}
+        >
+          {provider.logo ? (
+            <CachedImage
+              source={{ uri: provider.logo }}
+              style={styles.providerLogo}
+              contentFit="contain"
+            />
+          ) : (
+            <View style={styles.providerIcon}>
+              <Ionicons
+                name={getBillTypeMeta(provider.type).icon as any}
+                size={20}
+                color={Colors.gold}
+              />
+            </View>
+          )}
+          <View style={{ flex: 1 }}>
+            <Text style={styles.providerName}>{provider.name}</Text>
+            {provider.cashbackPercent > 0 && (
+              <Text style={styles.providerCashback}>
+                {provider.cashbackPercent}% cashback
+              </Text>
+            )}
+          </View>
+          {isActive && (
+            <Ionicons name="checkmark-circle" size={20} color={Colors.gold} />
+          )}
+        </Pressable>
+      );
+    },
+    [selectedProvider, getBillTypeMeta]
+  );
+
+  const renderRecentPayment = useCallback(
+    ({ item }: { item: BillPaymentRecord }) => {
+      const meta = getBillTypeMeta(item.billType);
+      const isPaid = item.status === 'completed';
+      return (
+        <Pressable style={styles.recentCard}>
+          <View style={styles.recentIcon}>
+            <Ionicons name={meta.icon as any} size={20} color={Colors.gold} />
+          </View>
+          <View style={styles.recentInfo}>
+            <Text style={styles.recentType}>{meta.label}</Text>
+            <Text style={styles.recentProvider}>
+              {item.provider?.name || 'Unknown'} - {item.customerNumber}
+            </Text>
+          </View>
+          <View style={styles.recentAmount}>
+            <Text style={styles.recentAmountText}>
+              {currencySymbol}{item.amount.toLocaleString()}
+            </Text>
+            <View style={[styles.recentStatus, isPaid && styles.recentStatusPaid]}>
+              <Text
+                style={[styles.recentStatusText, isPaid && styles.recentStatusTextPaid]}
+              >
+                {isPaid ? 'Paid' : item.status === 'failed' ? 'Failed' : 'Pending'}
+              </Text>
+            </View>
+          </View>
+        </Pressable>
+      );
+    },
+    [currencySymbol, getBillTypeMeta]
+  );
+
+  const renderHistoryFooter = useCallback(() => {
+    if (!loadingMoreHistory) return null;
+    return (
+      <View style={styles.footerLoader}>
+        <ActivityIndicator size="small" color={Colors.gold} />
+      </View>
+    );
+  }, [loadingMoreHistory]);
+
+  // ============================================
+  // MAIN LIST HEADER (all content above history)
+  // ============================================
+
+  const ListHeader = useCallback(() => {
+    const typeMeta = selectedType ? getBillTypeMeta(selectedType) : null;
+
+    return (
+      <View>
+        {/* Cashback Banner */}
+        <View style={styles.banner}>
+          <LinearGradient
+            colors={['rgba(255, 205, 87, 0.15)', 'rgba(251, 191, 36, 0.15)']}
+            style={styles.bannerGradient}
+          >
+            <Ionicons name="gift" size={24} color={Colors.gold} />
+            <View style={styles.bannerText}>
+              <Text style={styles.bannerTitle}>Earn Cashback</Text>
+              <Text style={styles.bannerSubtitle}>
+                {`Pay your utility bills and earn ${BRAND.COIN_NAME} as cashback`}
+              </Text>
+            </View>
+          </LinearGradient>
+        </View>
+
+        {/* Bill Types */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Select Bill Type</Text>
+          {loadingTypes ? (
+            <View style={styles.centeredLoader}>
+              <ActivityIndicator size="small" color={Colors.gold} />
+            </View>
+          ) : billTypes.length === 0 ? (
+            <View style={styles.emptyState}>
+              <View style={styles.emptyIcon}>
+                <Ionicons name="receipt-outline" size={32} color={Colors.text.secondary} />
+              </View>
+              <Text style={styles.emptyTitle}>No Bill Types Available</Text>
+              <Text style={styles.emptySubtitle}>Please check back later</Text>
+            </View>
+          ) : (
+            <View style={styles.billTypesGrid}>
+              {billTypes.map(renderBillTypeCard)}
+            </View>
+          )}
+        </View>
+
+        {/* Provider Selection */}
+        {selectedType && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Select Provider</Text>
+            {loadingProviders ? (
+              <View style={styles.centeredLoader}>
+                <ActivityIndicator size="small" color={Colors.gold} />
+              </View>
+            ) : providers.length === 0 ? (
+              <View style={styles.emptyState}>
+                <View style={styles.emptyIcon}>
+                  <Ionicons
+                    name={typeMeta?.icon as any || 'business-outline'}
+                    size={28}
+                    color={Colors.text.secondary}
+                  />
+                </View>
+                <Text style={styles.emptyTitle}>No Providers Found</Text>
+                <Text style={styles.emptySubtitle}>
+                  No providers available for {typeMeta?.label || selectedType}
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.providersList}>
+                {providers.map(renderProviderCard)}
+              </View>
+            )}
+          </View>
+        )}
+
+        {/* Consumer Number Input */}
+        {selectedProvider && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>
+              {selectedProvider.requiredFields?.[0]?.label || 'Consumer/Account Number'}
+            </Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder={
+                  selectedProvider.requiredFields?.[0]?.placeholder ||
+                  'Enter your consumer number'
+                }
+                placeholderTextColor={Colors.text.secondary}
+                value={consumerNumber}
+                onChangeText={setConsumerNumber}
+                keyboardType={
+                  selectedProvider.requiredFields?.[0]?.type === 'number'
+                    ? 'numeric'
+                    : 'default'
+                }
+              />
+              <Pressable
+                style={[
+                  styles.fetchButton,
+                  (!consumerNumber.trim() || loadingBill) && styles.fetchButtonDisabled,
+                ]}
+                onPress={handleFetchBill}
+                disabled={!consumerNumber.trim() || loadingBill}
+              >
+                {loadingBill ? (
+                  <ActivityIndicator size="small" color={Colors.background.primary} />
+                ) : (
+                  <Text style={styles.fetchButtonText}>Fetch Bill</Text>
+                )}
+              </Pressable>
+            </View>
+          </View>
+        )}
+
+        {/* Fetched Bill Details */}
+        {fetchedBill && (
+          <View style={styles.billCard}>
+            <View style={styles.billHeader}>
+              <Ionicons name="receipt-outline" size={24} color={Colors.gold} />
+              <Text style={styles.billTitle}>Bill Details</Text>
+            </View>
+            <View style={styles.billDetails}>
+              <View style={styles.billRow}>
+                <Text style={styles.billLabel}>Provider</Text>
+                <Text style={styles.billValue}>{fetchedBill.provider.name}</Text>
+              </View>
+              <View style={styles.billRow}>
+                <Text style={styles.billLabel}>Consumer Number</Text>
+                <Text style={styles.billValue}>{fetchedBill.customerNumber}</Text>
+              </View>
+              <View style={styles.billRow}>
+                <Text style={styles.billLabel}>Due Date</Text>
+                <Text style={styles.billValue}>
+                  {new Date(fetchedBill.dueDate).toLocaleDateString()}
+                </Text>
+              </View>
+              <View style={styles.billRow}>
+                <Text style={styles.billLabel}>Bill Amount</Text>
+                <Text style={styles.billAmount}>
+                  {currencySymbol}{fetchedBill.amount.toLocaleString()}
+                </Text>
+              </View>
+              {fetchedBill.cashbackAmount > 0 && (
+                <View style={styles.billRow}>
+                  <Text style={styles.billLabel}>Cashback</Text>
+                  <Text style={styles.billCashback}>
+                    + {currencySymbol}{fetchedBill.cashbackAmount.toLocaleString()} ({fetchedBill.cashbackPercent}%)
+                  </Text>
+                </View>
+              )}
+              <View style={styles.billDivider} />
+              <View style={styles.billRow}>
+                <Text style={styles.billTotalLabel}>You Pay</Text>
+                <Text style={styles.billTotal}>
+                  {currencySymbol}{fetchedBill.amount.toLocaleString()}
+                </Text>
+              </View>
+            </View>
+          </View>
+        )}
+
+        {/* Recent Payments Header */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Recent Payments</Text>
+          {loadingHistory && (
+            <View style={styles.centeredLoader}>
+              <ActivityIndicator size="small" color={Colors.gold} />
+            </View>
+          )}
+          {!loadingHistory && recentPayments.length === 0 && (
+            <View style={styles.emptyState}>
+              <View style={styles.emptyIcon}>
+                <Ionicons name="time-outline" size={32} color={Colors.text.secondary} />
+              </View>
+              <Text style={styles.emptyTitle}>No Payments Yet</Text>
+              <Text style={styles.emptySubtitle}>
+                Your bill payment history will appear here
+              </Text>
+            </View>
+          )}
+        </View>
+      </View>
+    );
+  }, [
+    billTypes,
+    selectedType,
+    providers,
+    selectedProvider,
+    consumerNumber,
+    fetchedBill,
+    loadingTypes,
+    loadingProviders,
+    loadingBill,
+    loadingHistory,
+    recentPayments.length,
+    currencySymbol,
+    renderBillTypeCard,
+    renderProviderCard,
+    getBillTypeMeta,
+    handleFetchBill,
+  ]);
+
+  // ============================================
+  // RENDER
+  // ============================================
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.background.primary} />
+
+      {/* Header */}
+      <View style={styles.header}>
+        <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
+        </Pressable>
+        <Text style={styles.headerTitle}>Bill Payments</Text>
+        <View style={{ width: 32 }} />
+      </View>
+
+      <FlatList
+        data={recentPayments}
+        renderItem={renderRecentPayment}
+        keyExtractor={(item) => item._id}
+        ListHeaderComponent={ListHeader}
+        ListFooterComponent={renderHistoryFooter}
+        onEndReached={handleLoadMoreHistory}
+        onEndReachedThreshold={0.3}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.listContent}
+      />
+
+      {/* Bottom CTA */}
+      {fetchedBill && (
+        <View style={styles.bottomCta}>
+          <Pressable
+            style={[styles.payButton, loadingPay && styles.payButtonDisabled]}
+            onPress={handlePayBill}
+            disabled={loadingPay}
+          >
+            {loadingPay ? (
+              <ActivityIndicator size="small" color={Colors.background.primary} />
+            ) : (
+              <>
+                <Text style={styles.payButtonText}>
+                  Pay {currencySymbol}{fetchedBill.amount.toLocaleString()}
+                </Text>
+                <Ionicons name="arrow-forward" size={20} color={Colors.background.primary} />
+              </>
+            )}
+          </Pressable>
+        </View>
+      )}
+    </SafeAreaView>
+  );
+}
+
+// ============================================
+// STYLES
+// ============================================
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background.secondary,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.md,
+    backgroundColor: Colors.background.primary,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border.default,
+  },
+  backButton: {
+    padding: Spacing.xs,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.text.primary,
+  },
+  listContent: {
+    paddingBottom: 120,
+  },
+  banner: {
+    margin: Spacing.base,
+    borderRadius: BorderRadius.md,
+    overflow: 'hidden',
+  },
+  bannerGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: Spacing.base,
+    gap: Spacing.md,
+  },
+  bannerText: {
+    flex: 1,
+  },
+  bannerTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.text.primary,
+    marginBottom: 2,
+  },
+  bannerSubtitle: {
+    fontSize: 13,
+    color: Colors.text.secondary,
+  },
+  section: {
+    marginBottom: Spacing.xl,
+    paddingHorizontal: Spacing.base,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.text.primary,
+    marginBottom: Spacing.md,
+  },
+  billTypesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.md,
+  },
+  billTypeCard: {
+    width: '22%',
+    alignItems: 'center',
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    backgroundColor: Colors.background.primary,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  billTypeCardActive: {
+    borderColor: Colors.gold,
+  },
+  billTypeIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: BorderRadius['2xl'],
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.sm,
+  },
+  billTypeName: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: Colors.text.primary,
+    textAlign: 'center',
+  },
+  billTypeCount: {
+    fontSize: 10,
+    color: Colors.text.secondary,
+    marginTop: 2,
+  },
+  providersList: {
+    gap: Spacing.sm,
+  },
+  providerCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.background.primary,
+    padding: Spacing.base,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.md,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  providerCardActive: {
+    borderColor: Colors.gold,
+  },
+  providerLogo: {
+    width: 40,
+    height: 40,
+    borderRadius: BorderRadius.xl,
+  },
+  providerIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: BorderRadius.xl,
+    backgroundColor: 'rgba(255, 205, 87, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  providerName: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: Colors.text.primary,
+  },
+  providerCashback: {
+    fontSize: 12,
+    color: Colors.gold,
+    marginTop: 2,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  input: {
+    flex: 1,
+    backgroundColor: Colors.background.primary,
+    borderRadius: BorderRadius.md,
+    paddingHorizontal: Spacing.base,
+    paddingVertical: 14,
+    fontSize: 15,
+    color: Colors.text.primary,
+    borderWidth: 1,
+    borderColor: Colors.border.default,
+  },
+  fetchButton: {
+    backgroundColor: Colors.gold,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.md,
+    justifyContent: 'center',
+    minWidth: 90,
+    alignItems: 'center',
+  },
+  fetchButtonDisabled: {
+    backgroundColor: Colors.text.secondary,
+  },
+  fetchButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.text.inverse,
+  },
+  billCard: {
+    marginHorizontal: Spacing.base,
+    marginBottom: Spacing.xl,
+    backgroundColor: Colors.background.primary,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.base,
+  },
+  billHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    marginBottom: Spacing.base,
+  },
+  billTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.text.primary,
+  },
+  billDetails: {
+    gap: Spacing.md,
+  },
+  billRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  billLabel: {
+    fontSize: 14,
+    color: Colors.text.secondary,
+  },
+  billValue: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.text.primary,
+  },
+  billAmount: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.text.primary,
+  },
+  billCashback: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.gold,
+  },
+  billDivider: {
+    height: 1,
+    backgroundColor: Colors.border.default,
+    marginVertical: Spacing.sm,
+  },
+  billTotalLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.text.primary,
+  },
+  billTotal: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: Colors.gold,
+  },
+  recentCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.background.primary,
+    padding: Spacing.base,
+    marginHorizontal: Spacing.base,
+    marginBottom: Spacing.sm,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.md,
+  },
+  recentIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: BorderRadius.xl,
+    backgroundColor: 'rgba(255, 205, 87, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  recentInfo: {
+    flex: 1,
+  },
+  recentType: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: Colors.text.primary,
+    marginBottom: 2,
+  },
+  recentProvider: {
+    fontSize: 12,
+    color: Colors.text.secondary,
+  },
+  recentAmount: {
+    alignItems: 'flex-end',
+  },
+  recentAmountText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.text.primary,
+    marginBottom: Spacing.xs,
+  },
+  recentStatus: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+  },
+  recentStatusPaid: {
+    backgroundColor: 'rgba(255, 205, 87, 0.1)',
+  },
+  recentStatusText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: Colors.error,
+  },
+  recentStatusTextPaid: {
+    color: Colors.gold,
+  },
+  bottomCta: {
+    padding: Spacing.base,
+    backgroundColor: Colors.background.primary,
+    borderTopWidth: 1,
+    borderTopColor: Colors.border.default,
+  },
+  payButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.gold,
+    paddingVertical: Spacing.base,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.sm,
+  },
+  payButtonDisabled: {
+    opacity: 0.6,
+  },
+  payButtonText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.text.inverse,
+  },
+  centeredLoader: {
+    paddingVertical: Spacing.xl,
+    alignItems: 'center',
+  },
+  emptyState: {
+    alignItems: 'center',
+    paddingVertical: Spacing.xl,
+  },
+  emptyIcon: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: Colors.background.secondary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.md,
+  },
+  emptyTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: Colors.text.primary,
+    marginBottom: 4,
+  },
+  emptySubtitle: {
+    fontSize: 13,
+    color: Colors.text.secondary,
+    textAlign: 'center',
+  },
+  footerLoader: {
+    paddingVertical: Spacing.lg,
+    alignItems: 'center',
+  },
+});

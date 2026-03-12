@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "847446181140",
+    "project_id": "erkrjhcvekjfhc",
+    "storage_bucket": "erkrjhcvekjfhc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847446181140:android:43e09c715b2eca29cf6e01",
+        "android_client_info": {
+          "package_name": "com.nuqta.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCc3hKjcq1AHne_LW9trOE0GsxvhCPSBzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

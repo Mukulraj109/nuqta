@@ -1,0 +1,598 @@
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useRegion } from '@/contexts/RegionContext';
+import RechargeWalletCard from "../components/RechargeWalletCard";
+import ProfileCompletionCard from "@/components/ProfileCompletionCard";
+import ScratchCardOffer from "@/components/ScratchCardOffer";
+import scratchImage from "@/assets/images/scratch-offer.png";
+import ReferAndEarnCard from "@/components/ReferAndEarnCard";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  RefreshControl,
+  ActivityIndicator,
+  StatusBar,
+  Dimensions,
+  Platform,
+  Share,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { CoinBalance, WalletScreenProps, COIN_TYPES, CoinType } from '@/types/wallet';
+import { useWalletContext } from '@/contexts/WalletContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSafeNavigation } from '@/hooks/useSafeNavigation';
+import { useProfile } from '@/contexts/ProfileContext';
+import { useReferral } from '@/hooks/useReferral';
+import { useWalletAnalytics } from '@/hooks/useWalletAnalytics';
+import WalletErrorBoundary from '@/components/WalletErrorBoundary';
+import { TransactionListSkeleton } from '@/components/skeletons';
+import EarningsBreakdown from '@/components/wallet/EarningsBreakdown';
+import { BalanceDisplay } from '@/components/wallet/BalanceDisplay';
+import { StickyQuickActions } from '@/components/wallet/StickyQuickActions';
+import { CoinDetailCard } from '@/components/wallet/CoinDetailCard';
+import { InsightSection } from '@/components/wallet/InsightSection';
+import { TransactionCTA } from '@/components/wallet/TransactionCTA';
+import { MoreForYouSection } from '@/components/wallet/MoreForYouSection';
+import { platformAlert } from '@/utils/platformAlert';
+import { ThemedText } from '@/components/ThemedText';
+import { BRAND } from '@/constants/brand';
+import { Colors, Spacing, BorderRadius, Typography, Gradients } from '@/constants/DesignSystem';
+import walletApi from '@/services/walletApi';
+
+const WalletScreen: React.FC<WalletScreenProps> = ({
+  onNavigateBack,
+  onCoinPress,
+}) => {
+  const { state: { user, isAuthenticated, isLoading: authLoading } } = useAuth();
+  const currentUserId = user?.id || '';
+  const router = useRouter();
+  const { goBack } = useSafeNavigation();
+  const { getCurrency } = useRegion();
+  const [screenData, setScreenData] = useState(Dimensions.get('window'));
+
+  const {
+    walletData,
+    isLoading: walletLoading,
+    isRefreshing: walletRefreshing,
+    refreshWallet,
+  } = useWalletContext();
+
+  const { completionStatus, isLoading: profileLoading, error: profileError } = useProfile();
+
+  const { referralData, isLoading: referralLoading, error: referralError } = useReferral({
+    autoFetch: true,
+    refreshInterval: 15 * 60 * 1000,
+  });
+
+  const {
+    trackWalletViewed,
+    trackTopupInitiated,
+    trackTransactionViewed,
+  } = useWalletAnalytics();
+
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener('change', ({ window }) => {
+      setScreenData(window);
+    });
+    return () => subscription?.remove();
+  }, []);
+
+  useEffect(() => {
+    trackWalletViewed();
+  }, [trackWalletViewed]);
+
+  // Expiring coins warning
+  const [expiringAmount, setExpiringAmount] = useState(0);
+  const [expiringLabel, setExpiringLabel] = useState('');
+  const [expiringByType, setExpiringByType] = useState<Array<{ type: string; amount: number; expiresAt: string; daysLeft: number }>>([]);
+
+  useEffect(() => {
+    if (!currentUserId || authLoading || !isAuthenticated) return;
+    let cancelled = false;
+    walletApi.getExpiringCoins().then(res => {
+      if (cancelled || !res.success || !res.data) return;
+      const { expiringCoins, totalExpiring } = res.data;
+      if (totalExpiring <= 0) return;
+      setExpiringAmount(totalExpiring);
+      // Show most urgent bucket
+      if (expiringCoins?.this_week?.totalAmount > 0) {
+        setExpiringLabel(`${expiringCoins.this_week.totalAmount} ${BRAND.CURRENCY_CODE} expiring this week`);
+      } else if (expiringCoins?.this_month?.totalAmount > 0) {
+        setExpiringLabel(`${expiringCoins.this_month.totalAmount} ${BRAND.CURRENCY_CODE} expiring this month`);
+      } else {
+        setExpiringLabel(`${totalExpiring} ${BRAND.CURRENCY_CODE} expiring soon`);
+      }
+
+      // Build per-type breakdown from all buckets
+      const typeMap = new Map<string, { amount: number; expiresAt: string; daysLeft: number }>();
+      for (const period of ['this_week', 'this_month', 'next_month'] as const) {
+        const bucket = expiringCoins?.[period];
+        if (!bucket?.coins) continue;
+        for (const coin of bucket.coins) {
+          const coinType = coin.type || coin.source || 'rez';
+          const existing = typeMap.get(coinType);
+          if (existing) {
+            existing.amount += coin.amount;
+            if (coin.daysLeft < existing.daysLeft) {
+              existing.daysLeft = coin.daysLeft;
+              existing.expiresAt = coin.expiresAt;
+            }
+          } else {
+            typeMap.set(coinType, { amount: coin.amount, expiresAt: coin.expiresAt, daysLeft: coin.daysLeft });
+          }
+        }
+      }
+      setExpiringByType(Array.from(typeMap.entries()).map(([type, data]) => ({ type, ...data })));
+    }).catch(() => { /* silent */ });
+    return () => { cancelled = true; };
+  }, [currentUserId, authLoading, isAuthenticated]);
+
+  const handleRefresh = useCallback(async () => {
+    try {
+      await refreshWallet();
+    } catch (error) {
+      platformAlert('Refresh Failed', error instanceof Error ? error.message : 'Unable to refresh wallet data');
+    }
+  }, [refreshWallet]);
+
+  const handleBackPress = useCallback(() => {
+    if (onNavigateBack) {
+      onNavigateBack();
+    } else {
+      goBack('/' as any);
+    }
+  }, [onNavigateBack, goBack]);
+
+  const handleCoinPress = useCallback((coin: CoinBalance) => {
+    if (onCoinPress) {
+      onCoinPress(coin);
+    } else {
+      router.push({
+        pathname: '/wallet/coin-detail/[coinType]',
+        params: { coinType: coin.type }
+      } as any);
+    }
+  }, [onCoinPress, router]);
+
+  const handleCoinTypePress = useCallback((type: CoinType) => {
+    router.push({
+      pathname: '/wallet/coin-detail/[coinType]',
+      params: { coinType: type }
+    } as any);
+  }, [router]);
+
+  const handleRetry = useCallback(() => {
+    refreshWallet();
+  }, [refreshWallet]);
+
+  // Topup state management
+  const [topupLoading, setTopupLoading] = useState(false);
+
+  const handleAmountSelect = useCallback((amount: number | "other") => {
+    // No-op: amount selection handled by RechargeWalletCard internally
+  }, []);
+
+  const handleTopupSubmit = useCallback((amount: number) => {
+    trackTopupInitiated(amount);
+    router.push({
+      pathname: '/payment',
+      params: {
+        amount: amount.toString(),
+        currency: BRAND.CURRENCY_CODE,
+        fiatCurrency: getCurrency(),
+        timestamp: Date.now().toString()
+      }
+    });
+  }, [trackTopupInitiated, router, getCurrency]);
+
+  // "More for You" options — Ring Sizer + Saved Address moved here from main scroll
+  const moreForYouOptions = useMemo(() => [
+    {
+      id: 'profile',
+      icon: 'person-outline' as const,
+      title: 'Complete Profile',
+      subtitle: `${completionStatus?.completionPercentage || 0}% complete`,
+      onPress: () => router.push('/profile/edit'),
+    },
+    {
+      id: 'scratch-card',
+      icon: 'ticket-outline' as const,
+      title: 'Scratch Card',
+      subtitle: 'Win coins & discounts',
+      onPress: () => router.push('/scratch-card'),
+      badge: 'NEW',
+    },
+    {
+      id: 'refer',
+      icon: 'people-outline' as const,
+      title: 'Refer & Earn',
+      subtitle: 'Invite friends, earn coins',
+      onPress: () => router.push('/referral'),
+    },
+    {
+      id: 'orders',
+      icon: 'receipt-outline' as const,
+      title: 'Order History',
+      subtitle: 'View order details',
+      onPress: () => router.push('/order-history'),
+    },
+    {
+      id: 'wishlist',
+      icon: 'heart-outline' as const,
+      title: 'Wishlist',
+      subtitle: 'All your Favorites',
+      onPress: () => router.push('/wishlist'),
+    },
+    {
+      id: 'address',
+      icon: 'location-outline' as const,
+      title: 'Saved Address',
+      subtitle: 'Edit, add, delete your address',
+      onPress: () => router.push('/account/addresses'),
+    },
+    {
+      id: 'ring-sizer',
+      icon: 'resize-outline' as const,
+      title: 'Ring Sizer',
+      subtitle: 'Check your ring size',
+      onPress: () => router.push('/ring-sizer'),
+    },
+  ], [completionStatus, router]);
+
+  const styles = useMemo(() => createStyles(screenData), [screenData]);
+
+  // --- Loading State ---
+  if (walletLoading && !walletData) {
+    return (
+      <View style={styles.root}>
+        <StatusBar barStyle="light-content" backgroundColor={Colors.nileBlue} />
+        <LinearGradient colors={Gradients.nileBlue} style={styles.headerBg}>
+          <View style={styles.headerContainer}>
+            <Pressable style={styles.backButton} onPress={handleBackPress}>
+              <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
+            </Pressable>
+            <Text style={styles.headerTitle}>Wallet</Text>
+            <View style={styles.headerRight} />
+          </View>
+        </LinearGradient>
+        <TransactionListSkeleton />
+      </View>
+    );
+  }
+
+  // --- Empty/Loading State (no data yet) ---
+  if (!walletData && !walletLoading) {
+    return (
+      <View style={styles.root}>
+        <StatusBar barStyle="light-content" backgroundColor={Colors.nileBlue} />
+        <LinearGradient colors={Gradients.nileBlue} style={styles.headerBg}>
+          <View style={styles.headerContainer}>
+            <Pressable style={styles.backButton} onPress={handleBackPress}>
+              <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
+            </Pressable>
+            <Text style={styles.headerTitle}>Wallet</Text>
+            <View style={styles.headerRight} />
+          </View>
+        </LinearGradient>
+        <View style={styles.errorContainer}>
+          <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
+          <Text style={styles.errorTitle}>Unable to load wallet</Text>
+          <Text style={styles.errorDetails}>Please check your connection and try again.</Text>
+          <Pressable
+            style={styles.retryButton}
+            onPress={handleRetry}
+            accessibilityLabel="Try again"
+            accessibilityRole="button"
+          >
+            <Text style={styles.retryButtonText}>Try Again</Text>
+          </Pressable>
+        </View>
+      </View>
+    );
+  }
+
+  if (!walletData) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background.secondary }}>
+        <ActivityIndicator size="large" color={Colors.primary[600]} />
+        <ThemedText style={{ marginTop: Spacing.md, color: Colors.text.secondary }}>Loading wallet...</ThemedText>
+      </View>
+    );
+  }
+
+  return (
+    <WalletErrorBoundary>
+      <View style={styles.root}>
+        <StatusBar barStyle="light-content" backgroundColor={Colors.nileBlue} />
+
+        {/* Fixed Header */}
+        <LinearGradient colors={Gradients.nileBlue} style={styles.headerBg}>
+          <View style={styles.headerContainer}>
+            <Pressable
+              style={styles.backButton}
+              onPress={handleBackPress}
+              accessibilityLabel="Go back"
+              accessibilityRole="button"
+            >
+              <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
+            </Pressable>
+            <Text style={styles.headerTitle}>Wallet</Text>
+            <Pressable
+              style={styles.settingsButton}
+              onPress={() => router.push('/settings' as any)}
+              accessibilityLabel="Wallet settings"
+              accessibilityRole="button"
+            >
+              <Ionicons name="settings-outline" size={20} color={Colors.text.inverse} />
+            </Pressable>
+          </View>
+        </LinearGradient>
+
+        {/* Scrollable Content */}
+        <ScrollView
+          style={styles.scroll}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={walletRefreshing}
+              onRefresh={handleRefresh}
+              tintColor={Colors.nileBlue}
+              colors={[Colors.nileBlue]}
+              progressBackgroundColor={Colors.background.primary}
+            />
+          }
+        >
+          {/* Frozen Wallet Banner */}
+          {walletData.isFrozen && (
+            <View style={styles.frozenBanner}>
+              <Ionicons name="lock-closed" size={18} color={Colors.errorScale[700]} />
+              <View style={{ flex: 1, marginLeft: Spacing.sm }}>
+                <Text style={styles.frozenTitle}>Wallet Locked</Text>
+                <Text style={styles.frozenReason}>
+                  {walletData.frozenReason || 'Your wallet is temporarily locked. Contact support for help.'}
+                </Text>
+              </View>
+            </View>
+          )}
+
+          {/* Balance Display with hide/reveal + coin chips */}
+          <BalanceDisplay
+            walletData={walletData}
+            onCoinPress={handleCoinTypePress}
+          />
+
+          {/* Coin Expiry Warning */}
+          {expiringAmount > 0 && (
+            <Pressable
+              style={styles.expiryBanner}
+              onPress={() => router.push('/wallet/expiry-tracker' as any)}
+            >
+              <View style={styles.expiryIconWrap}>
+                <Ionicons name="timer-outline" size={18} color="#D97706" />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.expiryText}>{expiringLabel}</Text>
+                {expiringByType.length > 0 && (
+                  <View style={{ marginTop: 4 }}>
+                    {expiringByType.slice(0, 3).map((item, idx) => {
+                      const label = item.type === 'promo' ? 'Promo' : item.type === 'branded' ? 'Branded' : item.type === 'prive' ? 'Prive' : 'ReZ';
+                      return (
+                        <Text key={idx} style={styles.expiryTypeRow}>
+                          {label}: {item.amount} {BRAND.CURRENCY_CODE} ({item.daysLeft <= 1 ? 'expires today' : `${item.daysLeft}d left`})
+                        </Text>
+                      );
+                    })}
+                  </View>
+                )}
+                <Text style={styles.expirySubtext}>Use them before they expire</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={16} color="#D97706" />
+            </Pressable>
+          )}
+
+          {/* Quick Actions Bar */}
+          {!walletData.isFrozen && <StickyQuickActions />}
+          {/* Coin Detail Cards */}
+          {walletData.coins.map((coin) => (
+            <CoinDetailCard key={coin.id} coin={coin} onPress={handleCoinPress} />
+          ))}
+
+          {/* Branded Coins Summary */}
+          {walletData.brandedCoins && walletData.brandedCoins.length > 0 && (
+            <CoinDetailCard
+              coin={{
+                id: 'branded-summary',
+                type: 'branded',
+                name: 'Branded Coins',
+                amount: walletData.brandedCoinsTotal,
+                currency: BRAND.CURRENCY_CODE,
+                formattedAmount: `${BRAND.CURRENCY_CODE} ${walletData.brandedCoinsTotal}`,
+                description: `From ${walletData.brandedCoins.length} ${walletData.brandedCoins.length === 1 ? 'store' : 'stores'}`,
+                iconPath: BRAND.COIN_IMAGE,
+                backgroundColor: COIN_TYPES.branded.backgroundColor,
+                color: COIN_TYPES.branded.color,
+                isActive: true,
+              }}
+              onPress={() => router.push('/BrandedCoinsScreen')}
+            />
+          )}
+
+          {/* Wallet Insights */}
+          <InsightSection walletData={walletData} />
+
+          {/* Recharge with Discount */}
+          <RechargeWalletCard
+            cashbackText="Save upto 10% on wallet recharge"
+            amountOptions={[120, 500, 1000, 5000, 10000]}
+            onAmountSelect={handleAmountSelect}
+            onSubmit={handleTopupSubmit}
+            isLoading={topupLoading}
+            currency={BRAND.CURRENCY_CODE}
+          />
+
+          {/* View Transactions CTA */}
+          <TransactionCTA onPress={() => {
+            trackTransactionViewed();
+            router.push('/earnings-history');
+          }} />
+
+          {/* Partner Earnings Breakdown */}
+          <EarningsBreakdown
+            compact={true}
+            onViewDetails={() => router.push('/explore')}
+          />
+
+          {/* More For You — collapsible section with profile, scratch card, refer, orders, wishlist, address, ring sizer */}
+          <MoreForYouSection options={moreForYouOptions} />
+
+          {/* Refer and Earn Card */}
+          <ReferAndEarnCard
+            data={{
+              title: referralData?.title || "Refer and Earn",
+              subtitle: referralData?.subtitle || "Invite your friends and get free jewellery",
+              inviteButtonText: referralData?.inviteButtonText || "Invite",
+              inviteLink: referralData?.inviteLink || "",
+            }}
+            onInvite={() => {
+              const link = referralData?.inviteLink || '';
+              if (link) {
+                Share.share({ message: `Join me on ${BRAND.APP_NAME} and earn rewards! ${link}`, url: link }).catch(() => {});
+              } else {
+                router.push('/referral' as any);
+              }
+            }}
+            isLoading={referralLoading}
+          />
+
+          <View style={{ height: 120 }} />
+        </ScrollView>
+
+      </View>
+    </WalletErrorBoundary>
+  );
+};
+
+const createStyles = (screenData: { width: number; height: number }) => {
+  const isSmallScreen = screenData.width < 375;
+  const isTablet = screenData.width > 768;
+  const horizontalPadding = isSmallScreen ? 10 : isTablet ? 24 : 14;
+
+  return StyleSheet.create({
+    root: { flex: 1, backgroundColor: Colors.background.primary },
+    headerBg: {
+      paddingTop: Platform.OS === 'ios' ? 50 : 40,
+      paddingBottom: Spacing.base,
+      paddingHorizontal: horizontalPadding,
+      borderBottomLeftRadius: BorderRadius.xl,
+      borderBottomRightRadius: BorderRadius.xl,
+      overflow: 'hidden',
+      shadowColor: Colors.nileBlue,
+      shadowOpacity: 0.15,
+      elevation: 8,
+    },
+    headerContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    backButton: {
+      width: 36,
+      height: 36,
+      borderRadius: BorderRadius.full,
+      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    settingsButton: {
+      width: 36,
+      height: 36,
+      borderRadius: BorderRadius.full,
+      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    headerTitle: {
+      color: Colors.text.inverse,
+      fontSize: isTablet ? Typography.h2.fontSize : isSmallScreen ? Typography.h4.fontSize : Typography.h3.fontSize,
+      fontWeight: '800',
+      textAlign: 'center',
+    },
+    headerRight: { width: 36 },
+    scroll: { flex: 1, paddingHorizontal: horizontalPadding },
+    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    loadingText: { fontSize: Typography.body.fontSize, color: Colors.text.secondary },
+    errorContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: Spacing['2xl'] },
+    errorTitle: { fontSize: Typography.bodyLarge.fontSize, fontWeight: '700', color: Colors.text.primary, marginTop: Spacing.md },
+    errorDetails: { fontSize: Typography.bodySmall.fontSize, color: Colors.text.secondary, marginTop: Spacing.xs + 2, textAlign: 'center' },
+    retryButton: {
+      backgroundColor: Colors.nileBlue,
+      paddingHorizontal: Spacing.lg,
+      paddingVertical: Spacing.sm + 2,
+      borderRadius: BorderRadius.md,
+      marginTop: Spacing.sm + 2,
+    },
+    retryButtonText: { color: Colors.text.inverse, fontSize: Typography.bodySmall.fontSize, fontWeight: '600' },
+    frozenBanner: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: Colors.errorScale[100],
+      marginHorizontal: Spacing.base,
+      marginTop: Spacing.sm,
+      padding: Spacing.md,
+      borderRadius: BorderRadius.md,
+      borderWidth: 1,
+      borderColor: '#FECACA',
+    },
+    frozenTitle: {
+      fontSize: Typography.bodySmall.fontSize,
+      fontWeight: '700',
+      color: Colors.errorScale[700],
+    },
+    frozenReason: {
+      fontSize: Typography.caption.fontSize,
+      color: '#991B1B',
+      marginTop: 1,
+    },
+    expiryBanner: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: '#FFFBEB',
+      borderRadius: BorderRadius.md + 2,
+      padding: Spacing.md + 2,
+      marginTop: Spacing.sm + 2,
+      marginHorizontal: Spacing.base,
+      borderWidth: 1,
+      borderColor: '#FDE68A',
+      gap: Spacing.sm + 2,
+    },
+    expiryIconWrap: {
+      width: 34,
+      height: 34,
+      borderRadius: BorderRadius.sm + 2,
+      backgroundColor: '#FEF3C7',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    expiryText: {
+      fontSize: Typography.bodySmall.fontSize,
+      fontWeight: '700',
+      color: '#92400E',
+    },
+    expirySubtext: {
+      fontSize: Typography.caption.fontSize,
+      color: '#B45309',
+      marginTop: 3,
+    },
+    expiryTypeRow: {
+      fontSize: 11,
+      color: '#92400E',
+      marginTop: 1,
+    },
+  });
+};
+
+export default WalletScreen;

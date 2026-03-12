@@ -1,0 +1,289 @@
+/**
+ * Offers Page - "Near U" (White Theme)
+ *
+ * Redesigned offers page with ReZ brand styling
+ */
+
+import React, { useState, useCallback, useRef } from 'react';
+import { View, StyleSheet, Pressable, StatusBar, Dimensions, Share } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { ThemedText } from '@/components/ThemedText';
+import { OffersThemeProvider } from '@/contexts/OffersThemeContext';
+import { OffersPageContent } from '@/components/offers/OffersPageContent';
+import { useAuth } from '@/contexts/AuthContext';
+import { useWalletContext } from '@/contexts/WalletContext';
+import { NuqtaCoin as ReZCoin } from '@/components/homepage/ReZCoin';
+import { Colors, Spacing, Typography, Shadows, BorderRadius } from '@/constants/DesignSystem';
+import { platformAlertSimple } from '@/utils/platformAlert';
+import { BRAND } from '@/constants/brand';
+
+const { width } = Dimensions.get('window');
+
+// New Color Palette
+const PALETTE = {
+  nileBlue: '#1a3a52',
+  lightMustard: '#ffcd57',
+  linen: '#faf1e0',
+  lightPeach: '#ffd7b5',
+  lavenderMist: '#dfebf7',
+};
+
+export default function OffersScreen() {
+  const router = useRouter();
+  const { state: authState } = useAuth();
+  const { rezBalance: userCoins, refreshWallet } = useWalletContext();
+  // Favorite state removed — no backend API integration for page-level favorites
+
+  // Get URL query parameters for filtering
+  const searchParams = useLocalSearchParams<{
+    type?: string;           // e.g., 'flash-sale', 'bogo', 'nearby'
+    tab?: string;            // e.g., 'cashback'
+    category?: string;       // category filter
+    multiplier?: string;     // e.g., '2' for 2X cashback
+    filter?: string;         // e.g., 'double', 'coindrops'
+  }>();
+
+  // Convert search params to filter props
+  const filterProps = {
+    initialType: searchParams.type,
+    initialTab: searchParams.tab,
+    initialCategory: searchParams.category,
+    cashbackMultiplier: searchParams.multiplier ? parseInt(searchParams.multiplier) : undefined,
+    initialFilter: searchParams.filter,
+  };
+
+  // Reference to OffersPageContent for refresh
+  const contentRef = useRef<any>(null);
+
+  const handleBack = () => {
+    router.back();
+  };
+
+  const handleShare = async () => {
+    try {
+      const result = await Share.share({
+        message: 'Check out amazing offers on ${BRAND.APP_NAME}! Get up to 50% off + extra cashback on your favorite stores. Download now!',
+        url: 'https://nuqta.app/offers',
+        title: `${BRAND.APP_NAME} Offers`,
+      });
+
+      if (result.action === Share.sharedAction) {
+      }
+    } catch (error) {
+      platformAlertSimple('Error', 'Failed to share. Please try again.');
+    }
+  };
+
+
+  const handleRefresh = useCallback(async () => {
+    // Refresh wallet balance
+    await refreshWallet();
+  }, [refreshWallet]);
+
+  return (
+    <OffersThemeProvider mode="light">
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
+
+        {/* Gradient Header - Linen to White */}
+        <LinearGradient
+          colors={[PALETTE.linen, '#fdf8f0', '#FFFFFF']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={styles.headerGradient}
+        >
+          <SafeAreaView edges={['top']} style={styles.safeHeader}>
+            <View style={styles.header}>
+              {/* Back Button */}
+              <Pressable
+                style={styles.backButton}
+                onPress={handleBack}
+               
+              >
+                <Ionicons name="arrow-back" size={22} color={Colors.text.primary} />
+              </Pressable>
+
+              {/* Center - Title & Coins on same line */}
+              <View style={styles.headerCenter}>
+                <View style={styles.locationIcon}>
+                  <Ionicons name="location" size={14} color={PALETTE.nileBlue} />
+                </View>
+                <ThemedText style={styles.headerTitle}>Near U Offers</ThemedText>
+
+                {/* ReZ Coin with real balance */}
+                <ReZCoin
+                  balance={userCoins}
+                  size="small"
+                  onPress={() => router.push('/coins')}
+                  style={styles.coinPill}
+                />
+              </View>
+
+              {/* Right Actions */}
+              <View style={styles.headerRight}>
+                <Pressable
+                  style={styles.iconButton}
+                  onPress={handleShare}
+                 
+                >
+                  <Ionicons name="share-outline" size={20} color={Colors.text.primary} />
+                </Pressable>
+              </View>
+            </View>
+
+            {/* Hero Banner - Nile Blue with Mustard accent */}
+            <View style={styles.heroBanner}>
+              <LinearGradient
+                colors={[PALETTE.nileBlue, '#234a64', '#1a3a52']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.heroBannerGradient}
+              >
+                <View style={styles.heroBannerContent}>
+                  <View style={styles.heroBannerText}>
+                    <ThemedText style={styles.heroTitle}>MEGA OFFERS</ThemedText>
+                    <ThemedText style={styles.heroSubtitle}>
+                      Up to 50% off + Extra Cashback
+                    </ThemedText>
+                  </View>
+                  <View style={styles.heroIconContainer}>
+                    <Ionicons name="gift" size={40} color={PALETTE.lightMustard} />
+                  </View>
+                </View>
+                <View style={styles.heroShine} />
+              </LinearGradient>
+            </View>
+          </SafeAreaView>
+        </LinearGradient>
+
+        {/* Page Content */}
+        <OffersPageContent onRefresh={handleRefresh} {...filterProps} />
+      </View>
+    </OffersThemeProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: PALETTE.linen,
+  },
+  headerGradient: {
+    paddingBottom: 0,
+  },
+  safeHeader: {
+    width: '100%',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.md,
+  },
+  backButton: {
+    width: 38,
+    height: 38,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 19,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    ...Shadows.subtle,
+  },
+  headerCenter: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  locationIcon: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: PALETTE.lightMustard,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: PALETTE.nileBlue,
+    letterSpacing: -0.3,
+  },
+  coinPill: {
+    backgroundColor: PALETTE.nileBlue,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 14,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  iconButton: {
+    width: 38,
+    height: 38,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 19,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    ...Shadows.subtle,
+  },
+  iconButtonActive: {
+    backgroundColor: '#FEE2E2',
+  },
+  // Hero Banner
+  heroBanner: {
+    marginHorizontal: Spacing.base,
+    marginBottom: Spacing.base,
+    borderRadius: BorderRadius.lg,
+    overflow: 'hidden',
+    ...Shadows.medium,
+  },
+  heroBannerGradient: {
+    padding: Spacing.base,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  heroBannerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  heroBannerText: {
+    flex: 1,
+  },
+  heroTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: PALETTE.lightMustard,
+    letterSpacing: 1,
+    marginBottom: 4,
+  },
+  heroSubtitle: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: '#FFFFFF',
+  },
+  heroIconContainer: {
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  heroShine: {
+    position: 'absolute',
+    top: -50,
+    right: -50,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: 'rgba(255, 205, 87, 0.15)',
+  },
+});

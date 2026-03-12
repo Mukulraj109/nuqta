@@ -1,0 +1,289 @@
+// MainStoreHeader.tsx - Redesigned for new MainStorePage UI
+import React, { useRef } from "react";
+import {
+  View,
+  Pressable,
+  StyleSheet,
+  Platform,
+  Dimensions,
+  StatusBar,
+  Animated,
+  Share,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { triggerImpact } from "@/utils/haptics";
+import { ThemedText } from "@/components/ThemedText";
+import ReZCoin from "@/components/homepage/ReZCoin";
+import {
+  Colors,
+  Spacing,
+  Shadows,
+  BorderRadius,
+} from "@/constants/DesignSystem";
+import { BRAND } from '@/constants/brand';
+
+export interface MainStoreHeaderProps {
+  storeName?: string;
+  storeCategory?: string;
+  onBack?: () => void;
+  onFavoritePress?: () => void;
+  isFavorited?: boolean;
+  showBack?: boolean;
+  userCoins?: number;
+  storeId?: string;
+}
+
+export default function MainStoreHeader({
+  storeName = "Store",
+  storeCategory = "Store",
+  onBack,
+  onFavoritePress,
+  isFavorited = false,
+  showBack = true,
+  userCoins = 0,
+  storeId,
+}: MainStoreHeaderProps) {
+  const router = useRouter();
+  const { width, height } = Dimensions.get("window");
+  const isSmall = width < 360;
+  const topPadding =
+    Platform.OS === "ios" ? (height >= 812 ? 50 : 24) : Platform.OS === "web" ? 8 : StatusBar.currentHeight ?? 24;
+
+  // Animation refs
+  const backButtonScaleAnim = useRef(new Animated.Value(1)).current;
+  const favoriteScaleAnim = useRef(new Animated.Value(1)).current;
+  const shareScaleAnim = useRef(new Animated.Value(1)).current;
+
+  // Handlers with haptic feedback
+  const handleBack = () => {
+    triggerImpact('Medium');
+    if (onBack) onBack();
+    else router.back();
+  };
+
+  const handleFavoritePress = () => {
+    triggerImpact('Light');
+    if (onFavoritePress) onFavoritePress();
+  };
+
+  const handleSharePress = async () => {
+    triggerImpact('Light');
+    try {
+      await Share.share({
+        message: `Check out ${storeName} on ${BRAND.APP_NAME}! Get amazing cashback and rewards.`,
+        title: storeName,
+      });
+    } catch (error) {
+    }
+  };
+
+  const handleCoinPress = () => {
+    triggerImpact('Light');
+    if (Platform.OS === 'ios') {
+      setTimeout(() => router.push('/coins'), 50);
+    } else {
+      router.push('/coins');
+    }
+  };
+
+  // Animation handlers
+  const animateScale = (animValue: Animated.Value, toValue: number) => {
+    Animated.spring(animValue, {
+      toValue,
+      useNativeDriver: true,
+      tension: 100,
+      friction: 8,
+    }).start();
+  };
+
+  return (
+    <View style={[styles.container, { paddingTop: topPadding }]}>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <View style={styles.inner}>
+        {/* Back Button */}
+        {showBack && (
+          <Animated.View
+            style={[
+              styles.backButtonWrapper,
+              { transform: [{ scale: backButtonScaleAnim }] },
+            ]}
+          >
+            <Pressable
+             
+              onPress={handleBack}
+              onPressIn={() => animateScale(backButtonScaleAnim, 0.9)}
+              onPressOut={() => animateScale(backButtonScaleAnim, 1)}
+              accessibilityRole="button"
+              accessibilityLabel="Go back"
+              style={styles.backButton}
+            >
+              <Ionicons name="chevron-back" size={22} color="#1a3a52" />
+            </Pressable>
+          </Animated.View>
+        )}
+
+        {/* Title & Subtitle */}
+        <View style={styles.titleContainer}>
+          <ThemedText style={[styles.title, isSmall && styles.titleSmall]} numberOfLines={1}>
+            {storeName}
+          </ThemedText>
+          {storeCategory && (
+            <ThemedText style={[styles.subtitle, isSmall && styles.subtitleSmall]} numberOfLines={1}>
+              {storeCategory}
+            </ThemedText>
+          )}
+        </View>
+
+        {/* Right Actions */}
+        <View style={styles.rightActions}>
+          {/* Favorite Button */}
+          <Animated.View style={{ transform: [{ scale: favoriteScaleAnim }] }}>
+            <Pressable
+             
+              onPress={handleFavoritePress}
+              onPressIn={() => animateScale(favoriteScaleAnim, 0.9)}
+              onPressOut={() => animateScale(favoriteScaleAnim, 1)}
+              accessibilityRole="button"
+              accessibilityLabel={isFavorited ? "Remove from favorites" : "Add to favorites"}
+              style={[styles.actionButton, isFavorited && styles.actionButtonActive]}
+            >
+              <Ionicons
+                name={isFavorited ? "heart" : "heart-outline"}
+                size={20}
+                color={isFavorited ? "#FFFFFF" : "#6B7280"}
+              />
+            </Pressable>
+          </Animated.View>
+
+          {/* Share Button */}
+          <Animated.View style={{ transform: [{ scale: shareScaleAnim }] }}>
+            <Pressable
+             
+              onPress={handleSharePress}
+              onPressIn={() => animateScale(shareScaleAnim, 0.9)}
+              onPressOut={() => animateScale(shareScaleAnim, 1)}
+              accessibilityRole="button"
+              accessibilityLabel="Share store"
+              style={styles.actionButton}
+            >
+              <Ionicons name="share-outline" size={20} color="#6B7280" />
+            </Pressable>
+          </Animated.View>
+
+          {/* Coin Display */}
+          <Pressable
+           
+            onPress={handleCoinPress}
+            style={styles.coinButton}
+          >
+            <View style={styles.coinIcon}>
+              <ThemedText style={styles.coinEmoji}>🪙</ThemedText>
+            </View>
+            <ThemedText style={styles.coinText}>{userCoins}</ThemedText>
+          </Pressable>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    backgroundColor: "#FFFFFF",
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.04,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 2,
+      },
+      web: {
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
+      },
+    }),
+  },
+  inner: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    minHeight: 60,
+  },
+  backButtonWrapper: {
+    marginRight: 8,
+  },
+  backButton: {
+    width: 36,
+    height: 36,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 12,
+    backgroundColor: "#F3F4F6",
+  },
+  titleContainer: {
+    flex: 1,
+    paddingHorizontal: 4,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#1a3a52",
+    letterSpacing: -0.3,
+  },
+  titleSmall: {
+    fontSize: 16,
+  },
+  subtitle: {
+    fontSize: 13,
+    color: "#6B7280",
+    marginTop: 2,
+    fontWeight: "500",
+  },
+  subtitleSmall: {
+    fontSize: 11,
+  },
+  rightActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  actionButton: {
+    width: 36,
+    height: 36,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 12,
+    backgroundColor: "#F3F4F6",
+  },
+  actionButtonActive: {
+    backgroundColor: "#FF4757",
+  },
+  coinButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#ffcd57",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 6,
+  },
+  coinIcon: {
+    width: 20,
+    height: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  coinEmoji: {
+    fontSize: 14,
+  },
+  coinText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#FFFFFF",
+  },
+});

@@ -1,0 +1,216 @@
+/**
+ * Coin Balance Component
+ * Displays user's coin/points balance with animated updates
+ */
+
+import React, { useEffect, useState, useRef } from 'react';
+import { BRAND } from '@/constants/brand';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Animated,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
+import CachedImage from '@/components/ui/CachedImage';
+import { useGamification } from '@/contexts/GamificationContext';
+import { useRouter } from 'expo-router';
+
+interface CoinBalanceProps {
+  size?: 'small' | 'medium' | 'large';
+  onPress?: () => void;
+  showIcon?: boolean;
+  showLabel?: boolean;
+  color?: string;
+  containerStyle?: ViewStyle;
+  textStyle?: TextStyle;
+  animateChanges?: boolean;
+}
+
+export default function CoinBalance({
+  size = 'medium',
+  onPress,
+  showIcon = true,
+  showLabel = false,
+  color = '#F59E0B',
+  containerStyle,
+  textStyle,
+  animateChanges = true,
+}: CoinBalanceProps) {
+  const router = useRouter();
+  const { state } = useGamification();
+  const [previousBalance, setPreviousBalance] = useState(state.coinBalance.total);
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const bounceAnim = useRef(new Animated.Value(0)).current;
+
+  // Animate balance changes
+  useEffect(() => {
+    if (animateChanges && state.coinBalance.total !== previousBalance) {
+      // Bounce animation
+      Animated.sequence([
+        Animated.parallel([
+          Animated.spring(scaleAnim, {
+            toValue: 1.2,
+            friction: 3,
+            useNativeDriver: true,
+          }),
+          Animated.timing(bounceAnim, {
+            toValue: -10,
+            duration: 150,
+            useNativeDriver: true,
+          }),
+        ]),
+        Animated.parallel([
+          Animated.spring(scaleAnim, {
+            toValue: 1,
+            friction: 3,
+            useNativeDriver: true,
+          }),
+          Animated.timing(bounceAnim, {
+            toValue: 0,
+            duration: 150,
+            useNativeDriver: true,
+          }),
+        ]),
+      ]).start();
+
+      setPreviousBalance(state.coinBalance.total);
+    }
+  }, [state.coinBalance.total, previousBalance, animateChanges]);
+
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    } else {
+      router.push('/coins');
+    }
+  };
+
+  const getSizeStyles = () => {
+    switch (size) {
+      case 'small':
+        return {
+          container: styles.containerSmall,
+          icon: 16,
+          text: styles.textSmall,
+        };
+      case 'large':
+        return {
+          container: styles.containerLarge,
+          icon: 28,
+          text: styles.textLarge,
+        };
+      default:
+        return {
+          container: styles.containerMedium,
+          icon: 20,
+          text: styles.textMedium,
+        };
+    }
+  };
+
+  const sizeStyles = getSizeStyles();
+  const formattedBalance = state.coinBalance.total.toLocaleString();
+
+  return (
+    <Pressable
+      style={[styles.container, sizeStyles.container, containerStyle]}
+      onPress={handlePress}
+     
+    >
+      <Animated.View
+        style={[
+          styles.content,
+          {
+            transform: [{ scale: scaleAnim }, { translateY: bounceAnim }],
+          },
+        ]}
+      >
+        {showIcon && (
+          <CachedImage
+            source={BRAND.COIN_IMAGE}
+            style={{ width: sizeStyles.icon + 8, height: sizeStyles.icon + 8 }}
+            contentFit="contain"
+          />
+        )}
+        <View style={styles.textContainer}>
+          {showLabel && <Text style={styles.label}>Coins</Text>}
+          <Text style={[sizeStyles.text, textStyle, { color }]}>{formattedBalance}</Text>
+        </View>
+        {state.coinBalance.pending > 0 && (
+          <View style={styles.pendingBadge}>
+            <Text style={styles.pendingText}>+{state.coinBalance.pending}</Text>
+          </View>
+        )}
+      </Animated.View>
+    </Pressable>
+);
+}
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  containerSmall: {
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+  },
+  containerMedium: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  containerLarge: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconContainer: {
+    borderRadius: 20,
+    padding: 6,
+    marginRight: 8,
+  },
+  textContainer: {
+    alignItems: 'flex-start',
+  },
+  label: {
+    fontSize: 10,
+    color: '#6B7280',
+    fontWeight: '500',
+    marginBottom: 2,
+  },
+  textSmall: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  textMedium: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  textLarge: {
+    fontSize: 20,
+    fontWeight: '800',
+  },
+  pendingBadge: {
+    backgroundColor: '#ffcd57',
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    marginLeft: 8,
+  },
+  pendingText: {
+    fontSize: 10,
+    color: '#FFFFFF',
+    fontWeight: '700',
+  },
+});

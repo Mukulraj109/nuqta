@@ -1,0 +1,718 @@
+/**
+ * Badges/Achievements Screen - Converted from V2 Web
+ * Exact match to Rez_v-2-main/src/pages/earn/Achievements.jsx
+ * Now integrated with achievementApi for real data
+ */
+
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  Dimensions,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
+import { CardGridSkeleton } from '@/components/skeletons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter, Stack } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { achievementApi, Achievement as ApiAchievement } from '@/services/achievementApi';
+import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const CARD_WIDTH = (SCREEN_WIDTH - 48 - 12) / 2;
+
+const COLORS = {
+  white: Colors.background.primary,
+  navy: Colors.nileBlue,
+  gray100: Colors.gray[100],
+  gray200: Colors.border.medium,
+  gray400: Colors.text.tertiary,
+  gray500: Colors.text.secondary,
+  gray600: Colors.gray[600],
+  green500: Colors.success,
+  amber400: '#FBBF24',
+  amber500: '#F59E0B',
+  purple500: '#8B5CF6',
+  purple600: '#7C3AED',
+  pink500: '#EC4899',
+  blue500: '#3B82F6',
+  cyan500: '#06B6D4',
+  teal500: '#14B8A6',
+  emerald500: '#10B981',
+};
+
+interface Achievement {
+  id: string;
+  title: string;
+  desc: string;
+  icon: string;
+  unlocked: boolean;
+  coins: number;
+  category: string;
+  tier: string;
+  progress?: number;
+}
+
+// Tier color mapping
+const TIER_COLORS: Record<string, string> = {
+  bronze: '#CD7F32',
+  silver: '#C0C0C0',
+  gold: '#FFD700',
+  platinum: '#E5E4E2',
+  diamond: '#B9F2FF',
+};
+
+const BadgesScreen: React.FC = () => {
+  const router = useRouter();
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [stats, setStats] = useState({
+    unlocked: 0,
+    total: 0,
+    totalCoins: 0,
+    completionPercent: 0,
+  });
+  const fetchingRef = React.useRef(false); // Prevent duplicate API calls
+
+  // Fetch achievements from API
+  const fetchAchievements = useCallback(async (isRefresh = false) => {
+    // Prevent duplicate concurrent API calls
+    if (fetchingRef.current && !isRefresh) return;
+    fetchingRef.current = true;
+
+    try {
+      if (isRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
+      setError(null);
+
+      // First recalculate achievements to get latest progress
+      try {
+        await achievementApi.recalculateAchievements();
+      } catch (recalcError) {
+        // Continue anyway - will just show potentially stale progress
+      }
+
+      const response = await achievementApi.getAchievementProgress();
+
+      if (response.success && response.data) {
+        // All display data (icon, category, reward, tier) now comes from the API
+        const mapped: Achievement[] = response.data.achievements
+          .filter((a: ApiAchievement) => {
+            // Filter out secret achievements; show hidden_until_progress only if there's progress
+            if (a.visibility === 'secret') return false;
+            if (a.visibility === 'hidden_until_progress' && a.progress === 0) return false;
+            return true;
+          })
+          .map((a: ApiAchievement) => ({
+            id: a.id,
+            title: a.title,
+            desc: a.description,
+            icon: a.icon || '🏆',
+            unlocked: a.unlocked,
+            coins: a.reward?.coins || 0,
+            category: a.category || 'General',
+            tier: a.tier || 'bronze',
+            progress: a.unlocked ? 100 : a.progress,
+          }));
+
+        setAchievements(mapped);
+        setStats({
+          unlocked: response.data.summary.unlocked,
+          total: response.data.summary.total,
+          totalCoins: response.data.summary.totalCoinsEarned ?? mapped.filter(a => a.unlocked).reduce((sum, a) => sum + a.coins, 0),
+          completionPercent: Math.round(response.data.summary.completionPercentage),
+        });
+      } else {
+        setError(response.error || 'Failed to load achievements');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+      fetchingRef.current = false;
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAchievements();
+  }, [fetchAchievements]);
+
+  const onRefresh = useCallback(() => {
+    fetchAchievements(true);
+  }, [fetchAchievements]);
+
+  // Derive categories dynamically from API data
+  const categories = ['All', ...Array.from(new Set(achievements.map(a => a.category))).sort()];
+
+  const filteredAchievements = activeCategory === 'All'
+    ? achievements
+    : achievements.filter(a => a.category === activeCategory);
+
+  // Loading state
+  if (loading) {
+    return (
+      <>
+        <Stack.Screen options={{ headerShown: false }} />
+        <CardGridSkeleton />
+      </>
+    );
+  }
+
+  // Error state
+  if (error && achievements.length === 0) {
+    return (
+      <>
+        <Stack.Screen options={{ headerShown: false }} />
+        <SafeAreaView style={styles.container}>
+          <View style={styles.header}>
+            <Pressable style={styles.backButton} onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={20} color={COLORS.navy} />
+          </Pressable>
+          <View>
+            <Text style={styles.headerTitle}>Achievements</Text>
+            <Text style={styles.headerSubtitle}>Unlock badges & earn coins</Text>
+          </View>
+        </View>
+        <View style={styles.errorContainer}>
+          <Ionicons name="cloud-offline-outline" size={64} color={COLORS.gray400} />
+          <Text style={styles.errorTitle}>Unable to load achievements</Text>
+          <Text style={styles.errorText}>{error}</Text>
+          <Pressable style={styles.retryButton} onPress={() => fetchAchievements()}>
+            <LinearGradient
+              colors={[COLORS.purple500, COLORS.purple600]}
+              style={styles.retryButtonGradient}
+            >
+              <Text style={styles.retryButtonText}>Try Again</Text>
+            </LinearGradient>
+          </Pressable>
+        </View>
+        </SafeAreaView>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={20} color={COLORS.navy} />
+          </Pressable>
+          <View>
+            <Text style={styles.headerTitle}>Achievements</Text>
+          <Text style={styles.headerSubtitle}>Unlock badges & earn coins</Text>
+        </View>
+      </View>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={[COLORS.purple500]}
+            tintColor={COLORS.purple500}
+          />
+        }
+      >
+        {/* Stats */}
+        <View style={styles.statsRow}>
+          <LinearGradient
+            colors={['rgba(139, 92, 246, 0.2)', 'rgba(236, 72, 153, 0.2)']}
+            style={styles.statCard}
+          >
+            <Text style={styles.statValue}>{stats.unlocked}/{stats.total}</Text>
+            <Text style={styles.statLabel}>Unlocked</Text>
+          </LinearGradient>
+          <LinearGradient
+            colors={['rgba(245, 158, 11, 0.2)', 'rgba(234, 179, 8, 0.2)']}
+            style={styles.statCard}
+          >
+            <Text style={[styles.statValue, { color: COLORS.amber400 }]}>{stats.totalCoins}</Text>
+            <Text style={styles.statLabel}>Coins Earned</Text>
+          </LinearGradient>
+          <LinearGradient
+            colors={['rgba(34, 197, 94, 0.2)', 'rgba(16, 185, 129, 0.2)']}
+            style={styles.statCard}
+          >
+            <Text style={[styles.statValue, { color: COLORS.green500 }]}>{stats.completionPercent}%</Text>
+            <Text style={styles.statLabel}>Complete</Text>
+          </LinearGradient>
+        </View>
+
+        {/* Empty State */}
+        {achievements.length === 0 && !loading && (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyIcon}>🏅</Text>
+            <Text style={styles.emptyTitle}>No Achievements Yet</Text>
+            <Text style={styles.emptyText}>Start shopping and engaging to unlock your first badge!</Text>
+          </View>
+        )}
+
+        {/* Category Filter */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.categoriesContainer}
+        >
+          {categories.map(cat => (
+            <Pressable
+              key={cat}
+              style={[
+                styles.categoryButton,
+                activeCategory === cat && styles.categoryButtonActive
+              ]}
+              onPress={() => setActiveCategory(cat)}
+            >
+              <Text style={[
+                styles.categoryText,
+                activeCategory === cat && styles.categoryTextActive
+              ]}>
+                {cat}
+              </Text>
+            </Pressable>
+          ))}
+        </ScrollView>
+
+        {/* Achievements Grid */}
+        <View style={styles.achievementsGrid}>
+          {filteredAchievements.map((achievement) => (
+            <View
+              key={achievement.id}
+              style={[
+                styles.achievementCard,
+                achievement.unlocked && styles.achievementCardUnlocked
+              ]}
+            >
+              {!achievement.unlocked && (
+                <View style={styles.lockIcon}>
+                  <Ionicons name="lock-closed" size={14} color={COLORS.gray400} />
+                </View>
+              )}
+
+              <View style={styles.achievementHeader}>
+                <Text style={styles.achievementIcon}>{achievement.icon}</Text>
+                <View style={styles.badgeRow}>
+                  {achievement.tier && achievement.tier !== 'bronze' && (
+                    <View style={[styles.tierBadge, { backgroundColor: TIER_COLORS[achievement.tier] || TIER_COLORS.bronze }]}>
+                      <Text style={styles.tierBadgeText}>{achievement.tier.charAt(0).toUpperCase() + achievement.tier.slice(1)}</Text>
+                    </View>
+                  )}
+                  {achievement.unlocked && <Text style={styles.checkIcon}>✅</Text>}
+                </View>
+              </View>
+
+              <Text style={styles.achievementTitle}>{achievement.title}</Text>
+              <Text style={styles.achievementDesc}>{achievement.desc}</Text>
+              <Text style={styles.achievementCoins}>+{achievement.coins} coins</Text>
+
+              {!achievement.unlocked && achievement.progress !== undefined && (
+                <View style={styles.progressContainer}>
+                  <View style={styles.progressTrack}>
+                    <LinearGradient
+                      colors={[COLORS.emerald500, COLORS.teal500]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 0 }}
+                      style={[styles.progressFill, { width: `${achievement.progress}%` }]}
+                    />
+                  </View>
+                  <Text style={styles.progressText}>{achievement.progress}% complete</Text>
+                </View>
+              )}
+            </View>
+          ))}
+        </View>
+
+        {/* CTAs Section */}
+        <View style={styles.ctasSection}>
+          <Text style={styles.ctasTitle}>Quick Actions to Unlock More</Text>
+
+          {/* Shopping CTA */}
+          <Pressable
+            style={styles.ctaCard}
+            onPress={() => router.push('/mall')}
+           
+          >
+            <LinearGradient
+              colors={['rgba(139, 92, 246, 0.2)', 'rgba(236, 72, 153, 0.2)']}
+              style={styles.ctaGradient}
+            >
+              <View style={[styles.ctaIconBox, { backgroundColor: 'rgba(139, 92, 246, 0.2)' }]}>
+                <Ionicons name="bag-handle" size={20} color={COLORS.purple600} />
+              </View>
+              <View style={styles.ctaContent}>
+                <Text style={styles.ctaTitle}>Shop & Unlock Deals</Text>
+                <Text style={styles.ctaSubtitle}>Complete shopping achievements</Text>
+              </View>
+              <Ionicons name="trending-up" size={20} color={COLORS.purple600} />
+            </LinearGradient>
+          </Pressable>
+
+          {/* Referral CTA */}
+          <Pressable
+            style={styles.ctaCard}
+            onPress={() => router.push('/referral')}
+           
+          >
+            <LinearGradient
+              colors={['rgba(59, 130, 246, 0.2)', 'rgba(6, 182, 212, 0.2)']}
+              style={styles.ctaGradient}
+            >
+              <View style={[styles.ctaIconBox, { backgroundColor: 'rgba(59, 130, 246, 0.2)' }]}>
+                <Ionicons name="people" size={20} color={COLORS.blue500} />
+              </View>
+              <View style={styles.ctaContent}>
+                <Text style={styles.ctaTitle}>Refer Friends</Text>
+                <Text style={styles.ctaSubtitle}>Unlock social achievements & earn</Text>
+              </View>
+              <Ionicons name="trending-up" size={20} color={COLORS.blue500} />
+            </LinearGradient>
+          </Pressable>
+
+          {/* Games CTA */}
+          <Pressable
+            style={styles.ctaCard}
+            onPress={() => router.push('/games')}
+           
+          >
+            <LinearGradient
+              colors={['rgba(34, 197, 94, 0.2)', 'rgba(16, 185, 129, 0.2)']}
+              style={styles.ctaGradient}
+            >
+              <View style={[styles.ctaIconBox, { backgroundColor: 'rgba(34, 197, 94, 0.2)' }]}>
+                <Ionicons name="game-controller" size={20} color={COLORS.green500} />
+              </View>
+              <View style={styles.ctaContent}>
+                <Text style={styles.ctaTitle}>Play Games</Text>
+                <Text style={styles.ctaSubtitle}>Complete gaming challenges</Text>
+              </View>
+              <Ionicons name="trending-up" size={20} color={COLORS.green500} />
+            </LinearGradient>
+          </Pressable>
+
+          {/* Daily Check-in CTA */}
+          <Pressable
+            style={styles.ctaCard}
+            onPress={() => router.push('/explore/daily-checkin')}
+           
+          >
+            <LinearGradient
+              colors={['rgba(245, 158, 11, 0.2)', 'rgba(234, 179, 8, 0.2)']}
+              style={styles.ctaGradient}
+            >
+              <View style={[styles.ctaIconBox, { backgroundColor: 'rgba(245, 158, 11, 0.2)' }]}>
+                <Ionicons name="ribbon" size={20} color={COLORS.amber500} />
+              </View>
+              <View style={styles.ctaContent}>
+                <Text style={styles.ctaTitle}>Daily Check-in</Text>
+                <Text style={styles.ctaSubtitle}>Build streaks & unlock rewards</Text>
+              </View>
+              <LinearGradient
+                colors={[COLORS.amber500, '#EAB308']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.checkInButton}
+              >
+                <Text style={styles.checkInText}>Check In</Text>
+              </LinearGradient>
+            </LinearGradient>
+          </Pressable>
+        </View>
+
+        <View style={{ height: 100 }} />
+        </ScrollView>
+      </SafeAreaView>
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.white,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 100,
+  },
+  loadingText: {
+    marginTop: Spacing.base,
+    ...Typography.body,
+    color: COLORS.gray500,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Spacing['2xl'],
+    paddingBottom: 100,
+  },
+  errorTitle: {
+    ...Typography.h4,
+    color: COLORS.navy,
+    marginTop: Spacing.base,
+    marginBottom: Spacing.sm,
+  },
+  errorText: {
+    ...Typography.body,
+    color: COLORS.gray500,
+    textAlign: 'center',
+    marginBottom: Spacing.xl,
+  },
+  retryButton: {
+    borderRadius: BorderRadius.md,
+    overflow: 'hidden',
+  },
+  retryButtonGradient: {
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+  },
+  retryButtonText: {
+    ...Typography.label,
+    color: COLORS.white,
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    paddingVertical: Spacing['3xl'],
+    paddingHorizontal: Spacing['2xl'],
+  },
+  emptyIcon: {
+    fontSize: 64,
+    marginBottom: Spacing.base,
+  },
+  emptyTitle: {
+    ...Typography.h4,
+    color: COLORS.navy,
+    marginBottom: Spacing.sm,
+  },
+  emptyText: {
+    ...Typography.body,
+    color: COLORS.gray500,
+    textAlign: 'center',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.md,
+    gap: Spacing.md,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: BorderRadius.xl,
+    backgroundColor: 'rgba(0,0,0,0.05)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerTitle: {
+    ...Typography.h4,
+    fontWeight: '700',
+    color: COLORS.navy,
+  },
+  headerSubtitle: {
+    ...Typography.bodySmall,
+    color: COLORS.gray500,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    paddingHorizontal: Spacing.base,
+    gap: Spacing.md,
+    marginBottom: Spacing.base,
+  },
+  statCard: {
+    flex: 1,
+    padding: Spacing.base,
+    borderRadius: BorderRadius.lg,
+    alignItems: 'center',
+  },
+  statValue: {
+    ...Typography.h3,
+    color: COLORS.navy,
+    marginBottom: Spacing.xs,
+  },
+  statLabel: {
+    ...Typography.caption,
+    color: COLORS.gray500,
+  },
+  categoriesContainer: {
+    paddingHorizontal: Spacing.base,
+    gap: Spacing.sm,
+    marginBottom: Spacing.base,
+  },
+  categoryButton: {
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.full,
+    backgroundColor: COLORS.gray100,
+    marginRight: Spacing.sm,
+  },
+  categoryButtonActive: {
+    backgroundColor: COLORS.green500,
+  },
+  categoryText: {
+    ...Typography.body,
+    fontSize: 13,
+    fontWeight: '500',
+    color: COLORS.gray600,
+  },
+  categoryTextActive: {
+    color: COLORS.white,
+  },
+  achievementsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: Spacing.base,
+    gap: Spacing.md,
+  },
+  achievementCard: {
+    width: CARD_WIDTH,
+    padding: Spacing.base,
+    borderRadius: BorderRadius.lg,
+    backgroundColor: COLORS.gray100,
+    borderWidth: 1,
+    borderColor: COLORS.gray200,
+    position: 'relative',
+  },
+  achievementCardUnlocked: {
+    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+    borderColor: 'rgba(245, 158, 11, 0.3)',
+  },
+  lockIcon: {
+    position: 'absolute',
+    top: Spacing.sm,
+    right: Spacing.sm,
+  },
+  achievementHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.sm,
+  },
+  achievementIcon: {
+    fontSize: 36,
+  },
+  checkIcon: {
+    ...Typography.h4,
+  },
+  badgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+  },
+  tierBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: BorderRadius.sm,
+  },
+  tierBadgeText: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#1a1a1a',
+  },
+  achievementTitle: {
+    ...Typography.body,
+    fontSize: 13,
+    fontWeight: '700',
+    color: COLORS.navy,
+    marginBottom: Spacing.xs,
+  },
+  achievementDesc: {
+    ...Typography.caption,
+    color: COLORS.gray500,
+    marginBottom: Spacing.sm,
+  },
+  achievementCoins: {
+    ...Typography.labelSmall,
+    color: COLORS.amber400,
+  },
+  progressContainer: {
+    marginTop: Spacing.md,
+  },
+  progressTrack: {
+    height: 6,
+    backgroundColor: COLORS.gray200,
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 3,
+  },
+  progressText: {
+    ...Typography.overline,
+    fontWeight: '400',
+    letterSpacing: 0,
+    textTransform: 'none',
+    color: COLORS.gray500,
+    marginTop: Spacing.xs,
+  },
+  ctasSection: {
+    paddingHorizontal: Spacing.base,
+    paddingTop: Spacing.xl,
+  },
+  ctasTitle: {
+    ...Typography.bodyLarge,
+    fontWeight: '700',
+    color: COLORS.navy,
+    marginBottom: Spacing.base,
+  },
+  ctaCard: {
+    marginBottom: Spacing.md,
+    borderRadius: BorderRadius.lg,
+    overflow: 'hidden',
+  },
+  ctaGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: Spacing.base,
+    gap: Spacing.md,
+  },
+  ctaIconBox: {
+    width: 44,
+    height: 44,
+    borderRadius: BorderRadius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ctaContent: {
+    flex: 1,
+  },
+  ctaTitle: {
+    ...Typography.label,
+    fontWeight: '700',
+    color: COLORS.navy,
+    marginBottom: 2,
+  },
+  ctaSubtitle: {
+    ...Typography.bodySmall,
+    color: COLORS.gray500,
+  },
+  checkInButton: {
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.md,
+  },
+  checkInText: {
+    ...Typography.labelSmall,
+    color: COLORS.white,
+  },
+});
+
+export default BadgesScreen;
