@@ -48,7 +48,7 @@ interface ProductVariantModalProps {
   variants?: ProductVariant[];
 }
 
-export default function ProductVariantModal({
+function ProductVariantModal({
   visible,
   product,
   onConfirm,
@@ -898,3 +898,5 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
   },
 });
+
+export default React.memo(ProductVariantModal);

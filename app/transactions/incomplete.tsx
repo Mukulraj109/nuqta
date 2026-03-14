@@ -113,7 +113,7 @@ const IncompleteTransactionsPage = () => {
     }
   };
 
-  const handleAction = (order: Order) => {
+  const handleAction = useCallback((order: Order) => {
     switch (order.status as any) {
       case 'payment_pending':
       case 'payment_failed':
@@ -129,9 +129,9 @@ const IncompleteTransactionsPage = () => {
         router.push(`/orders/${order._id}` as any);
         break;
     }
-  };
+  }, [router]);
 
-  const renderOrderItem = ({ item }: { item: Order }) => (
+  const renderOrderItem = useCallback(({ item }: { item: Order }) => (
     <View style={styles.orderCard}>
       <View style={styles.orderHeader}>
         <View style={styles.orderHeaderLeft}>
@@ -181,7 +181,7 @@ const IncompleteTransactionsPage = () => {
         <Ionicons name="arrow-forward" size={16} color={getStatusColor(item.status as any)} />
       </Pressable>
     </View>
-  );
+  ), [currencySymbol, handleAction]);
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>

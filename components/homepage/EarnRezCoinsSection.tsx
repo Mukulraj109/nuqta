@@ -654,4 +654,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EarnNuqtaCoinsSection;
+export default React.memo(EarnNuqtaCoinsSection);

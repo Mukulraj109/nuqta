@@ -16,7 +16,7 @@ import { useRegion } from '@/contexts/RegionContext';
 
 const PLACEHOLDER_IMAGE = 'https://via.placeholder.com/150x150?text=No+Image';
 
-export default function ProductCard({
+function ProductCard({
   product,
   isSelected,
   onToggleSelect,
@@ -399,3 +399,5 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
   },
 });
+
+export default React.memo(ProductCard);

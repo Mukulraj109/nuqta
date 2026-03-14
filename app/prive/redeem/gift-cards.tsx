@@ -228,6 +228,7 @@ export default function GiftCardsScreen() {
           visible={showVoucherModal}
           animationType="slide"
           transparent={true}
+          statusBarTranslucent
           onRequestClose={() => setShowVoucherModal(false)}
         >
           <View style={styles.modalOverlay}>

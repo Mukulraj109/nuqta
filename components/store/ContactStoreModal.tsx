@@ -29,7 +29,7 @@ interface ContactStoreModalProps {
   orderNumber?: string;
 }
 
-export default function ContactStoreModal({
+function ContactStoreModal({
   visible,
   onClose,
   storeId,
@@ -466,3 +466,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default React.memo(ContactStoreModal);

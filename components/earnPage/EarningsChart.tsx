@@ -21,7 +21,7 @@ const CHART_HEIGHT = 120;
 const BAR_WIDTH = (CHART_WIDTH - 60) / 4; // 4 bars with spacing
 const MAX_BAR_HEIGHT = 100;
 
-export default function EarningsChart({ breakdown, currency }: EarningsChartProps) {
+function EarningsChart({ breakdown, currency }: EarningsChartProps) {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = currency || getCurrencySymbol();
   const data = useMemo(() => {
@@ -152,3 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(EarningsChart);

@@ -42,7 +42,7 @@ interface VoucherSelectionModalProps {
   onRemove: () => void;
 }
 
-export default function VoucherSelectionModal({
+function VoucherSelectionModal({
   visible,
   cartTotal,
   currentVoucher,
@@ -747,3 +747,5 @@ const styles = StyleSheet.create({
     color: '#DC2626',
   },
 });
+
+export default React.memo(VoucherSelectionModal);

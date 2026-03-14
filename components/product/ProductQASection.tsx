@@ -667,4 +667,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductQASection;
+export default React.memo(ProductQASection);

@@ -249,4 +249,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SocialEarningScreen;
+export default React.memo(SocialEarningScreen);

@@ -145,4 +145,4 @@ export const ExclusiveCategoriesGrid: React.FC<ExclusiveCategoriesGridProps> = (
   );
 };
 
-export default ExclusiveCategoriesGrid;
+export default React.memo(ExclusiveCategoriesGrid);

@@ -126,8 +126,8 @@ const PlayAndEarn = () => {
   };
 
   const { rezBalance: rezCoins, walletData, brandedCoins: brandedCoinsFromCtx, refreshWallet, savingsInsights } = useWalletContext();
-  const totalBrandedCoins = brandedCoinsFromCtx?.reduce((sum: number, c: any) => sum + (c.amount || 0), 0) || 0;
-  const totalPromoCoins = walletData?.coins?.find(c => c.type === 'promo')?.amount || 0;
+  const totalBrandedCoins = useMemo(() => brandedCoinsFromCtx?.reduce((sum: number, c: any) => sum + (c.amount || 0), 0) || 0, [brandedCoinsFromCtx]);
+  const totalPromoCoins = useMemo(() => walletData?.coins?.find(c => c.type === 'promo')?.amount || 0, [walletData?.coins]);
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -718,7 +718,7 @@ const PlayAndEarn = () => {
           <Pressable style={styles.walletButton} onPress={() => navigateTo('/wallet')}>
             <Text style={styles.walletButtonText}>View Wallet</Text>
           </Pressable>
-          <Pressable style={styles.howButton} onPress={() => navigateTo('/how-rez-works')}>
+          <Pressable style={styles.howButton} onPress={() => navigateTo(BRAND.HOW_IT_WORKS_ROUTE)}>
             <Text style={styles.howButtonText}>How Coins Work</Text>
           </Pressable>
         </View>

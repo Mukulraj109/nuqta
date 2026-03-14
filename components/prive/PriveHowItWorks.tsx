@@ -221,4 +221,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveHowItWorks;
+export default React.memo(PriveHowItWorks);

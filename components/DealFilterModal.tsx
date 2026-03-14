@@ -25,7 +25,7 @@ interface DealFilterModalProps {
   dealCategories: DealCategory[];
 }
 
-export default function DealFilterModal({
+function DealFilterModal({
   visible,
   onClose,
   currentSort,
@@ -560,3 +560,5 @@ const createStyles = (screenData: { width: number; height: number }) => {
     },
   });
 };
+
+export default React.memo(DealFilterModal);

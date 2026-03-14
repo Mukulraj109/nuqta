@@ -51,7 +51,7 @@ interface CommentSystemProps {
   style?: any;
 }
 
-export default function CommentSystem({
+function CommentSystem({
   entityId,
   entityType,
   comments,
@@ -597,3 +597,5 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 });
+
+export default React.memo(CommentSystem);

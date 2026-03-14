@@ -146,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SecurePaymentHeader;
+export default React.memo(SecurePaymentHeader);

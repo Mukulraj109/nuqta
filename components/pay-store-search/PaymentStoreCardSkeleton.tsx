@@ -185,4 +185,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PaymentStoreCardSkeleton;
+export default React.memo(PaymentStoreCardSkeleton);

@@ -6,7 +6,7 @@ import { ProjectCardProps } from '@/types/earnPage.types';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
 import { useRegion } from '@/contexts/RegionContext';
 
-export default function ProjectCard({
+function ProjectCard({
   project,
   onPress,
   onStart
@@ -227,3 +227,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default React.memo(ProjectCard);

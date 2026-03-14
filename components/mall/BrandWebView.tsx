@@ -320,4 +320,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BrandWebView;
+export default React.memo(BrandWebView);

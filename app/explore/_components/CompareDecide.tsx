@@ -393,4 +393,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CompareDecide;
+export default React.memo(CompareDecide);

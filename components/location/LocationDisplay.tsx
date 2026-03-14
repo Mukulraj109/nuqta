@@ -37,7 +37,7 @@ const notifyLocationChange = (location: any) => {
   locationListeners.forEach(listener => listener(location));
 };
 
-export default function LocationDisplay({
+function LocationDisplay({
   showCoordinates = false,
   showLastUpdated = true,
   showRefreshButton = true,
@@ -429,7 +429,7 @@ export default function LocationDisplay({
         onPress={onPress || handleRefresh}
        
       >
-        <Text style={[styles.locationText, textStyle]}>{regionDisplayName}</Text>
+        <Text style={[styles.locationText, textStyle]} numberOfLines={compact ? 1 : undefined}>{regionDisplayName}</Text>
         {showRefreshButton && Platform.OS === 'web' && (
           <Pressable
             style={[styles.refreshButton, buttonStyle]}
@@ -450,7 +450,7 @@ export default function LocationDisplay({
         onPress={onPress || handleRefresh}
        
       >
-        <Text style={[styles.locationText, textStyle]}>{regionDisplayName}</Text>
+        <Text style={[styles.locationText, textStyle]} numberOfLines={compact ? 1 : undefined}>{regionDisplayName}</Text>
         {showRefreshButton && (
           <Pressable
             style={[styles.refreshButton, buttonStyle]}
@@ -471,7 +471,7 @@ export default function LocationDisplay({
         onPress={onPress || handleRefresh}
        
       >
-        <Text style={[styles.locationText, textStyle]}>{regionDisplayName}</Text>
+        <Text style={[styles.locationText, textStyle]} numberOfLines={compact ? 1 : undefined}>{regionDisplayName}</Text>
         {showRefreshButton && (
           <Pressable
             style={[styles.refreshButton, buttonStyle]}
@@ -500,7 +500,7 @@ export default function LocationDisplay({
           <View style={styles.locationTextContainer}>
             <Text
               style={[styles.locationText, textStyle]}
-              numberOfLines={0}
+              numberOfLines={compact ? 1 : 0}
             >
               {effectiveLocation
                 ? getLocationText(effectiveLocation)
@@ -557,7 +557,16 @@ const styles = StyleSheet.create({
     minWidth: 0, // This allows the container to shrink properly
   },
   compactContainer: {
-    padding: 8,
+    padding: 0,
+    backgroundColor: 'transparent',
+    shadowOpacity: 0,
+    elevation: 0,
+    borderRadius: 0,
+    ...Platform.select({
+      android: { flex: 0, flexGrow: 0, flexShrink: 1 },
+      ios: { flex: 0, flexShrink: 1 },
+      default: { padding: 0 }, // Web: just remove padding, keep flex behavior
+    }),
   },
   expandedContainer: {
     padding: 12,
@@ -660,3 +669,5 @@ export function FullLocationDisplay(props: LocationDisplayProps) {
     />
   );
 }
+
+export default React.memo(LocationDisplay);

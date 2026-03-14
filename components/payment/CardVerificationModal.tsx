@@ -25,7 +25,7 @@ interface CardVerificationModalProps {
   onError: (error: string) => void;
 }
 
-export default function CardVerificationModal({
+function CardVerificationModal({
   visible,
   paymentMethodId,
   onClose,
@@ -385,3 +385,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+
+export default React.memo(CardVerificationModal);

@@ -29,7 +29,7 @@ interface RewardsBreakdownCardProps {
 
 const COIN_IMAGE = BRAND.COIN_IMAGE;
 
-export default function RewardsBreakdownCard({
+function RewardsBreakdownCard({
   totalEarned,
   totalPossible,
   progressPercent,
@@ -388,3 +388,5 @@ const styles = StyleSheet.create({
     padding: 4,
   },
 });
+
+export default React.memo(RewardsBreakdownCard);

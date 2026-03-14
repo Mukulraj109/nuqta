@@ -227,4 +227,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WalletErrorBoundary;
+export default React.memo(WalletErrorBoundary);

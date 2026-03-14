@@ -177,4 +177,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrustPrivacySection;
+export default React.memo(TrustPrivacySection);

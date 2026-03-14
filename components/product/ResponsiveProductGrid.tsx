@@ -85,7 +85,7 @@ interface ResponsiveProductGridProps {
  *   onEndReached={loadMoreProducts}
  * />
  */
-export default function ResponsiveProductGrid({
+function ResponsiveProductGrid({
   products,
   renderProduct,
   onEndReached,
@@ -164,3 +164,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default React.memo(ResponsiveProductGrid);

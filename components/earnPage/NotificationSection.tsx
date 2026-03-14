@@ -10,7 +10,7 @@ interface NotificationSectionProps {
   onNotificationPress: (notification: Notification) => void;
 }
 
-export default function NotificationSection({ 
+function NotificationSection({ 
   notifications, 
   onNotificationPress 
 }: NotificationSectionProps) {
@@ -86,3 +86,5 @@ const styles = StyleSheet.create({
     gap: 12, // adds clean spacing between cards
   },
 });
+
+export default React.memo(NotificationSection);

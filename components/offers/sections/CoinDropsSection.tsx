@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
@@ -169,7 +169,7 @@ export const CoinDropsSection: React.FC<CoinDropsSectionProps> = ({
             <View style={styles.content}>
               <View style={styles.logoContainer}>
                 {coinDrop.storeLogo ? (
-                  <Image
+                  <CachedImage
                     source={{ uri: coinDrop.storeLogo }}
                     style={styles.logo}
                     contentFit="contain"
@@ -217,4 +217,4 @@ export const CoinDropsSection: React.FC<CoinDropsSectionProps> = ({
   );
 };
 
-export default CoinDropsSection;
+export default React.memo(CoinDropsSection);

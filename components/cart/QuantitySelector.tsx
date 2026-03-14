@@ -38,7 +38,7 @@ interface QuantitySelectorProps {
   size?: 'small' | 'normal';
 }
 
-export default function QuantitySelector({
+function QuantitySelector({
   quantity,
   min = 1,
   max,
@@ -276,3 +276,5 @@ const stylesSmall = StyleSheet.create({
     color: 'rgba(0, 192, 106, 0.5)',
   },
 });
+
+export default React.memo(QuantitySelector);

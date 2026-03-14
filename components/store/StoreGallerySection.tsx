@@ -12,7 +12,7 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import storeGalleryApi, { GalleryItem, GalleryCategory } from '@/services/storeGalleryApi';
@@ -30,7 +30,7 @@ interface StoreGallerySectionProps {
   storeId: string;
 }
 
-export default function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
+function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
   const [allGalleryItems, setAllGalleryItems] = useState<GalleryItem[]>([]); // Store all items for tag extraction
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]); // Filtered items to display
   const [categories, setCategories] = useState<GalleryCategory[]>([]);
@@ -220,7 +220,7 @@ export default function StoreGallerySection({ storeId }: StoreGallerySectionProp
       onPress={() => handleItemPress(index)}
      
     >
-      <Image
+      <CachedImage
         source={{
           uri: item.type === 'video' ? (item.thumbnail || item.url) : item.url,
         }}
@@ -265,7 +265,7 @@ export default function StoreGallerySection({ storeId }: StoreGallerySectionProp
         onPress={() => handleCategoryPress(category.name)}
        
       >
-        <Image
+        <CachedImage
           source={{ uri: category.coverImage || categoryItems[0]?.url || '' }}
           style={styles.categoryCardImage}
           contentFit="cover"
@@ -399,7 +399,7 @@ export default function StoreGallerySection({ storeId }: StoreGallerySectionProp
                 onPress={() => handleCategoryPress(category.name)}
               >
                 {category.coverImage && (
-                  <Image
+                  <CachedImage
                     source={{ uri: category.coverImage }}
                     style={styles.categoryChipImage}
                     contentFit="cover"
@@ -846,3 +846,5 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
 });
+
+export default React.memo(StoreGallerySection);

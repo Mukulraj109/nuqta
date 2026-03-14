@@ -15,7 +15,7 @@ interface PromotionBannerSkeletonProps {
   count?: number;
 }
 
-export default function PromotionBannerSkeleton({ count = 2 }: PromotionBannerSkeletonProps) {
+function PromotionBannerSkeleton({ count = 2 }: PromotionBannerSkeletonProps) {
   return (
     <View style={styles.container}>
       {Array.from({ length: count }).map((_, index) => (
@@ -93,3 +93,5 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 });
+
+export default React.memo(PromotionBannerSkeleton);

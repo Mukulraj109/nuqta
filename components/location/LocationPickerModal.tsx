@@ -27,7 +27,7 @@ interface LocationPickerModalProps {
 
 type ModalStep = 'search' | 'details';
 
-export default function LocationPickerModal({
+function LocationPickerModal({
   visible,
   onClose,
   onLocationSelect,
@@ -350,6 +350,7 @@ export default function LocationPickerModal({
       visible={visible}
       animationType="slide"
       transparent={true}
+      statusBarTranslucent
       onRequestClose={onClose}
     >
       <KeyboardAvoidingView
@@ -691,3 +692,5 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
 });
+
+export default React.memo(LocationPickerModal);

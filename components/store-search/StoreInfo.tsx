@@ -408,4 +408,4 @@ const createStyles = (screenWidth: number) => {
   });
 };
 
-export default StoreInfo;
+export default React.memo(StoreInfo);

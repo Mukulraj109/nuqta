@@ -395,4 +395,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoresNearYou;
+export default React.memo(StoresNearYou);

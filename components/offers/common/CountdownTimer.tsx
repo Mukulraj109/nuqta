@@ -113,4 +113,4 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
   );
 };
 
-export default CountdownTimer;
+export default React.memo(CountdownTimer);

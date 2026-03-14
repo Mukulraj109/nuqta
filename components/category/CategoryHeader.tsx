@@ -34,7 +34,7 @@ interface CategoryHeaderProps {
   };
 }
 
-export default function CategoryHeader({
+function CategoryHeader({
   category,
   onSearch,
   onBack,
@@ -475,3 +475,5 @@ const styles = StyleSheet.create({
     height: 30,
   },
 });
+
+export default React.memo(CategoryHeader);

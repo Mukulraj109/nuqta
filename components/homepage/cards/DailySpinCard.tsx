@@ -213,4 +213,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DailySpinCard;
+export default React.memo(DailySpinCard);

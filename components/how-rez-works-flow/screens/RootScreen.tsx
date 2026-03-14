@@ -139,4 +139,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default RootScreen;
+export default React.memo(RootScreen);

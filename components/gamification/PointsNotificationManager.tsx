@@ -29,7 +29,7 @@ export function showPointsNotification(data: PointsNotificationData) {
   }
 }
 
-export default function PointsNotificationManager() {
+function PointsNotificationManager() {
   const [activeNotification, setActiveNotification] = useState<NotificationItem | null>(null);
   const [queue, setQueue] = useState<NotificationItem[]>([]);
 
@@ -84,3 +84,5 @@ const styles = StyleSheet.create({
     zIndex: 9999,
   },
 });
+
+export default React.memo(PointsNotificationManager);

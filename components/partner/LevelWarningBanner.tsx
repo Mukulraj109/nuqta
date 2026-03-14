@@ -29,7 +29,7 @@ const COLORS = {
   white: '#FFFFFF',
 };
 
-export default function LevelWarningBanner({
+function LevelWarningBanner({
   daysRemaining,
   ordersNeeded,
   currentLevel,
@@ -297,3 +297,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(LevelWarningBanner);

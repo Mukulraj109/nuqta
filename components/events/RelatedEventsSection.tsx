@@ -30,7 +30,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = SCREEN_WIDTH * 0.75; // 75% of screen width
 const CARD_MARGIN = 12;
 
-export default function RelatedEventsSection({
+function RelatedEventsSection({
   events,
   isLoading = false,
   onEventPress,
@@ -316,3 +316,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(RelatedEventsSection);

@@ -132,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EnhancedCoinBadge;
+export default React.memo(EnhancedCoinBadge);

@@ -1160,4 +1160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PackageBookingFlow;
+export default React.memo(PackageBookingFlow);

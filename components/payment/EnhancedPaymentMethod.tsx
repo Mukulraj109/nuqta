@@ -241,4 +241,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EnhancedPaymentMethodCard;
+export default React.memo(EnhancedPaymentMethodCard);

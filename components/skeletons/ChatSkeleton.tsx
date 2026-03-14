@@ -8,7 +8,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
 
-export default function ChatSkeleton() {
+function ChatSkeleton() {
   return (
     <View style={styles.container}>
       {/* Chat Header */}
@@ -102,3 +102,5 @@ const styles = StyleSheet.create({
     borderTopColor: '#F3F4F6',
   },
 });
+
+export default React.memo(ChatSkeleton);

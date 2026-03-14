@@ -59,7 +59,7 @@ const getPriceRanges = (currencySymbol: string) => [
   { label: `Above ${currencySymbol}2000`, min: 2000, max: Infinity },
 ];
 
-export default function EventFilters({
+function EventFilters({
   filters,
   onFiltersChange,
   onResetFilters,
@@ -475,3 +475,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(EventFilters);

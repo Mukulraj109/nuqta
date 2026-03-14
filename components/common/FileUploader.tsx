@@ -43,7 +43,7 @@ interface FileUpload {
   error?: string;
 }
 
-export default function FileUploader({
+function FileUploader({
   uploadType,
   maxFiles = 1,
   maxSizeMB = 10,
@@ -433,3 +433,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default React.memo(FileUploader);

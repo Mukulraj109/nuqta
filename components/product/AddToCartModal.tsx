@@ -310,4 +310,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddToCartModal;
+export default React.memo(AddToCartModal);

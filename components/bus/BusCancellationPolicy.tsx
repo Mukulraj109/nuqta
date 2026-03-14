@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BusCancellationPolicy;
+export default React.memo(BusCancellationPolicy);

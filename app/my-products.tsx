@@ -1,7 +1,7 @@
 // My Products Page
 // Shows all products the user has purchased from their order history
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -181,10 +181,10 @@ const MyProductsPage = () => {
     }
   }, [loadingMore, hasMore, loading, page, fetchProducts]);
 
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = useMemo(() => products.filter((product) => {
     if (activeTab === 'all') return true;
     return product.deliveryStatus === activeTab;
-  });
+  }), [products, activeTab]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -279,13 +279,13 @@ const MyProductsPage = () => {
     }
   }, [reordering, reorderFull, validation, reorderError, refreshCart, router]);
 
-  const handleReview = (product: PurchasedProduct) => {
+  const handleReview = useCallback((product: PurchasedProduct) => {
     // TODO: Navigate to review page
 
     router.push('/ReviewPage' as any);
-  };
+  }, [router]);
 
-  const renderProduct = ({ item }: { item: PurchasedProduct }) => {
+  const renderProduct = useCallback(({ item }: { item: PurchasedProduct }) => {
     const productLabel = `${item.name}${item.variant ? `, ${item.variant.type}: ${item.variant.value}` : ''}. Price: ${item.price} rupees. Quantity: ${item.quantity}. Order number ${item.orderId}, placed on ${new Date(item.orderDate).toLocaleDateString()}. Status: ${getStatusText(item.deliveryStatus)}`;
 
     return (
@@ -393,7 +393,7 @@ const MyProductsPage = () => {
         </View>
       </Pressable>
     );
-  };
+  }, [router, currencySymbol, reorderingProductId, handleReorder, handleReview]);
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
@@ -469,8 +469,8 @@ const MyProductsPage = () => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
         removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
+        maxToRenderPerBatch={15}
+        windowSize={7}
         initialNumToRender={8}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />

@@ -73,7 +73,7 @@ const getSharePlatforms = (currencySymbol: string): ShareTemplate[] => [
   },
 ];
 
-export default function ShareModal({
+function ShareModal({
   visible,
   referralCode,
   referralLink,
@@ -428,3 +428,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(ShareModal);

@@ -303,4 +303,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriceAndRewardsSection;
+export default React.memo(PriceAndRewardsSection);

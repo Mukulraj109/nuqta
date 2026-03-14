@@ -6,7 +6,7 @@ interface ProductsErrorStateProps {
   onRetry: () => void;
 }
 
-export default function ProductsErrorState({
+function ProductsErrorState({
   message = 'Unable to load products',
   onRetry,
 }: ProductsErrorStateProps) {
@@ -88,3 +88,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(ProductsErrorState);

@@ -38,7 +38,7 @@ const SIZE_CONFIG: Record<ButtonSize, { height: number; paddingH: number; iconSi
   large: { height: 52, paddingH: spacing.xl, iconSize: 20 },
 };
 
-export default function Button({
+function Button({
   title,
   onPress,
   variant = 'primary',
@@ -168,3 +168,5 @@ export default function Button({
     </Animated.View>
   );
 }
+
+export default React.memo(Button);

@@ -110,4 +110,4 @@ const createStyles = (
   });
 };
 
-export default PaymentIndicator;
+export default React.memo(PaymentIndicator);

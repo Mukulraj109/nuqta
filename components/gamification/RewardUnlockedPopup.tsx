@@ -43,7 +43,7 @@ interface RewardUnlockedPopupProps {
   onDismiss: () => void;
 }
 
-export default function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
+function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
   const translateY = useRef(new Animated.Value(150)).current;
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(0.9)).current;
@@ -389,3 +389,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default React.memo(RewardUnlockedPopup);

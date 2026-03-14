@@ -120,7 +120,7 @@ const formatParticipants = (count: number): string => {
   return count.toString();
 };
 
-export default function ChallengesPage() {
+function ChallengesPage() {
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
   const [joinedChallenges, setJoinedChallenges] = useState<Set<string>>(new Set());
@@ -580,3 +580,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default React.memo(ChallengesPage);

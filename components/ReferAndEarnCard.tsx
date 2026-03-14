@@ -81,7 +81,7 @@ const ReferAndEarnCard: React.FC<ReferAndEarnCardProps> = ({
   );
 };
 
-export default ReferAndEarnCard;
+export default React.memo(ReferAndEarnCard);
 
 const styles = StyleSheet.create({
   card: {

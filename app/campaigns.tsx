@@ -3,7 +3,7 @@
  * Route: /campaigns
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -115,9 +115,9 @@ const AllCampaignsPage: React.FC = () => {
     return days;
   };
 
-  const filteredCampaigns = selectedType === 'all'
+  const filteredCampaigns = useMemo(() => selectedType === 'all'
     ? campaigns
-    : campaigns.filter(c => c.type === selectedType);
+    : campaigns.filter(c => c.type === selectedType), [campaigns, selectedType]);
 
   if (isLoading) {
     return (

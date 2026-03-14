@@ -408,4 +408,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FrequentlyBoughtTogether;
+export default React.memo(FrequentlyBoughtTogether);

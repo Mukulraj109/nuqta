@@ -14,7 +14,7 @@ interface PopularStoreCardSkeletonProps {
  * - Store name and rating
  * - Distance and reward amount
  */
-export default function PopularStoreCardSkeleton({ width = 170 }: PopularStoreCardSkeletonProps) {
+function PopularStoreCardSkeleton({ width = 170 }: PopularStoreCardSkeletonProps) {
   return (
     <View
       style={[styles.container, { width }]}
@@ -131,3 +131,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default React.memo(PopularStoreCardSkeleton);

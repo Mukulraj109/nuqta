@@ -21,7 +21,7 @@ interface LoadingScreenProps {
   onComplete?: () => void;
 }
 
-export default function LoadingScreen({ duration = 5000, onComplete }: LoadingScreenProps) {
+function LoadingScreen({ duration = 5000, onComplete }: LoadingScreenProps) {
   const spinValue = useRef(new Animated.Value(0)).current;
   const pulseValue = useRef(new Animated.Value(1)).current;
   const progressValue = useRef(new Animated.Value(0)).current;
@@ -419,3 +419,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default React.memo(LoadingScreen);

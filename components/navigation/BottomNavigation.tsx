@@ -585,10 +585,10 @@ const styles = StyleSheet.create({
 
   // Label below floating button
   floatingButtonLabel: {
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: '600',
     color: '#666666',
-    marginTop: 8,
+    marginTop: 6,
     textAlign: 'center',
   },
 
@@ -646,12 +646,12 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     minWidth: 60,
-    minHeight: 44, // Minimum touch target size
+    minHeight: 48, // Android recommends 48px minimum touch target
   },
 
   // Tab label text
   tabLabelText: {
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: '600',
     marginTop: 2,
     textAlign: 'center',
@@ -721,4 +721,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BottomNavigation;
+export default React.memo(BottomNavigation);

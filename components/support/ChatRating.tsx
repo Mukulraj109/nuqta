@@ -22,7 +22,7 @@ interface ChatRatingProps {
   agentName?: string;
 }
 
-export default function ChatRating({
+function ChatRating({
   visible,
   onClose,
   onSubmit,
@@ -392,3 +392,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default React.memo(ChatRating);

@@ -22,7 +22,7 @@ interface SectionSkeletonProps {
  * - Horizontal row of card skeletons (default 3-4 cards)
  * - Automatically matches the card type layout
  */
-export default function SectionSkeleton({
+function SectionSkeleton({
   cardType = 'product',
   cardWidth = 280,
   spacing = 16,
@@ -138,3 +138,5 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
 });
+
+export default React.memo(SectionSkeleton);

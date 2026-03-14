@@ -104,9 +104,9 @@ const LockDealsPage: React.FC = () => {
     }
   }, [isLoading, hasMore, page]);
 
-  const handleDealPress = (deal: LockPriceDeal) => {
+  const handleDealPress = useCallback((deal: LockPriceDeal) => {
     router.push(`/lock-deals/${deal._id}` as any);
-  };
+  }, [router]);
 
   const handleMyLocksPress = () => {
     router.push('/lock-deals/my-locks' as any);
@@ -133,7 +133,7 @@ const LockDealsPage: React.FC = () => {
     }
   };
 
-  const renderDealCard = ({ item: deal }: { item: LockPriceDeal }) => {
+  const renderDealCard = useCallback(({ item: deal }: { item: LockPriceDeal }) => {
     const daysLeft = getDaysRemaining(deal.validUntil);
     const discount = getDiscountPercent(deal);
     const currSymbol = getCurrencySymbol(deal.currency);
@@ -215,7 +215,7 @@ const LockDealsPage: React.FC = () => {
         </View>
       </Pressable>
     );
-  };
+  }, [handleDealPress]);
 
   const renderHeader = () => (
     <View>

@@ -281,4 +281,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default WalletOverviewScreen;
+export default React.memo(WalletOverviewScreen);

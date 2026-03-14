@@ -25,7 +25,7 @@ interface MessageInputProps {
   prefilledMessage?: string;
 }
 
-export default function MessageInput({
+function MessageInput({
   onSend,
   onTyping,
   onStopTyping,
@@ -258,3 +258,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0e0e0',
   },
 });
+
+export default React.memo(MessageInput);

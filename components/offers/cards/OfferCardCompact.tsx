@@ -271,4 +271,4 @@ export const OfferCardCompact: React.FC<OfferCardCompactProps> = ({
   );
 };
 
-export default OfferCardCompact;
+export default React.memo(OfferCardCompact);

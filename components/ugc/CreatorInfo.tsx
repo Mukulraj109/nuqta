@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
@@ -15,7 +15,7 @@ interface CreatorInfoProps {
   onFollowPress: () => Promise<void>;
 }
 
-export default function CreatorInfo({
+function CreatorInfo({
   creatorId,
   creatorName,
   creatorAvatar,
@@ -49,7 +49,7 @@ export default function CreatorInfo({
         {/* Avatar */}
         <View style={styles.avatarContainer}>
           {creatorAvatar ? (
-            <Image
+            <CachedImage
               source={{ uri: creatorAvatar }}
               style={styles.avatar}
               cachePolicy="memory-disk"
@@ -164,3 +164,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default React.memo(CreatorInfo);

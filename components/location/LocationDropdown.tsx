@@ -31,7 +31,7 @@ interface LocationDropdownProps {
   style?: any;
 }
 
-export default function LocationDropdown({
+function LocationDropdown({
   isVisible,
   onLocationSelect,
   onClose,
@@ -331,3 +331,5 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
 });
+
+export default React.memo(LocationDropdown);

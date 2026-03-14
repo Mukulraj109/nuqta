@@ -26,7 +26,7 @@ interface ROICalculatorProps {
   currency?: string;
 }
 
-export default function ROICalculator({
+function ROICalculator({
   subscriptionCost,
   totalSavings,
   showDetails = true,
@@ -325,3 +325,5 @@ const styles = StyleSheet.create({
     color: SUBSCRIPTION_COLORS.text,
   },
 });
+
+export default React.memo(ROICalculator);

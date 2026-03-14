@@ -120,7 +120,7 @@ const MyBookingsPage = () => {
     fetchBookings();
   }, [fetchBookings]);
 
-  const handleCancelBooking = async (bookingId: string) => {
+  const handleCancelBooking = useCallback(async (bookingId: string) => {
     platformAlertDestructive(
       'Cancel Booking',
       'Are you sure you want to cancel this booking?',
@@ -139,7 +139,7 @@ const MyBookingsPage = () => {
         }
       }
     );
-  };
+  }, [fetchBookings]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -185,7 +185,7 @@ const MyBookingsPage = () => {
     });
   };
 
-  const renderTravelBooking = ({ item }: { item: ServiceBooking }) => {
+  const renderTravelBooking = useCallback(({ item }: { item: ServiceBooking }) => {
     const canCancel = item.status === 'confirmed' || item.status === 'pending';
     const bookingDate = new Date(item.bookingDate);
     const isUpcoming = bookingDate > new Date();
@@ -302,9 +302,9 @@ const MyBookingsPage = () => {
         )}
       </Pressable>
     );
-  };
+  }, [router, currencySymbol, handleCancelBooking]);
 
-  const renderStandardBooking = ({ item }: { item: ServiceBooking }) => {
+  const renderStandardBooking = useCallback(({ item }: { item: ServiceBooking }) => {
     const canCancel = item.status === 'confirmed' || item.status === 'pending';
     const bookingDate = new Date(item.bookingDate);
     const isUpcoming = bookingDate > new Date();
@@ -383,14 +383,14 @@ const MyBookingsPage = () => {
         )}
       </Pressable>
     );
-  };
+  }, [router, currencySymbol, handleCancelBooking]);
 
-  const renderBooking = ({ item }: { item: ServiceBooking }) => {
+  const renderBooking = useCallback(({ item }: { item: ServiceBooking }) => {
     if (isTravelBooking(item)) {
       return renderTravelBooking({ item });
     }
     return renderStandardBooking({ item });
-  };
+  }, [renderTravelBooking, renderStandardBooking]);
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>

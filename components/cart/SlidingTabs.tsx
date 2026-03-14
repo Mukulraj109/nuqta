@@ -18,7 +18,7 @@ const defaultTabs: TabData[] = [
   { key: 'lockedproduct', title: 'Locked', icon: 'lock-closed-outline' }
 ];
 
-export default function SlidingTabs({
+function SlidingTabs({
   activeTab,
   onTabChange,
   tabs = defaultTabs
@@ -206,3 +206,5 @@ const styles = StyleSheet.create({
     borderRadius: 1.5,
   },
 });
+
+export default React.memo(SlidingTabs);

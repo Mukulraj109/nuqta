@@ -636,4 +636,4 @@ export const OffersPageContent: React.FC<OffersPageContentProps> = ({
   );
 };
 
-export default OffersPageContent;
+export default React.memo(OffersPageContent);

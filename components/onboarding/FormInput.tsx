@@ -20,7 +20,7 @@ interface FormInputProps extends TextInputProps {
   prefix?: string;
 }
 
-export default function FormInput({
+function FormInput({
   label,
   error,
   containerStyle,
@@ -212,3 +212,5 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
 });
+
+export default React.memo(FormInput);

@@ -403,4 +403,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DiscoverStoresScreen;
+export default React.memo(DiscoverStoresScreen);

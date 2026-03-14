@@ -10,7 +10,7 @@ import SkeletonLoader from './SkeletonLoader';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-export default function DetailPageSkeleton() {
+function DetailPageSkeleton() {
   return (
     <View style={styles.container}>
       {/* Header Image */}
@@ -89,3 +89,5 @@ const styles = StyleSheet.create({
     height: 16,
   },
 });
+
+export default React.memo(DetailPageSkeleton);

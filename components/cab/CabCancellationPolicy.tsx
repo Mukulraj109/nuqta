@@ -107,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CabCancellationPolicy;
+export default React.memo(CabCancellationPolicy);

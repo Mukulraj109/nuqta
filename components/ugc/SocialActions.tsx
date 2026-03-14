@@ -16,7 +16,7 @@ interface SocialActionsProps {
   onBookmark: () => Promise<void>;
 }
 
-export default function SocialActions({
+function SocialActions({
   videoId,
   likes,
   comments,
@@ -178,3 +178,5 @@ const styles = StyleSheet.create({
     textShadowRadius: 2,
   },
 });
+
+export default React.memo(SocialActions);

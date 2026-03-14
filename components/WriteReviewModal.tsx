@@ -20,7 +20,7 @@ interface WriteReviewModalProps {
   onReviewSubmitted?: (review: Review) => void;
 }
 
-export default function WriteReviewModal({
+function WriteReviewModal({
   visible,
   onClose,
   storeId,
@@ -146,3 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(WriteReviewModal);

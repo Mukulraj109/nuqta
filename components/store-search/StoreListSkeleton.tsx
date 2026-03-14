@@ -254,4 +254,4 @@ const createStyles = (screenWidth: number) => {
   });
 };
 
-export default StoreListSkeleton;
+export default React.memo(StoreListSkeleton);

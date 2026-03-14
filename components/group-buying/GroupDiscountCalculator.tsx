@@ -12,7 +12,7 @@ interface GroupDiscountCalculatorProps {
   group: GroupBuyingGroup;
 }
 
-export default function GroupDiscountCalculator({ group }: GroupDiscountCalculatorProps) {
+function GroupDiscountCalculator({ group }: GroupDiscountCalculatorProps) {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
   const currentMembers = group.currentMemberCount;
@@ -233,3 +233,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default React.memo(GroupDiscountCalculator);

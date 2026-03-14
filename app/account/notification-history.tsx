@@ -7,6 +7,7 @@ import {
   Pressable,
   ActivityIndicator,
   RefreshControl,
+  Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -302,6 +303,10 @@ export default function NotificationHistoryScreen() {
         }
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.3}
+        removeClippedSubviews={Platform.OS !== 'web'}
+        maxToRenderPerBatch={15}
+        windowSize={7}
+        initialNumToRender={8}
         ListEmptyComponent={
           <View
             style={styles.emptyContainer}

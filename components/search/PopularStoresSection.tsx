@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { StoreItem } from '@/services/searchDiscoveryApi';
 
@@ -10,7 +10,7 @@ interface PopularStoresSectionProps {
   onViewAll?: () => void;
 }
 
-export default function PopularStoresSection({
+function PopularStoresSection({
   stores,
   onStorePress,
   onViewAll,
@@ -59,7 +59,7 @@ export default function PopularStoresSection({
            
           >
             {store.logo ? (
-              <Image source={{ uri: store.logo }} style={styles.logo} contentFit="cover" cachePolicy="memory-disk" />
+              <CachedImage source={{ uri: store.logo }} style={styles.logo} contentFit="cover" cachePolicy="memory-disk" />
             ) : (
               <View style={styles.logoPlaceholder}>
                 <Ionicons name="storefront-outline" size={32} color="#9CA3AF" />
@@ -206,16 +206,4 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default React.memo(PopularStoresSection);

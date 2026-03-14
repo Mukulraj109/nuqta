@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Pressable, ImageSourcePropType } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { spacing, borderRadius } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
@@ -20,7 +20,7 @@ interface EmptyStateProps {
   style?: any;
 }
 
-export default function EmptyState({
+function EmptyState({
   title,
   message,
   subtitle,
@@ -45,12 +45,11 @@ export default function EmptyState({
       accessibilityLabel={`${title}. ${description || ''}`}
     >
       {imageSource ? (
-        <Image
+        <CachedImage
           source={imageSource}
           style={styles.image}
           contentFit="contain"
           transition={200}
-          accessible={false}
         />
       ) : iconName ? (
         <View style={[styles.iconCircle, { backgroundColor: resolvedIconBg }]}>
@@ -132,3 +131,5 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.md,
   },
 });
+
+export default React.memo(EmptyState);

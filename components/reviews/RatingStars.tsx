@@ -16,7 +16,7 @@ interface RatingStarsProps {
   style?: any;
 }
 
-export default function RatingStars({
+function RatingStars({
   rating,
   maxRating = 5,
   size = 16,
@@ -90,3 +90,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default React.memo(RatingStars);

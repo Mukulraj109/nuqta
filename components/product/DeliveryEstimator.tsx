@@ -14,7 +14,7 @@ interface DeliveryEstimatorProps {
   onCheckDelivery?: (pincode: string) => Promise<DeliveryInfo>;
 }
 
-export default function DeliveryEstimator({ productId, onCheckDelivery }: DeliveryEstimatorProps) {
+function DeliveryEstimator({ productId, onCheckDelivery }: DeliveryEstimatorProps) {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
   const [pincode, setPincode] = useState('');
@@ -189,3 +189,5 @@ const styles = StyleSheet.create({
     color: '#999999',
   },
 });
+
+export default React.memo(DeliveryEstimator);

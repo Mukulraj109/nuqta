@@ -13,7 +13,7 @@ import React from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
 
-export default function ProductCardSkeleton() {
+function ProductCardSkeleton() {
   return (
     <View
       style={styles.card}
@@ -133,3 +133,5 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 });
+
+export default React.memo(ProductCardSkeleton);

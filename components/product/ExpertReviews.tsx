@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { SPACING, TYPOGRAPHY, COLORS, BORDER_RADIUS } from '@/constants/DesignTokens';
 import Card from '@/components/ui/Card';
 
@@ -30,7 +30,7 @@ interface ExpertReviewsProps {
   onMarkHelpful?: (reviewId: string) => void;
 }
 
-export default function ExpertReviews({
+function ExpertReviews({
   productId,
   reviews = [],
   onMarkHelpful,
@@ -89,7 +89,7 @@ export default function ExpertReviews({
             >
               {/* Author Info */}
               <View style={styles.authorSection}>
-                <Image
+                <CachedImage
                   source={{ uri: review.author.avatar }}
                   style={styles.authorAvatar}
                   contentFit="cover"
@@ -174,7 +174,7 @@ export default function ExpertReviews({
                   style={styles.imagesScroll}
                 >
                   {review.images.map((image, index) => (
-                    <Image
+                    <CachedImage
                       key={index}
                       source={{ uri: image }}
                       style={styles.reviewImage}
@@ -430,3 +430,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(ExpertReviews);

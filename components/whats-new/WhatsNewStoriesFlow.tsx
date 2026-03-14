@@ -448,4 +448,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WhatsNewStoriesFlow;
+export default React.memo(WhatsNewStoriesFlow);

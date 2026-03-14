@@ -33,7 +33,7 @@ interface ClaimRewardModalProps {
   onShare?: () => void;
 }
 
-export default function ClaimRewardModal({
+function ClaimRewardModal({
   visible,
   onClose,
   reward,
@@ -442,3 +442,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(ClaimRewardModal);

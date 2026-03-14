@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { BonusZoneCampaign, UserCampaignState } from '@/services/bonusZoneApi';
@@ -148,7 +148,7 @@ function BonusZoneCard({ campaign, currencySymbol = 'د.إ' }: BonusZoneCardProp
       {/* Icon / Logo */}
       <View style={styles.iconContainer}>
         {hasPartnerLogo ? (
-          <Image
+          <CachedImage
             source={{ uri: hasPartnerLogo }}
             style={styles.partnerLogo}
             contentFit="contain"

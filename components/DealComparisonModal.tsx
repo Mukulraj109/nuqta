@@ -32,7 +32,7 @@ interface ComparisonMetric {
   priority: number; // Lower number = higher priority
 }
 
-export default function DealComparisonModal({
+function DealComparisonModal({
   visible,
   onClose,
   deals,
@@ -783,3 +783,5 @@ const createStyles = (screenData: { width: number; height: number }) => {
     },
   });
 };
+
+export default React.memo(DealComparisonModal);

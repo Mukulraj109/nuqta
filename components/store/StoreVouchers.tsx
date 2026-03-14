@@ -407,4 +407,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoreVouchers;
+export default React.memo(StoreVouchers);

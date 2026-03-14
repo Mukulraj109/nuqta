@@ -35,7 +35,7 @@ interface ProductCarouselProps {
  * Product carousel component for shoppable UGC videos
  * Displays horizontal scrollable list of products
  */
-export default function ProductCarousel({
+function ProductCarousel({
   products = [],
   title = '🛍️ Shop from this video',
   onProductPress,
@@ -462,3 +462,5 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
 });
+
+export default React.memo(ProductCarousel);

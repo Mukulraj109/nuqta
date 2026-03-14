@@ -89,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InsightTile;
+export default React.memo(InsightTile);

@@ -29,7 +29,7 @@ interface TransactionHistoryProps {
   maxHeight?: number;
 }
 
-export default function TransactionHistory({ 
+function TransactionHistory({
   onTransactionPress, 
   refreshing = false, 
   onRefresh,
@@ -327,3 +327,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default React.memo(TransactionHistory);

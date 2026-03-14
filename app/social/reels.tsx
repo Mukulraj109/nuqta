@@ -138,7 +138,7 @@ export default function ReelsPage() {
     }
   };
 
-  const handleLike = async (reelId: string) => {
+  const handleLike = useCallback(async (reelId: string) => {
     const wasLiked = likedReels.has(reelId);
 
     // Animate heart
@@ -175,9 +175,9 @@ export default function ReelsPage() {
     } catch (error) {
       // silently handle
     }
-  };
+  }, [getLikeAnimation]);
 
-  const handleBookmark = async (reelId: string) => {
+  const handleBookmark = useCallback(async (reelId: string) => {
     const wasBookmarked = bookmarkedReels.has(reelId);
     setBookmarkedReels(prev => {
       const newSet = new Set(prev);
@@ -197,9 +197,9 @@ export default function ReelsPage() {
         return newSet;
       });
     }
-  };
+  }, []);
 
-  const handleShare = async (reel: UgcReel) => {
+  const handleShare = useCallback(async (reel: UgcReel) => {
     try {
       await reelApi.shareReel(reel.id);
       setReels(prev => prev.map(r =>
@@ -212,13 +212,13 @@ export default function ReelsPage() {
     } catch (error) {
       // silently handle
     }
-  };
+  }, []);
 
-  const handleShop = (reel: UgcReel) => {
+  const handleShop = useCallback((reel: UgcReel) => {
     if (reel.store) {
       router.push(`/store/${reel.store.id}` as any);
     }
-  };
+  }, [router]);
 
   // Track view when reel becomes visible
   const handleViewableItemsChanged = useRef(({ viewableItems }: any) => {
@@ -235,7 +235,7 @@ export default function ReelsPage() {
     return num.toString();
   };
 
-  const renderReel = ({ item, index }: { item: UgcReel; index: number }) => {
+  const renderReel = useCallback(({ item, index }: { item: UgcReel; index: number }) => {
     const isLiked = likedReels.has(item.id);
     const isBookmarked = bookmarkedReels.has(item.id);
     const isActive = index === currentIndex;
@@ -391,7 +391,7 @@ export default function ReelsPage() {
         </View>
       </View>
     );
-  };
+  }, [currentIndex, likedReels, bookmarkedReels, router, handleLike, handleBookmark, handleShare]);
 
   const renderEmpty = () => {
     if (loading) return null;

@@ -21,7 +21,7 @@ interface QuickReorderProps {
   onViewAll?: () => void;
 }
 
-export default function QuickReorder({ limit = 5, onViewAll }: QuickReorderProps) {
+function QuickReorder({ limit = 5, onViewAll }: QuickReorderProps) {
   const { isAuthenticated } = useAuth();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
@@ -280,3 +280,5 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   }
 });
+
+export default React.memo(QuickReorder);

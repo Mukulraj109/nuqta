@@ -490,5 +490,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StreaksGamification;
+export default React.memo(StreaksGamification);
 

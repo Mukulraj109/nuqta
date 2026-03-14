@@ -12,7 +12,7 @@ const COLORS = {
   navy: '#0B2240',
 };
 
-export default function CategoryHeader({
+function CategoryHeader({
   categories,
   onCategoryPress
 }: CategoryHeaderProps) {
@@ -226,3 +226,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default React.memo(CategoryHeader);

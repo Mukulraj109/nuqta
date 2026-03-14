@@ -269,4 +269,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CoinEarnedToast;
+export default React.memo(CoinEarnedToast);

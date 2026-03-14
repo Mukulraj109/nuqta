@@ -264,4 +264,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlayAndEarnSection;
+export default React.memo(PlayAndEarnSection);

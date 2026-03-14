@@ -49,7 +49,7 @@ import {
 import storeComparisonApi from '@/services/storeComparisonApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 
-export default function FoodDiningCategoryPage() {
+function FoodDiningCategoryPage() {
   const router = useRouter();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
@@ -694,7 +694,7 @@ export default function FoodDiningCategoryPage() {
             </View>
 
             {/* Sort Modal */}
-            <Modal visible={showSortModal} transparent animationType="slide" onRequestClose={() => setShowSortModal(false)}>
+            <Modal visible={showSortModal} transparent statusBarTranslucent animationType="slide" onRequestClose={() => setShowSortModal(false)}>
               <Pressable style={styles.modalOverlay} onPress={() => setShowSortModal(false)}>
                 <View style={styles.modalContent}>
                   <Text style={styles.modalTitle}>Sort By</Text>
@@ -1741,3 +1741,5 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
 });
+
+export default React.memo(FoodDiningCategoryPage);

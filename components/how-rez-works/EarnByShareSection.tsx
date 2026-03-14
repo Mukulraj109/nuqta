@@ -160,4 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EarnByShareSection;
+export default React.memo(EarnByShareSection);

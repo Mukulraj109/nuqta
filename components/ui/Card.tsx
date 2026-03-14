@@ -15,7 +15,7 @@ interface CardProps {
   testID?: string;
 }
 
-export default function Card({
+function Card({
   children,
   variant = 'elevated',
   padding = 'base',
@@ -79,3 +79,5 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.99 }],
   },
 });
+
+export default React.memo(Card);

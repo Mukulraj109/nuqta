@@ -29,7 +29,7 @@ interface CoinBalanceProps {
   animateChanges?: boolean;
 }
 
-export default function CoinBalance({
+function CoinBalance({
   size = 'medium',
   onPress,
   showIcon = true,
@@ -214,3 +214,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default React.memo(CoinBalance);

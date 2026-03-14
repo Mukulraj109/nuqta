@@ -720,4 +720,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MerchantSelector;
+export default React.memo(MerchantSelector);

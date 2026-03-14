@@ -39,7 +39,7 @@ interface ArticlesTabProps {
   refreshing?: boolean;
 }
 
-export default function ArticlesTab({
+function ArticlesTab({
   data,
   loading = false,
   hasMore = true,
@@ -441,3 +441,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default React.memo(ArticlesTab);

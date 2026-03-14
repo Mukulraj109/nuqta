@@ -61,7 +61,7 @@ export default function SpinWinPage() {
   const [todayCoinsWon, setTodayCoinsWon] = useState(0);
   const [currentRotation, setCurrentRotation] = useState(0);
   const { rezBalance: walletBalance, refreshWallet } = useWalletContext();
-  const [resetTimer, setResetTimer] = useState(getTimeUntilReset());
+  const [resetTimer, setResetTimer] = useState(() => getTimeUntilReset());
 
   // Countdown timer — update every minute
   useEffect(() => {

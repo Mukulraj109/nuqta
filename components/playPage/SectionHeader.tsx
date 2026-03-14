@@ -11,7 +11,7 @@ const COLORS = {
   text: '#0B2240',
 };
 
-export default function SectionHeader({
+function SectionHeader({
   title,
   showViewAll = true,
   onViewAllPress,
@@ -84,3 +84,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
 });
+
+export default React.memo(SectionHeader);

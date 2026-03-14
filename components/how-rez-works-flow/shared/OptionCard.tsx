@@ -185,4 +185,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default OptionCard;
+export default React.memo(OptionCard);

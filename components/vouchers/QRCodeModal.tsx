@@ -447,4 +447,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QRCodeModal;
+export default React.memo(QRCodeModal);

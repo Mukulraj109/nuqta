@@ -247,4 +247,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveSectionContainer;
+export default React.memo(PriveSectionContainer);

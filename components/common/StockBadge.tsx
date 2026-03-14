@@ -11,7 +11,7 @@ interface StockBadgeProps {
   showIcon?: boolean;
 }
 
-export default function StockBadge({
+function StockBadge({
   stock,
   lowStockThreshold = 5,
   variant = 'default',
@@ -187,3 +187,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(StockBadge);

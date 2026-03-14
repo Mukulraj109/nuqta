@@ -53,7 +53,7 @@ interface BonusCampaignBannerProps {
 // Component
 // ---------------------------------------------------------------------------
 
-export default function BonusCampaignBanner({ campaignSlug }: BonusCampaignBannerProps) {
+function BonusCampaignBanner({ campaignSlug }: BonusCampaignBannerProps) {
   const [campaign, setCampaign] = useState<BonusZoneCampaignDetail | null>(null);
   const [loading, setLoading] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -209,3 +209,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+
+export default React.memo(BonusCampaignBanner);

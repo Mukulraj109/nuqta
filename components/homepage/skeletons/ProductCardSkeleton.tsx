@@ -18,7 +18,7 @@ interface ProductCardSkeletonProps {
  * - Cashback badge
  * - Add to Cart button
  */
-export default function ProductCardSkeleton({ width = 180 }: ProductCardSkeletonProps) {
+function ProductCardSkeleton({ width = 180 }: ProductCardSkeletonProps) {
   return (
     <View
       style={[styles.container, { width }]}
@@ -219,3 +219,5 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 });
+
+export default React.memo(ProductCardSkeleton);

@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
@@ -39,7 +39,7 @@ export const StoreInfoCard: React.FC<StoreInfoCardProps> = ({
       <View style={styles.storeRow}>
         <View style={styles.logoContainer}>
           {storeLogo ? (
-            <Image source={{ uri: storeLogo }} style={styles.logo} cachePolicy="memory-disk" />
+            <CachedImage source={{ uri: storeLogo }} style={styles.logo} cachePolicy="memory-disk" />
           ) : (
             <View style={styles.logoPlaceholder}>
               <Ionicons name="storefront" size={24} color={COLORS.neutral[400]} />
@@ -186,4 +186,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoreInfoCard;
+export default React.memo(StoreInfoCard);

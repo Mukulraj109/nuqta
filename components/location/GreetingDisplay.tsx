@@ -25,7 +25,7 @@ interface GreetingDisplayProps {
   emojiStyle?: any;
 }
 
-export default function GreetingDisplay({
+function GreetingDisplay({
   showEmoji = true,
   showTime = true,
   showLocation = true,
@@ -271,3 +271,5 @@ export function FullGreetingDisplay(props: GreetingDisplayProps) {
     />
   );
 }
+
+export default React.memo(GreetingDisplay);

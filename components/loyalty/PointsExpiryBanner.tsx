@@ -15,7 +15,7 @@ interface PointsExpiryBannerProps {
   onDismiss?: () => void;
 }
 
-export default function PointsExpiryBanner({
+function PointsExpiryBanner({
   notification,
   onViewRecommendations,
   onDismiss,
@@ -148,3 +148,5 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
 });
+
+export default React.memo(PointsExpiryBanner);

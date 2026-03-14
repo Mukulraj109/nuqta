@@ -142,16 +142,16 @@ export default function OccasionsPage() {
     loadOccasions();
   };
 
-  const handleOccasionPress = (occasion: Occasion) => {
+  const handleOccasionPress = useCallback((occasion: Occasion) => {
     router.push({
       pathname: '/shop',
       params: { occasion: occasion.id, category: categorySlug },
     } as any);
-  };
+  }, [router, categorySlug]);
 
-  const renderOccasion = ({ item }: { item: Occasion }) => (
+  const renderOccasion = useCallback(({ item }: { item: Occasion }) => (
     <OccasionCard occasion={item} onPress={() => handleOccasionPress(item)} />
-  );
+  ), [handleOccasionPress]);
 
   const renderHeader = () => (
     <View style={styles.headerContent}>

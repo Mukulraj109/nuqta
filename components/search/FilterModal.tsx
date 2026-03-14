@@ -65,7 +65,7 @@ const RATING_OPTIONS = [
   { value: 1, label: '1+ Stars' },
 ];
 
-export default function FilterModal({
+function FilterModal({
   visible,
   onClose,
   onApplyFilters,
@@ -498,3 +498,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(FilterModal);

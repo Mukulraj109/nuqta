@@ -1,7 +1,7 @@
 // My Reviews Page
 // Shows all reviews written by the user
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -42,9 +42,9 @@ export default function MyReviewsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [activeFilter, setActiveFilter] = useState<FilterTab>('all');
 
-  const filteredReviews = activeFilter === 'all'
+  const filteredReviews = useMemo(() => activeFilter === 'all'
     ? reviews
-    : reviews.filter(r => r.moderationStatus === activeFilter);
+    : reviews.filter(r => r.moderationStatus === activeFilter), [reviews, activeFilter]);
 
   useEffect(() => {
     loadReviews();
@@ -343,6 +343,10 @@ export default function MyReviewsPage() {
             }
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.3}
+            removeClippedSubviews={Platform.OS !== 'web'}
+            maxToRenderPerBatch={15}
+            windowSize={7}
+            initialNumToRender={8}
             ListHeaderComponent={
               filteredReviews.length > 0 ? (
                 <Text style={styles.reviewsCount}>

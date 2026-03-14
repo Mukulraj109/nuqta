@@ -14,7 +14,7 @@ interface RedemptionHistoryProps {
   onViewDetails?: (redemption: RedemptionRecord) => void;
 }
 
-export default function RedemptionHistory({ redemptions, onViewDetails }: RedemptionHistoryProps) {
+function RedemptionHistory({ redemptions, onViewDetails }: RedemptionHistoryProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
@@ -243,3 +243,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(RedemptionHistory);

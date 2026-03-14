@@ -176,7 +176,7 @@ export default function ReviewToEarnPage() {
     return total;
   };
 
-  const renderPendingReview = ({ item }: { item: PendingReview }) => (
+  const renderPendingReview = useCallback(({ item }: { item: PendingReview }) => (
     <Pressable
       style={styles.reviewCard}
       onPress={() => setSelectedItem(item)}
@@ -209,7 +209,7 @@ export default function ReviewToEarnPage() {
         )}
       </View>
     </Pressable>
-  );
+  ), []);
 
   if (selectedItem) {
     return (

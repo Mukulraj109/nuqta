@@ -28,7 +28,7 @@ interface ConfettiOverlayProps {
   onComplete?: () => void;
 }
 
-export default function ConfettiOverlay({ visible, onComplete }: ConfettiOverlayProps) {
+function ConfettiOverlay({ visible, onComplete }: ConfettiOverlayProps) {
   const fallAnims = useRef<Animated.Value[]>([]).current;
   const wobbleAnims = useRef<Animated.Value[]>([]).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
@@ -161,3 +161,5 @@ const styles = StyleSheet.create({
     top: 0,
   },
 });
+
+export default React.memo(ConfettiOverlay);

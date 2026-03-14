@@ -226,4 +226,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ShopByExperienceSection;
+export default React.memo(ShopByExperienceSection);

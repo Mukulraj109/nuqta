@@ -61,7 +61,7 @@ interface CustomerPhotosProps {
  * />
  * ```
  */
-export default function CustomerPhotos({
+function CustomerPhotos({
   productId,
   photos = [],
   onUploadPhoto,
@@ -597,3 +597,5 @@ const styles = StyleSheet.create({
     color: COLORS.primary[500],
   },
 });
+
+export default React.memo(CustomerPhotos);

@@ -224,4 +224,4 @@ const createStyles = (screenWidth: number) => {
   });
 };
 
-export default SearchHeader;
+export default React.memo(SearchHeader);

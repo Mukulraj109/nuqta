@@ -209,4 +209,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CabInfoCard;
+export default React.memo(CabInfoCard);

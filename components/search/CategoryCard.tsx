@@ -14,7 +14,7 @@ import { CategoryCardProps } from '@/types/search.types';
 
 const { width } = Dimensions.get('window');
 
-export default function CategoryCard({
+function CategoryCard({
   category,
   onPress,
   size = 'medium',
@@ -334,3 +334,5 @@ const styles = StyleSheet.create({
     }),
   },
 });
+
+export default React.memo(CategoryCard);

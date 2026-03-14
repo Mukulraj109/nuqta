@@ -260,4 +260,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default TrustControlScreen;
+export default React.memo(TrustControlScreen);

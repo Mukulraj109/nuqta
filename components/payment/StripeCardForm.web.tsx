@@ -30,7 +30,7 @@ const CARD_ELEMENT_OPTIONS = {
   },
 };
 
-export default function StripeCardForm({
+function StripeCardForm({
   clientSecret,
   amount,
   onSuccess,
@@ -369,3 +369,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default React.memo(StripeCardForm);

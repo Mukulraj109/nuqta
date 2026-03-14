@@ -41,7 +41,7 @@ interface CategoryRecommendationsGridProps {
   onCardPress?: (card: RecommendationCard) => void;
 }
 
-export default function CategoryRecommendationsGrid({
+function CategoryRecommendationsGrid({
   storeId,
   title = "What are you looking for?",
   limit = 6,
@@ -590,3 +590,5 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.3)',
   },
 });
+
+export default React.memo(CategoryRecommendationsGrid);

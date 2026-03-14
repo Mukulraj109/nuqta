@@ -208,4 +208,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoreSection;
+export default React.memo(StoreSection);

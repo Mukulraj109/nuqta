@@ -84,4 +84,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InsightSection;
+export default React.memo(InsightSection);

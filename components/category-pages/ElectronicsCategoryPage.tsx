@@ -104,7 +104,7 @@ function getPriceTier(priceForTwo?: number): { label: string; color: string } {
   return { label: '$$$', color: '#8B5CF6' };
 }
 
-export default function ElectronicsCategoryPage() {
+function ElectronicsCategoryPage() {
   const router = useRouter();
   const slug = 'electronics';
   const categoryConfig = getCategoryConfig(slug);
@@ -555,3 +555,5 @@ const styles = StyleSheet.create({
   ctaBtn: { backgroundColor: COLORS.white, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 },
   ctaBtnText: { fontSize: 13, fontWeight: '600', color: COLORS.blue },
 });
+
+export default React.memo(ElectronicsCategoryPage);

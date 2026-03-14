@@ -259,4 +259,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WalletSection;
+export default React.memo(WalletSection);

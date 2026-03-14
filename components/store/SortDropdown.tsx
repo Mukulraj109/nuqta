@@ -220,4 +220,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SortDropdown;
+export default React.memo(SortDropdown);

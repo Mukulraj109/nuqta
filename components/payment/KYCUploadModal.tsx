@@ -34,7 +34,7 @@ const DOCUMENT_TYPES = [
   { type: DocumentType.DRIVERS_LICENSE, label: 'Driver\'s License', icon: 'car', requiresBack: true },
 ];
 
-export default function KYCUploadModal({
+function KYCUploadModal({
   visible,
   paymentMethodId,
   onClose,
@@ -374,3 +374,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+
+export default React.memo(KYCUploadModal);

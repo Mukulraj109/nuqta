@@ -32,7 +32,7 @@ interface CashbackInfoModalProps {
   orderInfo: OrderInfo | null;
 }
 
-export default function CashbackInfoModal({
+function CashbackInfoModal({
   visible,
   onClose,
   onUpload,
@@ -349,3 +349,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(CashbackInfoModal);

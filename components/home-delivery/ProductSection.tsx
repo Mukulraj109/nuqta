@@ -12,7 +12,7 @@ import { ProductSectionProps } from '@/types/home-delivery.types';
 
 const { width } = Dimensions.get('window');
 
-export function ProductSection({
+function _ProductSectionInner({
   section,
   onProductPress,
   onViewAll,
@@ -144,3 +144,5 @@ const styles = StyleSheet.create({
     maxWidth: (width - 44) / 2, // (total width - padding*2 - gap) / 2
   },
 });
+
+export const ProductSection = React.memo(_ProductSectionInner);

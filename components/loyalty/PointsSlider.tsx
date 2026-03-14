@@ -17,7 +17,7 @@ interface PointsSliderProps {
   onValueChange: (points: number, discount: number) => void;
 }
 
-export default function PointsSlider({
+function PointsSlider({
   availablePoints,
   maxPointsForOrder,
   pointValue,
@@ -222,3 +222,5 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
 });
+
+export default React.memo(PointsSlider);

@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { WishlistEmptyProps } from '@/types/wishlist.types';
 
-export default function WishlistEmpty({ onShopPress }: WishlistEmptyProps) {
+function WishlistEmpty({ onShopPress }: WishlistEmptyProps) {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
@@ -126,3 +126,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default React.memo(WishlistEmpty);

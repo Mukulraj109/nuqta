@@ -183,4 +183,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EarningsPieChart;
+export default React.memo(EarningsPieChart);

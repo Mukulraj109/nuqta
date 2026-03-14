@@ -74,33 +74,24 @@ export default function ProfileEditPage() {
   }, [user]);
 
   useEffect(() => {
-    // Check if form has changes
-    const originalData = {
-      name: user?.name || '',
-      email: user?.email || '',
-      phone: user?.phone || '',
-      bio: user?.bio || '',
-      location: user?.location || '',
-      website: user?.website || '',
-      dateOfBirth: user?.dateOfBirth || '',
-      gender: user?.gender || '',
-    };
-
-    const currentData = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      bio: formData.bio,
-      location: formData.location,
-      website: formData.website,
-      dateOfBirth: formData.dateOfBirth,
-      gender: formData.gender,
-    };
-
-    const hasChangesDetected = JSON.stringify(originalData) !== JSON.stringify(currentData);
+    // Check if form has changes by comparing individual fields (avoids JSON.stringify overhead)
+    const hasChangesDetected =
+      formData.name !== (user?.name || '') ||
+      formData.email !== (user?.email || '') ||
+      formData.phone !== (user?.phone || '') ||
+      formData.bio !== (user?.bio || '') ||
+      formData.location !== (user?.location || '') ||
+      formData.website !== (user?.website || '') ||
+      formData.dateOfBirth !== (user?.dateOfBirth || '') ||
+      formData.gender !== (user?.gender || '');
 
     setHasChanges(hasChangesDetected);
-  }, [formData, user]);
+  }, [
+    formData.name, formData.email, formData.phone, formData.bio,
+    formData.location, formData.website, formData.dateOfBirth, formData.gender,
+    user?.name, user?.email, user?.phone, user?.bio,
+    user?.location, user?.website, user?.dateOfBirth, user?.gender,
+  ]);
 
   const handleBackPress = () => {
     if (hasChanges) {
@@ -542,6 +533,7 @@ export default function ProfileEditPage() {
       <Modal
         visible={showGenderModal}
         transparent={true}
+        statusBarTranslucent
         animationType="slide"
         onRequestClose={() => setShowGenderModal(false)}
       >

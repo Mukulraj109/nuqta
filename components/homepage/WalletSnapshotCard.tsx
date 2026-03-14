@@ -487,4 +487,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WalletSnapshotCard;
+export default React.memo(WalletSnapshotCard);

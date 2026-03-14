@@ -13,7 +13,7 @@ import VideoCard from './VideoCard';
 
 const { width } = Dimensions.get('window');
 
-export default function VideoGrid({ 
+function VideoGrid({ 
   items, 
   onItemPress, 
   autoPlay = true,
@@ -143,3 +143,5 @@ const styles = StyleSheet.create({
     opacity: 0.8,
   },
 });
+
+export default React.memo(VideoGrid);

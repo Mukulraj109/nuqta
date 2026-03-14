@@ -24,7 +24,7 @@ interface EventSearchBarProps {
   loading?: boolean;
 }
 
-export default function EventSearchBar({
+function EventSearchBar({
   searchQuery,
   onSearchChange,
   onSearchSubmit,
@@ -267,3 +267,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(EventSearchBar);

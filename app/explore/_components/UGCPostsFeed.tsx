@@ -566,4 +566,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UGCPostsFeed;
+export default React.memo(UGCPostsFeed);

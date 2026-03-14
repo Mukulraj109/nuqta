@@ -18,7 +18,7 @@ interface FilterBarProps {
   activeFilters?: string[];
 }
 
-export default function FilterBar({
+function FilterBar({
   onFilterPress,
   onSortChange,
   currentSort = 'best_value',
@@ -283,3 +283,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(FilterBar);

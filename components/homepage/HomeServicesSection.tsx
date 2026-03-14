@@ -430,4 +430,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeServicesSection;
+export default React.memo(HomeServicesSection);

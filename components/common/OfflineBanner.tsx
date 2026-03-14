@@ -26,6 +26,10 @@ export function OfflineBanner() {
   const isShowingRef = React.useRef(false);
   const hasShownInitialRef = React.useRef(false);
 
+  const resetIsShowing = React.useCallback(() => {
+    isShowingRef.current = false;
+  }, []);
+
   const showBanner = React.useCallback(() => {
     isShowingRef.current = true;
     translateY.value = withSpring(0, { damping: 18, stiffness: 120 });
@@ -34,10 +38,10 @@ export function OfflineBanner() {
   const hideBanner = React.useCallback(() => {
     translateY.value = withTiming(-120, { duration: 300 }, (finished) => {
       if (finished) {
-        runOnJS(() => { isShowingRef.current = false; })();
+        runOnJS(resetIsShowing)();
       }
     });
-  }, [translateY]);
+  }, [translateY, resetIsShowing]);
 
   useEffect(() => {
     if (!isOnline) {
@@ -172,4 +176,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OfflineBanner;
+export default React.memo(OfflineBanner);

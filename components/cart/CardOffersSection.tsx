@@ -32,7 +32,7 @@ interface CardOffersSectionProps {
   compact?: boolean; // Compact mode for checkout
 }
 
-export default function CardOffersSection({
+function CardOffersSection({
   storeId,
   orderValue,
   onOfferApplied,
@@ -468,3 +468,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(CardOffersSection);

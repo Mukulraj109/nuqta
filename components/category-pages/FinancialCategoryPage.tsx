@@ -83,7 +83,7 @@ function getPriceTier(priceForTwo?: number): { label: string; color: string } {
   return { label: '$$$', color: '#8B5CF6' };
 }
 
-export default function FinancialCategoryPage() {
+function FinancialCategoryPage() {
   const router = useRouter();
   const slug = 'financial-lifestyle';
   const categoryConfig = getCategoryConfig(slug);
@@ -490,3 +490,5 @@ const styles = StyleSheet.create({
   challengeBtn: { backgroundColor: COLORS.white, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 },
   challengeBtnText: { fontSize: 13, fontWeight: '600', color: COLORS.primary },
 });
+
+export default React.memo(FinancialCategoryPage);

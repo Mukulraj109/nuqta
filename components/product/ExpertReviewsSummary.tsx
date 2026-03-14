@@ -9,7 +9,7 @@ interface ExpertReviewsSummaryProps {
   onViewAll?: () => void;
 }
 
-export default function ExpertReviewsSummary({
+function ExpertReviewsSummary({
   averageRating,
   totalReviews,
   ratingDistribution,
@@ -165,3 +165,5 @@ const styles = StyleSheet.create({
     color: COLORS.primary[500],
   },
 });
+
+export default React.memo(ExpertReviewsSummary);

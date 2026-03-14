@@ -48,7 +48,7 @@ interface ProductDetails extends ProductItem {
   }>;
 }
 
-export default function ProductQuickView({
+function ProductQuickView({
   visible,
   productId,
   onClose,
@@ -1047,3 +1047,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 });
+
+export default React.memo(ProductQuickView);

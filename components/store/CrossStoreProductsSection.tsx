@@ -302,7 +302,7 @@ const CrossStoreProductsSection: React.FC<CrossStoreProductsSectionProps> = ({
   );
 };
 
-export default CrossStoreProductsSection;
+export default React.memo(CrossStoreProductsSection);
 
 const styles = StyleSheet.create({
   container: {

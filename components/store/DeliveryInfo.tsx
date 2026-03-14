@@ -789,4 +789,4 @@ export const mockServiceDelivery: DeliveryDetails = {
   trackingAvailable: false,
 };
 
-export default DeliveryInfo;
+export default React.memo(DeliveryInfo);

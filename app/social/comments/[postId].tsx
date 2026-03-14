@@ -186,11 +186,11 @@ export default function CommentsPage() {
     }
   }, [videoId]);
 
-  const handleReply = (commentId: string, userName: string) => {
+  const handleReply = useCallback((commentId: string, userName: string) => {
     setReplyingTo(commentId);
     setNewComment(`@${userName} `);
     inputRef.current?.focus();
-  };
+  }, []);
 
   const handleSendComment = useCallback(async () => {
     if (!newComment.trim() || !videoId || sending) return;
@@ -238,7 +238,7 @@ export default function CommentsPage() {
     }
   }, [newComment, videoId, sending, replyingTo, user]);
 
-  const renderComment = (comment: Comment, isReply = false) => (
+  const renderComment = useCallback((comment: Comment, isReply = false) => (
     <View key={comment.id} style={[styles.commentItem, isReply && styles.replyItem]}>
       <View style={styles.avatar}>
         <ThemedText style={styles.avatarText}>{comment.user.avatar}</ThemedText>
@@ -285,9 +285,9 @@ export default function CommentsPage() {
         </View>
       </View>
     </View>
-  );
+  ), [handleLike, handleReply]);
 
-  const renderCommentWithReplies = ({ item }: { item: Comment }) => (
+  const renderCommentWithReplies = useCallback(({ item }: { item: Comment }) => (
     <View>
       {renderComment(item)}
       {item.replies && item.replies.length > 0 && (
@@ -296,7 +296,7 @@ export default function CommentsPage() {
         </View>
       )}
     </View>
-  );
+  ), [renderComment]);
 
   return (
     <KeyboardAvoidingView

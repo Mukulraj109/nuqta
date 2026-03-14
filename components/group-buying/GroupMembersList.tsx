@@ -18,7 +18,7 @@ interface GroupMembersListProps {
   currentUserId?: string;
 }
 
-export default function GroupMembersList({
+function GroupMembersList({
   members,
   creatorId,
   currentUserId,
@@ -197,3 +197,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+
+export default React.memo(GroupMembersList);

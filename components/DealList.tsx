@@ -34,7 +34,7 @@ interface DealListItemData {
   isSelected: boolean;
 }
 
-export default function DealList({
+function DealList({
   deals,
   selectedDeals,
   onAddDeal,
@@ -528,3 +528,5 @@ const createStyles = (screenData: { width: number; height: number }, isTablet: b
     alignItems: 'center',
   },
 });
+
+export default React.memo(DealList);

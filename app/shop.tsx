@@ -303,18 +303,18 @@ export default function ShopPage() {
     }
   };
 
-  const handleProductPress = (product: Product) => {
+  const handleProductPress = useCallback((product: Product) => {
     const productId = product._id || product.id;
     router.push(`/product-page?cardId=${productId}&cardType=product` as any);
-  };
+  }, [router]);
 
-  const renderProduct = ({ item }: { item: Product }) => (
+  const renderProduct = useCallback(({ item }: { item: Product }) => (
     <ProductCard
       product={item}
       onPress={() => handleProductPress(item)}
       currencySymbol={currencySymbol}
     />
-  );
+  ), [handleProductPress, currencySymbol]);
 
   const renderHeader = () => (
     <View style={styles.headerContent}>

@@ -282,4 +282,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AnimatedButton;
+export default React.memo(AnimatedButton);

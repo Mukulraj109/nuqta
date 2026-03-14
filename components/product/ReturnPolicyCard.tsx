@@ -399,4 +399,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReturnPolicyCard;
+export default React.memo(ReturnPolicyCard);

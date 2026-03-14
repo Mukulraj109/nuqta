@@ -42,7 +42,7 @@ interface ImagesTabProps {
   refreshing?: boolean;
 }
 
-export default function ImagesTab({
+function ImagesTab({
   data,
   loading = false,
   hasMore = true,
@@ -457,3 +457,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default React.memo(ImagesTab);

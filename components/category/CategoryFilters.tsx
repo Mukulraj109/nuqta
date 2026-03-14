@@ -21,7 +21,7 @@ interface CategoryFiltersProps {
   onReset: () => void;
 }
 
-export default function CategoryFilters({
+function CategoryFilters({
   filters,
   activeFilters,
   onFilterChange,
@@ -543,3 +543,5 @@ const styles = StyleSheet.create({
     height: 40,
   },
 });
+
+export default React.memo(CategoryFilters);

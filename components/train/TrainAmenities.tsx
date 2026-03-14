@@ -98,4 +98,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrainAmenities;
+export default React.memo(TrainAmenities);

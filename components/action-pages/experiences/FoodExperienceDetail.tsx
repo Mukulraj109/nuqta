@@ -72,7 +72,7 @@ function StoreCard({ store, currencySymbol }: { store: any; currencySymbol: stri
   );
 }
 
-export default function ExperienceDetailPage() {
+function ExperienceDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getCurrencySymbol } = useRegion();
@@ -261,3 +261,5 @@ const styles = StyleSheet.create({
   },
   bookBtnText: { fontSize: 16, fontWeight: '600', color: COLORS.white },
 });
+
+export default React.memo(ExperienceDetailPage);

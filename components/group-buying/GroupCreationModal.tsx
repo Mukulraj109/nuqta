@@ -25,7 +25,7 @@ interface GroupCreationModalProps {
   onSubmit: (data: CreateGroupRequest) => Promise<void>;
 }
 
-export default function GroupCreationModal({
+function GroupCreationModal({
   visible,
   product,
   onClose,
@@ -465,3 +465,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default React.memo(GroupCreationModal);

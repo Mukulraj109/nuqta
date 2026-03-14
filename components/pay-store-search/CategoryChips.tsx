@@ -210,4 +210,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryChips;
+export default React.memo(CategoryChips);

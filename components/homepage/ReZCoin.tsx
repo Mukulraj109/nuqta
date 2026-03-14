@@ -13,7 +13,7 @@
 
 import React from 'react';
 import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { BRAND } from '@/constants/brand';
 
 // Brand colors from TASK.md
@@ -63,7 +63,7 @@ export const NuqtaCoin: React.FC<ReZCoinProps> = ({
    * CoinIcon - Renders the coin image
    */
   const CoinIcon = () => (
-    <Image
+    <CachedImage
       source={BRAND.COIN_IMAGE}
       style={{ width: config.coin, height: config.coin }}
       contentFit="contain"
@@ -145,4 +145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NuqtaCoin;
+export default React.memo(NuqtaCoin);

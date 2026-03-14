@@ -37,7 +37,7 @@ interface CountryCodePickerProps {
   style?: any;
 }
 
-export default function CountryCodePicker({
+function CountryCodePicker({
   selectedCountry,
   onSelect,
   style,
@@ -217,3 +217,5 @@ const styles = StyleSheet.create({
     color: '#9AA7B2',
   },
 });
+
+export default React.memo(CountryCodePicker);

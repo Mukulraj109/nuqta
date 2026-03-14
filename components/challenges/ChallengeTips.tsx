@@ -88,7 +88,7 @@ const getTipsForAction = (action: string, difficulty?: string): string[] => {
   return baseTips.slice(0, 3); // Return top 3 tips
 };
 
-export default function ChallengeTips({ action, difficulty }: ChallengeTipsProps) {
+function ChallengeTips({ action, difficulty }: ChallengeTipsProps) {
   const tips = getTipsForAction(action, difficulty);
 
   return (
@@ -168,3 +168,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default React.memo(ChallengeTips);

@@ -17,7 +17,7 @@ interface RewardTasksProps {
   onClaimReward?: (taskId: string) => void;
 }
 
-export default function RewardTasks({
+function RewardTasks({
   tasks,
   onCompleteTask,
   onClaimReward
@@ -549,3 +549,5 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 });
+
+export default React.memo(RewardTasks);

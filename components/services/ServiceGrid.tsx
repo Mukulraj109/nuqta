@@ -238,4 +238,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ServiceGrid;
+export default React.memo(ServiceGrid);

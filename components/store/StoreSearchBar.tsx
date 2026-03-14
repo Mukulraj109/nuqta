@@ -371,4 +371,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoreSearchBar;
+export default React.memo(StoreSearchBar);

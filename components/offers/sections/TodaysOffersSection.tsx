@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TodaysOffersSection;
+export default React.memo(TodaysOffersSection);

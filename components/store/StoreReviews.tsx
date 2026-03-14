@@ -606,4 +606,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoreReviews;
+export default React.memo(StoreReviews);

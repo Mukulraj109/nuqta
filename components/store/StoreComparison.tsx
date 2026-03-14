@@ -496,4 +496,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoreComparison;
+export default React.memo(StoreComparison);

@@ -63,7 +63,7 @@ function StoreCard({ store, currencySymbol, primaryColor }: { store: any; curren
   );
 }
 
-export default function GenericExperienceDetail() {
+function GenericExperienceDetail() {
   const router = useRouter();
   const { id, slug } = useLocalSearchParams<{ id: string; slug: string }>();
   const { getCurrencySymbol } = useRegion();
@@ -223,3 +223,5 @@ const styles = StyleSheet.create({
   emptyTitle: { fontSize: 16, fontWeight: '600', color: '#111827', marginTop: 16 },
   emptySubtitle: { fontSize: 13, color: '#6B7280', marginTop: 4 },
 });
+
+export default React.memo(GenericExperienceDetail);

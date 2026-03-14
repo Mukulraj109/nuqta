@@ -469,4 +469,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FriendsCommunity;
+export default React.memo(FriendsCommunity);

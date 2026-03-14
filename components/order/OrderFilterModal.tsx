@@ -306,4 +306,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrderFilterModal;
+export default React.memo(OrderFilterModal);

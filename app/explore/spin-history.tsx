@@ -117,7 +117,7 @@ export default function SpinHistoryPage() {
     return entry.prize || 'Prize';
   };
 
-  const renderItem = ({ item }: { item: SpinHistoryEntry }) => {
+  const renderItem = useCallback(({ item }: { item: SpinHistoryEntry }) => {
     const config = PRIZE_TYPE_CONFIG[item.type] || PRIZE_TYPE_CONFIG.coins;
     const rewardText = getRewardDisplay(item);
     const storeName = item.couponMetadata?.storeName;
@@ -143,7 +143,7 @@ export default function SpinHistoryPage() {
         </View>
       </View>
     );
-  };
+  }, [currencySymbol]);
 
   const renderEmpty = () => {
     if (loading) return null;

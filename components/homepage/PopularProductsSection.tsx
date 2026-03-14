@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import { Image as ExpoImage } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useRouter } from 'expo-router';
@@ -100,7 +100,7 @@ function PopularProductsSection({
         <ThemedView style={styles.cardContent}>
           {/* Product Image - Left Side (Smaller) */}
           <View style={styles.imageContainer}>
-            <ExpoImage
+            <CachedImage
               source={item.image || 'https://via.placeholder.com/70x70?text=No+Image'}
               style={styles.productImage}
               contentFit="cover"

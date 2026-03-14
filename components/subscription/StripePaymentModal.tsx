@@ -25,7 +25,7 @@ interface StripePaymentModalProps {
   onError: (error: Error) => void;
 }
 
-export default function StripePaymentModal({
+function StripePaymentModal({
   visible,
   tier,
   amount,
@@ -435,3 +435,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default React.memo(StripePaymentModal);

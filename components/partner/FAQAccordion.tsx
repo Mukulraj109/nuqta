@@ -105,7 +105,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ faq, isExpanded, onToggle
   );
 };
 
-export default function FAQAccordion({ faqs, onContactPress }: FAQAccordionProps) {
+function FAQAccordion({ faqs, onContactPress }: FAQAccordionProps) {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
@@ -474,3 +474,5 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
 });
+
+export default React.memo(FAQAccordion);

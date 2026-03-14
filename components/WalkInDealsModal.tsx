@@ -50,7 +50,7 @@ const COLORS = {
   error: '#EF4444',
 };
 
-export default function WalkInDealsModal({ visible, onClose, deals = [], storeId }: DealModalProps) {
+function WalkInDealsModal({ visible, onClose, deals = [], storeId }: DealModalProps) {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
@@ -856,3 +856,5 @@ const createStyles = (screenData: { width: number; height: number }) => {
     },
   });
 };
+
+export default React.memo(WalkInDealsModal);

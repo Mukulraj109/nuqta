@@ -17,7 +17,7 @@ interface UGCCardSkeletonProps {
   cardHeight?: number;
 }
 
-export default function UGCCardSkeleton({
+function UGCCardSkeleton({
   cardWidth = 200,
   cardHeight = 355
 }: UGCCardSkeletonProps) {
@@ -137,3 +137,5 @@ const styles = StyleSheet.create({
   },
   productPrice: {},
 });
+
+export default React.memo(UGCCardSkeleton);

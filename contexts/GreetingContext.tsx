@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useReducer, useEffect, useMemo, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useMemo, useCallback, useRef, ReactNode } from 'react';
 import { useLocation } from './LocationContext';
 import { useAuth } from './AuthContext';
 import {
   getCurrentGreeting,
-  getGreetingForTime,
+  getGreetingForTime as getGreetingForTimeUtil,
   getSmartGreeting,
 } from '@/utils/greetingUtils';
 import {
@@ -74,37 +74,22 @@ export function GreetingProvider({ children }: GreetingProviderProps) {
   const { state: locationState } = useLocation();
   const { state: authState } = useAuth();
 
-  // Initialize greeting
-  useEffect(() => {
-    updateGreeting();
-  }, []);
+  // Store auth/location state in refs so callbacks don't depend on them
+  const authStateRef = useRef(authState);
+  authStateRef.current = authState;
+  const locationStateRef = useRef(locationState);
+  locationStateRef.current = locationState;
 
-  // Update greeting when location or user changes
-  useEffect(() => {
-    if (locationState.currentLocation || authState.user) {
-      updateGreeting();
-    }
-  }, [locationState.currentLocation, authState.user]);
-
-  // Update greeting every hour
-  useEffect(() => {
-    const interval = setInterval(() => {
-      updateGreeting();
-    }, 60 * 60 * 1000); // Update every hour
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const updateGreeting = async (config?: GreetingConfig): Promise<void> => {
+  const updateGreeting = useCallback(async (config?: GreetingConfig): Promise<void> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
       dispatch({ type: 'CLEAR_ERROR' });
 
-      // Build greeting configuration
+      // Build greeting configuration using refs for stable deps
       const greetingConfig: GreetingConfig = {
-        userName: authState.user?.profile?.firstName || undefined,
-        timezone: locationState.currentLocation?.timezone || 'Asia/Kolkata',
-        language: 'en', // You can get this from user preferences
+        userName: authStateRef.current.user?.profile?.firstName || undefined,
+        timezone: locationStateRef.current.currentLocation?.timezone || 'Asia/Kolkata',
+        language: 'en',
         includeEmoji: true,
         personalized: true,
         ...config,
@@ -112,36 +97,57 @@ export function GreetingProvider({ children }: GreetingProviderProps) {
 
       // Get current greeting
       const greeting = getSmartGreeting(new Date(), greetingConfig);
-      
+
       dispatch({ type: 'SET_GREETING', payload: greeting });
     } catch (error) {
       dispatch({ type: 'SET_ERROR', payload: 'Failed to update greeting' });
     }
-  };
+  }, []);
 
-  const getGreetingForTime = (date: Date, config?: GreetingConfig): GreetingData => {
+  const getGreetingForTime = useCallback((date: Date, config?: GreetingConfig): GreetingData => {
     const greetingConfig: GreetingConfig = {
-      userName: authState.user?.profile?.firstName || undefined,
-      timezone: locationState.currentLocation?.timezone || 'Asia/Kolkata',
+      userName: authStateRef.current.user?.profile?.firstName || undefined,
+      timezone: locationStateRef.current.currentLocation?.timezone || 'Asia/Kolkata',
       language: 'en',
       includeEmoji: true,
       personalized: true,
       ...config,
     };
 
-    return getGreetingForTime(date, greetingConfig);
-  };
+    return getGreetingForTimeUtil(date, greetingConfig);
+  }, []);
 
-  const clearError = (): void => {
+  const clearError = useCallback((): void => {
     dispatch({ type: 'CLEAR_ERROR' });
-  };
+  }, []);
+
+  // Initialize greeting
+  useEffect(() => {
+    updateGreeting();
+  }, [updateGreeting]);
+
+  // Update greeting when location or user changes
+  useEffect(() => {
+    if (locationState.currentLocation || authState.user) {
+      updateGreeting();
+    }
+  }, [locationState.currentLocation, authState.user, updateGreeting]);
+
+  // Update greeting every hour
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateGreeting();
+    }, 60 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [updateGreeting]);
 
   const contextValue = useMemo<GreetingContextType>(() => ({
     state,
     updateGreeting,
     getGreetingForTime,
     clearError,
-  }), [state]);
+  }), [state, updateGreeting, getGreetingForTime, clearError]);
 
   return (
     <GreetingContext.Provider value={contextValue}>

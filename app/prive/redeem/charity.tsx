@@ -248,6 +248,7 @@ export default function CharityScreen() {
           visible={showVoucherModal}
           animationType="slide"
           transparent={true}
+          statusBarTranslucent
           onRequestClose={() => setShowVoucherModal(false)}
         >
           <View style={styles.modalOverlay}>

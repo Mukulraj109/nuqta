@@ -32,7 +32,7 @@ const FEATURES: Feature[] = [
   { name: 'Concierge Service', free: false, premium: false, vip: true },
 ];
 
-export default function FeatureComparisonTable({
+function FeatureComparisonTable({
   currentTier,
   newTier,
   compact = false,
@@ -213,3 +213,5 @@ const styles = StyleSheet.create({
     color: '#8B5CF6',
   },
 });
+
+export default React.memo(FeatureComparisonTable);

@@ -53,7 +53,7 @@ interface DiscoverAndShopSectionProps {
   onCategoryPress?: (category: CategoryCard) => void;
 }
 
-export default function DiscoverAndShopSection({
+function DiscoverAndShopSection({
   showHeader = true,
   showCategories = true,
   initialTab = 'reels',
@@ -1318,3 +1318,5 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
 });
+
+export default React.memo(DiscoverAndShopSection);

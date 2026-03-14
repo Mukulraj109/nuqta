@@ -225,4 +225,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default OffersHubScreen;
+export default React.memo(OffersHubScreen);

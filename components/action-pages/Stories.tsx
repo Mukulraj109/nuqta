@@ -51,7 +51,7 @@ const FILTERS = [
   { id: 'unboxings', label: 'Unboxings' },
 ];
 
-export default function TechStoriesPage() {
+function TechStoriesPage() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -328,3 +328,5 @@ const styles = StyleSheet.create({
   cardAction: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   cardActionText: { fontSize: 12, color: '#6B7280' },
 });
+
+export default React.memo(TechStoriesPage);

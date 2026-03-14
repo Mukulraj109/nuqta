@@ -457,4 +457,4 @@ Contact us within 48 hours of delivery if items are lost or damaged. We'll arran
   },
 ];
 
-export default StorePolicies;
+export default React.memo(StorePolicies);

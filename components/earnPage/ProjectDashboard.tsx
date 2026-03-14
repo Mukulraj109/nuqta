@@ -12,7 +12,7 @@ interface ProjectDashboardProps {
   loading?: boolean;
 }
 
-export default function ProjectDashboard({ 
+function ProjectDashboard({ 
   projectStatus, 
   onStatusPress,
   loading = false
@@ -171,3 +171,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default React.memo(ProjectDashboard);

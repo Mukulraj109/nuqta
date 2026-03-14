@@ -36,7 +36,7 @@ interface ReelsTabProps {
   refreshing?: boolean;
 }
 
-export default function ReelsTab({
+function ReelsTab({
   data,
   loading = false,
   hasMore = true,
@@ -240,3 +240,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default React.memo(ReelsTab);

@@ -170,4 +170,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PremiumSearchHeader;
+export default React.memo(PremiumSearchHeader);

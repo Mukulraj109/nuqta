@@ -20,7 +20,7 @@ interface JackpotTimelineProps {
 
 const { width } = Dimensions.get('window');
 
-export default function JackpotTimeline({
+function JackpotTimeline({
   milestones,
   currentSpent = 0, // Fixed: Don't hardcode to 18500, use actual value from props
   onMilestonePress
@@ -413,3 +413,5 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
 });
+
+export default React.memo(JackpotTimeline);

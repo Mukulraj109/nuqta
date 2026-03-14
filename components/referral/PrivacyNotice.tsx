@@ -373,4 +373,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PrivacyNotice;
+export default React.memo(PrivacyNotice);

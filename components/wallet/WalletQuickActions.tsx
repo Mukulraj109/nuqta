@@ -163,4 +163,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WalletQuickActions;
+export default React.memo(WalletQuickActions);

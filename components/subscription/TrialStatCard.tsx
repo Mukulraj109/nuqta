@@ -15,7 +15,7 @@ interface TrialStatCardProps {
   style?: ViewStyle;
 }
 
-export default function TrialStatCard({
+function TrialStatCard({
   icon,
   label,
   value,
@@ -138,3 +138,5 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 });
+
+export default React.memo(TrialStatCard);

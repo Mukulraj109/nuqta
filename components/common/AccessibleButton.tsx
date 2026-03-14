@@ -382,4 +382,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AccessibleButton;
+export default React.memo(AccessibleButton);

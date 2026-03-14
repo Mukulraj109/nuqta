@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
@@ -21,7 +21,7 @@ interface RewardCardProps {
   compact?: boolean;
 }
 
-export default function RewardCard({
+function RewardCard({
   reward,
   canRedeem,
   onRedeem,
@@ -117,7 +117,7 @@ export default function RewardCard({
       )}
 
       {reward.image ? (
-        <Image source={{ uri: reward.image }} style={styles.rewardImage} contentFit="cover" cachePolicy="memory-disk" />
+        <CachedImage source={{ uri: reward.image }} style={styles.rewardImage} contentFit="cover" cachePolicy="memory-disk" />
       ) : (
         <LinearGradient
           colors={[`${tierColor}20`, `${tierColor}10`]}
@@ -434,3 +434,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default React.memo(RewardCard);

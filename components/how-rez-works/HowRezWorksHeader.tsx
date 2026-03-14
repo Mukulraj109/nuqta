@@ -161,4 +161,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HowRezWorksHeader;
+export default React.memo(HowRezWorksHeader);

@@ -29,17 +29,21 @@ export function ToastProvider({ children }: ToastProviderProps) {
   const [currentToast, setCurrentToast] = useState<ToastItem | null>(null);
   const idCounter = useRef(0);
 
+  // Track currentToast in a ref so callbacks stay stable
+  const currentToastRef = useRef(currentToast);
+  currentToastRef.current = currentToast;
+
   // Process next toast in queue
   const processQueue = useCallback(() => {
     setQueue((prevQueue) => {
-      if (prevQueue.length > 0 && !currentToast) {
+      if (prevQueue.length > 0 && !currentToastRef.current) {
         const [next, ...rest] = prevQueue;
         setCurrentToast(next);
         return rest;
       }
       return prevQueue;
     });
-  }, [currentToast]);
+  }, []);
 
   // Handle toast dismissal
   const dismissTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -67,7 +71,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
     };
   }, []);
 
-  // Main showToast function
+  // Main showToast function — uses ref to avoid re-creating on every toast change
   const showToast = useCallback(
     (message: string, type: 'success' | 'error' | 'info' | 'warning', duration: number = 3000) => {
       const newToast: ToastItem = {
@@ -77,7 +81,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
         duration,
       };
 
-      if (!currentToast) {
+      if (!currentToastRef.current) {
         // No toast showing, show immediately
         setCurrentToast(newToast);
       } else {
@@ -85,7 +89,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
         setQueue((prevQueue) => [...prevQueue, newToast]);
       }
     },
-    [currentToast]
+    []
   );
 
   // Convenience methods

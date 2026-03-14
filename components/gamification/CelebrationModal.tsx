@@ -25,7 +25,7 @@ interface CelebrationModalProps {
 
 const { width } = Dimensions.get('window');
 
-export default function CelebrationModal({
+function CelebrationModal({
   visible,
   result,
   coinsEarned,
@@ -517,3 +517,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default React.memo(CelebrationModal);

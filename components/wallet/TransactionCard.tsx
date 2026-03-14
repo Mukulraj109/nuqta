@@ -21,7 +21,7 @@ interface TransactionCardProps {
   showDate?: boolean;
 }
 
-export default function TransactionCard({ 
+function TransactionCard({
   transaction, 
   onPress, 
   showDate = true 
@@ -295,3 +295,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+
+export default React.memo(TransactionCard);

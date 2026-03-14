@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
@@ -99,7 +99,7 @@ const RelatedCabsSection: React.FC<RelatedCabsSectionProps> = ({ currentCabId })
               onPress={() => handleCabPress(cabId)}
              
             >
-              <Image source={{ uri: imageUrl }} style={styles.cabImage} contentFit="cover" cachePolicy="memory-disk" />
+              <CachedImage source={{ uri: imageUrl }} style={styles.cabImage} contentFit="cover" cachePolicy="memory-disk" />
               <View style={styles.cabContent}>
                 <Text style={styles.cabName} numberOfLines={2}>
                   {cab.name}
@@ -213,4 +213,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RelatedCabsSection;
+export default React.memo(RelatedCabsSection);

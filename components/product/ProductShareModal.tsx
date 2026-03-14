@@ -544,4 +544,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductShareModal;
+export default React.memo(ProductShareModal);

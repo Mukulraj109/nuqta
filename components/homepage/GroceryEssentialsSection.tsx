@@ -345,4 +345,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroceryEssentialsSection;
+export default React.memo(GroceryEssentialsSection);

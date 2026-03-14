@@ -456,4 +456,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PickedForYou;
+export default React.memo(PickedForYou);

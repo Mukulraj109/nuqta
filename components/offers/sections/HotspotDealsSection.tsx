@@ -120,4 +120,4 @@ export const HotspotDealsSection: React.FC<HotspotDealsSectionProps> = ({
   );
 };
 
-export default HotspotDealsSection;
+export default React.memo(HotspotDealsSection);

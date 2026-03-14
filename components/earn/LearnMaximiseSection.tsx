@@ -324,4 +324,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LearnMaximiseSection;
+export default React.memo(LearnMaximiseSection);

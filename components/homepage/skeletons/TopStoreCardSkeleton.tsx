@@ -15,7 +15,7 @@ interface TopStoreCardSkeletonProps {
  * - Rating and distance
  * - Earn badge
  */
-export default function TopStoreCardSkeleton({ width = 180 }: TopStoreCardSkeletonProps) {
+function TopStoreCardSkeleton({ width = 180 }: TopStoreCardSkeletonProps) {
   return (
     <View
       style={[styles.container, { width }]}
@@ -127,3 +127,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
   },
 });
+
+export default React.memo(TopStoreCardSkeleton);

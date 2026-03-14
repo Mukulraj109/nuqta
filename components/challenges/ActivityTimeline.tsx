@@ -47,7 +47,7 @@ const getActionIcon = (action: string): any => {
   return iconMap[action] || 'checkmark-circle';
 };
 
-export default function ActivityTimeline({
+function ActivityTimeline({
   activities,
   currentProgress,
   targetProgress,
@@ -250,3 +250,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(ActivityTimeline);

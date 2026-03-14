@@ -60,7 +60,7 @@ const VALIDATION_RULES = {
   allowedVideoFormats: ['mp4', 'mov'],
 };
 
-export default function UGCUploadModal({
+function UGCUploadModal({
   visible,
   onClose,
   storeId,
@@ -1172,3 +1172,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default React.memo(UGCUploadModal);

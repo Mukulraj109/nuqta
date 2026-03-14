@@ -16,7 +16,7 @@ interface ProratedPriceDisplayProps {
   daysRemaining: number;
 }
 
-export default function ProratedPriceDisplay({
+function ProratedPriceDisplay({
   originalPrice,
   creditFromCurrentPlan,
   finalAmount,
@@ -174,3 +174,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(ProratedPriceDisplay);

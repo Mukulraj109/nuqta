@@ -15,7 +15,7 @@ interface BenefitShowcaseCardProps {
   style?: ViewStyle;
 }
 
-export default function BenefitShowcaseCard({
+function BenefitShowcaseCard({
   icon,
   title,
   description,
@@ -109,3 +109,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default React.memo(BenefitShowcaseCard);

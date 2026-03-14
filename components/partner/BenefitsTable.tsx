@@ -17,7 +17,7 @@ interface BenefitsTableProps {
   onUpgradePress?: (targetLevel: PartnerLevel) => void;
 }
 
-export default function BenefitsTable({
+function BenefitsTable({
   levels,
   currentLevel = 1,
   onUpgradePress
@@ -602,3 +602,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default React.memo(BenefitsTable);

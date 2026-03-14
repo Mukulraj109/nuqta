@@ -15,7 +15,7 @@ import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDa
 import { formatPrice } from '@/utils/priceFormatter';
 import { useCart } from '@/contexts/CartContext';
 
-export function GoingOutProductCard({
+function _GoingOutProductCardInner({
   product,
   onPress,
   onAddToCart,
@@ -631,3 +631,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export const GoingOutProductCard = React.memo(_GoingOutProductCardInner);

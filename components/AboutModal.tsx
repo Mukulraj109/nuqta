@@ -83,7 +83,7 @@ interface AboutModalProps {
   storeData?: StoreInfo;
 }
 
-export default function AboutModal({ visible, onClose, storeData }: AboutModalProps) {
+function AboutModal({ visible, onClose, storeData }: AboutModalProps) {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
@@ -736,3 +736,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(AboutModal);

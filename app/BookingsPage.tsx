@@ -483,7 +483,7 @@ export default function BookingsPage() {
   }
 
   // ─── Render booking card ─────────────────────────────────
-  const renderBookingCard = ({ item: booking }: { item: UnifiedBooking }) => {
+  const renderBookingCard = useCallback(({ item: booking }: { item: UnifiedBooking }) => {
     const typeConf = BOOKING_TYPE_CONFIG[booking.type];
     const statusConf = STATUS_CONFIG[booking.status] || STATUS_CONFIG.pending;
     const upcoming = isUpcoming(booking.date) && booking.status !== 'cancelled' && booking.status !== 'completed' && booking.status !== 'no_show';
@@ -674,7 +674,7 @@ export default function BookingsPage() {
         </View>
       </Pressable>
     );
-  };
+  }, [expandedBookingId, router]);
 
   // ─── Empty state ─────────────────────────────────────────
   const renderEmpty = () => {

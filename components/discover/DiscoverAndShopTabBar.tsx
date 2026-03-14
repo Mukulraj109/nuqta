@@ -63,7 +63,7 @@ interface DiscoverAndShopTabBarProps {
   onTabChange: (tab: DiscoverTabType) => void;
 }
 
-export default function DiscoverAndShopTabBar({
+function DiscoverAndShopTabBar({
   activeTab,
   onTabChange,
 }: DiscoverAndShopTabBarProps) {
@@ -176,3 +176,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default React.memo(DiscoverAndShopTabBar);

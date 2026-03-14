@@ -4,9 +4,15 @@ import {
   Pressable,
   StyleSheet,
   Animated,
+  LayoutAnimation,
+  UIManager,
   Dimensions,
   Platform,
 } from 'react-native';
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { DealCardProps } from '@/types/deals';
@@ -30,7 +36,6 @@ function DealCard({
   // Animation refs
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const cardAnim = useRef(new Animated.Value(0)).current;
-  const previewAnim = useRef(new Animated.Value(0)).current;
 
   // Calculate screen dimensions for responsive design with state updates
   const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
@@ -114,6 +119,7 @@ function DealCard({
       }),
     ]).start();
 
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setShowPreview(!showPreview);
   };
 
@@ -139,15 +145,6 @@ function DealCard({
       }),
     ]).start();
   };
-
-  // Toggle preview panel
-  useEffect(() => {
-    Animated.timing(previewAnim, {
-      toValue: showPreview ? 1 : 0,
-      duration: 200,
-      useNativeDriver: false,
-    }).start();
-  }, [showPreview]);
 
   // Calculate preview discount
   const previewResult = calculateDealDiscount(deal, billPreview);
@@ -305,7 +302,10 @@ function DealCard({
           {/* Quick Preview Toggle */}
           <Pressable 
             style={styles.previewToggle}
-            onPress={() => setShowPreview(!showPreview)}
+            onPress={() => {
+              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+              setShowPreview(!showPreview);
+            }}
           >
             <ThemedText style={styles.previewToggleText}>
               {showPreview ? 'Hide' : 'Preview'} savings
@@ -318,35 +318,26 @@ function DealCard({
           </Pressable>
         </View>
 
-        {/* Animated Preview Panel */}
-        <Animated.View 
-          style={[
-            styles.previewPanel,
-            {
-              maxHeight: previewAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 160], // Increased height for better visibility
-              }),
-              opacity: previewAnim,
-            }
-          ]}
-        >
-          <View style={styles.previewContent}>
-            <ThemedText style={styles.previewTitle}>Savings Preview</ThemedText>
-            <View style={styles.previewRow}>
-              <ThemedText style={styles.previewLabel}>Bill Amount:</ThemedText>
-              <ThemedText style={styles.previewValue}>{currencySymbol}{billPreview.toLocaleString()}</ThemedText>
-            </View>
-            <View style={styles.previewRow}>
-              <ThemedText style={styles.previewLabel}>You Save:</ThemedText>
-              <ThemedText style={styles.previewSavings}>{currencySymbol}{savingsAmount.toLocaleString()}</ThemedText>
-            </View>
-            <View style={[styles.previewRow, styles.previewFinal]}>
-              <ThemedText style={styles.previewLabel}>Final Amount:</ThemedText>
-              <ThemedText style={styles.previewFinalAmount}>{currencySymbol}{finalAmount.toLocaleString()}</ThemedText>
+        {/* Preview Panel */}
+        {showPreview && (
+          <View style={styles.previewPanel}>
+            <View style={styles.previewContent}>
+              <ThemedText style={styles.previewTitle}>Savings Preview</ThemedText>
+              <View style={styles.previewRow}>
+                <ThemedText style={styles.previewLabel}>Bill Amount:</ThemedText>
+                <ThemedText style={styles.previewValue}>{currencySymbol}{billPreview.toLocaleString()}</ThemedText>
+              </View>
+              <View style={styles.previewRow}>
+                <ThemedText style={styles.previewLabel}>You Save:</ThemedText>
+                <ThemedText style={styles.previewSavings}>{currencySymbol}{savingsAmount.toLocaleString()}</ThemedText>
+              </View>
+              <View style={[styles.previewRow, styles.previewFinal]}>
+                <ThemedText style={styles.previewLabel}>Final Amount:</ThemedText>
+                <ThemedText style={styles.previewFinalAmount}>{currencySymbol}{finalAmount.toLocaleString()}</ThemedText>
+              </View>
             </View>
           </View>
-        </Animated.View>
+        )}
 
         {/* Terms (first 2 only) */}
         <View style={styles.termsContainer}>

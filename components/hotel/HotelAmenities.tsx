@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HotelAmenities;
+export default React.memo(HotelAmenities);

@@ -118,7 +118,7 @@ export default function CoinPage() {
           </View>
         </View>
 
-        <View style={{ height: 36 }} />
+        <View style={{ height: 120 }} />
       </ScrollView>
     </View>
   );

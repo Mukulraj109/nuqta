@@ -17,7 +17,7 @@ interface ProgressStepsProps {
   currentStep: number;
 }
 
-export default function ProgressSteps({ steps, currentStep }: ProgressStepsProps) {
+function ProgressSteps({ steps, currentStep }: ProgressStepsProps) {
   const renderStep = (step: Step, index: number) => {
     const isCompleted = index < currentStep;
     const isCurrent = index === currentStep;
@@ -155,3 +155,5 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
   },
 });
+
+export default React.memo(ProgressSteps);

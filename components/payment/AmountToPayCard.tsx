@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
@@ -61,7 +61,7 @@ export const AmountToPayCard: React.FC<AmountToPayCardProps> = ({
       {coinsApplied > 0 && (
         <View style={styles.breakdownRow}>
           <View style={styles.breakdownItem}>
-            <Image
+            <CachedImage
               source={BRAND.COIN_IMAGE}
               style={styles.coinIcon}
               contentFit="contain"
@@ -188,4 +188,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AmountToPayCard;
+export default React.memo(AmountToPayCard);

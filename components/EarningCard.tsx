@@ -199,4 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EarningCard;
+export default React.memo(EarningCard);

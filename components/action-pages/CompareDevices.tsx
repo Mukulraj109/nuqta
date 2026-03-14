@@ -63,7 +63,7 @@ const COMPARISON_SPECS = [
   { key: 'cashback', label: 'Cashback', icon: 'wallet-outline' },
 ];
 
-export default function CompareDevicesPage() {
+function CompareDevicesPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ categoryId?: string }>();
   const { getCurrencySymbol } = useRegion();
@@ -675,3 +675,5 @@ const styles = StyleSheet.create({
   },
   compareBtnText: { fontSize: 16, fontWeight: '600', color: COLORS.white },
 });
+
+export default React.memo(CompareDevicesPage);

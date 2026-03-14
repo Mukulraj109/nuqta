@@ -139,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReviewList;
+export default React.memo(ReviewList);

@@ -81,11 +81,11 @@ export default function GoingOutSectionPage() {
     return `${currency} ${price.toFixed(2)}`;
   };
 
-  const handleProductPress = (item: SectionProduct) => {
+  const handleProductPress = useCallback((item: SectionProduct) => {
     router.push(`/product-page?cardId=${item._id}` as any);
-  };
+  }, [router]);
 
-  const renderProduct = ({ item }: { item: SectionProduct }) => (
+  const renderProduct = useCallback(({ item }: { item: SectionProduct }) => (
     <Pressable style={styles.productCard} onPress={() => handleProductPress(item)}>
       <CachedImage
         source={item.images?.[0] || undefined}
@@ -110,7 +110,7 @@ export default function GoingOutSectionPage() {
         ) : null}
       </View>
     </Pressable>
-  );
+  ), [handleProductPress]);
 
   if (loading) {
     return (

@@ -257,4 +257,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WalletPaymentOption;
+export default React.memo(WalletPaymentOption);

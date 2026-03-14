@@ -26,7 +26,7 @@ import { useRegion } from '@/contexts/RegionContext';
 
 const { width } = Dimensions.get('window');
 
-export default function CartValidation({
+function CartValidation({
   visible,
   validationResult,
   loading,
@@ -516,3 +516,5 @@ const styles = StyleSheet.create({
     height: 20,
   },
 });
+
+export default React.memo(CartValidation);

@@ -132,7 +132,7 @@ const BENEFITS_DATA: BenefitItem[] = [
   },
 ];
 
-export default function BenefitsModal({
+function BenefitsModal({
   visible,
   tier,
   onClose,
@@ -375,3 +375,5 @@ const styles = StyleSheet.create({
     color: SUBSCRIPTION_COLORS.textSecondary,
   },
 });
+
+export default React.memo(BenefitsModal);

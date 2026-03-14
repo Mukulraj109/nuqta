@@ -268,7 +268,7 @@ function WebPaymentForm({
   );
 }
 
-export default function EventBookingModal({
+function EventBookingModal({
   visible,
   onClose,
   event,
@@ -1225,3 +1225,5 @@ const styles = StyleSheet.create({
   },
 });
 
+
+export default React.memo(EventBookingModal);

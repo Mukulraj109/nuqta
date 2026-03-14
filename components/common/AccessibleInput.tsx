@@ -430,4 +430,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AccessibleInput;
+export default React.memo(AccessibleInput);

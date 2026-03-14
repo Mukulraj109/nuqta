@@ -64,7 +64,7 @@ const featureHighlights: FeatureHighlight[] = [
   },
 ];
 
-export default function FeatureHighlights() {
+function FeatureHighlights() {
   const router = useRouter();
 
   const handleFeaturePress = (route: string) => {
@@ -265,3 +265,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default React.memo(FeatureHighlights);

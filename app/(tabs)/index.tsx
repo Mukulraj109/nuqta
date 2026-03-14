@@ -50,10 +50,17 @@ import CachedImage, { prefetchImages } from '@/components/ui/CachedImage';
 import HomepageSkeleton from '@/components/homepage/HomepageSkeleton';
 import { BRAND } from '@/constants/brand';
 
+// ProfileMenuModal eagerly loaded — React.lazy + Suspense(null) causes modal to not appear on Android
+import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
+
 // Lazy-loaded components (below-the-fold)
-const ProfileMenuModal = React.lazy(() => import('@/components/profile/ProfileMenuModal'));
 const QuickAccessFAB = React.lazy(() => import('@/components/navigation/QuickAccessFAB'));
 const PushNotificationInitializer = React.lazy(() => import('@/components/common/PushNotificationInitializer'));
+
+// ── Module-level constants ──
+const IS_IOS = Platform.OS === 'ios';
+const IS_WEB = Platform.OS === 'web';
+const SCROLL_EVENT_THROTTLE = Platform.OS === 'android' ? 32 : 16;
 
 // ── Module-level state: survives component remounts caused by DeferredProviders ──
 let _lastFocusRefreshTime = 0; // Throttle focus refreshes across remounts
@@ -127,7 +134,6 @@ const TabContentFallback = React.memo(() => (
 ));
 
 // Fallback components for Suspense boundaries
-const ModalFallback = () => null;
 const FABFallback = () => null;
 
 
@@ -184,7 +190,7 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = React.useState(false);
   const [showDetailedLocation, setShowDetailedLocation] = React.useState(false);
   // On web, InteractionManager resolves synchronously — start as true to avoid an extra re-render
-  const [interactionsComplete, setInteractionsComplete] = React.useState(Platform.OS === 'web');
+  const [interactionsComplete, setInteractionsComplete] = React.useState(IS_WEB);
   const [pushReady, setPushReady] = React.useState(false); // Deferred push notification init
   const [selectedCategory, setSelectedCategory] = React.useState('for-you'); // Category tab state
   // activeTab now comes directly from useHomeTab() context
@@ -241,7 +247,7 @@ export default function HomeScreen() {
 
   // Defer heavy renders until after animations complete, then prefetch other tabs
   React.useEffect(() => {
-    if (Platform.OS === 'web') {
+    if (IS_WEB) {
       // Already set to true on web — just prefetch in background
       const webTimer = setTimeout(prefetchOtherTabs, 1000);
       return () => clearTimeout(webTimer);
@@ -402,7 +408,7 @@ export default function HomeScreen() {
   }, [router]);
 
   const handleCoinPress = useCallback(() => {
-    if (Platform.OS === 'ios') {
+    if (IS_IOS) {
       setTimeout(() => router.push('/coins'), 50);
     } else {
       router.push('/coins');
@@ -413,8 +419,30 @@ export default function HomeScreen() {
     router.push('/prive/eligibility');
   }, [router]);
 
+  const handleCartPress = useCallback(() => {
+    if (IS_IOS) {
+      setTimeout(() => router.push('/cart'), 50);
+    } else {
+      router.push('/cart');
+    }
+  }, [router]);
+
+  const handleNotificationPress = useCallback(() => {
+    router.push('/account/notification-history' as any);
+  }, [router]);
+
+  const handleProfilePress = useCallback(() => {
+    if (authState.isAuthenticated && authState.user) {
+      showModal();
+    }
+  }, [authState.isAuthenticated, authState.user, showModal]);
+
+  const handleWhatsNewPress = useCallback(() => {
+    router.push('/whats-new');
+  }, [router]);
+
   // Handle location selection from the picker modal
-  const handleLocationSelect = async (selectedLocation: AddressSearchResult) => {
+  const handleLocationSelect = useCallback(async (selectedLocation: AddressSearchResult) => {
     try {
       const coordinates = {
         latitude: selectedLocation.coordinates.latitude,
@@ -430,7 +458,7 @@ export default function HomeScreen() {
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update location. Please try again.');
     }
-  };
+  }, [updateUserLocation]);
 
   // Memoize gradient colors to avoid new array allocation on every scroll frame
   const gradientColors = useMemo((): string[] => {
@@ -440,6 +468,24 @@ export default function HomeScreen() {
       case 'cash': return [colors.lightPeach, '#FFE5D0', '#FFF0E6', colors.background.primary];
       default: return ['#ffe8a8', '#fff0c4', colors.linen, colors.background.primary];
     }
+  }, [activeTab]);
+
+  // Memoize tab-dependent styles to avoid creating new objects every render
+  const tabStyles = useMemo(() => {
+    const isPrive = activeTab === 'prive';
+    const isMall = activeTab === 'mall';
+    const isCash = activeTab === 'cash';
+    return {
+      locationIconBg: isPrive ? { backgroundColor: '#C9A962' } : isMall ? { backgroundColor: '#0284C7' } : isCash ? { backgroundColor: '#D4A07A' } : undefined,
+      locationText: isPrive ? { color: colors.text.inverse, ...typography.body, fontWeight: '600' as const } : undefined,
+      chevronColor: isPrive ? '#C9A962' : isMall ? '#0284C7' : isCash ? '#D4A07A' : colors.text.tertiary,
+      coinContainerStyle: isPrive ? { backgroundColor: 'rgba(201, 169, 98, 0.2)', borderColor: 'rgba(201, 169, 98, 0.4)' } : isMall ? { backgroundColor: 'rgba(2, 132, 199, 0.15)', borderColor: 'rgba(2, 132, 199, 0.3)' } : isCash ? { backgroundColor: 'rgba(212, 160, 122, 0.15)', borderColor: 'rgba(212, 160, 122, 0.3)' } : undefined,
+      coinTextColor: isPrive ? { color: '#C9A962' } : isMall ? { color: '#0284C7' } : isCash ? { color: '#D4A07A' } : undefined,
+      iconColor: isPrive ? colors.text.inverse : isMall ? '#0284C7' : colors.text.primary,
+      whatsNewVariant: (isMall ? 'blue' : isPrive ? 'gold' : 'green') as 'blue' | 'gold' | 'green',
+      savedPillBg: isPrive ? { backgroundColor: 'rgba(201, 169, 98, 0.25)' } : isMall ? { backgroundColor: 'rgba(2, 132, 199, 0.2)' } : isCash ? { backgroundColor: 'rgba(212, 160, 122, 0.2)' } : undefined,
+      savedTextColor: isPrive ? { color: '#C9A962' } : isMall ? { color: '#0284C7' } : isCash ? { color: '#D4A07A' } : undefined,
+    };
   }, [activeTab]);
 
   // Show full-page skeleton while initial data is loading
@@ -455,7 +501,7 @@ export default function HomeScreen() {
         style={viewStyles.container}
         contentContainerStyle={viewStyles.scrollContentContainer}
         showsVerticalScrollIndicator={false}
-        scrollEventThrottle={Platform.OS === 'android' ? 32 : 16}
+        scrollEventThrottle={SCROLL_EVENT_THROTTLE}
         nestedScrollEnabled={true}
         keyboardShouldPersistTaps="handled"
         scrollEnabled={true}
@@ -500,12 +546,7 @@ export default function HomeScreen() {
             accessibilityHint={showDetailedLocation ? "Tap to collapse location details" : "Tap to expand location details"}
             accessibilityState={{ expanded: showDetailedLocation }}
           >
-            <View style={[
-              viewStyles.locationIconWrapper,
-              activeTab === 'prive' && { backgroundColor: '#C9A962' },
-              activeTab === 'mall' && { backgroundColor: '#0284C7' },
-              activeTab === 'cash' && { backgroundColor: '#D4A07A' }
-            ]}>
+            <View style={[viewStyles.locationIconWrapper, tabStyles.locationIconBg]}>
               <Ionicons name="location" size={14} color={colors.text.inverse} />
             </View>
             <LocationDisplay
@@ -514,13 +555,13 @@ export default function HomeScreen() {
               showLastUpdated={false}
               showRefreshButton={false}
               style={viewStyles.locationDisplay}
-              textStyle={activeTab === 'prive' ? { color: colors.text.inverse, ...typography.body, fontWeight: '600' } : textStyles.locationText}
+              textStyle={tabStyles.locationText || textStyles.locationText}
             />
             <View style={viewStyles.locationChevron}>
               <Ionicons
                 name={showDetailedLocation ? "chevron-up" : "chevron-down"}
                 size={14}
-                color={activeTab === 'prive' ? '#C9A962' : activeTab === 'mall' ? '#0284C7' : activeTab === 'cash' ? '#D4A07A' : colors.text.tertiary}
+                color={tabStyles.chevronColor}
               />
             </View>
           </Pressable>
@@ -529,20 +570,9 @@ export default function HomeScreen() {
           <View style={viewStyles.headerActions}>
             {/* Coin Balance Display - Horizontal Pill Style */}
             <Pressable
-              onPress={() => {
-                if (Platform.OS === 'ios') {
-                  setTimeout(() => router.push('/coins'), 50);
-                } else {
-                  router.push('/coins');
-                }
-              }}
+              onPress={handleCoinPress}
              
-              style={[
-                viewStyles.headerCoinContainer,
-                activeTab === 'prive' && { backgroundColor: 'rgba(201, 169, 98, 0.2)', borderColor: 'rgba(201, 169, 98, 0.4)' },
-                activeTab === 'mall' && { backgroundColor: 'rgba(2, 132, 199, 0.15)', borderColor: 'rgba(2, 132, 199, 0.3)' },
-                activeTab === 'cash' && { backgroundColor: 'rgba(212, 160, 122, 0.15)', borderColor: 'rgba(212, 160, 122, 0.3)' }
-              ]}
+              style={[viewStyles.headerCoinContainer, tabStyles.coinContainerStyle]}
             >
               <CachedImage
                 source={BRAND.COIN_IMAGE}
@@ -550,37 +580,26 @@ export default function HomeScreen() {
                 contentFit="contain"
                 showShimmer={false}
               />
-              <Text style={[
-                viewStyles.headerCoinText, 
-                activeTab === 'prive' && { color: '#C9A962' },
-                activeTab === 'mall' && { color: '#0284C7' },
-                activeTab === 'cash' && { color: '#D4A07A' }
-              ]}>{!walletData && isWalletLoading ? '...' : userPoints}</Text>
+              <Text style={[viewStyles.headerCoinText, tabStyles.coinTextColor]}>{!walletData && isWalletLoading ? '...' : userPoints}</Text>
             </Pressable>
 
             {/* What's New Badge */}
             <WhatsNewBadge
-              onPress={() => router.push('/whats-new')}
+              onPress={handleWhatsNewPress}
               style={viewStyles.whatsNewBadge}
-              variant={activeTab === 'mall' ? 'blue' : activeTab === 'prive' ? 'gold' : 'green'}
+              variant={tabStyles.whatsNewVariant}
             />
 
             {/* Cart Button with Modern Badge */}
             <Pressable
-              onPress={() => {
-                if (Platform.OS === 'ios') {
-                  setTimeout(() => router.push('/cart'), 50);
-                } else {
-                  router.push('/cart');
-                }
-              }}
+              onPress={handleCartPress}
              
               accessibilityLabel={`Shopping cart: ${cartState.totalItems} items`}
               accessibilityRole="button"
               accessibilityHint="Double tap to view your shopping cart"
               style={viewStyles.headerIconButton}
             >
-              <Ionicons name="cart-outline" size={24} color={activeTab === 'prive' ? colors.text.inverse : activeTab === 'mall' ? '#0284C7' : colors.text.primary} />
+              <Ionicons name="cart-outline" size={24} color={tabStyles.iconColor} />
               {cartState.totalItems > 0 && (
                 <LinearGradient
                   colors={[colors.error, '#FF5252']}
@@ -595,47 +614,33 @@ export default function HomeScreen() {
 
             {/* Notification Bell */}
             <Pressable
-              onPress={() => router.push('/account/notification-history' as any)}
+              onPress={handleNotificationPress}
              
               accessibilityLabel="Notifications"
               accessibilityRole="button"
               style={viewStyles.headerIconButton}
             >
-              <Ionicons name="notifications-outline" size={22} color={activeTab === 'prive' ? colors.text.inverse : activeTab === 'mall' ? '#0284C7' : colors.text.primary} />
+              <Ionicons name="notifications-outline" size={22} color={tabStyles.iconColor} />
             </Pressable>
 
             {/* Profile Badge Avatar with Savings - Badge then text pill */}
             <Pressable
-              onPress={() => {
-                if (authState.isAuthenticated && authState.user) {
-                  showModal();
-                }
-              }}
-             
+              onPress={handleProfilePress}
+
               accessibilityLabel="User profile menu"
               accessibilityRole="button"
               accessibilityHint="Double tap to open profile menu and account settings"
               style={viewStyles.profileSavingsContainer}
             >
               {/* Text pill - on left */}
-              <View style={[
-                viewStyles.savedTextPill,
-                activeTab === 'prive' && { backgroundColor: 'rgba(201, 169, 98, 0.25)' },
-                activeTab === 'mall' && { backgroundColor: 'rgba(2, 132, 199, 0.2)' },
-                activeTab === 'cash' && { backgroundColor: 'rgba(212, 160, 122, 0.2)' }
-              ]}>
-                <Text style={[
-                  viewStyles.savedText,
-                  activeTab === 'prive' && { color: '#C9A962' },
-                  activeTab === 'mall' && { color: '#0284C7' },
-                  activeTab === 'cash' && { color: '#D4A07A' }
-                ]}>
+              <View style={[viewStyles.savedTextPill, tabStyles.savedPillBg]}>
+                <Text style={[viewStyles.savedText, tabStyles.savedTextColor]}>
                   {!walletData && isWalletLoading ? '...' : `${currencySymbol}${totalSaved} saved`}
                 </Text>
               </View>
               {/* Badge on right - overlaps text slightly with negative margin */}
               <View style={viewStyles.badgeOverlay}>
-                <BadgeAvatar color={activeTab === 'mall' ? '#0284C7' : activeTab === 'prive' ? '#C9A962' : activeTab === 'cash' ? '#D4A07A' : undefined} />
+                <BadgeAvatar color={tabStyles.savedTextColor?.color} />
               </View>
             </Pressable>
           </View>
@@ -832,11 +837,9 @@ export default function HomeScreen() {
         )}
       </View>
 
-      {/* Profile Menu Modal - Lazy Loaded */}
+      {/* Profile Menu Modal */}
       {user && (
-        <Suspense fallback={<ModalFallback />}>
-          <ProfileMenuModal visible={isModalVisible} onClose={hideModal} user={user} menuSections={profileMenuSections} onMenuItemPress={handleMenuItemPress} />
-        </Suspense>
+        <ProfileMenuModal visible={isModalVisible} onClose={hideModal} user={user} menuSections={profileMenuSections} onMenuItemPress={handleMenuItemPress} />
       )}
 
       {/* Location Picker Modal */}
@@ -931,6 +934,13 @@ const viewStyles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.xs,
+    flexShrink: 1,
+    flexGrow: 0,
+    ...Platform.select({
+      android: { maxWidth: '35%', overflow: 'hidden' as const },
+      ios: { maxWidth: '40%' },
+      default: {}, // Web: no constraint, flexShrink handles it
+    }),
   },
   locationIconWrapper: {
     width: 24,
@@ -940,19 +950,29 @@ const viewStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: spacing.sm,
+    flexShrink: 0,
   },
   locationChevron: {
     marginLeft: spacing.xs,
+    flexShrink: 0,
   },
   // Modern Header Actions
   headerActions: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.xs,
+    ...Platform.select({
+      android: { flexShrink: 0, flexGrow: 0, marginLeft: 4 },
+      ios: { flexShrink: 0, marginLeft: 4 },
+      default: { gap: spacing.xs }, // Web: use gap (well-supported)
+    }),
   },
   // What's New Badge
   whatsNewBadge: {
-    // aligned with other elements
+    ...Platform.select({
+      android: { marginLeft: 4, flexShrink: 0 },
+      ios: { marginLeft: 4, flexShrink: 0 },
+      default: {}, // Web: gap handles spacing
+    }),
   },
   // Header Coin - Horizontal Pill Style
   headerCoinContainer: {
@@ -965,11 +985,16 @@ const viewStyles = StyleSheet.create({
     paddingRight: 6,
     borderWidth: 1,
     borderColor: 'rgba(255, 200, 87, 0.35)',
-    gap: 2,
+    ...Platform.select({
+      android: { flexShrink: 0 },
+      ios: { flexShrink: 0 },
+      default: {},
+    }),
   },
   headerCoinImage: {
     width: 18,
     height: 18,
+    marginRight: 2,
   },
   headerCoinText: {
     fontSize: 11,
@@ -983,6 +1008,11 @@ const viewStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
+    ...Platform.select({
+      android: { marginLeft: 4, flexShrink: 0 },
+      ios: { marginLeft: 4, flexShrink: 0 },
+      default: {}, // Web: gap handles spacing
+    }),
   },
   cartBadgeModern: {
     position: 'absolute',
@@ -1004,6 +1034,11 @@ const viewStyles = StyleSheet.create({
   profileSavingsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    ...Platform.select({
+      android: { marginLeft: 4, flexShrink: 0 },
+      ios: { marginLeft: 4, flexShrink: 0 },
+      default: {}, // Web: gap handles spacing
+    }),
   },
   // Text pill with background - positioned to the left of badge
   savedTextPill: {
@@ -1030,6 +1065,11 @@ const viewStyles = StyleSheet.create({
     shadowOpacity: 0,
     elevation: 0,
     padding: 0,
+    ...Platform.select({
+      android: { flex: 0, flexGrow: 0, flexShrink: 1 },
+      ios: { flex: 0, flexShrink: 1 },
+      default: {}, // Web: let it size naturally
+    }),
   },
   detailedLocationContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.95)',

@@ -40,7 +40,7 @@ interface PostsTabProps {
   refreshing?: boolean;
 }
 
-export default function PostsTab({
+function PostsTab({
   data,
   loading = false,
   hasMore = true,
@@ -411,3 +411,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default React.memo(PostsTab);

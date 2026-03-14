@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
@@ -184,7 +184,7 @@ export const FreeDeliverySection: React.FC<FreeDeliverySectionProps> = ({
             </View>
 
             <View style={styles.imageContainer}>
-              <Image
+              <CachedImage
                 source={{ uri: offer.image }}
                 style={styles.image}
                 contentFit="cover"
@@ -192,7 +192,7 @@ export const FreeDeliverySection: React.FC<FreeDeliverySectionProps> = ({
               />
               <View style={styles.storeLogoContainer}>
                 {offer.store.logo ? (
-                  <Image
+                  <CachedImage
                     source={{ uri: offer.store.logo }}
                     style={styles.storeLogo}
                     contentFit="contain"
@@ -238,4 +238,4 @@ export const FreeDeliverySection: React.FC<FreeDeliverySectionProps> = ({
   );
 };
 
-export default FreeDeliverySection;
+export default React.memo(FreeDeliverySection);

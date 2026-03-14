@@ -21,8 +21,8 @@ config.transformer = {
   ...config.transformer,
   minifierConfig: {
     compress: {
-      reduce_funcs: false,
-      reduce_vars: false,
+      reduce_funcs: true,
+      reduce_vars: true,
     },
   },
   getTransformOptions: async () => ({
@@ -42,7 +42,8 @@ config.watcher = {
   healthCheck: {
     enabled: false,
   },
-  // Increase polling interval to reduce OneDrive false-positive triggers
+  // Disable worker threads for watcher — fixes startup timeout on Windows + OneDrive
+  unstable_workerThreads: false,
   additionalExts: [],
 };
 

@@ -155,4 +155,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveBalanceCard;
+export default React.memo(PriveBalanceCard);

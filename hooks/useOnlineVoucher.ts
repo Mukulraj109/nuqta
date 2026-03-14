@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { BRAND } from '@/constants/brand';
+import { useWalletContext } from '@/contexts/WalletContext';
 import NetInfo from '@react-native-community/netinfo';
 import {
   VoucherState,
@@ -49,38 +50,27 @@ const CATEGORY_COLORS: { [key: string]: { color: string; backgroundColor: string
 
 export const useOnlineVoucher = (): UseVoucherReturn => {
   const router = useRouter();
+  const { rezBalance } = useWalletContext();
   const [state, setState] = useState<VoucherState>(VoucherData.initialState);
   const searchAbortControllerRef = useRef<AbortController | null>(null);
 
   const [heroCarousel, setHeroCarousel] = useState<any[]>([]);
 
-  // Load user coins from wallet API
-  const loadUserCoins = useCallback(async () => {
-    try {
-      const walletApi = (await import('@/services/walletApi')).default;
-      const walletResponse = await walletApi.getBalance();
-      
-      if (walletResponse.success && walletResponse.data) {
-        const rezCoin = walletResponse.data.coins.find((c: any) => c.type === 'rez');
-        const userCoins = rezCoin?.amount || 0;
-        
-        setState(prev => ({ ...prev, userCoins }));
-      }
-    } catch (error) {
-      logger.error('❌ [ONLINE VOUCHER] Error loading user coins:', error);
-      // Keep default value (382) on error
+  // Sync user coins from WalletContext (no extra API call)
+  useEffect(() => {
+    if (rezBalance > 0) {
+      setState(prev => ({ ...prev, userCoins: rezBalance }));
     }
-  }, []);
+  }, [rezBalance]);
 
   // Initialize data on mount with mounted guard
   const isMountedRef = useRef(true);
   useEffect(() => {
     isMountedRef.current = true;
-    loadUserCoins();
     initializeVoucherData();
     initializeHeroCarousel();
     return () => { isMountedRef.current = false; };
-  }, [loadUserCoins]);
+  }, []);
 
   const initializeHeroCarousel = useCallback(async () => {
     try {

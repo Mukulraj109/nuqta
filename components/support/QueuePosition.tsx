@@ -11,7 +11,7 @@ interface QueuePositionProps {
   queueInfo: QueueInfo;
 }
 
-export default function QueuePosition({ queueInfo }: QueuePositionProps) {
+function QueuePosition({ queueInfo }: QueuePositionProps) {
   const formatWaitTime = (seconds: number): string => {
     if (seconds < 60) {
       return 'Less than a minute';
@@ -296,3 +296,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default React.memo(QueuePosition);

@@ -65,7 +65,7 @@ export default function AllianceStorePage() {
     return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
   };
 
-  const renderStore = ({ item }: { item: AllianceStore }) => (
+  const renderStore = useCallback(({ item }: { item: AllianceStore }) => (
     <Pressable
       style={styles.storeCard}
       onPress={() => router.push(`/MainStorePage?storeId=${item._id}` as any)}
@@ -131,7 +131,7 @@ export default function AllianceStorePage() {
         </View>
       </View>
     </Pressable>
-  );
+  ), [router]);
 
   return (
     <View style={styles.container}>

@@ -40,7 +40,7 @@ interface GalleryViewerModalProps {
   type?: 'store' | 'product'; // Add type prop
 }
 
-export default function GalleryViewerModal({
+function GalleryViewerModal({
   visible,
   items,
   initialIndex,
@@ -806,4 +806,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
 });
+
+export default React.memo(GalleryViewerModal);
 

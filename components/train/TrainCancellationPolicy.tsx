@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrainCancellationPolicy;
+export default React.memo(TrainCancellationPolicy);

@@ -112,4 +112,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RewardsBadge;
+export default React.memo(RewardsBadge);

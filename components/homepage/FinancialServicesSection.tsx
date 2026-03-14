@@ -364,4 +364,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FinancialServicesSection;
+export default React.memo(FinancialServicesSection);

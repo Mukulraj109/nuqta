@@ -126,16 +126,16 @@ export default function BrandsPage() {
     loadBrands();
   };
 
-  const handleBrandPress = (brand: Brand) => {
+  const handleBrandPress = useCallback((brand: Brand) => {
     router.push({
       pathname: '/brand/[name]',
       params: { name: brand.id },
     } as any);
-  };
+  }, [router]);
 
-  const renderBrand = ({ item }: { item: Brand }) => (
+  const renderBrand = useCallback(({ item }: { item: Brand }) => (
     <BrandCard brand={item} onPress={() => handleBrandPress(item)} />
-  );
+  ), [handleBrandPress]);
 
   const renderHeader = () => (
     <View style={styles.headerContent}>

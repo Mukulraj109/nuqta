@@ -16,7 +16,7 @@ interface MainContentSectionProps {
   hasReadMore?: boolean;
 }
 
-export default function MainContentSection({
+function MainContentSection({
   videos,
   onVideoPress,
   onReadMorePress,
@@ -78,3 +78,5 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
 });
+
+export default React.memo(MainContentSection);

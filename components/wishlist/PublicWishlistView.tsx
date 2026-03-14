@@ -34,7 +34,7 @@ interface PublicWishlistViewProps {
   onBack?: () => void;
 }
 
-export default function PublicWishlistView({
+function PublicWishlistView({
   shareCode,
   onBack,
 }: PublicWishlistViewProps) {
@@ -824,3 +824,5 @@ const styles = StyleSheet.create({
     height: 40,
   },
 });
+
+export default React.memo(PublicWishlistView);

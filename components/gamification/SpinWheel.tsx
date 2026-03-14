@@ -37,7 +37,7 @@ interface SpinWheelProps {
   onSpinComplete?: (result: SpinWheelResult) => void;
 }
 
-export default function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelProps) {
+function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelProps) {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
   const [isSpinning, setIsSpinning] = useState(false);
@@ -343,3 +343,5 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 });
+
+export default React.memo(SpinWheel);

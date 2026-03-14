@@ -16,7 +16,7 @@ interface RecentProjectsSectionProps {
   loading?: boolean;
 }
 
-export default function RecentProjectsSection({ 
+function RecentProjectsSection({ 
   projects, 
   onProjectPress, 
   onStartProject,
@@ -243,3 +243,5 @@ const styles = StyleSheet.create({
     color: EARN_COLORS.primary,
   },
 });
+
+export default React.memo(RecentProjectsSection);

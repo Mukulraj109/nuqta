@@ -240,4 +240,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DurationChips;
+export default React.memo(DurationChips);

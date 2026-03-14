@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -77,7 +77,7 @@ export default function BonusZonePage() {
   }, [fetchCampaigns]);
 
   // Filter campaigns: search first, then type filter
-  const searchFiltered = searchQuery.trim()
+  const searchFiltered = useMemo(() => searchQuery.trim()
     ? campaigns.filter(c => {
         const q = searchQuery.trim().toLowerCase();
         return (
@@ -85,15 +85,15 @@ export default function BonusZonePage() {
           (c.subtitle && c.subtitle.toLowerCase().includes(q))
         );
       })
-    : campaigns;
+    : campaigns, [campaigns, searchQuery]);
 
-  const filteredCampaigns = activeFilter === 'all'
+  const filteredCampaigns = useMemo(() => activeFilter === 'all'
     ? searchFiltered
-    : searchFiltered.filter(c => c.campaignType === activeFilter);
+    : searchFiltered.filter(c => c.campaignType === activeFilter), [searchFiltered, activeFilter]);
 
   // Separate featured and regular
-  const featured = filteredCampaigns.filter(c => c.display.featured);
-  const regular = filteredCampaigns.filter(c => !c.display.featured);
+  const featured = useMemo(() => filteredCampaigns.filter(c => c.display.featured), [filteredCampaigns]);
+  const regular = useMemo(() => filteredCampaigns.filter(c => !c.display.featured), [filteredCampaigns]);
 
   return (
     <>

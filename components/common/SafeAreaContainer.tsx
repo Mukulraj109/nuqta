@@ -47,7 +47,7 @@ interface SafeAreaContainerProps {
  *   <Content />
  * </SafeAreaContainer>
  */
-export default function SafeAreaContainer({
+function SafeAreaContainer({
   children,
   edges = ['top', 'bottom'],
   style,
@@ -90,3 +90,5 @@ const styles = StyleSheet.create({
 export function useSafeAreaValues() {
   return useSafeAreaInsets();
 }
+
+export default React.memo(SafeAreaContainer);

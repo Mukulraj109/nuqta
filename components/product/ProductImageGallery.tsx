@@ -399,4 +399,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductImageGallery;
+export default React.memo(ProductImageGallery);

@@ -282,7 +282,7 @@ const ExplorePage = () => {
   const [ugcReels, setUgcReels] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [trendingStores, setTrendingStores] = useState<any[]>([]);
-  const [searchSuggestions, setSearchSuggestions] = useState<string[]>(getDefaultSearchSuggestions(currencySymbol));
+  const [searchSuggestions, setSearchSuggestions] = useState<string[]>(() => getDefaultSearchSuggestions(currencySymbol));
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -466,7 +466,7 @@ const ExplorePage = () => {
                 </View>
                 <Text style={styles.sectionSubtitle}>Real experiences • Real savings</Text>
               </View>
-              <Pressable onPress={() => navigateTo('/explore/reels')}>
+              <Pressable onPress={() => navigateTo('/explore/reels')} accessibilityLabel="View all reels" accessibilityRole="button">
                 <Text style={styles.viewAllText}>View All Reels</Text>
               </Pressable>
             </View>
@@ -485,7 +485,7 @@ const ExplorePage = () => {
             {ugcReels.length > 0 && (
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.reelsContainer}>
                 {ugcReels.map((reel) => (
-                  <Pressable key={reel.id} style={styles.reelCard} onPress={() => navigateTo(`/explore/reel/${reel.id}`)}>
+                  <Pressable key={reel.id} style={styles.reelCard} onPress={() => navigateTo(`/explore/reel/${reel.id}`)} accessibilityLabel={`Watch reel: ${reel.product}`} accessibilityRole="button">
                     {reel.videoUrl ? (
                       <AutoPlayVideoReel uri={reel.videoUrl} poster={reel.image} style={styles.reelImage} />
                     ) : (
@@ -517,7 +517,7 @@ const ExplorePage = () => {
                           <Ionicons name="chatbubble-outline" size={18} color={Colors.text.inverse} />
                           <Text style={styles.statText}>{reel.comments}</Text>
                         </View>
-                        <Pressable style={styles.bookmarkButton} onPress={() => navigateTo(`/explore/reel/${reel.id}`)}>
+                        <Pressable style={styles.bookmarkButton} onPress={() => navigateTo(`/explore/reel/${reel.id}`)} accessibilityLabel="Bookmark reel" accessibilityRole="button">
                           <Ionicons name="bookmark-outline" size={18} color={Colors.text.inverse} />
                         </Pressable>
                       </View>
@@ -535,13 +535,13 @@ const ExplorePage = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Shop by Category</Text>
-              <Pressable onPress={() => navigateTo('/(tabs)/categories')}>
+              <Pressable onPress={() => navigateTo('/(tabs)/categories')} accessibilityLabel="View all categories" accessibilityRole="button">
                 <Text style={styles.viewAllText}>View all →</Text>
               </Pressable>
             </View>
             <View style={styles.categoryGrid}>
               {categories.map((cat) => (
-                <Pressable key={cat.id} style={styles.categoryCard} onPress={() => navigateTo(`/explore/category/${cat.id}`)}>
+                <Pressable key={cat.id} style={styles.categoryCard} onPress={() => navigateTo(`/explore/category/${cat.id}`)} accessibilityLabel={cat.name} accessibilityRole="button">
                   <Text style={styles.categoryCardEmoji}>{cat.emoji}</Text>
                   <Text style={styles.categoryCardName}>{cat.name}</Text>
                   {cat.cashback && <Text style={styles.categoryCardCashback}>{cat.cashback}</Text>}
@@ -556,13 +556,13 @@ const ExplorePage = () => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Trending Stores</Text>
-              <Pressable onPress={() => navigateTo('/explore/stores')}>
+              <Pressable onPress={() => navigateTo('/explore/stores')} accessibilityLabel="View all stores" accessibilityRole="button">
                 <Text style={styles.viewAllText}>View all →</Text>
               </Pressable>
             </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.storesContainer}>
               {trendingStores.map((store) => (
-                <Pressable key={store.id} style={styles.storeCard} onPress={() => navigateTo(`/MainStorePage?storeId=${store.id}`)}>
+                <Pressable key={store.id} style={styles.storeCard} onPress={() => navigateTo(`/MainStorePage?storeId=${store.id}`)} accessibilityLabel={store.name} accessibilityRole="button">
                   <View style={styles.storeHeader}>
                     {store.image ? (
                       <CachedImage source={{ uri: store.image }} style={styles.storeLogoImage} contentFit="cover" transition={200} cachePolicy="memory-disk" />
@@ -593,7 +593,7 @@ const ExplorePage = () => {
                       </View>
                     )}
                   </View>
-                  <Pressable style={styles.payNowButton} onPress={() => navigateTo(`/MainStorePage?storeId=${store.id}`)}>
+                  <Pressable style={styles.payNowButton} onPress={() => navigateTo(`/MainStorePage?storeId=${store.id}`)} accessibilityLabel={`Pay now at ${store.name}`} accessibilityRole="button">
                     <Text style={styles.payNowText}>Pay Now</Text>
                   </Pressable>
                 </Pressable>
@@ -633,7 +633,7 @@ const ExplorePage = () => {
     <View style={styles.headerContainer}>
       {/* Location & Actions Row */}
       <View style={styles.headerRow}>
-        <Pressable style={styles.locationButton} onPress={() => navigateTo('/explore/map')}>
+        <Pressable style={styles.locationButton} onPress={() => navigateTo('/explore/map')} accessibilityLabel={`Current location: ${locationDisplay}`} accessibilityRole="button">
           <Ionicons name={currentLocation?.source === 'gps' ? 'navigate' : 'location'} size={18} color={Colors.gold} />
           <View style={styles.locationText}>
             {isLocationLoading ? (
@@ -652,10 +652,10 @@ const ExplorePage = () => {
         </Pressable>
 
         <View style={styles.headerActions}>
-          <Pressable style={styles.mapButton} onPress={() => navigateTo('/explore/map')}>
+          <Pressable style={styles.mapButton} onPress={() => navigateTo('/explore/map')} accessibilityLabel="Open map view" accessibilityRole="button">
             <Ionicons name="map" size={22} color={Colors.nileBlue} />
           </Pressable>
-          <Pressable style={styles.coinsButton} onPress={() => navigateTo('/wallet')}>
+          <Pressable style={styles.coinsButton} onPress={() => navigateTo('/wallet')} accessibilityLabel={`Wallet: ${rezCoins.toLocaleString()} coins`} accessibilityRole="button">
             <View style={styles.coinIcon}>
               <Text style={styles.coinEmoji}>🪙</Text>
             </View>
@@ -666,11 +666,11 @@ const ExplorePage = () => {
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <Pressable style={styles.searchBar} onPress={() => navigateTo('/explore/search')}>
+        <Pressable style={styles.searchBar} onPress={() => navigateTo('/explore/search')} accessibilityLabel="Search stores and products" accessibilityRole="search">
           <Ionicons name="search" size={20} color={Colors.text.tertiary} />
           <Text style={styles.searchPlaceholder}>{searchSuggestions[currentPlaceholder]}</Text>
         </Pressable>
-        <Pressable style={styles.filterButton} onPress={() => navigateTo('/explore/stores')}>
+        <Pressable style={styles.filterButton} onPress={() => navigateTo('/explore/stores')} accessibilityLabel="Filter options" accessibilityRole="button">
           <Ionicons name="options" size={22} color={Colors.nileBlue} />
         </Pressable>
       </View>
@@ -692,6 +692,9 @@ const ExplorePage = () => {
                 }
               }
             }}
+            accessibilityLabel={category.label}
+            accessibilityRole="button"
+            accessibilityState={{ selected: selectedCategory === category.id }}
           >
             <Text style={styles.categoryEmoji}>{category.emoji}</Text>
             <Text style={[styles.categoryLabel, selectedCategory === category.id && styles.categoryLabelActive]}>{category.label}</Text>
@@ -714,6 +717,9 @@ const ExplorePage = () => {
               if (chip.id === 'trending') navigateTo('/explore/hot');
               else if (chip.id === 'delivery') navigateTo('/explore/stores');
             }}
+            accessibilityLabel={chip.label}
+            accessibilityRole="button"
+            accessibilityState={{ selected: selectedChip === chip.id }}
           >
             <Ionicons name={chip.icon as any} size={16} color={selectedChip === chip.id ? chip.color : Colors.text.tertiary} />
             <Text style={[styles.quickChipText, selectedChip === chip.id && { color: Colors.nileBlue, fontWeight: '600' }]}>{chip.label}</Text>
@@ -753,6 +759,8 @@ const ExplorePage = () => {
         <Pressable
           style={styles.floatingMapButton}
           onPress={() => navigateTo('/explore/map')}
+          accessibilityLabel="Map view"
+          accessibilityRole="button"
         >
           <LinearGradient
             colors={[Colors.gold, Colors.nileBlue]}

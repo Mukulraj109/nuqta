@@ -1061,4 +1061,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BusBookingFlow;
+export default React.memo(BusBookingFlow);

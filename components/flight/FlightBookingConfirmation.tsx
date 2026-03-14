@@ -412,4 +412,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FlightBookingConfirmation;
+export default React.memo(FlightBookingConfirmation);

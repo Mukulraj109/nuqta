@@ -65,7 +65,7 @@ interface ExperienceDetail {
   maxParticipants?: number;
 }
 
-export default function ExperienceDetailPage() {
+function ExperienceDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { getCurrencySymbol } = useRegion();
@@ -626,3 +626,5 @@ const styles = StyleSheet.create({
   },
   ctaButtonText: { fontSize: 16, fontWeight: '700', color: COLORS.white },
 });
+
+export default React.memo(ExperienceDetailPage);

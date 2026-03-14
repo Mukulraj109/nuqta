@@ -288,4 +288,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RechargeWalletCard;
+export default React.memo(RechargeWalletCard);

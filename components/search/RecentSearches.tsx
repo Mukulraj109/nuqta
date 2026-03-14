@@ -15,7 +15,7 @@ interface RecentSearchesProps {
   onClearAll: () => void;
 }
 
-export default function RecentSearches({
+function RecentSearches({
   searches,
   onSearchPress,
   onRemoveSearch,
@@ -133,3 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(RecentSearches);

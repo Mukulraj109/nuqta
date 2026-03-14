@@ -212,4 +212,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StreakRewardsCard;
+export default React.memo(StreakRewardsCard);

@@ -92,16 +92,16 @@ const ExploreReelsPage = () => {
     fetchReels(true);
   }, [fetchReels]);
 
-  const navigateTo = (path: string) => {
+  const navigateTo = useCallback((path: string) => {
     router.push(path as any);
-  };
+  }, [router]);
 
   const formatCount = (count: number) => {
     if (!count || count < 0) return '0';
     return count >= 1000 ? `${(count / 1000).toFixed(1)}K` : String(count);
   };
 
-  const renderReel = ({ item }: { item: Reel }) => (
+  const renderReel = useCallback(({ item }: { item: Reel }) => (
     <Pressable
       style={styles.reelCard}
       onPress={() => navigateTo(`/explore/reel/${item.id}`)}
@@ -167,7 +167,7 @@ const ExploreReelsPage = () => {
         </View>
       </LinearGradient>
     </Pressable>
-  );
+  ), [navigateTo, currencySymbol]);
 
   return (
     <>

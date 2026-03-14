@@ -22,7 +22,7 @@ interface ReorderSuggestionsProps {
   onAddToCart?: (productId: string, quantity: number) => void;
 }
 
-export default function ReorderSuggestions({ onAddToCart }: ReorderSuggestionsProps) {
+function ReorderSuggestions({ onAddToCart }: ReorderSuggestionsProps) {
   const { suggestions, loading, error, refresh } = useReorderSuggestions();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
@@ -428,3 +428,5 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   }
 });
+
+export default React.memo(ReorderSuggestions);

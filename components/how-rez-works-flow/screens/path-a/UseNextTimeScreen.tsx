@@ -129,4 +129,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default UseNextTimeScreen;
+export default React.memo(UseNextTimeScreen);

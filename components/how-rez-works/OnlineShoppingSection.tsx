@@ -224,4 +224,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OnlineShoppingSection;
+export default React.memo(OnlineShoppingSection);

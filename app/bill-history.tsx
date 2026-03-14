@@ -12,6 +12,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   Modal,
+  Platform,
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertConfirm } from '@/utils/platformAlert';
@@ -600,6 +601,10 @@ export default function BillHistoryPage() {
           }
           onEndReached={loadMore}
           onEndReachedThreshold={0.3}
+          removeClippedSubviews={Platform.OS !== 'web'}
+          maxToRenderPerBatch={15}
+          windowSize={7}
+          initialNumToRender={8}
           ListFooterComponent={renderListFooter}
         />
       )}

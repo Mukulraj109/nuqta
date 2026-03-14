@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
@@ -76,7 +76,7 @@ export const ApplyCoinsSection: React.FC<ApplyCoinsSectionProps> = ({
         <View style={styles.header}>
           <View style={styles.titleRow}>
             <View style={styles.headerIconWrapper}>
-              <Image
+              <CachedImage
                 source={BRAND.COIN_IMAGE}
                 style={styles.headerCoinIcon}
                 contentFit="contain"
@@ -332,4 +332,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ApplyCoinsSection;
+export default React.memo(ApplyCoinsSection);

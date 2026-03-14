@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { BRAND } from '@/constants/brand';
@@ -197,7 +197,7 @@ export const UploadBillSection: React.FC<UploadBillSectionProps> = ({
             >
               <View style={styles.storeLogoContainer}>
                 {store.logo ? (
-                  <Image
+                  <CachedImage
                     source={{ uri: store.logo }}
                     style={styles.storeLogo}
                     contentFit="contain"
@@ -236,4 +236,4 @@ export const UploadBillSection: React.FC<UploadBillSectionProps> = ({
   );
 };
 
-export default UploadBillSection;
+export default React.memo(UploadBillSection);

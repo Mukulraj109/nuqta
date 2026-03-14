@@ -4,15 +4,15 @@
  * Now integrated with achievementApi for real data
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
   ScrollView,
+  FlatList,
   Dimensions,
-  ActivityIndicator,
   RefreshControl,
 } from 'react-native';
 import { CardGridSkeleton } from '@/components/skeletons';
@@ -21,7 +21,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { achievementApi, Achievement as ApiAchievement } from '@/services/achievementApi';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48 - 12) / 2;
@@ -154,11 +154,215 @@ const BadgesScreen: React.FC = () => {
   }, [fetchAchievements]);
 
   // Derive categories dynamically from API data
-  const categories = ['All', ...Array.from(new Set(achievements.map(a => a.category))).sort()];
+  const categories = useMemo(() => ['All', ...Array.from(new Set(achievements.map(a => a.category))).sort()], [achievements]);
 
-  const filteredAchievements = activeCategory === 'All'
+  const filteredAchievements = useMemo(() => activeCategory === 'All'
     ? achievements
-    : achievements.filter(a => a.category === activeCategory);
+    : achievements.filter(a => a.category === activeCategory), [achievements, activeCategory]);
+
+  const keyExtractor = useCallback((item: Achievement) => item.id, []);
+
+  const renderAchievementItem = useCallback(({ item: achievement }: { item: Achievement }) => (
+    <View
+      style={[
+        styles.achievementCard,
+        achievement.unlocked && styles.achievementCardUnlocked
+      ]}
+    >
+      {!achievement.unlocked && (
+        <View style={styles.lockIcon}>
+          <Ionicons name="lock-closed" size={14} color={COLORS.gray400} />
+        </View>
+      )}
+
+      <View style={styles.achievementHeader}>
+        <Text style={styles.achievementIcon}>{achievement.icon}</Text>
+        <View style={styles.badgeRow}>
+          {achievement.tier && achievement.tier !== 'bronze' && (
+            <View style={[styles.tierBadge, { backgroundColor: TIER_COLORS[achievement.tier] || TIER_COLORS.bronze }]}>
+              <Text style={styles.tierBadgeText}>{achievement.tier.charAt(0).toUpperCase() + achievement.tier.slice(1)}</Text>
+            </View>
+          )}
+          {achievement.unlocked && <Text style={styles.checkIcon}>&#x2705;</Text>}
+        </View>
+      </View>
+
+      <Text style={styles.achievementTitle}>{achievement.title}</Text>
+      <Text style={styles.achievementDesc}>{achievement.desc}</Text>
+      <Text style={styles.achievementCoins}>+{achievement.coins} coins</Text>
+
+      {!achievement.unlocked && achievement.progress !== undefined && (
+        <View style={styles.progressContainer}>
+          <View style={styles.progressTrack}>
+            <LinearGradient
+              colors={[COLORS.emerald500, COLORS.teal500]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={[styles.progressFill, { width: `${achievement.progress}%` }]}
+            />
+          </View>
+          <Text style={styles.progressText}>{achievement.progress}% complete</Text>
+        </View>
+      )}
+    </View>
+  ), []);
+
+  const listHeader = useCallback(() => (
+    <>
+      {/* Stats */}
+      <View style={styles.statsRow}>
+        <LinearGradient
+          colors={['rgba(139, 92, 246, 0.2)', 'rgba(236, 72, 153, 0.2)']}
+          style={styles.statCard}
+        >
+          <Text style={styles.statValue}>{stats.unlocked}/{stats.total}</Text>
+          <Text style={styles.statLabel}>Unlocked</Text>
+        </LinearGradient>
+        <LinearGradient
+          colors={['rgba(245, 158, 11, 0.2)', 'rgba(234, 179, 8, 0.2)']}
+          style={styles.statCard}
+        >
+          <Text style={[styles.statValue, { color: COLORS.amber400 }]}>{stats.totalCoins}</Text>
+          <Text style={styles.statLabel}>Coins Earned</Text>
+        </LinearGradient>
+        <LinearGradient
+          colors={['rgba(34, 197, 94, 0.2)', 'rgba(16, 185, 129, 0.2)']}
+          style={styles.statCard}
+        >
+          <Text style={[styles.statValue, { color: COLORS.green500 }]}>{stats.completionPercent}%</Text>
+          <Text style={styles.statLabel}>Complete</Text>
+        </LinearGradient>
+      </View>
+
+      {/* Category Filter */}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.categoriesContainer}
+      >
+        {categories.map(cat => (
+          <Pressable
+            key={cat}
+            style={[
+              styles.categoryButton,
+              activeCategory === cat && styles.categoryButtonActive
+            ]}
+            onPress={() => setActiveCategory(cat)}
+          >
+            <Text style={[
+              styles.categoryText,
+              activeCategory === cat && styles.categoryTextActive
+            ]}>
+              {cat}
+            </Text>
+          </Pressable>
+        ))}
+      </ScrollView>
+    </>
+  ), [stats, categories, activeCategory]);
+
+  const listEmpty = useCallback(() => (
+    achievements.length === 0 && !loading ? (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyIcon}>&#x1F3C5;</Text>
+        <Text style={styles.emptyTitle}>No Achievements Yet</Text>
+        <Text style={styles.emptyText}>Start shopping and engaging to unlock your first badge!</Text>
+      </View>
+    ) : null
+  ), [achievements.length, loading]);
+
+  const listFooter = useCallback(() => (
+    <View style={styles.ctasSection}>
+      <Text style={styles.ctasTitle}>Quick Actions to Unlock More</Text>
+
+      {/* Shopping CTA */}
+      <Pressable
+        style={styles.ctaCard}
+        onPress={() => router.push('/mall')}
+      >
+        <LinearGradient
+          colors={['rgba(139, 92, 246, 0.2)', 'rgba(236, 72, 153, 0.2)']}
+          style={styles.ctaGradient}
+        >
+          <View style={[styles.ctaIconBox, { backgroundColor: 'rgba(139, 92, 246, 0.2)' }]}>
+            <Ionicons name="bag-handle" size={20} color={COLORS.purple600} />
+          </View>
+          <View style={styles.ctaContent}>
+            <Text style={styles.ctaTitle}>Shop & Unlock Deals</Text>
+            <Text style={styles.ctaSubtitle}>Complete shopping achievements</Text>
+          </View>
+          <Ionicons name="trending-up" size={20} color={COLORS.purple600} />
+        </LinearGradient>
+      </Pressable>
+
+      {/* Referral CTA */}
+      <Pressable
+        style={styles.ctaCard}
+        onPress={() => router.push('/referral')}
+      >
+        <LinearGradient
+          colors={['rgba(59, 130, 246, 0.2)', 'rgba(6, 182, 212, 0.2)']}
+          style={styles.ctaGradient}
+        >
+          <View style={[styles.ctaIconBox, { backgroundColor: 'rgba(59, 130, 246, 0.2)' }]}>
+            <Ionicons name="people" size={20} color={COLORS.blue500} />
+          </View>
+          <View style={styles.ctaContent}>
+            <Text style={styles.ctaTitle}>Refer Friends</Text>
+            <Text style={styles.ctaSubtitle}>Unlock social achievements & earn</Text>
+          </View>
+          <Ionicons name="trending-up" size={20} color={COLORS.blue500} />
+        </LinearGradient>
+      </Pressable>
+
+      {/* Games CTA */}
+      <Pressable
+        style={styles.ctaCard}
+        onPress={() => router.push('/games')}
+      >
+        <LinearGradient
+          colors={['rgba(34, 197, 94, 0.2)', 'rgba(16, 185, 129, 0.2)']}
+          style={styles.ctaGradient}
+        >
+          <View style={[styles.ctaIconBox, { backgroundColor: 'rgba(34, 197, 94, 0.2)' }]}>
+            <Ionicons name="game-controller" size={20} color={COLORS.green500} />
+          </View>
+          <View style={styles.ctaContent}>
+            <Text style={styles.ctaTitle}>Play Games</Text>
+            <Text style={styles.ctaSubtitle}>Complete gaming challenges</Text>
+          </View>
+          <Ionicons name="trending-up" size={20} color={COLORS.green500} />
+        </LinearGradient>
+      </Pressable>
+
+      {/* Daily Check-in CTA */}
+      <Pressable
+        style={styles.ctaCard}
+        onPress={() => router.push('/explore/daily-checkin')}
+      >
+        <LinearGradient
+          colors={['rgba(245, 158, 11, 0.2)', 'rgba(234, 179, 8, 0.2)']}
+          style={styles.ctaGradient}
+        >
+          <View style={[styles.ctaIconBox, { backgroundColor: 'rgba(245, 158, 11, 0.2)' }]}>
+            <Ionicons name="ribbon" size={20} color={COLORS.amber500} />
+          </View>
+          <View style={styles.ctaContent}>
+            <Text style={styles.ctaTitle}>Daily Check-in</Text>
+            <Text style={styles.ctaSubtitle}>Build streaks & unlock rewards</Text>
+          </View>
+          <LinearGradient
+            colors={[COLORS.amber500, '#EAB308']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.checkInButton}
+          >
+            <Text style={styles.checkInText}>Check In</Text>
+          </LinearGradient>
+        </LinearGradient>
+      </Pressable>
+    </View>
+  ), [router]);
 
   // Loading state
   if (loading) {
@@ -218,8 +422,17 @@ const BadgesScreen: React.FC = () => {
         </View>
       </View>
 
-      <ScrollView
+      <FlatList
+        data={filteredAchievements}
+        keyExtractor={keyExtractor}
+        renderItem={renderAchievementItem}
+        numColumns={2}
+        columnWrapperStyle={styles.achievementsRow}
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={listHeader}
+        ListFooterComponent={listFooter}
+        ListEmptyComponent={listEmpty}
+        contentContainerStyle={{ paddingBottom: 120 }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -228,213 +441,7 @@ const BadgesScreen: React.FC = () => {
             tintColor={COLORS.purple500}
           />
         }
-      >
-        {/* Stats */}
-        <View style={styles.statsRow}>
-          <LinearGradient
-            colors={['rgba(139, 92, 246, 0.2)', 'rgba(236, 72, 153, 0.2)']}
-            style={styles.statCard}
-          >
-            <Text style={styles.statValue}>{stats.unlocked}/{stats.total}</Text>
-            <Text style={styles.statLabel}>Unlocked</Text>
-          </LinearGradient>
-          <LinearGradient
-            colors={['rgba(245, 158, 11, 0.2)', 'rgba(234, 179, 8, 0.2)']}
-            style={styles.statCard}
-          >
-            <Text style={[styles.statValue, { color: COLORS.amber400 }]}>{stats.totalCoins}</Text>
-            <Text style={styles.statLabel}>Coins Earned</Text>
-          </LinearGradient>
-          <LinearGradient
-            colors={['rgba(34, 197, 94, 0.2)', 'rgba(16, 185, 129, 0.2)']}
-            style={styles.statCard}
-          >
-            <Text style={[styles.statValue, { color: COLORS.green500 }]}>{stats.completionPercent}%</Text>
-            <Text style={styles.statLabel}>Complete</Text>
-          </LinearGradient>
-        </View>
-
-        {/* Empty State */}
-        {achievements.length === 0 && !loading && (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyIcon}>🏅</Text>
-            <Text style={styles.emptyTitle}>No Achievements Yet</Text>
-            <Text style={styles.emptyText}>Start shopping and engaging to unlock your first badge!</Text>
-          </View>
-        )}
-
-        {/* Category Filter */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoriesContainer}
-        >
-          {categories.map(cat => (
-            <Pressable
-              key={cat}
-              style={[
-                styles.categoryButton,
-                activeCategory === cat && styles.categoryButtonActive
-              ]}
-              onPress={() => setActiveCategory(cat)}
-            >
-              <Text style={[
-                styles.categoryText,
-                activeCategory === cat && styles.categoryTextActive
-              ]}>
-                {cat}
-              </Text>
-            </Pressable>
-          ))}
-        </ScrollView>
-
-        {/* Achievements Grid */}
-        <View style={styles.achievementsGrid}>
-          {filteredAchievements.map((achievement) => (
-            <View
-              key={achievement.id}
-              style={[
-                styles.achievementCard,
-                achievement.unlocked && styles.achievementCardUnlocked
-              ]}
-            >
-              {!achievement.unlocked && (
-                <View style={styles.lockIcon}>
-                  <Ionicons name="lock-closed" size={14} color={COLORS.gray400} />
-                </View>
-              )}
-
-              <View style={styles.achievementHeader}>
-                <Text style={styles.achievementIcon}>{achievement.icon}</Text>
-                <View style={styles.badgeRow}>
-                  {achievement.tier && achievement.tier !== 'bronze' && (
-                    <View style={[styles.tierBadge, { backgroundColor: TIER_COLORS[achievement.tier] || TIER_COLORS.bronze }]}>
-                      <Text style={styles.tierBadgeText}>{achievement.tier.charAt(0).toUpperCase() + achievement.tier.slice(1)}</Text>
-                    </View>
-                  )}
-                  {achievement.unlocked && <Text style={styles.checkIcon}>✅</Text>}
-                </View>
-              </View>
-
-              <Text style={styles.achievementTitle}>{achievement.title}</Text>
-              <Text style={styles.achievementDesc}>{achievement.desc}</Text>
-              <Text style={styles.achievementCoins}>+{achievement.coins} coins</Text>
-
-              {!achievement.unlocked && achievement.progress !== undefined && (
-                <View style={styles.progressContainer}>
-                  <View style={styles.progressTrack}>
-                    <LinearGradient
-                      colors={[COLORS.emerald500, COLORS.teal500]}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 0 }}
-                      style={[styles.progressFill, { width: `${achievement.progress}%` }]}
-                    />
-                  </View>
-                  <Text style={styles.progressText}>{achievement.progress}% complete</Text>
-                </View>
-              )}
-            </View>
-          ))}
-        </View>
-
-        {/* CTAs Section */}
-        <View style={styles.ctasSection}>
-          <Text style={styles.ctasTitle}>Quick Actions to Unlock More</Text>
-
-          {/* Shopping CTA */}
-          <Pressable
-            style={styles.ctaCard}
-            onPress={() => router.push('/mall')}
-           
-          >
-            <LinearGradient
-              colors={['rgba(139, 92, 246, 0.2)', 'rgba(236, 72, 153, 0.2)']}
-              style={styles.ctaGradient}
-            >
-              <View style={[styles.ctaIconBox, { backgroundColor: 'rgba(139, 92, 246, 0.2)' }]}>
-                <Ionicons name="bag-handle" size={20} color={COLORS.purple600} />
-              </View>
-              <View style={styles.ctaContent}>
-                <Text style={styles.ctaTitle}>Shop & Unlock Deals</Text>
-                <Text style={styles.ctaSubtitle}>Complete shopping achievements</Text>
-              </View>
-              <Ionicons name="trending-up" size={20} color={COLORS.purple600} />
-            </LinearGradient>
-          </Pressable>
-
-          {/* Referral CTA */}
-          <Pressable
-            style={styles.ctaCard}
-            onPress={() => router.push('/referral')}
-           
-          >
-            <LinearGradient
-              colors={['rgba(59, 130, 246, 0.2)', 'rgba(6, 182, 212, 0.2)']}
-              style={styles.ctaGradient}
-            >
-              <View style={[styles.ctaIconBox, { backgroundColor: 'rgba(59, 130, 246, 0.2)' }]}>
-                <Ionicons name="people" size={20} color={COLORS.blue500} />
-              </View>
-              <View style={styles.ctaContent}>
-                <Text style={styles.ctaTitle}>Refer Friends</Text>
-                <Text style={styles.ctaSubtitle}>Unlock social achievements & earn</Text>
-              </View>
-              <Ionicons name="trending-up" size={20} color={COLORS.blue500} />
-            </LinearGradient>
-          </Pressable>
-
-          {/* Games CTA */}
-          <Pressable
-            style={styles.ctaCard}
-            onPress={() => router.push('/games')}
-           
-          >
-            <LinearGradient
-              colors={['rgba(34, 197, 94, 0.2)', 'rgba(16, 185, 129, 0.2)']}
-              style={styles.ctaGradient}
-            >
-              <View style={[styles.ctaIconBox, { backgroundColor: 'rgba(34, 197, 94, 0.2)' }]}>
-                <Ionicons name="game-controller" size={20} color={COLORS.green500} />
-              </View>
-              <View style={styles.ctaContent}>
-                <Text style={styles.ctaTitle}>Play Games</Text>
-                <Text style={styles.ctaSubtitle}>Complete gaming challenges</Text>
-              </View>
-              <Ionicons name="trending-up" size={20} color={COLORS.green500} />
-            </LinearGradient>
-          </Pressable>
-
-          {/* Daily Check-in CTA */}
-          <Pressable
-            style={styles.ctaCard}
-            onPress={() => router.push('/explore/daily-checkin')}
-           
-          >
-            <LinearGradient
-              colors={['rgba(245, 158, 11, 0.2)', 'rgba(234, 179, 8, 0.2)']}
-              style={styles.ctaGradient}
-            >
-              <View style={[styles.ctaIconBox, { backgroundColor: 'rgba(245, 158, 11, 0.2)' }]}>
-                <Ionicons name="ribbon" size={20} color={COLORS.amber500} />
-              </View>
-              <View style={styles.ctaContent}>
-                <Text style={styles.ctaTitle}>Daily Check-in</Text>
-                <Text style={styles.ctaSubtitle}>Build streaks & unlock rewards</Text>
-              </View>
-              <LinearGradient
-                colors={[COLORS.amber500, '#EAB308']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.checkInButton}
-              >
-                <Text style={styles.checkInText}>Check In</Text>
-              </LinearGradient>
-            </LinearGradient>
-          </Pressable>
-        </View>
-
-        <View style={{ height: 100 }} />
-        </ScrollView>
+      />
       </SafeAreaView>
     </>
   );
@@ -444,17 +451,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 100,
-  },
-  loadingText: {
-    marginTop: Spacing.base,
-    ...Typography.body,
-    color: COLORS.gray500,
   },
   errorContainer: {
     flex: 1,
@@ -575,11 +571,10 @@ const styles = StyleSheet.create({
   categoryTextActive: {
     color: COLORS.white,
   },
-  achievementsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  achievementsRow: {
     paddingHorizontal: Spacing.base,
     gap: Spacing.md,
+    marginBottom: Spacing.md,
   },
   achievementCard: {
     width: CARD_WIDTH,

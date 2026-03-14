@@ -820,6 +820,7 @@ export default function OfferDetailPage() {
       <Modal
         visible={showRedeemModal}
         transparent
+        statusBarTranslucent
         animationType="fade"
         onRequestClose={() => setShowRedeemModal(false)}
       >
@@ -854,6 +855,7 @@ export default function OfferDetailPage() {
       <Modal
         visible={showSuccessModal}
         transparent
+        statusBarTranslucent
         animationType="fade"
         onRequestClose={() => setShowSuccessModal(false)}
       >

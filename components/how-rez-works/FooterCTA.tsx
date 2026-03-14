@@ -195,4 +195,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FooterCTA;
+export default React.memo(FooterCTA);

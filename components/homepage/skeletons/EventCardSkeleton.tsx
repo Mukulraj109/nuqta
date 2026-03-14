@@ -17,7 +17,7 @@ interface EventCardSkeletonProps {
  * - Date and time
  * - Category badge
  */
-export default function EventCardSkeleton({ width = 280 }: EventCardSkeletonProps) {
+function EventCardSkeleton({ width = 280 }: EventCardSkeletonProps) {
   return (
     <View
       style={[styles.container, { width }]}
@@ -208,3 +208,5 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
 });
+
+export default React.memo(EventCardSkeleton);

@@ -13,7 +13,7 @@ import { HomeDeliveryProductCardProps } from '@/types/home-delivery.types';
 import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDataNormalizer';
 import { formatPrice } from '@/utils/priceFormatter';
 
-export function HomeDeliveryProductCard({
+function _HomeDeliveryProductCardInner({
   product,
   onPress,
   showCashback = true,
@@ -353,3 +353,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export const HomeDeliveryProductCard = React.memo(_HomeDeliveryProductCardInner);

@@ -376,4 +376,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoreInfoModal;
+export default React.memo(StoreInfoModal);

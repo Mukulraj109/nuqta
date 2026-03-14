@@ -69,7 +69,7 @@ function getCountdownColor(time: ReturnType<typeof getTimeRemaining>): string {
   return '#10B981'; // Green - more than 1 day
 }
 
-export default function CartLockedItemCard({
+function CartLockedItemCard({
   item,
   onCompletePurchase,
   onCancelLock,
@@ -397,3 +397,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default React.memo(CartLockedItemCard);

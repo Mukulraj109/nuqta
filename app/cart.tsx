@@ -267,20 +267,20 @@ export default function CartPage() {
     setActiveTab(tabKey);
   };
 
-  const handleRemoveItem = async (itemId: string) => {
+  const handleRemoveItem = useCallback(async (itemId: string) => {
     if (activeTab === 'products' || activeTab === 'service') {
       // Use CartContext to remove item (will sync with backend)
       await cartActions.removeItem(itemId);
     }
-  };
+  }, [activeTab, cartActions]);
 
-  const handleUpdateQuantity = async (itemId: string, newQuantity: number) => {
+  const handleUpdateQuantity = useCallback(async (itemId: string, newQuantity: number) => {
     if (activeTab === 'products') {
       await cartActions.updateQuantity(itemId, newQuantity);
     }
-  };
+  }, [activeTab, cartActions]);
 
-  const handleUnlockItem = async (itemId: string, productId: string) => {
+  const handleUnlockItem = useCallback(async (itemId: string, productId: string) => {
     if (!productId) {
       platformAlertSimple('Error', 'Product ID is missing');
       return;
@@ -298,9 +298,9 @@ export default function CartPage() {
     } catch (error) {
       platformAlertSimple('Error', 'Unable to unlock item. Please try again.');
     }
-  };
+  }, []);
 
-  const handleMoveToCart = async (itemId: string, productId: string) => {
+  const handleMoveToCart = useCallback(async (itemId: string, productId: string) => {
     try {
       const response = await cartApi.moveLockedToCart(productId);
       if (response.success) {
@@ -320,7 +320,7 @@ export default function CartPage() {
     } catch (error) {
       platformAlertSimple('Error', 'Unable to move item to cart. Please try again.');
     }
-  };
+  }, [cartActions]);
 
   const handleExpireItem = (itemId: string) => {
     setLockedProducts(prev => prev.filter(item => item.id !== itemId));
@@ -415,7 +415,7 @@ export default function CartPage() {
     router.back();
   };
 
-  const renderCartItem = ({ item }: { item: CartItemType }) => {
+  const renderCartItem = useCallback(({ item }: { item: CartItemType }) => {
     // Render locked item if on locked products tab
     if (activeTab === 'lockedproduct') {
       return (
@@ -482,7 +482,7 @@ export default function CartPage() {
         />
       </View>
     );
-  };
+  }, [activeTab, handleMoveToCart, handleUnlockItem, handleRemoveItem, handleUpdateQuantity]);
 
   const renderEmptyState = () => {
     let title = "Your cart is empty 🛒";
@@ -556,9 +556,9 @@ export default function CartPage() {
                 />
               ) : null
             }
-            removeClippedSubviews
-            maxToRenderPerBatch={10}
-            windowSize={10}
+            removeClippedSubviews={Platform.OS !== 'web'}
+            maxToRenderPerBatch={15}
+            windowSize={7}
             initialNumToRender={8}
           />
         )}
@@ -618,7 +618,7 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 20,
+    paddingBottom: 120,
   },
   emptyListContent: {
     flexGrow: 1,

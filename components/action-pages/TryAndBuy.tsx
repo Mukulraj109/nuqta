@@ -63,7 +63,7 @@ interface TimeSlot {
   remainingCapacity: number;
 }
 
-export default function TryAndBuyPage() {
+function TryAndBuyPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string }>();
   const { state: authState } = useAuth();
@@ -879,3 +879,5 @@ const styles = StyleSheet.create({
   viewBookingsBtn: { marginTop: 12, paddingVertical: 12, alignItems: 'center' },
   viewBookingsBtnText: { fontSize: 14, fontWeight: '600', color: COLORS.purple },
 });
+
+export default React.memo(TryAndBuyPage);

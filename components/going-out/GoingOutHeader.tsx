@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { GoingOutHeaderProps } from '@/types/going-out.types';
 
-export function GoingOutHeader({
+function _GoingOutHeaderInner({
   searchQuery,
   onSearchChange,
   onSearchSubmit,
@@ -264,3 +264,5 @@ const styles = StyleSheet.create({
     padding: 4,
   },
 });
+
+export const GoingOutHeader = React.memo(_GoingOutHeaderInner);

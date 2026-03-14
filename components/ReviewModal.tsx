@@ -50,7 +50,7 @@ const COLORS = {
   surface: '#F7FAFC',
 };
 
-export default function ReviewModal({
+function ReviewModal({
   visible,
   onClose,
   storeName,
@@ -685,3 +685,5 @@ const createStyles = (screenData: { width: number; height: number }) => {
     },
   });
 };
+
+export default React.memo(ReviewModal);

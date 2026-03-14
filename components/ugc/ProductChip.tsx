@@ -23,7 +23,7 @@ interface ProductChipProps {
  * ProductChip component for displaying selected products
  * Shows product image, name, price, and remove button
  */
-export default function ProductChip({
+function ProductChip({
   product,
   onRemove,
   disabled = false,
@@ -156,3 +156,5 @@ const styles = StyleSheet.create({
     padding: 4,
   },
 });
+
+export default React.memo(ProductChip);

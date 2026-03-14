@@ -326,4 +326,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventReviewCard;
+export default React.memo(EventReviewCard);

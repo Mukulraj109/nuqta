@@ -5,7 +5,7 @@
  * Ensures that when the app loads, the location defaults to the current region's location.
  */
 
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useRegion, RegionId } from '@/contexts/RegionContext';
 import { useLocation } from '@/contexts/LocationContext';
 import { UserLocation } from '@/types/location.types';
@@ -32,7 +32,7 @@ const REGION_LOCATIONS: Record<RegionId, { name: string; coords: { lat: number; 
   },
 };
 
-export default function LocationRegionSync() {
+function LocationRegionSync() {
   const { state: regionState } = useRegion();
   const { state: locationState, setManualLocation } = useLocation();
   const hasInitialized = useRef(false);
@@ -79,3 +79,5 @@ export default function LocationRegionSync() {
   // This component doesn't render anything
   return null;
 }
+
+export default React.memo(LocationRegionSync);

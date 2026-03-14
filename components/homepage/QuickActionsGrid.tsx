@@ -168,4 +168,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuickActionsGrid;
+export default React.memo(QuickActionsGrid);

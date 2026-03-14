@@ -585,4 +585,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroceryStoreCard;
+export default React.memo(GroceryStoreCard);

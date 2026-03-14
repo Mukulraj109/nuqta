@@ -301,4 +301,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveMemberCard;
+export default React.memo(PriveMemberCard);

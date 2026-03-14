@@ -35,7 +35,7 @@ interface RazorpayPaymentFormProps {
   onClose: () => void;
 }
 
-export default function RazorpayPaymentForm({
+function RazorpayPaymentForm({
   visible,
   paymentUrl,
   orderId,
@@ -387,3 +387,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(RazorpayPaymentForm);

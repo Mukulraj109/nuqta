@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -50,7 +50,7 @@ function FoodStoreCard({ store, currencySymbol, variant = 'default' }: FoodStore
     >
       <View style={styles.storeImageContainer}>
         {imageUri && !imageError ? (
-          <Image
+          <CachedImage
             source={{ uri: imageUri }}
             style={styles.storeImage}
             contentFit="cover"

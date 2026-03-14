@@ -252,4 +252,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FlashSaleTimer;
+export default React.memo(FlashSaleTimer);

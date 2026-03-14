@@ -317,4 +317,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default EarnRewardsScreen;
+export default React.memo(EarnRewardsScreen);

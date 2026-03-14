@@ -17,7 +17,7 @@ import { getCategoryTheme } from '@/config/categoryThemeConfig';
 import { getCategoryConfig } from '@/config/categoryConfig';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
 
-export default function GenericExperiencesIndex() {
+function GenericExperiencesIndex() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || '');
@@ -173,3 +173,5 @@ const styles = StyleSheet.create({
   emptyTitle: { fontSize: 16, fontWeight: '600', color: '#111827', marginTop: 16 },
   emptySubtitle: { fontSize: 13, color: '#6B7280', marginTop: 4 },
 });
+
+export default React.memo(GenericExperiencesIndex);

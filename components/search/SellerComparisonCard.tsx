@@ -22,7 +22,7 @@ interface SellerComparisonCardProps {
   productId?: string;
 }
 
-export default function SellerComparisonCard({
+function SellerComparisonCard({
   seller,
   onPress,
   onFavorite,
@@ -466,3 +466,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(SellerComparisonCard);

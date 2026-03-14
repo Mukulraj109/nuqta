@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RezPayBadge;
+export default React.memo(RezPayBadge);

@@ -274,4 +274,4 @@ const createStyles = (screenWidth: number) => {
   });
 };
 
-export default EmptySearchResults;
+export default React.memo(EmptySearchResults);

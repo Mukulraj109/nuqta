@@ -36,7 +36,7 @@ import { PromotionBanner, PromotionBannerProps, PromotionBannerItemProps } from 
  * />
  * ```
  */
-export default function PromotionsBanner({
+function PromotionsBanner({
   banners,
   storeId,
   storeName,
@@ -538,3 +538,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
 });
+
+export default React.memo(PromotionsBanner);

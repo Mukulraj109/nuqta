@@ -17,7 +17,7 @@ interface StoreDiscoverySkeletonProps {
  * - "Today's Top Stores" section with horizontal cards
  * - "Popular Near You" section with compact cards
  */
-export default function StoreDiscoverySkeleton({
+function StoreDiscoverySkeleton({
   showTopStores = true,
   showPopularStores = true,
 }: StoreDiscoverySkeletonProps) {
@@ -187,3 +187,5 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
 });
+
+export default React.memo(StoreDiscoverySkeleton);

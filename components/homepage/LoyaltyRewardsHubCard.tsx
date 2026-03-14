@@ -252,5 +252,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoyaltyRewardsHubCard;
+export default React.memo(LoyaltyRewardsHubCard);
 

@@ -14,7 +14,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
 
-export default function ReviewCardSkeleton() {
+function ReviewCardSkeleton() {
   return (
     <View
       style={styles.card}
@@ -133,3 +133,5 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 });
+
+export default React.memo(ReviewCardSkeleton);

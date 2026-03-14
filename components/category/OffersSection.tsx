@@ -47,7 +47,7 @@ function getBankGradient(bankName: string): string[] {
   return key ? BANK_GRADIENTS[key] : BANK_GRADIENTS.DEFAULT;
 }
 
-export default function OffersSection({ categorySlug, categoryId, title, onSeeAll, filterTags }: OffersSectionProps) {
+function OffersSection({ categorySlug, categoryId, title, onSeeAll, filterTags }: OffersSectionProps) {
   const router = useRouter();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
@@ -345,3 +345,5 @@ const styles = StyleSheet.create({
   },
   copyButtonText: { fontSize: 11, fontWeight: '600', color: COLORS.white },
 });
+
+export default React.memo(OffersSection);

@@ -32,7 +32,7 @@ interface ShoppableProductCardProps {
  * Enhanced product card for shoppable UGC videos
  * Displays product with add to cart and navigation functionality
  */
-export default function ShoppableProductCard({
+function ShoppableProductCard({
   product,
   onPress,
   onAddToCart,
@@ -543,3 +543,5 @@ const styles = StyleSheet.create({
     color: '#111827',
   },
 });
+
+export default React.memo(ShoppableProductCard);

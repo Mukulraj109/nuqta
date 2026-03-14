@@ -43,7 +43,7 @@ const TIER_MESSAGES = {
   },
 };
 
-export default function UpgradeBanner({
+function UpgradeBanner({
   currentTier,
   onUpgrade,
   dismissible = true,
@@ -195,3 +195,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(UpgradeBanner);

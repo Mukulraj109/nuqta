@@ -30,7 +30,7 @@ interface BillPreviewModalProps {
   onEdit: () => void;
 }
 
-export default function BillPreviewModal({
+function BillPreviewModal({
   visible,
   onClose,
   imageUri,
@@ -509,3 +509,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default React.memo(BillPreviewModal);

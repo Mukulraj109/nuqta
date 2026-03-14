@@ -25,7 +25,7 @@ interface FilterChipsProps {
   activeFilters: string[];
 }
 
-export function FilterChips({
+function _FilterChipsInner({
   filters,
   onFilterChange,
   activeFilters,
@@ -262,3 +262,5 @@ const styles = StyleSheet.create({
     color: '#EF4444',
   },
 });
+
+export const FilterChips = React.memo(_FilterChipsInner);

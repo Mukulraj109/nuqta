@@ -201,4 +201,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HeroSection;
+export default React.memo(HeroSection);

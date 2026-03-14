@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
@@ -171,7 +171,7 @@ export const FriendsRedeemedSection: React.FC<FriendsRedeemedSectionProps> = ({
            
           >
             <View style={styles.friendHeader}>
-              <Image
+              <CachedImage
                 source={{ uri: item.friendAvatar }}
                 style={styles.avatar}
                 cachePolicy="memory-disk"
@@ -187,7 +187,7 @@ export const FriendsRedeemedSection: React.FC<FriendsRedeemedSectionProps> = ({
             </View>
 
             <View style={styles.imageContainer}>
-              <Image
+              <CachedImage
                 source={{ uri: item.offer.image }}
                 style={styles.image}
                 contentFit="cover"
@@ -226,4 +226,4 @@ export const FriendsRedeemedSection: React.FC<FriendsRedeemedSectionProps> = ({
   );
 };
 
-export default FriendsRedeemedSection;
+export default React.memo(FriendsRedeemedSection);

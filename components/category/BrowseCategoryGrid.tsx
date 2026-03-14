@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, ImageSourcePropType } from 'react-native';
-import { Image as ExpoImage } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { CategoryGridItem, BrowseCategoryGridProps } from '@/types/categoryTypes';
@@ -263,7 +263,7 @@ const CategoryIcon: React.FC<CategoryIconProps> = ({ category, onPress, countLab
     >
       <View style={styles.itemCard}>
         {imageSource ? (
-          <ExpoImage source={imageSource} style={styles.itemImage} contentFit="contain" cachePolicy="memory-disk" recyclingKey={category.id} />
+          <CachedImage source={imageSource} style={styles.itemImage} contentFit="contain" cachePolicy="memory-disk" recyclingKey={category.id} />
         ) : iconFallback ? (
           <View style={[styles.emojiContainer, { backgroundColor: `${iconFallback.color}15` }]}>
             <Ionicons name={iconFallback.name} size={36} color={iconFallback.color} />
@@ -408,4 +408,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BrowseCategoryGrid;
+export default React.memo(BrowseCategoryGrid);

@@ -23,7 +23,7 @@ interface GroupCardProps {
   showJoinButton?: boolean;
 }
 
-export default function GroupCard({ group, onPress, showJoinButton = false }: GroupCardProps) {
+function GroupCard({ group, onPress, showJoinButton = false }: GroupCardProps) {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
   const spotsLeft = group.maxMembers - group.currentMemberCount;
@@ -303,3 +303,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default React.memo(GroupCard);

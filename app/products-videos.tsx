@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   View,
   ScrollView,
@@ -37,14 +37,14 @@ export default function ProductsVideosPage() {
   ];
 
   // Filter products based on search and category
-  const filteredProducts = state.merchantVideos.filter((video) => {
+  const filteredProducts = useMemo(() => state.merchantVideos.filter((video) => {
     const matchesSearch = video.description
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     const matchesCategory =
       selectedCategory === 'all' || video.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  }), [state.merchantVideos, searchQuery, selectedCategory]);
 
   const handleVideoPress = useCallback((video: UGCVideoItem) => {
     actions.navigateToDetail(video);

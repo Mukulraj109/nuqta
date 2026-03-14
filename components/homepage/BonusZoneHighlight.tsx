@@ -144,4 +144,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BonusZoneHighlight;
+export default React.memo(BonusZoneHighlight);

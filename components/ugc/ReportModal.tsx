@@ -20,7 +20,7 @@ import { useVideoReport } from '@/hooks/useVideoReport';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-export default function ReportModal({
+function ReportModal({
   visible,
   onClose,
   videoId,
@@ -568,3 +568,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
 });
+
+export default React.memo(ReportModal);

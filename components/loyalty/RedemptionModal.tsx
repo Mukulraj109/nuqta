@@ -27,7 +27,7 @@ interface RedemptionModalProps {
   onRedeem: (reward: RewardItem, quantity: number) => Promise<RedemptionResponse>;
 }
 
-export default function RedemptionModal({
+function RedemptionModal({
   visible,
   reward,
   userPoints,
@@ -600,3 +600,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default React.memo(RedemptionModal);

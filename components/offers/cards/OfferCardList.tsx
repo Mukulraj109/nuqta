@@ -380,4 +380,4 @@ export const OfferCardList: React.FC<OfferCardListProps> = ({
   );
 };
 
-export default OfferCardList;
+export default React.memo(OfferCardList);

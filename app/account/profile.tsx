@@ -587,7 +587,7 @@ export default function AccountProfilePage() {
           </View>
         </View>
 
-        <View style={{ height: 40 }} />
+        <View style={{ height: 120 }} />
       </ScrollView>
     </View>
 );

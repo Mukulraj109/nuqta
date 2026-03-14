@@ -214,4 +214,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RelatedFlightsSection;
+export default React.memo(RelatedFlightsSection);

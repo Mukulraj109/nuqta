@@ -13,7 +13,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { MenuItemCardProps } from '@/types/profile.types';
 import { PROFILE_COLORS, PROFILE_SPACING, PROFILE_RADIUS } from '@/types/profile.types';
 
-export default function MenuItemCard({
+function MenuItemCard({
   item,
   onPress,
   style,
@@ -218,3 +218,5 @@ const styles = StyleSheet.create({
     marginLeft: 56, // Align with text content
   },
 });
+
+export default React.memo(MenuItemCard);

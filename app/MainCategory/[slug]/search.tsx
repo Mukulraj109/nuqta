@@ -99,7 +99,8 @@ export default function SharedCategoryPage() {
 
   // Auto-focus search input
   useEffect(() => {
-    setTimeout(() => inputRef.current?.focus(), 300);
+    const timer = setTimeout(() => inputRef.current?.focus(), 300);
+    return () => clearTimeout(timer);
   }, []);
 
   // Search if query param provided

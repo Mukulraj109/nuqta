@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -92,7 +92,7 @@ export default function LocationHistoryScreen() {
     }
   };
 
-  const renderHistoryItem = ({ item }: { item: LocationHistoryEntry }) => (
+  const renderHistoryItem = useCallback(({ item }: { item: LocationHistoryEntry }) => (
     <View style={styles.historyItem}>
       <View style={styles.historyContent}>
         <View style={styles.historyHeader}>
@@ -126,7 +126,7 @@ export default function LocationHistoryScreen() {
         <Text style={styles.dateText}>{formatDate(item.timestamp)}</Text>
       </View>
     </View>
-  );
+  ), []);
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>

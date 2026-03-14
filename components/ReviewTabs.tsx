@@ -144,4 +144,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReviewTabs;
+export default React.memo(ReviewTabs);

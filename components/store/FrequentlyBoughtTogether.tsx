@@ -29,7 +29,7 @@ interface FrequentlyBoughtTogetherProps {
   onBundleAdded?: () => void;
 }
 
-export default function FrequentlyBoughtTogether({
+function FrequentlyBoughtTogether({
   currentProduct,
   storeId,
   onBundleAdded,
@@ -932,3 +932,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
 });
+
+export default React.memo(FrequentlyBoughtTogether);

@@ -95,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CrossPlatformSlider;
+export default React.memo(CrossPlatformSlider);

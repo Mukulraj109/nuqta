@@ -402,4 +402,4 @@ const createStyles = (screenWidth: number) => {
   });
 };
 
-export default FilterChips;
+export default React.memo(FilterChips);

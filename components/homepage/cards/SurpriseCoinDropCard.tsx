@@ -232,4 +232,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SurpriseCoinDropCard;
+export default React.memo(SurpriseCoinDropCard);

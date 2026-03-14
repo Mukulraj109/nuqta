@@ -14,7 +14,7 @@ interface TaskCardProps {
   isPending?: boolean;
 }
 
-export default function TaskCard({ 
+function TaskCard({ 
   title, 
   description, 
   icon, 
@@ -168,3 +168,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default React.memo(TaskCard);

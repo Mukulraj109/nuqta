@@ -243,4 +243,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PayYourBillCard;
+export default React.memo(PayYourBillCard);

@@ -53,7 +53,7 @@ interface DealDetailsModalProps {
   deal: Deal | null;
 }
 
-export default function DealDetailsModal({ visible, onClose, deal }: DealDetailsModalProps) {
+function DealDetailsModal({ visible, onClose, deal }: DealDetailsModalProps) {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
@@ -894,3 +894,5 @@ const createStyles = (screenData: { width: number; height: number }) => {
     },
   });
 };
+
+export default React.memo(DealDetailsModal);

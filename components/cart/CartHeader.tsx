@@ -19,7 +19,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { CartHeaderProps } from '@/types/cart';
 import { COLORS, SPACING, BORDER_RADIUS } from '@/constants/DesignTokens';
 
-export default function CartHeader({ onBack, title = 'Cart' }: CartHeaderProps) {
+function CartHeader({ onBack, title = 'Cart' }: CartHeaderProps) {
   const { width, height } = Dimensions.get('window');
   const isSmallScreen = width < 360;
   const statusBarHeight =
@@ -154,3 +154,5 @@ const styles = StyleSheet.create({
     width: 46,
   },
 });
+
+export default React.memo(CartHeader);

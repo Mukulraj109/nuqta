@@ -158,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveHighlightsSection;
+export default React.memo(PriveHighlightsSection);

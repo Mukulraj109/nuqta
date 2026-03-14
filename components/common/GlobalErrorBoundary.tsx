@@ -318,4 +318,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GlobalErrorBoundary;
+export default React.memo(GlobalErrorBoundary);

@@ -110,7 +110,7 @@ function getPriceTier(priceForTwo?: number): { label: string; color: string } {
   return { label: '$$$', color: '#8B5CF6' };
 }
 
-export default function BeautyCategoryPage() {
+function BeautyCategoryPage() {
   const router = useRouter();
   const slug = 'beauty-wellness';
   const categoryConfig = getCategoryConfig(slug);
@@ -765,3 +765,5 @@ const styles = StyleSheet.create({
   },
   experienceBtnText: { fontSize: 13, fontWeight: '600', color: COLORS.pinkText },
 });
+
+export default React.memo(BeautyCategoryPage);

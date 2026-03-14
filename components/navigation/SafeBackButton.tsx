@@ -236,4 +236,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SafeBackButton;
+export default React.memo(SafeBackButton);

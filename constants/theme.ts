@@ -422,8 +422,8 @@ export const typography = {
 
   // Caption & Overline
   caption: {
-    fontSize: 11,
-    lineHeight: 14,
+    fontSize: 12,
+    lineHeight: 16,
     fontWeight: '500' as const,
     letterSpacing: 0.2,
   },

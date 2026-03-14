@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AvailabilityBadge;
+export default React.memo(AvailabilityBadge);

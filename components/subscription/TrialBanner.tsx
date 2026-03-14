@@ -46,7 +46,7 @@ const TRIAL_BENEFITS = {
   },
 };
 
-export default function TrialBanner({
+function TrialBanner({
   daysRemaining,
   tier,
   onUpgrade,
@@ -392,3 +392,5 @@ const styles = StyleSheet.create({
     borderRadius: SUBSCRIPTION_BORDER_RADIUS.full,
   },
 });
+
+export default React.memo(TrialBanner);

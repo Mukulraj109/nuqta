@@ -18,7 +18,7 @@ interface SuccessModalProps {
   autoCloseDelay?: number; // Auto-close after this many milliseconds (0 = no auto-close)
 }
 
-export default function SuccessModal({
+function SuccessModal({
   visible,
   title,
   message,
@@ -142,3 +142,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(SuccessModal);

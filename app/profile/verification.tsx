@@ -728,6 +728,7 @@ export default function VerificationPage() {
       <Modal
         visible={showImageModal}
         transparent
+        statusBarTranslucent
         animationType="slide"
         onRequestClose={() => setShowImageModal(false)}
       >

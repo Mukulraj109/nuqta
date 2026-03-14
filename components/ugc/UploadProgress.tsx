@@ -20,7 +20,7 @@ interface UploadProgressProps {
   showCancel?: boolean;
 }
 
-export default function UploadProgress({
+function UploadProgress({
   status,
   progress,
   onCancel,
@@ -352,3 +352,5 @@ const styles = StyleSheet.create({
     color: '#EF4444',
   },
 });
+
+export default React.memo(UploadProgress);

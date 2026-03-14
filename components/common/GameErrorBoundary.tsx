@@ -405,4 +405,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GameErrorBoundary;
+export default React.memo(GameErrorBoundary);

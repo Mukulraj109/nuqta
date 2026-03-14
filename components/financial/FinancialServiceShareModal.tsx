@@ -265,4 +265,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FinancialServiceShareModal;
+export default React.memo(FinancialServiceShareModal);

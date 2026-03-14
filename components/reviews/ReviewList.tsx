@@ -27,7 +27,7 @@ interface ReviewListProps {
 type SortOption = 'newest' | 'oldest' | 'highest' | 'lowest' | 'helpful';
 type FilterRating = 'all' | 1 | 2 | 3 | 4 | 5;
 
-export default function ReviewList({
+function ReviewList({
   storeId,
   onWriteReviewPress,
   showWriteButton = true,
@@ -504,3 +504,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default React.memo(ReviewList);

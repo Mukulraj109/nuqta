@@ -22,7 +22,7 @@ interface ChipProps {
   testID?: string;
 }
 
-export default function Chip({
+function Chip({
   label,
   onPress,
   variant = 'filled',
@@ -104,3 +104,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default React.memo(Chip);

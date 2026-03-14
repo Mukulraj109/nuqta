@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Pressable, StyleSheet, Dimensions } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -22,7 +22,7 @@ interface ThumbnailVideoCardProps {
   style?: any;
 }
 
-export default function ThumbnailVideoCard({
+function ThumbnailVideoCard({
   item,
   onPress,
   showHashtags = true,
@@ -50,7 +50,7 @@ export default function ThumbnailVideoCard({
       <View style={styles.thumbnailContainer}>
         {/* Thumbnail Image */}
         {item.thumbnailUrl && !imageError ? (
-          <Image
+          <CachedImage
             source={{ uri: item.thumbnailUrl }}
             style={StyleSheet.absoluteFill}
             contentFit="cover"
@@ -256,3 +256,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(ThumbnailVideoCard);

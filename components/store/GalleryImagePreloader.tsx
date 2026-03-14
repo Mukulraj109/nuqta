@@ -3,6 +3,7 @@
 
 import { useEffect } from 'react';
 import { Image } from 'expo-image';
+import logger from '@/utils/logger';
 import { GalleryItem } from '@/services/storeGalleryApi';
 
 interface GalleryImagePreloaderProps {
@@ -41,7 +42,7 @@ export function useGalleryImagePreloader(
             cachePolicy: 'memory-disk',
           }).catch((error) => {
             // Silently fail - preloading is not critical
-            console.debug('Image preload failed:', error);
+            logger.debug('Image preload failed:', error);
           });
         }
       }

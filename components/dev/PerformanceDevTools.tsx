@@ -107,7 +107,7 @@ function PerformanceScoreBadge({ score }: { score: number }) {
 // Main Component
 // ============================================================================
 
-export default function PerformanceDevTools() {
+function PerformanceDevTools() {
   const [isOpen, setIsOpen] = useState(false);
   const dashboard = usePerformanceDashboard({
     updateInterval: 5000,
@@ -525,3 +525,5 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
 });
+
+export default React.memo(PerformanceDevTools);

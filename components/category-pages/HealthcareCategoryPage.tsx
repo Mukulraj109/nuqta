@@ -91,7 +91,7 @@ function getPriceTier(priceForTwo?: number): { label: string; color: string } {
   return { label: '$$$', color: '#8B5CF6' };
 }
 
-export default function HealthcareCategoryPage() {
+function HealthcareCategoryPage() {
   const router = useRouter();
   const slug = 'healthcare';
   const categoryConfig = getCategoryConfig(slug);
@@ -462,3 +462,5 @@ const styles = StyleSheet.create({
   emergencyBtn: { backgroundColor: COLORS.white, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 },
   emergencyBtnText: { fontSize: 13, fontWeight: '600', color: '#DC2626' },
 });
+
+export default React.memo(HealthcareCategoryPage);

@@ -247,4 +247,4 @@ export const OfferCardCashback: React.FC<OfferCardCashbackProps> = ({
   );
 };
 
-export default OfferCardCashback;
+export default React.memo(OfferCardCashback);

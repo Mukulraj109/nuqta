@@ -15,7 +15,7 @@ interface PricingToggleProps {
   yearlySavings?: number;
 }
 
-export default function PricingToggle({
+function PricingToggle({
   billingCycle,
   onChange,
   monthlyPrice,
@@ -316,3 +316,5 @@ const styles = StyleSheet.create({
     color: '#F59E0B',
   },
 });
+
+export default React.memo(PricingToggle);

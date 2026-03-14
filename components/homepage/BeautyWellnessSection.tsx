@@ -294,4 +294,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BeautyWellnessSection;
+export default React.memo(BeautyWellnessSection);

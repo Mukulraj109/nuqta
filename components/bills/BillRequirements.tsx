@@ -6,7 +6,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
 
-export default function BillRequirements() {
+function BillRequirements() {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
 
@@ -440,3 +440,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default React.memo(BillRequirements);

@@ -331,4 +331,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VerifiedReviews;
+export default React.memo(VerifiedReviews);

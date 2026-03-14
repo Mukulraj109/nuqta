@@ -24,7 +24,7 @@ interface RelatedProductsProps {
   title?: string;
 }
 
-export default function RelatedProducts({
+function RelatedProducts({
   productId,
   currentProduct,
   onProductPress,
@@ -360,3 +360,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+
+export default React.memo(RelatedProducts);

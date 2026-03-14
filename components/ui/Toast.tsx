@@ -23,7 +23,7 @@ const ICON_MAP: Record<string, keyof typeof Ionicons.glyphMap> = {
   info: 'information-circle',
 };
 
-export default function Toast({
+function Toast({
   message,
   type = 'success',
   duration = 4000,
@@ -206,3 +206,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default React.memo(Toast);

@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PayInStoreScreen;
+export default React.memo(PayInStoreScreen);

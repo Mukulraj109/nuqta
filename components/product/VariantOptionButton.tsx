@@ -260,4 +260,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VariantOptionButton;
+export default React.memo(VariantOptionButton);

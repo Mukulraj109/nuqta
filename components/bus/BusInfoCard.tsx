@@ -203,4 +203,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BusInfoCard;
+export default React.memo(BusInfoCard);

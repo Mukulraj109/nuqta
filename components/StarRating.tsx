@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StarRating;
+export default React.memo(StarRating);

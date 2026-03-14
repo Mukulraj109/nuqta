@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
@@ -166,7 +166,7 @@ export const AIRecommendedSection: React.FC<AIRecommendedSectionProps> = ({
            
           >
             <View style={styles.imageContainer}>
-              <Image
+              <CachedImage
                 source={{ uri: offer.image }}
                 style={styles.image}
                 contentFit="cover"
@@ -227,4 +227,4 @@ export const AIRecommendedSection: React.FC<AIRecommendedSectionProps> = ({
   );
 };
 
-export default AIRecommendedSection;
+export default React.memo(AIRecommendedSection);

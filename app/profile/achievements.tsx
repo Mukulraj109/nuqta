@@ -325,6 +325,7 @@ export default function AchievementsPage() {
       <Modal
         visible={selectedAchievement !== null}
         transparent
+        statusBarTranslucent
         animationType="fade"
         onRequestClose={() => setSelectedAchievement(null)}
       >

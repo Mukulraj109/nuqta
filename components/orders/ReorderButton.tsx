@@ -23,7 +23,7 @@ interface ReorderButtonProps {
   onSuccess?: () => void;
 }
 
-export default function ReorderButton({
+function ReorderButton({
   orderId,
   orderNumber,
   variant = 'primary',
@@ -206,3 +206,5 @@ const styles = StyleSheet.create({
     fontSize: 16
   }
 });
+
+export default React.memo(ReorderButton);

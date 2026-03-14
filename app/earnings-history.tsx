@@ -686,6 +686,10 @@ export default function EarningsHistoryPage() {
             </View>
           }
           renderItem={renderTransactionItem}
+          removeClippedSubviews={Platform.OS !== 'web'}
+          maxToRenderPerBatch={15}
+          windowSize={7}
+          initialNumToRender={8}
           ListFooterComponent={
             loading && transactions.length > 0 ? (
               <View style={styles.loadMoreContainer}>

@@ -118,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrendingHashtagsSection;
+export default React.memo(TrendingHashtagsSection);

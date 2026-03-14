@@ -68,7 +68,7 @@ const MyLocksPage: React.FC = () => {
     fetchLocks();
   }, [activeTab]);
 
-  const handleCancelLock = async (lock: UserLockDeal) => {
+  const handleCancelLock = useCallback(async (lock: UserLockDeal) => {
     const confirmed = await platformAlertConfirm(
       'Cancel Lock?',
       `Are you sure you want to cancel your lock on "${lock.dealSnapshot.title}"?\n\nYour deposit of ${getCurrencySymbol(lock.dealSnapshot.currency)}${lock.depositAmount} will be refunded.`
@@ -92,7 +92,7 @@ const MyLocksPage: React.FC = () => {
     } finally {
       setCancellingId(null);
     }
-  };
+  }, [fetchLocks]);
 
   const getCurrencySymbol = (currency: string) => {
     switch (currency) {
@@ -127,7 +127,7 @@ const MyLocksPage: React.FC = () => {
     }
   };
 
-  const renderLockCard = ({ item: lock }: { item: UserLockDeal }) => {
+  const renderLockCard = useCallback(({ item: lock }: { item: UserLockDeal }) => {
     const snap = lock.dealSnapshot;
     const currSymbol = getCurrencySymbol(snap.currency);
     const statusConfig = getStatusConfig(lock.status);
@@ -259,7 +259,7 @@ const MyLocksPage: React.FC = () => {
         )}
       </View>
     );
-  };
+  }, [cancellingId, router, handleCancelLock]);
 
   return (
     <View style={styles.container}>

@@ -219,4 +219,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EnhancedAISuggestionsSection;
+export default React.memo(EnhancedAISuggestionsSection);

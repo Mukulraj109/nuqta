@@ -12,7 +12,7 @@ import logger from '@/utils/logger';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function VideoCard({
+function VideoCard({
   item,
   onPress,
   onPlay,
@@ -788,3 +788,5 @@ const styles = StyleSheet.create({
     textShadowRadius: 2,
   },
 });
+
+export default React.memo(VideoCard);

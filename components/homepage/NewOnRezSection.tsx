@@ -1145,4 +1145,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewOnNuqtaSection;
+export default React.memo(NewOnNuqtaSection);

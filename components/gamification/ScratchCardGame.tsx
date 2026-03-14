@@ -30,7 +30,7 @@ interface ScratchCardGameProps {
   onError?: (error: string) => void;
 }
 
-export default function ScratchCardGame({
+function ScratchCardGame({
   onReveal,
   onCoinsEarned,
   onError,
@@ -470,3 +470,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default React.memo(ScratchCardGame);

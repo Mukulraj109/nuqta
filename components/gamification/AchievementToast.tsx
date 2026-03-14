@@ -21,7 +21,7 @@ interface AchievementToastProps {
   autoHideDuration?: number;
 }
 
-export default function AchievementToast({
+function AchievementToast({
   achievement,
   onDismiss,
   onPress,
@@ -244,3 +244,5 @@ const styles = StyleSheet.create({
     borderRadius: 1.5,
   },
 });
+
+export default React.memo(AchievementToast);

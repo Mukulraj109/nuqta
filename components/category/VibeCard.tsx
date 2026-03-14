@@ -91,4 +91,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VibeCard;
+export default React.memo(VibeCard);

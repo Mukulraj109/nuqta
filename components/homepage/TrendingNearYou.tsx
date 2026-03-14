@@ -694,4 +694,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrendingNearYou;
+export default React.memo(TrendingNearYou);

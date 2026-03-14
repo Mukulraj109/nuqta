@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoadingState;
+export default React.memo(LoadingState);

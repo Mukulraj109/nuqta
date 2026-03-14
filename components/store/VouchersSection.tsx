@@ -419,4 +419,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VouchersSection;
+export default React.memo(VouchersSection);

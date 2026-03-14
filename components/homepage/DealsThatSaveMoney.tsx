@@ -1838,4 +1838,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DealsThatSaveMoney;
+export default React.memo(DealsThatSaveMoney);

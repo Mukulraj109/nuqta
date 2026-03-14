@@ -24,7 +24,7 @@ function CardSkeleton() {
   );
 }
 
-export default function CardGridSkeleton({ count = 6 }: { count?: number }) {
+function CardGridSkeleton({ count = 6 }: { count?: number }) {
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -84,3 +84,5 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 });
+
+export default React.memo(CardGridSkeleton);

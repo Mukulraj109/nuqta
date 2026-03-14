@@ -161,7 +161,7 @@ function ExperienceCard({
   );
 }
 
-export default function BeautyExperiencesPage() {
+function BeautyExperiencesPage() {
   const router = useRouter();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
@@ -527,3 +527,5 @@ const styles = StyleSheet.create({
     lineHeight: 19,
   },
 });
+
+export default React.memo(BeautyExperiencesPage);

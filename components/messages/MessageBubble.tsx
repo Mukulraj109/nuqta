@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { PROFILE_COLORS } from '@/types/profile.types';
@@ -19,7 +19,7 @@ interface MessageBubbleProps {
   onImagePress?: (url: string) => void;
 }
 
-export default function MessageBubble({
+function MessageBubble({
   message,
   isOwnMessage,
   showAvatar = true,
@@ -80,7 +80,7 @@ export default function MessageBubble({
                 key={attachment.id}
                 onPress={() => onImagePress?.(attachment.url)}
               >
-                <Image
+                <CachedImage
                   source={{ uri: attachment.url }}
                   style={styles.imageAttachment}
                   contentFit="cover"
@@ -143,7 +143,7 @@ export default function MessageBubble({
       {showAvatar && !isOwnMessage && (
         <View style={styles.avatarContainer}>
           {message.senderAvatar ? (
-            <Image source={{ uri: message.senderAvatar }} style={styles.avatar} cachePolicy="memory-disk" />
+            <CachedImage source={{ uri: message.senderAvatar }} style={styles.avatar} cachePolicy="memory-disk" />
           ) : (
             <View style={[styles.avatar, styles.avatarPlaceholder]}>
               <ThemedText style={styles.avatarText}>
@@ -352,3 +352,5 @@ const styles = StyleSheet.create({
     marginLeft: 2,
   },
 });
+
+export default React.memo(MessageBubble);

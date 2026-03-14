@@ -215,4 +215,4 @@ export const DoubleCashbackBanner: React.FC<DoubleCashbackBannerProps> = ({
   );
 };
 
-export default DoubleCashbackBanner;
+export default React.memo(DoubleCashbackBanner);

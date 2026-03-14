@@ -36,7 +36,7 @@ interface ScannerPlaceholderProps {
   height?: number;
 }
 
-export default function ScannerPlaceholder({
+function ScannerPlaceholder({
   onPress,
   height = 270
 }: ScannerPlaceholderProps) {
@@ -205,3 +205,5 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
   },
 });
+
+export default React.memo(ScannerPlaceholder);

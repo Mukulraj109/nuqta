@@ -22,7 +22,7 @@ interface InfoModalProps {
   buttonColor?: string;
 }
 
-export default function InfoModal({
+function InfoModal({
   visible,
   title,
   message,
@@ -158,3 +158,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(InfoModal);

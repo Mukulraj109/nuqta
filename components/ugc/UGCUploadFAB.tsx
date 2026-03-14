@@ -20,7 +20,7 @@ interface UGCUploadFABProps {
   style?: ViewStyle;
 }
 
-export default function UGCUploadFAB({
+function UGCUploadFAB({
   onPress,
   visible = true,
   bottom = 80,
@@ -139,3 +139,5 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
 });
+
+export default React.memo(UGCUploadFAB);

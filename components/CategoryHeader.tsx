@@ -7,7 +7,7 @@
 import React, { useEffect } from "react";
 import { BRAND } from '@/constants/brand';
 import { View, Text, Pressable, StyleSheet, Dimensions, Platform } from "react-native";
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -303,7 +303,7 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({
                   colors={['rgba(0,0,0,0.45)', 'rgba(0,0,0,0.3)']}
                   style={styles.coinGradient}
                 >
-                  <Image source={BRAND.COIN_IMAGE} style={styles.nuqtaCoinIcon} contentFit="contain" transition={200} />
+                  <CachedImage source={BRAND.COIN_IMAGE} style={styles.nuqtaCoinIcon} contentFit="contain" transition={200} />
                   <Text style={styles.coinText}>{userPoints}</Text>
                 </LinearGradient>
               </Pressable>
@@ -781,4 +781,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryHeader;
+export default React.memo(CategoryHeader);

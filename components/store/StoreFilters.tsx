@@ -541,4 +541,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoreFilters;
+export default React.memo(StoreFilters);

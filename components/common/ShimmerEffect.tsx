@@ -10,7 +10,7 @@ interface ShimmerEffectProps {
   duration?: number;
 }
 
-export default function ShimmerEffect({
+function ShimmerEffect({
   width = '100%',
   height = 20,
   style,
@@ -80,3 +80,5 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
 });
+
+export default React.memo(ShimmerEffect);

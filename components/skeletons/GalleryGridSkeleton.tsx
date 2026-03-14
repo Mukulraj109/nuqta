@@ -8,7 +8,7 @@ import SkeletonLoader from './SkeletonLoader';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const ITEM_SIZE = (SCREEN_WIDTH - 48) / 3;
 
-export default function GalleryGridSkeleton() {
+function GalleryGridSkeleton() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -78,3 +78,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(GalleryGridSkeleton);

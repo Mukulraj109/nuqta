@@ -198,4 +198,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoreVisitLoadingSkeleton;
+export default React.memo(StoreVisitLoadingSkeleton);

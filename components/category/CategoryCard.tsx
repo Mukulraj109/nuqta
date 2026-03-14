@@ -26,7 +26,7 @@ interface CategoryCardProps {
   cardStyle?: 'elevated' | 'flat' | 'outlined';
 }
 
-export default function CategoryCard({
+function CategoryCard({
   item,
   layoutType = 'compact',
   onPress,
@@ -894,3 +894,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+export default React.memo(CategoryCard);

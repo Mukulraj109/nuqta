@@ -20,7 +20,7 @@ import {
 
 const { width } = Dimensions.get('window');
 
-export default function StockWarningBanner({
+function StockWarningBanner({
   issues,
   onDismiss,
   onViewDetails,
@@ -335,3 +335,5 @@ const compactStyles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(StockWarningBanner);

@@ -29,7 +29,7 @@ interface StoreProductCardProps {
   onLongPress?: () => void;
 }
 
-export default function StoreProductCard({
+function StoreProductCard({
   product,
   onPress,
   onAddToCart,
@@ -546,3 +546,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
 });
+
+export default React.memo(StoreProductCard);

@@ -209,4 +209,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductInfo;
+export default React.memo(ProductInfo);

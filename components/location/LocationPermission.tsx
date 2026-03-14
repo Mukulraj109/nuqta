@@ -18,7 +18,7 @@ interface LocationPermissionProps {
   textStyle?: any;
 }
 
-export default function LocationPermission({
+function LocationPermission({
   onPermissionGranted,
   onPermissionDenied,
   showSkipButton = true,
@@ -342,3 +342,5 @@ export function FullLocationPermission(props: LocationPermissionProps) {
     />
   );
 }
+
+export default React.memo(LocationPermission);

@@ -14,7 +14,7 @@ import { PriceSectionProps } from '@/types/cart';
 import { useRegion } from '@/contexts/RegionContext';
 import { COLORS, SPACING, BORDER_RADIUS, TYPOGRAPHY } from '@/constants/DesignTokens';
 
-export default function PriceSection({
+function PriceSection({
   totalPrice,
   onBuyNow,
   itemCount = 0,
@@ -245,3 +245,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default React.memo(PriceSection);

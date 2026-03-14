@@ -158,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OfflineStoresSection;
+export default React.memo(OfflineStoresSection);

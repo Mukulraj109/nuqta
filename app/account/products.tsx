@@ -120,7 +120,7 @@ export default function ProductsScreen() {
     </Pressable>
   );
 
-  const renderProductCard = ({ item }: { item: UserProduct }) => {
+  const renderProductCard = useCallback(({ item }: { item: UserProduct }) => {
     // Safely access nested properties
     const productName = item.product?.name || 'Unknown Product';
     const productImages = item.product?.images || [];
@@ -220,7 +220,7 @@ export default function ProductsScreen() {
         <Ionicons name="chevron-forward" size={24} color={Colors.text.tertiary} />
       </Pressable>
     );
-  };
+  }, [router]);
 
   const renderEmptyState = () => (
     <View

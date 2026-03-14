@@ -132,4 +132,4 @@ export const DiscountBucketsSection: React.FC<DiscountBucketsSectionProps> = ({
   );
 };
 
-export default DiscountBucketsSection;
+export default React.memo(DiscountBucketsSection);

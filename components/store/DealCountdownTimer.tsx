@@ -34,7 +34,7 @@ export interface DealCountdownTimerProps {
  * />
  * ```
  */
-export default function DealCountdownTimer({
+function DealCountdownTimer({
   expiryDate,
   size = 'normal',
   showLabel = true,
@@ -264,3 +264,5 @@ const getStyles = (size: CountdownSize) => {
     },
   });
 };
+
+export default React.memo(DealCountdownTimer);

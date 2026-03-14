@@ -458,4 +458,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventsExperiencesSection;
+export default React.memo(EventsExperiencesSection);

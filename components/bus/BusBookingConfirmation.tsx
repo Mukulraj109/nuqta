@@ -440,4 +440,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BusBookingConfirmation;
+export default React.memo(BusBookingConfirmation);

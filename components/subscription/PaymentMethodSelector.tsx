@@ -69,7 +69,7 @@ const getPaymentTypeLabel = (type: string): string => {
   }
 };
 
-export default function PaymentMethodSelector({
+function PaymentMethodSelector({
   methods,
   selectedId,
   onSelect,
@@ -472,3 +472,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(PaymentMethodSelector);

@@ -1,7 +1,7 @@
 // Global App Preferences Context
 // Manages app preferences and applies them globally across the app
 
-import React, { createContext, useContext, useEffect, useState, useCallback, useMemo, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, useMemo, useRef, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // Deferred: expo-haptics is heavy native module
 let _haptics: typeof import('expo-haptics') | null = null;
@@ -77,18 +77,40 @@ export function AppPreferencesProvider({ children }: AppPreferencesProviderProps
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Refs for state used inside stable callbacks (avoids re-creating callbacks on every state change)
+  const preferencesRef = useRef(preferences);
+  preferencesRef.current = preferences;
+  const isAuthenticatedRef = useRef(isAuthenticated);
+  isAuthenticatedRef.current = isAuthenticated;
+  const userRef = useRef(user);
+  userRef.current = user;
+
+  // Load from local storage
+  const loadFromStorage = useCallback(async () => {
+    try {
+      const stored = await AsyncStorage.getItem(STORAGE_KEYS.APP_PREFERENCES);
+      if (stored) {
+        setPreferences(JSON.parse(stored));
+      } else {
+        setPreferences(defaultPreferences);
+      }
+    } catch (err) {
+      setPreferences(defaultPreferences);
+    }
+  }, []);
+
   // Load preferences from storage or backend
-  const loadPreferences = async () => {
+  const loadPreferences = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      if (isAuthenticated && user) {
+      if (isAuthenticatedRef.current && userRef.current) {
         // Load from backend
         const response = await userSettingsApi.getUserSettings();
         if (response.success && response.data) {
           setPreferences(response.data.preferences || defaultPreferences);
-          
+
           // Save to local storage
           await AsyncStorage.setItem(STORAGE_KEYS.APP_PREFERENCES, JSON.stringify(response.data.preferences || defaultPreferences));
           await AsyncStorage.setItem(STORAGE_KEYS.LAST_SYNC, new Date().toISOString());
@@ -106,35 +128,22 @@ export function AppPreferencesProvider({ children }: AppPreferencesProviderProps
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Load from local storage
-  const loadFromStorage = async () => {
-    try {
-      const stored = await AsyncStorage.getItem(STORAGE_KEYS.APP_PREFERENCES);
-      if (stored) {
-        setPreferences(JSON.parse(stored));
-      } else {
-        setPreferences(defaultPreferences);
-      }
-    } catch (err) {
-      setPreferences(defaultPreferences);
-    }
-  };
+  }, [loadFromStorage]);
 
   // Update preferences
-  const updatePreferences = async (updates: Partial<AppPreferences>): Promise<boolean> => {
+  const updatePreferences = useCallback(async (updates: Partial<AppPreferences>): Promise<boolean> => {
     try {
-      if (!preferences) return false;
+      const currentPrefs = preferencesRef.current;
+      if (!currentPrefs) return false;
 
-      const newPreferences = { ...preferences, ...updates };
+      const newPreferences = { ...currentPrefs, ...updates };
       setPreferences(newPreferences);
 
       // Save to local storage immediately
       await AsyncStorage.setItem(STORAGE_KEYS.APP_PREFERENCES, JSON.stringify(newPreferences));
 
       // Sync with backend if authenticated
-      if (isAuthenticated && user) {
+      if (isAuthenticatedRef.current && userRef.current) {
         try {
           const response = await userSettingsApi.updateAppPreferences(newPreferences);
           if (response.success) {
@@ -153,16 +162,16 @@ export function AppPreferencesProvider({ children }: AppPreferencesProviderProps
       setError('Failed to update app preferences');
       return false;
     }
-  };
+  }, []);
 
   // Refresh preferences from backend
-  const refreshPreferences = async () => {
+  const refreshPreferences = useCallback(async () => {
     await loadPreferences();
-  };
+  }, [loadPreferences]);
 
   // Trigger haptic feedback based on preferences
-  const triggerHapticFeedback = (type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error' = 'light') => {
-    if (!preferences?.hapticFeedback) return;
+  const triggerHapticFeedback = useCallback((type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error' = 'light') => {
+    if (!preferencesRef.current?.hapticFeedback) return;
 
     getHaptics().then(Haptics => {
       switch (type) {
@@ -186,38 +195,34 @@ export function AppPreferencesProvider({ children }: AppPreferencesProviderProps
           break;
       }
     }).catch(() => {});
-  };
+  }, []);
 
   // Play sound based on preferences
-  const playSound = (type: 'success' | 'error' | 'notification' | 'click' = 'click') => {
-    if (!preferences?.sounds) return;
+  const playSound = useCallback((type: 'success' | 'error' | 'notification' | 'click' = 'click') => {
+    if (!preferencesRef.current?.sounds) return;
 
     try {
       // In a real app, you would use expo-av or react-native-sound
       // For now, we'll just log the sound type
-      // You can implement actual sound playing here:
-      // import { Audio } from 'expo-av';
-      // const { sound } = await Audio.Sound.createAsync(require(`../assets/sounds/${type}.mp3`));
-      // await sound.playAsync();
     } catch (_error) {
       // silently handle
     }
-  };
+  }, []);
 
   // Check if animations should be enabled
-  const shouldAnimate = (): boolean => {
-    return preferences?.animations || false;
-  };
+  const shouldAnimate = useCallback((): boolean => {
+    return preferencesRef.current?.animations || false;
+  }, []);
 
   // Check if sounds should be played
-  const shouldPlaySounds = (): boolean => {
-    return preferences?.sounds || false;
-  };
+  const shouldPlaySounds = useCallback((): boolean => {
+    return preferencesRef.current?.sounds || false;
+  }, []);
 
   // Check if haptic feedback should be used
-  const shouldUseHaptics = (): boolean => {
-    return preferences?.hapticFeedback || false;
-  };
+  const shouldUseHaptics = useCallback((): boolean => {
+    return preferencesRef.current?.hapticFeedback || false;
+  }, []);
 
   // Load preferences on mount and when auth state changes
   // Skip API calls during onboarding to prevent thundering herd on Android
@@ -268,7 +273,11 @@ export function AppPreferencesProvider({ children }: AppPreferencesProviderProps
     shouldAnimate,
     shouldPlaySounds,
     shouldUseHaptics,
-  }), [preferences, isLoading, error]);
+  }), [
+    preferences, isLoading, error,
+    updatePreferences, refreshPreferences, triggerHapticFeedback, playSound,
+    shouldAnimate, shouldPlaySounds, shouldUseHaptics,
+  ]);
 
   return (
     <AppPreferencesContext.Provider value={value}>

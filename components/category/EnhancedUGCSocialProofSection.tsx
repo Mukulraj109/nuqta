@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, Platform, ScrollView } from 'react-native';
-import { Image as ExpoImage } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -37,7 +37,7 @@ const UGCPostCard: React.FC<UGCPostCardProps> = ({ post, onPress, isLarge = fals
      
     >
       {/* Image */}
-      <ExpoImage
+      <CachedImage
         source={post.image}
         style={styles.postImage}
         contentFit="cover"
@@ -59,7 +59,7 @@ const UGCPostCard: React.FC<UGCPostCardProps> = ({ post, onPress, isLarge = fals
       {/* User Info & Stats */}
       <View style={styles.postFooter}>
         <View style={styles.userInfo}>
-          <ExpoImage
+          <CachedImage
             source={post.userAvatar}
             style={styles.userAvatar}
             contentFit="cover"
@@ -321,4 +321,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EnhancedUGCSocialProofSection;
+export default React.memo(EnhancedUGCSocialProofSection);

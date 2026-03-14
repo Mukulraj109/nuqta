@@ -114,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveActivitySummary;
+export default React.memo(PriveActivitySummary);

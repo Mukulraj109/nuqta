@@ -151,4 +151,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StockBadge;
+export default React.memo(StockBadge);

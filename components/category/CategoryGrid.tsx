@@ -26,7 +26,7 @@ interface CategoryGridProps {
   onRefresh?: () => void;
 }
 
-export default function CategoryGrid({
+function CategoryGrid({
   items,
   layoutConfig,
   onItemPress,
@@ -281,3 +281,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(CategoryGrid);

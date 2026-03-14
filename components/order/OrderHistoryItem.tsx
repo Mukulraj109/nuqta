@@ -400,4 +400,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrderHistoryItem;
+export default React.memo(OrderHistoryItem);

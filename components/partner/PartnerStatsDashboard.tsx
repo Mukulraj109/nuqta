@@ -28,7 +28,7 @@ const COLORS = {
   success: '#10B981',
 };
 
-export default function PartnerStatsDashboard({
+function PartnerStatsDashboard({
   compact = false,
   onViewLeaderboard,
 }: PartnerStatsDashboardProps) {
@@ -427,3 +427,5 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
   },
 });
+
+export default React.memo(PartnerStatsDashboard);

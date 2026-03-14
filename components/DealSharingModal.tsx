@@ -32,7 +32,7 @@ interface SharingOption {
   action: (deal: Deal, storeName: string) => void;
 }
 
-export default function DealSharingModal({
+function DealSharingModal({
   visible,
   onClose,
   deal,
@@ -593,3 +593,5 @@ const createStyles = (screenData: { width: number; height: number }) => {
     },
   });
 };
+
+export default React.memo(DealSharingModal);

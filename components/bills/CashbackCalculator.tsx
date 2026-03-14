@@ -11,7 +11,7 @@ interface CashbackCalculatorProps {
   calculation: CashbackCalculation;
 }
 
-export default function CashbackCalculator({ calculation }: CashbackCalculatorProps) {
+function CashbackCalculator({ calculation }: CashbackCalculatorProps) {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
 
@@ -303,3 +303,5 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
 });
+
+export default React.memo(CashbackCalculator);

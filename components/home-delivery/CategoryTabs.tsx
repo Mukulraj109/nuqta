@@ -25,7 +25,7 @@ const COLORS = {
   glassBorder: 'rgba(255, 255, 255, 0.4)',
 };
 
-export function CategoryTabs({
+function _CategoryTabsInner({
   categories,
   activeCategory,
   onCategoryChange,
@@ -315,3 +315,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export const CategoryTabs = React.memo(_CategoryTabsInner);

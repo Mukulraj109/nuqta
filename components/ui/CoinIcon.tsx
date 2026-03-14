@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { ImageStyle, StyleProp, View, Text, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { BRAND } from '@/constants/brand';
 
 interface CoinIconProps {
@@ -25,7 +25,7 @@ const CoinIcon: React.FC<CoinIconProps> = ({
   amountSize,
 }) => {
   const coinImage = (
-    <Image
+    <CachedImage
       source={BRAND.COIN_IMAGE}
       style={[{ width: size, height: size }, style]}
       contentFit="contain"

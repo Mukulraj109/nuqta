@@ -34,7 +34,7 @@ interface ProductReviewFormProps {
   onCancel?: () => void;
 }
 
-export default function ProductReviewForm({
+function ProductReviewForm({
   productId,
   productName,
   onSubmit,
@@ -667,3 +667,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default React.memo(ProductReviewForm);

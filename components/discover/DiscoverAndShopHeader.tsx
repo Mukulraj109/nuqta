@@ -105,7 +105,7 @@ interface DiscoverAndShopHeaderProps {
   showCategories?: boolean;
 }
 
-export default function DiscoverAndShopHeader({
+function DiscoverAndShopHeader({
   categories = DEFAULT_CATEGORIES,
   onCategoryPress,
   showCategories = true,
@@ -388,3 +388,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default React.memo(DiscoverAndShopHeader);

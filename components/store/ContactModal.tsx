@@ -26,7 +26,7 @@ interface ContactModalProps {
   storeName?: string;
 }
 
-export default function ContactModal({
+function ContactModal({
   visible,
   onClose,
   phone,
@@ -435,3 +435,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(ContactModal);

@@ -410,4 +410,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ModeSwitcher;
+export default React.memo(ModeSwitcher);

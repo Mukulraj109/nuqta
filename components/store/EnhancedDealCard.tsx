@@ -24,7 +24,7 @@ import { useRegion } from '@/contexts/RegionContext';
  * - Pulse animation for deals expiring soon
  * - Disable expired deals (cannot add to cart)
  */
-export default function EnhancedDealCard({
+function EnhancedDealCard({
   deal,
   onAdd,
   onRemove,
@@ -477,3 +477,5 @@ const createStyles = (screenWidth: number) => {
     },
   });
 };
+
+export default React.memo(EnhancedDealCard);

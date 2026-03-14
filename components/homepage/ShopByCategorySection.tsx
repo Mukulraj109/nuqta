@@ -474,4 +474,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ShopByCategorySection;
+export default React.memo(ShopByCategorySection);

@@ -300,4 +300,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VideoPlayer;
+export default React.memo(VideoPlayer);

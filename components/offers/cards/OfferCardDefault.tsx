@@ -326,4 +326,4 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
   );
 };
 
-export default OfferCardDefault;
+export default React.memo(OfferCardDefault);

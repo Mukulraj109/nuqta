@@ -36,7 +36,7 @@ interface RedemptionFlowProps {
   onRedeem: (voucherId: string, method: 'online' | 'in_store') => Promise<VoucherRedemption>;
 }
 
-export default function RedemptionFlow({
+function RedemptionFlow({
   visible,
   onClose,
   vouchers,
@@ -899,3 +899,5 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
 });
+
+export default React.memo(RedemptionFlow);

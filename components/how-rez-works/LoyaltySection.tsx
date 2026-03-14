@@ -217,4 +217,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoyaltySection;
+export default React.memo(LoyaltySection);

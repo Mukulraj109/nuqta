@@ -359,4 +359,4 @@ export const OfferCardLightning: React.FC<OfferCardLightningProps> = ({
   );
 };
 
-export default OfferCardLightning;
+export default React.memo(OfferCardLightning);

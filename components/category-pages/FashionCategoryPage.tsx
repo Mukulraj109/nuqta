@@ -104,7 +104,7 @@ function getPriceTier(priceForTwo?: number): { label: string; color: string } {
   return { label: '$$$', color: '#8B5CF6' };
 }
 
-export default function FashionCategoryPage() {
+function FashionCategoryPage() {
   const router = useRouter();
   const slug = 'fashion';
   const categoryConfig = getCategoryConfig(slug);
@@ -555,3 +555,5 @@ const styles = StyleSheet.create({
   ctaBtn: { backgroundColor: COLORS.white, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 },
   ctaBtnText: { fontSize: 13, fontWeight: '600', color: COLORS.purple },
 });
+
+export default React.memo(FashionCategoryPage);

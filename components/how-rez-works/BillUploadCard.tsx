@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BillUploadCard;
+export default React.memo(BillUploadCard);

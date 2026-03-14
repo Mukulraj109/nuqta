@@ -108,7 +108,7 @@ const ConfettiParticle = ({ delay, color }: { delay: number; color: string }) =>
   );
 };
 
-export default function LevelUpCelebration({
+function LevelUpCelebration({
   visible,
   oldLevel,
   newLevel,
@@ -551,3 +551,5 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
   },
 });
+
+export default React.memo(LevelUpCelebration);

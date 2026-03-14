@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, Platform } from 'react-native';
 
-export default function StoreProductCardSkeleton() {
+function StoreProductCardSkeleton() {
   const shimmerAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -103,3 +103,5 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
 });
+
+export default React.memo(StoreProductCardSkeleton);

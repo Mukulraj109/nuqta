@@ -18,7 +18,7 @@ interface ErrorModalProps {
   autoCloseDelay?: number; // Auto-close after this many milliseconds (0 = no auto-close)
 }
 
-export default function ErrorModal({
+function ErrorModal({
   visible,
   title,
   message,
@@ -142,3 +142,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(ErrorModal);

@@ -355,5 +355,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FeatureTryCards;
+export default React.memo(FeatureTryCards);
 

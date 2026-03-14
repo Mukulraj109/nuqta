@@ -14,7 +14,7 @@ interface GameStatusBarProps {
  * Reusable status bar showing plays remaining, cooldown timer, and next reset.
  * Drop into any game page to show daily play limits.
  */
-export default function GameStatusBar({ gameType, accentColor = '#8B5CF6', onStatusChange }: GameStatusBarProps) {
+function GameStatusBar({ gameType, accentColor = '#8B5CF6', onStatusChange }: GameStatusBarProps) {
   const { status, loading, countdown, playsRemaining, maxPlays, isAvailable } = useGameStatus(gameType);
 
   React.useEffect(() => {
@@ -134,3 +134,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(GameStatusBar);

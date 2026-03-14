@@ -882,4 +882,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExcitingDealsSection;
+export default React.memo(ExcitingDealsSection);

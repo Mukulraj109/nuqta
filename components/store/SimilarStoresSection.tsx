@@ -358,4 +358,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SimilarStoresSection;
+export default React.memo(SimilarStoresSection);

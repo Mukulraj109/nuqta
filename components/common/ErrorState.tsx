@@ -41,7 +41,7 @@ interface ErrorStateProps {
  *   title="Failed to Load Store"
  * />
  */
-export default function ErrorState({
+function ErrorState({
   error,
   onRetry,
   title = 'Oops! Something went wrong',
@@ -137,3 +137,5 @@ const styles = StyleSheet.create({
     color: COLORS.text.inverse,
   },
 });
+
+export default React.memo(ErrorState);

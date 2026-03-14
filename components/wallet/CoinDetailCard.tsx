@@ -4,7 +4,7 @@
  */
 import React, { useRef } from 'react';
 import { View, StyleSheet, Pressable, Animated } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { CoinBalance, COIN_TYPES, CoinType } from '@/types/wallet';
@@ -79,7 +79,7 @@ export const CoinDetailCard: React.FC<CoinDetailCardProps> = React.memo(({ coin,
       >
         <View style={[styles.iconContainer, { backgroundColor: coinInfo.backgroundColor }]}>
           {coin.type === 'rez' || coin.type === 'nuqta' ? (
-            <Image source={nuqtaCoinImage} style={styles.coinImage} contentFit="contain" transition={200} />
+            <CachedImage source={nuqtaCoinImage} style={styles.coinImage} contentFit="contain" transition={200} />
           ) : (
             <Ionicons
               name={coin.type === 'branded' ? 'storefront' : 'flash'}

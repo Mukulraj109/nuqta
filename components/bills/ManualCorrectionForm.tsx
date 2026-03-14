@@ -27,7 +27,7 @@ interface ManualCorrectionFormProps {
   onSubmit: (corrections: ManualCorrectionData) => void;
 }
 
-export default function ManualCorrectionForm({
+function ManualCorrectionForm({
   visible,
   onClose,
   ocrData,
@@ -632,3 +632,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(ManualCorrectionForm);

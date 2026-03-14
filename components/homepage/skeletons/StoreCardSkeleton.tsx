@@ -16,7 +16,7 @@ interface StoreCardSkeletonProps {
  * - Location and delivery time
  * - Cashback badge and minimum order
  */
-export default function StoreCardSkeleton({ width = 280 }: StoreCardSkeletonProps) {
+function StoreCardSkeleton({ width = 280 }: StoreCardSkeletonProps) {
   return (
     <View
       style={[styles.container, { width }]}
@@ -211,3 +211,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default React.memo(StoreCardSkeleton);

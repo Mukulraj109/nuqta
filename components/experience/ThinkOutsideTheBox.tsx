@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { experiencesApi } from '@/services/experiencesApi';
@@ -88,7 +88,7 @@ const ThinkOutsideTheBox: React.FC<Props> = ({ experienceType = 'default', searc
                         onPress={() => handlePress(item)}
                     >
                         <View style={styles.imageContainer}>
-                            <Image
+                            <CachedImage
                                 source={{ uri: item.image }}
                                 style={styles.image}
                                 contentFit="cover"
@@ -220,4 +220,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ThinkOutsideTheBox;
+export default React.memo(ThinkOutsideTheBox);

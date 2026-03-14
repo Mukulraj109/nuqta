@@ -44,7 +44,7 @@ interface ProductReviewsSectionProps {
 
 type SortOption = 'newest' | 'oldest' | 'rating_high' | 'rating_low' | 'helpful' | 'featured';
 
-export default function ProductReviewsSection({
+function ProductReviewsSection({
   productId,
   productName,
   reviews,
@@ -564,3 +564,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(ProductReviewsSection);

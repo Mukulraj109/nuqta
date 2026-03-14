@@ -104,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StickyQuickActions;
+export default React.memo(StickyQuickActions);

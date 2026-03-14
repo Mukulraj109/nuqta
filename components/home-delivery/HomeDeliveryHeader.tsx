@@ -26,7 +26,7 @@ const COLORS = {
   glassHighlight: 'rgba(255, 255, 255, 0.5)',
 };
 
-export function HomeDeliveryHeader({
+function _HomeDeliveryHeaderInner({
   searchQuery,
   onSearchChange,
   onSearchSubmit,
@@ -354,3 +354,5 @@ const styles = StyleSheet.create({
     padding: 4,
   },
 });
+
+export const HomeDeliveryHeader = React.memo(_HomeDeliveryHeaderInner);

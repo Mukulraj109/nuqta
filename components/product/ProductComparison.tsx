@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { SPACING, TYPOGRAPHY, COLORS, BORDER_RADIUS } from '@/constants/DesignTokens';
 import Button from '@/components/ui/Button';
@@ -38,7 +38,7 @@ interface ProductComparisonProps {
  * - Features comparison with checkmarks
  * - Quick actions (Add to Cart, View Details)
  */
-export default function ProductComparison({
+function ProductComparison({
   products,
   onRemoveProduct,
   onAddToCart,
@@ -89,7 +89,7 @@ export default function ProductComparison({
                 <Ionicons name="close-circle" size={24} color={COLORS.error[500]} />
               </Pressable>
 
-              <Image
+              <CachedImage
                 source={{ uri: product.image }}
                 style={styles.productImage}
                 contentFit="contain"
@@ -532,3 +532,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(ProductComparison);

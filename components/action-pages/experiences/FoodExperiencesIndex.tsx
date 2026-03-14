@@ -31,7 +31,7 @@ const TYPE_ICONS: Record<string, string> = {
   partner: '🤝', mall: '🏬',
 };
 
-export default function ExperiencesPage() {
+function ExperiencesPage() {
   const router = useRouter();
   const [experiences, setExperiences] = useState<StoreExperience[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -180,3 +180,5 @@ const styles = StyleSheet.create({
   emptyTitle: { fontSize: 16, fontWeight: '600', color: COLORS.textPrimary, marginTop: 16 },
   emptySubtitle: { fontSize: 13, color: COLORS.textSecondary, marginTop: 4 },
 });
+
+export default React.memo(ExperiencesPage);

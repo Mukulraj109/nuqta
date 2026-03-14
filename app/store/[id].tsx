@@ -419,6 +419,7 @@ const StoreDetailPage: React.FC = () => {
 
         <ScrollView
           style={styles.scrollView}
+          contentContainerStyle={{ paddingBottom: 120 }}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={COLORS.orange500} />

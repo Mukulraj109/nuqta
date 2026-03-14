@@ -24,7 +24,7 @@ interface AddressSearchProps {
   itemStyle?: any;
 }
 
-export default function AddressSearch({
+function AddressSearch({
   placeholder = 'Search for an address...',
   onAddressSelect,
   onSearch,
@@ -307,3 +307,5 @@ export function FullAddressSearch(props: AddressSearchProps) {
     />
   );
 }
+
+export default React.memo(AddressSearch);

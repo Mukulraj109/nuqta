@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { View, FlatList, Pressable, StyleSheet, Platform } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { PROFILE_COLORS } from '@/types/profile.types';
@@ -19,7 +19,7 @@ interface ConversationListProps {
   ListEmptyComponent?: React.ReactElement;
 }
 
-export default function ConversationList({
+function ConversationList({
   conversations,
   loading = false,
   onRefresh,
@@ -70,7 +70,7 @@ export default function ConversationList({
         {/* Store Avatar */}
         <View style={styles.avatarContainer}>
           {item.storeAvatar ? (
-            <Image source={{ uri: item.storeAvatar }} style={styles.avatar} cachePolicy="memory-disk" />
+            <CachedImage source={{ uri: item.storeAvatar }} style={styles.avatar} cachePolicy="memory-disk" />
           ) : (
             <View style={[styles.avatar, styles.avatarPlaceholder]}>
               <ThemedText style={styles.avatarText}>
@@ -284,3 +284,5 @@ const styles = StyleSheet.create({
     marginLeft: 84,
   },
 });
+
+export default React.memo(ConversationList);

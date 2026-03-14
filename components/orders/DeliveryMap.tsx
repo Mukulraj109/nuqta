@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Linking, Platform } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { OrderLocationUpdate } from '@/hooks/useOrderTracking';
 
@@ -21,7 +21,7 @@ interface DeliveryMapProps {
   };
 }
 
-export default function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: DeliveryMapProps) {
+function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: DeliveryMapProps) {
   const [estimatedTime, setEstimatedTime] = useState<string | null>(null);
 
   useEffect(() => {
@@ -134,7 +134,7 @@ export default function DeliveryMap({ locationUpdate, deliveryAddress, storeLoca
       {/* Map area: Static image on web, location info card on native */}
       <View style={styles.mapContainer}>
         {Platform.OS === 'web' && staticMapUrl ? (
-          <Image
+          <CachedImage
             source={{ uri: staticMapUrl }}
             style={styles.staticMapImage}
             contentFit="cover"
@@ -171,7 +171,7 @@ export default function DeliveryMap({ locationUpdate, deliveryAddress, storeLoca
         <View style={styles.driverInfo}>
           <View style={styles.driverAvatarContainer}>
             {locationUpdate.deliveryPartner.photoUrl ? (
-              <Image
+              <CachedImage
                 source={{ uri: locationUpdate.deliveryPartner.photoUrl }}
                 style={styles.driverAvatar}
                 cachePolicy="memory-disk"
@@ -485,3 +485,5 @@ const styles = StyleSheet.create({
     color: '#1a3a52',
   },
 });
+
+export default React.memo(DeliveryMap);

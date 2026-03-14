@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { WishlistItemProps } from '@/types/wishlist.types';
 
-export default function WishlistItem({
+function WishlistItem({
   item,
   onRemove,
   onPress,
@@ -257,3 +257,5 @@ const styles = StyleSheet.create({
     color: '#999',
   },
 });
+
+export default React.memo(WishlistItem);

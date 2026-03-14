@@ -33,7 +33,7 @@ interface NotificationBellProps {
 
 const { width } = Dimensions.get('window');
 
-export default function NotificationBell({
+function NotificationBell({
   iconSize = 24,
   iconColor = '#1F2937'
 }: NotificationBellProps) {
@@ -507,3 +507,5 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
 });
+
+export default React.memo(NotificationBell);

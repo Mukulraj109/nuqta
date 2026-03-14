@@ -12,7 +12,7 @@ interface CategoryGridProps {
   maxHeight?: number;
 }
 
-export default function CategoryGrid({ 
+function CategoryGrid({ 
   categories, 
   onCategoryPress, 
   columns = 3,
@@ -91,3 +91,5 @@ const styles = StyleSheet.create({
     opacity: 0, // keeps grid spacing consistent
   },
 });
+
+export default React.memo(CategoryGrid);

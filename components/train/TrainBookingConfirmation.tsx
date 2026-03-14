@@ -428,4 +428,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrainBookingConfirmation;
+export default React.memo(TrainBookingConfirmation);

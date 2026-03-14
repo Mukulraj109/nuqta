@@ -520,4 +520,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveHabitLoops;
+export default React.memo(PriveHabitLoops);

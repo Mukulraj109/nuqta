@@ -1,7 +1,7 @@
 // Share to Earn Page
 // Earn coins by sharing content
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   ScrollView,
@@ -170,7 +170,7 @@ export default function ShareToEarnPage() {
     }
   };
 
-  const renderContent = ({ item }: { item: ShareableContent }) => (
+  const renderContent = useCallback(({ item }: { item: ShareableContent }) => (
     <Pressable
       style={styles.contentCard}
       onPress={() => setSelectedContent(item)}
@@ -208,7 +208,7 @@ export default function ShareToEarnPage() {
         <Ionicons name="share-social" size={20} color={Colors.primary[600]} />
       </Pressable>
     </Pressable>
-  );
+  ), []);
 
   const getTypeColor = (type: string) => {
     switch (type) {

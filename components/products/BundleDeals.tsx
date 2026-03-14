@@ -24,7 +24,7 @@ interface BundleDealsProps {
   onProductPress?: (productId: string) => void;
 }
 
-export default function BundleDeals({
+function BundleDeals({
   bundles,
   loading = false,
   onAddToCart,
@@ -498,3 +498,5 @@ const styles = StyleSheet.create({
     color: '#F59E0B'
   }
 });
+
+export default React.memo(BundleDeals);

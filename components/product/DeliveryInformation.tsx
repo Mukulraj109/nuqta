@@ -598,4 +598,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DeliveryInformation;
+export default React.memo(DeliveryInformation);

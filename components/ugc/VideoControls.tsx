@@ -12,7 +12,7 @@ interface VideoControlsProps {
   visible?: boolean;
 }
 
-export default function VideoControls({
+function VideoControls({
   isPlaying,
   isMuted,
   onPlayPause,
@@ -124,3 +124,5 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.2)',
   },
 });
+
+export default React.memo(VideoControls);

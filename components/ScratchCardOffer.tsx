@@ -1,7 +1,7 @@
 // components/ScratchCardOffer.tsx
 import React from "react";
 import { View, StyleSheet, Pressable, Text } from "react-native";
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { ScratchCardOfferProps } from "@/types/profile";
 
 const ScratchCardOffer: React.FC<ScratchCardOfferProps> = ({ 
@@ -23,7 +23,7 @@ const ScratchCardOffer: React.FC<ScratchCardOfferProps> = ({
       accessibilityHint={isActive ? "Double tap to view this scratch card offer" : "This offer has expired"}
       accessibilityState={{ disabled: !isActive }}
     >
-      <Image
+      <CachedImage
         source={imageSource}
         style={[styles.image, !isActive && styles.inactiveImage]}
         contentFit="cover"
@@ -126,4 +126,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ScratchCardOffer;
+export default React.memo(ScratchCardOffer);

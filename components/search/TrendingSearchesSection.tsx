@@ -8,7 +8,7 @@ interface TrendingSearchesSectionProps {
   onPress: (query: string) => void;
 }
 
-export default function TrendingSearchesSection({
+function TrendingSearchesSection({
   searches,
   onPress,
 }: TrendingSearchesSectionProps) {
@@ -85,16 +85,4 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default React.memo(TrendingSearchesSection);

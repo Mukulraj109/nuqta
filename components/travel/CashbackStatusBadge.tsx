@@ -47,7 +47,7 @@ const STATUS_CONFIG: Record<CashbackStatus, {
   },
 };
 
-export default function CashbackStatusBadge({
+function CashbackStatusBadge({
   status,
   amount,
   verificationDays,
@@ -145,3 +145,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(CashbackStatusBadge);

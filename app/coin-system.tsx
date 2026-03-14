@@ -10,10 +10,16 @@ import {
   Pressable,
   StatusBar,
   Platform,
+  UIManager,
+  LayoutAnimation,
   Animated,
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -210,22 +216,26 @@ const CoinSystemPage = () => {
 
   const toggleFAQ = (index: number) => {
     const isExpanding = expandedFAQ !== index;
-    setExpandedFAQ(isExpanding ? index : null);
 
+    // Animate chevron rotation with native driver
     Animated.timing(faqAnimations[index], {
       toValue: isExpanding ? 1 : 0,
       duration: 250,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
 
-    // Close previously expanded FAQ
+    // Close previously expanded FAQ chevron
     if (expandedFAQ !== null && expandedFAQ !== index) {
       Animated.timing(faqAnimations[expandedFAQ], {
         toValue: 0,
         duration: 200,
-        useNativeDriver: false,
+        useNativeDriver: true,
       }).start();
     }
+
+    // Use LayoutAnimation for the height expand/collapse
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setExpandedFAQ(isExpanding ? index : null);
   };
 
   // ============================================
@@ -330,10 +340,6 @@ const CoinSystemPage = () => {
 
   const renderFAQItem = (faq: FAQItem, index: number) => {
     const isExpanded = expandedFAQ === index;
-    const animatedHeight = faqAnimations[index].interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, 120],
-    });
     const rotateIcon = faqAnimations[index].interpolate({
       inputRange: [0, 1],
       outputRange: ['0deg', '180deg'],
@@ -344,7 +350,7 @@ const CoinSystemPage = () => {
         <Pressable
           style={styles.faqQuestion}
           onPress={() => toggleFAQ(index)}
-         
+
           accessibilityLabel={`FAQ: ${faq.question}`}
           accessibilityRole="button"
           accessibilityState={{ expanded: isExpanded }}
@@ -354,11 +360,11 @@ const CoinSystemPage = () => {
             <Ionicons name="chevron-down" size={20} color={Colors.text.tertiary} />
           </Animated.View>
         </Pressable>
-        <Animated.View style={[styles.faqAnswerContainer, { maxHeight: animatedHeight }]}>
-          {isExpanded && (
+        {isExpanded && (
+          <View style={styles.faqAnswerContainer}>
             <Text style={styles.faqAnswerText}>{faq.answer}</Text>
-          )}
-        </Animated.View>
+          </View>
+        )}
       </View>
     );
   };

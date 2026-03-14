@@ -31,7 +31,7 @@ interface SendMoneyModalProps {
 
 type RecipientType = 'phone' | 'upi' | 'email';
 
-export default function SendMoneyModal({
+function SendMoneyModal({
   visible,
   onClose,
   onSuccess,
@@ -704,3 +704,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default React.memo(SendMoneyModal);

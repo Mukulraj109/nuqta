@@ -1275,4 +1275,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FlightBookingFlow;
+export default React.memo(FlightBookingFlow);

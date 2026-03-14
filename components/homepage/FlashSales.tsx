@@ -651,4 +651,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FlashSales;
+export default React.memo(FlashSales);

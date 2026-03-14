@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useAuth } from '@/contexts/AuthContext';
 import { getAuthToken, getRefreshToken, getUser } from '@/utils/authStorage';
 
-export default function AuthDebugger() {
+function AuthDebugger() {
   const { state, actions } = useAuth();
   const [storageData, setStorageData] = useState<any>({});
   const [isVisible, setIsVisible] = useState(false);
@@ -165,3 +165,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default React.memo(AuthDebugger);

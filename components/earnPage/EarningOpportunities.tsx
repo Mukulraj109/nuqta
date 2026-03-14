@@ -100,7 +100,7 @@ const opportunities: EarningOpportunity[] = [
   },
 ];
 
-export default function EarningOpportunities() {
+function EarningOpportunities() {
   const router = useRouter();
   const scrollX = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -569,3 +569,5 @@ const styles = StyleSheet.create({
     }),
   },
 });
+
+export default React.memo(EarningOpportunities);

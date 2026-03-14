@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSocket } from '@/contexts/SocketContext';
 
-export default function ConnectionStatus() {
+function ConnectionStatus() {
   const { state, connect } = useSocket();
   const pulseAnim = React.useRef(new Animated.Value(1)).current;
 
@@ -126,3 +126,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default React.memo(ConnectionStatus);

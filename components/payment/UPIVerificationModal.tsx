@@ -25,7 +25,7 @@ interface UPIVerificationModalProps {
   onError: (error: string) => void;
 }
 
-export default function UPIVerificationModal({
+function UPIVerificationModal({
   visible,
   paymentMethodId,
   vpa,
@@ -330,3 +330,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+
+export default React.memo(UPIVerificationModal);

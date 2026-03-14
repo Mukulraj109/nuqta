@@ -7,7 +7,7 @@ import { ReferralSectionProps } from '@/types/earnPage.types';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
 import { useRegion } from '@/contexts/RegionContext';
 
-export default function ReferralSection({
+function ReferralSection({
   referralData,
   onShare,
   onLearnMore
@@ -682,3 +682,5 @@ statLabel: {
     letterSpacing: 0.2,
   },
 });
+
+export default React.memo(ReferralSection);

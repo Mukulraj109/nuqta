@@ -583,4 +583,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CashbackRewardsCard;
+export default React.memo(CashbackRewardsCard);

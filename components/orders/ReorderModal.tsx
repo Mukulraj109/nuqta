@@ -27,7 +27,7 @@ interface ReorderModalProps {
   onSuccess?: () => void;
 }
 
-export default function ReorderModal({
+function ReorderModal({
   visible,
   orderId,
   orderNumber,
@@ -592,3 +592,5 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   }
 });
+
+export default React.memo(ReorderModal);

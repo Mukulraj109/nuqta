@@ -1,4 +1,4 @@
-import React, { useCallback, Suspense } from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   StyleSheet,
@@ -20,10 +20,8 @@ import { profileMenuSections } from '@/data/profileData';
 import { useAuth } from '@/contexts/AuthContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
-// Lazy-loaded components
-const ProfileMenuModal = React.lazy(() => import('@/components/profile/ProfileMenuModal'));
-
-const ModalFallback = () => null;
+// Eagerly loaded — React.lazy + Suspense(null) causes modal to not appear on Android
+import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const NUM_COLUMNS = 4;
@@ -165,15 +163,13 @@ export default function CategoriesScreen() {
       </ScrollView>
 
       {/* Profile Menu Modal */}
-      <Suspense fallback={<ModalFallback />}>
-        <ProfileMenuModal
-          visible={isModalVisible}
-          onClose={hideModal}
-          user={user!}
-          menuSections={profileMenuSections}
-          onMenuItemPress={handleMenuItemPress}
-        />
-      </Suspense>
+      <ProfileMenuModal
+        visible={isModalVisible}
+        onClose={hideModal}
+        user={user!}
+        menuSections={profileMenuSections}
+        onMenuItemPress={handleMenuItemPress}
+      />
     </View>
   );
 }

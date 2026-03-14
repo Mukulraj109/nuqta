@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { useRegion } from '@/contexts/RegionContext';
 
@@ -18,7 +18,7 @@ interface RecentlyViewedProps {
   onProductPress?: (product: Product) => void;
 }
 
-export default function RecentlyViewed({ products, onProductPress }: RecentlyViewedProps) {
+function RecentlyViewed({ products, onProductPress }: RecentlyViewedProps) {
   const router = useRouter();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
@@ -60,7 +60,7 @@ export default function RecentlyViewed({ products, onProductPress }: RecentlyVie
           >
             <View style={styles.imageContainer}>
               {product.image ? (
-                <Image
+                <CachedImage
                   source={{ uri: product.image }}
                   style={styles.productImage}
                   contentFit="cover"
@@ -187,3 +187,5 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
   },
 });
+
+export default React.memo(RecentlyViewed);

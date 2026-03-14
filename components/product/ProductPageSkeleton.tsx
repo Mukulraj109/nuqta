@@ -16,7 +16,7 @@ interface ProductPageSkeletonProps {
   showReviews?: boolean;
 }
 
-export default function ProductPageSkeleton({
+function ProductPageSkeleton({
   showVariants = true,
   showReviews = false,
 }: ProductPageSkeletonProps) {
@@ -332,3 +332,5 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.sm,
   },
 });
+
+export default React.memo(ProductPageSkeleton);

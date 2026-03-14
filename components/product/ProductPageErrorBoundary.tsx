@@ -246,4 +246,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductPageErrorBoundary;
+export default React.memo(ProductPageErrorBoundary);

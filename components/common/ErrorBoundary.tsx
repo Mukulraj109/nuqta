@@ -157,4 +157,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ErrorBoundary;
+export default React.memo(ErrorBoundary);

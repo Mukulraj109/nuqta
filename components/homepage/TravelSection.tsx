@@ -395,4 +395,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TravelSection;
+export default React.memo(TravelSection);

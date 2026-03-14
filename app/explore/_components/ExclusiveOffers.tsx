@@ -341,4 +341,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExclusiveOffers;
+export default React.memo(ExclusiveOffers);

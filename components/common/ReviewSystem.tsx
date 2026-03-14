@@ -74,7 +74,7 @@ interface ReviewSystemProps {
 type SortOption = 'newest' | 'oldest' | 'highest' | 'lowest' | 'helpful';
 type FilterOption = 'all' | '5' | '4' | '3' | '2' | '1' | 'verified';
 
-export default function ReviewSystem({
+function ReviewSystem({
   entityId,
   entityType,
   reviews,
@@ -1050,3 +1050,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+export default React.memo(ReviewSystem);

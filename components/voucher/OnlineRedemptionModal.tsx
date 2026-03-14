@@ -641,4 +641,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OnlineRedemptionModal;
+export default React.memo(OnlineRedemptionModal);

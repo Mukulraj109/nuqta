@@ -228,4 +228,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HotelInfoCard;
+export default React.memo(HotelInfoCard);

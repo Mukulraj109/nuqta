@@ -365,4 +365,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ServiceCard;
+export default React.memo(ServiceCard);

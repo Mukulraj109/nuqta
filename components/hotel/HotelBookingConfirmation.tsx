@@ -436,4 +436,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HotelBookingConfirmation;
+export default React.memo(HotelBookingConfirmation);

@@ -13,7 +13,7 @@ interface StripeUpiFormProps {
   onCancel: () => void;
 }
 
-export default function StripeUpiForm({
+function StripeUpiForm({
   clientSecret,
   amount,
   onSuccess,
@@ -429,3 +429,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default React.memo(StripeUpiForm);

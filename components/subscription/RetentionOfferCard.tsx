@@ -24,7 +24,7 @@ interface RetentionOfferCardProps {
   onDecline: () => void;
 }
 
-export default function RetentionOfferCard({
+function RetentionOfferCard({
   offer,
   onAccept,
   onDecline,
@@ -142,3 +142,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(RetentionOfferCard);

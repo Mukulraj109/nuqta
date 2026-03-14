@@ -121,4 +121,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FilterChips;
+export default React.memo(FilterChips);

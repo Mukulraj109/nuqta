@@ -19,7 +19,7 @@ const DIFFICULTY_COLORS = {
   hard: '#EF4444',
 };
 
-export default function ChallengeCard({ challenge, onClaim }: ChallengeCardProps) {
+function ChallengeCard({ challenge, onClaim }: ChallengeCardProps) {
   const difficultyColor = DIFFICULTY_COLORS[challenge.difficulty];
   const isCompleted = challenge.status === 'completed';
   const isClaimed = challenge.status === 'claimed';
@@ -249,3 +249,5 @@ const styles = StyleSheet.create({
     color: '#10B981',
   },
 });
+
+export default React.memo(ChallengeCard);

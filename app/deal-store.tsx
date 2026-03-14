@@ -3,7 +3,7 @@
  * 100% production ready - Connected to /api/campaigns
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -104,18 +104,18 @@ const DealStorePage: React.FC = () => {
   };
 
   // Filter deals based on selected category and query params
-  const filteredDealCategories = dealCategories
+  const filteredDealCategories = useMemo(() => dealCategories
     .filter((category) => {
       // Filter by campaign if specified in URL
       if (filteredCampaign) {
-        return category.id === filteredCampaign || 
+        return category.id === filteredCampaign ||
                category.id?.toLowerCase().includes(filteredCampaign.toLowerCase()) ||
                filteredCampaign.toLowerCase().includes(category.id?.toLowerCase() || '');
       }
       // Filter by category tab
       if (selectedCategory === 'all') return true;
       if (selectedCategory === 'Cashback') {
-        return category.id === 'super-cashback-weekend' || 
+        return category.id === 'super-cashback-weekend' ||
                category.id === 'super-cashback' ||
                category.title?.toLowerCase().includes('cashback');
       }
@@ -141,7 +141,7 @@ const DealStorePage: React.FC = () => {
           const searchName = filteredDealName.toLowerCase().replace(/\+/g, ' ');
           return dealStoreName.includes(searchName) || searchName.includes(dealStoreName);
         });
-        
+
         // Only return category if it has matching deals
         if (filteredDeals.length > 0) {
           return {
@@ -153,7 +153,7 @@ const DealStorePage: React.FC = () => {
       }
       return category;
     })
-    .filter((cat) => cat !== null) as DealCategory[];
+    .filter((cat) => cat !== null) as DealCategory[], [dealCategories, filteredCampaign, selectedCategory, filteredDealName]);
 
   if (isLoading) {
     return (

@@ -272,4 +272,4 @@ const createStyles = (screenWidth: number) => {
   });
 };
 
-export default ErrorState;
+export default React.memo(ErrorState);

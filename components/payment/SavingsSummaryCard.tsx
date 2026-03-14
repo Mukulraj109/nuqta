@@ -279,4 +279,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SavingsSummaryCard;
+export default React.memo(SavingsSummaryCard);

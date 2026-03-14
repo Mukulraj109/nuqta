@@ -21,7 +21,7 @@ interface SkeletonLoaderProps {
   variant?: 'rect' | 'circle' | 'text';
 }
 
-export default function SkeletonLoader({
+function SkeletonLoader({
   width = '100%',
   height = 20,
   borderRadius = 8,
@@ -97,3 +97,5 @@ export default function SkeletonLoader({
 }
 
 const styles = StyleSheet.create({});
+
+export default React.memo(SkeletonLoader);

@@ -400,6 +400,7 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
       <Modal
         visible={modal.visible}
         transparent
+        statusBarTranslucent
         animationType="none"
         onRequestClose={hideModal}
       >

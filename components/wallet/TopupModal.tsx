@@ -32,7 +32,7 @@ interface TopupModalProps {
 
 const QUICK_AMOUNTS = [100, 500, 1000, 2000, 5000];
 
-export default function TopupModal({
+function TopupModal({
   visible,
   onClose,
   onSuccess,
@@ -487,3 +487,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default React.memo(TopupModal);

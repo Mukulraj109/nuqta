@@ -14,7 +14,7 @@ interface OpportunityCardProps {
   category?: string;
 }
 
-export default function OpportunityCard({ 
+function OpportunityCard({ 
   title, 
   description, 
   icon, 
@@ -154,3 +154,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(OpportunityCard);

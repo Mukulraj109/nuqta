@@ -507,4 +507,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StockNotificationModal;
+export default React.memo(StockNotificationModal);

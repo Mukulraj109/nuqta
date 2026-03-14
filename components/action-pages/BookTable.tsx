@@ -52,7 +52,7 @@ interface TimeSlot {
   remainingCapacity: number;
 }
 
-export default function BookTablePage() {
+function BookTablePage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string }>();
   const { state: authState } = useAuth();
@@ -1124,3 +1124,5 @@ const styles = StyleSheet.create({
   },
   viewBookingsBtnText: { fontSize: 15, fontWeight: '600', color: COLORS.dark },
 });
+
+export default React.memo(BookTablePage);

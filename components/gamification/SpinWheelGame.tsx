@@ -30,7 +30,7 @@ interface SpinWheelGameProps {
 const { width } = Dimensions.get('window');
 const WHEEL_SIZE = Math.min(width * 0.85, 320);
 
-export default function SpinWheelGame({
+function SpinWheelGame({
   segments,
   onSpinComplete,
   spinsRemaining,
@@ -507,3 +507,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default React.memo(SpinWheelGame);

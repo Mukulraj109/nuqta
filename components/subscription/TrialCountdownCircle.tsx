@@ -2,7 +2,7 @@
 // Animated circular progress ring showing days remaining with color status
 
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Svg, Circle, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg';
 import { ThemedText } from '@/components/ThemedText';
 
@@ -12,14 +12,13 @@ interface TrialCountdownCircleProps {
   strokeWidth?: number;
 }
 
-export default function TrialCountdownCircle({
+function TrialCountdownCircle({
   endDate,
   size = 280,
   strokeWidth = 8,
 }: TrialCountdownCircleProps) {
   const [daysLeft, setDaysLeft] = useState(0);
   const [color, setColor] = useState('#10B981');
-  const animatedValue = new Animated.Value(0);
 
   useEffect(() => {
     // Calculate days remaining
@@ -38,14 +37,7 @@ export default function TrialCountdownCircle({
     } else {
       setColor('#EF4444'); // Red
     }
-
-    // Animate the progress ring
-    Animated.timing(animatedValue, {
-      toValue: daysRemaining > 7 ? 100 : (daysRemaining / 7) * 100,
-      duration: 1500,
-      useNativeDriver: false,
-    }).start();
-  }, [endDate, animatedValue]);
+  }, [endDate]);
 
   const radius = size / 2 - strokeWidth - 10;
   const circumference = 2 * Math.PI * radius;
@@ -149,3 +141,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default React.memo(TrialCountdownCircle);

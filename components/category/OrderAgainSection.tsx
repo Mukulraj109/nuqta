@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { Image as ExpoImage } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import ordersService, { Order } from '../../services/ordersApi';
@@ -41,7 +41,7 @@ const getTimeAgo = (dateString: string) => {
     return "Just now";
 };
 
-export default function OrderAgainSection({ orders: ordersProp, categorySlug, limit = 10 }: OrderAgainSectionProps) {
+function OrderAgainSection({ orders: ordersProp, categorySlug, limit = 10 }: OrderAgainSectionProps) {
     const router = useRouter();
     const { getCurrencySymbol } = useRegion();
     const currencySymbol = getCurrencySymbol();
@@ -141,7 +141,7 @@ export default function OrderAgainSection({ orders: ordersProp, categorySlug, li
                     >
                         <View style={styles.imageContainer}>
                             {item.image ? (
-                                <ExpoImage source={item.image} style={styles.image} contentFit="cover" cachePolicy="memory-disk" transition={200} />
+                                <CachedImage source={item.image} style={styles.image} contentFit="cover" cachePolicy="memory-disk" transition={200} />
                             ) : (
                                 <View style={[styles.image, styles.placeholderImage]}>
                                     <Ionicons name="fast-food" size={24} color={COLORS.textSecondary} />
@@ -259,3 +259,5 @@ const styles = StyleSheet.create({
         color: COLORS.primaryGreen,
     },
 });
+
+export default React.memo(OrderAgainSection);

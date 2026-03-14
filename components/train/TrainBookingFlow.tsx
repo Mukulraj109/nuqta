@@ -998,4 +998,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrainBookingFlow;
+export default React.memo(TrainBookingFlow);

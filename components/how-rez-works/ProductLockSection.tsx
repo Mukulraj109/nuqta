@@ -203,4 +203,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductLockSection;
+export default React.memo(ProductLockSection);

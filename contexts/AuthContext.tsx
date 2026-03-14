@@ -4,7 +4,7 @@ import { useRouter, useSegments } from 'expo-router';
 import authService, { User, AuthResponse, UnifiedUser } from '@/services/authApi';
 import apiClient from '@/services/apiClient';
 import * as authStorage from '@/utils/authStorage';
-import { isTokenExpired } from '@/utils/tokenUtils';
+import { isTokenExpired, isTokenExpiringSoon, getTimeUntilExpiration } from '@/utils/tokenUtils';
 import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
 import {
@@ -177,6 +177,29 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
     return () => { isCancelledRef.current = true; };
   }, [hasExplicitlyLoggedOut]);
+
+  // Proactive token refresh: refresh 2 minutes before expiry instead of waiting for 401
+  useEffect(() => {
+    if (!state.isAuthenticated || !state.token) return;
+
+    const scheduleRefresh = () => {
+      const secsLeft = getTimeUntilExpiration(state.token!);
+      if (secsLeft <= 0) return; // Already expired, 401 handler will deal with it
+
+      // Refresh 2 minutes before expiry (or immediately if less than 2 min left)
+      const refreshInMs = Math.max(0, (secsLeft - 120) * 1000);
+
+      return setTimeout(async () => {
+        // Double-check token is still expiring soon (state may have changed)
+        if (state.token && isTokenExpiringSoon(state.token, 3)) {
+          await tryRefreshToken();
+        }
+      }, refreshInMs);
+    };
+
+    const timerId = scheduleRefresh();
+    return () => { if (timerId) clearTimeout(timerId); };
+  }, [state.isAuthenticated, state.token]);
 
   // Navigation guard: Redirect to sign-in when user is logged out
   useEffect(() => {

@@ -245,7 +245,7 @@ export default function SavedAddressesPage() {
     }
   };
 
-  const renderAddress = ({ item: address }: { item: Address }) => {
+  const renderAddress = useCallback(({ item: address }: { item: Address }) => {
     const fullAddress = `${address.addressLine1}, ${address.addressLine2 ? address.addressLine2 + ', ' : ''}${address.city}, ${address.state} ${address.postalCode}, ${address.country}`;
     const addressLabel = `${address.title}. ${fullAddress}${address.isDefault ? '. Default address' : ''}${address.instructions ? '. Instructions: ' + address.instructions : ''}`;
 
@@ -328,7 +328,7 @@ export default function SavedAddressesPage() {
       )}
     </View>
     );
-  };
+  }, [handleEditAddress, handleDeleteAddress, handleSetDefault]);
 
   if (isLoading) {
     return (
@@ -437,6 +437,10 @@ export default function SavedAddressesPage() {
             }
             contentContainerStyle={styles.addressesContainer}
             showsVerticalScrollIndicator={false}
+            removeClippedSubviews={Platform.OS !== 'web'}
+            maxToRenderPerBatch={15}
+            windowSize={7}
+            initialNumToRender={8}
           />
         )}
       </View>

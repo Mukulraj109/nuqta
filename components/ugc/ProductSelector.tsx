@@ -23,7 +23,7 @@ import ProductCard from './ProductCard';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export default function ProductSelector({
+function ProductSelector({
   visible,
   onClose,
   selectedProducts: initialSelectedProducts,
@@ -656,3 +656,5 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
   },
 });
+
+export default React.memo(ProductSelector);

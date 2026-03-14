@@ -32,7 +32,7 @@ const TIER_COLORS = {
   diamond: ['#B9F2FF', '#81D4FA'],
 } as const;
 
-export default function AchievementUnlockModal({
+function AchievementUnlockModal({
   visible,
   achievement,
   onClose,
@@ -382,3 +382,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default React.memo(AchievementUnlockModal);

@@ -25,7 +25,7 @@ interface OTPVerificationModalProps {
   onError: (error: string) => void;
 }
 
-export default function OTPVerificationModal({
+function OTPVerificationModal({
   visible,
   phoneNumber,
   email,
@@ -370,3 +370,5 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
   },
 });
+
+export default React.memo(OTPVerificationModal);

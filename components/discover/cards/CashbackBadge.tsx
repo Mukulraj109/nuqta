@@ -8,7 +8,7 @@ interface CashbackBadgeProps {
   variant?: 'default' | 'light' | 'dark';
 }
 
-export default function CashbackBadge({
+function CashbackBadge({
   percent,
   size = 'medium',
   variant = 'default',
@@ -82,3 +82,5 @@ const styles = StyleSheet.create({
     color: '#1a3a52',
   },
 });
+
+export default React.memo(CashbackBadge);

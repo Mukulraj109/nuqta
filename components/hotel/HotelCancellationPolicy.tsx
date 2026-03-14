@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HotelCancellationPolicy;
+export default React.memo(HotelCancellationPolicy);

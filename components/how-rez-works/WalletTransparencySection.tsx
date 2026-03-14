@@ -102,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WalletTransparencySection;
+export default React.memo(WalletTransparencySection);

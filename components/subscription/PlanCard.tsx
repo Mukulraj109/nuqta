@@ -36,7 +36,7 @@ interface PlanCardProps {
   disabled?: boolean;
 }
 
-export default function PlanCard({
+function PlanCard({
   tier,
   name,
   price,
@@ -296,3 +296,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(PlanCard);

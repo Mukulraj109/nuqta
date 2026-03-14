@@ -22,7 +22,7 @@ interface SimilarProductsProps {
   onProductPress?: (productId: string) => void;
 }
 
-export default function SimilarProducts({
+function SimilarProducts({
   similarProducts,
   loading = false,
   onViewAll,
@@ -418,3 +418,5 @@ const styles = StyleSheet.create({
     color: '#F59E0B'
   }
 });
+
+export default React.memo(SimilarProducts);

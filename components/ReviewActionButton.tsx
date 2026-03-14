@@ -96,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReviewActionButton;
+export default React.memo(ReviewActionButton);

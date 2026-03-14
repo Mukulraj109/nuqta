@@ -67,7 +67,7 @@ const getCashbackPercentage = (product: any): number => {
   return product.cashback?.percentage || product.cashbackPercentage || 5;
 };
 
-export default function FrequentlyBoughtTogether({
+function FrequentlyBoughtTogether({
   bundles,
   loading = false,
   onAddToCart,
@@ -630,3 +630,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffcd57'
   }
 });
+
+export default React.memo(FrequentlyBoughtTogether);

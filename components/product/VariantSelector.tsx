@@ -14,7 +14,7 @@ interface VariantSelectorProps {
   onSelect: (variantId: string) => void;
 }
 
-export default function VariantSelector({
+function VariantSelector({
   title,
   variants,
   selectedId,
@@ -134,3 +134,5 @@ const styles = StyleSheet.create({
     transform: [{ rotate: '-15deg' }],
   },
 });
+
+export default React.memo(VariantSelector);

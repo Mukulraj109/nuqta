@@ -22,6 +22,7 @@ import {
   Modal,
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
+import logger from '@/utils/logger';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -70,7 +71,7 @@ class SectionErrorBoundary extends React.Component<
     return { hasError: true, error };
   }
   componentDidCatch(error: Error) {
-    console.warn(`[DynamicCategoryPage] Section "${this.props.name}" crashed:`, error?.message);
+    logger.warn(`[DynamicCategoryPage] Section "${this.props.name}" crashed:`, error?.message);
   }
   render() {
     if (this.state.hasError) return null; // Hide crashed section silently
@@ -410,7 +411,7 @@ const ServiceTypeCard = ({ serviceType, onPress }: { serviceType: PageConfigServ
 // ============================================
 // Main Component
 // ============================================
-export default function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
+function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
   const router = useRouter();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
@@ -1271,7 +1272,7 @@ export default function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) 
   // Main render
   // ============================================
   return (
-    <ErrorBoundary onError={(err, info) => { console.warn('[DynamicCategoryPage] Render error caught:', err?.message, info?.componentStack?.slice(0, 200)); }}>
+    <ErrorBoundary onError={(err, info) => { logger.warn('[DynamicCategoryPage] Render error caught:', err?.message, info?.componentStack?.slice(0, 200)); }}>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
@@ -2089,3 +2090,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(DynamicCategoryPage);

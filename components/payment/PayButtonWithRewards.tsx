@@ -256,4 +256,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PayButtonWithRewards;
+export default React.memo(PayButtonWithRewards);

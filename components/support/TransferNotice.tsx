@@ -11,7 +11,7 @@ interface TransferNoticeProps {
   transfer: ConversationTransfer;
 }
 
-export default function TransferNotice({ transfer }: TransferNoticeProps) {
+function TransferNotice({ transfer }: TransferNoticeProps) {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
@@ -93,3 +93,5 @@ const styles = StyleSheet.create({
     color: '#F59E0B',
   },
 });
+
+export default React.memo(TransferNotice);

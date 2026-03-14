@@ -19,7 +19,7 @@ interface LocationSharingProps {
   style?: any;
 }
 
-export default function LocationSharing({
+function LocationSharing({
   onShare,
   onCopy,
   style,
@@ -373,3 +373,5 @@ export function CompactLocationSharing(props: LocationSharingProps) {
     />
     );
 }
+
+export default React.memo(LocationSharing);

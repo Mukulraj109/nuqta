@@ -14,7 +14,7 @@ interface ChallengeCardProps {
   isCompleted?: boolean;
 }
 
-export default function ChallengeCard({ 
+function ChallengeCard({ 
   title, 
   description, 
   icon, 
@@ -170,3 +170,5 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
 });
+
+export default React.memo(ChallengeCard);

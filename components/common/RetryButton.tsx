@@ -312,4 +312,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RetryButton;
+export default React.memo(RetryButton);

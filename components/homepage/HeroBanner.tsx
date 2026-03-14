@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   subline: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '500',
     color: 'rgba(255, 255, 255, 0.65)',
     marginBottom: 12,
@@ -236,8 +236,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.18)',
     borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    minHeight: 44,
     gap: 6,
   },
   ctaCardPrimary: {
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
   },
   ctaText: {
     flex: 1,
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '600',
     color: '#FFFFFF',
   },
@@ -267,7 +268,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   proofText: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '500',
     color: 'rgba(255, 255, 255, 0.85)',
   },

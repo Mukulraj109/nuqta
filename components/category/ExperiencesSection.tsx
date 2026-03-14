@@ -42,7 +42,7 @@ const EXPERIENCE_TYPE_ICONS: Record<string, string> = {
   tours: '🚶', events: '🎉', private: '👑',
 };
 
-export default function ExperiencesSection({ categorySlug, pageConfig }: ExperiencesSectionProps) {
+function ExperiencesSection({ categorySlug, pageConfig }: ExperiencesSectionProps) {
   const router = useRouter();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
@@ -277,3 +277,5 @@ const styles = StyleSheet.create({
   whyItemTitle: { fontSize: 14, fontWeight: '600', color: COLORS.textPrimary, marginBottom: 4 },
   whyItemDescription: { fontSize: 11, color: COLORS.textSecondary, textAlign: 'center' },
 });
+
+export default React.memo(ExperiencesSection);

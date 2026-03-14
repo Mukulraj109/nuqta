@@ -18,7 +18,7 @@ interface TierBenefitsCardProps {
   onViewAllTiers?: () => void;
 }
 
-export default function TierBenefitsCard({
+function TierBenefitsCard({
   tierConfig,
   currentPoints,
   pointsToNextTier,
@@ -316,3 +316,5 @@ const styles = StyleSheet.create({
     color: '#92400E',
   },
 });
+
+export default React.memo(TierBenefitsCard);

@@ -25,7 +25,7 @@ interface EditAddressModalProps {
   onUpdate: (id: string, data: AddressUpdate) => Promise<boolean>;
 }
 
-export default function EditAddressModal({ visible, address, onClose, onUpdate }: EditAddressModalProps) {
+function EditAddressModal({ visible, address, onClose, onUpdate }: EditAddressModalProps) {
   const [type, setType] = useState<AddressType>(AddressType.HOME);
   const [title, setTitle] = useState('');
   const [phone, setPhone] = useState('');
@@ -541,3 +541,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default React.memo(EditAddressModal);

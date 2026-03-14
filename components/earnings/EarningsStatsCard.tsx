@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EarningsStatsCard;
+export default React.memo(EarningsStatsCard);

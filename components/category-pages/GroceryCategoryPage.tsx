@@ -306,7 +306,7 @@ const ProductCard = ({ product, currencySymbol }: { product: any; currencySymbol
   );
 };
 
-export default function GroceryCategoryPage() {
+function GroceryCategoryPage() {
   const router = useRouter();
   const slug = 'grocery-essentials';
   const categoryConfig = getCategoryConfig(slug);
@@ -955,3 +955,5 @@ const styles = StyleSheet.create({
   },
   loadMoreText: { fontSize: 13, fontWeight: '600', color: COLORS.greenDark },
 });
+
+export default React.memo(GroceryCategoryPage);

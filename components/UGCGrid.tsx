@@ -386,4 +386,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UGCGrid;
+export default React.memo(UGCGrid);

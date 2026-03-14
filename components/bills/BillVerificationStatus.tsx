@@ -10,7 +10,7 @@ interface BillVerificationStatusProps {
   state: BillVerificationState;
 }
 
-export default function BillVerificationStatus({ state }: BillVerificationStatusProps) {
+function BillVerificationStatus({ state }: BillVerificationStatusProps) {
   const getStatusIcon = () => {
     switch (state.status) {
       case 'uploading':
@@ -206,3 +206,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(BillVerificationStatus);

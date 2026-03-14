@@ -487,4 +487,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlayEarn;
+export default React.memo(PlayEarn);

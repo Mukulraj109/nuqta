@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from './constants';
@@ -45,7 +45,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, currencySymbol }) => {
       accessibilityRole="button"
     >
       {imgUri && !imgErr ? (
-        <Image source={{ uri: imgUri }} style={styles.dishImage} contentFit="cover" cachePolicy="memory-disk" onError={() => setImgErr(true)} />
+        <CachedImage source={{ uri: imgUri }} style={styles.dishImage} contentFit="cover" cachePolicy="memory-disk" onError={() => setImgErr(true)} />
       ) : (
         <View style={[styles.dishImage, { backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center' }]}>
           <Ionicons name="fast-food-outline" size={28} color={COLORS.textSecondary} />
@@ -112,4 +112,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DishCard;
+export default React.memo(DishCard);

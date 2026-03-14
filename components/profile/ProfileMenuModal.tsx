@@ -135,6 +135,7 @@ const ConfirmationModal = ({
     <Modal
       visible={visible}
       transparent
+      statusBarTranslucent
       animationType="none"
       onRequestClose={onCancel}
     >
@@ -330,7 +331,7 @@ const confirmStyles = StyleSheet.create({
   },
 });
 
-export default function ProfileMenuModal({
+function ProfileMenuModal({
   visible,
   onClose,
   user,
@@ -1577,3 +1578,5 @@ const styles = StyleSheet.create({
     color: COLORS.textMuted,
   },
 });
+
+export default React.memo(ProfileMenuModal);

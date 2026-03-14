@@ -415,4 +415,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CabBookingConfirmation;
+export default React.memo(CabBookingConfirmation);

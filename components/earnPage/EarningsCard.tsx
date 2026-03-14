@@ -30,7 +30,7 @@ const earningSources = [
   },
 ];
 
-export default function EarningsCard({ 
+function EarningsCard({ 
   earnings, 
   onSeeWallet 
 }: EarningsCardProps) {
@@ -495,3 +495,5 @@ const styles = StyleSheet.create({
     lineHeight: 14,
   },
 });
+
+export default React.memo(EarningsCard);

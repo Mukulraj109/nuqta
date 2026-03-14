@@ -213,4 +213,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductActions;
+export default React.memo(ProductActions);

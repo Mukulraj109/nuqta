@@ -228,4 +228,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoreTabs;
+export default React.memo(StoreTabs);

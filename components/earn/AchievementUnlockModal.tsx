@@ -552,4 +552,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AchievementUnlockModal;
+export default React.memo(AchievementUnlockModal);

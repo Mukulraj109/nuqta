@@ -524,4 +524,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SocialProofSection;
+export default React.memo(SocialProofSection);

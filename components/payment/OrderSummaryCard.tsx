@@ -147,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrderSummaryCard;
+export default React.memo(OrderSummaryCard);

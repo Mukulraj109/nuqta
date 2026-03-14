@@ -24,7 +24,7 @@ interface AddAddressModalProps {
   onAdd: (address: AddressCreate) => Promise<boolean>;
 }
 
-export default function AddAddressModal({ visible, onClose, onAdd }: AddAddressModalProps) {
+function AddAddressModal({ visible, onClose, onAdd }: AddAddressModalProps) {
   const [type, setType] = useState<AddressType>(AddressType.HOME);
   const [title, setTitle] = useState('');
   const [phone, setPhone] = useState('');
@@ -532,3 +532,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default React.memo(AddAddressModal);

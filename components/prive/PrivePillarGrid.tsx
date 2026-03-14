@@ -335,4 +335,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PrivePillarGrid;
+export default React.memo(PrivePillarGrid);

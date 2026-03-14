@@ -693,7 +693,7 @@ export default function SearchPage() {
     </ScrollView>
   );
 
-  const renderSuggestions = () => {
+  const filteredSuggestions = useMemo(() => {
     const filtered = searchState.suggestions
       .filter(s => s.text.toLowerCase().includes(searchState.query.toLowerCase()))
       .slice(0, 12);
@@ -705,6 +705,11 @@ export default function SearchPage() {
       if (!grouped[type]) grouped[type] = [];
       grouped[type].push(s);
     }
+    return { filtered, grouped };
+  }, [searchState.suggestions, searchState.query]);
+
+  const renderSuggestions = () => {
+    const { filtered, grouped } = filteredSuggestions;
 
     const typeLabels: Record<string, { label: string; icon: string }> = {
       product: { label: 'Products', icon: 'cube-outline' },

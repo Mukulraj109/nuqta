@@ -267,6 +267,7 @@ export default memo(function Section3({ productPrice = 1000, storeId }: Section3
         visible={showDetailsModal}
         animationType="slide"
         transparent={true}
+        statusBarTranslucent
         onRequestClose={() => setShowDetailsModal(false)}
       >
         <View style={styles.modalOverlay}>

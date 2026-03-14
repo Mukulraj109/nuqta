@@ -68,9 +68,10 @@ export default function SupportChatPage() {
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     if (messages.length > 0) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         scrollViewRef.current?.scrollToEnd({ animated: true });
       }, 100);
+      return () => clearTimeout(timer);
     }
   }, [messages.length]);
 

@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BusAmenities;
+export default React.memo(BusAmenities);

@@ -234,7 +234,7 @@ function CommentSkeleton() {
   );
 }
 
-export default function UGCCommentsModal({
+function UGCCommentsModal({
   visible,
   contentId,
   contentType,
@@ -992,3 +992,5 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
 });
+
+export default React.memo(UGCCommentsModal);

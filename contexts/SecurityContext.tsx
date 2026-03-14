@@ -1,7 +1,7 @@
 // Global Security Context
 // Manages security settings and applies them globally across the app
 
-import React, { createContext, useContext, useEffect, useState, useMemo, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, useMemo, useCallback, useRef, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // Import with fallback for when expo-local-authentication is not available
 let LocalAuthentication: any = null;
@@ -146,8 +146,22 @@ export function SecurityProvider({ children }: SecurityProviderProps) {
   const [biometricAvailable, setBiometricAvailable] = useState(false);
   const [biometricEnrolled, setBiometricEnrolled] = useState(false);
 
+  // Refs for state used inside stable callbacks (avoids re-creating callbacks on every state change)
+  const securitySettingsRef = useRef(securitySettings);
+  securitySettingsRef.current = securitySettings;
+  const privacySettingsRef = useRef(privacySettings);
+  privacySettingsRef.current = privacySettings;
+  const isAuthenticatedRef = useRef(isAuthenticated);
+  isAuthenticatedRef.current = isAuthenticated;
+  const userRef = useRef(user);
+  userRef.current = user;
+  const biometricAvailableRef = useRef(biometricAvailable);
+  biometricAvailableRef.current = biometricAvailable;
+  const biometricEnrolledRef = useRef(biometricEnrolled);
+  biometricEnrolledRef.current = biometricEnrolled;
+
   // Check biometric availability
-  const checkBiometricAvailability = async () => {
+  const checkBiometricAvailability = useCallback(async () => {
     try {
       if (!LocalAuthentication) {
         setBiometricAvailable(false);
@@ -158,7 +172,7 @@ export function SecurityProvider({ children }: SecurityProviderProps) {
       const hasHardware = await LocalAuthentication.hasHardwareAsync();
       const isEnrolled = await LocalAuthentication.isEnrolledAsync();
       const supportedTypes = await LocalAuthentication.supportedAuthenticationTypesAsync();
-      
+
       setBiometricAvailable(hasHardware);
       setBiometricEnrolled(isEnrolled);
 
@@ -175,11 +189,12 @@ export function SecurityProvider({ children }: SecurityProviderProps) {
       }
 
       // Update settings with available methods
-      if (securitySettings) {
+      const currentSettings = securitySettingsRef.current;
+      if (currentSettings) {
         setSecuritySettings({
-          ...securitySettings,
+          ...currentSettings,
           biometric: {
-            ...securitySettings.biometric,
+            ...currentSettings.biometric,
             availableMethods,
           },
         });
@@ -188,46 +203,10 @@ export function SecurityProvider({ children }: SecurityProviderProps) {
       setBiometricAvailable(false);
       setBiometricEnrolled(false);
     }
-  };
-
-  // Load settings from storage or backend
-  const loadSettings = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      if (isAuthenticated && user) {
-        // Load from backend
-        const response = await userSettingsApi.getUserSettings();
-        if (response.success && response.data) {
-          setSecuritySettings(response.data.security || defaultSecuritySettings);
-          setPrivacySettings(response.data.privacy || defaultPrivacySettings);
-          
-          // Save to local storage
-          await AsyncStorage.setItem(STORAGE_KEYS.SECURITY_SETTINGS, JSON.stringify(response.data.security || defaultSecuritySettings));
-          await AsyncStorage.setItem(STORAGE_KEYS.PRIVACY_SETTINGS, JSON.stringify(response.data.privacy || defaultPrivacySettings));
-          await AsyncStorage.setItem(STORAGE_KEYS.LAST_SYNC, new Date().toISOString());
-        } else {
-          // Fallback to local storage
-          await loadFromStorage();
-        }
-      } else {
-        // Load from local storage
-        await loadFromStorage();
-      }
-
-      // Check biometric availability
-      await checkBiometricAvailability();
-    } catch (err) {
-      setError('Failed to load security settings');
-      await loadFromStorage();
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, []);
 
   // Load from local storage
-  const loadFromStorage = async () => {
+  const loadFromStorage = useCallback(async () => {
     try {
       const [securityStored, privacyStored] = await Promise.all([
         AsyncStorage.getItem(STORAGE_KEYS.SECURITY_SETTINGS),
@@ -249,21 +228,58 @@ export function SecurityProvider({ children }: SecurityProviderProps) {
       setSecuritySettings(defaultSecuritySettings);
       setPrivacySettings(defaultPrivacySettings);
     }
-  };
+  }, []);
+
+  // Load settings from storage or backend
+  const loadSettings = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      if (isAuthenticatedRef.current && userRef.current) {
+        // Load from backend
+        const response = await userSettingsApi.getUserSettings();
+        if (response.success && response.data) {
+          setSecuritySettings(response.data.security || defaultSecuritySettings);
+          setPrivacySettings(response.data.privacy || defaultPrivacySettings);
+
+          // Save to local storage
+          await AsyncStorage.setItem(STORAGE_KEYS.SECURITY_SETTINGS, JSON.stringify(response.data.security || defaultSecuritySettings));
+          await AsyncStorage.setItem(STORAGE_KEYS.PRIVACY_SETTINGS, JSON.stringify(response.data.privacy || defaultPrivacySettings));
+          await AsyncStorage.setItem(STORAGE_KEYS.LAST_SYNC, new Date().toISOString());
+        } else {
+          // Fallback to local storage
+          await loadFromStorage();
+        }
+      } else {
+        // Load from local storage
+        await loadFromStorage();
+      }
+
+      // Check biometric availability
+      await checkBiometricAvailability();
+    } catch (err) {
+      setError('Failed to load security settings');
+      await loadFromStorage();
+    } finally {
+      setIsLoading(false);
+    }
+  }, [loadFromStorage, checkBiometricAvailability]);
 
   // Update security settings
-  const updateSecuritySettings = async (updates: Partial<SecuritySettings>): Promise<boolean> => {
+  const updateSecuritySettings = useCallback(async (updates: Partial<SecuritySettings>): Promise<boolean> => {
     try {
-      if (!securitySettings) return false;
+      const currentSettings = securitySettingsRef.current;
+      if (!currentSettings) return false;
 
-      const newSettings = { ...securitySettings, ...updates };
+      const newSettings = { ...currentSettings, ...updates };
       setSecuritySettings(newSettings);
 
       // Save to local storage immediately
       await AsyncStorage.setItem(STORAGE_KEYS.SECURITY_SETTINGS, JSON.stringify(newSettings));
 
       // Sync with backend if authenticated
-      if (isAuthenticated && user) {
+      if (isAuthenticatedRef.current && userRef.current) {
         try {
           const response = await userSettingsApi.updateSecuritySettings(newSettings);
           if (response.success) {
@@ -282,21 +298,22 @@ export function SecurityProvider({ children }: SecurityProviderProps) {
       setError('Failed to update security settings');
       return false;
     }
-  };
+  }, []);
 
   // Update privacy settings
-  const updatePrivacySettings = async (updates: Partial<PrivacySettings>): Promise<boolean> => {
+  const updatePrivacySettings = useCallback(async (updates: Partial<PrivacySettings>): Promise<boolean> => {
     try {
-      if (!privacySettings) return false;
+      const currentSettings = privacySettingsRef.current;
+      if (!currentSettings) return false;
 
-      const newSettings = { ...privacySettings, ...updates };
+      const newSettings = { ...currentSettings, ...updates };
       setPrivacySettings(newSettings);
 
       // Save to local storage immediately
       await AsyncStorage.setItem(STORAGE_KEYS.PRIVACY_SETTINGS, JSON.stringify(newSettings));
 
       // Sync with backend if authenticated
-      if (isAuthenticated && user) {
+      if (isAuthenticatedRef.current && userRef.current) {
         try {
           const response = await userSettingsApi.updatePrivacySettings(newSettings);
           if (response.success) {
@@ -315,22 +332,22 @@ export function SecurityProvider({ children }: SecurityProviderProps) {
       setError('Failed to update privacy settings');
       return false;
     }
-  };
+  }, []);
 
   // Refresh settings from backend
-  const refreshSettings = async () => {
+  const refreshSettings = useCallback(async () => {
     await loadSettings();
-  };
+  }, [loadSettings]);
 
   // Authenticate with biometric
-  const authenticateWithBiometric = async (): Promise<boolean> => {
+  const authenticateWithBiometric = useCallback(async (): Promise<boolean> => {
     try {
       if (!LocalAuthentication) {
         platformAlertSimple('Biometric Authentication', 'Biometric authentication is not available on this device.');
         return false;
       }
 
-      if (!biometricAvailable || !biometricEnrolled) {
+      if (!biometricAvailableRef.current || !biometricEnrolledRef.current) {
         platformAlertSimple('Biometric Authentication', 'Biometric authentication is not available or not enrolled.');
         return false;
       }
@@ -346,13 +363,13 @@ export function SecurityProvider({ children }: SecurityProviderProps) {
       platformAlertSimple('Authentication Failed', 'Biometric authentication failed. Please try again.');
       return false;
     }
-  };
+  }, []);
 
   // Enable two-factor authentication
-  const enableTwoFactorAuth = async (method: '2FA_SMS' | '2FA_EMAIL' | '2FA_APP'): Promise<boolean> => {
+  const enableTwoFactorAuth = useCallback(async (method: '2FA_SMS' | '2FA_EMAIL' | '2FA_APP'): Promise<boolean> => {
     try {
       const response = await userSettingsApi.enableTwoFactorAuth(method);
-      
+
       if (response.success) {
         // Update local state
         await updateSecuritySettings({
@@ -377,13 +394,13 @@ export function SecurityProvider({ children }: SecurityProviderProps) {
       platformAlertSimple('Error', 'Failed to enable two-factor authentication.');
       return false;
     }
-  };
+  }, [updateSecuritySettings]);
 
   // Disable two-factor authentication
-  const disableTwoFactorAuth = async (): Promise<boolean> => {
+  const disableTwoFactorAuth = useCallback(async (): Promise<boolean> => {
     try {
       const response = await userSettingsApi.disableTwoFactorAuth();
-      
+
       if (response.success) {
         // Update local state
         await updateSecuritySettings({
@@ -404,22 +421,23 @@ export function SecurityProvider({ children }: SecurityProviderProps) {
       platformAlertSimple('Error', 'Failed to disable two-factor authentication.');
       return false;
     }
-  };
+  }, [updateSecuritySettings]);
 
   // Generate backup codes
-  const generateBackupCodes = (): string[] => {
+  const generateBackupCodes = useCallback((): string[] => {
     const codes = [];
     for (let i = 0; i < 10; i++) {
       codes.push(Math.random().toString(36).substring(2, 8).toUpperCase());
     }
     return codes;
-  };
+  }, []);
 
   // Check if profile is visible based on privacy settings
-  const isProfileVisible = (visibility: 'PUBLIC' | 'FRIENDS' | 'PRIVATE'): boolean => {
-    if (!privacySettings) return false;
-    return privacySettings.profileVisibility === visibility;
-  };
+  const isProfileVisible = useCallback((visibility: 'PUBLIC' | 'FRIENDS' | 'PRIVATE'): boolean => {
+    const currentPrivacy = privacySettingsRef.current;
+    if (!currentPrivacy) return false;
+    return currentPrivacy.profileVisibility === visibility;
+  }, []);
 
   // Load settings on mount and when auth state changes
   // Skip during onboarding to prevent thundering herd of API calls on Android
@@ -474,7 +492,11 @@ export function SecurityProvider({ children }: SecurityProviderProps) {
     disableTwoFactorAuth,
     generateBackupCodes,
     isProfileVisible,
-  }), [securitySettings, privacySettings, isLoading, error, biometricAvailable, biometricEnrolled]);
+  }), [
+    securitySettings, privacySettings, isLoading, error, biometricAvailable, biometricEnrolled,
+    updateSecuritySettings, updatePrivacySettings, refreshSettings, authenticateWithBiometric,
+    enableTwoFactorAuth, disableTwoFactorAuth, generateBackupCodes, isProfileVisible,
+  ]);
 
   return (
     <SecurityContext.Provider value={value}>

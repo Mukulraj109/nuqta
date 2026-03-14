@@ -51,7 +51,7 @@ interface ProjectSubmissionFormProps {
   };
 }
 
-export default function ProjectSubmissionForm({
+function ProjectSubmissionForm({
   project,
   onSubmit,
   onCancel,
@@ -884,3 +884,5 @@ const styles = StyleSheet.create({
   },
 });
 
+
+export default React.memo(ProjectSubmissionForm);

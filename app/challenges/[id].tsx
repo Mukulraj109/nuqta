@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import apiClient from '@/services/apiClient';
 import { useAuth } from '@/contexts/AuthContext';
+import { useWalletContext } from '@/contexts/WalletContext';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import ClaimRewardModal from '@/components/challenges/ClaimRewardModal';
 import ChallengeTips from '@/components/challenges/ChallengeTips';
@@ -77,6 +78,7 @@ export default function ChallengeDetailPage() {
     afterBalance: number;
   } | null>(null);
   const { state: authState } = useAuth();
+  const { rezBalance, refreshWallet } = useWalletContext();
 
   // Pulse animation for Claim Reward button
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -232,9 +234,8 @@ export default function ChallengeDetailPage() {
     try {
       setClaiming(true);
 
-      // Get current wallet balance
-      const walletRes = await apiClient.get('/wallet/balance');
-      const beforeBalance = (walletRes.data as any)?.balance || 0;
+      // Use wallet balance from context instead of extra API call
+      const beforeBalance = rezBalance;
 
       // Claim the reward
       const response = await apiClient.post(`/gamification/challenges/${data.userProgress._id}/claim`);
@@ -250,6 +251,9 @@ export default function ChallengeDetailPage() {
         );
 
         const afterBalance = syncResult.success ? syncResult.newWalletBalance : beforeBalance + coinsEarned;
+
+        // Refresh wallet context so balance is up-to-date across the app
+        refreshWallet();
 
         // Show celebration modal
         setClaimData({

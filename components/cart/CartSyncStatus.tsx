@@ -227,4 +227,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CartSyncStatus;
+export default React.memo(CartSyncStatus);

@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { CategoryTabsProps } from '@/types/going-out.types';
 
-export function CategoryTabs({
+function _CategoryTabsInner({
   categories,
   activeCategory,
   onCategoryChange,
@@ -297,3 +297,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export const CategoryTabs = React.memo(_CategoryTabsInner);

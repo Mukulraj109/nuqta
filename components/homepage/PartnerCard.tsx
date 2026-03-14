@@ -153,4 +153,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PartnerCard;
+export default React.memo(PartnerCard);

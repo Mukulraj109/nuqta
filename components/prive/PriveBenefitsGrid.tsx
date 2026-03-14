@@ -242,4 +242,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveBenefitsGrid;
+export default React.memo(PriveBenefitsGrid);

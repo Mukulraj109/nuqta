@@ -16,6 +16,7 @@ import Animated, {
   useAnimatedScrollHandler,
   interpolate,
   Extrapolate,
+  runOnJS,
 } from 'react-native-reanimated';
 import { CategoryCarouselItem } from '@/types/category.types';
 
@@ -177,7 +178,7 @@ const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
     onScroll: (event) => {
       scrollX.value = event.contentOffset.x;
       const index = Math.round(event.contentOffset.x / CARD_WIDTH);
-      setActiveIndex(index);
+      runOnJS(setActiveIndex)(index);
     },
   });
 
@@ -368,4 +369,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryCarousel;
+export default React.memo(CategoryCarousel);

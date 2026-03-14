@@ -987,4 +987,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SizeGuideModal;
+export default React.memo(SizeGuideModal);

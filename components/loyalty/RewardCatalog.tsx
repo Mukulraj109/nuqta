@@ -29,7 +29,7 @@ const CATEGORIES: Array<{ label: string; value: RewardCategory | 'all' }> = [
   { label: 'Exclusive', value: 'exclusive' },
 ];
 
-export default function RewardCatalog({
+function RewardCatalog({
   rewards,
   onRedeemReward,
   canRedeemReward,
@@ -319,3 +319,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(RewardCatalog);

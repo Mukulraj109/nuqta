@@ -889,4 +889,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProgramDetailModal;
+export default React.memo(ProgramDetailModal);

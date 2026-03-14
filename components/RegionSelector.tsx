@@ -458,4 +458,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegionSelector;
+export default React.memo(RegionSelector);

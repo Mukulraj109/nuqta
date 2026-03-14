@@ -33,7 +33,7 @@ interface FilterChip {
   onPress: () => void;
 }
 
-export function FilterChips({
+function _FilterChipsInner({
   filters,
   onFilterChange,
   activeFilters,
@@ -297,3 +297,5 @@ const styles = StyleSheet.create({
     color: COLORS.error,
   },
 });
+
+export const FilterChips = React.memo(_FilterChipsInner);

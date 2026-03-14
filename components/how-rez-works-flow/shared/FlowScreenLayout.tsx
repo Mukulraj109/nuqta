@@ -241,4 +241,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default FlowScreenLayout;
+export default React.memo(FlowScreenLayout);

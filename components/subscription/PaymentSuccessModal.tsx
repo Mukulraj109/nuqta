@@ -24,7 +24,7 @@ interface PaymentSuccessModalProps {
   onClose: () => void;
 }
 
-export default function PaymentSuccessModal({
+function PaymentSuccessModal({
   visible,
   tier,
   price,
@@ -397,3 +397,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(PaymentSuccessModal);

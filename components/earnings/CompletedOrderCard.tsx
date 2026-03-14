@@ -41,7 +41,7 @@ interface CompletedOrderCardProps {
   submissionStatus?: SubmissionStatus;
 }
 
-export default function CompletedOrderCard({
+function CompletedOrderCard({
   order,
   onEarnPress,
   alreadyEarned = false,
@@ -382,3 +382,5 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
 });
+
+export default React.memo(CompletedOrderCard);

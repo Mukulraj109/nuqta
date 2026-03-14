@@ -38,7 +38,7 @@ const BENEFITS = [
   { icon: 'shield-checkmark-outline' as const, text: 'Reputation-based privileges' },
 ];
 
-export default function PriveLockedTeaser({ onAccessGranted }: PriveLockedTeaserProps) {
+function PriveLockedTeaser({ onAccessGranted }: PriveLockedTeaserProps) {
   const insets = useSafeAreaInsets();
   const [code, setCode] = useState('');
   const [isValidating, setIsValidating] = useState(false);
@@ -391,3 +391,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default React.memo(PriveLockedTeaser);

@@ -16,7 +16,7 @@ interface CategoryBannerProps {
   onPress?: (banner: CategoryBannerType) => void;
 }
 
-export default function CategoryBanner({ banner, onPress }: CategoryBannerProps) {
+function CategoryBanner({ banner, onPress }: CategoryBannerProps) {
   const { width } = Dimensions.get('window');
   const bannerWidth = width - 32; // Account for horizontal padding
 
@@ -188,3 +188,5 @@ const styles = StyleSheet.create({
     opacity: 0.9,
   },
 });
+
+export default React.memo(CategoryBanner);

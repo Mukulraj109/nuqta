@@ -17,7 +17,7 @@ interface TierBadgeProps {
   showText?: boolean;
 }
 
-export default function TierBadge({
+function TierBadge({
   tier,
   size = 'medium',
   style,
@@ -174,3 +174,5 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
 });
+
+export default React.memo(TierBadge);

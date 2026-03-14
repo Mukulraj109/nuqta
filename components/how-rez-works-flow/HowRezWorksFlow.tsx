@@ -141,4 +141,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default HowRezWorksFlow;
+export default React.memo(HowRezWorksFlow);

@@ -43,7 +43,7 @@ interface SpinHistoryProps {
   limit?: number;
 }
 
-export default function SpinHistory({ limit = 10 }: SpinHistoryProps) {
+function SpinHistory({ limit = 10 }: SpinHistoryProps) {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
   const [history, setHistory] = useState<SpinHistoryItem[]>([]);
@@ -355,3 +355,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(SpinHistory);

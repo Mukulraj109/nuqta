@@ -13,7 +13,7 @@ interface GameCardProps {
   isLocked?: boolean;
 }
 
-export default function GameCard({ 
+function GameCard({ 
   title, 
   description, 
   icon, 
@@ -132,3 +132,5 @@ const styles = StyleSheet.create({
     color: '#64748B',
   },
 });
+
+export default React.memo(GameCard);

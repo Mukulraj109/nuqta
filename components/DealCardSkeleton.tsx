@@ -7,7 +7,7 @@ import {
   Platform,
 } from 'react-native';
 
-export default function DealCardSkeleton() {
+function DealCardSkeleton() {
   const screenWidth = Dimensions.get('window').width;
   const shimmerAnim = useRef(new Animated.Value(0)).current;
 
@@ -257,3 +257,5 @@ const createStyles = (screenWidth: number) => {
     },
   });
 };
+
+export default React.memo(DealCardSkeleton);

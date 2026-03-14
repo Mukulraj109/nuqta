@@ -185,4 +185,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PackageInfoCard;
+export default React.memo(PackageInfoCard);

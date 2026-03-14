@@ -251,4 +251,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HotRightNow;
+export default React.memo(HotRightNow);

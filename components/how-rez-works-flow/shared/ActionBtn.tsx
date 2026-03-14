@@ -186,4 +186,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ActionBtn;
+export default React.memo(ActionBtn);

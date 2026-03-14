@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PackageCancellationPolicy;
+export default React.memo(PackageCancellationPolicy);

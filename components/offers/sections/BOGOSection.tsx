@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
@@ -196,7 +196,7 @@ export const BOGOSection: React.FC<BOGOSectionProps> = ({
             </View>
 
             <View style={styles.imageContainer}>
-              <Image
+              <CachedImage
                 source={{ uri: offer.image }}
                 style={styles.image}
                 contentFit="cover"
@@ -204,7 +204,7 @@ export const BOGOSection: React.FC<BOGOSectionProps> = ({
               />
               <View style={styles.storeLogoContainer}>
                 {offer.store.logo ? (
-                  <Image
+                  <CachedImage
                     source={{ uri: offer.store.logo }}
                     style={styles.storeLogo}
                     contentFit="contain"
@@ -247,4 +247,4 @@ export const BOGOSection: React.FC<BOGOSectionProps> = ({
   );
 };
 
-export default BOGOSection;
+export default React.memo(BOGOSection);

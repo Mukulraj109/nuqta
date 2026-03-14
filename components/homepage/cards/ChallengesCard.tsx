@@ -215,4 +215,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChallengesCard;
+export default React.memo(ChallengesCard);

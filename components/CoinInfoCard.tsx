@@ -1,10 +1,10 @@
 // components/CoinInfoCard.tsx
 import React from 'react';
 import { View, StyleSheet, Dimensions, Text, Pressable, Platform } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { CoinInfoCardProps } from '@/types/profile';
 
-export const CoinInfoCard: React.FC<CoinInfoCardProps> = ({ 
+const _CoinInfoCardInner: React.FC<CoinInfoCardProps> = ({
   image, 
   title, 
   subtitle,
@@ -13,7 +13,7 @@ export const CoinInfoCard: React.FC<CoinInfoCardProps> = ({
   const CardComponent = onPress ? Pressable : View;
   return (
     <CardComponent style={styles.card} onPress={onPress}>
-      <Image
+      <CachedImage
         source={image}
         style={styles.image}
         contentFit="cover"
@@ -106,3 +106,5 @@ const styles = StyleSheet.create({
     }),
   },
 });
+
+export const CoinInfoCard = React.memo(_CoinInfoCardInner);

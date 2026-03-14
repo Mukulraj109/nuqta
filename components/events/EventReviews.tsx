@@ -525,4 +525,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventReviews;
+export default React.memo(EventReviews);

@@ -21,7 +21,7 @@ const actions: QuickAction[] = [
   { icon: '🎮', label: 'Games', route: '/games', color: '#9C27B0' },
 ];
 
-export default function QuickAccessFAB() {
+function QuickAccessFAB() {
   const [expanded, setExpanded] = useState(false);
   const [animation] = useState(new Animated.Value(0));
 
@@ -74,7 +74,8 @@ export default function QuickAccessFAB() {
                 <Pressable
                   style={[styles.actionButton, { backgroundColor: action.color }]}
                   onPress={() => handleActionPress(action.route)}
-                 
+                  accessibilityLabel={action.label}
+                  accessibilityRole="button"
                 >
                   <ThemedText style={styles.actionIcon}>{action.icon}</ThemedText>
                   <ThemedText style={styles.actionLabel}>{action.label}</ThemedText>
@@ -87,7 +88,8 @@ export default function QuickAccessFAB() {
 
       <Pressable
         onPress={toggleExpand}
-       
+        accessibilityLabel={expanded ? 'Close quick actions' : 'Quick actions menu'}
+        accessibilityRole="button"
         style={styles.fabTouchable}
       >
         <LinearGradient
@@ -190,3 +192,5 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
 });
+
+export default React.memo(QuickAccessFAB);

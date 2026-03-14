@@ -27,7 +27,7 @@ export interface ReportToastProps {
  *   onDismiss={() => setToastVisible(false)}
  * />
  */
-export default function ReportToast({
+function ReportToast({
   visible,
   type,
   message,
@@ -178,3 +178,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+
+export default React.memo(ReportToast);

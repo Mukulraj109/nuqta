@@ -101,4 +101,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveQuickActions;
+export default React.memo(PriveQuickActions);

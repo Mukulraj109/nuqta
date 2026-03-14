@@ -543,4 +543,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SellerInformation;
+export default React.memo(SellerInformation);

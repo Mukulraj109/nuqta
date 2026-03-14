@@ -23,7 +23,7 @@ interface OrderTimelineProps {
   estimatedDeliveryTime?: Date | string;
 }
 
-export default function OrderTimeline({
+function OrderTimeline({
   currentStatus,
   timeline,
   estimatedDeliveryTime,
@@ -360,3 +360,5 @@ const styles = StyleSheet.create({
     color: '#9ca3af',
   },
 });
+
+export default React.memo(OrderTimeline);

@@ -22,7 +22,7 @@ interface ZoomableImageProps {
   onLoadEnd?: () => void;
 }
 
-export default function ZoomableImage({
+function ZoomableImage({
   source,
   style,
   onLoadStart,
@@ -192,3 +192,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(ZoomableImage);

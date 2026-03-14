@@ -16,7 +16,7 @@ interface BadgeProps {
   testID?: string;
 }
 
-export default function Badge({
+function Badge({
   label,
   variant = 'primary',
   size = 'medium',
@@ -113,3 +113,5 @@ const styles = StyleSheet.create({
     minHeight: 32,
   },
 });
+
+export default React.memo(Badge);

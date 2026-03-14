@@ -11,7 +11,7 @@
 
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Switch } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS } from '@/constants/DesignTokens';
 import CrossPlatformSlider from '@/components/common/CrossPlatformSlider';
@@ -130,21 +130,21 @@ export const CoinToggleRow: React.FC<CoinToggleRowProps> = ({
       <View style={styles.mainRow}>
         <View style={[styles.iconContainer, { backgroundColor: style.bgColor }]}>
           {(type === 'rez' || type === 'nuqta') ? (
-            <Image
+            <CachedImage
               source={BRAND.COIN_IMAGE}
               style={styles.coinIcon}
               contentFit="contain"
               transition={200}
             />
           ) : type === 'promo' ? (
-            <Image
+            <CachedImage
               source={require('@/assets/images/promo-coin.png')}
               style={styles.coinIcon}
               contentFit="contain"
               transition={200}
             />
           ) : type === 'branded' ? (
-            <Image
+            <CachedImage
               source={require('@/assets/images/wasil-coin.png')}
               style={styles.coinIcon}
               contentFit="contain"
@@ -372,4 +372,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CoinToggleRow;
+export default React.memo(CoinToggleRow);

@@ -80,7 +80,7 @@ interface QASectionProps {
  * />
  * ```
  */
-export default function QASection({
+function QASection({
   productId,
   questions = [],
   onAskQuestion,
@@ -654,3 +654,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(QASection);

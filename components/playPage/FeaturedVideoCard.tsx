@@ -8,7 +8,7 @@ import { FeaturedVideoCardProps, PLAY_PAGE_COLORS } from '@/types/playPage.types
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function FeaturedVideoCard({ 
+function FeaturedVideoCard({ 
   item, 
   onPress, 
   onLike,
@@ -392,3 +392,5 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
 });
+
+export default React.memo(FeaturedVideoCard);

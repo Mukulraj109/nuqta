@@ -62,7 +62,7 @@ interface TimeSlot {
   remainingCapacity: number;
 }
 
-export default function BookClassPage() {
+function BookClassPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string }>();
   const { state: authState } = useAuth();
@@ -872,3 +872,5 @@ const styles = StyleSheet.create({
   viewBookingsBtn: { marginTop: 12, paddingVertical: 12, alignItems: 'center' },
   viewBookingsBtnText: { fontSize: 14, fontWeight: '600', color: COLORS.orange },
 });
+
+export default React.memo(BookClassPage);

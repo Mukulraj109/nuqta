@@ -13,7 +13,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
 
-export default function StoreHeaderSkeleton() {
+function StoreHeaderSkeleton() {
   return (
     <View
       style={styles.container}
@@ -138,3 +138,5 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 });
+
+export default React.memo(StoreHeaderSkeleton);

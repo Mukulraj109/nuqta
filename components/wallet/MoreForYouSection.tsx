@@ -169,4 +169,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MoreForYouSection;
+export default React.memo(MoreForYouSection);

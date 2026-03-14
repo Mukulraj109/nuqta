@@ -17,7 +17,7 @@ interface StoreAvailabilityBadgeProps {
   showResponseTime?: boolean;
 }
 
-export default function StoreAvailabilityBadge({
+function StoreAvailabilityBadge({
   isOnline,
   isOpen = true,
   responseTime = 'Usually replies in a few hours',
@@ -141,3 +141,5 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 });
+
+export default React.memo(StoreAvailabilityBadge);

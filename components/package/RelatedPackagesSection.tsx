@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
@@ -91,7 +91,7 @@ const RelatedPackagesSection: React.FC<RelatedPackagesSectionProps> = ({ current
               onPress={() => handlePackagePress(packageId)}
              
             >
-              <Image source={{ uri: imageUrl }} style={styles.packageImage} contentFit="cover" cachePolicy="memory-disk" />
+              <CachedImage source={{ uri: imageUrl }} style={styles.packageImage} contentFit="cover" cachePolicy="memory-disk" />
               {cashback > 0 && (
                 <View style={styles.cashbackBadge}>
                   <Text style={styles.cashbackText}>{cashback}%</Text>
@@ -192,4 +192,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RelatedPackagesSection;
+export default React.memo(RelatedPackagesSection);

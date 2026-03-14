@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -83,7 +83,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
     >
       <View style={[styles.restaurantImageContainer, isCompact && styles.restaurantImageContainerCompact]}>
         {imageUri && !imageError ? (
-          <Image
+          <CachedImage
             source={{ uri: imageUri }}
             style={styles.restaurantImage}
             contentFit="cover"
@@ -494,4 +494,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RestaurantCard;
+export default React.memo(RestaurantCard);

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   View,
   ScrollView,
@@ -82,13 +82,13 @@ export default function ArticlesPage() {
   }, [fetchArticles]);
 
   // Filter articles based on search
-  const filteredArticles = articles.filter((article) => {
+  const filteredArticles = useMemo(() => articles.filter((article) => {
     const matchesSearch = article.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase()) ||
       article.excerpt?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesSearch;
-  });
+  }), [articles, searchQuery]);
 
   const handleArticlePress = useCallback((article: Article) => {
     router.push(`/article/${article.id}`);
@@ -98,14 +98,14 @@ export default function ArticlesPage() {
     router.push('/article/create');
   }, [router]);
 
-  const renderArticleCard = ({ item }: { item: Article }) => (
+  const renderArticleCard = useCallback(({ item }: { item: Article }) => (
     <View style={{ width: CARD_WIDTH }}>
       <ArticleCard
         article={item}
         onPress={handleArticlePress}
       />
     </View>
-  );
+  ), [handleArticlePress]);
 
   return (
     <View style={styles.container}>
@@ -276,6 +276,10 @@ export default function ArticlesPage() {
           columnWrapperStyle={styles.gridRow}
           contentContainerStyle={styles.gridContent}
           showsVerticalScrollIndicator={false}
+          removeClippedSubviews={Platform.OS !== 'web'}
+          maxToRenderPerBatch={15}
+          windowSize={7}
+          initialNumToRender={8}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

@@ -236,6 +236,7 @@ export default memo(function CombinedSection78({
       <Modal
         visible={showDetailsModal}
         transparent={true}
+        statusBarTranslucent
         animationType="none"
         onRequestClose={handleHideDetails}
       >

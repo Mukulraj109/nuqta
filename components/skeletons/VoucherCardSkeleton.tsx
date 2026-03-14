@@ -13,7 +13,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
 
-export default function VoucherCardSkeleton() {
+function VoucherCardSkeleton() {
   return (
     <View
       style={styles.card}
@@ -166,3 +166,5 @@ const styles = StyleSheet.create({
     gap: 10,
   },
 });
+
+export default React.memo(VoucherCardSkeleton);

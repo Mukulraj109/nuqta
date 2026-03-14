@@ -1,7 +1,7 @@
 // My Vouchers Page
 // Shows user's owned vouchers and gift cards
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -237,17 +237,17 @@ const MyVouchersPage = () => {
     }
   }, [loadingMore, hasMore, loading, page, fetchVouchers]);
 
-  const filteredVouchers = vouchers.filter((voucher) => {
+  const filteredVouchers = useMemo(() => vouchers.filter((voucher) => {
     if (activeTab === 'all') return true;
     return voucher.status === activeTab;
-  });
+  }), [vouchers, activeTab]);
 
-  const handleCopyCode = async (code: string) => {
+  const handleCopyCode = useCallback(async (code: string) => {
     await Clipboard.setStringAsync(code);
     platformAlertSimple('Copied to Clipboard!', `Voucher code "${code}" has been copied to clipboard`);
-  };
+  }, []);
 
-  const handleApplyVoucher = async (voucher: UserVoucher) => {
+  const handleApplyVoucher = useCallback(async (voucher: UserVoucher) => {
     // Check if cart has items first
     if (!cartState.items || cartState.items.length === 0) {
       platformAlertConfirm(
@@ -329,9 +329,9 @@ const MyVouchersPage = () => {
         'Go to Cart'
       );
     }
-  };
+  }, [cartState.items, currencySymbol, router]);
 
-  const handleShareVoucher = async (voucher: UserVoucher) => {
+  const handleShareVoucher = useCallback(async (voucher: UserVoucher) => {
     try {
       const message = `🎁 Check out this amazing voucher!\n\n` +
         `${voucher.brandName} - ${currencySymbol}${voucher.value}\n` +
@@ -346,14 +346,14 @@ const MyVouchersPage = () => {
     } catch (error) {
       logger.error('Error sharing voucher:', error);
     }
-  };
+  }, [currencySymbol]);
 
-  const handleUseVoucher = (voucher: UserVoucher) => {
+  const handleUseVoucher = useCallback((voucher: UserVoucher) => {
     setSelectedVoucher(voucher);
     setShowQRModal(true);
-  };
+  }, []);
 
-  const handleUseOnline = (voucher: UserVoucher) => {
+  const handleUseOnline = useCallback((voucher: UserVoucher) => {
     // For cashback vouchers (RED-xxx), redirect to apply flow instead
     if (voucher.voucherType === 'cashback') {
       platformAlertConfirm(
@@ -372,7 +372,7 @@ const MyVouchersPage = () => {
     // Show online redemption modal for gift cards
     setSelectedVoucher(voucher);
     setShowRedemptionModal(true);
-  };
+  }, [handleApplyVoucher]);
 
   const handleMarkAsUsed = async (voucherId: string) => {
     try {
@@ -416,7 +416,7 @@ const MyVouchersPage = () => {
     }
   };
 
-  const renderVoucher = ({ item }: { item: UserVoucher }) => {
+  const renderVoucher = useCallback(({ item }: { item: UserVoucher }) => {
     const isExpired = item.status === 'expired';
     const isUsed = item.status === 'used';
     const isActive = item.status === 'active';
@@ -424,7 +424,7 @@ const MyVouchersPage = () => {
     return (
       <Pressable
         style={[styles.voucherCard, isExpired && styles.expiredCard]}
-       
+
         disabled={!isActive}
       >
         <LinearGradient
@@ -591,7 +591,7 @@ const MyVouchersPage = () => {
         </LinearGradient>
       </Pressable>
     );
-  };
+  }, [currencySymbol, handleCopyCode, handleApplyVoucher, handleShareVoucher, handleUseOnline, handleUseVoucher]);
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>

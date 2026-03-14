@@ -245,4 +245,4 @@ export const SpecialProfilesSection: React.FC<SpecialProfilesSectionProps> = ({
   );
 };
 
-export default SpecialProfilesSection;
+export default React.memo(SpecialProfilesSection);

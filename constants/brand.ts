@@ -24,6 +24,10 @@ export const BRAND = {
   PAY_NAME: 'Rez Pay',
   PRIVE_NAME: 'Rez Prive',
 
+  // Routes (must match actual file names in app/)
+  HOW_IT_WORKS_ROUTE: '/how-rez-works' as const,
+  HOW_CASH_STORE_WORKS_ROUTE: '/how-cash-store-works' as const,
+
   // Contact & links
   SUPPORT_EMAIL: 'support@rezapp.com',
   WEBSITE: 'https://www.rezapp.com',

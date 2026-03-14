@@ -41,7 +41,7 @@ interface NearbyStoresProps {
   itemStyle?: any;
 }
 
-export default function NearbyStores({
+function NearbyStores({
   radius = 5,
   limit = 20,
   showDistance = true,
@@ -490,3 +490,5 @@ export function FullNearbyStores(props: NearbyStoresProps) {
     />
   );
 }
+
+export default React.memo(NearbyStores);

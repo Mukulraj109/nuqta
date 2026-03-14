@@ -5,8 +5,15 @@ import {
   StyleSheet,
   Pressable,
   Animated,
+  LayoutAnimation,
+  UIManager,
+  Platform,
   ActivityIndicator,
 } from 'react-native';
+
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import earningsApi, { PartnerEarningsSummary } from '@/services/earningsApi';
@@ -61,7 +68,7 @@ const BREAKDOWN_TOOLTIPS: Record<string, string> = {
   'Task Rewards': 'Earned by completing partner tasks like reviews and social shares',
 };
 
-export default function EarningsBreakdown({
+function EarningsBreakdown({
   onViewDetails,
   onRefresh,
   compact = false,
@@ -80,7 +87,6 @@ export default function EarningsBreakdown({
 
   const [state, setState] = useState<EarningsState>({ status: 'loading' });
   const [isExpanded, setIsExpanded] = useState(!compact);
-  const animatedHeight = useRef(new Animated.Value(compact ? 0 : 1)).current;
   const shimmerAnim = useRef(new Animated.Value(0)).current;
 
   // Shimmer animation loop
@@ -160,12 +166,7 @@ export default function EarningsBreakdown({
   }, []);
 
   const toggleExpanded = () => {
-    const toValue = isExpanded ? 0 : 1;
-    Animated.timing(animatedHeight, {
-      toValue,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsExpanded(!isExpanded);
   };
 
@@ -658,3 +659,5 @@ const styles = StyleSheet.create({
     color: COLORS.warning,
   },
 });
+
+export default React.memo(EarningsBreakdown);

@@ -188,4 +188,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FlightInfoCard;
+export default React.memo(FlightInfoCard);

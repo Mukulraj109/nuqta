@@ -17,7 +17,7 @@ interface MilestoneTrackerProps {
   onClaimReward?: (milestoneId: string) => void;
 }
 
-export default function MilestoneTracker({ 
+function MilestoneTracker({ 
   milestones, 
   currentOrders = 0, // Fixed: Don't hardcode to 12, use actual value from props
   onClaimReward 
@@ -503,3 +503,5 @@ const styles = StyleSheet.create({
     marginLeft: -1,
   },
 });
+
+export default React.memo(MilestoneTracker);

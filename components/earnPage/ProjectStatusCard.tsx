@@ -5,7 +5,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ProjectStatusCardProps } from '@/types/earnPage.types';
 import { PROJECT_STATUS_COLORS } from '@/constants/EarnPageColors';
 
-export default function ProjectStatusCard({ 
+function ProjectStatusCard({ 
   label, 
   count, 
   color, 
@@ -212,3 +212,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default React.memo(ProjectStatusCard);

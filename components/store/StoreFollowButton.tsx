@@ -47,7 +47,7 @@ interface StoreFollowButtonProps {
  * />
  * ```
  */
-export default function StoreFollowButton({
+function StoreFollowButton({
   storeId,
   storeName = 'this store',
   initialFollowing = false,
@@ -505,3 +505,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default React.memo(StoreFollowButton);

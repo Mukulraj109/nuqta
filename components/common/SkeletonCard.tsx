@@ -16,7 +16,7 @@ interface SkeletonCardProps {
  * Provides a reusable skeleton loader with customizable shape and size
  * Includes smooth shimmer animation for better perceived performance
  */
-export default function SkeletonCard({
+function SkeletonCard({
   width = '100%',
   height = 20,
   borderRadius = 8,
@@ -95,3 +95,5 @@ export default function SkeletonCard({
 const styles = StyleSheet.create({
   // No additional styles needed for base component
 });
+
+export default React.memo(SkeletonCard);

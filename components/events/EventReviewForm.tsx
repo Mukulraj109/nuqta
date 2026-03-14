@@ -329,4 +329,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventReviewForm;
+export default React.memo(EventReviewForm);

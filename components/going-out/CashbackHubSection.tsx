@@ -17,7 +17,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const CARD_WIDTH = 160;
 const CARD_SPACING = 12;
 
-export function CashbackHubSection({
+function _CashbackHubSectionInner({
   section,
   onProductPress,
   onToggleWishlist,
@@ -215,3 +215,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export const CashbackHubSection = React.memo(_CashbackHubSectionInner);

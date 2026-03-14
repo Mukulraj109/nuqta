@@ -322,4 +322,4 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
   );
 };
 
-export default HomeHeader;
+export default React.memo(HomeHeader);

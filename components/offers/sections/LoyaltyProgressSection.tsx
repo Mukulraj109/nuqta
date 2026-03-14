@@ -245,4 +245,4 @@ export const LoyaltyProgressSection: React.FC<LoyaltyProgressSectionProps> = ({
   );
 };
 
-export default LoyaltyProgressSection;
+export default React.memo(LoyaltyProgressSection);

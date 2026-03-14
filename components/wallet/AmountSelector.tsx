@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AmountSelector;
+export default React.memo(AmountSelector);

@@ -29,7 +29,7 @@ interface PointsNotificationProps {
   onDismiss: () => void;
 }
 
-export default function PointsNotification({ data, onDismiss }: PointsNotificationProps) {
+function PointsNotification({ data, onDismiss }: PointsNotificationProps) {
   const translateY = useRef(new Animated.Value(-100)).current;
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(0.8)).current;
@@ -206,3 +206,5 @@ const styles = StyleSheet.create({
     left: 0,
   },
 });
+
+export default React.memo(PointsNotification);

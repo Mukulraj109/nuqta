@@ -83,7 +83,7 @@ const STEPS: { key: Step; label: string; icon: string }[] = [
   { key: 'confirm', label: 'Confirm', icon: '✅' },
 ];
 
-export default function PlanTripPage() {
+function PlanTripPage() {
   const router = useRouter();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
@@ -447,3 +447,5 @@ const styles = StyleSheet.create({
   confirmBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: COLORS.green, borderRadius: 16, paddingVertical: 16 },
   confirmBtnText: { fontSize: 16, fontWeight: '600', color: COLORS.white },
 });
+
+export default React.memo(PlanTripPage);

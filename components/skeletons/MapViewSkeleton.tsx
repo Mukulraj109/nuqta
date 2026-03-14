@@ -10,7 +10,7 @@ import SkeletonLoader from './SkeletonLoader';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-export default function MapViewSkeleton() {
+function MapViewSkeleton() {
   return (
     <View style={styles.container}>
       {/* Map Area */}
@@ -79,3 +79,5 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 });
+
+export default React.memo(MapViewSkeleton);

@@ -522,4 +522,4 @@ export const mockEMIPartners = [
   'ZestMoney',
 ];
 
-export default PaymentMethods;
+export default React.memo(PaymentMethods);

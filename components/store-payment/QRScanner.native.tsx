@@ -46,7 +46,7 @@ interface QRScannerProps {
   onManualEntry?: () => void;
 }
 
-export default function QRScanner({ onScan, onClose, onManualEntry }: QRScannerProps) {
+function QRScanner({ onScan, onClose, onManualEntry }: QRScannerProps) {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
   const [permission, requestPermission] = useCameraPermissions();
@@ -610,3 +610,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 });
+
+export default React.memo(QRScanner);

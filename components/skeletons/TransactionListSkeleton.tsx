@@ -21,7 +21,7 @@ function TransactionRow() {
   );
 }
 
-export default function TransactionListSkeleton({ count = 8 }: { count?: number }) {
+function TransactionListSkeleton({ count = 8 }: { count?: number }) {
   return (
     <View style={styles.container}>
       {/* Summary Card */}
@@ -91,3 +91,5 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 });
+
+export default React.memo(TransactionListSkeleton);

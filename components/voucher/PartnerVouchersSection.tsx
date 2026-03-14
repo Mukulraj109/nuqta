@@ -32,7 +32,7 @@ const COLORS = {
   border: '#E5E7EB',
 };
 
-export default function PartnerVouchersSection({
+function PartnerVouchersSection({
   onVoucherCopied,
   onApplyVoucher,
   compact = false,
@@ -422,3 +422,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default React.memo(PartnerVouchersSection);

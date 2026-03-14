@@ -188,17 +188,6 @@ export const HomeTabProvider: React.FC<HomeTabProviderProps> = ({ children }) =>
     }));
   }, []);
 
-  // Tab-specific flags (new API)
-  const isNearUActive = activeTab === 'near-u';
-  const isMallActive = activeTab === 'mall';
-  const isCashActive = activeTab === 'cash';
-  const isPriveActive = activeTab === 'prive';
-
-  // Legacy API (backward compatibility)
-  const activeHomeTab = TAB_TO_LEGACY[activeTab];
-  const isRezMallActive = activeTab === 'mall';
-  const isCashStoreActive = activeTab === 'cash';
-
   // Legacy setter (maps to new API)
   const setActiveHomeTab = useCallback(
     (tab: HomeTabId) => {
@@ -234,31 +223,29 @@ export const HomeTabProvider: React.FC<HomeTabProviderProps> = ({ children }) =>
 
     // Privé
     priveEligibility: memoizedPriveEligibility,
-    isPriveEligible: priveEligibility.isEligible,
+    isPriveEligible: memoizedPriveEligibility.isEligible,
     refreshPriveEligibility,
     markPriveGlowSeen,
 
-    // Tab flags (new)
-    isNearUActive,
-    isMallActive,
-    isCashActive,
-    isPriveActive,
+    // Tab flags (derived from activeTab — computed inside useMemo to reduce deps)
+    isNearUActive: activeTab === 'near-u',
+    isMallActive: activeTab === 'mall',
+    isCashActive: activeTab === 'cash',
+    isPriveActive: activeTab === 'prive',
 
-    // Legacy API
-    activeHomeTab,
+    // Legacy API (derived from activeTab — computed inside useMemo to reduce deps)
+    activeHomeTab: TAB_TO_LEGACY[activeTab],
     setActiveHomeTab,
-    isRezMallActive,
-    isCashStoreActive,
+    isRezMallActive: activeTab === 'mall',
+    isCashStoreActive: activeTab === 'cash',
 
     // Scroll to top
     scrollToTop,
     registerScrollToTop,
   }), [
     activeTab, setActiveTab, isLoaded, isTransitioning,
-    memoizedPriveEligibility, priveEligibility.isEligible, refreshPriveEligibility, markPriveGlowSeen,
-    isNearUActive, isMallActive, isCashActive, isPriveActive,
-    activeHomeTab, setActiveHomeTab, isRezMallActive, isCashStoreActive,
-    scrollToTop, registerScrollToTop,
+    memoizedPriveEligibility, refreshPriveEligibility, markPriveGlowSeen,
+    setActiveHomeTab, scrollToTop, registerScrollToTop,
   ]);
 
   return (

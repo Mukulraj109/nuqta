@@ -6,7 +6,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { CategoryTileProps, CategoryColor } from '@/types/earnPage.types';
 import { CATEGORY_GRADIENTS, CATEGORY_SOLID_COLORS, EARN_COLORS } from '@/constants/EarnPageColors';
 
-export default function CategoryTile({ 
+function CategoryTile({ 
   category, 
   onPress, 
   size = 'medium' 
@@ -195,3 +195,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(CategoryTile);

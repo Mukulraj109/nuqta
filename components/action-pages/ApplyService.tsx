@@ -61,7 +61,7 @@ const DOC_TYPES = [
   { id: 'bank-statement', label: 'Bank Statement', icon: 'document-text-outline' },
 ];
 
-export default function ApplyServicePage() {
+function ApplyServicePage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string; service?: string }>();
   const { state: authState } = useAuth();
@@ -474,3 +474,5 @@ const styles = StyleSheet.create({
   viewBookingsBtn: { marginTop: 12, paddingVertical: 12, alignItems: 'center' },
   viewBookingsBtnText: { fontSize: 14, fontWeight: '600', color: COLORS.teal },
 });
+
+export default React.memo(ApplyServicePage);

@@ -25,7 +25,7 @@ interface AddressSelectionModalProps {
   loading?: boolean;
 }
 
-export default function AddressSelectionModal({
+function AddressSelectionModal({
   visible,
   addresses,
   selectedAddressId,
@@ -418,3 +418,5 @@ const styles = StyleSheet.create({
     color: '#ffcd57',
   },
 });
+
+export default React.memo(AddressSelectionModal);

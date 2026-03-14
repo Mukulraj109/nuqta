@@ -79,4 +79,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveConciergeCard;
+export default React.memo(PriveConciergeCard);

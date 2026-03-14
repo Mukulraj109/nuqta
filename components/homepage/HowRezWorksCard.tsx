@@ -33,7 +33,7 @@ const HowNuqtaWorksCard: React.FC = () => {
   const router = useRouter();
 
   const handleNavigateToPage = () => {
-    router.push('/how-nuqta-works');
+    router.push(BRAND.HOW_IT_WORKS_ROUTE);
   };
 
   return (
@@ -365,4 +365,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HowNuqtaWorksCard;
+export default React.memo(HowNuqtaWorksCard);

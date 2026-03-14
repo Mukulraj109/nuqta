@@ -171,4 +171,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveOffersCarousel;
+export default React.memo(PriveOffersCarousel);

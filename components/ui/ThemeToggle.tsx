@@ -11,7 +11,7 @@ const OPTIONS: { mode: ThemeMode; icon: keyof typeof Ionicons.glyphMap; label: s
   { mode: 'dark', icon: 'moon', label: 'Dark' },
 ];
 
-export default function ThemeToggle() {
+function ThemeToggle() {
   const { themeMode, setThemeMode, colors } = useTheme();
 
   return (
@@ -81,3 +81,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 });
+
+export default React.memo(ThemeToggle);

@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback, useEffect, useRef } from 'react';
+import React, { useReducer, useCallback, useEffect, useRef, useMemo } from 'react';
 import {
   View,
   ScrollView,
@@ -278,7 +278,7 @@ export default function CheckoutPage() {
   };
 
   // Check if cart has service items (services require upfront payment, no COD)
-  const serviceItems = state.items?.filter((item: any) => item.itemType === 'service') || [];
+  const serviceItems = useMemo(() => state.items?.filter((item: any) => item.itemType === 'service') || [], [state.items]);
   const hasServiceItems = serviceItems.length > 0;
   const productItems = state.items?.filter((item: any) => item.itemType !== 'service') || [];
 

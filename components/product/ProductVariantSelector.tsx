@@ -274,4 +274,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductVariantSelector;
+export default React.memo(ProductVariantSelector);

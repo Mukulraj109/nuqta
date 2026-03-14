@@ -101,7 +101,7 @@ const SHARE_PLATFORMS: SharePlatform[] = [
   },
 ];
 
-export default function ShareModal({
+function ShareModal({
   visible,
   onClose,
   wishlistId,
@@ -660,3 +660,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default React.memo(ShareModal);

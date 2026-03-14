@@ -231,6 +231,7 @@ export default function BillPayScreen() {
           visible={showVoucherModal}
           animationType="slide"
           transparent={true}
+          statusBarTranslucent
           onRequestClose={() => setShowVoucherModal(false)}
         >
           <View style={styles.modalOverlay}>

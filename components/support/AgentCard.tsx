@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import type { SupportAgent } from '@/types/supportChat.types';
@@ -13,7 +13,7 @@ interface AgentCardProps {
   showDetails?: boolean;
 }
 
-export default function AgentCard({ agent, showDetails = false }: AgentCardProps) {
+function AgentCard({ agent, showDetails = false }: AgentCardProps) {
   const getStatusColor = () => {
     switch (agent.status) {
       case 'online':
@@ -63,7 +63,7 @@ export default function AgentCard({ agent, showDetails = false }: AgentCardProps
     <View style={styles.container}>
       <View style={styles.avatarContainer}>
         {agent.avatar ? (
-          <Image source={{ uri: agent.avatar }} style={styles.avatar} cachePolicy="memory-disk" />
+          <CachedImage source={{ uri: agent.avatar }} style={styles.avatar} cachePolicy="memory-disk" />
         ) : (
           <View style={styles.avatarPlaceholder}>
             <ThemedText style={styles.avatarText}>
@@ -234,3 +234,5 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
 });
+
+export default React.memo(AgentCard);

@@ -237,4 +237,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EmptySearchState;
+export default React.memo(EmptySearchState);

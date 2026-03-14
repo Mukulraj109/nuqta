@@ -15,7 +15,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
 
-export default function DealCardSkeleton() {
+function DealCardSkeleton() {
   return (
     <View
       style={styles.card}
@@ -210,3 +210,5 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
 });
+
+export default React.memo(DealCardSkeleton);

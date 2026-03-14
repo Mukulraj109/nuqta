@@ -22,7 +22,7 @@ interface QuizGameProps {
   onGameComplete?: (score: number, coinsEarned: number, tournamentUpdate?: any) => void;
 }
 
-export default function QuizGame({ difficulty, category, onGameComplete }: QuizGameProps) {
+function QuizGame({ difficulty, category, onGameComplete }: QuizGameProps) {
   const [gameData, setGameData] = useState<QuizGameType | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -442,3 +442,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default React.memo(QuizGame);

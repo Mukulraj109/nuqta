@@ -7,7 +7,7 @@
 
 import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   useAnimatedStyle,
@@ -169,7 +169,7 @@ export const PaymentStoreCard: React.FC<PaymentStoreCardProps> = ({
       >
         <View style={[styles.compactLogo, { backgroundColor: store.logo ? '#F3F4F6' : logoColor }]}>
           {store.logo ? (
-            <Image source={{ uri: store.logo }} style={styles.compactLogoImage} contentFit="cover" cachePolicy="memory-disk" />
+            <CachedImage source={{ uri: store.logo }} style={styles.compactLogoImage} contentFit="cover" cachePolicy="memory-disk" />
           ) : (
             <Ionicons name="storefront" size={22} color="#FFF" />
           )}
@@ -222,7 +222,7 @@ export const PaymentStoreCard: React.FC<PaymentStoreCardProps> = ({
           {/* Logo */}
           <View style={[styles.logo, { backgroundColor: store.logo ? '#F8FAFC' : logoColor }]}>
             {store.logo ? (
-              <Image source={{ uri: store.logo }} style={styles.logoImage} contentFit="cover" cachePolicy="memory-disk" />
+              <CachedImage source={{ uri: store.logo }} style={styles.logoImage} contentFit="cover" cachePolicy="memory-disk" />
             ) : (
               <Ionicons name="storefront" size={26} color="#FFF" />
             )}
@@ -716,4 +716,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PaymentStoreCard;
+export default React.memo(PaymentStoreCard);

@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TransactionCTA;
+export default React.memo(TransactionCTA);

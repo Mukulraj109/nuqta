@@ -24,7 +24,7 @@ const SIZE_HEIGHT: Record<InputSize, number> = {
   large: 56,
 };
 
-export default function Input({
+function Input({
   label,
   error,
   helperText,
@@ -157,3 +157,5 @@ const styles = StyleSheet.create({
     marginLeft: spacing.xs,
   },
 });
+
+export default React.memo(Input);

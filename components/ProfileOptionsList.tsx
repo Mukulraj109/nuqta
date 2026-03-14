@@ -179,4 +179,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileOptionsList;
+export default React.memo(ProfileOptionsList);

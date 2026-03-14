@@ -27,7 +27,7 @@ interface TierUpgradeCelebrationProps {
   onClose: () => void;
 }
 
-export default function TierUpgradeCelebration({
+function TierUpgradeCelebration({
   visible,
   newTier,
   tierData,
@@ -411,3 +411,5 @@ const styles = StyleSheet.create({
     right: '25%',
   },
 });
+
+export default React.memo(TierUpgradeCelebration);

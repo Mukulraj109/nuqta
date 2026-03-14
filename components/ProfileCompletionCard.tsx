@@ -45,7 +45,7 @@ const ProfileCompletionCard: React.FC<ProfileCompletionCardProps> = ({
   );
 };
 
-export default ProfileCompletionCard;
+export default React.memo(ProfileCompletionCard);
 
 const styles = StyleSheet.create({
   card: {

@@ -119,4 +119,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default FollowButton;
+export default React.memo(FollowButton);

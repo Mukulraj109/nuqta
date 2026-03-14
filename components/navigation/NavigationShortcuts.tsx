@@ -24,7 +24,7 @@ const shortcuts: Shortcut[] = [
   { icon: '🏆', label: 'Badges', route: '/profile/achievements' },
 ];
 
-export default function NavigationShortcuts() {
+function NavigationShortcuts() {
   const router = useRouter();
 
   return (
@@ -39,7 +39,8 @@ export default function NavigationShortcuts() {
           key={index}
           style={styles.shortcut}
           onPress={() => router.push(shortcut.route as any)}
-         
+          accessibilityLabel={shortcut.label}
+          accessibilityRole="button"
         >
           {shortcut.badge && (
             <View style={[
@@ -129,3 +130,5 @@ const styles = StyleSheet.create({
     color: '#0B2240',
   },
 });
+
+export default React.memo(NavigationShortcuts);

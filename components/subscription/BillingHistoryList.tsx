@@ -20,7 +20,7 @@ interface Props {
   loading?: boolean;
 }
 
-export default function BillingHistoryList({
+function BillingHistoryList({
   transactions,
   onDownloadInvoice,
   onViewInvoice,
@@ -319,3 +319,5 @@ const styles = StyleSheet.create({
     fontFamily: 'monospace',
   },
 });
+
+export default React.memo(BillingHistoryList);

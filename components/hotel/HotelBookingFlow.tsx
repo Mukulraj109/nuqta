@@ -910,4 +910,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HotelBookingFlow;
+export default React.memo(HotelBookingFlow);

@@ -72,7 +72,7 @@ interface BottomSheetProps {
  *   <FilterContent />
  * </BottomSheet>
  */
-export default function BottomSheet({
+function BottomSheet({
   visible,
   onClose,
   title,
@@ -245,3 +245,5 @@ const styles = StyleSheet.create({
     paddingVertical: SPACING.md,
   },
 });
+
+export default React.memo(BottomSheet);

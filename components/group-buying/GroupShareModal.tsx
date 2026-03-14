@@ -21,7 +21,7 @@ interface GroupShareModalProps {
   onClose: () => void;
 }
 
-export default function GroupShareModal({
+function GroupShareModal({
   visible,
   group,
   onClose,
@@ -242,3 +242,5 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
 });
+
+export default React.memo(GroupShareModal);

@@ -144,4 +144,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GlassCard;
+export default React.memo(GlassCard);

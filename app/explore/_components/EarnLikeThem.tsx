@@ -353,4 +353,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EarnLikeThem;
+export default React.memo(EarnLikeThem);

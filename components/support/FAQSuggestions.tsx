@@ -20,7 +20,7 @@ interface FAQSuggestionsProps {
   onClose?: () => void;
 }
 
-export default function FAQSuggestions({
+function FAQSuggestions({
   suggestions,
   onSelect,
   onHelpful,
@@ -340,3 +340,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default React.memo(FAQSuggestions);

@@ -677,4 +677,4 @@ export const MOCK_CONTACT_INFO: StoreContactInfo = {
   },
 };
 
-export default StoreContact;
+export default React.memo(StoreContact);

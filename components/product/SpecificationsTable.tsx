@@ -11,7 +11,7 @@ interface SpecificationsTableProps {
   defaultExpanded?: boolean;
 }
 
-export default function SpecificationsTable({
+function SpecificationsTable({
   specifications,
   defaultExpanded = false
 }: SpecificationsTableProps) {
@@ -110,3 +110,5 @@ const styles = StyleSheet.create({
     color: '#6C47FF',
   },
 });
+
+export default React.memo(SpecificationsTable);

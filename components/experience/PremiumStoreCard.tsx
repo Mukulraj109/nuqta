@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -28,7 +28,7 @@ const PremiumStoreCard: React.FC<PremiumStoreCardProps> = ({ store, onPress }) =
         >
             <View style={styles.imageContainer}>
                 {storeImage ? (
-                    <Image source={{ uri: storeImage }} style={styles.image} contentFit="cover" cachePolicy="memory-disk" />
+                    <CachedImage source={{ uri: storeImage }} style={styles.image} contentFit="cover" cachePolicy="memory-disk" />
                 ) : (
                     <View style={styles.imagePlaceholder}>
                         <Ionicons name="storefront" size={40} color="#94A3B8" />
@@ -264,4 +264,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PremiumStoreCard;
+export default React.memo(PremiumStoreCard);

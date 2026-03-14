@@ -15,7 +15,7 @@
  * @version 2.0.0
  */
 
-import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -944,10 +944,12 @@ export default function BillUploadPage() {
   /**
    * Render merchant selector modal
    */
-  const renderMerchantSelector = () => {
-    const filteredMerchants = merchants.filter((m) =>
+  const filteredMerchants = useMemo(() =>
+    merchants.filter((m) =>
       m.name.toLowerCase().includes(merchantSearchQuery.toLowerCase())
-    );
+    ), [merchants, merchantSearchQuery]);
+
+  const renderMerchantSelector = () => {
 
     return (
       <Modal

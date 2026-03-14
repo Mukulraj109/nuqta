@@ -22,7 +22,7 @@ interface CashbackModalProps {
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-export default function CashbackModal({
+function CashbackModal({
   visible,
   onClose,
   cashbackAmount = 219.9,
@@ -419,3 +419,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(CashbackModal);

@@ -17,7 +17,7 @@ interface TransactionTabsProps {
   onTabPress: (tabId: TransactionCategory) => void;
 }
 
-export default function TransactionTabs({ tabs, activeTab, onTabPress }: TransactionTabsProps) {
+function TransactionTabs({ tabs, activeTab, onTabPress }: TransactionTabsProps) {
   
   const renderTab = (tab: WalletTab) => {
     const isActive = tab.id === activeTab;
@@ -160,3 +160,5 @@ const styles = StyleSheet.create({
     color: '#8B5CF6',
   },
 });
+
+export default React.memo(TransactionTabs);

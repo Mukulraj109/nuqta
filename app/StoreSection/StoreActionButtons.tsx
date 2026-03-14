@@ -136,7 +136,7 @@ function StoreActionButtons({
     (storeType === 'SERVICE' ? 'Book Service' : 'Schedule Pickup');
   
   // Component state management
-  const [buttonState, setButtonState] = useState(createInitialButtonState());
+  const [buttonState, setButtonState] = useState(() => createInitialButtonState());
   const stateManager = useMemo(() => 
     new ButtonStateManager(buttonState, setButtonState), 
     [buttonState]

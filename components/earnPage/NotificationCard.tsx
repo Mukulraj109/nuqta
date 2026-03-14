@@ -5,7 +5,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { NotificationCardProps } from '@/types/earnPage.types';
 import { NOTIFICATION_COLORS, EARN_COLORS } from '@/constants/EarnPageColors';
 
-export default function NotificationCard({ 
+function NotificationCard({ 
   notification, 
   onPress 
 }: NotificationCardProps) {
@@ -136,3 +136,5 @@ const styles = StyleSheet.create({
     padding: 3,
   },
 });
+
+export default React.memo(NotificationCard);

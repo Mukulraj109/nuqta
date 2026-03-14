@@ -360,4 +360,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FitnessSportsSection;
+export default React.memo(FitnessSportsSection);

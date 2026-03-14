@@ -183,4 +183,4 @@ export const BirthdayBanner: React.FC<BirthdayBannerProps> = ({
   );
 };
 
-export default BirthdayBanner;
+export default React.memo(BirthdayBanner);

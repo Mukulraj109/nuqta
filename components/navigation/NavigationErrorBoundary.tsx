@@ -264,4 +264,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NavigationErrorBoundary;
+export default React.memo(NavigationErrorBoundary);

@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PackageAmenities;
+export default React.memo(PackageAmenities);

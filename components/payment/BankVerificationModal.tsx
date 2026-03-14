@@ -28,7 +28,7 @@ interface BankVerificationModalProps {
   onError: (error: string) => void;
 }
 
-export default function BankVerificationModal({
+function BankVerificationModal({
   visible,
   paymentMethodId,
   accountNumber,
@@ -518,3 +518,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+
+export default React.memo(BankVerificationModal);

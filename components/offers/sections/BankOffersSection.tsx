@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
@@ -200,7 +200,7 @@ export const BankOffersSection: React.FC<BankOffersSectionProps> = ({
               <View style={styles.header}>
                 <View style={styles.bankLogoContainer}>
                   {offer.bankLogo ? (
-                    <Image
+                    <CachedImage
                       source={{ uri: offer.bankLogo }}
                       style={styles.bankLogo}
                       contentFit="contain"
@@ -263,4 +263,4 @@ export const BankOffersSection: React.FC<BankOffersSectionProps> = ({
   );
 };
 
-export default BankOffersSection;
+export default React.memo(BankOffersSection);

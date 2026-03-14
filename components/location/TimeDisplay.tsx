@@ -22,7 +22,7 @@ interface TimeDisplayProps {
   timeOfDayStyle?: any;
 }
 
-export default function TimeDisplay({
+function TimeDisplay({
   showDate = true,
   showTimezone = true,
   showTimeOfDay = true,
@@ -253,3 +253,5 @@ export function FullTimeDisplay(props: TimeDisplayProps) {
     />
   );
 }
+
+export default React.memo(TimeDisplay);

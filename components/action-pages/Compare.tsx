@@ -89,7 +89,7 @@ const HOW_STEPS = [
   { icon: 'bookmark-outline' as const, text: 'Save comparisons for later' },
 ];
 
-export default function ComparePage() {
+function ComparePage() {
   const router = useRouter();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
@@ -495,7 +495,7 @@ export default function ComparePage() {
         </View>
 
         {/* Scrollable product columns */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flex: 1 }}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexShrink: 1 }}>
           <View>
             {/* Product header row */}
             <View style={styles.tableDataRow}>
@@ -939,3 +939,5 @@ const styles = StyleSheet.create({
   modalSuggestions: { padding: 16 },
   modalSuggestionsTitle: { fontSize: 15, fontWeight: '600', color: COLORS.textPrimary, marginBottom: 12 },
 });
+
+export default React.memo(ComparePage);

@@ -22,7 +22,7 @@ interface EditInstructionsModalProps {
   onSave: (instructions: string) => void;
 }
 
-export default function EditInstructionsModal({
+function EditInstructionsModal({
   visible,
   currentInstructions,
   onClose,
@@ -219,3 +219,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default React.memo(EditInstructionsModal);

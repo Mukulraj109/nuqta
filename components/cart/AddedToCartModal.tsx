@@ -30,7 +30,7 @@ interface AddedToCartModalProps {
   cartTotal?: number;
 }
 
-export default function AddedToCartModal({
+function AddedToCartModal({
   visible,
   onClose,
   onViewCart,
@@ -402,3 +402,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default React.memo(AddedToCartModal);

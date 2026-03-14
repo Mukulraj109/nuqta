@@ -8,7 +8,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
 
-export default function ProfileSkeleton() {
+function ProfileSkeleton() {
   return (
     <View style={styles.container}>
       {/* Avatar + Name */}
@@ -93,3 +93,5 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
 });
+
+export default React.memo(ProfileSkeleton);

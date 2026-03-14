@@ -1012,4 +1012,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CabBookingFlow;
+export default React.memo(CabBookingFlow);

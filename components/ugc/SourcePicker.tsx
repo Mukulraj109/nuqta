@@ -24,7 +24,7 @@ interface SourcePickerProps {
   disabled?: boolean;
 }
 
-export default function SourcePicker({
+function SourcePicker({
   onSelectCamera,
   onSelectGallery,
   onSelectUrl,
@@ -345,3 +345,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default React.memo(SourcePicker);

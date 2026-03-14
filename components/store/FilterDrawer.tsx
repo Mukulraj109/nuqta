@@ -48,7 +48,7 @@ const RATING_OPTIONS = [
   { value: 1, label: '1+ Stars' },
 ];
 
-export default function FilterDrawer({
+function FilterDrawer({
   visible,
   onClose,
   onApplyFilters,
@@ -822,3 +822,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default React.memo(FilterDrawer);

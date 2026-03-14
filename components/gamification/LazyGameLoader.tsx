@@ -73,7 +73,7 @@ class LazyGameErrorBoundary extends React.Component<
  * Lazy Game Loader Component
  * Dynamically loads game components with caching and error handling
  */
-export default function LazyGameLoader({
+function LazyGameLoader({
   gamePath,
   fallback,
   onError
@@ -173,3 +173,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(LazyGameLoader);

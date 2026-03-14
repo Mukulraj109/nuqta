@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Pressable, StyleSheet, Dimensions } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -22,7 +22,7 @@ interface ArticleCardProps {
   style?: any;
 }
 
-export default function ArticleCard({ article, onPress, style }: ArticleCardProps) {
+function ArticleCard({ article, onPress, style }: ArticleCardProps) {
   const [imageError, setImageError] = React.useState(false);
 
   // Grid card width: ensure equal width for both columns
@@ -48,7 +48,7 @@ export default function ArticleCard({ article, onPress, style }: ArticleCardProp
       <View style={styles.imageContainer}>
         {/* Cover Image */}
         {article.coverImage && !imageError ? (
-          <Image
+          <CachedImage
             source={{ uri: article.coverImage }}
             style={StyleSheet.absoluteFill}
             contentFit="cover"
@@ -195,3 +195,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default React.memo(ArticleCard);

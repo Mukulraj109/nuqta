@@ -377,4 +377,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegionMismatchError;
+export default React.memo(RegionMismatchError);

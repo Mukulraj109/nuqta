@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import { PRIVE_COLORS } from './priveTheme';
 
@@ -11,6 +11,7 @@ interface PriveProgressRingProps {
   bgColor?: string;
   label?: string;
   sublabel?: string;
+  /** @deprecated No longer used - progress is applied directly */
   animated?: boolean;
 }
 
@@ -22,24 +23,13 @@ export const PriveProgressRing: React.FC<PriveProgressRingProps> = ({
   bgColor = PRIVE_COLORS.transparent.white10,
   label,
   sublabel,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   animated = true,
 }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const clampedProgress = Math.max(0, Math.min(100, progress));
   const strokeDashoffset = circumference - (clampedProgress / 100) * circumference;
-
-  const animatedValue = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    if (animated) {
-      Animated.timing(animatedValue, {
-        toValue: clampedProgress,
-        duration: 800,
-        useNativeDriver: false,
-      }).start();
-    }
-  }, [clampedProgress, animated]);
 
   return (
     <View style={[styles.container, { width: size, height: size }]}>
@@ -95,4 +85,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveProgressRing;
+export default React.memo(PriveProgressRing);

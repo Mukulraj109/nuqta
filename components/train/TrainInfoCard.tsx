@@ -199,4 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrainInfoCard;
+export default React.memo(TrainInfoCard);

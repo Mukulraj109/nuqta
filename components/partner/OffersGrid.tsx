@@ -24,7 +24,7 @@ interface OffersGridProps {
 const { width } = Dimensions.get('window');
 const cardWidth = (width - 72) / 2; // Account for padding and gap
 
-export default function OffersGrid({ 
+function OffersGrid({ 
   offers, 
   onClaimOffer,
   onViewTerms 
@@ -519,3 +519,5 @@ const styles = StyleSheet.create({
     height: 20,
   },
 });
+
+export default React.memo(OffersGrid);

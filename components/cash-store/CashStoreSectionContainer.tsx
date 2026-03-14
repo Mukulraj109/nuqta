@@ -28,6 +28,7 @@ import * as WebBrowser from 'expo-web-browser';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 import { useRouter } from 'expo-router';
+import { BRAND } from '@/constants/brand';
 import { useCashStoreSection } from '../../hooks/useCashStoreSection';
 import cashStoreApi from '../../services/cashStoreApi';
 import {
@@ -180,7 +181,7 @@ const CashStoreSectionContainer: React.FC<CashStoreSectionContainerProps> = ({
   );
 
   const handleLearnMore = useCallback(() => {
-    router.push('/how-cash-store-works' as any);
+    router.push(BRAND.HOW_CASH_STORE_WORKS_ROUTE as any);
   }, [router]);
 
   const handleQuickActionPress = useCallback(

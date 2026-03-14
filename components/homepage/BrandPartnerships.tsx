@@ -333,4 +333,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BrandPartnerships;
+export default React.memo(BrandPartnerships);

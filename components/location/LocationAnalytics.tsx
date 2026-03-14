@@ -19,7 +19,7 @@ interface LocationAnalyticsProps {
   style?: any;
 }
 
-export default function LocationAnalytics({
+function LocationAnalytics({
   onViewHistory,
   onViewStats,
   style,
@@ -529,3 +529,5 @@ export function CompactLocationAnalytics(props: LocationAnalyticsProps) {
     />
   );
 }
+
+export default React.memo(LocationAnalytics);

@@ -314,4 +314,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default FinalScreen;
+export default React.memo(FinalScreen);

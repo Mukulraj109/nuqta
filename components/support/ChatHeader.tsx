@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { View, StyleSheet, Pressable, Modal } from 'react-native';
-import { Image } from 'expo-image';
+import CachedImage from '@/components/ui/CachedImage';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -20,7 +20,7 @@ interface ChatHeaderProps {
   accessibilityLabel?: string;
 }
 
-export default function ChatHeader({
+function ChatHeader({
   agent,
   isTyping,
   queuePosition,
@@ -87,7 +87,7 @@ export default function ChatHeader({
             {agent ? (
               <>
                 {agent.avatar ? (
-                  <Image source={{ uri: agent.avatar }} style={styles.avatar} cachePolicy="memory-disk" />
+                  <CachedImage source={{ uri: agent.avatar }} style={styles.avatar} cachePolicy="memory-disk" />
                 ) : (
                   <View style={styles.avatarPlaceholder}>
                     <ThemedText style={styles.avatarText}>
@@ -149,6 +149,7 @@ export default function ChatHeader({
       <Modal
         visible={showMenu}
         transparent
+        statusBarTranslucent
         animationType="fade"
         onRequestClose={() => setShowMenu(false)}
       >
@@ -337,3 +338,5 @@ const styles = StyleSheet.create({
     color: '#1F2937',
   },
 });
+
+export default React.memo(ChatHeader);

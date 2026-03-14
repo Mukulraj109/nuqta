@@ -30,7 +30,7 @@ interface LocationNotificationsProps {
   style?: any;
 }
 
-export default function LocationNotifications({
+function LocationNotifications({
   onNotificationPress,
   onSettingsPress,
   style,
@@ -512,3 +512,5 @@ export function CompactLocationNotifications(props: LocationNotificationsProps) 
     />
   );
 }
+
+export default React.memo(LocationNotifications);

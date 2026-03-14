@@ -201,6 +201,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
     <Modal
       visible={visible}
       transparent
+      statusBarTranslucent
       animationType="fade"
       onRequestClose={handleClose}
     >
@@ -864,4 +865,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PurchaseModal;
+export default React.memo(PurchaseModal);

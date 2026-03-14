@@ -29,7 +29,7 @@ interface ReviewItemProps {
   currency?: string;
 }
 
-export default function ReviewItem({
+function ReviewItem({
   review,
   onHelpfulPress,
   onReportPress,
@@ -428,3 +428,5 @@ const styles = StyleSheet.create({
     color: '#ffcd57',
   },
 });
+
+export default React.memo(ReviewItem);

@@ -143,4 +143,4 @@ export const OffersTabs: React.FC<OffersTabsProps> = ({
   );
 };
 
-export default OffersTabs;
+export default React.memo(OffersTabs);

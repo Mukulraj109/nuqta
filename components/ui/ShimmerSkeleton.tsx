@@ -156,4 +156,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ShimmerSkeleton;
+export default React.memo(ShimmerSkeleton);

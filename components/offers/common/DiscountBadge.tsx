@@ -184,4 +184,4 @@ export const DiscountBadge: React.FC<DiscountBadgeProps> = ({
   );
 };
 
-export default DiscountBadge;
+export default React.memo(DiscountBadge);

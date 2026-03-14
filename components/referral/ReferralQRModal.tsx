@@ -34,7 +34,7 @@ interface SharePlatform {
   action: () => Promise<void>;
 }
 
-export default function ReferralQRModal({
+function ReferralQRModal({
   visible,
   referralCode,
   referralLink,
@@ -578,3 +578,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default React.memo(ReferralQRModal);

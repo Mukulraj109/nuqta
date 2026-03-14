@@ -958,6 +958,7 @@ export default function StorePage() {
       <Modal
         visible={showReviewForm}
         animationType="slide"
+        statusBarTranslucent
         presentationStyle="pageSheet"
         onRequestClose={handleCloseReviewForm}
       >

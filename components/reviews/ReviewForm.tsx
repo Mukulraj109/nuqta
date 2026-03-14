@@ -28,7 +28,7 @@ interface ReviewFormProps {
   isEdit?: boolean;
 }
 
-export default function ReviewForm({
+function ReviewForm({
   storeId,
   existingReview,
   onSubmit,
@@ -559,3 +559,5 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
+
+export default React.memo(ReviewForm);
