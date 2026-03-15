@@ -46,7 +46,7 @@ interface PromoCodeModalProps {
   onQuickPromoSelect: (code: string) => void;
 }
 
-export default function PromoCodeModal({
+function PromoCodeModal({
   visible,
   promoCode,
   availablePromoCodes,
@@ -432,3 +432,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default React.memo(PromoCodeModal);

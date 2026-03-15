@@ -64,6 +64,8 @@ class ApiClient {
   private currentAppVersion: string = '1.0.0';
   // Region
   private currentRegion: string = 'bangalore';
+  // Slow request warning callback (fires before timeout)
+  private slowRequestCallback: ((endpoint: string) => void) | null = null;
 
   constructor() {
     // Use environment variable or fallback to user backend localhost
@@ -126,6 +128,11 @@ class ApiClient {
     this.currentAppVersion = version;
   }
 
+  // Set slow request warning callback (fires at 4s before actual timeout)
+  setSlowRequestCallback(callback: ((endpoint: string) => void) | null) {
+    this.slowRequestCallback = callback;
+  }
+
   // Compare semantic versions (returns -1 if v1 < v2, 0 if equal, 1 if v1 > v2)
   private compareVersions(v1: string, v2: string): number {
     const parts1 = v1.split('.').map(Number);
@@ -173,7 +180,7 @@ class ApiClient {
       method = 'GET',
       headers = {},
       body,
-      timeout = 12000
+      timeout = 8000
     } = options;
 
     const url = `${this.baseURL}${endpoint}`;
@@ -189,6 +196,14 @@ class ApiClient {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+      // Show "taking longer than usual" warning at 4s
+      let slowWarningId: ReturnType<typeof setTimeout> | null = null;
+      if (this.slowRequestCallback && timeout >= 5000) {
+        slowWarningId = setTimeout(() => {
+          this.slowRequestCallback?.(endpoint);
+        }, 4000);
+      }
 
       const config: RequestInit = {
         method,
@@ -209,6 +224,7 @@ class ApiClient {
 
       const response = await globalConcurrencyLimiter.execute(() => fetch(url, config));
       clearTimeout(timeoutId);
+      if (slowWarningId) clearTimeout(slowWarningId);
 
       const responseData = await response.json();
 
@@ -300,6 +316,7 @@ class ApiClient {
       };
 
     } catch (error) {
+      if (slowWarningId) clearTimeout(slowWarningId);
 
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
@@ -467,11 +484,12 @@ class ApiClient {
     });
   }
 
-  // Upload file
+  // Upload file (30s timeout for large files)
   async uploadFile<T>(endpoint: string, formData: FormData): Promise<ApiResponse<T>> {
     return this.makeRequest<T>(endpoint, {
       method: 'POST',
-      body: formData
+      body: formData,
+      timeout: API_TIMEOUTS.UPLOAD,
     });
   }
 
@@ -519,6 +537,13 @@ class ApiClient {
     globalDeduplicator.cancelAll();
   }
 }
+
+// Timeout constants for callers that need specific timeouts
+export const API_TIMEOUTS = {
+  DEFAULT: 8000,
+  UPLOAD: 30000,
+  LONG_RUNNING: 15000,
+} as const;
 
 // Create singleton instance
 const apiClient = new ApiClient();

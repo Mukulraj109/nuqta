@@ -120,6 +120,10 @@ function ExperienceDetailPage() {
     setRefreshing(false);
   };
 
+  const renderStoreCard = useCallback(({ item }: { item: any }) => (
+    <StoreCard store={item} currencySymbol={currencySymbol} />
+  ), [currencySymbol]);
+
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -177,7 +181,7 @@ function ExperienceDetailPage() {
       <FlatList
         data={stores}
         keyExtractor={(item) => item._id || item.id}
-        renderItem={({ item }) => <StoreCard store={item} currencySymbol={currencySymbol} />}
+        renderItem={renderStoreCard}
         contentContainerStyle={styles.storeList}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.primaryGold]} />}

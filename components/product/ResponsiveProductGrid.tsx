@@ -8,8 +8,7 @@
 import React, { useCallback } from 'react';
 import { FlatList, View, StyleSheet, ViewStyle } from 'react-native';
 import { useResponsiveGrid } from '@/hooks/useResponsiveGrid';
-import { SPACING } from '@/constants/DesignTokens';
-
+import { spacing } from '@/constants/theme';
 interface Product {
   id: string;
   [key: string]: any;
@@ -43,7 +42,7 @@ interface ResponsiveProductGridProps {
   minCardWidth?: number;
 
   /**
-   * Gap between cards (default: SPACING.md)
+   * Gap between cards (default: spacing.md)
    */
   gap?: number;
 
@@ -91,7 +90,7 @@ function ResponsiveProductGrid({
   onEndReached,
   onEndReachedThreshold = 0.5,
   minCardWidth = 150,
-  gap = SPACING.md,
+  gap = spacing.md,
   style,
   ListFooterComponent,
   ListEmptyComponent,
@@ -158,7 +157,7 @@ function ResponsiveProductGrid({
 
 const styles = StyleSheet.create({
   content: {
-    padding: SPACING.sm,
+    padding: spacing.sm,
   },
   itemWrapper: {
     flex: 1,

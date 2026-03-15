@@ -134,13 +134,15 @@ export default function TriviaPage() {
 
   // Timer countdown
   useEffect(() => {
+    let progressAnimation: Animated.CompositeAnimation | undefined;
     if (gameState === 'playing') {
       progressAnim.setValue(1);
-      Animated.timing(progressAnim, {
+      progressAnimation = Animated.timing(progressAnim, {
         toValue: 0,
         duration: SECONDS_PER_QUESTION * 1000,
         useNativeDriver: false,
-      }).start();
+      });
+      progressAnimation.start();
 
       timerRef.current = setInterval(() => {
         setTimeLeft(prev => {
@@ -155,21 +157,24 @@ export default function TriviaPage() {
     }
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
+      progressAnimation?.stop();
     };
   }, [gameState, currentIndex]);
 
   // Animate options appearing
   useEffect(() => {
     if (gameState === 'playing') {
-      optionAnimations.forEach((anim, i) => {
+      const anims = optionAnimations.map((anim, i) => {
         anim.setValue(0);
-        Animated.timing(anim, {
+        return Animated.timing(anim, {
           toValue: 1,
           duration: 300,
           delay: i * 100,
           useNativeDriver: true,
-        }).start();
+        });
       });
+      anims.forEach(a => a.start());
+      return () => anims.forEach(a => a.stop());
     }
   }, [gameState, currentIndex]);
 

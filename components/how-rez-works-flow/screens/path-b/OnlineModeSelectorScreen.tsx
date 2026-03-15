@@ -38,4 +38,4 @@ const OnlineModeSelectorScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
     );
 };
 
-export default OnlineModeSelectorScreen;
+export default React.memo(OnlineModeSelectorScreen);

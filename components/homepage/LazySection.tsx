@@ -177,13 +177,16 @@ const LazySection: React.FC<LazySectionProps> = ({
     if (isVisible && !hasLoaded) {
       setHasLoaded(true);
 
-      Animated.timing(fadeAnim, {
+      const _anim0 = Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 200,
         useNativeDriver: true,
-      }).start();
+      });
+      _anim0.start();
     }
-  }, [isVisible, hasLoaded, fadeAnim]);
+  
+    return () => { _anim0.stop(); };
+}, [isVisible, hasLoaded, fadeAnim]);
 
   const shouldRenderContent = hasLoaded && (keepMounted || isVisible || !unloadWhenOffscreen);
 

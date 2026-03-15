@@ -17,7 +17,7 @@ interface LoadingSpinnerProps {
   fullScreen?: boolean;
 }
 
-export default function LoadingSpinner({
+function LoadingSpinner({
   size = 'large',
   color = colors.brand.purpleLight,
   message,
@@ -71,3 +71,4 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+export default React.memo(LoadingSpinner);

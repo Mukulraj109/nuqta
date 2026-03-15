@@ -11,9 +11,9 @@ import {
   Platform,
   TextInput,
   Image,
-  FlatList,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -347,21 +347,18 @@ export default function GiftCardsPage() {
               </Pressable>
             </View>
           ) : (
-            <FlatList
+            <FlashList
               data={filteredCards}
               renderItem={renderGiftCard}
               keyExtractor={item => item._id}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.listContent}
-              removeClippedSubviews={Platform.OS !== 'web'}
-              maxToRenderPerBatch={10}
-              windowSize={5}
-              initialNumToRender={8}
               ListEmptyComponent={
                 <View style={styles.emptyState}>
                   <ThemedText style={styles.emptyText}>No gift cards found</ThemedText>
                 </View>
               }
+              estimatedItemSize={120}
             />
           )}
         </View>
@@ -370,12 +367,13 @@ export default function GiftCardsPage() {
           {myCardsLoading ? (
             <CardGridSkeleton />
           ) : myGiftCards.length > 0 ? (
-            <FlatList
+            <FlashList
               data={myGiftCards}
               renderItem={renderMyGiftCard}
               keyExtractor={item => item._id}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.listContent}
+              estimatedItemSize={120}
             />
           ) : (
             <View style={styles.emptyState}>

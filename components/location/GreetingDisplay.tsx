@@ -58,8 +58,9 @@ function GreetingDisplay({
 
   // Handle animation
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (animationType === 'fade') {
-      Animated.sequence([
+      _anim = Animated.sequence([
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 200,
@@ -70,9 +71,10 @@ function GreetingDisplay({
           duration: 300,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else if (animationType === 'slide') {
-      Animated.sequence([
+      _anim = Animated.sequence([
         Animated.timing(slideAnim, {
           toValue: -20,
           duration: 200,
@@ -83,9 +85,12 @@ function GreetingDisplay({
           duration: 300,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [animationKey, animationType, fadeAnim, slideAnim]);
+  
+    return () => _anim.stop();
+}, [animationKey, animationType, fadeAnim, slideAnim]);
 
   const handlePress = () => {
     if (onPress) {

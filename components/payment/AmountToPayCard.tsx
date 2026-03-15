@@ -9,10 +9,9 @@ import { View, Text, StyleSheet } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 interface AmountToPayCardProps {
   originalAmount: number;
@@ -37,7 +36,7 @@ export const AmountToPayCard: React.FC<AmountToPayCardProps> = ({
         <Text style={styles.title}>Amount to Pay</Text>
         {showOptimizedBadge && hasSavings && (
           <View style={styles.optimizedBadge}>
-            <Ionicons name="sparkles" size={12} color={COLORS.primary[600]} />
+            <Ionicons name="sparkles" size={12} color={colors.primary[600]} />
             <Text style={styles.optimizedText}>Optimized</Text>
           </View>
         )}
@@ -52,7 +51,7 @@ export const AmountToPayCard: React.FC<AmountToPayCardProps> = ({
 
       {hasSavings && (
         <View style={styles.savingsInfo}>
-          <Ionicons name="checkmark-circle" size={14} color={COLORS.success[500]} />
+          <Ionicons name="checkmark-circle" size={14} color={colors.successScale[500]} />
           <Text style={styles.savingsText}>
             {`${BRAND.APP_NAME} applied maximum savings for you`}
           </Text>
@@ -76,7 +75,7 @@ export const AmountToPayCard: React.FC<AmountToPayCardProps> = ({
 
       {amountToPay === 0 && (
         <LinearGradient
-          colors={[COLORS.success[500], COLORS.success[600]]}
+          colors={[colors.successScale[500], colors.successScale[600]]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.freePaymentBanner}
@@ -93,96 +92,96 @@ export const AmountToPayCard: React.FC<AmountToPayCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.lg,
-    padding: SPACING.lg,
-    marginBottom: SPACING.md,
-    ...SHADOWS.sm,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.md,
+    ...shadows.sm,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SPACING.sm,
+    marginBottom: spacing.sm,
   },
   title: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.primary,
+    ...typography.h4,
+    color: colors.text.primary,
   },
   optimizedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: SPACING.sm,
+    paddingHorizontal: spacing.sm,
     paddingVertical: 2,
-    backgroundColor: COLORS.primary[50],
-    borderRadius: BORDER_RADIUS.full,
+    backgroundColor: colors.primary[50],
+    borderRadius: borderRadius.full,
     gap: 4,
   },
   optimizedText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.primary[600],
+    ...typography.caption,
+    color: colors.primary[600],
     fontWeight: '600',
   },
   amountRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: SPACING.sm,
+    gap: spacing.sm,
   },
   originalAmount: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.tertiary,
+    ...typography.h4,
+    color: colors.text.tertiary,
     textDecorationLine: 'line-through',
   },
   finalAmount: {
     fontSize: 36,
     fontWeight: '800',
-    color: COLORS.primary[600],
+    color: colors.primary[600],
   },
   savingsInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: SPACING.sm,
-    gap: SPACING.xs,
+    marginTop: spacing.sm,
+    gap: spacing.xs,
   },
   savingsText: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.success[600],
+    ...typography.bodySmall,
+    color: colors.successScale[600],
   },
   breakdownRow: {
-    marginTop: SPACING.md,
-    paddingTop: SPACING.md,
+    marginTop: spacing.md,
+    paddingTop: spacing.md,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border.light,
+    borderTopColor: colors.border.light,
   },
   breakdownItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.xs,
+    gap: spacing.xs,
   },
   coinIcon: {
     width: 18,
     height: 18,
   },
   breakdownLabel: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.secondary,
+    ...typography.bodySmall,
+    color: colors.text.secondary,
     flex: 1,
   },
   breakdownValue: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.success[600],
+    ...typography.body,
+    color: colors.successScale[600],
     fontWeight: '600',
   },
   freePaymentBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: SPACING.md,
-    borderRadius: BORDER_RADIUS.md,
-    marginTop: SPACING.md,
-    gap: SPACING.sm,
+    padding: spacing.md,
+    borderRadius: borderRadius.md,
+    marginTop: spacing.md,
+    gap: spacing.sm,
   },
   freePaymentText: {
-    ...TYPOGRAPHY.body,
+    ...typography.body,
     color: colors.background.primary,
     flex: 1,
     fontWeight: '600',

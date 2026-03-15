@@ -70,15 +70,18 @@ export default function PlayScreen() {
 
   // Animate FAB entrance on mount & fetch articles
   React.useEffect(() => {
-    Animated.spring(fabScale, {
+    const anim = Animated.spring(fabScale, {
       toValue: 1,
       friction: 5,
       tension: 40,
       useNativeDriver: true,
-    }).start();
+    });
+    anim.start();
 
     // Fetch articles on mount
     fetchArticles();
+
+    return () => anim.stop();
   }, [fetchArticles]);
 
   const handleRefresh = React.useCallback(async () => {

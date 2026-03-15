@@ -22,7 +22,6 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import {
   OffersScreenParams,
   StorePaymentOffer,
@@ -33,7 +32,7 @@ import apiClient from '@/services/apiClient';
 import { useRegion } from '@/contexts/RegionContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { BRAND } from '@/constants/brand';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 type TabKey = 'all' | 'store' | 'bank' | 'rez';
 
@@ -159,7 +158,7 @@ export default function OffersScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color={COLORS.text.primary} />
+          <Ionicons name="arrow-back" size={24} color={colors.text.primary} />
         </Pressable>
         <View style={styles.headerContent}>
           <Text style={styles.headerTitle}>Available Offers</Text>
@@ -204,12 +203,12 @@ export default function OffersScreen() {
       {/* Content */}
       {isLoading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={COLORS.primary[500]} />
+          <ActivityIndicator size="large" color={colors.primary[500]} />
           <Text style={styles.loadingText}>Finding best offers...</Text>
         </View>
       ) : error ? (
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle-outline" size={48} color={COLORS.error[500]} />
+          <Ionicons name="alert-circle-outline" size={48} color={colors.errorScale[500]} />
           <Text style={styles.errorTitle}>Couldn't load offers</Text>
           <Text style={styles.errorText}>{error}</Text>
           <Pressable style={styles.retryButton} onPress={() => loadOffers()}>
@@ -224,7 +223,7 @@ export default function OffersScreen() {
             <RefreshControl
               refreshing={isRefreshing}
               onRefresh={() => loadOffers(true)}
-              colors={[COLORS.primary[500]]}
+              colors={[colors.primary[500]]}
             />
           }
         >
@@ -235,7 +234,7 @@ export default function OffersScreen() {
               onPress={() => toggleOfferSelection(offers.bestOffer!)}
             >
               <LinearGradient
-                colors={[COLORS.secondary[500], COLORS.secondary[600]]}
+                colors={[colors.secondary[500], colors.secondary[600]]}
                 style={styles.bestOfferGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
@@ -266,7 +265,7 @@ export default function OffersScreen() {
           {/* Offers List */}
           {filteredOffers.length === 0 ? (
             <View style={styles.emptyState}>
-              <Ionicons name="pricetag-outline" size={48} color={COLORS.neutral[300]} />
+              <Ionicons name="pricetag-outline" size={48} color={colors.neutral[300]} />
               <Text style={styles.emptyStateTitle}>No offers available</Text>
               <Text style={styles.emptyStateText}>
                 Check back later for exclusive offers
@@ -338,13 +337,13 @@ function OfferCard({ offer, billAmount, isSelected, onPress, currencySymbol }: O
   const getSourceColor = (source: OfferSource): string => {
     switch (source) {
       case 'STORE':
-        return COLORS.primary[500];
+        return colors.primary[500];
       case 'BANK':
-        return COLORS.info[500];
+        return colors.infoScale[500];
       case 'REZ':
-        return COLORS.secondary[500];
+        return colors.secondary[500];
       default:
-        return COLORS.neutral[500];
+        return colors.neutral[500];
     }
   };
 
@@ -420,11 +419,11 @@ function OfferCard({ offer, billAmount, isSelected, onPress, currencySymbol }: O
       {/* Selection Indicator */}
       <View style={styles.offerSelection}>
         {isSelected ? (
-          <Ionicons name="checkmark-circle" size={24} color={COLORS.primary[500]} />
+          <Ionicons name="checkmark-circle" size={24} color={colors.primary[500]} />
         ) : isEligible ? (
-          <Ionicons name="ellipse-outline" size={24} color={COLORS.neutral[300]} />
+          <Ionicons name="ellipse-outline" size={24} color={colors.neutral[300]} />
         ) : (
-          <Ionicons name="lock-closed" size={20} color={COLORS.neutral[400]} />
+          <Ionicons name="lock-closed" size={20} color={colors.neutral[400]} />
         )}
       </View>
 
@@ -441,16 +440,16 @@ function OfferCard({ offer, billAmount, isSelected, onPress, currencySymbol }: O
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background.secondary,
+    backgroundColor: colors.background.secondary,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.md,
-    backgroundColor: COLORS.background.primary,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border.light,
+    borderBottomColor: colors.border.light,
   },
   backButton: {
     width: 40,
@@ -464,56 +463,56 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.primary,
+    ...typography.h4,
+    color: colors.text.primary,
   },
   headerSubtitle: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
+    ...typography.caption,
+    color: colors.text.secondary,
     marginTop: 2,
   },
   placeholder: {
     width: 40,
   },
   tabsContainer: {
-    backgroundColor: COLORS.background.primary,
-    paddingVertical: SPACING.sm,
+    backgroundColor: colors.background.primary,
+    paddingVertical: spacing.sm,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border.light,
+    borderBottomColor: colors.border.light,
   },
   tab: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    marginHorizontal: SPACING.xs,
-    borderRadius: BORDER_RADIUS.full,
-    backgroundColor: COLORS.neutral[100],
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    marginHorizontal: spacing.xs,
+    borderRadius: borderRadius.full,
+    backgroundColor: colors.neutral[100],
   },
   activeTab: {
-    backgroundColor: COLORS.primary[500],
+    backgroundColor: colors.primary[500],
   },
   tabText: {
-    ...TYPOGRAPHY.buttonSmall,
-    color: COLORS.text.secondary,
+    ...typography.buttonSmall,
+    color: colors.text.secondary,
   },
   activeTabText: {
     color: colors.background.primary,
   },
   tabBadge: {
-    marginLeft: SPACING.xs,
+    marginLeft: spacing.xs,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 10,
-    backgroundColor: COLORS.neutral[200],
+    backgroundColor: colors.neutral[200],
   },
   activeTabBadge: {
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
   tabBadgeText: {
-    ...TYPOGRAPHY.caption,
+    ...typography.caption,
     fontSize: 10,
-    color: COLORS.text.secondary,
+    color: colors.text.secondary,
   },
   activeTabBadgeText: {
     color: colors.background.primary,
@@ -524,52 +523,52 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.secondary,
-    marginTop: SPACING.md,
+    ...typography.body,
+    color: colors.text.secondary,
+    marginTop: spacing.md,
   },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: SPACING.xl,
+    padding: spacing.xl,
   },
   errorTitle: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.primary,
-    marginTop: SPACING.md,
+    ...typography.h4,
+    color: colors.text.primary,
+    marginTop: spacing.md,
   },
   errorText: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.secondary,
+    ...typography.body,
+    color: colors.text.secondary,
     textAlign: 'center',
-    marginTop: SPACING.sm,
+    marginTop: spacing.sm,
   },
   retryButton: {
-    marginTop: SPACING.lg,
-    paddingHorizontal: SPACING.xl,
-    paddingVertical: SPACING.md,
-    backgroundColor: COLORS.primary[500],
-    borderRadius: BORDER_RADIUS.lg,
+    marginTop: spacing.lg,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.md,
+    backgroundColor: colors.primary[500],
+    borderRadius: borderRadius.lg,
   },
   retryButtonText: {
-    ...TYPOGRAPHY.button,
+    ...typography.button,
     color: colors.background.primary,
   },
   content: {
     flex: 1,
-    padding: SPACING.md,
+    padding: spacing.md,
   },
   bestOfferBanner: {
-    marginBottom: SPACING.md,
-    borderRadius: BORDER_RADIUS.lg,
+    marginBottom: spacing.md,
+    borderRadius: borderRadius.lg,
     overflow: 'hidden',
-    ...SHADOWS.md,
+    ...shadows.md,
   },
   bestOfferGradient: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: SPACING.lg,
+    padding: spacing.lg,
   },
   bestOfferContent: {
     flex: 1,
@@ -577,56 +576,56 @@ const styles = StyleSheet.create({
   bestOfferBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: SPACING.sm,
+    marginBottom: spacing.sm,
   },
   bestOfferBadgeText: {
-    ...TYPOGRAPHY.caption,
+    ...typography.caption,
     color: colors.background.primary,
     fontWeight: '700',
     marginLeft: 4,
   },
   bestOfferTitle: {
-    ...TYPOGRAPHY.button,
+    ...typography.button,
     color: colors.background.primary,
   },
   bestOfferValue: {
-    ...TYPOGRAPHY.h3,
+    ...typography.h3,
     color: colors.background.primary,
-    marginTop: SPACING.xs,
+    marginTop: spacing.xs,
   },
   bestOfferCheck: {
-    marginLeft: SPACING.md,
+    marginLeft: spacing.md,
   },
   emptyState: {
     alignItems: 'center',
-    padding: SPACING.xxl,
+    padding: spacing.xxl,
   },
   emptyStateTitle: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.secondary,
-    marginTop: SPACING.md,
+    ...typography.h4,
+    color: colors.text.secondary,
+    marginTop: spacing.md,
   },
   emptyStateText: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.tertiary,
+    ...typography.body,
+    color: colors.text.tertiary,
     textAlign: 'center',
-    marginTop: SPACING.sm,
+    marginTop: spacing.sm,
   },
   offersList: {
-    gap: SPACING.md,
+    gap: spacing.md,
   },
   offerCard: {
     flexDirection: 'row',
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.lg,
-    padding: SPACING.lg,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
     borderWidth: 2,
     borderColor: 'transparent',
-    ...SHADOWS.sm,
+    ...shadows.sm,
   },
   offerCardSelected: {
-    borderColor: COLORS.primary[500],
-    backgroundColor: COLORS.primary[50],
+    borderColor: colors.primary[500],
+    backgroundColor: colors.primary[50],
   },
   offerCardDisabled: {
     opacity: 0.6,
@@ -638,65 +637,65 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
-    paddingHorizontal: SPACING.sm,
+    paddingHorizontal: spacing.sm,
     paddingVertical: 2,
-    borderRadius: BORDER_RADIUS.sm,
-    marginBottom: SPACING.sm,
+    borderRadius: borderRadius.sm,
+    marginBottom: spacing.sm,
   },
   sourceBadgeText: {
-    ...TYPOGRAPHY.caption,
+    ...typography.caption,
     fontWeight: '600',
     marginLeft: 4,
   },
   offerTitle: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.text.primary,
-    marginBottom: SPACING.xs,
+    ...typography.button,
+    color: colors.text.primary,
+    marginBottom: spacing.xs,
   },
   offerDescription: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.secondary,
-    marginBottom: SPACING.sm,
+    ...typography.bodySmall,
+    color: colors.text.secondary,
+    marginBottom: spacing.sm,
   },
   offerValueRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.md,
-    marginBottom: SPACING.xs,
+    gap: spacing.md,
+    marginBottom: spacing.xs,
   },
   offerValue: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.primary[600],
+    ...typography.h4,
+    color: colors.primary[600],
   },
   offerSavings: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.success[600],
+    ...typography.caption,
+    color: colors.successScale[600],
     fontWeight: '600',
   },
   offerCondition: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
+    ...typography.caption,
+    color: colors.text.tertiary,
     marginTop: 2,
   },
   offerConditionUnmet: {
-    color: COLORS.warning[600],
+    color: colors.warningScale[600],
   },
   offerSelection: {
     justifyContent: 'center',
-    marginLeft: SPACING.md,
+    marginLeft: spacing.md,
   },
   bestBadge: {
     position: 'absolute',
     top: 0,
     right: 0,
-    backgroundColor: COLORS.secondary[500],
-    paddingHorizontal: SPACING.sm,
+    backgroundColor: colors.secondary[500],
+    paddingHorizontal: spacing.sm,
     paddingVertical: 2,
-    borderTopRightRadius: BORDER_RADIUS.lg,
-    borderBottomLeftRadius: BORDER_RADIUS.md,
+    borderTopRightRadius: borderRadius.lg,
+    borderBottomLeftRadius: borderRadius.md,
   },
   bestBadgeText: {
-    ...TYPOGRAPHY.caption,
+    ...typography.caption,
     fontSize: 10,
     fontWeight: '700',
     color: colors.background.primary,
@@ -704,35 +703,35 @@ const styles = StyleSheet.create({
   bottomAction: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: SPACING.md,
-    backgroundColor: COLORS.background.primary,
+    padding: spacing.md,
+    backgroundColor: colors.background.primary,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border.light,
-    gap: SPACING.md,
+    borderTopColor: colors.border.light,
+    gap: spacing.md,
   },
   savingsInfo: {
     alignItems: 'center',
   },
   savingsLabel: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
+    ...typography.caption,
+    color: colors.text.secondary,
   },
   savingsValue: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.success[600],
+    ...typography.h4,
+    color: colors.successScale[600],
   },
   continueButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: SPACING.md,
-    borderRadius: BORDER_RADIUS.lg,
-    backgroundColor: COLORS.primary[500],
-    gap: SPACING.sm,
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.lg,
+    backgroundColor: colors.primary[500],
+    gap: spacing.sm,
   },
   continueButtonText: {
-    ...TYPOGRAPHY.button,
+    ...typography.button,
     color: colors.background.primary,
   },
 });

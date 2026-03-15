@@ -5,7 +5,7 @@
  * Features: Copy animation, success rate bar, verified/exclusive badges, dashed coupon style
  */
 
-import React, { memo, useState, useRef, useEffect } from 'react';
+import React, { memo, useState, useRef, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -45,7 +45,7 @@ const CouponCard: React.FC<{
 
   useEffect(() => {
     // Staggered entry animation
-    Animated.parallel([
+    const _anim0 = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 400,
@@ -59,8 +59,11 @@ const CouponCard: React.FC<{
         delay: index * 80,
         useNativeDriver: true,
       }),
-    ]).start();
-  }, [index]);
+    ]);
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, [index]);
 
   const handleCopy = () => {
     // Animate copy button
@@ -327,6 +330,17 @@ const BestCouponCodes: React.FC<BestCouponCodesProps> = ({
     return () => shieldLoop.stop();
   }, []);
 
+  const renderCouponItem = useCallback(({ item, index }: { item: unknown; index: number }) =>
+    isLoading ? (
+      <SkeletonCard key={`skeleton-${index}`} index={index} />
+    ) : (
+      <CouponCard
+        coupon={item as CashStoreCoupon}
+        index={index}
+        onCopy={() => onCouponCopy(item as CashStoreCoupon)}
+      />
+    ), [isLoading, onCouponCopy]);
+
   if (coupons.length === 0 && !isLoading) {
     return null;
   }
@@ -365,17 +379,7 @@ const BestCouponCodes: React.FC<BestCouponCodesProps> = ({
       {/* Horizontal List */}
       <FlatList
         data={isLoading ? Array.from({ length: 3 }) : coupons}
-        renderItem={({ item, index }) =>
-          isLoading ? (
-            <SkeletonCard key={`skeleton-${index}`} index={index} />
-          ) : (
-            <CouponCard
-              coupon={item as CashStoreCoupon}
-              index={index}
-              onCopy={() => onCouponCopy(item as CashStoreCoupon)}
-            />
-          )
-        }
+        renderItem={renderCouponItem}
         keyExtractor={(item, index) => (isLoading ? `skeleton-${index}` : (item as CashStoreCoupon).id)}
         horizontal
         showsHorizontalScrollIndicator={false}

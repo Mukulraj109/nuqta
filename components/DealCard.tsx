@@ -67,12 +67,14 @@ function DealCard({
 
   // Initialize card animation
   useEffect(() => {
-    Animated.spring(cardAnim, {
+    const anim = Animated.spring(cardAnim, {
       toValue: 1,
       tension: 100,
       friction: 8,
       useNativeDriver: true,
-    }).start();
+    });
+    anim.start();
+    return () => anim.stop();
   }, []);
 
   // Update countdown timer

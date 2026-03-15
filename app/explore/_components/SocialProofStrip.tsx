@@ -134,12 +134,14 @@ const SocialProofStrip = () => {
   useEffect(() => {
     if (proofItems.length === 0) return;
 
-    Animated.spring(scrollX, {
+    const anim = Animated.spring(scrollX, {
       toValue: currentIndex,
       useNativeDriver: true,
       tension: 50,
       friction: 8,
-    }).start();
+    });
+    anim.start();
+    return () => anim.stop();
   }, [currentIndex, proofItems.length]);
 
   // Don't render if loading or no data

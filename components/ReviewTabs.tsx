@@ -22,13 +22,16 @@ const ReviewTabs: React.FC<ReviewTabsProps> = ({
 
   useEffect(() => {
     const targetX = activeTab === 'reviews' ? 0 : tabWidth;
-    Animated.spring(translateX, {
+    const _anim0 = Animated.spring(translateX, {
       toValue: targetX,
       tension: 150,
       friction: 15,
       useNativeDriver: true,
-    }).start();
-  }, [activeTab, tabWidth, translateX]);
+    });
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, [activeTab, tabWidth, translateX]);
 
   const handleTabPress = (tab: TabType) => {
     onTabChange(tab);

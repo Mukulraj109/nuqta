@@ -60,8 +60,9 @@ function DealSharingModal({
   const styles = createStyles(screenData);
 
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 200,
@@ -73,9 +74,10 @@ function DealSharingModal({
           friction: 8,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 150,
@@ -86,14 +88,17 @@ function DealSharingModal({
           duration: 200,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [visible, fadeAnim, slideAnim]);
+  
+    return () => _anim.stop();
+}, [visible, fadeAnim, slideAnim]);
 
   // Copy feedback animation
   useEffect(() => {
     if (copyFeedback) {
-      Animated.sequence([
+      const anim = Animated.sequence([
         Animated.timing(feedbackAnim, {
           toValue: 1,
           duration: 200,
@@ -105,9 +110,11 @@ function DealSharingModal({
           duration: 200,
           useNativeDriver: true,
         }),
-      ]).start(() => {
+      ]);
+      anim.start(() => {
         setCopyFeedback(false);
       });
+      return () => anim.stop();
     }
   }, [copyFeedback, feedbackAnim]);
 

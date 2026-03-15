@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { NUQTA } from './searchTheme';
 
-export default function SearchHintView() {
+function SearchHintView() {
   return (
     <View
       style={styles.searchHintContainer}
@@ -73,3 +73,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default React.memo(SearchHintView);

@@ -47,6 +47,8 @@ import { showToast } from '@/components/common/ToastManager';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { errorReporter } from '@/utils/errorReporter';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -235,8 +237,7 @@ function StoreProductsPage({}: StoreProductsPageProps) {
           },
         };
         await AsyncStorage.setItem(cacheKey, JSON.stringify(cacheData));
-      } catch (error) {
-        // silently handle
+      } catch (error) { // Silent: non-critical AsyncStorage cache write
       }
     };
 
@@ -315,18 +316,20 @@ function StoreProductsPage({}: StoreProductsPageProps) {
 
   // Fetch categories from Category API
   useEffect(() => {
+    let cancelled = false;
     const loadCategories = async () => {
       try {
         setLoadingCategories(true);
         const response = await apiClient.get('/categories', {
           type: 'home_delivery', // Get home delivery categories for products
         });
-        
+
+        if (cancelled) return;
         if (response.success && response.data) {
-          const categoryList = Array.isArray(response.data) 
-            ? response.data 
+          const categoryList = Array.isArray(response.data)
+            ? response.data
             : ((response.data as any).categories || []);
-          
+
           setCategories(categoryList.map((cat: any) => ({
             id: cat._id || cat.id || '',
             name: cat.name || '',
@@ -334,13 +337,20 @@ function StoreProductsPage({}: StoreProductsPageProps) {
           })));
         }
       } catch (error: any) {
+        if (cancelled) return;
+        errorReporter.captureError(
+          error instanceof Error ? error : new Error('Failed to fetch product categories'),
+          { context: 'StoreProductsPage.loadCategories' },
+          'info'
+        );
         setCategories([]);
       } finally {
-        setLoadingCategories(false);
+        if (!cancelled) setLoadingCategories(false);
       }
     };
-    
+
     loadCategories();
+    return () => { cancelled = true; };
   }, []);
 
   // Fetch products with comprehensive error handling and retry logic
@@ -548,8 +558,7 @@ function StoreProductsPage({}: StoreProductsPageProps) {
         
         return updatedHistory;
       });
-    } catch (error) {
-      // silently handle
+    } catch (error) { // Silent: non-critical search history save
     }
   }, [storeId]);
 
@@ -654,11 +663,10 @@ function StoreProductsPage({}: StoreProductsPageProps) {
           const parsed = JSON.parse(history);
           setSearchHistory(Array.isArray(parsed) ? parsed.slice(0, 10) : []);
         }
-      } catch (error) {
-        // silently handle
+      } catch (error) { // Silent: non-critical AsyncStorage read
       }
     };
-    
+
     if (storeId) {
       loadSearchHistory();
     }
@@ -2001,7 +2009,7 @@ function StoreProductsPage({}: StoreProductsPageProps) {
 
 // Performance optimization: Memoize component to prevent unnecessary re-renders
 const MemoizedStoreProductsPage = React.memo(StoreProductsPage);
-export default MemoizedStoreProductsPage;
+export default withErrorBoundary(MemoizedStoreProductsPage, 'Store Products');
 
 const styles = StyleSheet.create({
   container: {

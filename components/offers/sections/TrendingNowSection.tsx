@@ -67,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TrendingNowSection;
+export default React.memo(TrendingNowSection);

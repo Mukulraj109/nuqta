@@ -5,7 +5,7 @@
  * Warm peach palette with frosted glass cards
  */
 
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo, useRef, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -42,7 +42,7 @@ const BrandCard: React.FC<{
   const pressAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    Animated.parallel([
+    const _anim0 = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 350,
@@ -56,8 +56,11 @@ const BrandCard: React.FC<{
         delay: index * 60,
         useNativeDriver: true,
       }),
-    ]).start();
-  }, [index]);
+    ]);
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, [index]);
 
   const handlePressIn = () => {
     Animated.spring(pressAnim, {
@@ -264,20 +267,27 @@ const TopOnlineBrands: React.FC<TopOnlineBrandsProps> = ({
     : (brands.length > 0 ? `${brands.length}+` : null);
 
   useEffect(() => {
-    Animated.timing(headerFadeAnim, {
+    const _anim0 = Animated.timing(headerFadeAnim, {
       toValue: 1,
       duration: 400,
       useNativeDriver: true,
-    }).start();
-  }, []);
+    });
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, []);
 
   const hasActiveFilter = activeFilter && activeFilter !== 'all';
   const hasNoBrands = !isLoading && brands.length === 0;
   const isFilteredEmpty = hasNoBrands && hasActiveFilter;
 
-  const renderBrandCard = ({ item, index }: { item: CashStoreBrand; index: number }) => (
+  const renderBrandCard = useCallback(({ item, index }: { item: CashStoreBrand; index: number }) => (
     <BrandCard brand={item} index={index} onPress={() => onBrandPress(item)} />
-  );
+  ), [onBrandPress]);
+
+  const renderSkeletonCard = useCallback(({ index }: { item: unknown; index: number }) => (
+    <SkeletonCard index={index} />
+  ), []);
 
   return (
     <View style={styles.outerContainer}>
@@ -329,7 +339,7 @@ const TopOnlineBrands: React.FC<TopOnlineBrandsProps> = ({
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.listContent}
             keyExtractor={(_, i) => `skeleton-${i}`}
-            renderItem={({ index }) => <SkeletonCard index={index} />}
+            renderItem={renderSkeletonCard}
           />
         ) : (
           <FlatList

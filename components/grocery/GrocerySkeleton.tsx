@@ -21,7 +21,7 @@ const COLORS = {
 };
 
 // Shimmer animation component
-const Shimmer: React.FC<{ style?: any }> = ({ style }) => {
+const Shimmer: React.FC<{ style?: any }> = React.memo(({ style }) => {
   const shimmerAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -57,10 +57,10 @@ const Shimmer: React.FC<{ style?: any }> = ({ style }) => {
       ]}
     />
   );
-};
+});
 
 // Product Card Skeleton
-export const ProductCardSkeleton: React.FC<{ variant?: 'default' | 'compact' | 'horizontal' }> = ({
+export const ProductCardSkeleton: React.FC<{ variant?: 'default' | 'compact' | 'horizontal' }> = React.memo(({
   variant = 'default',
 }) => {
   if (variant === 'horizontal') {
@@ -100,10 +100,10 @@ export const ProductCardSkeleton: React.FC<{ variant?: 'default' | 'compact' | '
       </View>
     </View>
   );
-};
+});
 
 // Store Card Skeleton
-export const StoreCardSkeleton: React.FC<{ variant?: 'default' | 'compact' | 'horizontal' | 'featured' }> = ({
+export const StoreCardSkeleton: React.FC<{ variant?: 'default' | 'compact' | 'horizontal' | 'featured' }> = React.memo(({
   variant = 'default',
 }) => {
   if (variant === 'featured') {
@@ -156,20 +156,20 @@ export const StoreCardSkeleton: React.FC<{ variant?: 'default' | 'compact' | 'ho
       </View>
     </View>
   );
-};
+});
 
 // Category Card Skeleton
-export const CategoryCardSkeleton: React.FC = () => {
+export const CategoryCardSkeleton: React.FC = React.memo(() => {
   return (
     <View style={styles.categoryCard}>
       <Shimmer style={styles.categoryIcon} />
       <Shimmer style={styles.categoryTitle} />
     </View>
   );
-};
+});
 
 // Header Skeleton
-export const HeaderSkeleton: React.FC = () => {
+export const HeaderSkeleton: React.FC = React.memo(() => {
   return (
     <View style={styles.headerSkeleton}>
       <View style={styles.headerTop}>
@@ -182,10 +182,10 @@ export const HeaderSkeleton: React.FC = () => {
       </View>
     </View>
   );
-};
+});
 
 // Filter Bar Skeleton
-export const FilterBarSkeleton: React.FC = () => {
+export const FilterBarSkeleton: React.FC = React.memo(() => {
   return (
     <View style={styles.filterBar}>
       {[1, 2, 3, 4].map((i) => (
@@ -193,10 +193,10 @@ export const FilterBarSkeleton: React.FC = () => {
       ))}
     </View>
   );
-};
+});
 
 // Stats Row Skeleton
-export const StatsRowSkeleton: React.FC = () => {
+export const StatsRowSkeleton: React.FC = React.memo(() => {
   return (
     <View style={styles.statsRow}>
       {[1, 2, 3].map((i) => (
@@ -207,10 +207,10 @@ export const StatsRowSkeleton: React.FC = () => {
       ))}
     </View>
   );
-};
+});
 
 // Full Page Skeleton - Products Grid
-export const ProductsGridSkeleton: React.FC<{ count?: number }> = ({ count = 6 }) => {
+export const ProductsGridSkeleton: React.FC<{ count?: number }> = React.memo(({ count = 6 }) => {
   return (
     <View style={styles.productsGrid}>
       {Array.from({ length: count }).map((_, i) => (
@@ -218,10 +218,10 @@ export const ProductsGridSkeleton: React.FC<{ count?: number }> = ({ count = 6 }
       ))}
     </View>
   );
-};
+});
 
 // Full Page Skeleton - Stores List
-export const StoresListSkeleton: React.FC<{ count?: number }> = ({ count = 4 }) => {
+export const StoresListSkeleton: React.FC<{ count?: number }> = React.memo(({ count = 4 }) => {
   return (
     <View style={styles.storesList}>
       {Array.from({ length: count }).map((_, i) => (
@@ -229,10 +229,10 @@ export const StoresListSkeleton: React.FC<{ count?: number }> = ({ count = 4 }) 
       ))}
     </View>
   );
-};
+});
 
 // Full Grocery Page Skeleton
-export const GroceryPageSkeleton: React.FC = () => {
+export const GroceryPageSkeleton: React.FC = React.memo(() => {
   return (
     <View style={styles.pageSkeleton}>
       <HeaderSkeleton />
@@ -242,10 +242,10 @@ export const GroceryPageSkeleton: React.FC = () => {
       </View>
     </View>
   );
-};
+});
 
 // Grocery Hub Page Skeleton
-export const GroceryHubSkeleton: React.FC = () => {
+export const GroceryHubSkeleton: React.FC = React.memo(() => {
   return (
     <View style={styles.pageSkeleton}>
       <HeaderSkeleton />
@@ -268,7 +268,7 @@ export const GroceryHubSkeleton: React.FC = () => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   shimmer: {

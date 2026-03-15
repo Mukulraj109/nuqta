@@ -14,9 +14,9 @@ import {
   Pressable,
   Platform,
   ActivityIndicator,
-  FlatList,
   RefreshControl,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -292,14 +292,11 @@ const MyLocksPage: React.FC = () => {
       {isLoading ? (
         <CardGridSkeleton />
       ) : (
-        <FlatList
+        <FlashList
           data={locks}
           renderItem={renderLockCard}
           keyExtractor={(item) => item._id}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
+          estimatedItemSize={120}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Ionicons

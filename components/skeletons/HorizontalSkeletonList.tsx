@@ -22,7 +22,7 @@ interface HorizontalSkeletonListProps {
   paddingHorizontal?: number;
 }
 
-export default function HorizontalSkeletonList({
+function HorizontalSkeletonList({
   SkeletonComponent,
   count = 4,
   cardWidth = 200,
@@ -53,3 +53,5 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
 });
+
+export default React.memo(HorizontalSkeletonList);

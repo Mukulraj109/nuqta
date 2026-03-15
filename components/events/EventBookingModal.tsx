@@ -168,14 +168,14 @@ function WebPaymentForm({
   };
 
   return (
-    <View style={{ marginTop: 20 }}>
-      <ThemedText style={{ fontSize: 16, fontWeight: '600', marginBottom: 15, color: textColor }}>
+    <View style={styles.paymentSection}>
+      <ThemedText style={[styles.paymentTitle, { color: textColor }]}>
         Payment Details
       </ThemedText>
-      
+
       {/* Card Number */}
-      <View style={{ marginBottom: 15 }}>
-        <ThemedText style={{ fontSize: 14, color: placeholderColor, marginBottom: 8 }}>
+      <View style={styles.paymentFieldGroup}>
+        <ThemedText style={[styles.paymentFieldLabel, { color: placeholderColor }]}>
           Card Number
         </ThemedText>
         <View style={{ 
@@ -193,9 +193,9 @@ function WebPaymentForm({
       </View>
 
       {/* Expiry and CVC Row */}
-      <View style={{ flexDirection: 'row', gap: 10, marginBottom: 15 }}>
-        <View style={{ flex: 1 }}>
-          <ThemedText style={{ fontSize: 14, color: placeholderColor, marginBottom: 8 }}>
+      <View style={styles.paymentRow}>
+        <View style={styles.paymentRowItem}>
+          <ThemedText style={[styles.paymentFieldLabel, { color: placeholderColor }]}>
             Expiry Date
           </ThemedText>
           <View style={{ 
@@ -212,8 +212,8 @@ function WebPaymentForm({
           </View>
         </View>
         
-        <View style={{ flex: 1 }}>
-          <ThemedText style={{ fontSize: 14, color: placeholderColor, marginBottom: 8 }}>
+        <View style={styles.paymentRowItem}>
+          <ThemedText style={[styles.paymentFieldLabel, { color: placeholderColor }]}>
             CVC
           </ThemedText>
           <View style={{ 
@@ -232,15 +232,8 @@ function WebPaymentForm({
       </View>
 
       {cardError && (
-        <View style={{ 
-          backgroundColor: colors.errorScale[100], 
-          borderColor: colors.error, 
-          borderWidth: 1, 
-          borderRadius: 8, 
-          padding: 12, 
-          marginBottom: 15 
-        }}>
-          <ThemedText style={{ color: colors.error, fontSize: 14 }}>
+        <View style={styles.cardErrorBox}>
+          <ThemedText style={styles.cardErrorText}>
             {cardError}
           </ThemedText>
         </View>
@@ -260,7 +253,7 @@ function WebPaymentForm({
         {isProcessing ? (
           <ActivityIndicator color={colors.background.primary} />
         ) : (
-          <ThemedText style={{ color: colors.background.primary, fontSize: 16, fontWeight: '600' }}>
+          <ThemedText style={styles.payBtnText}>
             Pay {currency}{amount}
           </ThemedText>
         )}
@@ -930,7 +923,7 @@ function EventBookingModal({
               disabled={!isFormValid() || isBooking}
             >
             {isProcessingPayment ? (
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <View style={styles.processingRow}>
                   <ActivityIndicator size="small" color={colors.background.primary} />
                   <ThemedText style={styles.bookButtonText}>
                     Processing Payment...
@@ -957,81 +950,37 @@ function EventBookingModal({
           onClose();
         }}
       >
-        <View style={{
-          flex: 1,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: 20
-        }}>
-          <View style={{
-            backgroundColor: cardBackground,
-            borderRadius: 20,
-            padding: 30,
-            width: '100%',
-            maxWidth: 400,
-            alignItems: 'center',
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 8,
-            elevation: 8
-          }}>
+        <View style={styles.successOverlay}>
+          <View style={[styles.successModal, { backgroundColor: cardBackground }]}>
             {/* Success Icon */}
-            <View style={{
-              width: 80,
-              height: 80,
-              borderRadius: 40,
-              backgroundColor: colors.lightMustard,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: 20
-            }}>
+            <View style={styles.successIcon}>
               <Ionicons name="checkmark" size={50} color={colors.background.primary} />
             </View>
 
             {/* Success Title */}
-            <ThemedText style={{
-              fontSize: 24,
-              fontWeight: 'bold',
-              color: textColor,
-              marginBottom: 10,
-              textAlign: 'center'
-            }}>
+            <ThemedText style={[styles.successTitle, { color: textColor }]}>
               Payment Successful!
             </ThemedText>
 
             {/* Success Message */}
-            <ThemedText style={{
-              fontSize: 16,
-              color: placeholderColor,
-              textAlign: 'center',
-              marginBottom: 20,
-              lineHeight: 24
-            }}>
+            <ThemedText style={[styles.successMessage, { color: placeholderColor }]}>
               Your booking for "{event?.title}" has been confirmed.
             </ThemedText>
 
             {/* Booking Details */}
             {successData && (
-              <View style={{
-                width: '100%',
-                backgroundColor: backgroundColor,
-                borderRadius: 12,
-                padding: 15,
-                marginBottom: 20
-              }}>
+              <View style={[styles.bookingDetailsBox, { backgroundColor: backgroundColor }]}>
                 {successData.bookingReference && (
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-                    <ThemedText style={{ fontSize: 14, color: placeholderColor }}>Booking Reference:</ThemedText>
-                    <ThemedText style={{ fontSize: 14, fontWeight: '600', color: textColor }}>
+                  <View style={styles.bookingDetailRow}>
+                    <ThemedText style={[styles.bookingDetailLabel, { color: placeholderColor }]}>Booking Reference:</ThemedText>
+                    <ThemedText style={[styles.bookingDetailValue, { color: textColor }]}>
                       {successData.bookingReference}
                     </ThemedText>
                   </View>
                 )}
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <ThemedText style={{ fontSize: 14, color: placeholderColor }}>Amount Paid:</ThemedText>
-                  <ThemedText style={{ fontSize: 14, fontWeight: '600', color: textColor }}>
+                <View style={styles.bookingDetailRowNoBtm}>
+                  <ThemedText style={[styles.bookingDetailLabel, { color: placeholderColor }]}>Amount Paid:</ThemedText>
+                  <ThemedText style={[styles.bookingDetailValue, { color: textColor }]}>
                     {event?.price.currency}{event?.price.amount}
                   </ThemedText>
                 </View>
@@ -1039,15 +988,9 @@ function EventBookingModal({
             )}
 
             {/* Action Buttons */}
-            <View style={{ flexDirection: 'row', gap: 10, width: '100%' }}>
+            <View style={styles.successActionsRow}>
               <Pressable
-                style={{
-                  flex: 1,
-                  backgroundColor: tintColor,
-                  padding: 15,
-                  borderRadius: 10,
-                  alignItems: 'center'
-                }}
+                style={[styles.successActionBtn, { backgroundColor: tintColor }]}
                 onPress={() => {
                   setShowSuccessModal(false);
                   onBookingSuccess?.(successData?.bookingId);
@@ -1056,25 +999,19 @@ function EventBookingModal({
                   router.push('/my-events' as any);
                 }}
               >
-                <ThemedText style={{ color: colors.background.primary, fontSize: 16, fontWeight: '600' }}>
+                <ThemedText style={styles.successActionBtnText}>
                   View Bookings
                 </ThemedText>
               </Pressable>
               <Pressable
-                style={{
-                  flex: 1,
-                  backgroundColor: borderColor,
-                  padding: 15,
-                  borderRadius: 10,
-                  alignItems: 'center'
-                }}
+                style={[styles.successActionBtn, { backgroundColor: borderColor }]}
                 onPress={() => {
                   setShowSuccessModal(false);
                   onBookingSuccess?.(successData?.bookingId);
                   onClose();
                 }}
               >
-                <ThemedText style={{ color: textColor, fontSize: 16, fontWeight: '600' }}>
+                <ThemedText style={[styles.successActionBtnTextAlt, { color: textColor }]}>
                   Done
                 </ThemedText>
               </Pressable>
@@ -1224,6 +1161,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+
+  // Extracted inline styles
+  paymentSection: { marginTop: 20 },
+  paymentTitle: { fontSize: 16, fontWeight: '600', marginBottom: 15 },
+  paymentFieldGroup: { marginBottom: 15 },
+  paymentFieldLabel: { fontSize: 14, marginBottom: 8 },
+  paymentRow: { flexDirection: 'row', gap: 10, marginBottom: 15 },
+  paymentRowItem: { flex: 1 },
+  cardErrorBox: { backgroundColor: colors.errorScale[100], borderColor: colors.error, borderWidth: 1, borderRadius: 8, padding: 12, marginBottom: 15 },
+  cardErrorText: { color: colors.error, fontSize: 14 },
+  payBtnText: { color: colors.background.primary, fontSize: 16, fontWeight: '600' },
+  processingRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  successOverlay: { flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', justifyContent: 'center', alignItems: 'center', padding: 20 },
+  successModal: { borderRadius: 20, padding: 30, width: '100%', maxWidth: 400, alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 8 },
+  successIcon: { width: 80, height: 80, borderRadius: 40, backgroundColor: colors.lightMustard, justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
+  successTitle: { fontSize: 24, fontWeight: 'bold', marginBottom: 10, textAlign: 'center' },
+  successMessage: { fontSize: 16, textAlign: 'center', marginBottom: 20, lineHeight: 24 },
+  bookingDetailsBox: { width: '100%', borderRadius: 12, padding: 15, marginBottom: 20 },
+  bookingDetailRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
+  bookingDetailRowNoBtm: { flexDirection: 'row', justifyContent: 'space-between' },
+  bookingDetailLabel: { fontSize: 14 },
+  bookingDetailValue: { fontSize: 14, fontWeight: '600' },
+  successActionsRow: { flexDirection: 'row', gap: 10, width: '100%' },
+  successActionBtn: { flex: 1, padding: 15, borderRadius: 10, alignItems: 'center' },
+  successActionBtnText: { color: colors.background.primary, fontSize: 16, fontWeight: '600' },
+  successActionBtnTextAlt: { fontSize: 16, fontWeight: '600' },
 });
 
 

@@ -30,7 +30,7 @@ function formatTime(timeStr: string): string {
   return `${displayHour}:${minutes.toString().padStart(2, '0')} ${ampm}`;
 }
 
-export default function ServicesSummary({ serviceItems, currencySymbol }: ServicesSummaryProps) {
+function ServicesSummary({ serviceItems, currencySymbol }: ServicesSummaryProps) {
   if (serviceItems.length === 0) return null;
 
   return (
@@ -166,3 +166,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default React.memo(ServicesSummary);

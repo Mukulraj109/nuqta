@@ -3,6 +3,8 @@
  * Composes all eager and deferred context providers in the correct nesting order.
  */
 import React, { useEffect, useRef } from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '@/lib/queryClient';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -58,6 +60,7 @@ export default function AppProviders({
   onQueueSyncError,
 }: AppProvidersProps) {
   return (
+    <QueryClientProvider client={queryClient}>
     <ErrorBoundary onError={onErrorBoundaryError}>
       <NuqtaThemeProvider>
       <CrossPlatformAlertProvider>
@@ -116,6 +119,7 @@ export default function AppProviders({
       </CrossPlatformAlertProvider>
       </NuqtaThemeProvider>
     </ErrorBoundary>
+    </QueryClientProvider>
   );
 }
 

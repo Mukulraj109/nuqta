@@ -3,12 +3,12 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
   RefreshControl,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import notificationService from '../../services/notificationService';
@@ -292,21 +292,17 @@ export default function NotificationHistoryScreen() {
         )}
       </View>
 
-      <FlatList
+      <FlashList
         data={notifications}
         renderItem={renderNotificationItem}
         keyExtractor={(item) => item.id}
-        style={styles.scrollView}
         contentContainerStyle={[styles.scrollContent, { paddingBottom: 120 }]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.3}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={15}
-        windowSize={7}
-        initialNumToRender={8}
+        estimatedItemSize={80}
         ListEmptyComponent={
           <View
             style={styles.emptyContainer}

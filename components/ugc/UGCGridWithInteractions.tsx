@@ -15,7 +15,7 @@ interface UGCGridWithInteractionsProps {
  * UGCGrid with integrated like and bookmark functionality
  * Handles authentication, optimistic updates, and backend synchronization
  */
-export default function UGCGridWithInteractions({
+function UGCGridWithInteractions({
   ugcContent,
   onContentPress,
 }: UGCGridWithInteractionsProps) {
@@ -74,3 +74,5 @@ export default function UGCGridWithInteractions({
     </View>
   );
 }
+
+export default React.memo(UGCGridWithInteractions);

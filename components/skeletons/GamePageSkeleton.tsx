@@ -11,7 +11,7 @@ import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-export default function GamePageSkeleton() {
+function GamePageSkeleton() {
   return (
     <View style={styles.container}>
       {/* Header area */}
@@ -78,3 +78,5 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
+
+export default React.memo(GamePageSkeleton);

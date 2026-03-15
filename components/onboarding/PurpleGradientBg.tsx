@@ -8,7 +8,7 @@ interface PurpleGradientBgProps {
   style?: any;
 }
 
-export default function PurpleGradientBg({ children, style }: PurpleGradientBgProps) {
+function PurpleGradientBg({ children, style }: PurpleGradientBgProps) {
   return (
     <LinearGradient
       colors={[colors.lightMustard, colors.nileBlue, colors.nileBlue]}  // Nuqta: Mustard to Nile Blue
@@ -26,3 +26,4 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+export default React.memo(PurpleGradientBg);

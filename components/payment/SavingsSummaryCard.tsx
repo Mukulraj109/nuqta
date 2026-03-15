@@ -9,11 +9,10 @@ import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { SavingsSummary } from '@/types/storePayment.types';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 interface SavingsSummaryCardProps {
   savings: SavingsSummary;
@@ -36,26 +35,26 @@ export const SavingsSummaryCard: React.FC<SavingsSummaryCardProps> = ({
       label: 'Coins Used',
       value: savings.coinsUsed,
       icon: 'diamond',
-      gradient: [COLORS.nuqta.mustard, COLORS.nuqta.peach],
+      gradient: [colors.nuqta.mustard, colors.nuqta.peach],
     },
     {
       label: 'Bank/UPI Offers',
       value: savings.bankOffers,
       icon: 'card',
-      gradient: [COLORS.nuqta.lavender, COLORS.nuqta.nileBlue],
+      gradient: [colors.nuqta.lavender, colors.nuqta.nileBlue],
     },
     {
       label: 'Loyalty Benefit',
       value: savings.loyaltyBenefit,
       icon: 'star',
-      gradient: [COLORS.nuqta.peach, COLORS.nuqta.mustard],
+      gradient: [colors.nuqta.peach, colors.nuqta.mustard],
     },
   ].filter(item => item.value > 0);
 
   return (
     <View style={styles.cardWrapper}>
       <LinearGradient
-        colors={[COLORS.nuqta.lavender, COLORS.nuqta.linen, colors.background.primary]}
+        colors={[colors.nuqta.lavender, colors.nuqta.linen, colors.background.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.container}
@@ -74,12 +73,12 @@ export const SavingsSummaryCard: React.FC<SavingsSummaryCardProps> = ({
           </View>
           {showCelebration && savings.totalSaved >= 100 && (
             <LinearGradient
-              colors={[COLORS.nuqta.mustard, COLORS.nuqta.peach]}
+              colors={[colors.nuqta.mustard, colors.nuqta.peach]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.amazingBadge}
             >
-              <Ionicons name="sparkles" size={12} color={COLORS.nuqta.nileBlue} />
+              <Ionicons name="sparkles" size={12} color={colors.nuqta.nileBlue} />
               <Text style={styles.amazingText}>Amazing!</Text>
             </LinearGradient>
           )}
@@ -89,7 +88,7 @@ export const SavingsSummaryCard: React.FC<SavingsSummaryCardProps> = ({
         <View style={styles.totalContainer}>
           <Text style={styles.totalLabel}>Total Saved</Text>
           <LinearGradient
-            colors={[COLORS.nuqta.mustard, COLORS.nuqta.peach]}
+            colors={[colors.nuqta.mustard, colors.nuqta.peach]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.totalAmountWrapper}
@@ -119,7 +118,7 @@ export const SavingsSummaryCard: React.FC<SavingsSummaryCardProps> = ({
         {/* Footer Note */}
         <View style={styles.footer}>
           <View style={styles.footerIconWrapper}>
-            <Ionicons name="checkmark-circle" size={14} color={COLORS.nuqta.mustard} />
+            <Ionicons name="checkmark-circle" size={14} color={colors.nuqta.mustard} />
           </View>
           <Text style={styles.footerText}>
             {`Smart savings automatically applied by ${BRAND.APP_NAME}`}
@@ -132,12 +131,12 @@ export const SavingsSummaryCard: React.FC<SavingsSummaryCardProps> = ({
 
 const styles = StyleSheet.create({
   cardWrapper: {
-    marginBottom: SPACING.md,
-    borderRadius: BORDER_RADIUS.xl,
+    marginBottom: spacing.md,
+    borderRadius: borderRadius.xl,
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: COLORS.nuqta.nileBlue,
+        shadowColor: colors.nuqta.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 12,
@@ -148,10 +147,10 @@ const styles = StyleSheet.create({
     }),
   },
   container: {
-    borderRadius: BORDER_RADIUS.xl,
-    padding: SPACING.lg,
+    borderRadius: borderRadius.xl,
+    padding: spacing.lg,
     borderWidth: 1,
-    borderColor: COLORS.nuqta.peach,
+    borderColor: colors.nuqta.peach,
     position: 'relative',
     overflow: 'hidden',
   },
@@ -177,63 +176,63 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SPACING.md,
+    marginBottom: spacing.md,
   },
   titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.xs,
+    gap: spacing.xs,
   },
   emoji: {
     fontSize: 20,
   },
   title: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.nuqta.nileBlue,
+    ...typography.h4,
+    color: colors.nuqta.nileBlue,
     fontWeight: '700',
   },
   amazingBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: SPACING.sm,
+    paddingHorizontal: spacing.sm,
     paddingVertical: 4,
-    borderRadius: BORDER_RADIUS.full,
+    borderRadius: borderRadius.full,
     gap: 4,
   },
   amazingText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.nuqta.nileBlue,
+    ...typography.caption,
+    color: colors.nuqta.nileBlue,
     fontWeight: '700',
   },
   totalContainer: {
     alignItems: 'center',
-    paddingVertical: SPACING.md,
+    paddingVertical: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.nuqta.peach,
-    marginBottom: SPACING.md,
+    borderBottomColor: colors.nuqta.peach,
+    marginBottom: spacing.md,
   },
   totalLabel: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.nuqta.mustard,
+    ...typography.caption,
+    color: colors.nuqta.mustard,
     fontWeight: '600',
     marginBottom: 8,
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
   totalAmountWrapper: {
-    paddingHorizontal: SPACING.xl,
-    paddingVertical: SPACING.sm,
-    borderRadius: BORDER_RADIUS.lg,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.sm,
+    borderRadius: borderRadius.lg,
   },
   totalAmount: {
     fontSize: 36,
     fontWeight: '800',
-    color: COLORS.nuqta.nileBlue,
+    color: colors.nuqta.nileBlue,
     letterSpacing: -1,
   },
   breakdownContainer: {
-    marginBottom: SPACING.md,
-    gap: SPACING.sm,
+    marginBottom: spacing.md,
+    gap: spacing.sm,
   },
   breakdownRow: {
     flexDirection: 'row',
@@ -245,25 +244,25 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: SPACING.sm,
+    marginRight: spacing.sm,
   },
   breakdownLabel: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.nuqta.nileBlue,
+    ...typography.bodySmall,
+    color: colors.nuqta.nileBlue,
     flex: 1,
   },
   breakdownValue: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.nuqta.nileBlue,
+    ...typography.body,
+    color: colors.nuqta.nileBlue,
     fontWeight: '700',
   },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.nuqta.linen,
-    padding: SPACING.sm,
-    borderRadius: BORDER_RADIUS.md,
-    gap: SPACING.xs,
+    backgroundColor: colors.nuqta.linen,
+    padding: spacing.sm,
+    borderRadius: borderRadius.md,
+    gap: spacing.xs,
   },
   footerIconWrapper: {
     width: 24,
@@ -274,8 +273,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   footerText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.nuqta.nileBlue,
+    ...typography.caption,
+    color: colors.nuqta.nileBlue,
     flex: 1,
   },
 });

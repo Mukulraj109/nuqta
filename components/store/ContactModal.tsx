@@ -40,21 +40,26 @@ function ContactModal({
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.spring(fadeAnim, {
+      _anim = Animated.spring(fadeAnim, {
         toValue: 1,
         useNativeDriver: true,
         tension: 50,
         friction: 7,
-      }).start();
+      });
+      _anim.start();
     } else {
-      Animated.timing(fadeAnim, {
+      _anim = Animated.timing(fadeAnim, {
         toValue: 0,
         duration: 200,
         useNativeDriver: true,
-      }).start();
+      });
+      _anim.start();
     }
-  }, [visible]);
+  
+    return () => _anim.stop();
+}, [visible]);
 
   const handleCopy = async (text: string, field: 'phone' | 'email') => {
     try {

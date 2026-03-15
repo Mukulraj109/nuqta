@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ProductLockScreen;
+export default React.memo(ProductLockScreen);

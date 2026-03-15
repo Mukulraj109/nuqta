@@ -17,8 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { CartHeaderProps } from '@/types/cart';
-import { COLORS, SPACING, BORDER_RADIUS } from '@/constants/DesignTokens';
-
+import { borderRadius, colors, spacing } from '@/constants/theme';
 function CartHeader({ onBack, title = 'Cart' }: CartHeaderProps) {
   const { width, height } = Dimensions.get('window');
   const isSmallScreen = width < 360;
@@ -31,7 +30,7 @@ function CartHeader({ onBack, title = 'Cart' }: CartHeaderProps) {
 
   return (
     <LinearGradient
-      colors={[COLORS.nuqta.mustard, COLORS.nuqta.peach]}
+      colors={[colors.nuqta.mustard, colors.nuqta.peach]}
       style={[styles.container, { paddingTop: statusBarHeight + 10 }]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
@@ -49,7 +48,7 @@ function CartHeader({ onBack, title = 'Cart' }: CartHeaderProps) {
           accessibilityLabel="Go back"
           accessibilityRole="button"
         >
-          <Ionicons name="arrow-back" size={22} color={COLORS.nuqta.nileBlue} />
+          <Ionicons name="arrow-back" size={22} color={colors.nuqta.nileBlue} />
         </Pressable>
 
         {/* Title */}
@@ -63,7 +62,7 @@ function CartHeader({ onBack, title = 'Cart' }: CartHeaderProps) {
             {title}
           </ThemedText>
           <View style={styles.cartIconWrapper}>
-            <Ionicons name="cart" size={16} color={COLORS.nuqta.mustard} />
+            <Ionicons name="cart" size={16} color={colors.nuqta.mustard} />
           </View>
         </View>
 
@@ -79,7 +78,7 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     borderBottomLeftRadius: 28,
     borderBottomRightRadius: 28,
-    shadowColor: COLORS.nuqta.mustard,
+    shadowColor: colors.nuqta.mustard,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.25,
     shadowRadius: 16,
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderWidth: 1,
     borderColor: 'rgba(26, 58, 82, 0.1)',
-    shadowColor: COLORS.nuqta.nileBlue,
+    shadowColor: colors.nuqta.nileBlue,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
@@ -134,19 +133,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: SPACING.sm,
+    gap: spacing.sm,
   },
   title: {
     textAlign: 'center',
     fontWeight: '700',
-    color: COLORS.nuqta.nileBlue,
+    color: colors.nuqta.nileBlue,
     letterSpacing: 1,
   },
   cartIconWrapper: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: COLORS.nuqta.nileBlue,
+    backgroundColor: colors.nuqta.nileBlue,
     justifyContent: 'center',
     alignItems: 'center',
   },

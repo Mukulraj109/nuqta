@@ -10,9 +10,9 @@ import {
   StatusBar,
   Platform,
   TextInput,
-  FlatList,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -381,12 +381,13 @@ export default function ReviewToEarnPage() {
       {loading ? (
         <FormPageSkeleton />
       ) : (
-      <FlatList
+      <FlashList
         data={pendingReviews}
         renderItem={renderPendingReview}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
+        estimatedItemSize={120}
         ListHeaderComponent={
           <View style={styles.tipsCard}>
             <Ionicons name="bulb-outline" size={24} color={Colors.gold} />

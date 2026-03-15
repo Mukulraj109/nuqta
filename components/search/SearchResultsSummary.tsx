@@ -13,7 +13,7 @@ interface SearchResultsSummaryProps {
   summary: SearchResultsSummaryType;
 }
 
-export default function SearchResultsSummary({ query, summary }: SearchResultsSummaryProps) {
+function SearchResultsSummary({ query, summary }: SearchResultsSummaryProps) {
   const { getCurrencySymbol, getLocale } = useRegion();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
@@ -72,3 +72,5 @@ const styles = StyleSheet.create({
   },
 });
 
+
+export default React.memo(SearchResultsSummary);

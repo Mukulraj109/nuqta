@@ -22,7 +22,7 @@ function ProjectDashboard({
   const slideAnim = useRef(new Animated.Value(30)).current;
 
   useEffect(() => {
-    Animated.parallel([
+    const _anim0 = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 600,
@@ -33,8 +33,11 @@ function ProjectDashboard({
         duration: 600,
         useNativeDriver: true,
       }),
-    ]).start();
-  }, []);
+    ]);
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, []);
 
   return (
     <Animated.View 

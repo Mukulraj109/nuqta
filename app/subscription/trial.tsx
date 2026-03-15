@@ -55,7 +55,7 @@ export default function TrialPage() {
     if (isOnTrial) {
       fetchTrialStats();
       // Animate in
-      Animated.parallel([
+      const anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 500,
@@ -66,7 +66,9 @@ export default function TrialPage() {
           duration: 600,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      anim.start();
+      return () => anim.stop();
     } else {
       // Not on trial, redirect
       router.replace('/subscription/manage');

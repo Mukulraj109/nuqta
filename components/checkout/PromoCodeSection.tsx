@@ -43,7 +43,7 @@ interface PromoCodeSectionProps {
   onApplyVoucherCode: (code: string) => void;
 }
 
-export default function PromoCodeSection({
+function PromoCodeSection({
   appliedPromoCode,
   promoDiscount,
   availablePromoCodes,
@@ -315,3 +315,5 @@ const styles = StyleSheet.create({
     padding: Spacing.xs,
   },
 });
+
+export default React.memo(PromoCodeSection);

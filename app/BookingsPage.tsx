@@ -9,8 +9,8 @@ import {
   RefreshControl,
   ActivityIndicator,
   Platform,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -827,7 +827,7 @@ export default function BookingsPage() {
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={filteredBookings}
           keyExtractor={(item) => item.id}
           renderItem={renderBookingCard}
@@ -835,11 +835,8 @@ export default function BookingsPage() {
             styles.listContent,
             filteredBookings.length === 0 && { flex: 1 },
           ]}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
           ListEmptyComponent={renderEmpty}
+          estimatedItemSize={120}
           ListFooterComponent={
             hasMoreData && filteredBookings.length > 0 ? (
               <View style={styles.loadMoreFooter}>

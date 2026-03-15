@@ -20,7 +20,7 @@ function ReferralSection({
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
 
   useEffect(() => {
-    Animated.parallel([
+    const _anim0 = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 600,
@@ -37,8 +37,11 @@ function ReferralSection({
         friction: 7,
         useNativeDriver: true,
       }),
-    ]).start();
-  }, []);
+    ]);
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, []);
 
   return (
     <Animated.View 

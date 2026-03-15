@@ -52,7 +52,7 @@ const CoinEarnedToast: React.FC<CoinEarnedToastProps> = ({
       coinRotate.setValue(0);
 
       // Slide down + fade in
-      Animated.parallel([
+      const _anim0 = Animated.parallel([
         Animated.spring(translateY, {
           toValue: 0,
           tension: 60,
@@ -75,7 +75,8 @@ const CoinEarnedToast: React.FC<CoinEarnedToastProps> = ({
           duration: 600,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim0.start();
 
       // Auto-dismiss after 3 seconds
       autoDismissTimer.current = setTimeout(() => {
@@ -83,6 +84,7 @@ const CoinEarnedToast: React.FC<CoinEarnedToastProps> = ({
       }, 3000);
 
       return () => {
+        _anim0.stop();
         if (autoDismissTimer.current) {
           clearTimeout(autoDismissTimer.current);
         }

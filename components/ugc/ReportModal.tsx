@@ -39,8 +39,9 @@ function ReportModal({
 
   // Animation effects
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 300,
@@ -52,9 +53,10 @@ function ReportModal({
           speed: 12,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 200,
@@ -65,9 +67,12 @@ function ReportModal({
           duration: 250,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [visible]);
+  
+    return () => _anim.stop();
+}, [visible]);
 
   // Handle success state
   useEffect(() => {

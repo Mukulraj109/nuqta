@@ -9,7 +9,7 @@ export type ThemedTextProps = TextProps & {
   type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
 };
 
-export function ThemedText({
+function ThemedTextInner({
   style,
   lightColor,
   darkColor,
@@ -33,6 +33,8 @@ export function ThemedText({
     />
   );
 }
+
+export const ThemedText = React.memo(ThemedTextInner);
 
 const styles = StyleSheet.create({
   default: {

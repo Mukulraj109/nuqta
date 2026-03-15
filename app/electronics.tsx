@@ -12,8 +12,8 @@ import {
   Platform,
   Dimensions,
   ActivityIndicator,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -562,7 +562,7 @@ const ElectronicsPage: React.FC = () => {
       </View>
 
       {/* Main Content */}
-      <FlatList
+      <FlashList
         data={productRows}
         renderItem={renderProductRow}
         keyExtractor={(_, index) => `row-${index}`}
@@ -573,6 +573,7 @@ const ElectronicsPage: React.FC = () => {
         onEndReachedThreshold={0.3}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 0 }}
+        estimatedItemSize={120}
       />
     </View>
   );

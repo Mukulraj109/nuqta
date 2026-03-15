@@ -29,7 +29,7 @@ function SectionBlock() {
   );
 }
 
-export default function SectionListSkeleton({ sections = 5 }: { sections?: number }) {
+function SectionListSkeleton({ sections = 5 }: { sections?: number }) {
   return (
     <View style={styles.container}>
       {/* Page Title */}
@@ -78,3 +78,5 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 });
+
+export default React.memo(SectionListSkeleton);

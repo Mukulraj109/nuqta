@@ -11,7 +11,7 @@ interface StickyCTAContainerProps {
  * Fixed-bottom container for subscription CTA buttons.
  * Renders a soft top shadow and sits above the tab bar.
  */
-export default function StickyCTAContainer({ children }: StickyCTAContainerProps) {
+function StickyCTAContainer({ children }: StickyCTAContainerProps) {
   return (
     <View style={styles.wrapper}>
       {/* Top shadow fade */}
@@ -59,3 +59,5 @@ const styles = StyleSheet.create({
     }),
   },
 });
+
+export default React.memo(StickyCTAContainer);

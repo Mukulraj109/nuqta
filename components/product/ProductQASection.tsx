@@ -5,9 +5,9 @@ import {
   Pressable,
   TextInput,
   ActivityIndicator,
-  FlatList,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -320,7 +320,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
       </View>
 
       {/* Questions List */}
-      <FlatList
+      <FlashList
         data={questions}
         renderItem={renderQuestion}
         keyExtractor={item => item._id}
@@ -329,10 +329,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
         refreshing={isRefreshing}
         onEndReached={loadMore}
         onEndReachedThreshold={0.5}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
+        estimatedItemSize={100}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="chatbubble-ellipses-outline" size={64} color={colors.neutral[300]} />

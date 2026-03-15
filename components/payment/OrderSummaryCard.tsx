@@ -7,8 +7,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { useRegion } from '@/contexts/RegionContext';
+import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 interface OrderSummaryCardProps {
   billAmount: number;
@@ -56,7 +56,7 @@ export const OrderSummaryCard: React.FC<OrderSummaryCardProps> = ({
 
       {showSmartSavingsHint && totalSavings === 0 && (
         <View style={styles.hintBanner}>
-          <Ionicons name="sparkles" size={16} color={COLORS.info[500]} />
+          <Ionicons name="sparkles" size={16} color={colors.infoScale[500]} />
           <Text style={styles.hintText}>
             Smart savings will be applied below
           </Text>
@@ -65,7 +65,7 @@ export const OrderSummaryCard: React.FC<OrderSummaryCardProps> = ({
 
       {totalSavings > 0 && (
         <View style={styles.savingsBanner}>
-          <Ionicons name="checkmark-circle" size={16} color={COLORS.success[500]} />
+          <Ionicons name="checkmark-circle" size={16} color={colors.successScale[500]} />
           <Text style={styles.savingsText}>
             You're saving {currencySymbol}{totalSavings.toFixed(2)} on this order!
           </Text>
@@ -77,71 +77,71 @@ export const OrderSummaryCard: React.FC<OrderSummaryCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.lg,
-    padding: SPACING.lg,
-    marginBottom: SPACING.md,
-    ...SHADOWS.sm,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.md,
+    ...shadows.sm,
   },
   sectionTitle: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.primary,
-    marginBottom: SPACING.md,
+    ...typography.h4,
+    color: colors.text.primary,
+    marginBottom: spacing.md,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SPACING.sm,
+    marginBottom: spacing.sm,
   },
   label: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.secondary,
+    ...typography.body,
+    color: colors.text.secondary,
   },
   value: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.primary,
+    ...typography.body,
+    color: colors.text.primary,
     fontWeight: '600',
   },
   divider: {
     height: 1,
-    backgroundColor: COLORS.border.light,
-    marginVertical: SPACING.md,
+    backgroundColor: colors.border.light,
+    marginVertical: spacing.md,
   },
   totalLabel: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.primary,
+    ...typography.h4,
+    color: colors.text.primary,
   },
   totalValue: {
-    ...TYPOGRAPHY.h3,
-    color: COLORS.text.primary,
+    ...typography.h3,
+    color: colors.text.primary,
   },
   hintBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.info[50],
-    padding: SPACING.sm,
-    borderRadius: BORDER_RADIUS.md,
-    marginTop: SPACING.md,
-    gap: SPACING.xs,
+    backgroundColor: colors.infoScale[50],
+    padding: spacing.sm,
+    borderRadius: borderRadius.md,
+    marginTop: spacing.md,
+    gap: spacing.xs,
   },
   hintText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.info[700],
+    ...typography.caption,
+    color: colors.infoScale[700],
     flex: 1,
   },
   savingsBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.success[50],
-    padding: SPACING.sm,
-    borderRadius: BORDER_RADIUS.md,
-    marginTop: SPACING.md,
-    gap: SPACING.xs,
+    backgroundColor: colors.successScale[50],
+    padding: spacing.sm,
+    borderRadius: borderRadius.md,
+    marginTop: spacing.md,
+    gap: spacing.xs,
   },
   savingsText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.success[700],
+    ...typography.caption,
+    color: colors.successScale[700],
     flex: 1,
     fontWeight: '600',
   },

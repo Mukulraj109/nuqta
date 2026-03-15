@@ -24,12 +24,11 @@ import { useRouter, Stack, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { challengesApi, ChallengeProgress, Challenge } from '@/services/challengesApi';
 import streakApi from '@/services/streakApi';
-import { COLORS, SPACING, TYPOGRAPHY, SHADOWS, BORDER_RADIUS } from '@/constants/DesignTokens';
 import { useRegion } from '@/contexts/RegionContext';
 import { platformAlert, platformAlertSimple } from '@/utils/platformAlert';
 import { SkeletonBox } from '@/components/earn/SkeletonLoader';
 import { BRAND } from '@/constants/brand';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -99,11 +98,11 @@ const tabs = [
 
 const getDifficultyStyle = (difficulty: string) => {
   switch (difficulty) {
-    case 'easy': return { bg: 'rgba(255, 205, 87, 0.15)', color: COLORS.primary[500], label: 'Easy' };
-    case 'medium': return { bg: 'rgba(59, 130, 246, 0.15)', color: COLORS.info[500], label: 'Medium' };
+    case 'easy': return { bg: 'rgba(255, 205, 87, 0.15)', color: colors.primary[500], label: 'Easy' };
+    case 'medium': return { bg: 'rgba(59, 130, 246, 0.15)', color: colors.infoScale[500], label: 'Medium' };
     case 'hard': return { bg: 'rgba(139, 92, 246, 0.15)', color: THEME.purple500, label: 'Hard' };
-    case 'legendary': return { bg: 'rgba(245, 158, 11, 0.15)', color: COLORS.warning[500], label: 'Legendary' };
-    default: return { bg: COLORS.neutral[200], color: COLORS.neutral[600], label: difficulty };
+    case 'legendary': return { bg: 'rgba(245, 158, 11, 0.15)', color: colors.warningScale[500], label: 'Legendary' };
+    default: return { bg: colors.neutral[200], color: colors.neutral[600], label: difficulty };
   }
 };
 
@@ -158,9 +157,9 @@ const MissionCard: React.FC<{
             mission.userState === 'available' && styles.missionIconBoxAvailable
           ]}>
             {mission.claimed ? (
-              <Ionicons name="checkmark-done" size={24} color={COLORS.background.primary} />
+              <Ionicons name="checkmark-done" size={24} color={colors.background.primary} />
             ) : mission.completed ? (
-              <Ionicons name="checkmark-circle" size={24} color={COLORS.background.primary} />
+              <Ionicons name="checkmark-circle" size={24} color={colors.background.primary} />
             ) : mission.userState === 'in_progress' ? (
               <Ionicons name="play-circle" size={24} color={THEME.purple500} />
             ) : mission.userState === 'available' ? (
@@ -211,8 +210,8 @@ const MissionCard: React.FC<{
                 </View>
                 {mission.reward.cashback > 0 && (
                   <View style={[styles.rewardBadge, styles.cashbackBadge]}>
-                    <Ionicons name="flash" size={12} color={COLORS.success[500]} />
-                    <Text style={[styles.rewardText, { color: COLORS.success[600] }]}>
+                    <Ionicons name="flash" size={12} color={colors.successScale[500]} />
+                    <Text style={[styles.rewardText, { color: colors.successScale[600] }]}>
                       {currencySymbol}{mission.reward.cashback}
                     </Text>
                   </View>
@@ -232,7 +231,7 @@ const MissionCard: React.FC<{
                   }
                   return (
                     <>
-                      <Ionicons name="time-outline" size={12} color={COLORS.neutral[500]} />
+                      <Ionicons name="time-outline" size={12} color={colors.neutral[500]} />
                       <Text style={styles.endsIn}>{mission.endsIn}</Text>
                     </>
                   );
@@ -243,7 +242,7 @@ const MissionCard: React.FC<{
 
           {/* Arrow indicator */}
           <View style={styles.arrowContainer}>
-            <Ionicons name="chevron-forward" size={20} color={COLORS.neutral[400]} />
+            <Ionicons name="chevron-forward" size={20} color={colors.neutral[400]} />
           </View>
         </View>
 
@@ -259,13 +258,13 @@ const MissionCard: React.FC<{
             disabled={isClaiming}
           >
             <LinearGradient
-              colors={[COLORS.primary[500], COLORS.success[500]]}
+              colors={[colors.primary[500], colors.successScale[500]]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.claimButton}
             >
               {isClaiming ? (
-                <ActivityIndicator size="small" color={COLORS.background.primary} />
+                <ActivityIndicator size="small" color={colors.background.primary} />
               ) : (
                 <>
                   <CachedImage source={REZ_COIN_IMAGE} style={styles.claimCoinIcon} />
@@ -279,7 +278,7 @@ const MissionCard: React.FC<{
         {/* Claimed Badge */}
         {mission.claimed && (
           <View style={styles.claimedBadge}>
-            <Ionicons name="checkmark-circle" size={16} color={COLORS.success[500]} />
+            <Ionicons name="checkmark-circle" size={16} color={colors.successScale[500]} />
             <Text style={styles.claimedText}>Rewards Claimed</Text>
           </View>
         )}
@@ -479,7 +478,7 @@ const MissionsScreen: React.FC = () => {
               onPress={() => router.back()}
              
             >
-              <Ionicons name="arrow-back" size={20} color={COLORS.background.primary} />
+              <Ionicons name="arrow-back" size={20} color={colors.background.primary} />
             </Pressable>
             <View style={styles.headerContent}>
               <View style={styles.headerTitleRow}>
@@ -499,7 +498,7 @@ const MissionsScreen: React.FC = () => {
                 onPress={() => router.push('/explore/daily-checkin')}
                
               >
-                <Ionicons name="flame-outline" size={14} color={COLORS.background.primary} />
+                <Ionicons name="flame-outline" size={14} color={colors.background.primary} />
                 <Text style={styles.streakText}>Check in</Text>
               </Pressable>
             )}
@@ -523,7 +522,7 @@ const MissionsScreen: React.FC = () => {
                   <Ionicons
                     name={tab.icon}
                     size={16}
-                    color={isActive ? THEME.purple600 : COLORS.background.primary}
+                    color={isActive ? THEME.purple600 : colors.background.primary}
                   />
                   <Text style={[styles.tabText, isActive && styles.tabTextActive]}>
                     {tab.label}
@@ -560,7 +559,7 @@ const MissionsScreen: React.FC = () => {
               {/* Stats skeleton */}
               <View style={styles.statsRow}>
                 {[1, 2, 3].map(i => (
-                  <View key={i} style={[styles.statCard, { alignItems: 'center', padding: SPACING.md }]}>
+                  <View key={i} style={[styles.statCard, { alignItems: 'center', padding: spacing.md }]}>
                     <SkeletonBox width={36} height={36} borderRadius={18} />
                     <SkeletonBox width={30} height={20} borderRadius={4} style={{ marginTop: 8 }} />
                     <SkeletonBox width={60} height={12} borderRadius={4} style={{ marginTop: 4 }} />
@@ -568,10 +567,10 @@ const MissionsScreen: React.FC = () => {
                 ))}
               </View>
               {/* Mission card skeletons */}
-              <View style={{ paddingHorizontal: SPACING.md }}>
-                <SkeletonBox width={140} height={16} borderRadius={4} style={{ marginBottom: SPACING.sm }} />
+              <View style={{ paddingHorizontal: spacing.md }}>
+                <SkeletonBox width={140} height={16} borderRadius={4} style={{ marginBottom: spacing.sm }} />
                 {[1, 2, 3, 4].map(i => (
-                  <View key={i} style={[styles.missionCard, { flexDirection: 'row', gap: SPACING.sm }]}>
+                  <View key={i} style={[styles.missionCard, { flexDirection: 'row', gap: spacing.sm }]}>
                     <SkeletonBox width={48} height={48} borderRadius={8} />
                     <View style={{ flex: 1 }}>
                       <SkeletonBox width="70%" height={16} borderRadius={4} />
@@ -592,7 +591,7 @@ const MissionsScreen: React.FC = () => {
           {!loading && error && (
             <View style={styles.errorContainer}>
               <View style={styles.errorIconContainer}>
-                <Ionicons name="cloud-offline-outline" size={48} color={COLORS.neutral[400]} />
+                <Ionicons name="cloud-offline-outline" size={48} color={colors.neutral[400]} />
               </View>
               <Text style={styles.errorTitle}>Unable to load missions</Text>
               <Text style={styles.errorText}>{error}</Text>
@@ -611,9 +610,9 @@ const MissionsScreen: React.FC = () => {
             <View style={styles.statsRow}>
               <View style={[styles.statCard, styles.statCardGreen]}>
                 <View style={styles.statIconContainer}>
-                  <Ionicons name="trophy" size={20} color={COLORS.success[500]} />
+                  <Ionicons name="trophy" size={20} color={colors.successScale[500]} />
                 </View>
-                <Text style={[styles.statValue, { color: COLORS.success[600] }]}>
+                <Text style={[styles.statValue, { color: colors.successScale[600] }]}>
                   {stats.completed}
                 </Text>
                 <Text style={styles.statLabel}>Completed</Text>
@@ -622,16 +621,16 @@ const MissionsScreen: React.FC = () => {
                 <View style={styles.statIconContainer}>
                   <CachedImage source={REZ_COIN_IMAGE} style={styles.statCoinIcon} />
                 </View>
-                <Text style={[styles.statValue, { color: COLORS.secondary[700] }]}>
+                <Text style={[styles.statValue, { color: colors.secondary[700] }]}>
                   {formatNumber(stats.coinsEarned)}
                 </Text>
                 <Text style={styles.statLabel}>Coins Earned</Text>
               </View>
               <View style={[styles.statCard, styles.statCardBlue]}>
                 <View style={styles.statIconContainer}>
-                  <Ionicons name="flash" size={20} color={COLORS.info[500]} />
+                  <Ionicons name="flash" size={20} color={colors.infoScale[500]} />
                 </View>
-                <Text style={[styles.statValue, { color: COLORS.info[700] }]}>
+                <Text style={[styles.statValue, { color: colors.infoScale[700] }]}>
                   {stats.active}
                 </Text>
                 <Text style={styles.statLabel}>Active</Text>
@@ -656,7 +655,7 @@ const MissionsScreen: React.FC = () => {
               {missions.length === 0 && (
                 <View style={styles.emptyContainer}>
                   <View style={styles.emptyIconContainer}>
-                    <Ionicons name="flag-outline" size={48} color={COLORS.neutral[300]} />
+                    <Ionicons name="flag-outline" size={48} color={colors.neutral[300]} />
                   </View>
                   <Text style={styles.emptyTitle}>No {activeTab} missions available</Text>
                   <Text style={styles.emptyText}>
@@ -697,17 +696,17 @@ const MissionsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background.secondary,
+    backgroundColor: colors.background.secondary,
   },
   header: {
-    paddingTop: SPACING.sm,
-    paddingBottom: SPACING.md,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.md,
   },
   headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: SPACING.md,
-    marginBottom: SPACING.md,
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.md,
   },
   backButton: {
     width: 40,
@@ -719,20 +718,20 @@ const styles = StyleSheet.create({
   },
   headerContent: {
     flex: 1,
-    marginLeft: SPACING.sm,
+    marginLeft: spacing.sm,
   },
   headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
+    gap: spacing.sm,
   },
   headerTitle: {
-    fontSize: TYPOGRAPHY.h3.fontSize,
+    fontSize: typography.h3.fontSize,
     fontWeight: '700',
-    color: COLORS.background.primary,
+    color: colors.background.primary,
   },
   headerSubtitle: {
-    fontSize: TYPOGRAPHY.caption.fontSize,
+    fontSize: typography.caption.fontSize,
     color: 'rgba(255,255,255,0.8)',
     marginTop: 2,
   },
@@ -740,20 +739,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    paddingHorizontal: SPACING.sm,
-    paddingVertical: SPACING.xs,
-    borderRadius: BORDER_RADIUS.full,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.full,
     backgroundColor: 'rgba(255,255,255,0.2)',
   },
   streakText: {
-    fontSize: TYPOGRAPHY.bodySmall.fontSize,
+    fontSize: typography.bodySmall.fontSize,
     fontWeight: '700',
-    color: COLORS.background.primary,
+    color: colors.background.primary,
   },
   tabsRow: {
     flexDirection: 'row',
-    paddingHorizontal: SPACING.md,
-    gap: SPACING.sm,
+    paddingHorizontal: spacing.md,
+    gap: spacing.sm,
   },
   tab: {
     flex: 1,
@@ -761,17 +760,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    paddingVertical: SPACING.sm,
-    borderRadius: BORDER_RADIUS.lg,
+    paddingVertical: spacing.sm,
+    borderRadius: borderRadius.lg,
     backgroundColor: 'rgba(255,255,255,0.15)',
   },
   tabActive: {
-    backgroundColor: COLORS.background.primary,
+    backgroundColor: colors.background.primary,
   },
   tabText: {
-    fontSize: TYPOGRAPHY.bodySmall.fontSize,
+    fontSize: typography.bodySmall.fontSize,
     fontWeight: '600',
-    color: COLORS.background.primary,
+    color: colors.background.primary,
   },
   tabTextActive: {
     color: THEME.purple600,
@@ -791,31 +790,31 @@ const styles = StyleSheet.create({
   tabBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: COLORS.background.primary,
+    color: colors.background.primary,
   },
   tabBadgeTextActive: {
-    color: COLORS.background.primary,
+    color: colors.background.primary,
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
-    paddingTop: SPACING.md,
+    paddingTop: spacing.md,
   },
   statsRow: {
     flexDirection: 'row',
-    paddingHorizontal: SPACING.md,
-    gap: SPACING.sm,
-    marginBottom: SPACING.md,
+    paddingHorizontal: spacing.md,
+    gap: spacing.sm,
+    marginBottom: spacing.md,
   },
   statCard: {
     flex: 1,
-    padding: SPACING.sm,
-    borderRadius: BORDER_RADIUS.lg,
+    padding: spacing.sm,
+    borderRadius: borderRadius.lg,
     alignItems: 'center',
-    backgroundColor: COLORS.background.primary,
+    backgroundColor: colors.background.primary,
     ...Platform.select({
-      ios: SHADOWS.sm,
+      ios: shadows.sm,
       android: { elevation: 2 },
     }),
   },
@@ -838,39 +837,39 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   statValue: {
-    fontSize: TYPOGRAPHY.h4.fontSize,
+    fontSize: typography.h4.fontSize,
     fontWeight: '700',
   },
   statLabel: {
-    fontSize: TYPOGRAPHY.caption.fontSize,
-    color: COLORS.text.secondary,
+    fontSize: typography.caption.fontSize,
+    color: colors.text.secondary,
     marginTop: 2,
   },
   missionsList: {
-    paddingHorizontal: SPACING.md,
+    paddingHorizontal: spacing.md,
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SPACING.sm,
+    marginBottom: spacing.sm,
   },
   sectionTitle: {
-    fontSize: TYPOGRAPHY.body.fontSize,
+    fontSize: typography.body.fontSize,
     fontWeight: '600',
-    color: COLORS.text.primary,
+    color: colors.text.primary,
   },
   sectionCount: {
-    fontSize: TYPOGRAPHY.caption.fontSize,
-    color: COLORS.text.tertiary,
+    fontSize: typography.caption.fontSize,
+    color: colors.text.tertiary,
   },
   missionCard: {
-    padding: SPACING.md,
-    borderRadius: BORDER_RADIUS.lg,
-    backgroundColor: COLORS.background.primary,
-    marginBottom: SPACING.sm,
+    padding: spacing.md,
+    borderRadius: borderRadius.lg,
+    backgroundColor: colors.background.primary,
+    marginBottom: spacing.sm,
     ...Platform.select({
-      ios: SHADOWS.md,
+      ios: shadows.md,
       android: { elevation: 4 },
     }),
   },
@@ -886,18 +885,18 @@ const styles = StyleSheet.create({
   },
   missionRow: {
     flexDirection: 'row',
-    gap: SPACING.sm,
+    gap: spacing.sm,
   },
   missionIconBox: {
     width: 48,
     height: 48,
-    borderRadius: BORDER_RADIUS.md,
+    borderRadius: borderRadius.md,
     backgroundColor: 'rgba(139, 92, 246, 0.15)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   missionIconBoxCompleted: {
-    backgroundColor: COLORS.success[500],
+    backgroundColor: colors.successScale[500],
   },
   missionIconBoxAvailable: {
     backgroundColor: 'rgba(99, 102, 241, 0.15)',
@@ -926,16 +925,16 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   missionTitle: {
-    fontSize: TYPOGRAPHY.bodySmall.fontSize,
+    fontSize: typography.bodySmall.fontSize,
     fontWeight: '600',
-    color: COLORS.text.primary,
+    color: colors.text.primary,
     flex: 1,
-    marginRight: SPACING.sm,
+    marginRight: spacing.sm,
   },
   difficultyBadge: {
-    paddingHorizontal: SPACING.sm,
+    paddingHorizontal: spacing.sm,
     paddingVertical: 2,
-    borderRadius: BORDER_RADIUS.full,
+    borderRadius: borderRadius.full,
   },
   difficultyText: {
     fontSize: 10,
@@ -943,13 +942,13 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   missionDesc: {
-    fontSize: TYPOGRAPHY.caption.fontSize,
-    color: COLORS.text.secondary,
-    marginBottom: SPACING.sm,
+    fontSize: typography.caption.fontSize,
+    color: colors.text.secondary,
+    marginBottom: spacing.sm,
     lineHeight: 18,
   },
   progressSection: {
-    marginBottom: SPACING.sm,
+    marginBottom: spacing.sm,
   },
   progressHeader: {
     flexDirection: 'row',
@@ -957,17 +956,17 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   progressLabel: {
-    fontSize: TYPOGRAPHY.caption.fontSize,
-    color: COLORS.text.secondary,
+    fontSize: typography.caption.fontSize,
+    color: colors.text.secondary,
   },
   progressPercent: {
-    fontSize: TYPOGRAPHY.caption.fontSize,
+    fontSize: typography.caption.fontSize,
     fontWeight: '600',
     color: THEME.purple600,
   },
   progressTrack: {
     height: 6,
-    backgroundColor: COLORS.neutral[200],
+    backgroundColor: colors.neutral[200],
     borderRadius: 3,
     overflow: 'hidden',
   },
@@ -982,15 +981,15 @@ const styles = StyleSheet.create({
   },
   rewardsRow: {
     flexDirection: 'row',
-    gap: SPACING.xs,
+    gap: spacing.xs,
   },
   rewardBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    paddingHorizontal: SPACING.xs,
+    paddingHorizontal: spacing.xs,
     paddingVertical: 3,
-    borderRadius: BORDER_RADIUS.sm,
+    borderRadius: borderRadius.sm,
     backgroundColor: 'rgba(255, 200, 87, 0.2)',
   },
   cashbackBadge: {
@@ -999,7 +998,7 @@ const styles = StyleSheet.create({
   rewardText: {
     fontSize: 11,
     fontWeight: '700',
-    color: COLORS.secondary[700],
+    color: colors.secondary[700],
   },
   coinIcon: {
     width: 14,
@@ -1023,27 +1022,27 @@ const styles = StyleSheet.create({
   },
   endsIn: {
     fontSize: 11,
-    color: COLORS.text.tertiary,
+    color: colors.text.tertiary,
   },
   arrowContainer: {
     justifyContent: 'center',
-    paddingLeft: SPACING.xs,
+    paddingLeft: spacing.xs,
   },
   claimButtonWrapper: {
-    marginTop: SPACING.sm,
+    marginTop: spacing.sm,
   },
   claimButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: SPACING.xs,
-    paddingVertical: SPACING.sm,
-    borderRadius: BORDER_RADIUS.md,
+    gap: spacing.xs,
+    paddingVertical: spacing.sm,
+    borderRadius: borderRadius.md,
   },
   claimButtonText: {
-    fontSize: TYPOGRAPHY.bodySmall.fontSize,
+    fontSize: typography.bodySmall.fontSize,
     fontWeight: '700',
-    color: COLORS.background.primary,
+    color: colors.background.primary,
   },
   loadingContainer: {
     alignItems: 'center',
@@ -1051,87 +1050,87 @@ const styles = StyleSheet.create({
     paddingVertical: 80,
   },
   loadingText: {
-    marginTop: SPACING.sm,
-    fontSize: TYPOGRAPHY.bodySmall.fontSize,
-    color: COLORS.text.secondary,
+    marginTop: spacing.sm,
+    fontSize: typography.bodySmall.fontSize,
+    color: colors.text.secondary,
   },
   errorContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 60,
-    paddingHorizontal: SPACING.lg,
+    paddingHorizontal: spacing.lg,
   },
   errorIconContainer: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: COLORS.neutral[100],
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: SPACING.md,
+    marginBottom: spacing.md,
   },
   errorTitle: {
-    fontSize: TYPOGRAPHY.body.fontSize,
+    fontSize: typography.body.fontSize,
     fontWeight: '600',
-    color: COLORS.text.primary,
-    marginBottom: SPACING.xs,
+    color: colors.text.primary,
+    marginBottom: spacing.xs,
   },
   errorText: {
-    fontSize: TYPOGRAPHY.bodySmall.fontSize,
-    color: COLORS.text.secondary,
+    fontSize: typography.bodySmall.fontSize,
+    color: colors.text.secondary,
     textAlign: 'center',
-    marginBottom: SPACING.md,
+    marginBottom: spacing.md,
   },
   retryButton: {
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.sm,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
     backgroundColor: THEME.purple600,
-    borderRadius: BORDER_RADIUS.md,
+    borderRadius: borderRadius.md,
   },
   retryText: {
-    fontSize: TYPOGRAPHY.bodySmall.fontSize,
+    fontSize: typography.bodySmall.fontSize,
     fontWeight: '600',
-    color: COLORS.background.primary,
+    color: colors.background.primary,
   },
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 60,
-    paddingHorizontal: SPACING.lg,
+    paddingHorizontal: spacing.lg,
   },
   emptyIconContainer: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: COLORS.neutral[100],
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: SPACING.md,
+    marginBottom: spacing.md,
   },
   emptyTitle: {
-    fontSize: TYPOGRAPHY.body.fontSize,
+    fontSize: typography.body.fontSize,
     fontWeight: '600',
-    color: COLORS.text.primary,
-    marginBottom: SPACING.xs,
+    color: colors.text.primary,
+    marginBottom: spacing.xs,
   },
   emptyText: {
-    fontSize: TYPOGRAPHY.bodySmall.fontSize,
-    color: COLORS.text.secondary,
+    fontSize: typography.bodySmall.fontSize,
+    color: colors.text.secondary,
     textAlign: 'center',
-    marginBottom: SPACING.md,
+    marginBottom: spacing.md,
   },
   emptyButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.xs,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    borderRadius: BORDER_RADIUS.md,
+    gap: spacing.xs,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: borderRadius.md,
     borderWidth: 1,
     borderColor: THEME.purple600,
   },
   emptyButtonText: {
-    fontSize: TYPOGRAPHY.bodySmall.fontSize,
+    fontSize: typography.bodySmall.fontSize,
     fontWeight: '600',
     color: THEME.purple600,
   },
@@ -1140,15 +1139,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    marginTop: SPACING.sm,
-    paddingVertical: SPACING.xs,
+    marginTop: spacing.sm,
+    paddingVertical: spacing.xs,
     backgroundColor: 'rgba(255, 205, 87, 0.1)',
-    borderRadius: BORDER_RADIUS.sm,
+    borderRadius: borderRadius.sm,
   },
   claimedText: {
-    fontSize: TYPOGRAPHY.bodySmall.fontSize,
+    fontSize: typography.bodySmall.fontSize,
     fontWeight: '600',
-    color: COLORS.success[500],
+    color: colors.successScale[500],
   },
 });
 

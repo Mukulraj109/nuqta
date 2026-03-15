@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LightningDealsSection;
+export default React.memo(LightningDealsSection);

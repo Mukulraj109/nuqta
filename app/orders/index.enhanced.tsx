@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
   RefreshControl,
@@ -11,6 +10,7 @@ import {
   Modal,
   ScrollView,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { router, Stack } from 'expo-router';
 import ordersService, { Order } from '@/services/ordersApi';
@@ -358,7 +358,7 @@ export default function OrdersListScreen() {
       </View>
 
       {/* Orders List */}
-      <FlatList
+      <FlashList
         data={filteredOrders}
         renderItem={renderOrderItem}
         keyExtractor={item => item.id}
@@ -377,6 +377,7 @@ export default function OrdersListScreen() {
         }
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
+        estimatedItemSize={120}
       />
 
       {/* Filter Modal */}

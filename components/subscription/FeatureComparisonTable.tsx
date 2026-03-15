@@ -49,7 +49,10 @@ function FeatureComparisonTable({
         useNativeDriver: true,
       })
     );
-    Animated.stagger(50, animations).start();
+    const staggered = Animated.stagger(50, animations);
+    staggered.start();
+
+    return () => { staggered.stop(); };
   }, []);
 
   const renderCheckIcon = (hasFeature: boolean, tier?: SubscriptionTier) => {

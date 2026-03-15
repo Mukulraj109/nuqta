@@ -9,7 +9,7 @@ interface ProcessingOverlayProps {
   message: string;
 }
 
-export default function ProcessingOverlay({ visible, message }: ProcessingOverlayProps) {
+function ProcessingOverlay({ visible, message }: ProcessingOverlayProps) {
   if (!visible) return null;
 
   return (
@@ -53,3 +53,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(ProcessingOverlay);

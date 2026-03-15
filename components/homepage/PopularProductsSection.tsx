@@ -2,12 +2,12 @@ import React, { useEffect, useState, useCallback, memo } from 'react';
 import { BRAND } from '@/constants/brand';
 import {
   View,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -182,15 +182,13 @@ function PopularProductsSection({
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={products}
           renderItem={renderProduct}
           keyExtractor={keyExtractor}
           scrollEnabled={false}
           contentContainerStyle={styles.listContent}
-          initialNumToRender={5}
-          maxToRenderPerBatch={10}
-          windowSize={5}
+          estimatedItemSize={100}
         />
       )}
     </View>

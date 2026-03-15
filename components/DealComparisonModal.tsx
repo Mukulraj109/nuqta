@@ -65,8 +65,9 @@ function DealComparisonModal({
   const styles = createStyles(screenData);
 
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 200,
@@ -78,9 +79,10 @@ function DealComparisonModal({
           friction: 8,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 150,
@@ -91,9 +93,12 @@ function DealComparisonModal({
           duration: 200,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [visible, fadeAnim, slideAnim]);
+  
+    return () => _anim.stop();
+}, [visible, fadeAnim, slideAnim]);
 
   const handleBackdropPress = () => {
     onClose();

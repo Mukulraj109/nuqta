@@ -16,7 +16,7 @@ import PaymentSuccessModal from '@/components/subscription/PaymentSuccessModal';
 import StripePaymentModal from '@/components/subscription/StripePaymentModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRegion } from '@/contexts/RegionContext';
-import toast, { Toaster } from 'react-hot-toast';
+import { showToast } from '@/components/common/ToastManager';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -73,7 +73,7 @@ export default function SubscriptionPlansPage() {
 
   // Entrance animation
   useEffect(() => {
-    Animated.parallel([
+    const anim = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 500,
@@ -85,7 +85,9 @@ export default function SubscriptionPlansPage() {
         friction: 8,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]);
+    anim.start();
+    return () => anim.stop();
   }, []);
 
   // Safe navigation function for web compatibility
@@ -124,7 +126,7 @@ export default function SubscriptionPlansPage() {
 
       if (!stripeApi.isConfigured()) {
         if (Platform.OS === 'web') {
-          toast.error('Payment not available. Stripe is not configured properly.');
+          showToast({ message: 'Payment not available. Stripe is not configured properly.', type: 'error' });
         } else {
           platformAlertSimple('Payment Not Available', 'Stripe is not configured properly.');
         }
@@ -150,7 +152,7 @@ export default function SubscriptionPlansPage() {
 
         try {
           setProcessingPayment(true);
-          toast.loading('Creating your subscription...', { id: 'create-subscription' });
+          showToast({ message: 'Creating your subscription...', type: 'info' });
 
           const result = await subscriptionAPI.subscribeToPlan(
             tier,
@@ -160,7 +162,7 @@ export default function SubscriptionPlansPage() {
           );
 
           if (result && result.subscription) {
-            toast.success('Subscription created! Opening payment...', { id: 'create-subscription' });
+            showToast({ message: 'Subscription created! Opening payment...', type: 'success' });
             setPaymentData({
               subscriptionId: result.subscription._id,
               amount,
@@ -174,7 +176,7 @@ export default function SubscriptionPlansPage() {
             throw new Error('Failed to create subscription');
           }
         } catch (error: any) {
-          toast.error(error.message || 'Failed to create subscription.', { id: 'create-subscription' });
+          showToast({ message: error.message || 'Failed to create subscription.', type: 'error' });
           setIsSubscribing(false);
           setSelectedTier(null);
           setProcessingPayment(false);
@@ -214,7 +216,7 @@ export default function SubscriptionPlansPage() {
     } catch (error: any) {
       const errorMessage = error.message || 'An error occurred.';
       if (Platform.OS === 'web') {
-        toast.error(errorMessage);
+        showToast({ message: errorMessage, type: 'error' });
       } else {
         platformAlertSimple('Error', errorMessage);
       }
@@ -235,7 +237,7 @@ export default function SubscriptionPlansPage() {
     setPaymentData(null);
 
     if (Platform.OS === 'web') {
-      toast.success('Payment successful! Your subscription is now active.', { duration: 5000 });
+      showToast({ message: 'Payment successful! Your subscription is now active.', type: 'success', duration: 5000 });
     }
 
     actions.loadSubscription(true);
@@ -259,7 +261,7 @@ export default function SubscriptionPlansPage() {
     setProcessingPayment(false);
 
     if (Platform.OS === 'web') {
-      toast.error(`Payment failed: ${error.message}`, { duration: 5000 });
+      showToast({ message: `Payment failed: ${error.message}`, type: 'error', duration: 5000 });
     } else {
       platformAlertSimple('Payment Failed', error.message);
     }
@@ -268,7 +270,7 @@ export default function SubscriptionPlansPage() {
   const handleApplyPromo = async () => {
     if (!promoCode.trim()) {
       if (Platform.OS === 'web') {
-        toast.error('Please enter a promo code');
+        showToast({ message: 'Please enter a promo code', type: 'error' });
       } else {
         platformAlertSimple('Error', 'Please enter a promo code');
       }
@@ -279,7 +281,7 @@ export default function SubscriptionPlansPage() {
     setValidatingPromo(true);
 
     if (Platform.OS === 'web') {
-      toast.loading('Validating promo code...', { id: 'validate-promo' });
+      showToast({ message: 'Validating promo code...', type: 'info' });
     }
 
     try {
@@ -295,7 +297,7 @@ export default function SubscriptionPlansPage() {
         setFinalPrice(response.data.finalPrice);
         const successMsg = response.data.message || `Promo applied! You saved ${currencySymbol}${response.data.discount}`;
         if (Platform.OS === 'web') {
-          toast.success(successMsg, { id: 'validate-promo' });
+          showToast({ message: successMsg, type: 'success' });
         } else {
           platformAlertSimple('Success!', successMsg);
         }
@@ -305,7 +307,7 @@ export default function SubscriptionPlansPage() {
         setFinalPrice(null);
         const errorMsg = response.message || 'This promo code is not valid';
         if (Platform.OS === 'web') {
-          toast.error(errorMsg, { id: 'validate-promo' });
+          showToast({ message: errorMsg, type: 'error' });
         } else {
           platformAlertSimple('Invalid Code', errorMsg);
         }
@@ -315,7 +317,7 @@ export default function SubscriptionPlansPage() {
       setPromoDiscount(0);
       setFinalPrice(null);
       if (Platform.OS === 'web') {
-        toast.error('Failed to validate promo code.', { id: 'validate-promo' });
+        showToast({ message: 'Failed to validate promo code.', type: 'error' });
       } else {
         platformAlertSimple('Error', 'Failed to validate promo code.');
       }
@@ -755,8 +757,7 @@ export default function SubscriptionPlansPage() {
         />
       )}
 
-      {/* Toast Notifications (Web Only) */}
-      {Platform.OS === 'web' && <Toaster position="top-center" />}
+      {/* Toast handled by global ToastManager */}
     </View>
   );
 }

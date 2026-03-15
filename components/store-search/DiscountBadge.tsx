@@ -66,4 +66,4 @@ const createStyles = (size: 'small' | 'medium' | 'large') => {
   });
 };
 
-export default DiscountBadge;
+export default React.memo(DiscountBadge);

@@ -145,27 +145,31 @@ export default memo(function ProductDisplay({
 
   // Animate pagination dots on index change
   useEffect(() => {
-    dotAnimations.forEach((anim, i) => {
+    const anims = dotAnimations.map((anim, i) =>
       Animated.spring(anim, {
         toValue: i === currentIndex ? 1 : 0,
         useNativeDriver: false,
         tension: 50,
         friction: 7,
-      }).start();
-    });
+      })
+    );
+    anims.forEach(a => a.start());
+    return () => anims.forEach(a => a.stop());
   }, [currentIndex, dotAnimations]);
 
   // Staggered entrance animation for category tags
   useEffect(() => {
     if (categoryTags.length > 0) {
-      categoryTags.forEach((_, index) => {
+      const anims = categoryTags.map((_, index) =>
         Animated.timing(tagAnimations[index], {
           toValue: 1,
           duration: 300,
           delay: index * 80,
           useNativeDriver: true,
-        }).start();
-      });
+        })
+      );
+      anims.forEach(a => a.start());
+      return () => anims.forEach(a => a.stop());
     }
   }, [categoryTags, tagAnimations]);
 

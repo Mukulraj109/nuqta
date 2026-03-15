@@ -13,10 +13,9 @@ import {
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { BRAND } from '@/constants/brand';
 import { RewardChecklistItem } from '@/hooks/usePostOrderRewards';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 interface RewardsBreakdownCardProps {
   totalEarned: number;
@@ -43,7 +42,7 @@ function RewardsBreakdownCard({
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.parallel([
+    const _anim0 = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 400,
@@ -55,8 +54,11 @@ function RewardsBreakdownCard({
         delay: 300,
         useNativeDriver: false,
       }),
-    ]).start();
-  }, [progressPercent]);
+    ]);
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, [progressPercent]);
 
   const progressWidth = progressAnim.interpolate({
     inputRange: [0, 100],
@@ -85,7 +87,7 @@ function RewardsBreakdownCard({
     if (item.isLoading) {
       return (
         <View style={styles.statusBadgeLoading}>
-          <ActivityIndicator size="small" color={COLORS.secondary[500]} />
+          <ActivityIndicator size="small" color={colors.secondary[500]} />
         </View>
       );
     }
@@ -115,7 +117,7 @@ function RewardsBreakdownCard({
       case 'locked':
         return (
           <View style={styles.statusBadgeLocked}>
-            <Ionicons name="lock-closed" size={14} color={COLORS.neutral[400]} />
+            <Ionicons name="lock-closed" size={14} color={colors.neutral[400]} />
           </View>
         );
       default:
@@ -176,7 +178,7 @@ function RewardsBreakdownCard({
               <Ionicons
                 name={getItemIcon(item)}
                 size={18}
-                color={item.status === 'locked' ? COLORS.neutral[400] : COLORS.secondary[500]}
+                color={item.status === 'locked' ? colors.neutral[400] : colors.secondary[500]}
               />
             )}
           </View>
@@ -219,10 +221,10 @@ function RewardsBreakdownCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.xl,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.xl,
     overflow: 'hidden',
-    ...SHADOWS.md,
+    ...shadows.md,
     width: '100%',
   },
   // Header
@@ -230,21 +232,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: COLORS.secondary[500],
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.md,
+    backgroundColor: colors.secondary[500],
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
   },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
+    gap: spacing.sm,
   },
   headerCoinImage: {
     width: 28,
     height: 28,
   },
   headerTitle: {
-    ...TYPOGRAPHY.h4,
+    ...typography.h4,
     color: colors.background.primary,
   },
   headerRight: {
@@ -253,70 +255,70 @@ const styles = StyleSheet.create({
   totalEarnedValue: {
     fontSize: 22,
     fontWeight: '700',
-    color: COLORS.primary[500],
+    color: colors.primary[500],
     lineHeight: 26,
   },
   totalEarnedLabel: {
-    ...TYPOGRAPHY.caption,
+    ...typography.caption,
     color: 'rgba(255, 255, 255, 0.8)',
   },
   // Progress
   progressSection: {
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.md,
-    paddingBottom: SPACING.sm,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.sm,
   },
   progressBarBg: {
     height: 8,
-    backgroundColor: COLORS.neutral[200],
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: COLORS.primary[500],
+    backgroundColor: colors.primary[500],
     borderRadius: 4,
   },
   progressText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
+    ...typography.caption,
+    color: colors.text.secondary,
     textAlign: 'right',
     marginTop: 4,
   },
   // Divider
   divider: {
     height: 1,
-    backgroundColor: COLORS.border.light,
-    marginHorizontal: SPACING.lg,
-    marginVertical: SPACING.xs,
+    backgroundColor: colors.border.light,
+    marginHorizontal: spacing.lg,
+    marginVertical: spacing.xs,
   },
   // Earn More
   earnMoreLabel: {
-    ...TYPOGRAPHY.overline,
-    color: COLORS.text.secondary,
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.sm,
-    paddingBottom: SPACING.xs,
+    ...typography.overline,
+    color: colors.text.secondary,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xs,
   },
   // Checklist
   checklistItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.md,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border.light,
+    borderBottomColor: colors.border.light,
   },
   checklistItemLast: {
     borderBottomWidth: 0,
-    paddingBottom: SPACING.lg,
+    paddingBottom: spacing.lg,
   },
   // Icon Circle
   itemIconCircle: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.neutral[50],
+    backgroundColor: colors.neutral[50],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -329,24 +331,24 @@ const styles = StyleSheet.create({
   // Content
   itemContent: {
     flex: 1,
-    marginLeft: SPACING.md,
-    marginRight: SPACING.sm,
+    marginLeft: spacing.md,
+    marginRight: spacing.sm,
   },
   itemLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.text.primary,
+    color: colors.text.primary,
     marginBottom: 2,
   },
   itemLabelLocked: {
-    color: COLORS.neutral[400],
+    color: colors.neutral[400],
   },
   itemDescription: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
+    ...typography.caption,
+    color: colors.text.secondary,
   },
   itemDescriptionLocked: {
-    color: COLORS.neutral[400],
+    color: colors.neutral[400],
   },
   // Right side
   itemRight: {
@@ -365,22 +367,22 @@ const styles = StyleSheet.create({
   coinBadgeText: {
     fontSize: 13,
     fontWeight: '700',
-    color: COLORS.secondary[500],
+    color: colors.secondary[500],
   },
   // Status badges
   statusBadgeCompleted: {
     padding: 2,
   },
   statusBadgeAvailable: {
-    backgroundColor: COLORS.primary[500],
+    backgroundColor: colors.primary[500],
     paddingHorizontal: 14,
     paddingVertical: 6,
-    borderRadius: BORDER_RADIUS.md,
+    borderRadius: borderRadius.md,
   },
   statusBadgeAvailableText: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.secondary[500],
+    color: colors.secondary[500],
   },
   statusBadgeLocked: {
     padding: 4,

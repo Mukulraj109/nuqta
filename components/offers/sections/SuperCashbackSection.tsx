@@ -66,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SuperCashbackSection;
+export default React.memo(SuperCashbackSection);

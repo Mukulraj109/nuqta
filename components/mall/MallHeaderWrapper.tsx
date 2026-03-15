@@ -64,4 +64,4 @@ const MallHeaderWrapper: React.FC = () => {
   );
 };
 
-export default MallHeaderWrapper;
+export default React.memo(MallHeaderWrapper);

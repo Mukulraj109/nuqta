@@ -163,7 +163,7 @@ const CategoryItem: React.FC<CategoryItemProps> = memo(
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
-      Animated.parallel([
+      const _anim0 = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 300,
@@ -177,8 +177,11 @@ const CategoryItem: React.FC<CategoryItemProps> = memo(
           delay: index * 40,
           useNativeDriver: true,
         }),
-      ]).start();
-    }, [index]);
+      ]);
+      _anim0.start();
+    
+      return () => { _anim0.stop(); };
+}, [index]);
 
     const handlePressIn = () => {
       Animated.spring(scaleAnim, {
@@ -300,12 +303,15 @@ const CategoryFilterRow: React.FC<CategoryFilterRowProps> = ({
   const headerFadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.timing(headerFadeAnim, {
+    const _anim0 = Animated.timing(headerFadeAnim, {
       toValue: 1,
       duration: 400,
       useNativeDriver: true,
-    }).start();
-  }, []);
+    });
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, []);
 
   // Use passed categories, or fallback to defaults
   const displayCategories = (categories && categories.length > 0) ? categories : FALLBACK_CATEGORIES;

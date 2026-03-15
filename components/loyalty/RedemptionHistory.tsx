@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import { View, FlatList, StyleSheet, Pressable, Platform } from 'react-native';
+import { View, StyleSheet, Pressable, Platform } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { RedemptionRecord } from '@/types/loyaltyRedemption.types';
@@ -116,16 +117,13 @@ function RedemptionHistory({ redemptions, onViewDetails }: RedemptionHistoryProp
   }
 
   return (
-    <FlatList
+    <FlashList
       data={redemptions}
       renderItem={renderRedemption}
       keyExtractor={item => item._id}
       contentContainerStyle={styles.list}
       showsVerticalScrollIndicator={false}
-      removeClippedSubviews={Platform.OS !== 'web'}
-      maxToRenderPerBatch={10}
-      windowSize={5}
-      initialNumToRender={8}
+      estimatedItemSize={80}
     />
   );
 }

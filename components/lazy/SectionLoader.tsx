@@ -15,7 +15,7 @@ interface SectionLoaderProps {
  * Provides a consistent loading experience across all lazy-loaded components.
  * Can be customized with different sizes and colors.
  */
-export default function SectionLoader({
+function SectionLoader({
   text = 'Loading...',
   size = 'large',
   color = colors.brand.indigo
@@ -41,3 +41,5 @@ const styles = StyleSheet.create({
     color: colors.neutral[500],
   },
 });
+
+export default React.memo(SectionLoader);

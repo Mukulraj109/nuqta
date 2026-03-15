@@ -19,6 +19,7 @@ import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } f
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 interface DeliveryPartner {
   name: string;
   phone: string;
@@ -68,7 +69,7 @@ interface DetailedOrder {
   orderDate: string;
 }
 
-export default function DetailedOrderTrackingPage() {
+function DetailedOrderTrackingPage() {
   const router = useRouter();
   const { orderId } = useLocalSearchParams();
   const { getCurrencySymbol } = useRegion();
@@ -1270,3 +1271,5 @@ const styles = StyleSheet.create({
     height: 20,
   },
 });
+
+export default withErrorBoundary(DetailedOrderTrackingPage, 'Order Tracking');

@@ -42,7 +42,7 @@ function getPaymentMethodLabel(method: string | null): string {
   return labels[method || ''] || '';
 }
 
-export default function OrderConfirmationModal({
+function OrderConfirmationModal({
   visible,
   selectedPaymentMethod,
   billSummary,
@@ -338,3 +338,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default React.memo(OrderConfirmationModal);

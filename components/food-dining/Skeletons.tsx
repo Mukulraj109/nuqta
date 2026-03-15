@@ -7,16 +7,16 @@ import { View } from 'react-native';
 import SkeletonLoader from '@/components/skeletons/SkeletonLoader';
 import { colors } from '@/constants/theme';
 
-export const SectionHeaderSkeleton = () => (
+export const SectionHeaderSkeleton = React.memo(() => (
   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12, paddingHorizontal: 16 }}>
     <SkeletonLoader width={20} height={20} variant="circle" />
     <SkeletonLoader width={150} height={18} borderRadius={6} />
     <View style={{ flex: 1 }} />
     <SkeletonLoader width={60} height={12} borderRadius={4} />
   </View>
-);
+));
 
-export const RestaurantCardSkeleton = ({ count = 3, variant = 'default' }: { count?: number; variant?: 'default' | 'compact' }) => {
+export const RestaurantCardSkeleton = React.memo(({ count = 3, variant = 'default' }: { count?: number; variant?: 'default' | 'compact' }) => {
   const isCompact = variant === 'compact';
   return (
     <View style={{ paddingHorizontal: 16, gap: 12 }}>
@@ -42,9 +42,9 @@ export const RestaurantCardSkeleton = ({ count = 3, variant = 'default' }: { cou
       ))}
     </View>
   );
-};
+});
 
-export const DishCardSkeleton = ({ count = 4 }: { count?: number }) => (
+export const DishCardSkeleton = React.memo(({ count = 4 }: { count?: number }) => (
   <View style={{ flexDirection: 'row', paddingHorizontal: 16, gap: 12 }}>
     {Array.from({ length: count }).map((_, i) => (
       <View key={i} style={{ width: 140, marginRight: 12 }}>
@@ -54,4 +54,4 @@ export const DishCardSkeleton = ({ count = 4 }: { count?: number }) => (
       </View>
     ))}
   </View>
-);
+));

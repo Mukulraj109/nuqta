@@ -23,14 +23,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { SuccessScreenParams, PaymentRewards } from '@/types/storePayment.types';
 import { useRewardPopup } from '@/contexts/RewardPopupContext';
 import { useRegion } from '@/contexts/RegionContext';
 import usePostOrderRewards from '@/hooks/usePostOrderRewards';
 import RewardsBreakdownCard from '@/components/rewards/RewardsBreakdownCard';
 import { BRAND } from '@/constants/brand';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 export default function PaymentSuccessScreen() {
   const router = useRouter();
@@ -85,7 +84,7 @@ export default function PaymentSuccessScreen() {
     }
 
     // Run animations
-    Animated.sequence([
+    const anim = Animated.sequence([
       Animated.spring(checkmarkScale, {
         toValue: 1,
         tension: 150,
@@ -105,7 +104,8 @@ export default function PaymentSuccessScreen() {
           useNativeDriver: true,
         }),
       ]),
-    ]).start();
+    ]);
+    anim.start();
 
     // Show reward popup after a short delay (let the success screen animate first)
     const popupTimer = setTimeout(() => {
@@ -127,7 +127,10 @@ export default function PaymentSuccessScreen() {
       }
     }, 1500); // Show popup 1.5s after screen loads
 
-    return () => clearTimeout(popupTimer);
+    return () => {
+      anim.stop();
+      clearTimeout(popupTimer);
+    };
   }, []);
 
   const handleViewReceipt = () => {
@@ -163,7 +166,7 @@ export default function PaymentSuccessScreen() {
           style={[styles.successIconContainer, { transform: [{ scale: checkmarkScale }] }]}
         >
           <LinearGradient
-            colors={[COLORS.success[400], COLORS.success[600]]}
+            colors={[colors.successScale[400], colors.successScale[600]]}
             style={styles.successIconGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -214,7 +217,7 @@ export default function PaymentSuccessScreen() {
         {/* Rewards Breakdown Card */}
         <Animated.View
           style={[
-            { width: '100%', marginBottom: SPACING.lg },
+            { width: '100%', marginBottom: spacing.lg },
             { opacity: contentOpacity, transform: [{ translateY: rewardsSlide }] },
           ]}
         >
@@ -233,7 +236,7 @@ export default function PaymentSuccessScreen() {
         {loyaltyProgress.nextMilestone > 0 && (
           <Animated.View style={[styles.loyaltyCard, { opacity: contentOpacity }]}>
             <View style={styles.loyaltyHeader}>
-              <Ionicons name="trophy-outline" size={20} color={COLORS.warning[500]} />
+              <Ionicons name="trophy-outline" size={20} color={colors.warningScale[500]} />
               <Text style={styles.loyaltyTitle}>Loyalty Progress</Text>
             </View>
 
@@ -248,7 +251,7 @@ export default function PaymentSuccessScreen() {
 
             {loyaltyProgress.milestoneReward && (
               <View style={styles.milestoneContainer}>
-                <Ionicons name="gift" size={16} color={COLORS.secondary[500]} />
+                <Ionicons name="gift" size={16} color={colors.secondary[500]} />
                 <Text style={styles.milestoneText}>
                   Next reward: {loyaltyProgress.milestoneReward}
                 </Text>
@@ -263,13 +266,13 @@ export default function PaymentSuccessScreen() {
       {/* Bottom Actions */}
       <View style={styles.bottomActions}>
         <Pressable style={styles.receiptButton} onPress={handleViewReceipt}>
-          <Ionicons name="receipt-outline" size={20} color={COLORS.primary[500]} />
+          <Ionicons name="receipt-outline" size={20} color={colors.primary[500]} />
           <Text style={styles.receiptButtonText}>View Receipt</Text>
         </Pressable>
 
         <Pressable style={styles.homeButton} onPress={handleBackToHome}>
           <LinearGradient
-            colors={[COLORS.primary[500], COLORS.primary[600]]}
+            colors={[colors.primary[500], colors.primary[600]]}
             style={styles.homeButtonGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -285,18 +288,18 @@ export default function PaymentSuccessScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background.secondary,
+    backgroundColor: colors.background.secondary,
   },
   content: {
     flex: 1,
   },
   contentContainer: {
-    padding: SPACING.md,
+    padding: spacing.md,
     alignItems: 'center',
   },
   successIconContainer: {
-    marginTop: SPACING.xl,
-    marginBottom: SPACING.lg,
+    marginTop: spacing.xl,
+    marginBottom: spacing.lg,
   },
   successIconGradient: {
     width: 120,
@@ -304,46 +307,46 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    ...SHADOWS.lg,
+    ...shadows.lg,
   },
   successTextContainer: {
     alignItems: 'center',
-    marginBottom: SPACING.xl,
+    marginBottom: spacing.xl,
   },
   successTitle: {
-    ...TYPOGRAPHY.h2,
-    color: COLORS.text.primary,
-    marginBottom: SPACING.xs,
+    ...typography.h2,
+    color: colors.text.primary,
+    marginBottom: spacing.xs,
   },
   successSubtitle: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.secondary,
+    ...typography.body,
+    color: colors.text.secondary,
     textAlign: 'center',
   },
   coinsUsedText: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.primary[600],
-    marginTop: SPACING.xs,
+    ...typography.bodySmall,
+    color: colors.primary[600],
+    marginTop: spacing.xs,
   },
   transactionId: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
-    marginTop: SPACING.sm,
+    ...typography.caption,
+    color: colors.text.tertiary,
+    marginTop: spacing.sm,
   },
   firstVisitCard: {
     width: '100%',
-    marginBottom: SPACING.lg,
+    marginBottom: spacing.lg,
   },
   firstVisitGradient: {
-    borderRadius: BORDER_RADIUS.lg,
-    padding: SPACING.lg,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
     borderWidth: 1,
     borderColor: colors.warningScale[400],
   },
   firstVisitContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
+    gap: spacing.sm,
   },
   firstVisitEmoji: {
     fontSize: 28,
@@ -375,92 +378,92 @@ const styles = StyleSheet.create({
   },
   loyaltyCard: {
     width: '100%',
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.lg,
-    padding: SPACING.lg,
-    marginBottom: SPACING.lg,
-    ...SHADOWS.sm,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.lg,
+    ...shadows.sm,
   },
   loyaltyHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: SPACING.md,
-    gap: SPACING.sm,
+    marginBottom: spacing.md,
+    gap: spacing.sm,
   },
   loyaltyTitle: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.text.primary,
+    ...typography.button,
+    color: colors.text.primary,
   },
   progressContainer: {
-    marginBottom: SPACING.sm,
+    marginBottom: spacing.sm,
   },
   progressBar: {
     height: 8,
-    backgroundColor: COLORS.neutral[200],
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
-    marginBottom: SPACING.xs,
+    marginBottom: spacing.xs,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: COLORS.warning[500],
+    backgroundColor: colors.warningScale[500],
     borderRadius: 4,
   },
   progressText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
+    ...typography.caption,
+    color: colors.text.secondary,
     textAlign: 'right',
   },
   milestoneContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: SPACING.sm,
-    padding: SPACING.sm,
-    backgroundColor: COLORS.secondary[50],
-    borderRadius: BORDER_RADIUS.md,
-    gap: SPACING.xs,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+    backgroundColor: colors.secondary[50],
+    borderRadius: borderRadius.md,
+    gap: spacing.xs,
   },
   milestoneText: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.secondary[700],
+    ...typography.bodySmall,
+    color: colors.secondary[700],
   },
   bottomActions: {
     flexDirection: 'row',
-    padding: SPACING.md,
+    padding: spacing.md,
     paddingBottom: Platform.OS === 'ios' ? 100 : 80,
-    backgroundColor: COLORS.background.primary,
+    backgroundColor: colors.background.primary,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border.light,
-    gap: SPACING.md,
-    ...SHADOWS.lg,
+    borderTopColor: colors.border.light,
+    gap: spacing.md,
+    ...shadows.lg,
   },
   receiptButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: SPACING.md,
-    borderRadius: BORDER_RADIUS.lg,
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.lg,
     borderWidth: 2,
-    borderColor: COLORS.primary[500],
-    gap: SPACING.sm,
+    borderColor: colors.primary[500],
+    gap: spacing.sm,
   },
   receiptButtonText: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.primary[500],
+    ...typography.button,
+    color: colors.primary[500],
   },
   homeButton: {
     flex: 1,
-    borderRadius: BORDER_RADIUS.lg,
+    borderRadius: borderRadius.lg,
     overflow: 'hidden',
   },
   homeButtonGradient: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: SPACING.md,
+    paddingVertical: spacing.md,
   },
   homeButtonText: {
-    ...TYPOGRAPHY.button,
+    ...typography.button,
     color: colors.background.primary,
   },
 });

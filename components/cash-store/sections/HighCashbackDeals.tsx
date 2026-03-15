@@ -5,7 +5,7 @@
  * Features: Large animated numbers, gradient borders, Shop Now with arrow animation
  */
 
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo, useRef, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -302,6 +302,17 @@ const HighCashbackDeals: React.FC<HighCashbackDealsProps> = ({
     return () => rocketLoop.stop();
   }, []);
 
+  const renderDealItem = useCallback(({ item, index }: { item: unknown; index: number }) =>
+    isLoading ? (
+      <SkeletonCard key={`skeleton-${index}`} index={index} />
+    ) : (
+      <DealCard
+        deal={item as HighCashbackDeal}
+        index={index}
+        onPress={() => onDealPress(item as HighCashbackDeal)}
+      />
+    ), [isLoading, onDealPress]);
+
   if (deals.length === 0 && !isLoading) {
     return null;
   }
@@ -340,17 +351,7 @@ const HighCashbackDeals: React.FC<HighCashbackDealsProps> = ({
       {/* Horizontal List */}
       <FlatList
         data={isLoading ? Array.from({ length: 3 }) : deals}
-        renderItem={({ item, index }) =>
-          isLoading ? (
-            <SkeletonCard key={`skeleton-${index}`} index={index} />
-          ) : (
-            <DealCard
-              deal={item as HighCashbackDeal}
-              index={index}
-              onPress={() => onDealPress(item as HighCashbackDeal)}
-            />
-          )
-        }
+        renderItem={renderDealItem}
         keyExtractor={(item, index) =>
           isLoading ? `skeleton-${index}` : (item as HighCashbackDeal).id
         }

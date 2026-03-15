@@ -8,7 +8,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   TextInput,
   SafeAreaView,
@@ -16,6 +15,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -26,6 +26,9 @@ import { platformAlert } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { errorReporter } from '@/utils/errorReporter';
+import ErrorState from '@/components/common/ErrorState';
 import {
   getBillTypes,
   getProviders,
@@ -40,7 +43,7 @@ import {
 
 type PageStep = 'types' | 'providers' | 'input' | 'bill';
 
-export default function BillPaymentPage() {
+function BillPaymentPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const initialType = (params.type as string) || '';
@@ -58,6 +61,7 @@ export default function BillPaymentPage() {
   const [selectedType, setSelectedType] = useState(initialType);
   const [selectedProvider, setSelectedProvider] = useState<BillProviderInfo | null>(null);
   const [consumerNumber, setConsumerNumber] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [loadingTypes, setLoadingTypes] = useState(true);
   const [loadingProviders, setLoadingProviders] = useState(false);
   const [loadingBill, setLoadingBill] = useState(false);
@@ -73,28 +77,35 @@ export default function BillPaymentPage() {
   // DATA FETCHING
   // ============================================
 
+  const fetchBillTypes = useCallback(async () => {
+    try {
+      setLoadingTypes(true);
+      setError(null);
+      const res = await getBillTypes();
+      if (res.success && res.data) {
+        setBillTypes(res.data);
+        if (initialType && res.data.some((t) => t.id === initialType)) {
+          setSelectedType(initialType);
+        }
+      } else {
+        setError('Failed to load bill types. Please try again.');
+      }
+    } catch (err) {
+      setError('Failed to load bill types. Please try again.');
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to fetch bill types'),
+        { context: 'BillPaymentPage.fetchBillTypes' },
+        'warning'
+      );
+    } finally {
+      setLoadingTypes(false);
+    }
+  }, [initialType]);
+
   // Fetch bill types on mount
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        setLoadingTypes(true);
-        const res = await getBillTypes();
-        if (!cancelled && res.success && res.data) {
-          setBillTypes(res.data);
-          // Auto-select initial type if passed via params
-          if (initialType && res.data.some((t) => t.id === initialType)) {
-            setSelectedType(initialType);
-          }
-        }
-      } catch {
-        // Types are non-critical, silent fail
-      } finally {
-        if (!cancelled) setLoadingTypes(false);
-      }
-    })();
-    return () => { cancelled = true; };
-  }, []);
+    fetchBillTypes();
+  }, [fetchBillTypes]);
 
   // Fetch providers when type changes
   useEffect(() => {
@@ -113,7 +124,12 @@ export default function BillPaymentPage() {
         if (!cancelled && res.success && res.data) {
           setProviders(res.data.providers);
         }
-      } catch {
+      } catch (err) {
+        errorReporter.captureError(
+          err instanceof Error ? err : new Error('Failed to fetch bill providers'),
+          { context: 'BillPaymentPage.fetchProviders' },
+          'warning'
+        );
         setProviders([]);
       } finally {
         if (!cancelled) setLoadingProviders(false);
@@ -138,8 +154,12 @@ export default function BillPaymentPage() {
         setHasMoreHistory(res.data.pagination.hasNextPage);
         setHistoryPage(page);
       }
-    } catch {
-      // Silent fail for history
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to fetch payment history'),
+        { context: 'BillPaymentPage.loadHistory' },
+        'info'
+      );
     } finally {
       setLoadingHistory(false);
       setLoadingMoreHistory(false);
@@ -166,7 +186,12 @@ export default function BillPaymentPage() {
       } else {
         platformAlert('Error', res.message || 'Could not fetch bill details');
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to fetch bill details'),
+        { context: 'BillPaymentPage.handleFetchBill' },
+        'warning'
+      );
       platformAlert('Error', 'Failed to fetch bill. Please try again.');
     } finally {
       setLoadingBill(false);
@@ -192,7 +217,12 @@ export default function BillPaymentPage() {
       } else {
         platformAlert('Error', res.message || 'Payment failed');
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Bill payment failed'),
+        { context: 'BillPaymentPage.handlePayBill' },
+        'warning'
+      );
       platformAlert('Error', 'Payment failed. Please try again.');
     } finally {
       setLoadingPay(false);
@@ -540,6 +570,22 @@ export default function BillPaymentPage() {
   // RENDER
   // ============================================
 
+  if (error && !loadingTypes) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor={Colors.background.primary} />
+        <View style={styles.header}>
+          <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
+          </Pressable>
+          <Text style={styles.headerTitle}>Bill Payments</Text>
+          <View style={{ width: 32 }} />
+        </View>
+        <ErrorState error={error} onRetry={fetchBillTypes} title="Failed to Load Bill Types" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.background.primary} />
@@ -553,7 +599,7 @@ export default function BillPaymentPage() {
         <View style={{ width: 32 }} />
       </View>
 
-      <FlatList
+      <FlashList
         data={recentPayments}
         renderItem={renderRecentPayment}
         keyExtractor={(item) => item._id}
@@ -563,6 +609,7 @@ export default function BillPaymentPage() {
         onEndReachedThreshold={0.3}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+        estimatedItemSize={80}
       />
 
       {/* Bottom CTA */}
@@ -934,3 +981,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(BillPaymentPage, 'Bill Payment');

@@ -6,9 +6,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  View, Text, StyleSheet, Pressable, FlatList,
+  View, Text, StyleSheet, Pressable,
   RefreshControl, ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { getCategoryTheme, SHARED_COLORS } from '@/config/categoryThemeConfig';
@@ -203,13 +204,14 @@ export default function ElectronicsMissionsPage() {
         ))}
       </View>
 
-      <FlatList
+      <FlashList
         data={currentData}
         keyExtractor={(item) => item.missionId}
         renderItem={renderMission}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[theme.primaryColor]} />}
+        estimatedItemSize={100}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons

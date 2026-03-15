@@ -7,13 +7,13 @@ import {
   Dimensions,
   StatusBar,
   ScrollView,
-  FlatList,
   TextInput,
   ActivityIndicator,
   RefreshControl,
   Platform,
   Share,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -551,14 +551,14 @@ const ReelDetailPage = () => {
       <View style={styles.commentsSection}>
         <Text style={styles.commentsTitle}>Comments ({comments.length})</Text>
 
-        <FlatList
+        <FlashList
           data={comments}
           keyExtractor={(item) => item.id}
-          style={styles.commentsList}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[Colors.gold]} />
           }
+          estimatedItemSize={80}
           ListEmptyComponent={
             <View style={styles.emptyComments}>
               <Ionicons name="chatbubble-outline" size={32} color={Colors.text.tertiary} />

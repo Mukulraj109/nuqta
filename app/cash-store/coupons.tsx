@@ -19,6 +19,7 @@ import {
   Clipboard,
   Animated,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -333,19 +334,16 @@ export default function CouponsPage() {
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={coupons}
           renderItem={renderCouponCard}
           keyExtractor={(item) => item._id}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
           refreshControl={
             <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} colors={[colors.brand.caramel]} />
           }
+          estimatedItemSize={100}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Ionicons name="pricetags-outline" size={48} color={Colors.background.secondary0} />

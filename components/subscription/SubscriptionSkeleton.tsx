@@ -4,7 +4,7 @@ import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-const SkeletonBlock = ({ width, height, style, borderRadius = 8 }: {
+const SkeletonBlock = React.memo(({ width, height, style, borderRadius = 8 }: {
   width: number | string;
   height: number;
   style?: any;
@@ -42,10 +42,10 @@ const SkeletonBlock = ({ width, height, style, borderRadius = 8 }: {
       ]}
     />
   );
-};
+});
 
 /** Skeleton for the Manage Subscription page */
-export const ManageSubscriptionSkeleton = () => (
+export const ManageSubscriptionSkeleton = React.memo(() => (
   <View style={styles.container}>
     {/* Tier Card Skeleton */}
     <View style={styles.tierCard}>
@@ -80,10 +80,10 @@ export const ManageSubscriptionSkeleton = () => (
       <SkeletonBlock width="100%" height={52} borderRadius={26} />
     </View>
   </View>
-);
+));
 
 /** Skeleton for the Plans page */
-export const PlansPageSkeleton = () => (
+export const PlansPageSkeleton = React.memo(() => (
   <View style={styles.container}>
     {/* Billing Toggle */}
     <View style={styles.toggleRow}>
@@ -105,10 +105,10 @@ export const PlansPageSkeleton = () => (
       </View>
     ))}
   </View>
-);
+));
 
 /** Skeleton for the Upgrade Confirmation page */
-export const UpgradeConfirmationSkeleton = () => (
+export const UpgradeConfirmationSkeleton = React.memo(() => (
   <View style={styles.container}>
     {/* Tier Transition */}
     <View style={styles.transitionRow}>
@@ -139,7 +139,7 @@ export const UpgradeConfirmationSkeleton = () => (
       <SkeletonBlock width="100%" height={52} borderRadius={26} />
     </View>
   </View>
-);
+));
 
 const styles = StyleSheet.create({
   container: {

@@ -10,10 +10,10 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  FlatList,
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -289,13 +289,14 @@ export default function SharedCategoryPage() {
         </View>
       </View>
 
-      <FlatList
+      <FlashList
         data={filteredStores}
         keyExtractor={(item) => item._id || item.id}
         renderItem={renderTopRatedItem}
         contentContainerStyle={styles.storeList}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[theme.primaryColor]} tintColor={theme.primaryColor} />}
+        estimatedItemSize={100}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name={(theme.defaultMissionIcon || 'storefront-outline') as any} size={48} color={theme.primaryColor} />

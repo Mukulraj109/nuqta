@@ -48,6 +48,7 @@ function TierUpgradeCelebration({
   ).current;
 
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
       // Reset animations
       scaleAnim.setValue(0);
@@ -59,7 +60,7 @@ function TierUpgradeCelebration({
       });
 
       // Start celebration animation
-      Animated.sequence([
+      _anim = Animated.sequence([
         // Fade in backdrop
         Animated.timing(fadeAnim, {
           toValue: 1,
@@ -73,7 +74,8 @@ function TierUpgradeCelebration({
           friction: 7,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
 
       // Animate confetti
       confettiAnims.forEach((anim, index) => {
@@ -82,7 +84,7 @@ function TierUpgradeCelebration({
         const randomY = height * (1 + Math.random());
         const randomRotation = Math.random() * 720;
 
-        Animated.parallel([
+        _anim = Animated.parallel([
           Animated.timing(anim.x, {
             toValue: randomX,
             duration: 3000 + Math.random() * 1000,
@@ -101,10 +103,13 @@ function TierUpgradeCelebration({
             delay,
             useNativeDriver: true,
           }),
-        ]).start();
+        ]);
+        _anim.start();
       });
     }
-  }, [visible]);
+  
+    return () => _anim.stop();
+}, [visible]);
 
   // Handle share achievement
   const handleShare = async () => {

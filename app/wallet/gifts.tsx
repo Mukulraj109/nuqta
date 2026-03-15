@@ -4,7 +4,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   Pressable,
   StatusBar,
@@ -12,6 +11,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -261,19 +261,16 @@ export default function GiftsPage() {
       {loading ? (
         <CardGridSkeleton />
       ) : (
-        <FlatList
+        <FlashList
           data={gifts}
           renderItem={activeTab === 'received' ? renderReceivedGift : renderSentGift}
           keyExtractor={item => item._id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={() => fetchGifts(true)} colors={[Colors.primary[600]]} />
           }
+          estimatedItemSize={100}
           ListEmptyComponent={
             <View style={styles.emptyState}>
               <Ionicons name="gift-outline" size={64} color={Colors.gray[300]} />

@@ -10,8 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { SlidingTabsProps, TabData } from '@/types/cart';
-import { COLORS, SPACING, BORDER_RADIUS } from '@/constants/DesignTokens';
-
+import { borderRadius, colors, spacing } from '@/constants/theme';
 const defaultTabs: TabData[] = [
   { key: 'products', title: 'Products', icon: 'cube-outline' },
   { key: 'service', title: 'Service', icon: 'construct-outline' },
@@ -94,7 +93,7 @@ function SlidingTabs({
                   <Ionicons
                     name={tab.icon as any}
                     size={tabIconSize}
-                    color={isActive ? COLORS.nuqta.nileBlue : COLORS.neutral[400]}
+                    color={isActive ? colors.nuqta.nileBlue : colors.neutral[400]}
                   />
                 </View>
                 <ThemedText style={[
@@ -129,7 +128,7 @@ function SlidingTabs({
         ]}
       >
         <LinearGradient
-          colors={[COLORS.nuqta.mustard, COLORS.nuqta.peach]}
+          colors={[colors.nuqta.mustard, colors.nuqta.peach]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.underlineGradient}
@@ -141,9 +140,9 @@ function SlidingTabs({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.background.primary,
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.nuqta.linen,
+    borderBottomColor: colors.nuqta.linen,
     position: 'relative',
   },
   tabsContainer: {
@@ -161,13 +160,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 1,
-    paddingHorizontal: SPACING.sm,
-    paddingVertical: SPACING.xs,
-    borderRadius: BORDER_RADIUS.full,
-    gap: SPACING.xs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.full,
+    gap: spacing.xs,
   },
   tabContentActive: {
-    backgroundColor: COLORS.nuqta.linen,
+    backgroundColor: colors.nuqta.linen,
   },
   iconWrapper: {
     width: 28,
@@ -187,11 +186,11 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   activeTabText: {
-    color: COLORS.nuqta.nileBlue,
+    color: colors.nuqta.nileBlue,
     fontWeight: '600',
   },
   inactiveTabText: {
-    color: COLORS.neutral[400],
+    color: colors.neutral[400],
     fontWeight: '500',
   },
   underlineContainer: {

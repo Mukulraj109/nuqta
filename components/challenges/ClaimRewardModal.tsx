@@ -68,7 +68,7 @@ function ClaimRewardModal({
       });
 
       // Start animations
-      Animated.parallel([
+      const _anim2 = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 300,
@@ -80,14 +80,16 @@ function ClaimRewardModal({
           tension: 40,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim2.start();
 
       // Animate coin counter
-      Animated.timing(coinCountAnim, {
+      const _anim1 = Animated.timing(coinCountAnim, {
         toValue: reward.coins,
         duration: 1500,
         useNativeDriver: false,
-      }).start();
+      });
+      _anim1.start();
 
       // Animate confetti
       confettiAnims.forEach((anim, index) => {
@@ -96,7 +98,7 @@ function ClaimRewardModal({
         const randomY = Math.random() * -300 - 100;
         const randomRotate = Math.random() * 720;
 
-        Animated.parallel([
+        const _anim0 = Animated.parallel([
           Animated.timing(anim.x, {
             toValue: randomX,
             duration: 2000,
@@ -121,10 +123,13 @@ function ClaimRewardModal({
             delay: delay + 1000,
             useNativeDriver: true,
           }),
-        ]).start();
+        ]);
+        _anim0.start();
       });
     }
-  }, [visible]);
+  
+    return () => { _anim2.stop(); _anim1.stop(); _anim0.stop(); };
+}, [visible]);
 
   const confettiColors = [colors.brand.purpleLight, colors.successScale[400], colors.warningScale[400], colors.error, colors.infoScale[400], colors.brand.pink];
 

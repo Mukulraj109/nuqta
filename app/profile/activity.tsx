@@ -10,9 +10,9 @@ import {
   StatusBar,
   Platform,
   RefreshControl,
-  FlatList,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
@@ -230,15 +230,12 @@ export default function ActivityFeedPage() {
       </View>
 
       {/* Activity List */}
-      <FlatList
+      <FlashList
         data={activities}
         renderItem={renderActivityItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
+        estimatedItemSize={80}
         refreshControl={
           <RefreshControl
             refreshing={isLoading && activities.length > 0}

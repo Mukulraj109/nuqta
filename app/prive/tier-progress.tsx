@@ -148,11 +148,13 @@ const TierProgressBar = React.memo(({
   const maxScore = 100;
 
   useEffect(() => {
-    Animated.timing(widthAnim, {
+    const anim = Animated.timing(widthAnim, {
       toValue: score,
       duration: 1000,
       useNativeDriver: false,
-    }).start();
+    });
+    anim.start();
+    return () => anim.stop();
   }, [score]);
 
   const width = widthAnim.interpolate({
@@ -244,16 +246,20 @@ const HeroSection = React.memo(({
 
   useEffect(() => {
     countAnim.setValue(0);
-    Animated.timing(countAnim, {
+    const anim = Animated.timing(countAnim, {
       toValue: score,
       duration: 1200,
       useNativeDriver: false,
-    }).start();
+    });
+    anim.start();
 
     const listener = countAnim.addListener(({ value }) => {
       setDisplayScore(Math.round(value * 10) / 10);
     });
-    return () => countAnim.removeListener(listener);
+    return () => {
+      anim.stop();
+      countAnim.removeListener(listener);
+    };
   }, [score]);
 
   const getTierColor = () => {

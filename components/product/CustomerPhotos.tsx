@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertSimple } from '@/utils/platformAlert';
-import { SPACING, TYPOGRAPHY, COLORS, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { Button } from '@/components/ui';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
+import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 /**
  * Customer Photo Interface
@@ -169,7 +169,7 @@ function CustomerPhotos({
             size="small"
             loading={uploading}
             disabled={uploading}
-            icon={!uploading && <Ionicons name="camera" size={16} color={COLORS.primary[500]} />}
+            icon={!uploading && <Ionicons name="camera" size={16} color={colors.primary[500]} />}
           />
         )}
       </View>
@@ -177,14 +177,14 @@ function CustomerPhotos({
       {/* Empty State */}
       {visiblePhotos.length === 0 ? (
         <View style={styles.emptyState}>
-          <Ionicons name="images-outline" size={64} color={COLORS.neutral[300]} />
+          <Ionicons name="images-outline" size={64} color={colors.neutral[300]} />
           <Text style={styles.emptyTitle}>No photos yet</Text>
           <Text style={styles.emptyMessage}>
             Help others by uploading photos of this product
           </Text>
           {enableUpload && onUploadPhoto && (
             <Pressable style={styles.emptyButton} onPress={pickImage}>
-              <Ionicons name="camera" size={20} color={COLORS.primary[500]} />
+              <Ionicons name="camera" size={20} color={colors.primary[500]} />
               <Text style={styles.emptyButtonText}>Upload First Photo</Text>
             </Pressable>
           )}
@@ -214,7 +214,7 @@ function CustomerPhotos({
                 {/* Verified Badge */}
                 {photo.isVerifiedPurchase && (
                   <View style={styles.verifiedBadge}>
-                    <Ionicons name="checkmark-circle" size={20} color={COLORS.text.inverse} />
+                    <Ionicons name="checkmark-circle" size={20} color={colors.text.inverse} />
                   </View>
                 )}
 
@@ -232,7 +232,7 @@ function CustomerPhotos({
                     accessibilityRole="button"
                     accessibilityLabel={`Mark as helpful. ${photo.helpful} people found this helpful`}
                   >
-                    <Ionicons name="thumbs-up" size={14} color={COLORS.text.inverse} />
+                    <Ionicons name="thumbs-up" size={14} color={colors.text.inverse} />
                     <Text style={styles.helpfulText}>{photo.helpful}</Text>
                   </Pressable>
                 </View>
@@ -278,7 +278,7 @@ function CustomerPhotos({
                 accessibilityRole="button"
                 accessibilityLabel="Close"
               >
-                <Ionicons name="close" size={28} color={COLORS.text.primary} />
+                <Ionicons name="close" size={28} color={colors.text.primary} />
               </Pressable>
 
               {/* Full Image */}
@@ -301,7 +301,7 @@ function CustomerPhotos({
                     <View style={styles.modalMeta}>
                       {selectedPhoto.isVerifiedPurchase && (
                         <View style={styles.verifiedPurchaseRow}>
-                          <Ionicons name="checkmark-circle" size={14} color={COLORS.success[700]} />
+                          <Ionicons name="checkmark-circle" size={14} color={colors.successScale[700]} />
                           <Text style={styles.verifiedPurchaseText}>Verified Purchase</Text>
                         </View>
                       )}
@@ -325,7 +325,7 @@ function CustomerPhotos({
                     accessibilityRole="button"
                     accessibilityLabel="Mark as helpful"
                   >
-                    <Ionicons name="thumbs-up" size={20} color={COLORS.primary[500]} />
+                    <Ionicons name="thumbs-up" size={20} color={colors.primary[500]} />
                     <Text style={styles.modalHelpfulText}>
                       Helpful ({selectedPhoto.helpful})
                     </Text>
@@ -349,7 +349,7 @@ function CustomerPhotos({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: SPACING.lg,
+    marginVertical: spacing.lg,
   },
 
   // Header
@@ -357,72 +357,72 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SPACING.md,
-    paddingHorizontal: SPACING.md,
+    marginBottom: spacing.md,
+    paddingHorizontal: spacing.md,
   },
   headerLeft: {
     flex: 1,
   },
   title: {
-    ...TYPOGRAPHY.h3,
-    color: COLORS.text.primary,
-    marginBottom: SPACING.xs,
+    ...typography.h3,
+    color: colors.text.primary,
+    marginBottom: spacing.xs,
   },
   count: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.secondary,
+    ...typography.bodySmall,
+    color: colors.text.secondary,
   },
 
   // Empty State
   emptyState: {
-    paddingVertical: SPACING.xxl,
-    paddingHorizontal: SPACING.lg,
+    paddingVertical: spacing.xxl,
+    paddingHorizontal: spacing.lg,
     alignItems: 'center',
-    backgroundColor: COLORS.background.secondary,
-    borderRadius: BORDER_RADIUS.lg,
-    marginHorizontal: SPACING.md,
+    backgroundColor: colors.background.secondary,
+    borderRadius: borderRadius.lg,
+    marginHorizontal: spacing.md,
   },
   emptyTitle: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.primary,
-    marginTop: SPACING.md,
-    marginBottom: SPACING.sm,
+    ...typography.h4,
+    color: colors.text.primary,
+    marginTop: spacing.md,
+    marginBottom: spacing.sm,
   },
   emptyMessage: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.secondary,
+    ...typography.body,
+    color: colors.text.secondary,
     textAlign: 'center',
-    marginBottom: SPACING.lg,
+    marginBottom: spacing.lg,
   },
   emptyButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
-    paddingVertical: SPACING.md,
-    paddingHorizontal: SPACING.lg,
-    backgroundColor: COLORS.primary[50],
-    borderRadius: BORDER_RADIUS.md,
+    gap: spacing.sm,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    backgroundColor: colors.primary[50],
+    borderRadius: borderRadius.md,
     borderWidth: 1,
-    borderColor: COLORS.primary[500],
+    borderColor: colors.primary[500],
   },
   emptyButtonText: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.primary[500],
+    ...typography.button,
+    color: colors.primary[500],
   },
 
   // Photos Grid
   scrollContent: {
-    paddingHorizontal: SPACING.md,
-    gap: SPACING.sm,
+    paddingHorizontal: spacing.md,
+    gap: spacing.sm,
   },
   photoCard: {
     width: 160,
     height: 160,
-    borderRadius: BORDER_RADIUS.md,
+    borderRadius: borderRadius.md,
     overflow: 'hidden',
     position: 'relative',
-    backgroundColor: COLORS.neutral[100],
-    ...SHADOWS.md,
+    backgroundColor: colors.neutral[100],
+    ...shadows.md,
   },
   photoImage: {
     width: '100%',
@@ -430,15 +430,15 @@ const styles = StyleSheet.create({
   },
   verifiedBadge: {
     position: 'absolute',
-    top: SPACING.xs,
-    right: SPACING.xs,
+    top: spacing.xs,
+    right: spacing.xs,
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: COLORS.success[500],
+    backgroundColor: colors.successScale[500],
     justifyContent: 'center',
     alignItems: 'center',
-    ...SHADOWS.sm,
+    ...shadows.sm,
   },
   photoOverlay: {
     position: 'absolute',
@@ -446,14 +446,14 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    padding: SPACING.sm,
+    padding: spacing.sm,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   photoUserName: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.inverse,
+    ...typography.bodySmall,
+    color: colors.text.inverse,
     fontWeight: '600',
     flex: 1,
   },
@@ -462,22 +462,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     paddingVertical: 2,
-    paddingHorizontal: SPACING.xs,
+    paddingHorizontal: spacing.xs,
   },
   helpfulText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.inverse,
+    ...typography.caption,
+    color: colors.text.inverse,
     fontWeight: '600',
   },
 
   // More Photos
   moreContainer: {
-    marginTop: SPACING.sm,
+    marginTop: spacing.sm,
     alignItems: 'center',
   },
   moreText: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.primary[500],
+    ...typography.bodySmall,
+    color: colors.primary[500],
     fontWeight: '600',
   },
 
@@ -494,64 +494,64 @@ const styles = StyleSheet.create({
   modalContent: {
     width: '90%',
     maxWidth: 500,
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.lg,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.lg,
     overflow: 'hidden',
-    ...SHADOWS.xl,
+    ...shadows.xl,
   },
   closeButton: {
     position: 'absolute',
-    top: SPACING.sm,
-    right: SPACING.sm,
+    top: spacing.sm,
+    right: spacing.sm,
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.background.primary,
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,
-    ...SHADOWS.md,
+    ...shadows.md,
   },
   modalImage: {
     width: '100%',
     height: 400,
-    backgroundColor: COLORS.neutral[100],
+    backgroundColor: colors.neutral[100],
   },
   modalInfo: {
-    padding: SPACING.lg,
+    padding: spacing.lg,
   },
   modalUserInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
-    marginBottom: SPACING.md,
+    gap: spacing.sm,
+    marginBottom: spacing.md,
   },
   avatar: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: COLORS.primary[100],
+    backgroundColor: colors.primary[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
   avatarText: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.primary[700],
+    ...typography.button,
+    color: colors.primary[700],
     fontSize: 18,
   },
   userDetails: {
     flex: 1,
   },
   modalUserName: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.primary,
+    ...typography.body,
+    color: colors.text.primary,
     fontWeight: '600',
     marginBottom: 2,
   },
   modalMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.xs,
+    gap: spacing.xs,
   },
   verifiedPurchaseRow: {
     flexDirection: 'row',
@@ -559,42 +559,42 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   verifiedPurchaseText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.success[700],
+    ...typography.caption,
+    color: colors.successScale[700],
     fontWeight: '600',
   },
   modalDate: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
+    ...typography.caption,
+    color: colors.text.tertiary,
   },
   captionContainer: {
-    marginBottom: SPACING.md,
-    padding: SPACING.md,
-    backgroundColor: COLORS.background.secondary,
-    borderRadius: BORDER_RADIUS.md,
+    marginBottom: spacing.md,
+    padding: spacing.md,
+    backgroundColor: colors.background.secondary,
+    borderRadius: borderRadius.md,
   },
   modalCaption: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.secondary,
+    ...typography.body,
+    color: colors.text.secondary,
     lineHeight: 22,
   },
   modalActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: SPACING.md,
+    paddingTop: spacing.md,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border.light,
+    borderTopColor: colors.border.light,
   },
   modalHelpfulButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
-    padding: SPACING.sm,
+    gap: spacing.sm,
+    padding: spacing.sm,
   },
   modalHelpfulText: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.primary[500],
+    ...typography.button,
+    color: colors.primary[500],
   },
 });
 

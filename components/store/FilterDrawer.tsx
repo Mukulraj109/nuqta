@@ -71,9 +71,10 @@ function FilterDrawer({
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
       setFilters(currentFilters);
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 250,
@@ -85,9 +86,10 @@ function FilterDrawer({
           friction: 11,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 200,
@@ -98,9 +100,12 @@ function FilterDrawer({
           duration: 250,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [visible]);
+  
+    return () => _anim.stop();
+}, [visible]);
 
   const handleApply = () => {
     onApplyFilters(filters);

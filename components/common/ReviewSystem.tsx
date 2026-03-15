@@ -7,12 +7,12 @@ import {
   StyleSheet,
   Pressable,
   TextInput,
-  FlatList,
   RefreshControl,
   ActivityIndicator,
   Modal,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
@@ -544,14 +544,11 @@ function ReviewSystem({
       </View>
 
       {/* Reviews List */}
-      <FlatList
+      <FlashList
         data={getSortedAndFilteredReviews()}
         renderItem={renderReview}
         keyExtractor={(item) => item.id}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
+        estimatedItemSize={120}
         refreshControl={
           onRefresh ? (
             <RefreshControl

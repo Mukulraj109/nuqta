@@ -7,7 +7,7 @@ interface StockIndicatorProps {
   lowStockThreshold?: number;
 }
 
-export default function StockIndicator({ stock, lowStockThreshold = 10 }: StockIndicatorProps) {
+function StockIndicator({ stock, lowStockThreshold = 10 }: StockIndicatorProps) {
   const getStockStatus = () => {
     if (stock === 0) {
       return {
@@ -65,3 +65,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(StockIndicator);

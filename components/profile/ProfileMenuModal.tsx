@@ -100,8 +100,9 @@ const ConfirmationModal = ({
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.spring(scaleAnim, {
           toValue: 1,
           useNativeDriver: true,
@@ -113,9 +114,10 @@ const ConfirmationModal = ({
           duration: 200,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(scaleAnim, {
           toValue: 0.8,
           duration: 150,
@@ -126,9 +128,12 @@ const ConfirmationModal = ({
           duration: 150,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [visible]);
+  
+    return () => _anim.stop();
+}, [visible]);
 
   if (!visible) return null;
 
@@ -412,8 +417,9 @@ function ProfileMenuModal({
   };
 
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.spring(slideAnim, {
           toValue: 0,
           useNativeDriver: true,
@@ -425,9 +431,10 @@ function ProfileMenuModal({
           duration: 300,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(slideAnim, {
           toValue: MODAL_WIDTH,
           duration: 250,
@@ -438,9 +445,12 @@ function ProfileMenuModal({
           duration: 200,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [visible]);
+  
+    return () => _anim.stop();
+}, [visible]);
 
   const performLogout = async () => {
     try {

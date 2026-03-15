@@ -14,7 +14,7 @@ interface ProductGridSkeletonProps {
   columns?: number;
 }
 
-export default function ProductGridSkeleton({
+function ProductGridSkeleton({
   count = 6,
   columns = 2,
 }: ProductGridSkeletonProps) {
@@ -41,3 +41,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
+
+export default React.memo(ProductGridSkeleton);

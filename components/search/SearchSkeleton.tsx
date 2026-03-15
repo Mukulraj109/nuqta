@@ -28,7 +28,7 @@ function ShimmerBar({ width: w, height, borderRadius = 8, style }: { width: numb
   );
 }
 
-export function LandingSkeleton() {
+function LandingSkeletonInner() {
   return (
     <View style={styles.container}>
       {/* Quick Actions Skeleton */}
@@ -66,7 +66,7 @@ export function LandingSkeleton() {
   );
 }
 
-export function ResultsSkeleton() {
+function ResultsSkeletonInner() {
   return (
     <View style={styles.container}>
       {/* Summary Skeleton */}
@@ -105,6 +105,9 @@ export function ResultsSkeleton() {
     </View>
   );
 }
+
+export const LandingSkeleton = React.memo(LandingSkeletonInner);
+export const ResultsSkeleton = React.memo(ResultsSkeletonInner);
 
 const styles = StyleSheet.create({
   container: {

@@ -6,9 +6,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  View, Text, StyleSheet, Pressable, FlatList,
+  View, Text, StyleSheet, Pressable,
   RefreshControl, ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { getCategoryTheme, SHARED_COLORS } from '@/config/categoryThemeConfig';
@@ -158,13 +159,14 @@ export default function ElectronicsCoinsPage() {
         </View>
       </View>
 
-      <FlatList
+      <FlashList
         data={filteredHistory}
         keyExtractor={(_, i) => String(i)}
         renderItem={renderTransaction}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[theme.primaryColor]} />}
+        estimatedItemSize={80}
         ListHeaderComponent={
           <>
             {/* Balance card */}

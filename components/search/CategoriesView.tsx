@@ -35,7 +35,7 @@ interface CategoriesViewProps {
   onPopularStorePress: (store: any) => void;
 }
 
-export default function CategoriesView({
+function CategoriesView({
   sections,
   recentSearches,
   trendingSearches,
@@ -399,3 +399,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(CategoriesView);

@@ -9,9 +9,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { StoreMembership, MembershipTier } from '@/types/storePayment.types';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 interface StoreInfoCardProps {
   storeName: string;
@@ -21,7 +20,7 @@ interface StoreInfoCardProps {
 }
 
 const TIER_COLORS: Record<MembershipTier, { bg: string; text: string; icon: string }> = {
-  new: { bg: COLORS.neutral[100], text: COLORS.neutral[700], icon: 'person-outline' },
+  new: { bg: colors.neutral[100], text: colors.neutral[700], icon: 'person-outline' },
   bronze: { bg: '#FDF2E9', text: colors.brand.amberDeep, icon: 'medal-outline' },
   silver: { bg: colors.neutral[100], text: colors.neutral[600], icon: 'medal' },
   gold: { bg: colors.tint.amberLight, text: colors.brand.amberDeep, icon: 'trophy' },
@@ -33,7 +32,7 @@ export const StoreInfoCard: React.FC<StoreInfoCardProps> = ({
   storeCategory,
   membership,
 }) => {
-  const tierStyle = membership ? TIER_COLORS[membership.tier] : TIER_COLORS.new;
+  const tierStyle = membership ? TIER_COLORS[membership.tier] : TIER_colors.new;
 
   return (
     <View style={styles.container}>
@@ -43,7 +42,7 @@ export const StoreInfoCard: React.FC<StoreInfoCardProps> = ({
             <CachedImage source={{ uri: storeLogo }} style={styles.logo} cachePolicy="memory-disk" />
           ) : (
             <View style={styles.logoPlaceholder}>
-              <Ionicons name="storefront" size={24} color={COLORS.neutral[400]} />
+              <Ionicons name="storefront" size={24} color={colors.neutral[400]} />
             </View>
           )}
         </View>
@@ -67,7 +66,7 @@ export const StoreInfoCard: React.FC<StoreInfoCardProps> = ({
 
       {/* Rewards Banner */}
       <LinearGradient
-        colors={[COLORS.primary[500], COLORS.primary[600]]}
+        colors={[colors.primary[500], colors.primary[600]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.rewardsBanner}
@@ -86,7 +85,7 @@ export const StoreInfoCard: React.FC<StoreInfoCardProps> = ({
       {/* Membership Progress */}
       {membership && membership.nextTier && membership.visitsToNextTier > 0 && (
         <View style={styles.progressRow}>
-          <Ionicons name="trending-up" size={14} color={COLORS.info[500]} />
+          <Ionicons name="trending-up" size={14} color={colors.infoScale[500]} />
           <Text style={styles.progressText}>
             {membership.visitsToNextTier} more visits to become a {membership.nextTier}
           </Text>
@@ -98,30 +97,30 @@ export const StoreInfoCard: React.FC<StoreInfoCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.lg,
-    padding: SPACING.md,
-    marginBottom: SPACING.md,
-    ...SHADOWS.sm,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.lg,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+    ...shadows.sm,
   },
   storeRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: SPACING.md,
+    marginBottom: spacing.md,
   },
   logoContainer: {
-    marginRight: SPACING.md,
+    marginRight: spacing.md,
   },
   logo: {
     width: 48,
     height: 48,
-    borderRadius: BORDER_RADIUS.md,
+    borderRadius: borderRadius.md,
   },
   logoPlaceholder: {
     width: 48,
     height: 48,
-    borderRadius: BORDER_RADIUS.md,
-    backgroundColor: COLORS.neutral[100],
+    borderRadius: borderRadius.md,
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -129,61 +128,61 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   storeName: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.primary,
+    ...typography.h4,
+    color: colors.text.primary,
   },
   storeCategory: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
+    ...typography.caption,
+    color: colors.text.secondary,
     marginTop: 2,
   },
   membershipBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: SPACING.sm,
+    paddingHorizontal: spacing.sm,
     paddingVertical: 4,
-    borderRadius: BORDER_RADIUS.full,
+    borderRadius: borderRadius.full,
     gap: 4,
   },
   membershipText: {
-    ...TYPOGRAPHY.caption,
+    ...typography.caption,
     fontWeight: '600',
   },
   rewardsBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: SPACING.sm,
-    borderRadius: BORDER_RADIUS.md,
-    gap: SPACING.sm,
+    padding: spacing.sm,
+    borderRadius: borderRadius.md,
+    gap: spacing.sm,
   },
   rewardsText: {
-    ...TYPOGRAPHY.bodySmall,
+    ...typography.bodySmall,
     color: colors.background.primary,
     flex: 1,
   },
   bonusBadge: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: SPACING.sm,
+    paddingHorizontal: spacing.sm,
     paddingVertical: 2,
-    borderRadius: BORDER_RADIUS.full,
+    borderRadius: borderRadius.full,
   },
   bonusText: {
-    ...TYPOGRAPHY.caption,
+    ...typography.caption,
     color: colors.background.primary,
     fontWeight: '700',
   },
   progressRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: SPACING.sm,
-    paddingTop: SPACING.sm,
+    marginTop: spacing.sm,
+    paddingTop: spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border.light,
-    gap: SPACING.xs,
+    borderTopColor: colors.border.light,
+    gap: spacing.xs,
   },
   progressText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.info[600],
+    ...typography.caption,
+    color: colors.infoScale[600],
   },
 });
 

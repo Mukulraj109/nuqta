@@ -89,7 +89,7 @@ export default function VoucherCategoryPage() {
 
   useEffect(() => {
     // Entrance animation
-    Animated.parallel([
+    const anim = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 600,
@@ -107,7 +107,9 @@ export default function VoucherCategoryPage() {
         friction: 7,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]);
+    anim.start();
+    return () => anim.stop();
   }, []);
 
   useEffect(() => {

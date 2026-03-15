@@ -127,18 +127,21 @@ export default function RedeemScreen() {
     }
 
     // Animate newly unlocked cards
+    const unlockAnimations: Animated.CompositeAnimation[] = [];
     for (const cat of newUnlocked) {
       if (!prevUnlocked.has(cat) && prevBalance > 0) {
         if (!unlockAnims[cat]) {
           unlockAnims[cat] = new Animated.Value(0);
         }
         unlockAnims[cat].setValue(0);
-        Animated.spring(unlockAnims[cat], {
+        const a = Animated.spring(unlockAnims[cat], {
           toValue: 1,
           friction: 4,
           tension: 80,
           useNativeDriver: true,
-        }).start();
+        });
+        a.start();
+        unlockAnimations.push(a);
       }
     }
 
@@ -150,13 +153,16 @@ export default function RedeemScreen() {
       setDisplayBalance(Math.round(value));
     });
 
-    Animated.timing(animatedValue, {
+    const balanceAnim = Animated.timing(animatedValue, {
       toValue: availableCoins,
       duration: 800,
       useNativeDriver: false,
-    }).start();
+    });
+    balanceAnim.start();
 
     return () => {
+      balanceAnim.stop();
+      unlockAnimations.forEach(a => a.stop());
       animatedValue.removeListener(listener);
     };
   }, [availableCoins, isLoading]);

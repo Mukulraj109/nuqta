@@ -9,11 +9,11 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  FlatList,
   Dimensions,
   ActivityIndicator,
   Linking,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -294,12 +294,13 @@ export default function HotspotsPage() {
           <ThemedText style={styles.emptyText}>No hotspots found in your area yet.</ThemedText>
         </View>
       ) : viewMode === 'list' ? (
-        <FlatList
+        <FlashList
           data={filteredHotspots}
           renderItem={renderHotspot}
           keyExtractor={item => item._id}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
+          estimatedItemSize={120}
           ListHeaderComponent={
             <View style={styles.summaryCard}>
               <View style={styles.summaryItem}>

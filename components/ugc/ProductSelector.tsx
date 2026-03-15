@@ -70,16 +70,19 @@ function ProductSelector({
   // Animate modal entrance
   React.useEffect(() => {
     if (visible) {
-      Animated.spring(slideAnim, {
+      const _anim0 = Animated.spring(slideAnim, {
         toValue: 1,
         tension: 50,
         friction: 8,
         useNativeDriver: true,
-      }).start();
+      });
+      _anim0.start();
     } else {
       slideAnim.setValue(0);
     }
-  }, [visible]);
+  
+    return () => { _anim0.stop(); };
+}, [visible]);
 
   // Handle search input change
   const handleSearchChange = useCallback(

@@ -73,11 +73,13 @@ const AnimatedProgressBar = ({ score, color }: { score: number; color: string })
   const widthAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.timing(widthAnim, {
+    const anim = Animated.timing(widthAnim, {
       toValue: score,
       duration: 800,
       useNativeDriver: false,
-    }).start();
+    });
+    anim.start();
+    return () => anim.stop();
   }, [score]);
 
   const width = widthAnim.interpolate({
@@ -115,16 +117,20 @@ const HeroScoreSection = ({
 
   useEffect(() => {
     countAnim.setValue(0);
-    Animated.timing(countAnim, {
+    const anim = Animated.timing(countAnim, {
       toValue: totalScore,
       duration: 1200,
       useNativeDriver: false,
-    }).start();
+    });
+    anim.start();
 
     const listener = countAnim.addListener(({ value }) => {
       setDisplayScore(Math.round(value * 10) / 10);
     });
-    return () => countAnim.removeListener(listener);
+    return () => {
+      anim.stop();
+      countAnim.removeListener(listener);
+    };
   }, [totalScore]);
 
   const getTierColor = () => {

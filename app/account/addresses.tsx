@@ -10,8 +10,8 @@ import {
   StatusBar,
   Platform,
   ActivityIndicator,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -429,7 +429,7 @@ export default function SavedAddressesPage() {
             </Pressable>
           </View>
         ) : (
-          <FlatList
+          <FlashList
             data={addresses}
             renderItem={renderAddress}
             keyExtractor={(item) => item.id}
@@ -438,10 +438,7 @@ export default function SavedAddressesPage() {
             }
             contentContainerStyle={styles.addressesContainer}
             showsVerticalScrollIndicator={false}
-            removeClippedSubviews={Platform.OS !== 'web'}
-            maxToRenderPerBatch={15}
-            windowSize={7}
-            initialNumToRender={8}
+            estimatedItemSize={100}
           />
         )}
       </View>

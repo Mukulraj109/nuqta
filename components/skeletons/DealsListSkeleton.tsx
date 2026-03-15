@@ -13,7 +13,7 @@ interface DealsListSkeletonProps {
   count?: number;
 }
 
-export default function DealsListSkeleton({ count = 5 }: DealsListSkeletonProps) {
+function DealsListSkeleton({ count = 5 }: DealsListSkeletonProps) {
   return (
     <View style={styles.container}>
       {Array.from({ length: count }).map((_, index) => (
@@ -28,3 +28,5 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
 });
+
+export default React.memo(DealsListSkeleton);

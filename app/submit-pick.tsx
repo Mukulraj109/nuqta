@@ -13,8 +13,8 @@ import {
   Platform,
   StatusBar,
   Alert,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -441,16 +441,15 @@ export default function SubmitPickPage() {
             {/* Dropdown results */}
             {searchResults.length > 0 && (
               <View style={styles.searchResults}>
-                <FlatList
+                <FlashList
                   data={searchResults}
                   keyExtractor={(item) => item._id}
                   renderItem={renderProductItem}
-                  style={styles.dropdownList}
-                  nestedScrollEnabled
                   onEndReached={loadMore}
                   onEndReachedThreshold={0.3}
                   ListFooterComponent={renderDropdownFooter}
                   keyboardShouldPersistTaps="handled"
+                  estimatedItemSize={60}
                 />
               </View>
             )}

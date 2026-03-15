@@ -66,6 +66,10 @@ export default function FastDeliveryPage() {
     setRefreshing(false);
   };
 
+  const renderStoreCard = useCallback(({ item }: { item: any }) => (
+    <FoodStoreCard store={item} currencySymbol={currencySymbol} variant="delivery-focused" />
+  ), [currencySymbol]);
+
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -107,7 +111,7 @@ export default function FastDeliveryPage() {
       <FlatList
         data={stores}
         keyExtractor={(item, i) => item._id || item.id || `store-${i}`}
-        renderItem={({ item }) => <FoodStoreCard store={item} currencySymbol={currencySymbol} variant="delivery-focused" />}
+        renderItem={renderStoreCard}
         contentContainerStyle={styles.storeList}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[COLORS.primaryGold]} />}

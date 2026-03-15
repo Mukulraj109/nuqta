@@ -17,7 +17,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 import { useRegion } from '@/contexts/RegionContext';
-import toast, { Toaster } from 'react-hot-toast';
+import { showToast } from '@/components/common/ToastManager';
 import { Platform } from 'react-native';
 import subscriptionAPI from '@/services/subscriptionApi';
 
@@ -103,9 +103,7 @@ export default function PaymentSuccessPage() {
         setLoading(false);
 
         if (Platform.OS === 'web') {
-          toast.success('Payment successful! Your subscription is now active.', {
-            duration: 5000,
-          });
+          showToast({ message: 'Payment successful! Your subscription is now active.', type: 'success', duration: 5000 });
         }
       } catch (error) {
         setLoading(false);
@@ -337,8 +335,7 @@ export default function PaymentSuccessPage() {
         </Pressable>
       </View>
 
-      {/* Toast Notifications (Web Only) */}
-      {Platform.OS === 'web' && <Toaster position="top-center" />}
+      {/* Toast handled by global ToastManager */}
     </ThemedView>
   );
 }

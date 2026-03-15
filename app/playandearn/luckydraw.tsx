@@ -77,19 +77,24 @@ const ConfettiParticle: React.FC<{ delay: number; color: string }> = ({ delay, c
   const rotate = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    let currentAnim: Animated.CompositeAnimation | undefined;
     const startAnimation = () => {
       translateY.setValue(0);
       translateX.setValue(Math.random() * 200 - 100);
       opacity.setValue(1);
       rotate.setValue(0);
-      Animated.parallel([
+      currentAnim = Animated.parallel([
         Animated.timing(translateY, { toValue: 300, duration: 2500, easing: Easing.out(Easing.quad), useNativeDriver: true }),
         Animated.timing(opacity, { toValue: 0, duration: 2500, useNativeDriver: true }),
         Animated.timing(rotate, { toValue: 1, duration: 2500, useNativeDriver: true }),
-      ]).start(() => startAnimation());
+      ]);
+      currentAnim.start(() => startAnimation());
     };
     const timeout = setTimeout(startAnimation, delay);
-    return () => clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout);
+      currentAnim?.stop();
+    };
   }, []);
 
   const spin = rotate.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] });

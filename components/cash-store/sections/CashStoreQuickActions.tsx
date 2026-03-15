@@ -94,7 +94,7 @@ const ActionCard: React.FC<{
 
   useEffect(() => {
     // Staggered entry animation
-    Animated.parallel([
+    const _anim0 = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 400,
@@ -108,8 +108,11 @@ const ActionCard: React.FC<{
         delay: index * 100,
         useNativeDriver: true,
       }),
-    ]).start();
-  }, [index]);
+    ]);
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, [index]);
 
   const handlePressIn = () => {
     Animated.parallel([

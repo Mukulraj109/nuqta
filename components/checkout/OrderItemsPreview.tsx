@@ -20,7 +20,7 @@ interface OrderItemsPreviewProps {
   currencySymbol: string;
 }
 
-export default function OrderItemsPreview({ items, currencySymbol }: OrderItemsPreviewProps) {
+function OrderItemsPreview({ items, currencySymbol }: OrderItemsPreviewProps) {
   const router = useRouter();
 
   if (items.length === 0) return null;
@@ -178,3 +178,5 @@ const styles = StyleSheet.create({
     color: Colors.gold,
   },
 });
+
+export default React.memo(OrderItemsPreview);

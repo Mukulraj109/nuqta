@@ -9,7 +9,6 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  FlatList,
   Pressable,
   Platform,
   Dimensions,
@@ -18,6 +17,7 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -647,13 +647,14 @@ const HealthRecordsPage: React.FC = () => {
           )}
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={records}
           keyExtractor={(item) => item._id}
           renderItem={renderRecordItem}
           showsVerticalScrollIndicator={false}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
           contentContainerStyle={[styles.recordsList, { paddingBottom: 120 }]}
+          estimatedItemSize={80}
         />
       )}
 

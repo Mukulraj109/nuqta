@@ -100,8 +100,9 @@ function ReviewModal({
 
   // Animate in/out
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 300,
@@ -113,9 +114,10 @@ function ReviewModal({
           friction: 8,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 200,
@@ -126,9 +128,12 @@ function ReviewModal({
           duration: 250,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [visible, fadeAnim, slideAnim, screenData.height]);
+  
+    return () => _anim.stop();
+}, [visible, fadeAnim, slideAnim, screenData.height]);
 
   const handleTabChange = useCallback((tab: TabType) => setActiveTab(tab), []);
 

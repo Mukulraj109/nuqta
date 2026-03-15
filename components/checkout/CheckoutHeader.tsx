@@ -17,7 +17,7 @@ interface CheckoutHeaderProps {
   onBack: () => void;
 }
 
-export default function CheckoutHeader({
+function CheckoutHeader({
   totalPayable,
   redemptionBenefit,
   cashbackEarned,
@@ -151,3 +151,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(CheckoutHeader);

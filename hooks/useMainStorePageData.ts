@@ -18,6 +18,7 @@ import { storesApi } from '@/services/storesApi';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import asyncStorageService from '@/services/asyncStorageService';
 import { platformAlert, platformAlertSimple } from '@/utils/platformAlert';
+import { errorReporter } from '@/utils/errorReporter';
 
 interface LocationData {
   address?: string;
@@ -187,7 +188,7 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
             cashback: typeof transformedData.cashback === 'number' && transformedData.cashback > 0
               ? transformedData.cashback : undefined,
           },
-        }).catch(() => {});
+        }).catch(() => {}); // Silent: non-critical AsyncStorage write
 
         asyncStorageService.trackStoreVisit({
           _id: transformedData.id,
@@ -215,8 +216,13 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
               ? transformedData.cashback : undefined,
           },
           operationalInfo: { deliveryTime: fetchedStoreData.operationalInfo?.deliveryTime || '' },
-        }).catch(() => {});
-      } catch {
+        }).catch(() => {}); // Silent: non-critical AsyncStorage write
+      } catch (err) {
+        errorReporter.captureError(
+          err instanceof Error ? err : new Error('Failed to transform store data'),
+          { context: 'useMainStorePageData.transformStoreData' },
+          'warning'
+        );
         setError('Failed to load store details');
       }
     }
@@ -252,7 +258,12 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
           });
           setIsDynamic(true);
           setError(null);
-        } catch {
+        } catch (err) {
+          errorReporter.captureError(
+            err instanceof Error ? err : new Error('Failed to parse store data from params'),
+            { context: 'useMainStorePageData.parseStoreParams' },
+            'warning'
+          );
           setError(storeError.message || 'Failed to load store details');
         }
       } else {
@@ -275,7 +286,12 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
         try {
           setStoreData(JSON.parse(storeDataParam));
           setIsDynamic(true);
-        } catch {
+        } catch (err) {
+          errorReporter.captureError(
+            err instanceof Error ? err : new Error('Failed to parse initial storeData param'),
+            { context: 'useMainStorePageData.initStoreData' },
+            'info'
+          );
           setIsDynamic(false);
         }
       } else if (!storeIdParam) {
@@ -321,7 +337,12 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
             try {
               const response = await reviewApi.canUserReviewStore(reviewStoreId);
               if (response.success && response.data) setCanReview(response.data.canReview);
-            } catch {
+            } catch (err) {
+              errorReporter.captureError(
+                err instanceof Error ? err : new Error('Failed to check review eligibility'),
+                { context: 'useMainStorePageData.canUserReviewStore' },
+                'info'
+              );
               setCanReview(true);
             }
           })(),
@@ -348,7 +369,12 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
                   productTags: item.tags || [],
                 })));
               }
-            } catch {
+            } catch (err) {
+              errorReporter.captureError(
+                err instanceof Error ? err : new Error('Failed to fetch UGC content'),
+                { context: 'useMainStorePageData.fetchUgcContent' },
+                'warning'
+              );
               setUgcContent([]);
             } finally {
               setUgcLoading(false);
@@ -369,7 +395,7 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
           .then(response => {
             if (response.success && response.data) setIsFavorited(response.data.inWishlist || false);
           })
-          .catch(() => {});
+          .catch(() => {}); // Silent: non-critical wishlist status check
       }
     }, [storeIdParam, storeData?.id, isAuthenticated])
   );
@@ -405,7 +431,13 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
     try {
       const response = await reviewsApi.markHelpful(reviewId);
       if (response.success) await refetchReviews();
-    } catch { /* silently handle */ }
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to mark review as helpful'),
+        { context: 'useMainStorePageData.handleReviewHelpful' },
+        'info'
+      );
+    }
   }, [refetchReviews]);
 
   const handleReviewReport = useCallback(async (reviewId: string) => {
@@ -414,7 +446,12 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
       if (response.success) {
         platformAlertSimple('Success', 'Review reported successfully. Thank you for helping keep our community safe.');
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to report review'),
+        { context: 'useMainStorePageData.handleReviewReport' },
+        'warning'
+      );
       platformAlertSimple('Error', 'Failed to report review. Please try again.');
     }
   }, []);
@@ -538,7 +575,13 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
             hasCompletedMilestone: response.data.hasCompletedMilestone,
           });
         }
-      } catch { /* Keep default null */ }
+      } catch (err) {
+        errorReporter.captureError(
+          err instanceof Error ? err : new Error('Failed to fetch user store visits'),
+          { context: 'useMainStorePageData.fetchUserVisits' },
+          'info'
+        );
+      }
     });
     return () => task.cancel();
   }, [storeIdParam, storeData?.id, productData.storeId, isDynamic, pageLoading]);
@@ -552,7 +595,7 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
         url: `https://store.example.com/products/${productData.id}`,
         title: productData.title,
       });
-    } catch {
+    } catch { // Silent: Share API cancellation is expected
       setError("Failed to share product.");
     } finally {
       setIsLoading(false);
@@ -594,7 +637,12 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
           throw new Error(response.message || 'Failed to follow');
         }
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to toggle store follow'),
+        { context: 'useMainStorePageData.handleFavoritePress' },
+        'warning'
+      );
       setIsFavorited(wasFollowing);
       showAlert('Error', 'Something went wrong. Please try again.', undefined, 'error');
     } finally {
@@ -634,7 +682,12 @@ export function useMainStorePageData({ productId, initialProduct }: MainStorePag
       } else {
         await new Promise(resolve => setTimeout(resolve, 500));
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to refresh store data'),
+        { context: 'useMainStorePageData.onRefresh' },
+        'warning'
+      );
       setError('Failed to refresh store data');
     } finally {
       setRefreshing(false);

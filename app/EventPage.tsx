@@ -37,13 +37,14 @@ import eventAnalytics from "@/services/eventAnalytics";
 import { getCategoryTheme, CategoryTheme, DEFAULT_THEME } from "@/constants/categoryThemes";
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { errorReporter } from '@/utils/errorReporter';
 // Conditional import for native Stripe service
 let stripeReactNativeService: any = null;
 if (Platform.OS !== 'web') {
   try {
     stripeReactNativeService = require('@/services/stripeReactNativeService').default;
-  } catch (e) {
-    // silently handle
+  } catch (e) { // Silent: non-critical dynamic import for native Stripe
   }
 }
 
@@ -81,7 +82,7 @@ interface DynamicEventData {
   [key: string]: any;
 }
 
-export default function EventPage({ eventId, initialEvent }: EventPageProps = {}) {
+function EventPage({ eventId, initialEvent }: EventPageProps = {}) {
   const router = useRouter();
   const params = useLocalSearchParams();
   const auth = useAuth();
@@ -130,53 +131,81 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
 
   // Parse dynamic event data from navigation params and fetch real data
   useEffect(() => {
+    let cancelled = false;
     const loadEventData = async () => {
       setIsLoadingEvent(true);
       setError(null);
-      
+
       try {
         if (eventDataParam && eventIdParam && eventTypeParam) {
           try {
             const parsedData = JSON.parse(eventDataParam);
+            if (cancelled) return;
             setEventData(parsedData);
             setIsDynamic(true);
 
             // Try to fetch real event data from backend
             try {
               const realData = await eventsApiService.getEventById(eventIdParam);
-              if (realData) {
+              if (!cancelled && realData) {
                 setRealEventData(realData);
               }
-            } catch (error) {
+            } catch (err) {
               // Continue with dynamic data if backend fetch fails
+              errorReporter.captureError(
+                err instanceof Error ? err : new Error('Failed to fetch real event data'),
+                { context: 'EventPage.loadEventData.fetchReal' },
+                'info'
+              );
             }
-          } catch (error) {
+          } catch (err) {
+            if (cancelled) return;
+            errorReporter.captureError(
+              err instanceof Error ? err : new Error('Failed to parse event data param'),
+              { context: 'EventPage.loadEventData.parseParam' },
+              'info'
+            );
             setIsDynamic(false);
           }
         } else if (eventIdParam) {
           // Direct event ID from params - fetch from backend
           try {
             const realData = await eventsApiService.getEventById(eventIdParam);
+            if (cancelled) return;
             if (realData) {
               setRealEventData(realData);
               setIsDynamic(false);
             } else {
               setError("Event not found");
             }
-          } catch (error) {
+          } catch (err) {
+            if (cancelled) return;
+            errorReporter.captureError(
+              err instanceof Error ? err : new Error('Failed to load event by ID'),
+              { context: 'EventPage.loadEventData.fetchById' },
+              'warning'
+            );
             setError("Failed to load event. Please try again.");
           }
         } else {
+          if (cancelled) return;
           setIsDynamic(false);
         }
-      } catch (error) {
+      } catch (err) {
+        if (cancelled) return;
+        errorReporter.captureError(
+          err instanceof Error ? err : new Error('Failed to load event data'),
+          { context: 'EventPage.loadEventData' },
+          'warning'
+        );
         setError("Failed to load event. Please try again.");
       } finally {
-        setIsLoadingEvent(false);
+        if (!cancelled) setIsLoadingEvent(false);
       }
     };
 
     loadEventData();
+    return () => { cancelled = true; };
   }, [eventIdParam, eventDataParam, eventTypeParam]);
 
   // Fetch reward info and favorite status when event loads
@@ -184,19 +213,19 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
     if (realEventData?.id) {
       eventsApiService.getEventRewardInfo(realEventData.id)
         .then(info => { if (info) setRewardInfo(info); })
-        .catch(() => {}); // Silently fail - reward info is optional
+        .catch(() => {}); // Silent: non-critical reward info
 
       // Check if user has favorited this event
       eventsApiService.isFavorited(realEventData.id)
         .then(fav => setIsFavorited(fav))
-        .catch(() => {}); // Silently fail
+        .catch(() => {}); // Silent: non-critical favorite status
     }
   }, [realEventData?.id]);
 
   // Animate content on load
   useEffect(() => {
     if (!isLoadingEvent && realEventData) {
-      Animated.parallel([
+      const anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 400,
@@ -207,7 +236,9 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
           duration: 400,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      anim.start();
+      return () => anim.stop();
     }
   }, [isLoadingEvent, realEventData, fadeAnim, slideAnim]);
 
@@ -314,8 +345,12 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
               setIsLoadingEvent(false);
             });
         }
-      } catch (error) {
-        // silently handle
+      } catch (err) {
+        errorReporter.captureError(
+          err instanceof Error ? err : new Error('Failed to handle deep link'),
+          { context: 'EventPage.handleDeepLink' },
+          'info'
+        );
       }
     };
 
@@ -329,8 +364,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
       if (url) {
         handleDeepLink(url);
       }
-    }).catch((error) => {
-    });
+    }).catch(() => {}); // Silent: non-critical initial URL check
 
     return () => {
       subscription.remove();
@@ -909,36 +943,22 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
         {rewardInfo && rewardInfo.rewards.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Earn Coins</Text>
-            <View style={{
-              backgroundColor: colors.tint.purpleLight,
-              borderRadius: BorderRadius.lg,
-              padding: Spacing.base,
-              borderWidth: 1,
-              borderColor: '#E0D4FC',
-            }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: Spacing.md }}>
-                <View style={{
-                  width: 40, height: 40, borderRadius: BorderRadius.xl,
-                  backgroundColor: Colors.brand.purpleLight, justifyContent: 'center', alignItems: 'center',
-                }}>
+            <View style={styles.rewardCard}>
+              <View style={styles.rewardCardHeader}>
+                <View style={styles.rewardIconCircle}>
                   <Ionicons name="gift-outline" size={20} color={Colors.text.inverse} />
                 </View>
-                <View style={{ marginLeft: Spacing.md, flex: 1 }}>
-                  <Text style={{ ...Typography.bodyLarge, fontWeight: '700', color: Colors.text.primary }}>
+                <View style={styles.rewardHeaderText}>
+                  <Text style={styles.rewardTitle}>
                     Earn up to {rewardInfo.totalPotential} coins
                   </Text>
-                  <Text style={{ ...Typography.bodySmall, color: Colors.text.tertiary }}>
+                  <Text style={styles.rewardSubtitle}>
                     Complete actions to earn rewards
                   </Text>
                 </View>
               </View>
               {rewardInfo.rewards.map((reward, index) => (
-                <View key={index} style={{
-                  flexDirection: 'row', alignItems: 'center',
-                  paddingVertical: Spacing.sm,
-                  borderTopWidth: index > 0 ? 1 : 0,
-                  borderTopColor: '#E0D4FC',
-                }}>
+                <View key={index} style={[styles.rewardRow, index > 0 && styles.rewardRowBorder]}>
                   <Ionicons
                     name={
                       reward.action.includes('checkin') ? 'location-outline' :
@@ -950,16 +970,11 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
                     size={18}
                     color={Colors.brand.purpleLight}
                   />
-                  <Text style={{ flex: 1, marginLeft: 10, ...Typography.body, color: colors.neutral[700] }}>
+                  <Text style={styles.rewardDescription}>
                     {reward.description || reward.action.replace(/_/g, ' ')}
                   </Text>
-                  <View style={{
-                    backgroundColor: Colors.brand.purpleLight,
-                    paddingHorizontal: Spacing.sm,
-                    paddingVertical: 3,
-                    borderRadius: 10,
-                  }}>
-                    <Text style={{ ...Typography.bodySmall, fontWeight: '700', color: Colors.text.inverse }}>
+                  <View style={styles.rewardCoinBadge}>
+                    <Text style={styles.rewardCoinText}>
                       +{reward.coins}
                     </Text>
                   </View>
@@ -974,26 +989,19 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Schedule</Text>
             {(realEventData as any).schedule.map((item: any, index: number) => (
-              <View key={index} style={{
-                flexDirection: 'row',
-                paddingVertical: Spacing.md,
-                borderBottomWidth: index < (realEventData as any).schedule.length - 1 ? 1 : 0,
-                borderBottomColor: Colors.border.default,
-              }}>
-                <View style={{
-                  width: 44, alignItems: 'center',
-                }}>
+              <View key={index} style={[styles.scheduleRow, index < (realEventData as any).schedule.length - 1 && styles.scheduleRowBorder]}>
+                <View style={styles.scheduleTimeCol}>
                   <Ionicons name="time-outline" size={18} color={Colors.brand.purpleLight} />
-                  <Text style={{ fontSize: 11, color: Colors.text.tertiary, marginTop: 2, textAlign: 'center' }}>
+                  <Text style={styles.scheduleTimeText}>
                     {item.startTime || ''}
                   </Text>
                 </View>
-                <View style={{ flex: 1, marginLeft: Spacing.md }}>
-                  <Text style={{ fontSize: 15, fontWeight: '600', color: Colors.text.primary }}>
+                <View style={styles.scheduleContent}>
+                  <Text style={styles.scheduleItemTitle}>
                     {item.title}
                   </Text>
                   {item.description && (
-                    <Text style={{ fontSize: 13, color: Colors.text.tertiary, marginTop: 2 }}>
+                    <Text style={styles.scheduleItemDesc}>
                       {item.description}
                     </Text>
                   )}
@@ -1007,31 +1015,20 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
         {realEventData && (realEventData as any).sponsors && (realEventData as any).sponsors.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Sponsors</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 8 }}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.sponsorsScroll}>
               {(realEventData as any).sponsors.map((sponsor: any, index: number) => (
-                <View key={index} style={{
-                  alignItems: 'center',
-                  marginRight: Spacing.base,
-                  padding: Spacing.md,
-                  backgroundColor: Colors.background.secondary,
-                  borderRadius: BorderRadius.md,
-                  minWidth: 80,
-                }}>
+                <View key={index} style={styles.sponsorCard}>
                   {sponsor.logo ? (
                     <CachedImage
                       source={sponsor.logo}
-                      style={{ width: 40, height: 40, borderRadius: 20, marginBottom: 8 }}
+                      style={styles.sponsorLogo}
                     />
                   ) : (
-                    <View style={{
-                      width: 40, height: 40, borderRadius: BorderRadius.xl,
-                      backgroundColor: Colors.border.default, justifyContent: 'center', alignItems: 'center',
-                      marginBottom: Spacing.sm,
-                    }}>
+                    <View style={styles.sponsorLogoPlaceholder}>
                       <Ionicons name="business-outline" size={20} color={colors.neutral[400]} />
                     </View>
                   )}
-                  <Text style={{ ...Typography.bodySmall, fontWeight: '600', color: colors.neutral[700], textAlign: 'center' }}>
+                  <Text style={styles.sponsorName}>
                     {sponsor.name}
                   </Text>
                 </View>
@@ -1793,6 +1790,31 @@ const createStyles = (
       ...Typography.bodyLarge,
       fontWeight: '600',
     },
+
+    // Extracted inline styles
+    rewardCard: { backgroundColor: colors.tint.purpleLight, borderRadius: BorderRadius.lg, padding: Spacing.base, borderWidth: 1, borderColor: '#E0D4FC' },
+    rewardCardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: Spacing.md },
+    rewardIconCircle: { width: 40, height: 40, borderRadius: BorderRadius.xl, backgroundColor: Colors.brand.purpleLight, justifyContent: 'center', alignItems: 'center' },
+    rewardHeaderText: { marginLeft: Spacing.md, flex: 1 },
+    rewardTitle: { ...Typography.bodyLarge, fontWeight: '700', color: Colors.text.primary },
+    rewardSubtitle: { ...Typography.bodySmall, color: Colors.text.tertiary },
+    rewardRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: Spacing.sm },
+    rewardRowBorder: { borderTopWidth: 1, borderTopColor: '#E0D4FC' },
+    rewardDescription: { flex: 1, marginLeft: 10, ...Typography.body, color: colors.neutral[700] },
+    rewardCoinBadge: { backgroundColor: Colors.brand.purpleLight, paddingHorizontal: Spacing.sm, paddingVertical: 3, borderRadius: 10 },
+    rewardCoinText: { ...Typography.bodySmall, fontWeight: '700', color: Colors.text.inverse },
+    scheduleRow: { flexDirection: 'row', paddingVertical: Spacing.md },
+    scheduleRowBorder: { borderBottomWidth: 1, borderBottomColor: Colors.border.default },
+    scheduleTimeCol: { width: 44, alignItems: 'center' },
+    scheduleTimeText: { fontSize: 11, color: Colors.text.tertiary, marginTop: 2, textAlign: 'center' },
+    scheduleContent: { flex: 1, marginLeft: Spacing.md },
+    scheduleItemTitle: { fontSize: 15, fontWeight: '600', color: Colors.text.primary },
+    scheduleItemDesc: { fontSize: 13, color: Colors.text.tertiary, marginTop: 2 },
+    sponsorsScroll: { marginTop: 8 },
+    sponsorCard: { alignItems: 'center', marginRight: Spacing.base, padding: Spacing.md, backgroundColor: Colors.background.secondary, borderRadius: BorderRadius.md, minWidth: 80 },
+    sponsorLogo: { width: 40, height: 40, borderRadius: 20, marginBottom: 8 },
+    sponsorLogoPlaceholder: { width: 40, height: 40, borderRadius: BorderRadius.xl, backgroundColor: Colors.border.default, justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.sm },
+    sponsorName: { ...Typography.bodySmall, fontWeight: '600', color: colors.neutral[700], textAlign: 'center' },
   });
 
 const actionStyles = StyleSheet.create({
@@ -1823,3 +1845,5 @@ const actionStyles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(EventPage, 'Event');

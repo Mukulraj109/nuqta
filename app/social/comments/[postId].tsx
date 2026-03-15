@@ -8,11 +8,11 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  FlatList,
   TextInput,
   KeyboardAvoidingView,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
@@ -318,19 +318,16 @@ export default function CommentsPage() {
       </View>
 
       {/* Comments List */}
-      <FlatList
+      <FlashList
         data={comments}
         renderItem={renderCommentWithReplies}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.3}
+        estimatedItemSize={80}
         ListFooterComponent={
           loadingMore ? (
             <View style={styles.footerLoader}>

@@ -11,7 +11,7 @@ interface MerchantVideoSectionProps {
   loading?: boolean;
 }
 
-export default function MerchantVideoSection({
+function MerchantVideoSection({
   videos,
   onVideoPress,
   onViewAllPress,
@@ -69,3 +69,5 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 });
+
+export default React.memo(MerchantVideoSection);

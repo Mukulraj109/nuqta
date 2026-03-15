@@ -39,7 +39,7 @@ function PointsNotification({ data, onDismiss }: PointsNotificationProps) {
 
   useEffect(() => {
     // Entrance animation
-    Animated.parallel([
+    const _anim0 = Animated.parallel([
       Animated.spring(translateY, {
         toValue: 0,
         friction: 8,
@@ -56,14 +56,18 @@ function PointsNotification({ data, onDismiss }: PointsNotificationProps) {
         friction: 5,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]);
+    _anim0.start();
 
     // Auto dismiss after duration
     const timer = setTimeout(() => {
       handleDismiss();
     }, duration);
 
-    return () => clearTimeout(timer);
+    return () => {
+      _anim0.stop();
+      clearTimeout(timer);
+    }
   }, []);
 
   const handleDismiss = () => {

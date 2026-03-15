@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet, ScrollView, Platform, FlatList } from 'react-native';
 import SkeletonCard from '@/components/common/SkeletonCard';
 import { ThemedView } from '@/components/ThemedView';
@@ -31,6 +31,28 @@ function StoreDiscoverySkeleton({
     id: `popular-skeleton-${index}`,
   }));
 
+  const renderTopStoreSkeletonItem = useCallback(({ item, index }: { item: { id: string }; index: number }) => (
+    <View
+      style={[
+        styles.cardContainer,
+        { marginRight: index === topStoreSkeletons.length - 1 ? 0 : 12 },
+      ]}
+    >
+      <TopStoreCardSkeleton width={180} />
+    </View>
+  ), [topStoreSkeletons.length]);
+
+  const renderPopularStoreSkeletonItem = useCallback(({ item, index }: { item: { id: string }; index: number }) => (
+    <View
+      style={[
+        styles.cardContainer,
+        { marginRight: index === popularStoreSkeletons.length - 1 ? 0 : 12 },
+      ]}
+    >
+      <PopularStoreCardSkeleton width={170} />
+    </View>
+  ), [popularStoreSkeletons.length]);
+
   const renderTopStoresSkeleton = () => (
     <ThemedView style={styles.sectionContainer}>
       {/* Section Header Skeleton */}
@@ -57,16 +79,7 @@ function StoreDiscoverySkeleton({
           style={styles.webFlatListContainer}
           removeClippedSubviews={false}
           scrollEnabled={false}
-          renderItem={({ item, index }) => (
-            <View
-              style={[
-                styles.cardContainer,
-                { marginRight: index === topStoreSkeletons.length - 1 ? 0 : 12 },
-              ]}
-            >
-              <TopStoreCardSkeleton width={180} />
-            </View>
-          )}
+          renderItem={renderTopStoreSkeletonItem}
           keyExtractor={(item) => item.id}
         />
       ) : (
@@ -118,16 +131,7 @@ function StoreDiscoverySkeleton({
           style={styles.webFlatListContainer}
           removeClippedSubviews={false}
           scrollEnabled={false}
-          renderItem={({ item, index }) => (
-            <View
-              style={[
-                styles.cardContainer,
-                { marginRight: index === popularStoreSkeletons.length - 1 ? 0 : 12 },
-              ]}
-            >
-              <PopularStoreCardSkeleton width={170} />
-            </View>
-          )}
+          renderItem={renderPopularStoreSkeletonItem}
           keyExtractor={(item) => item.id}
         />
       ) : (

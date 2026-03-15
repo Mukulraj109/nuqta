@@ -10,8 +10,8 @@ import {
   Dimensions,
   Animated,
   ActivityIndicator,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -602,11 +602,10 @@ export default function OrderTrackingScreen() {
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={orders}
           renderItem={renderModernOrderCard}
           keyExtractor={(item) => item.id}
-          style={styles.content}
           contentContainerStyle={[styles.scrollContent, { paddingBottom: 120 }]}
           showsVerticalScrollIndicator={false}
           refreshControl={
@@ -653,6 +652,7 @@ export default function OrderTrackingScreen() {
               </View>
             ) : null
           }
+          estimatedItemSize={120}
         />
       )}
     </SafeAreaView>

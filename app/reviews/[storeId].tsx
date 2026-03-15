@@ -3,13 +3,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   ScrollView,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
   RefreshControl,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ReviewsListSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -273,12 +273,12 @@ export default function ReviewsPage() {
           </Pressable>
         </LinearGradient>
 
-      <FlatList
+      <FlashList
         data={filteredAndSortedReviews}
         keyExtractor={(item) => item._id}
         renderItem={renderReviewItem}
-        style={styles.content}
         contentContainerStyle={{ paddingBottom: 120 }}
+        estimatedItemSize={120}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={() => fetchReviews(true, 1)} tintColor={Colors.brand.purple} />
         }

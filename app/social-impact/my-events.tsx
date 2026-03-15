@@ -4,12 +4,12 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   RefreshControl,
   ActivityIndicator,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -192,18 +192,15 @@ export default function MyParticipationsScreen() {
       {loading ? (
         <CardGridSkeleton />
       ) : (
-        <FlatList
+        <FlashList
           data={enrollments}
           renderItem={renderEnrollmentCard}
           keyExtractor={item => item.enrollmentId}
           contentContainerStyle={styles.listContent}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Colors.gold} />
           }
+          estimatedItemSize={120}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Ionicons name="heart-outline" size={56} color={Colors.text.tertiary} />

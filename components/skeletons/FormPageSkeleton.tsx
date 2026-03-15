@@ -9,7 +9,7 @@ import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
 import { colors } from '@/constants/theme';
 
-export default function FormPageSkeleton({ fields = 5 }: { fields?: number }) {
+function FormPageSkeleton({ fields = 5 }: { fields?: number }) {
   return (
     <View style={styles.container}>
       {/* Page Title */}
@@ -52,3 +52,5 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
 });
+
+export default React.memo(FormPageSkeleton);

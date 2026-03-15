@@ -8,7 +8,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   RefreshControl,
   ActivityIndicator,
@@ -16,6 +15,7 @@ import {
   Pressable,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -478,7 +478,7 @@ export default function BrandsListingPage() {
             />
           </View>
         ) : (
-          <FlatList
+          <FlashList
             data={brands}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
@@ -497,9 +497,7 @@ export default function BrandsListingPage() {
             }
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.3}
-            initialNumToRender={10}
-            maxToRenderPerBatch={10}
-            windowSize={10}
+            estimatedItemSize={100}
           />
         )}
       </View>

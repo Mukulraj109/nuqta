@@ -12,7 +12,7 @@ interface DividerProps {
   style?: ViewStyle;
 }
 
-export default function Divider({
+function Divider({
   orientation = 'horizontal',
   spacing = 'md',
   color,
@@ -48,3 +48,5 @@ export default function Divider({
 const styles = StyleSheet.create({
   base: {},
 });
+
+export default React.memo(Divider);

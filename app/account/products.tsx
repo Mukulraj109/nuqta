@@ -3,12 +3,12 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   RefreshControl,
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { useRouter } from 'expo-router';
@@ -309,7 +309,7 @@ export default function ProductsScreen() {
       {error ? (
         renderErrorState()
       ) : (
-        <FlatList
+        <FlashList
           data={products}
           renderItem={renderProductCard}
           keyExtractor={(item) => item._id}
@@ -318,6 +318,7 @@ export default function ProductsScreen() {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           ListEmptyComponent={renderEmptyState}
+          estimatedItemSize={100}
         />
       )}
     </View>

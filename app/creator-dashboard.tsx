@@ -202,15 +202,15 @@ export default function CreatorDashboard() {
           <View style={styles.earningsHeader}>
             <Text style={styles.earningsTitle}>Total Earnings</Text>
             <View style={[styles.tierBadge, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
-              <CachedImage source={NUQTA_COIN} style={{ width: 14, height: 14, borderRadius: 7 }} />
+              <CachedImage source={NUQTA_COIN} style={styles.coinIcon14} />
               <Text style={styles.tierBadgeText}>
                 {tier.charAt(0).toUpperCase() + tier.slice(1)}
               </Text>
             </View>
           </View>
 
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-            <CachedImage source={NUQTA_COIN} style={{ width: 28, height: 28, borderRadius: 14 }} />
+          <View style={styles.totalEarningsRow}>
+            <CachedImage source={NUQTA_COIN} style={styles.coinIcon28} />
             <Text style={styles.totalEarnings}>
               {formatCount(earnings?.totalEarnings || 0)} coins
             </Text>
@@ -295,7 +295,7 @@ export default function CreatorDashboard() {
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>My Picks</Text>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 8 }}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
             <View style={styles.filterRow}>
               {([
                 { key: 'all', label: 'All' },
@@ -329,7 +329,7 @@ export default function CreatorDashboard() {
                  
                 >
                   <View style={styles.pickRow}>
-                    <View style={{ position: 'relative' }}>
+                    <View style={styles.positionRelative}>
                       {pick.productImage ? (
                         <CachedImage source={pick.productImage} style={styles.pickImage} />
                       ) : (
@@ -358,7 +358,7 @@ export default function CreatorDashboard() {
                             {pick.earnings > 0 && (
                               <>
                                 <Text style={styles.pickMetaDot}>·</Text>
-                                <CachedImage source={NUQTA_COIN} style={{ width: 13, height: 13, borderRadius: 7 }} />
+                                <CachedImage source={NUQTA_COIN} style={styles.coinIcon13} />
                                 <Text style={styles.pickEarnings}>
                                   +{formatCount(pick.earnings)}
                                 </Text>
@@ -410,16 +410,16 @@ export default function CreatorDashboard() {
                   </View>
                   {/* Show merchant rejection reason */}
                   {pick.status === 'rejected' && pick.merchantApproval?.status === 'rejected' && pick.merchantApproval?.rejectionReason && (
-                    <Text style={{ fontSize: 11, color: Colors.error, marginTop: 2, paddingLeft: 56 }}>
+                    <Text style={styles.rejectionReasonText}>
                       Store: {pick.merchantApproval.rejectionReason}
                     </Text>
                   )}
                   {/* Show merchant reward if approved with reward */}
                   {pick.merchantApproval?.reward && pick.merchantApproval.reward.type !== 'none' && pick.merchantApproval.reward.amount > 0 && (
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2, paddingLeft: 56, gap: 4 }}>
+                    <View style={styles.merchantRewardRow}>
                       <Ionicons name="gift-outline" size={12} color={Colors.nileBlue} />
-                      <CachedImage source={NUQTA_COIN} style={{ width: 13, height: 13, borderRadius: 7 }} />
-                      <Text style={{ fontSize: 11, color: Colors.nileBlue, fontWeight: '500' }}>
+                      <CachedImage source={NUQTA_COIN} style={styles.coinIcon13} />
+                      <Text style={styles.merchantRewardText}>
                         +{pick.merchantApproval.reward.amount} {pick.merchantApproval.reward.type === 'branded_coins' ? 'branded' : BRAND.APP_NAME} reward
                       </Text>
                     </View>
@@ -461,8 +461,8 @@ export default function CreatorDashboard() {
                   <Text style={styles.convBuyer}>by {conv.buyer}</Text>
                 </View>
                 <View style={styles.convRight}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-                    <CachedImage source={NUQTA_COIN} style={{ width: 14, height: 14, borderRadius: 7 }} />
+                  <View style={styles.convCoinRow}>
+                    <CachedImage source={NUQTA_COIN} style={styles.coinIcon14} />
                     <Text style={styles.convCommission}>+{conv.commission}</Text>
                   </View>
                   <View style={[
@@ -534,7 +534,7 @@ export default function CreatorDashboard() {
           </View>
         </View>
 
-        <View style={{ height: 40 }} />
+        <View style={styles.bottomSpacer} />
       </ScrollView>
     </View>
   );
@@ -552,7 +552,7 @@ function Header({ onBack }: { onBack: () => void }) {
           <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
         </Pressable>
         <Text style={headerStyles.title}>Creator Dashboard</Text>
-        <View style={{ width: 40 }} />
+        <View style={headerStyles.spacer} />
       </View>
     </LinearGradient>
   );
@@ -582,6 +582,7 @@ const headerStyles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.text.inverse,
   },
+  spacer: { width: 40 },
 });
 
 // ============================================
@@ -950,4 +951,17 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
     fontWeight: '500',
   },
+
+  // Extracted inline styles
+  totalEarningsRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  filterScroll: { marginBottom: 8 },
+  positionRelative: { position: 'relative' },
+  rejectionReasonText: { fontSize: 11, color: Colors.error, marginTop: 2, paddingLeft: 56 },
+  merchantRewardRow: { flexDirection: 'row', alignItems: 'center', marginTop: 2, paddingLeft: 56, gap: 4 },
+  merchantRewardText: { fontSize: 11, color: Colors.nileBlue, fontWeight: '500' },
+  convCoinRow: { flexDirection: 'row', alignItems: 'center', gap: 3 },
+  bottomSpacer: { height: 40 },
+  coinIcon13: { width: 13, height: 13, borderRadius: 7 },
+  coinIcon14: { width: 14, height: 14, borderRadius: 7 },
+  coinIcon28: { width: 28, height: 28, borderRadius: 14 },
 });

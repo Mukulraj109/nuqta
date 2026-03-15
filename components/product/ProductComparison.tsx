@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
-import { SPACING, TYPOGRAPHY, COLORS, BORDER_RADIUS } from '@/constants/DesignTokens';
 import Button from '@/components/ui/Button';
 import { useRegion } from '@/contexts/RegionContext';
+import { borderRadius, colors, spacing, typography } from '@/constants/theme';
 
 interface Product {
   id: string;
@@ -50,7 +50,7 @@ function ProductComparison({
   if (products.length === 0) {
     return (
       <View style={styles.emptyState}>
-        <Ionicons name="scale-outline" size={64} color={COLORS.neutral[300]} />
+        <Ionicons name="scale-outline" size={64} color={colors.neutral[300]} />
         <Text style={styles.emptyTitle}>No products to compare</Text>
         <Text style={styles.emptyMessage}>
           Add products to compare their features side-by-side
@@ -86,7 +86,7 @@ function ProductComparison({
                 accessibilityLabel={`Remove ${product.name} from comparison`}
                 accessibilityRole="button"
               >
-                <Ionicons name="close-circle" size={24} color={COLORS.error[500]} />
+                <Ionicons name="close-circle" size={24} color={colors.errorScale[500]} />
               </Pressable>
 
               <CachedImage
@@ -101,7 +101,7 @@ function ProductComparison({
               </Text>
 
               <View style={styles.ratingRow}>
-                <Ionicons name="star" size={14} color={COLORS.warning[500]} />
+                <Ionicons name="star" size={14} color={colors.warningScale[500]} />
                 <Text style={styles.rating}>{product.rating}</Text>
                 <Text style={styles.reviews}>({product.reviews})</Text>
               </View>
@@ -125,7 +125,7 @@ function ProductComparison({
         </View>
 
         {/* Price Comparison */}
-        <ComparisonRow label="Price" backgroundColor={COLORS.background.secondary}>
+        <ComparisonRow label="Price" backgroundColor={colors.background.secondary}>
           {products.map((product) => (
             <View key={product.id} style={styles.valueCell}>
               <Text style={styles.priceValue}>{currencySymbol}{product.price.toLocaleString()}</Text>
@@ -145,7 +145,7 @@ function ProductComparison({
               <View key={product.id} style={styles.valueCell}>
                 {product.cashback ? (
                   <View style={styles.cashbackBadge}>
-                    <Ionicons name="cash-outline" size={14} color={COLORS.success[700]} />
+                    <Ionicons name="cash-outline" size={14} color={colors.successScale[700]} />
                     <Text style={styles.cashbackText}>{currencySymbol}{product.cashback}</Text>
                   </View>
                 ) : (
@@ -157,7 +157,7 @@ function ProductComparison({
         )}
 
         {/* Brand Comparison */}
-        <ComparisonRow label="Brand" backgroundColor={COLORS.background.secondary}>
+        <ComparisonRow label="Brand" backgroundColor={colors.background.secondary}>
           {products.map((product) => (
             <Text key={product.id} style={styles.value}>
               {product.brand}
@@ -175,7 +175,7 @@ function ProductComparison({
                     key={i}
                     name={i < Math.floor(product.rating) ? "star" : "star-outline"}
                     size={12}
-                    color={COLORS.warning[500]}
+                    color={colors.warningScale[500]}
                   />
                 ))}
               </View>
@@ -189,14 +189,14 @@ function ProductComparison({
         {allSpecKeys.length > 0 && (
           <>
             <View style={styles.sectionHeader}>
-              <Ionicons name="document-text-outline" size={18} color={COLORS.primary[700]} />
+              <Ionicons name="document-text-outline" size={18} color={colors.primary[700]} />
               <Text style={styles.sectionTitle}>Specifications</Text>
             </View>
             {allSpecKeys.map((key, index) => (
               <ComparisonRow
                 key={key}
                 label={key}
-                backgroundColor={index % 2 === 0 ? COLORS.background.secondary : undefined}
+                backgroundColor={index % 2 === 0 ? colors.background.secondary : undefined}
               >
                 {products.map((product) => (
                   <Text
@@ -218,14 +218,14 @@ function ProductComparison({
         {allFeatures.length > 0 && (
           <>
             <View style={styles.sectionHeader}>
-              <Ionicons name="checkmark-circle-outline" size={18} color={COLORS.primary[700]} />
+              <Ionicons name="checkmark-circle-outline" size={18} color={colors.primary[700]} />
               <Text style={styles.sectionTitle}>Features</Text>
             </View>
             {allFeatures.map((feature, index) => (
               <ComparisonRow
                 key={feature}
                 label={feature}
-                backgroundColor={index % 2 === 0 ? COLORS.background.secondary : undefined}
+                backgroundColor={index % 2 === 0 ? colors.background.secondary : undefined}
               >
                 {products.map((product) => {
                   const hasFeature = product.features?.includes(feature);
@@ -234,7 +234,7 @@ function ProductComparison({
                       <Ionicons
                         name={hasFeature ? "checkmark-circle" : "close-circle"}
                         size={20}
-                        color={hasFeature ? COLORS.success[500] : COLORS.neutral[300]}
+                        color={hasFeature ? colors.successScale[500] : colors.neutral[300]}
                       />
                     </View>
                   );
@@ -257,7 +257,7 @@ function ProductComparison({
                 variant="primary"
                 size="small"
                 fullWidth
-                icon={<Ionicons name="cart-outline" size={16} color={COLORS.text.inverse} />}
+                icon={<Ionicons name="cart-outline" size={16} color={colors.text.inverse} />}
               />
               <Button
                 title="View Details"
@@ -265,8 +265,8 @@ function ProductComparison({
                 variant="outline"
                 size="small"
                 fullWidth
-                style={{ marginTop: SPACING.sm }}
-                icon={<Ionicons name="eye-outline" size={16} color={COLORS.primary[500]} />}
+                style={{ marginTop: spacing.sm }}
+                icon={<Ionicons name="eye-outline" size={16} color={colors.primary[500]} />}
               />
             </View>
           ))}
@@ -311,99 +311,99 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: COLORS.background.primary,
+    backgroundColor: colors.background.primary,
   },
 
   // Header Row
   headerRow: {
     flexDirection: 'row',
     borderBottomWidth: 2,
-    borderBottomColor: COLORS.border.default,
-    paddingBottom: SPACING.md,
-    backgroundColor: COLORS.background.primary,
+    borderBottomColor: colors.border.default,
+    paddingBottom: spacing.md,
+    backgroundColor: colors.background.primary,
   },
   labelColumn: {
     width: LABEL_WIDTH,
-    padding: SPACING.sm,
+    padding: spacing.sm,
     justifyContent: 'center',
   },
   headerLabel: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.primary,
+    ...typography.h4,
+    color: colors.text.primary,
   },
   headerSubtext: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
-    marginTop: SPACING.xs,
+    ...typography.caption,
+    color: colors.text.tertiary,
+    marginTop: spacing.xs,
   },
 
   // Product Column
   productColumn: {
     width: COLUMN_WIDTH,
-    padding: SPACING.sm,
+    padding: spacing.sm,
     alignItems: 'center',
   },
   removeButton: {
     position: 'absolute',
-    top: SPACING.xs,
-    right: SPACING.xs,
+    top: spacing.xs,
+    right: spacing.xs,
     zIndex: 10,
-    padding: SPACING.xs,
+    padding: spacing.xs,
   },
   productImage: {
     width: 120,
     height: 120,
-    marginBottom: SPACING.sm,
-    backgroundColor: COLORS.background.secondary,
-    borderRadius: BORDER_RADIUS.md,
+    marginBottom: spacing.sm,
+    backgroundColor: colors.background.secondary,
+    borderRadius: borderRadius.md,
   },
   productName: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.primary,
+    ...typography.bodySmall,
+    color: colors.text.primary,
     textAlign: 'center',
     fontWeight: '600',
-    marginBottom: SPACING.xs,
+    marginBottom: spacing.xs,
     height: 40,
   },
   ratingRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.xs,
-    marginBottom: SPACING.xs,
+    gap: spacing.xs,
+    marginBottom: spacing.xs,
   },
   rating: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.primary,
+    ...typography.bodySmall,
+    color: colors.text.primary,
     fontWeight: '600',
   },
   reviews: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
+    ...typography.caption,
+    color: colors.text.tertiary,
   },
   priceRow: {
     alignItems: 'center',
-    marginBottom: SPACING.xs,
+    marginBottom: spacing.xs,
   },
   price: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.primary,
+    ...typography.h4,
+    color: colors.text.primary,
     fontWeight: '700',
   },
   originalPrice: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
+    ...typography.caption,
+    color: colors.text.tertiary,
     textDecorationLine: 'line-through',
     marginTop: 2,
   },
   discountBadge: {
-    backgroundColor: COLORS.error[50],
-    paddingHorizontal: SPACING.sm,
-    paddingVertical: SPACING.xs / 2,
-    borderRadius: BORDER_RADIUS.sm,
+    backgroundColor: colors.errorScale[50],
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs / 2,
+    borderRadius: borderRadius.sm,
   },
   discountText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.error[700],
+    ...typography.caption,
+    color: colors.errorScale[700],
     fontWeight: '700',
   },
 
@@ -411,22 +411,22 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border.light,
+    borderBottomColor: colors.border.light,
     minHeight: 50,
     alignItems: 'center',
   },
   label: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.secondary,
+    ...typography.bodySmall,
+    color: colors.text.secondary,
     fontWeight: '600',
   },
   value: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.primary,
+    ...typography.bodySmall,
+    color: colors.text.primary,
     textAlign: 'center',
   },
   valueMissing: {
-    color: COLORS.text.tertiary,
+    color: colors.text.tertiary,
     fontStyle: 'italic',
   },
   valueCell: {
@@ -436,13 +436,13 @@ const styles = StyleSheet.create({
 
   // Price Value
   priceValue: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.primary[600],
+    ...typography.button,
+    color: colors.primary[600],
     fontWeight: '700',
   },
   savings: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.success[700],
+    ...typography.caption,
+    color: colors.successScale[700],
     marginTop: 2,
   },
 
@@ -450,15 +450,15 @@ const styles = StyleSheet.create({
   cashbackBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.xs,
-    backgroundColor: COLORS.success[50],
-    paddingHorizontal: SPACING.sm,
-    paddingVertical: SPACING.xs / 2,
-    borderRadius: BORDER_RADIUS.full,
+    gap: spacing.xs,
+    backgroundColor: colors.successScale[50],
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs / 2,
+    borderRadius: borderRadius.full,
   },
   cashbackText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.success[700],
+    ...typography.caption,
+    color: colors.successScale[700],
     fontWeight: '600',
   },
 
@@ -466,16 +466,16 @@ const styles = StyleSheet.create({
   ratingStars: {
     flexDirection: 'row',
     gap: 2,
-    marginBottom: SPACING.xs / 2,
+    marginBottom: spacing.xs / 2,
   },
   ratingValue: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.primary,
+    ...typography.bodySmall,
+    color: colors.text.primary,
     fontWeight: '600',
   },
   reviewsSmall: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
+    ...typography.caption,
+    color: colors.text.tertiary,
   },
 
   // Features
@@ -488,47 +488,47 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
-    padding: SPACING.md,
-    backgroundColor: COLORS.primary[50],
+    gap: spacing.sm,
+    padding: spacing.md,
+    backgroundColor: colors.primary[50],
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.primary[200],
+    borderBottomColor: colors.primary[200],
   },
   sectionTitle: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.primary[700],
+    ...typography.button,
+    color: colors.primary[700],
   },
 
   // Actions Row
   actionsRow: {
     flexDirection: 'row',
-    paddingVertical: SPACING.lg,
+    paddingVertical: spacing.lg,
     borderTopWidth: 2,
-    borderTopColor: COLORS.border.default,
-    backgroundColor: COLORS.background.primary,
+    borderTopColor: colors.border.default,
+    backgroundColor: colors.background.primary,
   },
   actionsLabel: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.text.primary,
+    ...typography.button,
+    color: colors.text.primary,
   },
 
   // Empty State
   emptyState: {
     flex: 1,
-    paddingVertical: SPACING.xxl * 2,
-    paddingHorizontal: SPACING.xl,
+    paddingVertical: spacing.xxl * 2,
+    paddingHorizontal: spacing.xl,
     alignItems: 'center',
     justifyContent: 'center',
   },
   emptyTitle: {
-    ...TYPOGRAPHY.h3,
-    color: COLORS.text.primary,
-    marginTop: SPACING.lg,
-    marginBottom: SPACING.sm,
+    ...typography.h3,
+    color: colors.text.primary,
+    marginTop: spacing.lg,
+    marginBottom: spacing.sm,
   },
   emptyMessage: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.secondary,
+    ...typography.body,
+    color: colors.text.secondary,
     textAlign: 'center',
   },
 });

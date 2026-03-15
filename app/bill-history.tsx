@@ -8,12 +8,12 @@ import {
   StyleSheet,
   Pressable,
   ScrollView,
-  FlatList,
   RefreshControl,
   ActivityIndicator,
   Modal,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertConfirm } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
@@ -587,11 +587,10 @@ export default function BillHistoryPage() {
           </View>
         )
       ) : (
-        <FlatList
+        <FlashList
           data={bills}
           renderItem={renderBillCard}
           keyExtractor={(item) => item._id}
-          style={styles.billList}
           contentContainerStyle={{ paddingBottom: 120 }}
           refreshControl={
             <RefreshControl
@@ -602,10 +601,7 @@ export default function BillHistoryPage() {
           }
           onEndReached={loadMore}
           onEndReachedThreshold={0.3}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={15}
-          windowSize={7}
-          initialNumToRender={8}
+          estimatedItemSize={100}
           ListFooterComponent={renderListFooter}
         />
       )}

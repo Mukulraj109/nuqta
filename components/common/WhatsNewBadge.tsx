@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WhatsNewBadge;
+export default React.memo(WhatsNewBadge);

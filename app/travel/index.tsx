@@ -274,20 +274,20 @@ const TravelPage: React.FC = () => {
   // ─── Error State ─────────────────────────────────────────────────────────
   if (error && categories.length === 0 && !isLoading) {
     return (
-      <View style={[s.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: C.cyan50, justifyContent: 'center', alignItems: 'center', marginBottom: 20 }}>
+      <View style={[s.container, s.centeredContent]}>
+        <View style={s.errorIconCircle}>
           <Ionicons name="cloud-offline-outline" size={36} color={C.cyan600} />
         </View>
-        <Text style={{ fontSize: 18, fontWeight: '700', color: C.navy, marginBottom: 6 }}>Connection Error</Text>
-        <Text style={{ fontSize: 14, color: C.slate500, textAlign: 'center', paddingHorizontal: 40, marginBottom: 24 }}>
+        <Text style={s.errorTitle}>Connection Error</Text>
+        <Text style={s.errorMessage}>
           {error}. Pull down to retry.
         </Text>
         <Pressable
           onPress={() => { setIsLoading(true); fetchTravelData(); }}
-          style={{ backgroundColor: C.cyan600, paddingHorizontal: 28, paddingVertical: 12, borderRadius: 24 }}
-         
+          style={s.errorRetryBtn}
+
         >
-          <Text style={{ fontSize: 14, fontWeight: '600', color: C.white }}>Try Again</Text>
+          <Text style={s.errorRetryBtnText}>Try Again</Text>
         </Pressable>
       </View>
     );
@@ -313,7 +313,7 @@ const TravelPage: React.FC = () => {
           <Pressable onPress={() => router.back()} style={s.headerBtn}>
             <Ionicons name="arrow-back" size={22} color={C.white} />
           </Pressable>
-          <View style={{ flex: 1, marginLeft: 12 }}>
+          <View style={s.headerTitleWrap}>
             <Text style={s.headerTitle}>Travel & Booking</Text>
             <Text style={s.headerSub}>Book trips, earn rewards</Text>
           </View>
@@ -359,7 +359,7 @@ const TravelPage: React.FC = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} colors={[C.cyan600]} />}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={s.scrollContentPadding}
       >
         {/* ── Categories ──────────────────────────────────────────────────── */}
         <View style={s.section}>
@@ -399,7 +399,7 @@ const TravelPage: React.FC = () => {
         {/* ── Hot Deals ───────────────────────────────────────────────────── */}
         <View style={s.section}>
           <View style={s.sectionRow}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <View style={s.sectionTitleRow}>
               <Ionicons name="flame" size={20} color={C.rose500} />
               <Text style={s.sectionTitle}>Hot Deals</Text>
             </View>
@@ -411,7 +411,7 @@ const TravelPage: React.FC = () => {
           </View>
 
           {isLoading ? <DealSkeleton /> : featuredDeals.length > 0 ? (
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingLeft: 16, paddingRight: 4 }}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.horizontalScrollPadding}>
               {featuredDeals.map((deal) => (
                 <Pressable
                   key={deal.id}
@@ -453,13 +453,13 @@ const TravelPage: React.FC = () => {
                       )}
                     </View>
                     {deal.rating > 0 && (
-                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 2 }}>
+                      <View style={s.dealRatingRow}>
                         <Ionicons name="star" size={11} color={C.amber500} />
-                        <Text style={{ fontSize: 11, color: 'rgba(255,255,255,0.9)', fontWeight: '600' }}>
+                        <Text style={s.dealRatingText}>
                           {deal.rating.toFixed(1)}
                         </Text>
                         {deal.storeName && (
-                          <Text style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)' }}> | {deal.storeName}</Text>
+                          <Text style={s.dealStoreText}> | {deal.storeName}</Text>
                         )}
                       </View>
                     )}
@@ -481,14 +481,14 @@ const TravelPage: React.FC = () => {
         {/* ── Popular Services ────────────────────────────────────────────── */}
         <View style={s.section}>
           <View style={s.sectionRow}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <View style={s.sectionTitleRow}>
               <Ionicons name="trending-up" size={20} color={C.blue600} />
               <Text style={s.sectionTitle}>Popular Now</Text>
             </View>
           </View>
 
           {isLoading ? <PopularSkeleton /> : popularServices.length > 0 ? (
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingLeft: 16, paddingRight: 4 }}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.horizontalScrollPadding}>
               {popularServices.map((svc) => {
                 const cfg = CATEGORY_CONFIG[svc.categorySlug] || CATEGORY_CONFIG.packages;
                 return (
@@ -515,9 +515,9 @@ const TravelPage: React.FC = () => {
                           <Text style={[s.popCatText, { color: cfg.gradient[0] }]}>{svc.categoryName}</Text>
                         </View>
                         {svc.rating > 0 && (
-                          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+                          <View style={s.popRatingRow}>
                             <Ionicons name="star" size={11} color={C.amber500} />
-                            <Text style={{ fontSize: 11, fontWeight: '600', color: C.navy }}>{svc.rating.toFixed(1)}</Text>
+                            <Text style={s.popRatingText}>{svc.rating.toFixed(1)}</Text>
                           </View>
                         )}
                       </View>
@@ -541,7 +541,7 @@ const TravelPage: React.FC = () => {
         </View>
 
         {/* ── Rewards Banner ──────────────────────────────────────────────── */}
-        <View style={{ paddingHorizontal: 16, marginBottom: 20 }}>
+        <View style={s.rewardsBannerWrap}>
           <LinearGradient
             colors={[colors.brand.purple, colors.brand.purpleDeep, '#5B21B6']}
             start={{ x: 0, y: 0 }}
@@ -576,7 +576,7 @@ const TravelPage: React.FC = () => {
         </View>
 
         {/* ── Quick Links ─────────────────────────────────────────────────── */}
-        <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
+        <View style={s.quickLinksWrap}>
           <View style={s.quickLinks}>
             <Pressable
               style={s.quickLink}
@@ -856,6 +856,25 @@ const s = StyleSheet.create({
   quickLink: { alignItems: 'center', gap: 6 },
   qlIcon: { width: 42, height: 42, borderRadius: BorderRadius.md, justifyContent: 'center', alignItems: 'center' },
   qlText: { fontSize: 11, fontWeight: '600', color: C.slate500 },
+
+  // Extracted inline styles
+  centeredContent: { justifyContent: 'center', alignItems: 'center' },
+  errorIconCircle: { width: 80, height: 80, borderRadius: 40, backgroundColor: C.cyan50, justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
+  errorTitle: { fontSize: 18, fontWeight: '700', color: C.navy, marginBottom: 6 },
+  errorMessage: { fontSize: 14, color: C.slate500, textAlign: 'center', paddingHorizontal: 40, marginBottom: 24 },
+  errorRetryBtn: { backgroundColor: C.cyan600, paddingHorizontal: 28, paddingVertical: 12, borderRadius: 24 },
+  errorRetryBtnText: { fontSize: 14, fontWeight: '600', color: C.white },
+  headerTitleWrap: { flex: 1, marginLeft: 12 },
+  scrollContentPadding: { paddingBottom: 100 },
+  sectionTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  horizontalScrollPadding: { paddingLeft: 16, paddingRight: 4 },
+  dealRatingRow: { flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 2 },
+  dealRatingText: { fontSize: 11, color: 'rgba(255,255,255,0.9)', fontWeight: '600' },
+  dealStoreText: { fontSize: 11, color: 'rgba(255,255,255,0.7)' },
+  popRatingRow: { flexDirection: 'row', alignItems: 'center', gap: 2 },
+  popRatingText: { fontSize: 11, fontWeight: '600', color: C.navy },
+  rewardsBannerWrap: { paddingHorizontal: 16, marginBottom: 20 },
+  quickLinksWrap: { paddingHorizontal: 16, marginBottom: 16 },
 });
 
 export default TravelPage;

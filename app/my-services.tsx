@@ -6,12 +6,12 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   RefreshControl,
   StatusBar,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -254,15 +254,11 @@ const MyServicesPage = () => {
       )}
 
       {/* Projects List */}
-      <FlatList
+      <FlashList
         data={projects}
         renderItem={renderProject}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -271,6 +267,7 @@ const MyServicesPage = () => {
           />
         }
         ListEmptyComponent={renderEmptyState}
+        estimatedItemSize={100}
       />
     </View>
   );

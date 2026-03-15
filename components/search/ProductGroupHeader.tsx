@@ -8,7 +8,7 @@ interface ProductGroupHeaderProps {
   product: GroupedProductResult;
 }
 
-export default function ProductGroupHeader({ product }: ProductGroupHeaderProps) {
+function ProductGroupHeader({ product }: ProductGroupHeaderProps) {
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
@@ -72,3 +72,5 @@ const styles = StyleSheet.create({
   },
 });
 
+
+export default React.memo(ProductGroupHeader);

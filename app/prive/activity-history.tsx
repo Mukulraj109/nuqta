@@ -8,9 +8,9 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/priveTheme';
 import { TransactionListSkeleton } from '@/components/skeletons';
@@ -121,12 +121,12 @@ export default function ActivityHistoryScreen() {
             <Text style={styles.errorText}>{error}</Text>
           </View>
         ) : (
-          <FlatList
+          <FlashList
             data={transactions}
             keyExtractor={(item) => item.id}
-            style={styles.content}
             contentContainerStyle={{ paddingBottom: 120 }}
             showsVerticalScrollIndicator={false}
+            estimatedItemSize={80}
             ListHeaderComponent={
               <>
                 <View style={styles.statsCard}>

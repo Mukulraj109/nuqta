@@ -25,7 +25,7 @@ interface SearchSuggestionsViewProps {
   onSuggestionPress: (suggestion: SearchSuggestion) => void;
 }
 
-export default function SearchSuggestionsView({
+function SearchSuggestionsView({
   suggestions,
   query,
   onSuggestionPress,
@@ -218,3 +218,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 });
+
+export default React.memo(SearchSuggestionsView);

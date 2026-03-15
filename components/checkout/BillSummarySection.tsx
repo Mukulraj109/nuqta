@@ -42,7 +42,7 @@ interface BillSummarySectionProps {
   onTogglePlatformFeeInfo: () => void;
 }
 
-export default function BillSummarySection({
+function BillSummarySection({
   billSummary,
   items,
   appliedRedemption,
@@ -347,3 +347,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default React.memo(BillSummarySection);

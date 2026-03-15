@@ -275,7 +275,7 @@ export default function OffersPage() {
               <Ionicons name="chevron-back" size={20} color={Colors.nileBlue} />
             </Pressable>
             <Text style={styles.headerTitle}>Offers</Text>
-            <View style={{ width: 32 }} />
+            <View style={styles.headerSpacer} />
           </View>
         </View>
         <View style={styles.skeletonWrap}>
@@ -305,7 +305,7 @@ export default function OffersPage() {
             <Ionicons name="chevron-back" size={20} color={Colors.nileBlue} />
           </Pressable>
           <Text style={styles.headerTitle}>Offers</Text>
-          <View style={{ width: 32 }} />
+          <View style={styles.headerSpacer} />
         </View>
       </View>
 
@@ -708,7 +708,7 @@ export default function OffersPage() {
           </>
         ) : null}
 
-        <View style={{ height: 100 }} />
+        <View style={styles.bottomSpacer} />
       </ScrollView>
     </View>
   );
@@ -1389,4 +1389,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.text.inverse,
   },
+
+  // Extracted inline styles
+  headerSpacer: { width: 32 },
+  bottomSpacer: { height: 100 },
 });

@@ -11,8 +11,8 @@ import {
   Platform,
   TextInput,
   ActivityIndicator,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -392,7 +392,7 @@ export default function PhotoUploadPage() {
           <View style={{ height: 40 }} />
         </ScrollView>
       ) : (
-        <FlatList
+        <FlashList
           data={uploads}
           keyExtractor={item => item._id}
           contentContainerStyle={styles.historyList}
@@ -406,6 +406,7 @@ export default function PhotoUploadPage() {
             </View>
           }
           renderItem={renderUploadHistoryItem}
+          estimatedItemSize={100}
         />
       )}
     </View>

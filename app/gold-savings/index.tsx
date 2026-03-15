@@ -28,6 +28,9 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { errorReporter } from '@/utils/errorReporter';
+import ErrorState from '@/components/common/ErrorState';
 
 const GOLD_COLOR = colors.warningScale[400];
 const GOLD_DARK = colors.warningScale[700];
@@ -37,7 +40,7 @@ function generateIdempotencyKey(): string {
   return `gold_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
 }
 
-export default function GoldSavingsPage() {
+function GoldSavingsPage() {
   const router = useRouter();
   const { getCurrencySymbol } = useRegion();
   const { isAuthenticated, authLoading } = useAuth();
@@ -75,12 +78,20 @@ export default function GoldSavingsPage() {
   const fetchPrice = useCallback(async () => {
     try {
       setLoadingPrice(true);
+      setError(null);
       const response = await goldSavingsApi.getPrice();
       if (response.success && response.data) {
         setGoldPrice(response.data);
+      } else {
+        setError('Failed to load gold price. Please try again.');
       }
-    } catch {
-      // Price fetch failed silently - will show loading state
+    } catch (err) {
+      setError('Failed to load gold price. Please try again.');
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to fetch gold price'),
+        { context: 'GoldSavingsPage.fetchPrice' },
+        'warning'
+      );
     } finally {
       setLoadingPrice(false);
     }
@@ -95,8 +106,12 @@ export default function GoldSavingsPage() {
       if (response.success && response.data) {
         setHolding(response.data);
       }
-    } catch {
-      // silently fail
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to fetch gold holding'),
+        { context: 'GoldSavingsPage.fetchHolding' },
+        'warning'
+      );
     } finally {
       setLoadingHolding(false);
     }
@@ -121,8 +136,12 @@ export default function GoldSavingsPage() {
         setTxHasMore(pagination ? pagination.page < pagination.pages : false);
         setTxPage(page);
       }
-    } catch {
-      // silently fail
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to fetch gold transactions'),
+        { context: 'GoldSavingsPage.fetchTransactions' },
+        'warning'
+      );
     } finally {
       setLoadingTx(false);
       setLoadingMoreTx(false);
@@ -214,7 +233,12 @@ export default function GoldSavingsPage() {
         setError(response.message || 'Purchase failed');
         platformAlertSimple('Purchase Failed', response.message || 'Something went wrong.');
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Gold purchase failed'),
+        { context: 'GoldSavingsPage.executeBuy' },
+        'warning'
+      );
       setError('Purchase failed. Please try again.');
       platformAlertSimple('Error', 'Purchase failed. Please try again.');
     } finally {
@@ -245,7 +269,12 @@ export default function GoldSavingsPage() {
         setError(response.message || 'Sale failed');
         platformAlertSimple('Sale Failed', response.message || 'Something went wrong.');
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Gold sale failed'),
+        { context: 'GoldSavingsPage.executeSell' },
+        'warning'
+      );
       setError('Sale failed. Please try again.');
       platformAlertSimple('Error', 'Sale failed. Please try again.');
     } finally {
@@ -286,6 +315,22 @@ export default function GoldSavingsPage() {
           <ActivityIndicator size="large" color={GOLD_COLOR} style={{ marginTop: Spacing.lg }} />
           <Text style={styles.loadingText}>Loading gold prices...</Text>
         </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (error && !goldPrice && !loadingPrice) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor={Colors.background.primary} />
+        <View style={styles.header}>
+          <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
+          </Pressable>
+          <Text style={styles.headerTitle}>Digital Gold</Text>
+          <View style={{ width: 24 }} />
+        </View>
+        <ErrorState error={error} onRetry={() => fetchPrice()} title="Failed to Load Gold Prices" />
       </SafeAreaView>
     );
   }
@@ -987,3 +1032,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(GoldSavingsPage, 'Gold Savings');

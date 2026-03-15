@@ -34,8 +34,9 @@ import ProcessingOverlay from '@/components/checkout/ProcessingOverlay';
 import AddressSelectionModal from '@/components/checkout/AddressSelectionModal';
 import PaymentFailureModal from '@/components/checkout/PaymentFailureModal';
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 
-export default function CheckoutPage() {
+function CheckoutPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ offerRedemptionCode?: string; orderId?: string }>();
   const { getCurrencySymbol } = useRegion();
@@ -341,3 +342,5 @@ const styles = StyleSheet.create({
     height: 220,
   },
 });
+
+export default withErrorBoundary(CheckoutPage, 'Checkout');

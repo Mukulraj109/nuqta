@@ -11,8 +11,8 @@ import {
   Platform,
   TextInput,
   ActivityIndicator,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -229,11 +229,12 @@ export default function OfferCommentsPage() {
         <CardGridSkeleton />
       ) : activeTab === 'offers' ? (
         <View style={styles.offersContent}>
-          <FlatList
+          <FlashList
             data={offers}
             renderItem={renderOfferCard}
             keyExtractor={item => item.id}
             contentContainerStyle={styles.listContent}
+            estimatedItemSize={120}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
                 <Ionicons name="pricetags-outline" size={64} color={Colors.text.tertiary} />
@@ -297,11 +298,12 @@ export default function OfferCommentsPage() {
           )}
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={myComments}
           renderItem={renderMyCommentItem}
           keyExtractor={item => item.id}
           contentContainerStyle={styles.listContent}
+          estimatedItemSize={80}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Ionicons name="chatbubbles-outline" size={64} color={Colors.text.tertiary} />

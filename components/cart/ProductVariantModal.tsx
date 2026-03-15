@@ -166,8 +166,9 @@ function ProductVariantModal({
 
   // Animation
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.spring(slideAnim, {
           toValue: 0,
           useNativeDriver: true,
@@ -179,9 +180,10 @@ function ProductVariantModal({
           duration: 250,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(slideAnim, {
           toValue: 300,
           duration: 200,
@@ -192,9 +194,12 @@ function ProductVariantModal({
           duration: 200,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [visible]);
+  
+    return () => _anim.stop();
+}, [visible]);
 
   // Reset selections when modal opens
   useEffect(() => {

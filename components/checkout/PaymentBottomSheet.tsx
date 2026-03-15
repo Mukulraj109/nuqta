@@ -21,7 +21,7 @@ interface PaymentBottomSheetProps {
   onPaymentSelect: (method: 'cod' | 'wallet' | 'razorpay') => void;
 }
 
-export default function PaymentBottomSheet({
+function PaymentBottomSheet({
   totalPayable,
   redemptionBenefit,
   totalWalletBalance,
@@ -282,3 +282,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default React.memo(PaymentBottomSheet);

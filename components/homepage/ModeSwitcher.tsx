@@ -132,12 +132,15 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
     const targetLayout = tabLayouts[activeMode];
     if (!targetLayout.width) return;
 
-    Animated.timing(pillPosition, {
+    const _anim0 = Animated.timing(pillPosition, {
       toValue: targetLayout.x,
       duration: Timing.normal, // 250ms
       useNativeDriver: true,
-    }).start();
-  }, [activeMode, tabLayouts, layoutsReady, pillPosition]);
+    });
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, [activeMode, tabLayouts, layoutsReady, pillPosition]);
 
   // Privé glow animation (once per session for eligible users)
   useEffect(() => {
@@ -146,7 +149,7 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
       !priveEligibility.hasSeenGlowThisSession
     ) {
       // Pulse glow animation
-      Animated.sequence([
+      const _anim0 = Animated.sequence([
         Animated.timing(priveGlowOpacity, {
           toValue: 0.8,
           duration: 500,
@@ -157,9 +160,12 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
           duration: 500,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim0.start();
     }
-  }, [priveEligibility.isEligible, priveEligibility.hasSeenGlowThisSession, priveGlowOpacity]);
+  
+    return () => { _anim0.stop(); };
+}, [priveEligibility.isEligible, priveEligibility.hasSeenGlowThisSession, priveGlowOpacity]);
 
   // Handle mode press
   const handleModePress = useCallback(

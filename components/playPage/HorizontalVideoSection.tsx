@@ -12,7 +12,7 @@ interface HorizontalVideoSectionProps {
   autoPlay?: boolean;
 }
 
-export default function HorizontalVideoSection({ 
+function HorizontalVideoSection({
   videos, 
   onVideoPress, 
   autoPlay = true 
@@ -71,3 +71,5 @@ const styles = StyleSheet.create({
     marginRight: 0,
   },
 });
+
+export default React.memo(HorizontalVideoSection);

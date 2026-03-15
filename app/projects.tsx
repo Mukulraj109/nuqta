@@ -259,21 +259,14 @@ export default function AllProjectsPage() {
   }, [selectedCategory, selectedDifficulty, sortBy, filterStatus]);
 
   useEffect(() => {
-    if (searchFocused) {
-      Animated.spring(searchScaleAnim, {
-        toValue: 1.02,
-        useNativeDriver: true,
-        tension: 300,
-        friction: 10,
-      }).start();
-    } else {
-      Animated.spring(searchScaleAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        tension: 300,
-        friction: 10,
-      }).start();
-    }
+    const anim = Animated.spring(searchScaleAnim, {
+      toValue: searchFocused ? 1.02 : 1,
+      useNativeDriver: true,
+      tension: 300,
+      friction: 10,
+    });
+    anim.start();
+    return () => anim.stop();
   }, [searchFocused, searchScaleAnim]);
 
   const handleRefresh = useCallback(() => {

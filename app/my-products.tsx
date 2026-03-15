@@ -6,7 +6,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   RefreshControl,
   ActivityIndicator,
@@ -14,6 +13,7 @@ import {
   Modal,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
@@ -464,15 +464,11 @@ const MyProductsPage = () => {
       </LinearGradient>
 
       {/* Products List */}
-      <FlatList
+      <FlashList
         data={filteredProducts}
         renderItem={renderProduct}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContainer}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={15}
-        windowSize={7}
-        initialNumToRender={8}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
@@ -486,6 +482,7 @@ const MyProductsPage = () => {
             </View>
           ) : null
         }
+        estimatedItemSize={100}
       />
 
       {/* Reorder Result Modal */}

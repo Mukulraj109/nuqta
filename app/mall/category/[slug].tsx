@@ -8,7 +8,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   RefreshControl,
   ActivityIndicator,
@@ -17,6 +16,7 @@ import {
   Platform,
   Dimensions,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -377,19 +377,16 @@ export default function CategoryStoresPage() {
           </View>
         </Pressable>
 
-        <FlatList
+        <FlashList
           data={stores}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
           ListHeaderComponent={ListHeader}
           ListFooterComponent={ListFooter}
           ListEmptyComponent={ListEmpty}
+          estimatedItemSize={100}
           refreshControl={
             <RefreshControl
               refreshing={isRefreshing}

@@ -650,12 +650,14 @@ const GiftCardCard = React.memo(({
   const pressAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    Animated.timing(fadeAnim, {
+    const anim = Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 300,
       delay: Math.min(index * 50, 300),
       useNativeDriver: true,
-    }).start();
+    });
+    anim.start();
+    return () => anim.stop();
   }, [index]);
 
   const handlePressIn = () => {
@@ -774,12 +776,14 @@ const CouponCard = React.memo(({
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.timing(fadeAnim, {
+    const anim = Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 300,
       delay: Math.min(index * 60, 300),
       useNativeDriver: true,
-    }).start();
+    });
+    anim.start();
+    return () => anim.stop();
   }, [index]);
 
   const discountDisplay = coupon.discountType === 'PERCENTAGE'

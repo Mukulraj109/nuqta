@@ -47,16 +47,19 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
   React.useEffect(() => {
     if (visible) {
-      Animated.spring(scaleAnim, {
+      const _anim0 = Animated.spring(scaleAnim, {
         toValue: 1,
         tension: 50,
         friction: 7,
         useNativeDriver: true,
-      }).start();
+      });
+      _anim0.start();
     } else {
       scaleAnim.setValue(0);
     }
-  }, [visible]);
+  
+    return () => { _anim0.stop(); };
+}, [visible]);
 
   const totalPrice = quantity * price;
 

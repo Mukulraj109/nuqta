@@ -9,13 +9,13 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   Platform,
   RefreshControl,
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -346,11 +346,10 @@ export default function MyEventsPage() {
       {isLoading ? (
         <CardGridSkeleton />
       ) : (
-        <FlatList
+        <FlashList
           data={currentData}
           renderItem={renderEventItem}
           keyExtractor={(item: any) => item._id || item.id}
-          style={styles.content}
           contentContainerStyle={{ paddingBottom: 120 }}
           showsVerticalScrollIndicator={false}
           refreshControl={
@@ -362,6 +361,7 @@ export default function MyEventsPage() {
             />
           }
           ListEmptyComponent={renderEmptyState()}
+          estimatedItemSize={120}
         />
       )}
     </View>

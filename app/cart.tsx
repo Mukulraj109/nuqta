@@ -2,11 +2,11 @@ import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import {
   View,
   StyleSheet,
-  FlatList,
   StatusBar,
   Platform,
   Pressable,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { SafeAreaView } from 'react-native-safe-area-context'; // ✅ supports 'edges'
@@ -535,7 +535,7 @@ export default function CartPage() {
             ))}
           </View>
         ) : (
-          <FlatList
+          <FlashList
             data={currentItems}
             renderItem={renderCartItem}
             keyExtractor={(item) => item.id}
@@ -557,10 +557,7 @@ export default function CartPage() {
                 />
               ) : null
             }
-            removeClippedSubviews={Platform.OS !== 'web'}
-            maxToRenderPerBatch={15}
-            windowSize={7}
-            initialNumToRender={8}
+            estimatedItemSize={100}
           />
         )}
       </View>

@@ -9,7 +9,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   TextInput,
   SafeAreaView,
@@ -17,6 +16,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -480,7 +480,7 @@ export default function RechargePage() {
         <View style={{ width: 32 }} />
       </View>
 
-      <FlatList
+      <FlashList
         data={selectedOperator && !loadingPlans ? plans : []}
         keyExtractor={(item) => item._id}
         renderItem={renderPlan}
@@ -491,6 +491,7 @@ export default function RechargePage() {
         onEndReachedThreshold={0.3}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
+        estimatedItemSize={80}
       />
 
       {/* Bottom CTA */}

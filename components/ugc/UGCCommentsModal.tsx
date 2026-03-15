@@ -267,8 +267,9 @@ function UGCCommentsModal({
 
   // Animations
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 300,
@@ -280,9 +281,10 @@ function UGCCommentsModal({
           speed: 12,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 200,
@@ -293,9 +295,12 @@ function UGCCommentsModal({
           duration: 250,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [visible]);
+  
+    return () => _anim.stop();
+}, [visible]);
 
   // Load comments
   const loadComments = useCallback(async (pageNum: number = 0, isRefreshing: boolean = false) => {
@@ -529,6 +534,16 @@ function UGCCommentsModal({
     setReplyingTo(null);
   };
 
+  const renderCommentItem = useCallback(({ item }: { item: UGCComment }) => (
+    <CommentItem
+      comment={item}
+      onLike={handleLikeComment}
+      onReply={handleReplyToComment}
+      onDelete={handleDeleteComment}
+      onReport={handleReportComment}
+    />
+  ), [handleLikeComment, handleReplyToComment, handleDeleteComment, handleReportComment]);
+
   const remainingChars = MAX_COMMENT_LENGTH - commentText.length;
   const isOverLimit = remainingChars < 0;
 
@@ -603,15 +618,7 @@ function UGCCommentsModal({
               ref={flatListRef}
               data={comments}
               keyExtractor={(item) => item._id}
-              renderItem={({ item }) => (
-                <CommentItem
-                  comment={item}
-                  onLike={handleLikeComment}
-                  onReply={handleReplyToComment}
-                  onDelete={handleDeleteComment}
-                  onReport={handleReportComment}
-                />
-              )}
+              renderItem={renderCommentItem}
               contentContainerStyle={[
                 styles.commentsList,
                 comments.length === 0 && styles.emptyList,

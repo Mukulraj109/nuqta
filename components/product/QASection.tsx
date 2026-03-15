@@ -8,9 +8,9 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import { SPACING, TYPOGRAPHY, COLORS, BORDER_RADIUS } from '@/constants/DesignTokens';
 import { Button } from '@/components/ui';
 import { Ionicons } from '@expo/vector-icons';
+import { borderRadius, colors, spacing, typography } from '@/constants/theme';
 
 /**
  * Question Interface
@@ -167,7 +167,7 @@ function QASection({
         accessibilityRole="button"
         accessibilityLabel="Ask a question"
       >
-        <Ionicons name="help-circle-outline" size={20} color={COLORS.primary[500]} />
+        <Ionicons name="help-circle-outline" size={20} color={colors.primary[500]} />
         <Text style={styles.askButtonText}>Ask a Question</Text>
       </Pressable>
 
@@ -177,7 +177,7 @@ function QASection({
           <TextInput
             style={styles.askInput}
             placeholder="What would you like to know about this product?"
-            placeholderTextColor={COLORS.text.tertiary}
+            placeholderTextColor={colors.text.tertiary}
             value={questionText}
             onChangeText={setQuestionText}
             multiline
@@ -249,13 +249,13 @@ function QASection({
                             <Text style={styles.answerUserName}>{answer.userName}</Text>
                             {answer.isSeller && (
                               <View style={styles.sellerBadge}>
-                                <Ionicons name="storefront" size={10} color={COLORS.text.inverse} />
+                                <Ionicons name="storefront" size={10} color={colors.text.inverse} />
                                 <Text style={styles.sellerBadgeText}>Seller</Text>
                               </View>
                             )}
                             {answer.isVerifiedPurchase && (
                               <View style={styles.verifiedBadge}>
-                                <Ionicons name="checkmark-circle" size={10} color={COLORS.text.inverse} />
+                                <Ionicons name="checkmark-circle" size={10} color={colors.text.inverse} />
                                 <Text style={styles.verifiedBadgeText}>Verified</Text>
                               </View>
                             )}
@@ -269,7 +269,7 @@ function QASection({
                         accessibilityRole="button"
                         accessibilityLabel={`Mark answer as helpful. ${answer.helpful} people found this helpful`}
                       >
-                        <Ionicons name="thumbs-up-outline" size={16} color={COLORS.text.secondary} />
+                        <Ionicons name="thumbs-up-outline" size={16} color={colors.text.secondary} />
                         <Text style={styles.helpfulText}>{answer.helpful}</Text>
                       </Pressable>
                     </View>
@@ -287,7 +287,7 @@ function QASection({
                 accessibilityRole="button"
                 accessibilityLabel="Answer this question"
               >
-                <Ionicons name="chatbubble-outline" size={16} color={COLORS.primary[500]} />
+                <Ionicons name="chatbubble-outline" size={16} color={colors.primary[500]} />
                 <Text style={styles.answerButtonText}>Answer this question</Text>
               </Pressable>
               <Pressable
@@ -296,7 +296,7 @@ function QASection({
                 accessibilityRole="button"
                 accessibilityLabel={`Mark question as helpful. ${question.helpful} people found this helpful`}
               >
-                <Ionicons name="thumbs-up-outline" size={16} color={COLORS.text.secondary} />
+                <Ionicons name="thumbs-up-outline" size={16} color={colors.text.secondary} />
                 <Text style={styles.helpfulText}>Helpful ({question.helpful})</Text>
               </Pressable>
             </View>
@@ -307,7 +307,7 @@ function QASection({
                 <TextInput
                   style={styles.answerInput}
                   placeholder="Share your answer..."
-                  placeholderTextColor={COLORS.text.tertiary}
+                  placeholderTextColor={colors.text.tertiary}
                   value={answerText}
                   onChangeText={setAnswerText}
                   multiline
@@ -345,7 +345,7 @@ function QASection({
         {/* Empty State */}
         {questions.length === 0 && (
           <View style={styles.emptyState}>
-            <Ionicons name="chatbubble-ellipses-outline" size={64} color={COLORS.neutral[300]} />
+            <Ionicons name="chatbubble-ellipses-outline" size={64} color={colors.neutral[300]} />
             <Text style={styles.emptyTitle}>No questions yet</Text>
             <Text style={styles.emptyMessage}>
               Be the first to ask a question about this product
@@ -368,7 +368,7 @@ function QASection({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: SPACING.lg,
+    marginVertical: spacing.lg,
   },
 
   // Header
@@ -376,17 +376,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SPACING.md,
-    paddingHorizontal: SPACING.md,
+    marginBottom: spacing.md,
+    paddingHorizontal: spacing.md,
   },
   title: {
-    ...TYPOGRAPHY.h3,
-    color: COLORS.text.primary,
-    marginBottom: SPACING.xs,
+    ...typography.h3,
+    color: colors.text.primary,
+    marginBottom: spacing.xs,
   },
   count: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.secondary,
+    ...typography.bodySmall,
+    color: colors.text.secondary,
   },
 
   // Ask Button
@@ -394,87 +394,87 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: SPACING.sm,
-    padding: SPACING.md,
-    marginHorizontal: SPACING.md,
+    gap: spacing.sm,
+    padding: spacing.md,
+    marginHorizontal: spacing.md,
     borderWidth: 1.5,
-    borderColor: COLORS.primary[500],
-    borderRadius: BORDER_RADIUS.md,
-    backgroundColor: COLORS.primary[50],
-    marginBottom: SPACING.md,
+    borderColor: colors.primary[500],
+    borderRadius: borderRadius.md,
+    backgroundColor: colors.primary[50],
+    marginBottom: spacing.md,
   },
   askButtonText: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.primary[500],
+    ...typography.button,
+    color: colors.primary[500],
   },
 
   // Ask Modal
   askModal: {
-    padding: SPACING.md,
-    marginHorizontal: SPACING.md,
-    backgroundColor: COLORS.background.secondary,
-    borderRadius: BORDER_RADIUS.md,
-    marginBottom: SPACING.md,
+    padding: spacing.md,
+    marginHorizontal: spacing.md,
+    backgroundColor: colors.background.secondary,
+    borderRadius: borderRadius.md,
+    marginBottom: spacing.md,
   },
   askInput: {
-    ...TYPOGRAPHY.body,
+    ...typography.body,
     borderWidth: 1,
-    borderColor: COLORS.border.default,
-    borderRadius: BORDER_RADIUS.md,
-    padding: SPACING.md,
-    backgroundColor: COLORS.background.primary,
+    borderColor: colors.border.default,
+    borderRadius: borderRadius.md,
+    padding: spacing.md,
+    backgroundColor: colors.background.primary,
     minHeight: 80,
     textAlignVertical: 'top',
-    color: COLORS.text.primary,
+    color: colors.text.primary,
   },
   modalActions: {
-    marginTop: SPACING.sm,
+    marginTop: spacing.sm,
   },
   charCount: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
-    marginBottom: SPACING.xs,
+    ...typography.caption,
+    color: colors.text.tertiary,
+    marginBottom: spacing.xs,
   },
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    gap: SPACING.sm,
+    gap: spacing.sm,
   },
 
   // Questions List
   questionsList: {
     maxHeight: 600,
-    paddingHorizontal: SPACING.md,
+    paddingHorizontal: spacing.md,
   },
   questionCard: {
-    padding: SPACING.md,
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.md,
-    marginBottom: SPACING.md,
+    padding: spacing.md,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.md,
+    marginBottom: spacing.md,
     borderWidth: 1,
-    borderColor: COLORS.border.light,
+    borderColor: colors.border.light,
   },
 
   // Question
   questionHeader: {
-    marginBottom: SPACING.sm,
+    marginBottom: spacing.sm,
   },
   userInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
+    gap: spacing.sm,
   },
   avatar: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.primary[100],
+    backgroundColor: colors.primary[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
   avatarText: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.primary[700],
+    ...typography.button,
+    color: colors.primary[700],
   },
   avatarSmall: {
     width: 32,
@@ -482,71 +482,71 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   avatarTextSmall: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.primary[700],
+    ...typography.bodySmall,
+    color: colors.primary[700],
   },
   userName: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.primary,
+    ...typography.bodySmall,
+    color: colors.text.primary,
     fontWeight: '600',
   },
   date: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
+    ...typography.caption,
+    color: colors.text.tertiary,
   },
   dateSmall: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
+    ...typography.caption,
+    color: colors.text.tertiary,
     fontSize: 11,
   },
   questionText: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.primary,
-    marginBottom: SPACING.md,
+    ...typography.body,
+    color: colors.text.primary,
+    marginBottom: spacing.md,
     fontWeight: '500',
   },
 
   // Answers
   answersContainer: {
-    marginLeft: SPACING.lg,
-    marginBottom: SPACING.sm,
-    gap: SPACING.sm,
+    marginLeft: spacing.lg,
+    marginBottom: spacing.sm,
+    gap: spacing.sm,
   },
   answerCard: {
-    padding: SPACING.sm,
-    backgroundColor: COLORS.background.secondary,
-    borderRadius: BORDER_RADIUS.sm,
+    padding: spacing.sm,
+    backgroundColor: colors.background.secondary,
+    borderRadius: borderRadius.sm,
     borderLeftWidth: 3,
-    borderLeftColor: COLORS.secondary[500],
+    borderLeftColor: colors.secondary[500],
   },
   answerHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: SPACING.xs,
+    marginBottom: spacing.xs,
   },
   answerUserRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.xs,
+    gap: spacing.xs,
   },
   answerUserName: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.primary,
+    ...typography.bodySmall,
+    color: colors.text.primary,
     fontWeight: '600',
   },
   sellerBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
-    paddingHorizontal: SPACING.xs,
+    paddingHorizontal: spacing.xs,
     paddingVertical: 2,
-    backgroundColor: COLORS.warning[500],
-    borderRadius: BORDER_RADIUS.xs,
+    backgroundColor: colors.warningScale[500],
+    borderRadius: borderRadius.xs,
   },
   sellerBadgeText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.inverse,
+    ...typography.caption,
+    color: colors.text.inverse,
     fontSize: 10,
     fontWeight: '600',
   },
@@ -554,20 +554,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
-    paddingHorizontal: SPACING.xs,
+    paddingHorizontal: spacing.xs,
     paddingVertical: 2,
-    backgroundColor: COLORS.success[500],
-    borderRadius: BORDER_RADIUS.xs,
+    backgroundColor: colors.successScale[500],
+    borderRadius: borderRadius.xs,
   },
   verifiedBadgeText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.inverse,
+    ...typography.caption,
+    color: colors.text.inverse,
     fontSize: 10,
     fontWeight: '600',
   },
   answerText: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.secondary,
+    ...typography.bodySmall,
+    color: colors.text.secondary,
   },
 
   // Actions
@@ -575,82 +575,82 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: SPACING.sm,
+    marginTop: spacing.sm,
   },
   answerButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.xs,
-    padding: SPACING.sm,
+    gap: spacing.xs,
+    padding: spacing.sm,
   },
   answerButtonText: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.primary[500],
+    ...typography.bodySmall,
+    color: colors.primary[500],
     fontWeight: '600',
   },
   helpfulButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    padding: SPACING.sm,
+    padding: spacing.sm,
   },
   helpfulText: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.secondary,
+    ...typography.bodySmall,
+    color: colors.text.secondary,
   },
 
   // Answer Input
   answerInputContainer: {
-    marginTop: SPACING.md,
-    padding: SPACING.md,
-    backgroundColor: COLORS.background.secondary,
-    borderRadius: BORDER_RADIUS.md,
+    marginTop: spacing.md,
+    padding: spacing.md,
+    backgroundColor: colors.background.secondary,
+    borderRadius: borderRadius.md,
   },
   answerInput: {
-    ...TYPOGRAPHY.body,
+    ...typography.body,
     borderWidth: 1,
-    borderColor: COLORS.border.default,
-    borderRadius: BORDER_RADIUS.md,
-    padding: SPACING.sm,
-    backgroundColor: COLORS.background.primary,
+    borderColor: colors.border.default,
+    borderRadius: borderRadius.md,
+    padding: spacing.sm,
+    backgroundColor: colors.background.primary,
     minHeight: 60,
     textAlignVertical: 'top',
-    color: COLORS.text.primary,
+    color: colors.text.primary,
   },
   answerActions: {
-    marginTop: SPACING.sm,
+    marginTop: spacing.sm,
   },
   answerButtons: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    gap: SPACING.sm,
+    gap: spacing.sm,
   },
 
   // Empty State
   emptyState: {
-    paddingVertical: SPACING.xxl,
+    paddingVertical: spacing.xxl,
     alignItems: 'center',
   },
   emptyTitle: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.primary,
-    marginTop: SPACING.md,
-    marginBottom: SPACING.sm,
+    ...typography.h4,
+    color: colors.text.primary,
+    marginTop: spacing.md,
+    marginBottom: spacing.sm,
   },
   emptyMessage: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.secondary,
+    ...typography.body,
+    color: colors.text.secondary,
     textAlign: 'center',
   },
 
   // More Container
   moreContainer: {
-    paddingVertical: SPACING.md,
+    paddingVertical: spacing.md,
     alignItems: 'center',
   },
   moreText: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.primary[500],
+    ...typography.bodySmall,
+    color: colors.primary[500],
     fontWeight: '600',
   },
 });

@@ -60,22 +60,22 @@ export const SkeletonBox: React.FC<SkeletonBoxProps> = ({
  * A card-sized skeleton placeholder.
  * Full width, 80px height, 12px border radius.
  */
-export const SkeletonCard: React.FC<{ style?: ViewStyle }> = ({ style }) => (
+export const SkeletonCard = React.memo<{ style?: ViewStyle }>(({ style }) => (
   <SkeletonBox width="100%" height={80} borderRadius={12} style={style} />
-);
+));
 
 /**
  * A game grid item skeleton placeholder.
  * Half width (handled by parent), 120px height.
  */
-export const SkeletonGameCard: React.FC<{ style?: ViewStyle }> = ({ style }) => (
+export const SkeletonGameCard = React.memo<{ style?: ViewStyle }>(({ style }) => (
   <SkeletonBox width="100%" height={120} borderRadius={16} style={style} />
-);
+));
 
 /**
  * A creator card skeleton placeholder.
  * 100px width, 120px height.
  */
-export const SkeletonCreatorCard: React.FC<{ style?: ViewStyle }> = ({ style }) => (
+export const SkeletonCreatorCard = React.memo<{ style?: ViewStyle }>(({ style }) => (
   <SkeletonBox width={100} height={120} borderRadius={12} style={style} />
-);
+));

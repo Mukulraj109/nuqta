@@ -26,6 +26,7 @@ import { platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 
 // Nuqta Brand Colors
 const COLORS = {
@@ -90,7 +91,7 @@ const formatEventDate = (dateString?: string): string => {
   });
 };
 
-export default function SocialImpactEventDetail() {
+function SocialImpactEventDetail() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
 
@@ -1870,3 +1871,5 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
 });
+
+export default withErrorBoundary(SocialImpactEventDetail, 'Social Impact');

@@ -697,4 +697,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OfferRedemptionModal;
+export default React.memo(OfferRedemptionModal);

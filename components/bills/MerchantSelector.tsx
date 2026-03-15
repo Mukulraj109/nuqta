@@ -4,13 +4,13 @@ import {
   Text,
   TextInput,
   Pressable,
-  FlatList,
   ActivityIndicator,
   StyleSheet,
   Modal,
   ScrollView,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
@@ -367,13 +367,14 @@ const MerchantSelector: React.FC<MerchantSelectorProps> = ({
         {isLoading ? (
           renderLoadingSkeleton()
         ) : filteredMerchants.length > 0 ? (
-          <FlatList
+          <FlashList
             data={filteredMerchants.slice(0, 50)}
             renderItem={renderMerchantItem}
             keyExtractor={(item) => item._id}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={true}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
+            estimatedItemSize={60}
           />
         ) : (
           renderEmptyState()

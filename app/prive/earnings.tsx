@@ -255,10 +255,10 @@ export default function EarningsScreen() {
       </View>
 
       {/* Source breakdown skeleton */}
-      <View style={[styles.listCard, { marginBottom: PRIVE_SPACING.lg }]}>
+      <View style={[styles.listCard, styles.skeletonSourceCard]}>
         <PriveSkeletonBlock width={140} height={14} style={{ marginBottom: PRIVE_SPACING.lg }} />
         {[1, 2, 3, 4].map(i => (
-          <View key={i} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: PRIVE_SPACING.md }}>
+          <View key={i} style={styles.skeletonSourceRow}>
             <PriveSkeletonBlock width={36} height={36} borderRadius={18} style={{ marginRight: PRIVE_SPACING.md }} />
             <PriveSkeletonBlock width={100} height={14} style={{ flex: 1 }} />
             <PriveSkeletonBlock width={50} height={14} />
@@ -270,9 +270,9 @@ export default function EarningsScreen() {
       <View style={styles.listCard}>
         <PriveSkeletonBlock width={120} height={14} style={{ marginBottom: PRIVE_SPACING.lg }} />
         {[1, 2, 3, 4, 5].map(i => (
-          <View key={i} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: PRIVE_SPACING.md }}>
+          <View key={i} style={styles.skeletonEarningRow}>
             <PriveSkeletonBlock width={40} height={40} borderRadius={20} style={{ marginRight: PRIVE_SPACING.md }} />
-            <View style={{ flex: 1 }}>
+            <View style={styles.skeletonFlex1}>
               <PriveSkeletonBlock width={160} height={14} style={{ marginBottom: PRIVE_SPACING.xs }} />
               <PriveSkeletonBlock width={80} height={12} />
             </View>
@@ -400,7 +400,7 @@ export default function EarningsScreen() {
           <ScrollView
             style={styles.content}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 120 }}
+            contentContainerStyle={styles.scrollContentPadding}
             refreshControl={
               <RefreshControl
                 refreshing={isRefreshing}
@@ -779,4 +779,11 @@ const styles = StyleSheet.create({
     color: PRIVE_COLORS.gold.primary,
     fontWeight: '500',
   },
+
+  // Extracted inline styles
+  scrollContentPadding: { paddingBottom: 120 },
+  skeletonSourceCard: { marginBottom: PRIVE_SPACING.lg },
+  skeletonSourceRow: { flexDirection: 'row', alignItems: 'center', marginBottom: PRIVE_SPACING.md },
+  skeletonEarningRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: PRIVE_SPACING.md },
+  skeletonFlex1: { flex: 1 },
 });

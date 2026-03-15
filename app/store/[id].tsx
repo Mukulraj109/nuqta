@@ -29,6 +29,7 @@ import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -1383,4 +1384,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoreDetailPage;
+export default withErrorBoundary(StoreDetailPage, 'Store Detail');

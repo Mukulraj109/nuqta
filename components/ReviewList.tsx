@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   RefreshControl,
   ListRenderItem,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ThemedText } from '@/components/ThemedText';
 import ReviewCard from '@/components/ReviewCard';
 import { Review } from '@/types/reviews';
@@ -70,16 +70,16 @@ const ReviewList: React.FC<ReviewListProps> = ({
   ), [reviews.length]);
 
   return (
-    <FlatList
+    <FlashList
       data={reviews}
       renderItem={renderReviewItem}
       keyExtractor={keyExtractor}
-      style={styles.container}
       contentContainerStyle={[
         styles.contentContainer,
         reviews.length === 0 && styles.emptyContentContainer
       ]}
       showsVerticalScrollIndicator={false}
+      estimatedItemSize={200}
       refreshControl={
         onRefresh ? (
           <RefreshControl
@@ -92,15 +92,6 @@ const ReviewList: React.FC<ReviewListProps> = ({
       }
       ListEmptyComponent={EmptyComponent}
       ListFooterComponent={reviews.length > 0 ? FooterComponent : null}
-      removeClippedSubviews={true}
-      maxToRenderPerBatch={10}
-      windowSize={10}
-      initialNumToRender={8}
-      getItemLayout={(data, index) => ({
-        length: 200, // Approximate item height
-        offset: 200 * index,
-        index,
-      })}
     />
   );
 };

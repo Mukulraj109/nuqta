@@ -5,9 +5,9 @@ import {
   StyleSheet,
   TextInput,
   Pressable,
-  FlatList,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { storeSearchService } from '@/services/storeSearchService';
 import { BRAND } from '@/constants/brand';
@@ -251,14 +251,13 @@ const StoreSearchBar: React.FC<StoreSearchBarProps> = ({
 
       {showSuggestions && suggestions.length > 0 && (
         <View style={styles.suggestionsContainer}>
-          <FlatList
+          <FlashList
             data={suggestions}
             renderItem={renderSuggestion}
             keyExtractor={(item) => item.id}
-            style={styles.suggestionsList}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
-            nestedScrollEnabled={true}
+            estimatedItemSize={50}
           />
         </View>
       )}

@@ -81,7 +81,7 @@ function ProductQuickView({
     if (visible && productId) {
       loadProductDetails();
       // Animate in
-      Animated.parallel([
+      const _anim0 = Animated.parallel([
         Animated.timing(slideAnim, {
           toValue: 0,
           duration: 300,
@@ -92,7 +92,8 @@ function ProductQuickView({
           duration: 300,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim0.start();
     } else {
       // Reset state when modal closes
       setProduct(null);
@@ -102,7 +103,9 @@ function ProductQuickView({
       setExpandedDescription(false);
       setError(null);
     }
-  }, [visible, productId]);
+  
+    return () => { _anim0.stop(); };
+}, [visible, productId]);
 
   const loadProductDetails = async () => {
     try {

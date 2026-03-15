@@ -80,6 +80,7 @@ import { FILE_SIZE_LIMITS, ALLOWED_FILE_FORMATS } from '@/utils/fileUploadConsta
 import logger from '@/utils/logger';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 
 // Constants
 const FORM_STORAGE_KEY = '@bill_upload_draft';
@@ -130,7 +131,7 @@ interface ToastConfig {
 /**
  * Main Bill Upload Component
  */
-export default function BillUploadPage() {
+function BillUploadPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const { bonusCampaignSlug } = useLocalSearchParams<{ bonusCampaignSlug?: string }>();
@@ -230,6 +231,15 @@ export default function BillUploadPage() {
    */
   useEffect(() => {
     initializePage();
+
+    // Fade in animation with cleanup
+    const anim = Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    });
+    anim.start();
+    return () => anim.stop();
   }, []);
 
   const initializePage = async () => {
@@ -243,13 +253,6 @@ export default function BillUploadPage() {
 
     // Load saved form data
     await loadSavedFormData();
-
-    // Fade in animation
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
   };
 
   /**
@@ -2326,3 +2329,5 @@ const styles = StyleSheet.create({
     color: '#1565C0',
   },
 });
+
+export default withErrorBoundary(BillUploadPage, 'Bill Upload');

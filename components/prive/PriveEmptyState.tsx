@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PriveEmptyState;
+export default React.memo(PriveEmptyState);

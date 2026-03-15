@@ -2,7 +2,8 @@
 // Comprehensive Frequently Asked Questions page with search and categories
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, FlatList, StyleSheet, Pressable, StatusBar, Platform, RefreshControl, TextInput, ActivityIndicator, Animated, LayoutAnimation } from 'react-native';
+import { View, ScrollView, StyleSheet, Pressable, StatusBar, Platform, RefreshControl, TextInput, ActivityIndicator, Animated, LayoutAnimation } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
@@ -481,14 +482,14 @@ export default function FAQPage() {
       {loading ? (
         <SectionListSkeleton />
       ) : (
-        <FlatList
+        <FlashList
           data={displayedFAQs}
           keyExtractor={(item) => item._id}
           renderItem={renderFAQListItem}
-          style={styles.content}
           contentContainerStyle={{ paddingBottom: 120 }}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
           showsVerticalScrollIndicator={false}
+          estimatedItemSize={80}
           ListEmptyComponent={
             <View style={styles.emptyState}>
               <Ionicons name="document-text-outline" size={64} color={Colors.gray[300]} />

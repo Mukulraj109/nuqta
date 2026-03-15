@@ -6,13 +6,13 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   RefreshControl,
   ActivityIndicator,
   StatusBar,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -227,15 +227,11 @@ const IncompleteTransactionsPage = () => {
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={orders}
           renderItem={renderOrderItem}
           keyExtractor={(item) => item._id}
           contentContainerStyle={styles.listContainer}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
           ListEmptyComponent={renderEmptyState}
           refreshControl={
             <RefreshControl
@@ -245,6 +241,7 @@ const IncompleteTransactionsPage = () => {
               colors={[Colors.brand.purple]}
             />
           }
+          estimatedItemSize={100}
         />
       )}
     </View>

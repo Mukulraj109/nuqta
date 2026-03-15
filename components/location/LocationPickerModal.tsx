@@ -5,7 +5,6 @@ import {
   Modal,
   TextInput,
   Pressable,
-  FlatList,
   ActivityIndicator,
   StyleSheet,
   Platform,
@@ -13,6 +12,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { useAddressSearch } from '@/hooks/useLocation';
 import { useLocation } from '@/contexts/LocationContext';
@@ -333,15 +333,15 @@ function LocationPickerModal({
       </View>
 
       {/* Results List */}
-      <FlatList
+      <FlashList
         data={searchResults}
         renderItem={renderResultItem}
         keyExtractor={keyExtractor}
-        style={styles.resultsList}
         contentContainerStyle={searchResults.length === 0 ? styles.emptyListContent : undefined}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         ListEmptyComponent={ListEmptyComponent}
+        estimatedItemSize={60}
       />
     </>
   );

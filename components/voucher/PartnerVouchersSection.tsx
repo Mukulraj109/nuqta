@@ -4,10 +4,10 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  FlatList,
   ActivityIndicator,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -214,17 +214,14 @@ function PartnerVouchersSection({
         </View>
       )}
 
-      <FlatList
+      <FlashList
         data={offers}
         keyExtractor={(item) => item.id}
         renderItem={renderVoucher}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         scrollEnabled={!compact}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
+        estimatedItemSize={80}
       />
     </View>
   );

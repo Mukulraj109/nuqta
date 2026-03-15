@@ -4,12 +4,12 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
   RefreshControl,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
@@ -194,15 +194,11 @@ export default function SpinHistoryPage() {
 
       {/* History List */}
       {!loading && (
-        <FlatList
+        <FlashList
           data={history}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContent}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[Colors.warning]} />
           }
@@ -211,6 +207,7 @@ export default function SpinHistoryPage() {
           ListEmptyComponent={renderEmpty}
           ListFooterComponent={renderFooter}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
+          estimatedItemSize={80}
         />
       )}
     </View>

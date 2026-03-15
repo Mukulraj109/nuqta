@@ -65,7 +65,7 @@ export default function TabNavigation({
   useEffect(() => {
     const activePosition = tabPositions[activeTab];
     if (activePosition) {
-      Animated.parallel([
+      const anim = Animated.parallel([
         Animated.spring(underlineLeft, {
           toValue: activePosition.x,
           useNativeDriver: false,
@@ -78,7 +78,9 @@ export default function TabNavigation({
           tension: 100,
           friction: 12,
         }),
-      ]).start();
+      ]);
+      anim.start();
+      return () => anim.stop();
     }
   }, [activeTab, tabPositions]);
 

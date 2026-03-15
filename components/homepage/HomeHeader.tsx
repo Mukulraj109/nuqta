@@ -91,12 +91,15 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
 
   useEffect(() => {
     if (cartItemCount > 0) {
-      Animated.sequence([
+      const _anim0 = Animated.sequence([
         Animated.spring(cartBounceAnim, { toValue: 1.3, useNativeDriver: true, tension: 200, friction: 5 }),
         Animated.spring(cartBounceAnim, { toValue: 1, useNativeDriver: true, tension: 200, friction: 10 }),
-      ]).start();
+      ]);
+      _anim0.start();
     }
-  }, [cartItemCount]);
+  
+    return () => { _anim0.stop(); };
+}, [cartItemCount]);
 
   return (
     <LinearGradient

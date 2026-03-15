@@ -43,6 +43,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRegion } from '@/contexts/RegionContext';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 
 
 const { width } = Dimensions.get('window');
@@ -1371,4 +1372,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExplorePage;
+export default withErrorBoundary(ExplorePage, 'Explore');

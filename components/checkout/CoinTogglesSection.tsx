@@ -29,7 +29,7 @@ interface CoinTogglesSectionProps {
   onCustomCoinAmount: (type: 'rez' | 'storePromo', amount: number) => void;
 }
 
-export default function CoinTogglesSection({
+function CoinTogglesSection({
   coinSystem,
   totalWalletBalance,
   coinSectionExpanded,
@@ -496,3 +496,5 @@ const styles = StyleSheet.create({
     marginTop: Spacing.sm,
   },
 });
+
+export default React.memo(CoinTogglesSection);

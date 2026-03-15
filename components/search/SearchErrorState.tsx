@@ -16,7 +16,7 @@ interface SearchErrorStateProps {
   onRetry: () => void;
 }
 
-export default function SearchErrorState({ error, onRetry }: SearchErrorStateProps) {
+function SearchErrorState({ error, onRetry }: SearchErrorStateProps) {
   const isNetworkError = error.toLowerCase().includes('network') ||
     error.toLowerCase().includes('connection') ||
     error.toLowerCase().includes('fetch') ||
@@ -110,3 +110,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(SearchErrorState);

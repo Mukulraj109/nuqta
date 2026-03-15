@@ -55,7 +55,7 @@ const ConfettiParticle = ({ delay, color }: { delay: number; color: string }) =>
 
   useEffect(() => {
     const startAnimation = () => {
-      Animated.parallel([
+      const _anim0 = Animated.parallel([
         Animated.timing(translateY, {
           toValue: 600,
           duration: 3000,
@@ -80,11 +80,14 @@ const ConfettiParticle = ({ delay, color }: { delay: number; color: string }) =>
           delay,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim0.start();
     };
 
     startAnimation();
-  }, []);
+  
+    return () => { _anim0.stop(); };
+}, []);
 
   return (
     <Animated.View

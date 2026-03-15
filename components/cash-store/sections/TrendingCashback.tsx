@@ -5,7 +5,7 @@
  * Features: Animated countdown timer, pulsing live indicator, progress bars
  */
 
-import React, { memo, useState, useEffect, useRef } from 'react';
+import React, { memo, useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -326,6 +326,17 @@ const TrendingCashback: React.FC<TrendingCashbackProps> = ({
     return () => flameLoop.stop();
   }, []);
 
+  const renderTrendingItem = useCallback(({ item, index }: { item: unknown; index: number }) =>
+    isLoading ? (
+      <SkeletonCard key={`skeleton-${index}`} index={index} />
+    ) : (
+      <TrendingDealCard
+        deal={item as TrendingDeal}
+        index={index}
+        onPress={() => onDealPress(item as TrendingDeal)}
+      />
+    ), [isLoading, onDealPress]);
+
   if (deals.length === 0 && !isLoading) {
     return null;
   }
@@ -364,17 +375,7 @@ const TrendingCashback: React.FC<TrendingCashbackProps> = ({
       {/* Horizontal List */}
       <FlatList
         data={isLoading ? Array.from({ length: 4 }) : deals}
-        renderItem={({ item, index }) =>
-          isLoading ? (
-            <SkeletonCard key={`skeleton-${index}`} index={index} />
-          ) : (
-            <TrendingDealCard
-              deal={item as TrendingDeal}
-              index={index}
-              onPress={() => onDealPress(item as TrendingDeal)}
-            />
-          )
-        }
+        renderItem={renderTrendingItem}
         keyExtractor={(item, index) =>
           isLoading ? `skeleton-${index}` : (item as TrendingDeal).id
         }

@@ -16,15 +16,7 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-import { colors } from '@/constants/theme';
-import {
-  SPACING,
-  TYPOGRAPHY,
-  COLORS,
-  BORDER_RADIUS,
-  Z_INDEX,
-  ANIMATION,
-} from '@/constants/DesignTokens';
+import { colors, spacing, typography, borderRadius, zIndex, timing } from '@/constants/theme';
 
 type SnapPoint = '25%' | '50%' | '75%' | '90%';
 
@@ -88,8 +80,9 @@ function BottomSheet({
   const sheetHeight = screenHeight * (parseInt(snapPoints[0]) / 100);
 
   useEffect(() => {
+    let anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.parallel([
+      anim = Animated.parallel([
         Animated.spring(slideAnim, {
           toValue: 1,
           useNativeDriver: true,
@@ -98,24 +91,26 @@ function BottomSheet({
         }),
         Animated.timing(backdropAnim, {
           toValue: 1,
-          duration: ANIMATION.duration.normal,
+          duration: timing.duration.normal,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
     } else {
-      Animated.parallel([
+      anim = Animated.parallel([
         Animated.timing(slideAnim, {
           toValue: 0,
-          duration: ANIMATION.duration.fast,
+          duration: timing.duration.fast,
           useNativeDriver: true,
         }),
         Animated.timing(backdropAnim, {
           toValue: 0,
-          duration: ANIMATION.duration.fast,
+          duration: timing.duration.fast,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
     }
+    anim.start();
+    return () => anim.stop();
   }, [visible, slideAnim, backdropAnim]);
 
   const translateY = slideAnim.interpolate({
@@ -205,13 +200,13 @@ const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: Z_INDEX.modalBackdrop,
+    zIndex: zIndex.modalBackdrop,
   },
   sheet: {
-    backgroundColor: COLORS.background.primary,
-    borderTopLeftRadius: BORDER_RADIUS.xxl,
-    borderTopRightRadius: BORDER_RADIUS.xxl,
-    zIndex: Z_INDEX.modal,
+    backgroundColor: colors.background.primary,
+    borderTopLeftRadius: borderRadius.xxl,
+    borderTopRightRadius: borderRadius.xxl,
+    zIndex: zIndex.modal,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.25,
@@ -219,31 +214,31 @@ const styles = StyleSheet.create({
     elevation: 16,
   },
   handleContainer: {
-    paddingVertical: SPACING.sm,
+    paddingVertical: spacing.sm,
     alignItems: 'center',
   },
   handle: {
     width: 40,
     height: 4,
-    backgroundColor: COLORS.neutral[300],
-    borderRadius: BORDER_RADIUS.sm,
+    backgroundColor: colors.neutral[300],
+    borderRadius: borderRadius.sm,
   },
   header: {
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.md,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border.light,
+    borderBottomColor: colors.border.light,
   },
   title: {
-    ...TYPOGRAPHY.h3,
-    color: COLORS.text.primary,
+    ...typography.h3,
+    color: colors.text.primary,
   },
   content: {
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: SPACING.md,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
   },
 });
 

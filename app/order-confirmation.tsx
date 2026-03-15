@@ -68,7 +68,7 @@ export default function OrderConfirmationPage() {
       trackPositiveAction();
       setShowConfetti(true);
       // Animate success icon
-      Animated.sequence([
+      const anim = Animated.sequence([
         Animated.spring(successAnim, {
           toValue: 1,
           tension: 50,
@@ -80,7 +80,9 @@ export default function OrderConfirmationPage() {
           duration: 300,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      anim.start();
+      return () => anim.stop();
     }
   }, [order]);
 

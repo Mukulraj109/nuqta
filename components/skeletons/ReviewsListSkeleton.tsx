@@ -13,7 +13,7 @@ interface ReviewsListSkeletonProps {
   count?: number;
 }
 
-export default function ReviewsListSkeleton({ count = 5 }: ReviewsListSkeletonProps) {
+function ReviewsListSkeleton({ count = 5 }: ReviewsListSkeletonProps) {
   return (
     <View style={styles.container}>
       {Array.from({ length: count }).map((_, index) => (
@@ -28,3 +28,5 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
 });
+
+export default React.memo(ReviewsListSkeleton);

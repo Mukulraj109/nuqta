@@ -14,8 +14,8 @@ import {
   TextInput,
   ActivityIndicator,
   Platform,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -341,12 +341,13 @@ function BookServicePage() {
             <Text style={styles.emptySubtitle}>{searchQuery ? 'Try a different search term' : 'Check back later for booking options'}</Text>
           </View>
         ) : (
-          <FlatList
+          <FlashList
             data={filteredProviders}
             keyExtractor={(item) => item._id || item.id}
             renderItem={renderStoreCard}
             contentContainerStyle={styles.storeList}
             showsVerticalScrollIndicator={false}
+            estimatedItemSize={100}
           />
         )}
       </SafeAreaView>

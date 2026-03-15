@@ -64,7 +64,7 @@ function TrialBanner({
 
   useEffect(() => {
     // Animate entrance
-    Animated.parallel([
+    const _anim0 = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 300,
@@ -75,13 +75,16 @@ function TrialBanner({
         duration: 400,
         useNativeDriver: Platform.OS !== 'web',
       }),
-    ]).start();
+    ]);
+    _anim0.start();
 
     // Auto-dismiss after trial expires
     if (isExpired) {
       handleDismiss();
     }
-  }, [daysRemaining]);
+  
+    return () => { _anim0.stop(); };
+}, [daysRemaining]);
 
   const handleDismiss = () => {
     Animated.timing(fadeAnim, {

@@ -114,6 +114,10 @@ function GenericExperienceDetail() {
     setRefreshing(false);
   };
 
+  const renderStoreCard = useCallback(({ item }: { item: any }) => (
+    <StoreCard store={item} currencySymbol={currencySymbol} primaryColor={theme.primaryColor} />
+  ), [currencySymbol, theme.primaryColor]);
+
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -168,7 +172,7 @@ function GenericExperienceDetail() {
       <FlatList
         data={stores}
         keyExtractor={(item) => item._id || item.id}
-        renderItem={({ item }) => <StoreCard store={item} currencySymbol={currencySymbol} primaryColor={theme.primaryColor} />}
+        renderItem={renderStoreCard}
         contentContainerStyle={styles.storeList}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[theme.primaryColor]} />}

@@ -794,20 +794,20 @@ function StoreVisitPageInner() {
             <Ionicons name="arrow-back" size={22} color="white" />
           </Pressable>
           <Text style={styles.headerTitle}>Store Visit</Text>
-          <View style={{ width: 44 }} />
+          <View style={styles.headerSpacer} />
         </View>
         <View style={styles.storeCard}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <View style={styles.storeCardRow}>
             <View style={styles.storeIconContainer}>
               <Ionicons name="storefront" size={22} color={Colors.gold} />
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={styles.flex1}>
               <Text style={styles.storeName}>{store.name}</Text>
               {store.category?.name && (
                 <Text style={styles.storeCategory}>{store.category.name}</Text>
               )}
               {(store.location?.address || store.location?.city) && (
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 }}>
+                <View style={styles.addressRow}>
                   <Ionicons name="location-outline" size={12} color={Colors.text.tertiary} />
                   <Text style={styles.addressText} numberOfLines={1}>
                     {[store.location?.address, store.location?.city].filter(Boolean).join(', ')}
@@ -850,24 +850,24 @@ function StoreVisitPageInner() {
                 <Text style={styles.queueNumberLabel}>Your Queue Number</Text>
                 <Text style={styles.queueNumberValue}>#{queueNumber}</Text>
                 {queueEstimatedWait ? (
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: Spacing.sm }}>
+                  <View style={styles.queueWaitRow}>
                     <Ionicons name="time-outline" size={14} color={Colors.gold} />
-                    <Text style={{ fontSize: 13, color: Colors.gold, fontWeight: '600' }}>
+                    <Text style={styles.queueWaitText}>
                       Est. wait: {queueEstimatedWait}
                     </Text>
                   </View>
                 ) : null}
                 {queueSize > 0 ? (
-                  <Text style={{ fontSize: 12, color: Colors.text.tertiary, marginTop: Spacing.xs }}>
+                  <Text style={styles.queueSizeText}>
                     {queueSize} {queueSize === 1 ? 'person' : 'people'} in queue
                   </Text>
                 ) : null}
                 <Pressable
                   onPress={() => router.push('/my-visits')}
-                  style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 10, paddingVertical: 6, paddingHorizontal: Spacing.md, borderRadius: BorderRadius.md, backgroundColor: Colors.gold + '15' }}
+                  style={styles.viewMyVisitsBtn}
                 >
                   <Ionicons name="list-outline" size={14} color={Colors.nileBlue} />
-                  <Text style={{ fontSize: 13, color: Colors.nileBlue, fontWeight: '700' }}>View My Visits</Text>
+                  <Text style={styles.viewMyVisitsText}>View My Visits</Text>
                 </Pressable>
               </View>
             )}
@@ -972,7 +972,7 @@ function StoreVisitPageInner() {
             <Text style={styles.cardTitle}>Payment Option</Text>
           </View>
 
-          <View style={{ flexDirection: 'row', gap: 10 }}>
+          <View style={styles.paymentOptionsRow}>
             <Pressable
               style={[
                 styles.paymentOption,
@@ -985,13 +985,13 @@ function StoreVisitPageInner() {
                 <View style={styles.paymentOptionInner}>
                   <Ionicons name="walk-outline" size={20} color={Colors.gold} />
                   <Text style={[styles.paymentOptionText, { color: Colors.nileBlue }]}>No Payment Required</Text>
-                  <Text style={{ fontSize: 11, color: Colors.text.tertiary, textAlign: 'center' }}>Just visiting</Text>
+                  <Text style={styles.paymentOptionSubtext}>Just visiting</Text>
                 </View>
               ) : (
                 <View style={styles.paymentOptionInner}>
                   <Ionicons name="walk-outline" size={22} color={Colors.text.tertiary} />
                   <Text style={styles.paymentOptionText}>No Payment Required</Text>
-                  <Text style={{ fontSize: 11, color: Colors.text.tertiary, textAlign: 'center' }}>Just visiting</Text>
+                  <Text style={styles.paymentOptionSubtext}>Just visiting</Text>
                 </View>
               )}
             </Pressable>
@@ -1008,13 +1008,13 @@ function StoreVisitPageInner() {
                 <View style={styles.paymentOptionInner}>
                   <Ionicons name="storefront-outline" size={20} color={Colors.gold} />
                   <Text style={[styles.paymentOptionText, { color: Colors.nileBlue }]}>Pay at Store</Text>
-                  <Text style={{ fontSize: 11, color: Colors.text.tertiary, textAlign: 'center' }}>Pay when you arrive</Text>
+                  <Text style={styles.paymentOptionSubtext}>Pay when you arrive</Text>
                 </View>
               ) : (
                 <View style={styles.paymentOptionInner}>
                   <Ionicons name="storefront-outline" size={22} color={Colors.text.tertiary} />
                   <Text style={styles.paymentOptionText}>Pay at Store</Text>
-                  <Text style={{ fontSize: 11, color: Colors.text.tertiary, textAlign: 'center' }}>Pay when you arrive</Text>
+                  <Text style={styles.paymentOptionSubtext}>Pay when you arrive</Text>
                 </View>
               )}
             </Pressable>
@@ -1076,7 +1076,7 @@ function StoreVisitPageInner() {
             })}
           </ScrollView>
 
-          <View style={[styles.sectionHeader, { marginTop: 24 }]}>
+          <View style={[styles.sectionHeader, styles.sectionHeaderSpaced]}>
             <Ionicons name="time" size={16} color={Colors.nileBlue} />
             <Text style={styles.sectionLabel}>Select Time</Text>
             {loadingSlots && (
@@ -1109,7 +1109,7 @@ function StoreVisitPageInner() {
                   {isBooked ? (
                     <View style={[styles.timeSlot, styles.timeSlotBooked]}>
                       <Text style={[styles.timeText, { color: Colors.text.tertiary }]}>{time}</Text>
-                      <Text style={{ fontSize: 10, color: Colors.text.tertiary, fontWeight: '600' }}>Booked</Text>
+                      <Text style={styles.bookedText}>Booked</Text>
                     </View>
                   ) : isSelected ? (
                     <View style={[styles.timeSlot, styles.timeSlotSelected]}>
@@ -1126,9 +1126,9 @@ function StoreVisitPageInner() {
             })}
           </View>
           {slotsLoaded && availableSlots.length === 0 && !loadingSlots && (
-            <View style={{ backgroundColor: Colors.errorScale[50], padding: Spacing.md, borderRadius: BorderRadius.sm, marginTop: Spacing.sm, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <View style={styles.allBookedBanner}>
               <Ionicons name="alert-circle" size={18} color={Colors.error} />
-              <Text style={{ color: Colors.error, fontSize: 13, flex: 1 }}>All time slots are booked for this date. Please try another day.</Text>
+              <Text style={styles.allBookedText}>All time slots are booked for this date. Please try another day.</Text>
             </View>
           )}
           {selectedDate && getAvailableTimeSlots().length === 0 && (() => {
@@ -1213,11 +1213,11 @@ function StoreVisitPageInner() {
 
           <Pressable
             onPress={() => router.push('/my-visits')}
-            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: Spacing.sm }}
-           
+            style={styles.viewPlannedVisitsBtn}
+
           >
             <Ionicons name="list-outline" size={16} color={Colors.nileBlue} />
-            <Text style={{ fontSize: 14, color: Colors.nileBlue, fontWeight: '700' }}>View My Planned Visits</Text>
+            <Text style={styles.viewPlannedVisitsText}>View My Planned Visits</Text>
           </Pressable>
         </View>
       </ScrollView>
@@ -1681,6 +1681,25 @@ const styles = StyleSheet.create({
     color: Colors.nileBlue,
     textAlign: 'center',
   },
+
+  // Extracted inline styles
+  flex1: { flex: 1 },
+  headerSpacer: { width: 44 },
+  storeCardRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  addressRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 },
+  queueWaitRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: Spacing.sm },
+  queueWaitText: { fontSize: 13, color: Colors.gold, fontWeight: '600' },
+  queueSizeText: { fontSize: 12, color: Colors.text.tertiary, marginTop: Spacing.xs },
+  viewMyVisitsBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 10, paddingVertical: 6, paddingHorizontal: Spacing.md, borderRadius: BorderRadius.md, backgroundColor: Colors.gold + '15' },
+  viewMyVisitsText: { fontSize: 13, color: Colors.nileBlue, fontWeight: '700' },
+  paymentOptionsRow: { flexDirection: 'row', gap: 10 },
+  paymentOptionSubtext: { fontSize: 11, color: Colors.text.tertiary, textAlign: 'center' },
+  sectionHeaderSpaced: { marginTop: 24 },
+  bookedText: { fontSize: 10, color: Colors.text.tertiary, fontWeight: '600' },
+  allBookedBanner: { backgroundColor: Colors.errorScale[50], padding: Spacing.md, borderRadius: BorderRadius.sm, marginTop: Spacing.sm, flexDirection: 'row', alignItems: 'center', gap: 8 },
+  allBookedText: { color: Colors.error, fontSize: 13, flex: 1 },
+  viewPlannedVisitsBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: Spacing.sm },
+  viewPlannedVisitsText: { fontSize: 14, color: Colors.nileBlue, fontWeight: '700' },
 });
 
 // Wrap component with ErrorBoundary for production safety

@@ -11,10 +11,10 @@ import {
   TextInput,
   RefreshControl,
   ActivityIndicator,
-  FlatList,
   Dimensions,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -433,15 +433,12 @@ function PublicWishlistView({
     <View style={styles.container}>
       {renderWishlistHeader()}
 
-      <FlatList
+      <FlashList
         data={wishlist.items}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.itemsList}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
+        estimatedItemSize={100}
         ListFooterComponent={
           <>
             {renderComments()}

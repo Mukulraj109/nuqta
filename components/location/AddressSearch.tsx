@@ -5,8 +5,8 @@ import {
   TextInput,
   StyleSheet,
   Pressable,
-  FlatList,
   ActivityIndicator} from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { useAddressSearch } from '@/hooks/useLocation';
 import { AddressSearchResult } from '@/types/location.types';
@@ -156,13 +156,13 @@ function AddressSearch({
       {/* Search Results */}
       {showResultsList && searchResults.length > 0 && (
         <View style={[styles.resultsContainer, resultsStyle]}>
-          <FlatList
+          <FlashList
             data={searchResults.slice(0, maxResults)}
             renderItem={renderAddressItem}
             keyExtractor={(item, index) => `${item.address}-${index}`}
-            style={styles.resultsList}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
+            estimatedItemSize={60}
           />
         </View>
       )}

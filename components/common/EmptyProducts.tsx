@@ -34,7 +34,7 @@ interface EmptyProductsProps {
  *   onClearFilters={clearAllFilters}
  * />
  */
-export default function EmptyProducts({
+function EmptyProducts({
   onClearFilters,
   hasFilters = false,
   style,
@@ -54,3 +54,5 @@ export default function EmptyProducts({
     />
   );
 }
+
+export default React.memo(EmptyProducts);

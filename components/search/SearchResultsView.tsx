@@ -100,7 +100,7 @@ function StoreCard({ store }: { store: any }) {
   );
 }
 
-export default function SearchResultsView({
+function SearchResultsView({
   query,
   loading,
   results,
@@ -664,3 +664,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default React.memo(SearchResultsView);

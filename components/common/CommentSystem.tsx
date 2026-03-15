@@ -7,12 +7,12 @@ import {
   StyleSheet,
   Pressable,
   TextInput,
-  FlatList,
   RefreshControl,
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
@@ -306,7 +306,7 @@ function CommentSystem({
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       {/* Comments List */}
-      <FlatList
+      <FlashList
         data={comments.filter(c => !c.parentId)} // Only show top-level comments
         renderItem={renderComment}
         keyExtractor={(item) => item.id}
@@ -323,10 +323,7 @@ function CommentSystem({
         }
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
+        estimatedItemSize={100}
       />
 
       {/* Loading indicator */}

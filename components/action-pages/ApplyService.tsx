@@ -14,8 +14,8 @@ import {
   TextInput,
   ActivityIndicator,
   Platform,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -240,7 +240,7 @@ function ApplyServicePage() {
         ) : filteredProviders.length === 0 ? (
           <View style={styles.emptyContainer}><Ionicons name="business-outline" size={48} color={COLORS.border} /><Text style={styles.emptyTitle}>{searchQuery ? 'No matches found' : 'No providers available'}</Text><Text style={styles.emptySubtitle}>{searchQuery ? 'Try a different search term' : 'Check back later'}</Text></View>
         ) : (
-          <FlatList data={filteredProviders} keyExtractor={(item) => item._id || item.id} renderItem={renderProviderCard} contentContainerStyle={styles.storeList} showsVerticalScrollIndicator={false} />
+          <FlashList data={filteredProviders} keyExtractor={(item) => item._id || item.id} renderItem={renderProviderCard} contentContainerStyle={styles.storeList} showsVerticalScrollIndicator={false} estimatedItemSize={100} />
         )}
       </SafeAreaView>
     );

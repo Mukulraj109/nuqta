@@ -33,7 +33,7 @@ export default function SurveyCompletePage() {
 
   useEffect(() => {
     // Sequence of animations
-    Animated.sequence([
+    const anim1 = Animated.sequence([
       // Check mark scale in
       Animated.spring(scaleAnim, {
         toValue: 1,
@@ -47,10 +47,11 @@ export default function SurveyCompletePage() {
         duration: 300,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]);
+    anim1.start();
 
     // Coin animation (parallel)
-    Animated.sequence([
+    const anim2 = Animated.sequence([
       Animated.delay(300),
       Animated.parallel([
         Animated.spring(coinScaleAnim, {
@@ -66,10 +67,11 @@ export default function SurveyCompletePage() {
           useNativeDriver: true,
         }),
       ]),
-    ]).start();
+    ]);
+    anim2.start();
 
     // Stats slide in
-    Animated.sequence([
+    const anim3 = Animated.sequence([
       Animated.delay(500),
       Animated.spring(statsSlideAnim, {
         toValue: 0,
@@ -77,10 +79,11 @@ export default function SurveyCompletePage() {
         friction: 8,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]);
+    anim3.start();
 
     // Button slide in
-    Animated.sequence([
+    const anim4 = Animated.sequence([
       Animated.delay(700),
       Animated.spring(buttonSlideAnim, {
         toValue: 0,
@@ -88,7 +91,15 @@ export default function SurveyCompletePage() {
         friction: 8,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]);
+    anim4.start();
+
+    return () => {
+      anim1.stop();
+      anim2.stop();
+      anim3.stop();
+      anim4.stop();
+    };
   }, []);
 
   const formatTime = (seconds: number): string => {

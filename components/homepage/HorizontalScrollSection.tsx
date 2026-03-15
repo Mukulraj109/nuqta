@@ -47,6 +47,17 @@ const HorizontalScrollSection = React.memo(function HorizontalScrollSection({
     return 'product'; // default
   };
 
+  const renderSectionCard = React.useCallback(({ item, index }: { item: any; index: number }) => (
+    <View
+      style={[
+        styles.cardContainer,
+        { width: cardWidth, marginRight: index === section.items.length - 1 ? 0 : spacing },
+      ]}
+    >
+      {renderCard(item)}
+    </View>
+  ), [cardWidth, spacing, section.items.length, renderCard]);
+
   // Show skeleton loader if loading or no items yet
   if (isLoading || !section.items || section.items.length === 0) {
     return (
@@ -90,16 +101,7 @@ const HorizontalScrollSection = React.memo(function HorizontalScrollSection({
           index
         })}
         keyExtractor={(item, index) => item?.id || item?._id || `item-${index}`}
-        renderItem={({ item, index }) => (
-          <View
-            style={[
-              styles.cardContainer,
-              { width: cardWidth, marginRight: index === section.items.length - 1 ? 0 : spacing },
-            ]}
-          >
-            {renderCard(item)}
-          </View>
-        )}
+        renderItem={renderSectionCard}
       />
 
       {/* Optional iOS Always-visible Scroll Indicator */}

@@ -25,4 +25,4 @@ const PriveHeaderWrapper: React.FC = () => {
   );
 };
 
-export default PriveHeaderWrapper;
+export default React.memo(PriveHeaderWrapper);

@@ -48,7 +48,7 @@ function CelebrationModal({
       fadeAnim.setValue(0);
 
       // Start animations
-      Animated.parallel([
+      const _anim0 = Animated.parallel([
         Animated.spring(scaleAnim, {
           toValue: 1,
           tension: 50,
@@ -65,9 +65,12 @@ function CelebrationModal({
           duration: 300,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim0.start();
     }
-  }, [visible]);
+  
+    return () => { _anim0.stop(); };
+}, [visible]);
 
   if (!result) return null;
 

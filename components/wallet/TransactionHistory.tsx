@@ -5,10 +5,10 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   StyleSheet,
-  FlatList,
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ThemedText } from '@/components/ThemedText';
 import TransactionTabs from './TransactionTabs';
 import TransactionCard from './TransactionCard';
@@ -200,7 +200,7 @@ function TransactionHistory({
       />
 
       {/* Transaction List */}
-      <FlatList
+      <FlashList
         data={transactions}
         renderItem={renderTransaction}
         keyExtractor={(item) => item.id}
@@ -209,14 +209,7 @@ function TransactionHistory({
         onEndReachedThreshold={0.1}
         ListFooterComponent={renderFooter}
         ListEmptyComponent={renderEmptyState}
-        removeClippedSubviews={true}
-        maxToRenderPerBatch={15}
-        windowSize={5}
-        getItemLayout={(_data, index) => ({
-          length: 72,
-          offset: 72 * index,
-          index,
-        })}
+        estimatedItemSize={72}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

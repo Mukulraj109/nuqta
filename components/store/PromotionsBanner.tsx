@@ -64,14 +64,17 @@ function PromotionsBanner({
   // Slide in animation on mount
   useEffect(() => {
     if (sortedBanners.length > 0) {
-      Animated.spring(slideAnim, {
+      const _anim0 = Animated.spring(slideAnim, {
         toValue: 0,
         tension: 50,
         friction: 8,
         useNativeDriver: true,
-      }).start();
+      });
+      _anim0.start();
     }
-  }, [sortedBanners.length, slideAnim]);
+  
+    return () => { _anim0.stop(); };
+}, [sortedBanners.length, slideAnim]);
 
   // Auto-rotation logic
   useEffect(() => {

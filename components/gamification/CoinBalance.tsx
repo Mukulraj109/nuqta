@@ -50,7 +50,7 @@ function CoinBalance({
   useEffect(() => {
     if (animateChanges && state.coinBalance.total !== previousBalance) {
       // Bounce animation
-      Animated.sequence([
+      const _anim0 = Animated.sequence([
         Animated.parallel([
           Animated.spring(scaleAnim, {
             toValue: 1.2,
@@ -75,11 +75,14 @@ function CoinBalance({
             useNativeDriver: true,
           }),
         ]),
-      ]).start();
+      ]);
+      _anim0.start();
 
       setPreviousBalance(state.coinBalance.total);
     }
-  }, [state.coinBalance.total, previousBalance, animateChanges]);
+  
+    return () => { _anim0.stop(); };
+}, [state.coinBalance.total, previousBalance, animateChanges]);
 
   const handlePress = () => {
     if (onPress) {

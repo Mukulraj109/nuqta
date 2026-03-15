@@ -57,8 +57,9 @@ export const CrossPlatformAlertProvider: React.FC<{ children: React.ReactNode }>
   }, []);
 
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 200,
@@ -70,9 +71,10 @@ export const CrossPlatformAlertProvider: React.FC<{ children: React.ReactNode }>
           tension: 40,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 150,
@@ -83,9 +85,12 @@ export const CrossPlatformAlertProvider: React.FC<{ children: React.ReactNode }>
           duration: 150,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [visible]);
+  
+    return () => _anim.stop();
+}, [visible]);
 
   const handleClose = (button?: AlertButton) => {
     setVisible(false);

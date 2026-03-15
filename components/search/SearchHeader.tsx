@@ -27,7 +27,7 @@ interface SearchHeaderProps {
   onOpenFilters: () => void;
 }
 
-export default function SearchHeader({
+function SearchHeader({
   query,
   inputFocused,
   activeFilterCount,
@@ -343,3 +343,5 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
 });
+
+export default React.memo(SearchHeader);

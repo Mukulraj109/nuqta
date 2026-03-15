@@ -11,6 +11,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -279,20 +280,17 @@ export default function FriendsRedeemedPage() {
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={filteredOffers}
           renderItem={renderOffer}
           keyExtractor={item => item.id}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
           onEndReached={selectedFriend === 'all' ? handleLoadMore : undefined}
           onEndReachedThreshold={0.3}
           refreshing={loading}
           onRefresh={handleRefresh}
+          estimatedItemSize={120}
           ListHeaderComponent={
             FRIENDS.length > 1 ? (
               <View style={styles.filtersSection}>

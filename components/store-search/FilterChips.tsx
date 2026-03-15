@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   ScrollView,
@@ -65,6 +65,39 @@ const FilterChips: React.FC<FilterChipsProps & { parentCategorySlug?: string }> 
 
   const styles = createStyles(screenWidth);
 
+  const renderGenderOption = useCallback(({ item }: { item: { id: string; label: string; icon: string; color: string } }) => (
+    <Pressable
+      style={[
+        styles.genderOption,
+        filters.gender.includes(item.id as any) && styles.genderOptionSelected
+      ]}
+      onPress={() => handleGenderSelect(item.id)}
+      accessibilityRole="checkbox"
+      accessibilityLabel={item.label}
+      accessibilityHint={filters.gender.includes(item.id as any) ? 'Double tap to deselect' : 'Double tap to select'}
+      accessibilityState={{ checked: filters.gender.includes(item.id as any) }}
+    >
+      <Ionicons
+        name={item.icon as any}
+        size={22}
+        color={filters.gender.includes(item.id as any) ? COLORS.WHITE : item.color}
+      />
+      <ThemedText style={[
+        styles.genderOptionText,
+        filters.gender.includes(item.id as any) && styles.genderOptionTextSelected
+      ]}>
+        {item.label}
+      </ThemedText>
+      {filters.gender.includes(item.id as any) && (
+        <Ionicons
+          name="checkmark-circle"
+          size={22}
+          color={COLORS.WHITE}
+        />
+      )}
+    </Pressable>
+  ), [filters.gender, handleGenderSelect, styles]);
+
   // Hide entire component if no filters are relevant for this category
   if (!showFashion && !showGender) {
     return null;
@@ -100,38 +133,7 @@ const FilterChips: React.FC<FilterChipsProps & { parentCategorySlug?: string }> 
           <FlatList
             data={Object.values(GENDER_OPTIONS)}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <Pressable
-                style={[
-                  styles.genderOption,
-                  filters.gender.includes(item.id as any) && styles.genderOptionSelected
-                ]}
-                onPress={() => handleGenderSelect(item.id)}
-                accessibilityRole="checkbox"
-                accessibilityLabel={item.label}
-                accessibilityHint={filters.gender.includes(item.id as any) ? 'Double tap to deselect' : 'Double tap to select'}
-                accessibilityState={{ checked: filters.gender.includes(item.id as any) }}
-              >
-                <Ionicons
-                  name={item.icon as any}
-                  size={22}
-                  color={filters.gender.includes(item.id as any) ? COLORS.WHITE : item.color}
-                />
-                <ThemedText style={[
-                  styles.genderOptionText,
-                  filters.gender.includes(item.id as any) && styles.genderOptionTextSelected
-                ]}>
-                  {item.label}
-                </ThemedText>
-                {filters.gender.includes(item.id as any) && (
-                  <Ionicons
-                    name="checkmark-circle"
-                    size={22}
-                    color={COLORS.WHITE}
-                  />
-                )}
-              </Pressable>
-            )}
+            renderItem={renderGenderOption}
             showsVerticalScrollIndicator={false}
           />
         </View>

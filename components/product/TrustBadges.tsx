@@ -18,7 +18,7 @@ interface TrustBadgesProps {
   badges?: Badge[];
 }
 
-export default function TrustBadges({ badges = DEFAULT_BADGES }: TrustBadgesProps) {
+function TrustBadges({ badges = DEFAULT_BADGES }: TrustBadgesProps) {
   return (
     <View style={styles.container}>
       {badges.map((badge, index) => (
@@ -59,3 +59,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default React.memo(TrustBadges);

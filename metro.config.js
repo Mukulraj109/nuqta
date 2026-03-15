@@ -144,6 +144,14 @@ const markdownItEntitiesJson = path.resolve(
   __dirname, 'node_modules/markdown-it/node_modules/entities/lib/maps/entities.json'
 );
 
+// Fix: @tanstack/react-query v5.90+ with "type":"module" breaks Metro 0.80 resolution
+const tanstackReactQueryEntry = path.resolve(
+  __dirname, 'node_modules/@tanstack/react-query/build/legacy/index.cjs'
+);
+const tanstackQueryCoreEntry = path.resolve(
+  __dirname, 'node_modules/@tanstack/query-core/build/legacy/index.cjs'
+);
+
 const localforageFilePath = path.resolve(
   __dirname, 'node_modules/localforage/dist/localforage.js'
 );
@@ -159,6 +167,14 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
   // (top-level entities@6 removed this file)
   if (moduleName === 'entities/lib/maps/entities.json') {
     return { filePath: markdownItEntitiesJson, type: 'sourceFile' };
+  }
+
+  // Fix: @tanstack/react-query v5.90+ uses "type":"module" which breaks Metro 0.80
+  if (moduleName === '@tanstack/react-query') {
+    return { filePath: tanstackReactQueryEntry, type: 'sourceFile' };
+  }
+  if (moduleName === '@tanstack/query-core') {
+    return { filePath: tanstackQueryCoreEntry, type: 'sourceFile' };
   }
 
   // SHORT-CIRCUIT: Skip all shim logic for non-web platforms

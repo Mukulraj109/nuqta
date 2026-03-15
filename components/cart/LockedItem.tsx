@@ -13,8 +13,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { useRegion } from '@/contexts/RegionContext';
-import { COLORS, SPACING, BORDER_RADIUS } from '@/constants/DesignTokens';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, spacing } from '@/constants/theme';
 
 interface LockedItemProps {
   item: {
@@ -216,21 +215,21 @@ function LockedItem({
     >
       {/* Price Locked Header Banner */}
       <LinearGradient
-        colors={isExpired ? [colors.error, colors.error] : [COLORS.nuqta.mustard, COLORS.nuqta.peach]}
+        colors={isExpired ? [colors.error, colors.error] : [colors.nuqta.mustard, colors.nuqta.peach]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.headerBanner}
       >
         <View style={styles.headerBannerContent}>
           <View style={styles.lockIconWrapper}>
-            <Ionicons name="lock-closed" size={14} color={isExpired ? colors.background.primary : COLORS.nuqta.nileBlue} />
+            <Ionicons name="lock-closed" size={14} color={isExpired ? colors.background.primary : colors.nuqta.nileBlue} />
           </View>
-          <ThemedText style={[styles.headerBannerText, !isExpired && { color: COLORS.nuqta.nileBlue }]}>
+          <ThemedText style={[styles.headerBannerText, !isExpired && { color: colors.nuqta.nileBlue }]}>
             {isExpired ? 'LOCK EXPIRED' : 'PRICE LOCKED'}
           </ThemedText>
           {item.isPaidLock && !isExpired && (
             <View style={styles.paidBadge}>
-              <Ionicons name="checkmark-circle" size={12} color={COLORS.nuqta.nileBlue} />
+              <Ionicons name="checkmark-circle" size={12} color={colors.nuqta.nileBlue} />
               <ThemedText style={styles.paidBadgeText}>PAID</ThemedText>
             </View>
           )}
@@ -361,12 +360,12 @@ function LockedItem({
              
             >
               <LinearGradient
-                colors={[COLORS.nuqta.mustard, COLORS.nuqta.peach]}
+                colors={[colors.nuqta.mustard, colors.nuqta.peach]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.purchaseButton}
               >
-                <Ionicons name="cart" size={18} color={COLORS.nuqta.nileBlue} />
+                <Ionicons name="cart" size={18} color={colors.nuqta.nileBlue} />
                 <ThemedText style={styles.purchaseButtonText}>
                   {item.isPaidLock ? 'Complete Purchase' : 'Move to Cart'}
                 </ThemedText>
@@ -439,7 +438,7 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
   },
   paidBadgeText: {
-    color: COLORS.nuqta.nileBlue,
+    color: colors.nuqta.nileBlue,
     fontSize: 10,
     fontWeight: '700',
     letterSpacing: 0.3,
@@ -569,12 +568,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: COLORS.nuqta.linen,
+    backgroundColor: colors.nuqta.linen,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: COLORS.nuqta.peach,
+    borderColor: colors.nuqta.peach,
   },
   securedText: {
     fontSize: 11,
@@ -621,7 +620,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   purchaseButtonText: {
-    color: COLORS.nuqta.nileBlue,
+    color: colors.nuqta.nileBlue,
     fontSize: 14,
     fontWeight: '700',
   },

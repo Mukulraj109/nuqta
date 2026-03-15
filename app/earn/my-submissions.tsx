@@ -10,9 +10,9 @@ import {
   StatusBar,
   Platform,
   ActivityIndicator,
-  FlatList,
   ScrollView,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -419,16 +419,13 @@ export default function MySubmissionsPage() {
       {loading ? (
         <CardGridSkeleton />
       ) : (
-        <FlatList
+        <FlashList
           data={filteredSubmissions}
           renderItem={renderSubmission}
           keyExtractor={item => item.id}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
+          estimatedItemSize={100}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <View style={styles.emptyIconCircle}>

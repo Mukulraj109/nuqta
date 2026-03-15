@@ -9,10 +9,9 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, ActivityIndicator, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { RewardsPreview } from '@/types/storePayment.types';
 import { useRegion } from '@/contexts/RegionContext';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 interface PayButtonWithRewardsProps {
   amountToPay: number;
@@ -39,13 +38,13 @@ export const PayButtonWithRewards: React.FC<PayButtonWithRewardsProps> = ({
       {/* Rewards Preview Banner */}
       {hasRewards && (
         <LinearGradient
-          colors={[COLORS.nuqta.lavender, COLORS.nuqta.linen]}
+          colors={[colors.nuqta.lavender, colors.nuqta.linen]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.rewardsPreview}
         >
           <View style={styles.rewardsIconWrapper}>
-            <Ionicons name="gift" size={14} color={COLORS.nuqta.mustard} />
+            <Ionicons name="gift" size={14} color={colors.nuqta.mustard} />
           </View>
           <Text style={styles.rewardsText}>
             You'll earn{' '}
@@ -79,10 +78,10 @@ export const PayButtonWithRewards: React.FC<PayButtonWithRewardsProps> = ({
           <LinearGradient
             colors={
               isProcessing || disabled
-                ? [COLORS.neutral[400], COLORS.neutral[500]]
+                ? [colors.neutral[400], colors.neutral[500]]
                 : isFreePayment
-                ? [COLORS.nuqta.nileBlue, colors.brand.nileBlueLight]
-                : [COLORS.nuqta.mustard, COLORS.nuqta.peach]
+                ? [colors.nuqta.nileBlue, colors.brand.nileBlueLight]
+                : [colors.nuqta.mustard, colors.nuqta.peach]
             }
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -94,7 +93,7 @@ export const PayButtonWithRewards: React.FC<PayButtonWithRewardsProps> = ({
               <>
                 <Text style={[
                   styles.buttonText,
-                  !isFreePayment && { color: COLORS.nuqta.nileBlue }
+                  !isFreePayment && { color: colors.nuqta.nileBlue }
                 ]}>
                   {isFreePayment ? 'Confirm Payment' : `Pay ${currencySymbol}${amountToPay.toFixed(0)}`}
                 </Text>
@@ -110,7 +109,7 @@ export const PayButtonWithRewards: React.FC<PayButtonWithRewardsProps> = ({
                   <Ionicons
                     name="arrow-forward"
                     size={18}
-                    color={isFreePayment ? colors.background.primary : COLORS.nuqta.nileBlue}
+                    color={isFreePayment ? colors.background.primary : colors.nuqta.nileBlue}
                   />
                 </View>
               </>
@@ -121,7 +120,7 @@ export const PayButtonWithRewards: React.FC<PayButtonWithRewardsProps> = ({
 
       {/* Security Note */}
       <View style={styles.securityNote}>
-        <Ionicons name="shield-checkmark" size={12} color={COLORS.nuqta.mustard} />
+        <Ionicons name="shield-checkmark" size={12} color={colors.nuqta.mustard} />
         <Text style={styles.securityText}>
           Secured by 256-bit encryption
         </Text>
@@ -132,15 +131,15 @@ export const PayButtonWithRewards: React.FC<PayButtonWithRewardsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: SPACING.md,
-    paddingTop: SPACING.sm,
-    paddingBottom: Platform.OS === 'ios' ? SPACING.xl : SPACING.md,
-    backgroundColor: COLORS.background.primary,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    paddingBottom: Platform.OS === 'ios' ? spacing.xl : spacing.md,
+    backgroundColor: colors.background.primary,
     borderTopWidth: 1,
-    borderTopColor: COLORS.nuqta.linen,
+    borderTopColor: colors.nuqta.linen,
     ...Platform.select({
       ios: {
-        shadowColor: COLORS.nuqta.nileBlue,
+        shadowColor: colors.nuqta.nileBlue,
         shadowOffset: { width: 0, height: -4 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -154,11 +153,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.md,
-    borderRadius: BORDER_RADIUS.full,
-    marginBottom: SPACING.sm,
-    gap: SPACING.xs,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    borderRadius: borderRadius.full,
+    marginBottom: spacing.sm,
+    gap: spacing.xs,
   },
   rewardsIconWrapper: {
     width: 24,
@@ -169,37 +168,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rewardsText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.nuqta.nileBlue,
+    ...typography.caption,
+    color: colors.nuqta.nileBlue,
   },
   rewardsHighlight: {
     fontWeight: '700',
-    color: COLORS.nuqta.nileBlue,
+    color: colors.nuqta.nileBlue,
   },
   buttonRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.md,
+    gap: spacing.md,
   },
   amountInfo: {
     alignItems: 'flex-start',
   },
   amountLabel: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
+    ...typography.caption,
+    color: colors.text.secondary,
   },
   amountValue: {
-    ...TYPOGRAPHY.h3,
-    color: COLORS.nuqta.nileBlue,
+    ...typography.h3,
+    color: colors.nuqta.nileBlue,
     fontWeight: '800',
   },
   buttonWrapper: {
     flex: 1,
-    borderRadius: BORDER_RADIUS.lg,
+    borderRadius: borderRadius.lg,
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: COLORS.nuqta.mustard,
+        shadowColor: colors.nuqta.mustard,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -213,26 +212,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: SPACING.md,
-    borderRadius: BORDER_RADIUS.lg,
-    gap: SPACING.sm,
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.lg,
+    gap: spacing.sm,
   },
   buttonText: {
-    ...TYPOGRAPHY.button,
+    ...typography.button,
     color: colors.background.primary,
     fontSize: 17,
     fontWeight: '700',
   },
   earnBadge: {
     backgroundColor: 'rgba(26, 58, 82, 0.15)',
-    paddingHorizontal: SPACING.sm,
+    paddingHorizontal: spacing.sm,
     paddingVertical: 2,
-    borderRadius: BORDER_RADIUS.full,
+    borderRadius: borderRadius.full,
   },
   earnText: {
-    ...TYPOGRAPHY.caption,
+    ...typography.caption,
     fontSize: 10,
-    color: COLORS.nuqta.nileBlue,
+    color: colors.nuqta.nileBlue,
     fontWeight: '600',
   },
   arrowWrapper: {
@@ -247,13 +246,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: SPACING.sm,
+    marginTop: spacing.sm,
     gap: 4,
   },
   securityText: {
-    ...TYPOGRAPHY.caption,
+    ...typography.caption,
     fontSize: 10,
-    color: COLORS.text.tertiary,
+    color: colors.text.tertiary,
   },
 });
 

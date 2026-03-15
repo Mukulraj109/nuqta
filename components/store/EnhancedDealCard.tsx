@@ -73,13 +73,16 @@ function EnhancedDealCard({
 
   // Initialize card animation
   useEffect(() => {
-    Animated.spring(cardAnim, {
+    const _anim0 = Animated.spring(cardAnim, {
       toValue: 1,
       tension: 100,
       friction: 8,
       useNativeDriver: true,
-    }).start();
-  }, [cardAnim]);
+    });
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, [cardAnim]);
 
   // Pulse animation for expiring soon deals
   useEffect(() => {

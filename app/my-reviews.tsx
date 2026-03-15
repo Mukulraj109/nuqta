@@ -6,7 +6,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
   RefreshControl,
@@ -14,6 +13,7 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ReviewsListSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
@@ -329,8 +329,7 @@ export default function MyReviewsPage() {
             </Pressable>
           </View>
         ) : (
-          <FlatList
-            style={styles.content}
+          <FlashList
             data={filteredReviews}
             keyExtractor={(item) => item._id || item.id || String(Math.random())}
             renderItem={renderReviewItem}
@@ -344,10 +343,7 @@ export default function MyReviewsPage() {
             }
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.3}
-            removeClippedSubviews={Platform.OS !== 'web'}
-            maxToRenderPerBatch={15}
-            windowSize={7}
-            initialNumToRender={8}
+            estimatedItemSize={120}
             ListHeaderComponent={
               filteredReviews.length > 0 ? (
                 <Text style={styles.reviewsCount}>

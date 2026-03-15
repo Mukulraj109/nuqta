@@ -3,13 +3,13 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
   RefreshControl,
   Platform,
   SafeAreaView,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocationHistory } from '@/hooks/useLocation';
@@ -181,7 +181,7 @@ export default function LocationHistoryScreen() {
         ) : error ? (
           renderErrorState()
         ) : (
-          <FlatList
+          <FlashList
             data={locationHistory}
             renderItem={renderHistoryItem}
             keyExtractor={(item, index) => `${item.timestamp.getTime()}-${index}`}
@@ -198,6 +198,7 @@ export default function LocationHistoryScreen() {
             contentContainerStyle={
               locationHistory.length === 0 ? styles.emptyContainer : styles.listContainer
             }
+            estimatedItemSize={80}
           />
         )}
       </View>

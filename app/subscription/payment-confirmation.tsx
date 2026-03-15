@@ -37,7 +37,7 @@ export default function PaymentConfirmationPage() {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     }
     // Animate success icon
-    Animated.sequence([
+    const anim = Animated.sequence([
       Animated.spring(scaleAnim, {
         toValue: 1,
         tension: 50,
@@ -49,7 +49,9 @@ export default function PaymentConfirmationPage() {
         duration: 500,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]);
+    anim.start();
+    return () => anim.stop();
   }, []);
 
   const getNextBillingDate = () => {

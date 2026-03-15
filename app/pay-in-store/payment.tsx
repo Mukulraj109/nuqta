@@ -28,7 +28,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Elements } from '@stripe/react-stripe-js';
 import { getStripePromise } from '@/utils/lazyImports';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { PaymentScreenParams, StorePaymentInitResponse } from '@/types/storePayment.types';
 import apiClient from '@/services/apiClient';
 import { useAuth } from '@/contexts/AuthContext';
@@ -50,7 +49,7 @@ import {
   PayButtonWithRewards,
   StripeCardForm,
 } from '@/components/payment';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 // Initialize Stripe lazily — SDK is only loaded when this promise is first awaited
 const stripePromise = getStripePromise(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
@@ -307,7 +306,7 @@ export default function PaymentScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={COLORS.primary[500]} />
+          <ActivityIndicator size="large" color={colors.primary[500]} />
           <Text style={styles.loadingText}>Preparing payment...</Text>
         </View>
       </SafeAreaView>
@@ -405,7 +404,7 @@ export default function PaymentScreen() {
         {/* Error Display */}
         {paymentFlow.error && (
           <View style={styles.errorContainer}>
-            <Ionicons name="alert-circle" size={20} color={COLORS.error[500]} />
+            <Ionicons name="alert-circle" size={20} color={colors.errorScale[500]} />
             <Text style={styles.errorText}>{paymentFlow.error}</Text>
           </View>
         )}
@@ -439,7 +438,7 @@ export default function PaymentScreen() {
                   appearance: {
                     theme: 'stripe',
                     variables: {
-                      colorPrimary: COLORS.primary[500],
+                      colorPrimary: colors.primary[500],
                       colorBackground: colors.background.primary,
                       colorText: colors.neutral[900],
                       colorDanger: colors.error,
@@ -583,7 +582,7 @@ export default function PaymentScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background.secondary,
+    backgroundColor: colors.background.secondary,
   },
   loadingContainer: {
     flex: 1,
@@ -591,44 +590,44 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.secondary,
-    marginTop: SPACING.md,
+    ...typography.body,
+    color: colors.text.secondary,
+    marginTop: spacing.md,
   },
   content: {
     flex: 1,
-    padding: SPACING.md,
+    padding: spacing.md,
   },
   paymentMethodsCard: {
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.lg,
-    padding: SPACING.lg,
-    marginBottom: SPACING.md,
-    ...SHADOWS.sm,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.md,
+    ...shadows.sm,
   },
   sectionTitle: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.primary,
-    marginBottom: SPACING.md,
+    ...typography.h4,
+    color: colors.text.primary,
+    marginBottom: spacing.md,
   },
   subsectionTitle: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.secondary,
-    marginTop: SPACING.md,
-    marginBottom: SPACING.sm,
+    ...typography.bodySmall,
+    color: colors.text.secondary,
+    marginTop: spacing.md,
+    marginBottom: spacing.sm,
   },
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.error[50],
-    padding: SPACING.md,
-    borderRadius: BORDER_RADIUS.lg,
-    marginBottom: SPACING.md,
-    gap: SPACING.sm,
+    backgroundColor: colors.errorScale[50],
+    padding: spacing.md,
+    borderRadius: borderRadius.lg,
+    marginBottom: spacing.md,
+    gap: spacing.sm,
   },
   errorText: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.error[700],
+    ...typography.bodySmall,
+    color: colors.errorScale[700],
     flex: 1,
   },
   modalOverlay: {
@@ -636,14 +635,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: SPACING.md,
+    padding: spacing.md,
   },
   modalContent: {
     width: '100%',
     maxWidth: 500,
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.xl,
-    ...SHADOWS.lg,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.xl,
+    ...shadows.lg,
   },
   upiModalContent: {
     width: '100%',
@@ -651,7 +650,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background.primary,
     borderRadius: 20,
     padding: 24,
-    ...SHADOWS.lg,
+    ...shadows.lg,
   },
   upiHeader: {
     flexDirection: 'row',

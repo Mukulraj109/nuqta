@@ -20,7 +20,6 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
-import { COLORS } from '@/constants/DesignTokens';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -68,7 +67,7 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
     }
 
     // Entrance animation
-    Animated.parallel([
+    const _anim0 = Animated.parallel([
       Animated.spring(translateY, {
         toValue: 0,
         friction: 8,
@@ -85,7 +84,8 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
         friction: 6,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]);
+    _anim0.start();
 
     // Auto dismiss after duration (if duration > 0)
     let timer: NodeJS.Timeout | null = null;
@@ -95,9 +95,7 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
       }, duration);
     }
 
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
+    return () => { _anim0.stop(); if (timer) clearTimeout(timer); };
   }, []);
 
   const handleDismiss = () => {
@@ -195,17 +193,17 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
   const getIconBgColor = (): string => {
     switch (type) {
       case 'coins':
-        return COLORS.secondary[600]; // ReZ Gold
+        return colors.secondary[600]; // ReZ Gold
       case 'cashback':
-        return COLORS.primary[400]; // ReZ Green light
+        return colors.primary[400]; // ReZ Green light
       case 'voucher':
-        return COLORS.secondary[700]; // Darker gold
+        return colors.secondary[700]; // Darker gold
       case 'discount':
-        return COLORS.secondary[500]; // ReZ Gold
+        return colors.secondary[500]; // ReZ Gold
       case 'freebie':
-        return COLORS.secondary[600]; // Gold
+        return colors.secondary[600]; // Gold
       default:
-        return COLORS.secondary[500];
+        return colors.secondary[500];
     }
   };
 
@@ -220,7 +218,7 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
       ]}
     >
       <LinearGradient
-        colors={[COLORS.primary[500], COLORS.primary[600], COLORS.primary[700]]}
+        colors={[colors.primary[500], colors.primary[600], colors.primary[700]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.gradient}
@@ -285,7 +283,7 @@ const styles = StyleSheet.create({
     right: 12,
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: COLORS.primary[700],
+    shadowColor: colors.primary[700],
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,
     shadowRadius: 16,
@@ -359,11 +357,11 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.secondary[500], // ReZ Gold color
+    color: colors.secondary[500], // ReZ Gold color
     letterSpacing: 0.3,
   },
   claimButton: {
-    backgroundColor: COLORS.secondary[500], // ReZ Gold background
+    backgroundColor: colors.secondary[500], // ReZ Gold background
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
@@ -376,7 +374,7 @@ const styles = StyleSheet.create({
   claimButtonText: {
     fontSize: 14,
     fontWeight: '700',
-    color: COLORS.primary[800], // Dark green text on gold button
+    color: colors.primary[800], // Dark green text on gold button
   },
   closeButton: {
     position: 'absolute',

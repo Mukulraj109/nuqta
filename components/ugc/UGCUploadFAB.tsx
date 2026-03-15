@@ -33,8 +33,9 @@ function UGCUploadFAB({
 
   // Fade in animation on mount
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.spring(scaleAnim, {
           toValue: 1,
           tension: 50,
@@ -46,9 +47,10 @@ function UGCUploadFAB({
           duration: 300,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(scaleAnim, {
           toValue: 0,
           duration: 200,
@@ -59,9 +61,12 @@ function UGCUploadFAB({
           duration: 200,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [visible]);
+  
+    return () => _anim.stop();
+}, [visible]);
 
   const handlePress = () => {
     // Haptic feedback

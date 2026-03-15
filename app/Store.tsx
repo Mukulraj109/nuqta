@@ -287,7 +287,7 @@ function StoreCard({ item, index }: { item: Store; index: number }) {
 
   useEffect(() => {
     const delay = index * 80;
-    Animated.parallel([
+    const anim = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 400,
@@ -300,7 +300,9 @@ function StoreCard({ item, index }: { item: Store; index: number }) {
         delay,
         useNativeDriver: true,
       }),
-    ]).start();
+    ]);
+    anim.start();
+    return () => anim.stop();
   }, []);
 
   const handleStorePress = async () => {

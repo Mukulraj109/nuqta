@@ -16,6 +16,7 @@ import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRegion } from '@/contexts/RegionContext';
 
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors, spacing, borderRadius, shadows, typography } from '@/constants/theme';
 import StickySearchHeader from '@/components/homepage/StickySearchHeader';
 import HeroBanner from '@/components/homepage/HeroBanner';
@@ -165,7 +166,7 @@ const BadgeAvatar: React.FC<BadgeAvatarProps> = React.memo(({ size = 24, color }
   );
 });
 
-export default function HomeScreen() {
+function HomeScreen() {
   const router = useRouter();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
@@ -1196,3 +1197,5 @@ const viewStyles = StyleSheet.create({
     color: colors.nileBlue,
   },
 });
+
+export default withErrorBoundary(HomeScreen, 'Home');

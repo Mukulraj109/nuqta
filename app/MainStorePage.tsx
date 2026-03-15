@@ -34,6 +34,7 @@ import {
 } from "@/components/skeletons";
 import { Colors, Spacing } from "@/constants/DesignSystem";
 import { createStyles } from "./MainStorePage.styles";
+import { withErrorBoundary } from "@/utils/withErrorBoundary";
 
 // Extracted section components
 import StoreInfoHeader from "@/components/store/StoreInfoHeader";
@@ -49,7 +50,7 @@ import StoreModals, { buildAboutModalData } from "@/components/store/StoreModals
 // Custom hook for all data/state/handlers
 import { useMainStorePageData } from "@/hooks/useMainStorePageData";
 
-export default function MainStorePage({ productId, initialProduct }: MainStorePageProps = {}) {
+function MainStorePage({ productId, initialProduct }: MainStorePageProps = {}) {
   const router = useRouter();
   const d = useMainStorePageData({ productId, initialProduct });
 
@@ -74,11 +75,13 @@ export default function MainStorePage({ productId, initialProduct }: MainStorePa
   const tabsPositionMeasured = useRef(false);
 
   useEffect(() => {
-    Animated.timing(stickyHeaderAnim, {
+    const anim = Animated.timing(stickyHeaderAnim, {
       toValue: showStickyTabs ? 1 : 0,
       duration: 200,
       useNativeDriver: true,
-    }).start();
+    });
+    anim.start();
+    return () => anim.stop();
   }, [showStickyTabs, stickyHeaderAnim]);
 
   // Measure tabs position after page loads
@@ -442,4 +445,6 @@ export default function MainStorePage({ productId, initialProduct }: MainStorePa
     </ThemedView>
   );
 }
+
+export default withErrorBoundary(MainStorePage, 'Store Page');
 

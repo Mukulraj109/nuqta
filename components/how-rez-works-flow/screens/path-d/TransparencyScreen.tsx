@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default TransparencyScreen;
+export default React.memo(TransparencyScreen);

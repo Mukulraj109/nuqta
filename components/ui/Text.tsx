@@ -43,7 +43,7 @@ function getColorMap(themeColors: ReturnType<typeof useTheme>['colors']): Record
   };
 }
 
-export default function Text({
+function Text({
   children,
   variant = 'body',
   color = 'primary',
@@ -76,3 +76,5 @@ export default function Text({
     </RNText>
   );
 }
+
+export default React.memo(Text);

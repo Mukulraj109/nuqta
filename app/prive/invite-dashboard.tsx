@@ -12,12 +12,12 @@ import {
   Text,
   Pressable,
   StyleSheet,
-  FlatList,
   ActivityIndicator,
   RefreshControl,
   Share,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ProfileSkeleton } from '@/components/skeletons';
 import { Ionicons } from '@expo/vector-icons';
@@ -140,12 +140,13 @@ export default function PriveInviteDashboard() {
 
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
-      <FlatList
+      <FlashList
         data={leaderboard}
         keyExtractor={(item) => `${item.rank}-${item.userId}`}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={PRIVE_COLORS.gold.primary} />
         }
+        estimatedItemSize={60}
         ListHeaderComponent={
           <>
             {/* Stats Header */}

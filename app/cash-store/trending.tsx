@@ -575,12 +575,14 @@ const OfferCard = React.memo(({
   const [logoError, setLogoError] = useState(false);
 
   useEffect(() => {
-    Animated.timing(fadeAnim, {
+    const anim = Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 350,
       delay: Math.min(index * 60, 300),
       useNativeDriver: true,
-    }).start();
+    });
+    anim.start();
+    return () => anim.stop();
   }, [index]);
 
   const handlePressIn = () => {
@@ -726,12 +728,14 @@ const BrandCard = React.memo(({
   const [logoError, setLogoError] = useState(false);
 
   useEffect(() => {
-    Animated.timing(fadeAnim, {
+    const anim = Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 350,
       delay: Math.min(index * 50, 300),
       useNativeDriver: true,
-    }).start();
+    });
+    anim.start();
+    return () => anim.stop();
   }, [index]);
 
   const handlePressIn = () => {

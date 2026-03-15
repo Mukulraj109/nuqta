@@ -4,8 +4,8 @@ import {
   View,
   Pressable,
   StyleSheet,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -107,12 +107,13 @@ export default function MenuSection({
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         data={items}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         scrollEnabled={false}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
+        estimatedItemSize={60}
       />
     </View>
   );

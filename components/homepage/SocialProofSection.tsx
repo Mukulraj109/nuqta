@@ -150,7 +150,7 @@ const SocialProofSection: React.FC = () => {
 
     const rotateInterval = setInterval(() => {
       // Fade out and slide
-      Animated.parallel([
+      const _anim0 = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 300,
@@ -180,11 +180,15 @@ const SocialProofSection: React.FC = () => {
             duration: 300,
             useNativeDriver: true,
           }),
-        ]).start();
+        ]);
+      _anim0.start();
       });
     }, 4000);
 
-    return () => clearInterval(rotateInterval);
+    return () => {
+      _anim0.stop();
+      clearInterval(rotateInterval);
+    }
   }, [activities.length, fadeAnim, slideAnim]);
 
   if (isLoading) {

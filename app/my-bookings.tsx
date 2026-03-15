@@ -6,13 +6,13 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   RefreshControl,
   ActivityIndicator,
   StatusBar,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -463,15 +463,11 @@ const MyBookingsPage = () => {
       )}
 
       {/* Bookings List */}
-      <FlatList
+      <FlashList
         data={bookings}
         renderItem={renderBooking}
         keyExtractor={(item) => item._id}
         contentContainerStyle={styles.listContainer}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -482,6 +478,7 @@ const MyBookingsPage = () => {
         }
         ListEmptyComponent={renderEmptyState}
         showsVerticalScrollIndicator={false}
+        estimatedItemSize={120}
       />
     </View>
   );

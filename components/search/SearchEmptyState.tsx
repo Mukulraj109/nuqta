@@ -25,7 +25,7 @@ interface SearchEmptyStateProps {
   onClearSearch: () => void;
 }
 
-export default function SearchEmptyState({
+function SearchEmptyState({
   query,
   didYouMeanSuggestions,
   trendingSearches,
@@ -334,3 +334,5 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
 });
+
+export default React.memo(SearchEmptyState);

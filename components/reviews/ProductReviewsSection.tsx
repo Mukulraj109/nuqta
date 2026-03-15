@@ -1,17 +1,17 @@
 // Product Reviews Section Component
 // Complete reviews section for product pages with sorting, filtering, and interactions
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   StyleSheet,
   Pressable,
-  FlatList,
   Modal,
   ActivityIndicator,
   RefreshControl,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -267,6 +267,17 @@ function ProductReviewsSection({
     );
   };
 
+  const renderReviewItem = useCallback(({ item }: { item: Review }) => (
+    <ReviewItem
+      review={item as any}
+      isOwnReview={currentUserId === item.userId}
+      onHelpfulPress={() => onMarkHelpful(item.id)}
+      onEditPress={() => handleEditReview(item)}
+      onDeletePress={() => onDeleteReview(item.id)}
+      showActions={true}
+    />
+  ), [currentUserId, onMarkHelpful, handleEditReview, onDeleteReview]);
+
   if (isLoading && reviews.length === 0) {
     return (
       <View style={styles.loadingContainer}>
@@ -278,26 +289,14 @@ function ProductReviewsSection({
 
   return (
     <ThemedView style={styles.container}>
-      <FlatList
+      <FlashList
         data={reviews}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <ReviewItem
-            review={item as any}
-            isOwnReview={currentUserId === item.userId}
-            onHelpfulPress={() => onMarkHelpful(item.id)}
-            onEditPress={() => handleEditReview(item)}
-            onDeletePress={() => onDeleteReview(item.id)}
-            showActions={true}
-          />
-        )}
+        renderItem={renderReviewItem}
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={renderEmpty}
         ListFooterComponent={renderFooter}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
+        estimatedItemSize={120}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}

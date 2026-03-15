@@ -7,7 +7,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   RefreshControl,
   Text,
@@ -16,6 +15,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, Stack } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -281,18 +281,15 @@ export default function AllOffersPage() {
       <Stack.Screen options={{ headerTitle: 'Exclusive Offers' }} />
 
       <View style={styles.container}>
-        <FlatList
+        <FlashList
           data={offers}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
           ListHeaderComponent={ListHeader}
           ListFooterComponent={ListFooter}
+          estimatedItemSize={120}
           ListEmptyComponent={
             <MallEmptyState
               title="No offers available"

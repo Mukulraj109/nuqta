@@ -175,7 +175,7 @@ function WalletSkeleton() {
         {[1, 2, 3, 4, 5].map((i) => (
           <View key={i} style={[styles.transactionRow, i === 5 && styles.transactionRowLast]}>
             <PriveSkeletonBlock width={36} height={36} borderRadius={18} style={{ marginRight: PRIVE_SPACING.md }} />
-            <View style={{ flex: 1 }}>
+            <View style={styles.skeletonFlex1}>
               <PriveSkeletonBlock width={140} height={13} style={{ marginBottom: 4 }} />
               <PriveSkeletonBlock width={70} height={11} />
             </View>
@@ -367,7 +367,7 @@ export default function PriveWalletScreen() {
             <Ionicons name="arrow-back" size={24} color={PRIVE_COLORS.text.primary} />
           </Pressable>
           <Text style={styles.headerTitle}>Prive Wallet</Text>
-          <View style={{ width: 40 }} />
+          <View style={styles.headerSpacer} />
         </View>
 
         {/* Error State */}
@@ -392,7 +392,7 @@ export default function PriveWalletScreen() {
           <ScrollView
             style={styles.content}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 120 }}
+            contentContainerStyle={styles.scrollContentPadding}
             refreshControl={
               <RefreshControl
                 refreshing={isRefreshing}
@@ -960,4 +960,9 @@ const styles = StyleSheet.create({
     color: PRIVE_COLORS.gold.primary,
     fontWeight: '500',
   },
+
+  // Extracted inline styles
+  headerSpacer: { width: 40 },
+  scrollContentPadding: { paddingBottom: 120 },
+  skeletonFlex1: { flex: 1 },
 });

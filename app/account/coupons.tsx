@@ -5,7 +5,6 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   View,
   ScrollView,
-  FlatList,
   StyleSheet,
   Pressable,
   StatusBar,
@@ -17,6 +16,7 @@ import {
   Share,
   Dimensions,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
@@ -27,6 +27,9 @@ import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } f
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { errorReporter } from '@/utils/errorReporter';
+import ErrorState from '@/components/common/ErrorState';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 type CouponTab = 'available' | 'my-coupons' | 'expired';
@@ -55,7 +58,7 @@ const getRefName = (ref: string | { _id: string; name: string; [key: string]: an
   return null;
 };
 
-export default function CouponsPage() {
+function CouponsPage() {
   const router = useRouter();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
@@ -66,6 +69,7 @@ export default function CouponsPage() {
   const [featuredCoupons, setFeaturedCoupons] = useState<Coupon[]>([]);
   const [myCoupons, setMyCoupons] = useState<UserCoupon[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
   const [selectedUserCoupon, setSelectedUserCoupon] = useState<UserCoupon | null>(null);
@@ -105,6 +109,7 @@ export default function CouponsPage() {
 
   const loadData = async () => {
     setLoading(true);
+    setError(null);
     try {
       if (activeTab === 'available') {
         await Promise.all([loadAvailableCoupons(), loadFeaturedCoupons()]);
@@ -113,6 +118,8 @@ export default function CouponsPage() {
       } else {
         await loadMyCoupons('expired');
       }
+    } catch (err) {
+      setError('Failed to load coupons. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -124,8 +131,12 @@ export default function CouponsPage() {
       if (response.success && response.data) {
         setAvailableCoupons(response.data.coupons);
       }
-    } catch (error) {
-      // silently handle
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to load available coupons'),
+        { context: 'CouponsPage.loadAvailableCoupons' },
+        'warning'
+      );
     }
   };
 
@@ -135,7 +146,13 @@ export default function CouponsPage() {
       if (response.success && response.data) {
         setFeaturedCoupons(response.data.coupons);
       }
-    } catch {}
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to load featured coupons'),
+        { context: 'CouponsPage.loadFeaturedCoupons' },
+        'warning'
+      );
+    }
   };
 
   const loadMyCoupons = async (status?: 'available' | 'used' | 'expired') => {
@@ -145,8 +162,12 @@ export default function CouponsPage() {
         setMyCoupons(response.data.coupons);
         setCouponSummary(response.data.summary);
       }
-    } catch (error) {
-      // silently handle
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to load my coupons'),
+        { context: 'CouponsPage.loadMyCoupons' },
+        'warning'
+      );
     }
   };
 
@@ -174,7 +195,12 @@ export default function CouponsPage() {
       } else {
         setSearchResults([]);
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to search coupons'),
+        { context: 'CouponsPage.handleSearchCode' },
+        'warning'
+      );
       setSearchResults([]);
     } finally {
       setSearching(false);
@@ -208,7 +234,12 @@ export default function CouponsPage() {
         platformAlertSimple('Oops', response.error || 'You may have already claimed this coupon.');
         await loadAvailableCoupons();
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to claim coupon'),
+        { context: 'CouponsPage.handleClaimCoupon' },
+        'warning'
+      );
       platformAlertSimple('Error', 'Something went wrong. Please try again.');
       await loadAvailableCoupons();
     } finally {
@@ -227,7 +258,12 @@ export default function CouponsPage() {
           setMyCoupons(prev);
           platformAlertSimple('Error', response.error || 'Failed to remove');
         }
-      } catch {
+      } catch (err) {
+        errorReporter.captureError(
+          err instanceof Error ? err : new Error('Failed to remove coupon'),
+          { context: 'CouponsPage.handleRemoveCoupon' },
+          'warning'
+        );
         setMyCoupons(prev);
         platformAlertSimple('Error', 'Something went wrong');
       }
@@ -244,7 +280,7 @@ export default function CouponsPage() {
         await Clipboard.setStringAsync(code);
       }
       platformAlertSimple('Copied!', `Code "${code}" copied to clipboard`);
-    } catch {
+    } catch { // Silent: non-critical clipboard operation
       platformAlertSimple('Coupon Code', code);
     }
   };
@@ -269,7 +305,7 @@ export default function CouponsPage() {
       const disc = coupon.discountType === 'PERCENTAGE'
         ? `${coupon.discountValue}% OFF` : `${currencySymbol}${coupon.discountValue} OFF`;
       await Share.share({ message: `Use code "${coupon.couponCode}" to get ${disc} on Nquta! ${coupon.title}` });
-    } catch {}
+    } catch {} // Silent: non-critical Share API
   };
 
   // ── View Details ──────────────────────────────────────────────
@@ -845,6 +881,15 @@ export default function CouponsPage() {
   // ═══════════════════════════════════════════════════════════════
   //  MAIN RENDER
   // ═══════════════════════════════════════════════════════════════
+  if (error && !loading) {
+    return (
+      <View style={{ flex: 1 }}>
+        <Stack.Screen options={{ headerShown: false }} />
+        <ErrorState error={error} onRetry={() => loadData()} />
+      </View>
+    );
+  }
+
   return (
     <View style={s.container}>
       <Stack.Screen options={{ headerShown: false }} />
@@ -903,13 +948,13 @@ export default function CouponsPage() {
       </LinearGradient>
 
       {/* ── CONTENT ────────────────────────────────────────────── */}
-      <FlatList
+      <FlashList
         data={flatListData}
         keyExtractor={flatListKeyExtractor}
         renderItem={flatListRenderItem}
-        style={s.scroll}
         contentContainerStyle={s.scrollContent}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
+        estimatedItemSize={120}
         ListHeaderComponent={
           <>
             {loading && <CardGridSkeleton />}
@@ -1206,3 +1251,5 @@ const s = StyleSheet.create({
   modalMainBtnGrad: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 14, gap: 6 },
   modalMainBtnText: { fontSize: 15, fontWeight: '700', color: Colors.text.inverse },
 });
+
+export default withErrorBoundary(CouponsPage, 'Coupons');

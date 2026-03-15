@@ -642,7 +642,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
   useEffect(() => {
     if (recentOrders.length > 1) {
       const timer = setInterval(() => {
-        Animated.timing(fadeAnim, {
+        const _anim0 = Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 300,
           useNativeDriver: true,
@@ -652,10 +652,14 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
             toValue: 1,
             duration: 300,
             useNativeDriver: true,
-          }).start();
+          });
+        _anim0.start();
         });
       }, 4000);
-      return () => clearInterval(timer);
+      return () => {
+      _anim0.stop();
+      clearInterval(timer);
+    }
     }
   }, [recentOrders.length, fadeAnim]);
 

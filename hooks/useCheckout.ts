@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { router } from 'expo-router';
+import { errorReporter } from '@/utils/errorReporter';
 import {
   CheckoutPageState,
   CheckoutItem,
@@ -582,7 +583,13 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
                     addr.pincode === (lastAddr.pincode || (lastAddr as any).postalCode)
                   );
                 }
-              } catch {} // Non-critical — fallback to default
+              } catch (err) {
+                errorReporter.captureError(
+                  err instanceof Error ? err : new Error('Failed to fetch recent order for address'),
+                  { context: 'useCheckout.loadAddresses' },
+                  'info'
+                );
+              } // Non-critical — fallback to default
               defaultAddress = lastUsedAddress || userAddresses.find(addr => addr.isDefault) || userAddresses[0];
               devLog.log('📍 [Checkout] Addresses loaded:', {
                 total: userAddresses.length,
@@ -625,7 +632,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
           }));
 
           // Track begin_checkout event
-          try { analytics.trackEvent(ANALYTICS_EVENTS.CHECKOUT_STARTED, { item_count: checkoutItems.length, cart_value: adjustedBillSummary.itemTotal, store_id: realStore.id }); } catch {}
+          try { analytics.trackEvent(ANALYTICS_EVENTS.CHECKOUT_STARTED, { item_count: checkoutItems.length, cart_value: adjustedBillSummary.itemTotal, store_id: realStore.id }); } catch {} // Silent: non-critical analytics
 
           return;
         }
@@ -1327,7 +1334,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
         devLog.log('🔗 [Checkout] Navigating to payment-success with orderId:', orderId);
 
         // Non-blocking analytics
-        try { analyticsService.trackFulfillmentOrderPlaced({ fulfillmentType: state.fulfillment.selectedType, storeId: state.store.id, orderId, cartValue: state.billSummary.itemTotal, paymentMethod: state.selectedPaymentMethod?.id || '' }); } catch {}
+        try { analyticsService.trackFulfillmentOrderPlaced({ fulfillmentType: state.fulfillment.selectedType, storeId: state.store.id, orderId, cartValue: state.billSummary.itemTotal, paymentMethod: state.selectedPaymentMethod?.id || '' }); } catch {} // Silent: non-critical analytics
 
         setState(prev => ({ ...prev, currentStep: 'success', loading: false }));
         router.replace(`/payment-success?orderId=${orderId}`);
@@ -1553,7 +1560,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
       const transactionId = walletResponse.data.transaction.transactionId;
 
       // Non-blocking analytics
-      try { analyticsService.trackFulfillmentOrderPlaced({ fulfillmentType: state.fulfillment.selectedType, storeId: state.store.id, orderId, cartValue: state.billSummary.itemTotal, paymentMethod: 'wallet' }); } catch {}
+      try { analyticsService.trackFulfillmentOrderPlaced({ fulfillmentType: state.fulfillment.selectedType, storeId: state.store.id, orderId, cartValue: state.billSummary.itemTotal, paymentMethod: 'wallet' }); } catch {} // Silent: non-critical analytics
 
       router.replace(`/payment-success?orderId=${orderId}&transactionId=${transactionId}&paymentMethod=wallet`);
 
@@ -1780,7 +1787,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
       const orderIdsParam = createdOrderIds.join(',');
 
       // Non-blocking analytics
-      try { analyticsService.trackFulfillmentOrderPlaced({ fulfillmentType: state.fulfillment.selectedType, storeId: state.store.id, orderId: createdOrderIds[0] || '', cartValue: state.billSummary.itemTotal, paymentMethod: 'cod' }); } catch {}
+      try { analyticsService.trackFulfillmentOrderPlaced({ fulfillmentType: state.fulfillment.selectedType, storeId: state.store.id, orderId: createdOrderIds[0] || '', cartValue: state.billSummary.itemTotal, paymentMethod: 'cod' }); } catch {} // Silent: non-critical analytics
 
       router.replace(`/payment-success?orderId=${orderIdsParam}&transactionId=${transactionId}&paymentMethod=cod&multiStore=${isMultiStore}`);
 
@@ -1995,7 +2002,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
             showToast({ message: 'Payment successful! Order placed', type: 'success' });
 
             // Non-blocking analytics
-            try { analyticsService.trackFulfillmentOrderPlaced({ fulfillmentType: state.fulfillment.selectedType, storeId: state.store.id, orderId, cartValue: state.billSummary.itemTotal, paymentMethod: 'razorpay' }); } catch {}
+            try { analyticsService.trackFulfillmentOrderPlaced({ fulfillmentType: state.fulfillment.selectedType, storeId: state.store.id, orderId, cartValue: state.billSummary.itemTotal, paymentMethod: 'razorpay' }); } catch {} // Silent: non-critical analytics
 
             router.replace(
               `/payment-success?orderId=${orderId}&transactionId=${paymentResponse.transactionId}&paymentMethod=razorpay`
@@ -2200,7 +2207,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
           cartValue: prev.billSummary.itemTotal,
           previousType: prev.fulfillment.selectedType,
         });
-      } catch {}
+      } catch {} // Silent: non-critical analytics
 
       return {
         ...prev,

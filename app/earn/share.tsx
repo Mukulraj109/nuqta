@@ -10,9 +10,9 @@ import {
   StatusBar,
   Platform,
   Share,
-  FlatList,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -255,7 +255,7 @@ export default function ShareToEarnPage() {
       {loading ? (
         <CardGridSkeleton />
       ) : (
-      <FlatList
+      <FlashList
         data={shareableContent}
         renderItem={renderContent}
         keyExtractor={item => item.id}
@@ -288,6 +288,7 @@ export default function ShareToEarnPage() {
             </View>
           </View>
         }
+        estimatedItemSize={120}
       />
       )}
 

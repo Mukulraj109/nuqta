@@ -44,22 +44,27 @@ function AddedToCartModal({
   const slideAnim = React.useRef(new Animated.Value(300)).current;
 
   React.useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
       triggerImpact('Light');
-      Animated.spring(slideAnim, {
+      _anim = Animated.spring(slideAnim, {
         toValue: 0,
         useNativeDriver: true,
         tension: 65,
         friction: 11,
-      }).start();
+      });
+      _anim.start();
     } else {
-      Animated.timing(slideAnim, {
+      _anim = Animated.timing(slideAnim, {
         toValue: 300,
         duration: 250,
         useNativeDriver: true,
-      }).start();
+      });
+      _anim.start();
     }
-  }, [visible]);
+  
+    return () => _anim.stop();
+}, [visible]);
 
   const safePrice = typeof product.price === 'number' ? product.price : 0;
   const safeQuantity = typeof product.quantity === 'number' ? product.quantity : 1;

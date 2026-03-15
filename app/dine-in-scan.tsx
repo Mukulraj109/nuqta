@@ -30,13 +30,15 @@ import analyticsService from '@/services/analyticsService';
 import { FormPageSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { errorReporter } from '@/utils/errorReporter';
 interface ResolvedStore {
   _id: string;
   name: string;
   logo?: string;
 }
 
-export default function DineInScanScreen() {
+function DineInScanScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string; table?: string }>();
   const { actions: cartActions } = useCart();
@@ -79,17 +81,16 @@ export default function DineInScanScreen() {
             if (parsed.tableNumber) {
               setTableNumber(parsed.tableNumber);
             }
-            try { analyticsService.trackDineInScanCompleted({ storeId: store._id, storeName: store.name, tableNumber: parsed.tableNumber, scanMethod: 'qr_dine_in' }); } catch {}
+            try { analyticsService.trackDineInScanCompleted({ storeId: store._id, storeName: store.name, tableNumber: parsed.tableNumber, scanMethod: 'qr_dine_in' }); } catch {} // Silent: non-critical analytics
           } else {
             // Fallback: use storeId directly
             setResolvedStore({ _id: parsed.storeId, name: parsed.storeName || 'Restaurant' });
             if (parsed.tableNumber) setTableNumber(parsed.tableNumber);
-            try { analyticsService.trackDineInScanCompleted({ storeId: parsed.storeId, storeName: parsed.storeName || '', tableNumber: parsed.tableNumber, scanMethod: 'qr_dine_in' }); } catch {}
+            try { analyticsService.trackDineInScanCompleted({ storeId: parsed.storeId, storeName: parsed.storeName || '', tableNumber: parsed.tableNumber, scanMethod: 'qr_dine_in' }); } catch {} // Silent: non-critical analytics
           }
           return;
         }
-      } catch {
-        // Not JSON — that's fine, treat as regular store QR code
+      } catch { // Silent: non-critical — not JSON, treat as regular store QR code
       }
 
       // Regular store QR code (same as pay-in-store) → look up via API
@@ -97,7 +98,7 @@ export default function DineInScanScreen() {
       if (response.success && response.data) {
         const store = response.data as ResolvedStore;
         setResolvedStore(store);
-        try { analyticsService.trackDineInScanCompleted({ storeId: store._id, storeName: store.name, scanMethod: 'qr_store' }); } catch {}
+        try { analyticsService.trackDineInScanCompleted({ storeId: store._id, storeName: store.name, scanMethod: 'qr_store' }); } catch {} // Silent: non-critical analytics
       } else {
         setError(response.error || 'Store not found. Please try again.');
       }
@@ -168,7 +169,7 @@ export default function DineInScanScreen() {
   }
 
   const openScanner = () => {
-    try { analyticsService.trackDineInScanStarted({ storeId: params.storeId }); } catch {}
+    try { analyticsService.trackDineInScanStarted({ storeId: params.storeId }); } catch {} // Silent: non-critical analytics
     setShowScanner(true);
   };
 
@@ -369,3 +370,5 @@ const styles = StyleSheet.create({
   stepNumberText: { fontSize: 14, fontWeight: '700', color: Colors.nileBlue },
   stepText: { fontSize: 15, color: Colors.nileBlue, flex: 1 },
 });
+
+export default withErrorBoundary(DineInScanScreen, 'Dine-In Scan');

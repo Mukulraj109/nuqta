@@ -37,7 +37,7 @@ export default function SurveyCompletePage() {
 
   useEffect(() => {
     // Run entrance animations
-    Animated.sequence([
+    const anim = Animated.sequence([
       // Check mark scale in
       Animated.spring(scaleAnim, {
         toValue: 1,
@@ -58,7 +58,8 @@ export default function SurveyCompletePage() {
           useNativeDriver: true,
         }),
       ]),
-    ]).start();
+    ]);
+    anim.start();
 
     // Coin count animation using timer
     const duration = 1500;
@@ -78,7 +79,10 @@ export default function SurveyCompletePage() {
       }
     }, stepDuration);
 
-    return () => clearInterval(timer);
+    return () => {
+      anim.stop();
+      clearInterval(timer);
+    };
   }, [coins]);
 
   const handleBackToSurveys = () => {

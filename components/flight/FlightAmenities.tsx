@@ -75,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FlightAmenities;
+export default React.memo(FlightAmenities);

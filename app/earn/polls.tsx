@@ -10,8 +10,8 @@ import {
   StatusBar,
   Platform,
   ActivityIndicator,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -322,11 +322,12 @@ export default function PollsPage() {
           )}
         </ScrollView>
       ) : (
-        <FlatList
+        <FlashList
           data={voteHistory}
           renderItem={renderVoteHistoryItem}
           keyExtractor={item => item.id}
           contentContainerStyle={styles.contentContainer}
+          estimatedItemSize={80}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Ionicons name="hand-left-outline" size={64} color={Colors.text.tertiary} />

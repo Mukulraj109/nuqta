@@ -66,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewTodaySection;
+export default React.memo(NewTodaySection);

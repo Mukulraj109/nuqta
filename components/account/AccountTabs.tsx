@@ -26,14 +26,17 @@ function AccountTabs({ tabs, activeTab, onTabPress }: AccountTabsProps) {
   const pillAnim = useRef(new Animated.Value(getTabIndex(activeTab))).current;
 
   useEffect(() => {
-    Animated.spring(pillAnim, {
+    const _anim0 = Animated.spring(pillAnim, {
       toValue: getTabIndex(activeTab),
       damping: Timing.springSmooth.damping,
       stiffness: Timing.springSmooth.stiffness,
       mass: Timing.springSmooth.mass,
       useNativeDriver: true,
-    }).start();
-  }, [activeTab, pillAnim]);
+    });
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, [activeTab, pillAnim]);
 
   const handleLayout = useCallback((e: LayoutChangeEvent) => {
     setContainerWidth(e.nativeEvent.layout.width);

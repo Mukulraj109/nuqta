@@ -41,7 +41,7 @@ function PaymentSuccessModal({
   useEffect(() => {
     if (visible) {
       // Animate success icon
-      Animated.sequence([
+      const _anim0 = Animated.sequence([
         Animated.spring(scaleAnim, {
           toValue: 1,
           tension: 50,
@@ -53,13 +53,16 @@ function PaymentSuccessModal({
           duration: 300,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim0.start();
     } else {
       // Reset animations
       scaleAnim.setValue(0);
       fadeAnim.setValue(0);
     }
-  }, [visible]);
+  
+    return () => { _anim0.stop(); };
+}, [visible]);
 
   const handleViewSubscription = () => {
     onClose();

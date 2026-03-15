@@ -257,6 +257,13 @@ function ReviewList({
     );
   };
 
+  const renderReviewItem = useCallback(({ item }: { item: Review }) => (
+    <ReviewItem
+      review={item}
+      isOwnReview={currentUserId ? item.user._id === currentUserId || item.user.id === currentUserId : false}
+    />
+  ), [currentUserId]);
+
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
@@ -270,12 +277,7 @@ function ReviewList({
     <FlatList
       data={reviews}
       keyExtractor={(item) => item._id || item.id || Math.random().toString()}
-      renderItem={({ item }) => (
-        <ReviewItem
-          review={item}
-          isOwnReview={currentUserId ? item.user._id === currentUserId || item.user.id === currentUserId : false}
-        />
-      )}
+      renderItem={renderReviewItem}
       ListHeaderComponent={renderHeader}
       ListEmptyComponent={renderEmptyState}
       ListFooterComponent={renderFooter}

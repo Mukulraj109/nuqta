@@ -7,9 +7,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS } from '@/constants/DesignTokens';
 import { EnhancedPaymentMethod as EnhancedPaymentMethodType, PaymentBadgeType } from '@/types/storePayment.types';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, spacing, typography } from '@/constants/theme';
 
 interface EnhancedPaymentMethodProps {
   method: EnhancedPaymentMethodType;
@@ -18,9 +17,9 @@ interface EnhancedPaymentMethodProps {
 }
 
 const BADGE_STYLES: Record<PaymentBadgeType, { bg: string; text: string; label: string }> = {
-  best: { bg: COLORS.success[500], text: colors.background.primary, label: 'Best' },
-  popular: { bg: COLORS.primary[500], text: colors.background.primary, label: 'Popular' },
-  new: { bg: COLORS.secondary[500], text: colors.background.primary, label: 'New' },
+  best: { bg: colors.successScale[500], text: colors.background.primary, label: 'Best' },
+  popular: { bg: colors.primary[500], text: colors.background.primary, label: 'Popular' },
+  new: { bg: colors.secondary[500], text: colors.background.primary, label: 'New' },
 };
 
 export const EnhancedPaymentMethodCard: React.FC<EnhancedPaymentMethodProps> = ({
@@ -42,7 +41,7 @@ export const EnhancedPaymentMethodCard: React.FC<EnhancedPaymentMethodProps> = (
           <Ionicons
             name={method.icon as any}
             size={24}
-            color={isSelected ? COLORS.primary[500] : COLORS.neutral[500]}
+            color={isSelected ? colors.primary[500] : colors.neutral[500]}
           />
         </View>
 
@@ -63,9 +62,9 @@ export const EnhancedPaymentMethodCard: React.FC<EnhancedPaymentMethodProps> = (
 
         {/* Selection Indicator */}
         {isSelected ? (
-          <Ionicons name="checkmark-circle" size={24} color={COLORS.primary[500]} />
+          <Ionicons name="checkmark-circle" size={24} color={colors.primary[500]} />
         ) : (
-          <Ionicons name="ellipse-outline" size={24} color={COLORS.neutral[300]} />
+          <Ionicons name="ellipse-outline" size={24} color={colors.neutral[300]} />
         )}
       </View>
 
@@ -83,7 +82,7 @@ export const EnhancedPaymentMethodCard: React.FC<EnhancedPaymentMethodProps> = (
                     'gift-outline'
                   }
                   size={12}
-                  color={COLORS.success[500]}
+                  color={colors.successScale[500]}
                 />
               </View>
               <Text style={styles.offerText} numberOfLines={1}>
@@ -125,16 +124,16 @@ export const EnhancedPaymentMethodCard: React.FC<EnhancedPaymentMethodProps> = (
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.lg,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.lg,
     borderWidth: 2,
-    borderColor: COLORS.border.light,
-    padding: SPACING.md,
-    marginBottom: SPACING.sm,
+    borderColor: colors.border.light,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
   },
   containerSelected: {
-    borderColor: COLORS.primary[500],
-    backgroundColor: COLORS.primary[50],
+    borderColor: colors.primary[500],
+    backgroundColor: colors.primary[50],
   },
   mainRow: {
     flexDirection: 'row',
@@ -144,13 +143,13 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: COLORS.neutral[100],
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: SPACING.md,
+    marginRight: spacing.md,
   },
   iconContainerSelected: {
-    backgroundColor: COLORS.primary[100],
+    backgroundColor: colors.primary[100],
   },
   infoContainer: {
     flex: 1,
@@ -158,86 +157,86 @@ const styles = StyleSheet.create({
   nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.xs,
+    gap: spacing.xs,
   },
   methodName: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.text.primary,
+    ...typography.button,
+    color: colors.text.primary,
   },
   badge: {
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: BORDER_RADIUS.full,
+    borderRadius: borderRadius.full,
   },
   badgeText: {
     fontSize: 10,
     fontWeight: '700',
   },
   methodDesc: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
+    ...typography.caption,
+    color: colors.text.secondary,
     marginTop: 2,
   },
   offersContainer: {
-    marginTop: SPACING.md,
-    paddingTop: SPACING.sm,
+    marginTop: spacing.md,
+    paddingTop: spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border.light,
+    borderTopColor: colors.border.light,
   },
   offerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 4,
-    gap: SPACING.xs,
+    gap: spacing.xs,
   },
   offerIcon: {
     width: 18,
     height: 18,
     borderRadius: 9,
-    backgroundColor: COLORS.success[50],
+    backgroundColor: colors.successScale[50],
     justifyContent: 'center',
     alignItems: 'center',
   },
   offerText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.success[700],
+    ...typography.caption,
+    color: colors.successScale[700],
     flex: 1,
   },
   offerBanks: {
-    ...TYPOGRAPHY.caption,
+    ...typography.caption,
     fontSize: 10,
-    color: COLORS.text.tertiary,
+    color: colors.text.tertiary,
   },
   moreOffers: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.primary[500],
+    ...typography.caption,
+    color: colors.primary[500],
     marginTop: 4,
   },
   providersContainer: {
-    marginTop: SPACING.sm,
-    paddingTop: SPACING.sm,
+    marginTop: spacing.sm,
+    paddingTop: spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border.light,
+    borderTopColor: colors.border.light,
   },
   providersLabel: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
-    marginBottom: SPACING.xs,
+    ...typography.caption,
+    color: colors.text.secondary,
+    marginBottom: spacing.xs,
   },
   providersList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: SPACING.xs,
+    gap: spacing.xs,
   },
   providerChip: {
-    paddingHorizontal: SPACING.sm,
+    paddingHorizontal: spacing.sm,
     paddingVertical: 2,
-    backgroundColor: COLORS.neutral[100],
-    borderRadius: BORDER_RADIUS.full,
+    backgroundColor: colors.neutral[100],
+    borderRadius: borderRadius.full,
   },
   providerText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
+    ...typography.caption,
+    color: colors.text.secondary,
     fontWeight: '500',
   },
 });

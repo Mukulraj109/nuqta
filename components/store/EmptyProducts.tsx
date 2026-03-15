@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { colors } from '@/constants/theme';
 
-export default function EmptyProducts() {
+function EmptyProducts() {
   return (
     <View style={styles.container}>
       {/* Shopping Bag Icon */}
@@ -60,3 +60,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default React.memo(EmptyProducts);

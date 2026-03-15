@@ -17,4 +17,4 @@ const MallHeroBannerWrapper: React.FC = () => {
   );
 };
 
-export default MallHeroBannerWrapper;
+export default React.memo(MallHeroBannerWrapper);

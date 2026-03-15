@@ -7,7 +7,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   RefreshControl,
   Text,
@@ -15,6 +14,7 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, Stack } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -177,17 +177,14 @@ export default function AllCollectionsPage() {
       <Stack.Screen options={{ headerTitle: 'All Collections' }} />
 
       <View style={styles.container}>
-        <FlatList
+        <FlashList
           data={collections}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
           ListHeaderComponent={ListHeader}
+          estimatedItemSize={120}
           ListEmptyComponent={
             <MallEmptyState
               title="No collections available"

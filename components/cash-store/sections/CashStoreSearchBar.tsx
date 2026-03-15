@@ -34,7 +34,7 @@ const CashStoreSearchBar: React.FC<CashStoreSearchBarProps> = ({
   const slideAnim = useRef(new Animated.Value(10)).current;
 
   useEffect(() => {
-    Animated.parallel([
+    const _anim0 = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 400,
@@ -45,8 +45,11 @@ const CashStoreSearchBar: React.FC<CashStoreSearchBarProps> = ({
         duration: 400,
         useNativeDriver: true,
       }),
-    ]).start();
-  }, []);
+    ]);
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, []);
 
   const handleDealsPress = () => {
     router.push('/offers' as any);

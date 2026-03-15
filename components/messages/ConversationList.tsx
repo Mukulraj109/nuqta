@@ -3,7 +3,8 @@
 
 import { colors } from '@/constants/theme';
 import React from 'react';
-import { View, FlatList, Pressable, StyleSheet, Platform } from 'react-native';
+import { View, Pressable, StyleSheet, Platform } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -149,7 +150,7 @@ function ConversationList({
   };
 
   return (
-    <FlatList
+    <FlashList
       data={conversations}
       renderItem={renderConversation}
       keyExtractor={(item) => item.id}
@@ -161,10 +162,7 @@ function ConversationList({
       onEndReachedThreshold={0.5}
       ListEmptyComponent={ListEmptyComponent}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
-      removeClippedSubviews={Platform.OS !== 'web'}
-      maxToRenderPerBatch={10}
-      windowSize={5}
-      initialNumToRender={8}
+      estimatedItemSize={80}
     />
   );
 }

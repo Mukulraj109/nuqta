@@ -5,7 +5,7 @@
  * Features: Animated cards, brand-colored headers, savings preview, ratings
  */
 
-import React, { memo, useRef, useEffect } from 'react';
+import React, { memo, useRef, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -327,6 +327,17 @@ const BuyCouponSection: React.FC<BuyCouponSectionProps> = ({
     return () => giftLoop.stop();
   }, []);
 
+  const renderGiftCardItem = useCallback(({ item, index }: { item: unknown; index: number }) =>
+    isLoading ? (
+      <SkeletonCard key={`skeleton-${index}`} index={index} />
+    ) : (
+      <GiftCardCard
+        brand={item as GiftCardBrand}
+        index={index}
+        onPress={() => onBrandPress(item as GiftCardBrand)}
+      />
+    ), [isLoading, onBrandPress]);
+
   if (brands.length === 0 && !isLoading) {
     return null;
   }
@@ -365,17 +376,7 @@ const BuyCouponSection: React.FC<BuyCouponSectionProps> = ({
       {/* Horizontal List */}
       <FlatList
         data={isLoading ? Array.from({ length: 4 }) : brands}
-        renderItem={({ item, index }) =>
-          isLoading ? (
-            <SkeletonCard key={`skeleton-${index}`} index={index} />
-          ) : (
-            <GiftCardCard
-              brand={item as GiftCardBrand}
-              index={index}
-              onPress={() => onBrandPress(item as GiftCardBrand)}
-            />
-          )
-        }
+        renderItem={renderGiftCardItem}
         keyExtractor={(item, index) => (isLoading ? `skeleton-${index}` : (item as GiftCardBrand).id)}
         horizontal
         showsHorizontalScrollIndicator={false}

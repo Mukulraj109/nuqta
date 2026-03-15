@@ -13,7 +13,7 @@ interface UGCVideoSectionProps {
   hasMore?: boolean;
 }
 
-export default function UGCVideoSection({
+function UGCVideoSection({
   videos,
   onVideoPress,
   onViewAllPress,
@@ -76,3 +76,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
+
+export default React.memo(UGCVideoSection);

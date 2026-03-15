@@ -8,12 +8,12 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
   RefreshControl,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -117,16 +117,12 @@ export default function PriveOffersScreen() {
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         data={offers}
         renderItem={renderOffer}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}
@@ -136,6 +132,7 @@ export default function PriveOffersScreen() {
         }
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.3}
+        estimatedItemSize={120}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="pricetag-outline" size={48} color={PRIVE_COLORS.text.tertiary} />

@@ -9,10 +9,10 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  FlatList,
   TextInput,
   RefreshControl,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -366,16 +366,13 @@ export default function LowestPricePage() {
             </Pressable>
           </View>
         ) : (
-          <FlatList
+          <FlashList
             data={products}
             renderItem={renderProduct}
             keyExtractor={item => item.productId}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
-            removeClippedSubviews={Platform.OS !== 'web'}
-            maxToRenderPerBatch={10}
-            windowSize={5}
-            initialNumToRender={8}
+            estimatedItemSize={120}
             refreshControl={
               <RefreshControl
                 refreshing={isRefreshing}

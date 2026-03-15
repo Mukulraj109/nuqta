@@ -62,4 +62,4 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   );
 };
 
-export default ProgressBar;
+export default React.memo(ProgressBar);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet, ScrollView, Platform, FlatList } from 'react-native';
 import SkeletonCard from '@/components/common/SkeletonCard';
 import ProductCardSkeleton from './ProductCardSkeleton';
@@ -49,6 +49,17 @@ function SectionSkeleton({
     id: `skeleton-${index}`,
   }));
 
+  const renderSkeletonItem = useCallback(({ item, index }: { item: { id: string }; index: number }) => (
+    <View
+      style={[
+        styles.cardContainer,
+        { width: cardWidth, marginRight: index === skeletonCards.length - 1 ? 0 : spacing },
+      ]}
+    >
+      {renderSkeletonCard()}
+    </View>
+  ), [cardWidth, spacing, skeletonCards.length, renderSkeletonCard]);
+
   return (
     <ThemedView style={styles.container}>
       {/* Section Header Skeleton */}
@@ -77,16 +88,7 @@ function SectionSkeleton({
           style={styles.webFlatListContainer}
           removeClippedSubviews={false}
           scrollEnabled={false}
-          renderItem={({ item, index }) => (
-            <View
-              style={[
-                styles.cardContainer,
-                { width: cardWidth, marginRight: index === skeletonCards.length - 1 ? 0 : spacing },
-              ]}
-            >
-              {renderSkeletonCard()}
-            </View>
-          )}
+          renderItem={renderSkeletonItem}
           keyExtractor={(item) => item.id}
         />
       ) : (

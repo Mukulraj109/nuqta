@@ -13,7 +13,7 @@ interface PaymentFailedBannerProps {
  * Warning banner shown when a subscription is in grace_period status
  * (payment failed but access hasn't been revoked yet).
  */
-export default function PaymentFailedBanner({ daysRemaining, onRetryPayment }: PaymentFailedBannerProps) {
+function PaymentFailedBanner({ daysRemaining, onRetryPayment }: PaymentFailedBannerProps) {
   return (
     <View style={styles.banner}>
       <View style={styles.iconRow}>
@@ -77,3 +77,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default React.memo(PaymentFailedBanner);

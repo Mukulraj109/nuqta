@@ -8,10 +8,10 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  FlatList,
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -283,20 +283,17 @@ export default function SponsoredCashbackPage() {
           <ActivityIndicator size="large" color={colors.brand.indigo} style={{ marginTop: 16 }} />
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={offers}
           renderItem={renderOffer}
           keyExtractor={item => item.id}
           contentContainerStyle={[styles.listContent, offers.length === 0 && { flex: 1 }]}
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.3}
           ListFooterComponent={renderFooter}
           ListEmptyComponent={renderEmpty}
+          estimatedItemSize={120}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

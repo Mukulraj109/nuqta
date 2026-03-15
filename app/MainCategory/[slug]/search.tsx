@@ -12,11 +12,11 @@ import {
   StyleSheet,
   TextInput,
   Pressable,
-  FlatList,
   ActivityIndicator,
   ScrollView,
   Keyboard,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -383,12 +383,13 @@ export default function SharedCategoryPage() {
           </View>
 
           {activeTab === 'services' ? (
-            <FlatList
+            <FlashList
               data={displayedStores}
               keyExtractor={(item) => item._id || item.id}
               renderItem={renderStoreSearchItem}
               contentContainerStyle={styles.resultsList}
               showsVerticalScrollIndicator={false}
+              estimatedItemSize={80}
               ListEmptyComponent={
                 <View style={styles.emptyResults}>
                   <Ionicons name="search-outline" size={40} color={SHARED_COLORS.textSecondary} />
@@ -398,12 +399,13 @@ export default function SharedCategoryPage() {
               }
             />
           ) : (
-            <FlatList
+            <FlashList
               data={products}
               keyExtractor={(item) => item._id || item.id || String(Math.random())}
               renderItem={renderProductSearchItem}
               contentContainerStyle={styles.resultsList}
               showsVerticalScrollIndicator={false}
+              estimatedItemSize={80}
               ListEmptyComponent={
                 <View style={styles.emptyResults}>
                   <Ionicons name="search-outline" size={40} color={SHARED_COLORS.textSecondary} />

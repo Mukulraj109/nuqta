@@ -3,7 +3,7 @@
  * Browse and filter available rewards
  */
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, FlatList, Pressable, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -76,6 +76,25 @@ function RewardCatalog({
   const featuredRewards = filteredRewards.filter(r => r.featured);
   const regularRewards = filteredRewards.filter(r => !r.featured);
 
+  const renderCategoryChip = useCallback(({ item }: { item: { label: string; value: RewardCategory | 'all' } }) => (
+    <Pressable
+      style={[
+        styles.categoryButton,
+        selectedCategory === item.value && styles.categoryButtonActive,
+      ]}
+      onPress={() => handleCategoryChange(item.value)}
+    >
+      <ThemedText
+        style={[
+          styles.categoryText,
+          selectedCategory === item.value && styles.categoryTextActive,
+        ]}
+      >
+        {item.label}
+      </ThemedText>
+    </Pressable>
+  ), [selectedCategory, handleCategoryChange]);
+
   return (
     <View style={styles.container}>
       {/* Search Bar */}
@@ -102,24 +121,7 @@ function RewardCatalog({
           showsHorizontalScrollIndicator={false}
           data={CATEGORIES}
           keyExtractor={item => item.value}
-          renderItem={({ item }) => (
-            <Pressable
-              style={[
-                styles.categoryButton,
-                selectedCategory === item.value && styles.categoryButtonActive,
-              ]}
-              onPress={() => handleCategoryChange(item.value)}
-            >
-              <ThemedText
-                style={[
-                  styles.categoryText,
-                  selectedCategory === item.value && styles.categoryTextActive,
-                ]}
-              >
-                {item.label}
-              </ThemedText>
-            </Pressable>
-          )}
+          renderItem={renderCategoryChip}
           contentContainerStyle={styles.categoryList}
         />
       </View>

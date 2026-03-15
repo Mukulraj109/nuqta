@@ -260,12 +260,16 @@ function FoodDiningCategoryPage() {
   useEffect(() => {
     if (recentOrders.length > 1) {
       const timer = setInterval(() => {
-        Animated.timing(fadeAnim, { toValue: 0, duration: 300, useNativeDriver: true }).start(() => {
+        const _anim0 = Animated.timing(fadeAnim, { toValue: 0, duration: 300, useNativeDriver: true }).start(() => {
           setTickerIndex((prev) => (prev + 1) % recentOrders.length);
-          Animated.timing(fadeAnim, { toValue: 1, duration: 300, useNativeDriver: true }).start();
+          Animated.timing(fadeAnim, { toValue: 1, duration: 300, useNativeDriver: true });
+        _anim0.start();
         });
       }, 4000);
-      return () => clearInterval(timer);
+      return () => {
+      _anim0.stop();
+      clearInterval(timer);
+    }
     }
   }, [recentOrders.length, fadeAnim]);
 

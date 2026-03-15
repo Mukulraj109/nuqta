@@ -34,7 +34,7 @@ interface DeliveryAddressSectionProps {
   onSetFulfillmentDetails: (details: any) => void;
 }
 
-export default function DeliveryAddressSection({
+function DeliveryAddressSection({
   fulfillmentType,
   selectedAddress,
   store,
@@ -307,3 +307,5 @@ const styles = StyleSheet.create({
     borderColor: Colors.border.default,
   },
 });
+
+export default React.memo(DeliveryAddressSection);

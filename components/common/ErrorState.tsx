@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { SPACING, TYPOGRAPHY, COLORS, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
+import { colors, spacing, typography, borderRadius, shadows } from '@/constants/theme';
 
 interface ErrorStateProps {
   /**
@@ -103,38 +103,38 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: SPACING.xl,
-    paddingVertical: SPACING.xxl,
-    backgroundColor: COLORS.background.secondary,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.xxl,
+    backgroundColor: colors.background.secondary,
   },
   icon: {
     fontSize: 64,
-    marginBottom: SPACING.lg,
+    marginBottom: spacing.xl,
   },
   title: {
-    ...TYPOGRAPHY.h2,
-    color: COLORS.error[500],
+    ...typography.h2,
+    color: colors.errorScale[500],
     textAlign: 'center',
-    marginBottom: SPACING.sm,
+    marginBottom: spacing.sm,
   },
   message: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.secondary,
+    ...typography.body,
+    color: colors.text.secondary,
     textAlign: 'center',
-    marginBottom: SPACING.lg,
+    marginBottom: spacing.xl,
     maxWidth: 320,
   },
   button: {
-    marginTop: SPACING.md,
-    paddingHorizontal: SPACING.xl,
-    paddingVertical: SPACING.md,
-    backgroundColor: COLORS.error[500],
-    borderRadius: BORDER_RADIUS.lg,
-    ...SHADOWS.md,
+    marginTop: spacing.base,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.base,
+    backgroundColor: colors.errorScale[500],
+    borderRadius: borderRadius.lg,
+    ...shadows.md,
   },
   buttonText: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.text.inverse,
+    ...typography.button,
+    color: colors.text.inverse,
   },
 });
 

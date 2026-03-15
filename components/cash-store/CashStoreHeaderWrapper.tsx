@@ -20,4 +20,4 @@ const CashStoreHeaderWrapper: React.FC = () => {
   );
 };
 
-export default CashStoreHeaderWrapper;
+export default React.memo(CashStoreHeaderWrapper);

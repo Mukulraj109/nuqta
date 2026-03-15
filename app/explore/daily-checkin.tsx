@@ -461,7 +461,7 @@ export default function DailyCheckInPage() {
           <Ionicons name="calendar" size={20} color={Colors.info} />
           <Text style={styles.headerTitle}>Daily Check-In & Earn</Text>
         </View>
-        <View style={{ width: 40 }} />
+        <View style={styles.headerSpacer} />
       </View>
 
       <ScrollView
@@ -480,7 +480,7 @@ export default function DailyCheckInPage() {
             <Text style={styles.statLabel}>Day streak</Text>
           </View>
           <View style={[styles.statCard, { backgroundColor: 'rgba(16, 185, 129, 0.1)', borderColor: 'rgba(16, 185, 129, 0.2)' }]}>
-            <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 20, height: 20 }} contentFit="contain" />
+            <CachedImage source={BRAND.COIN_IMAGE} style={styles.coinIcon20} contentFit="contain" />
             <Text style={styles.statValue}>{currencySymbol}{totalEarned}</Text>
             <Text style={styles.statLabel}>Total earned</Text>
           </View>
@@ -493,7 +493,7 @@ export default function DailyCheckInPage() {
 
         {/* Skeleton Loading State */}
         {loading && (
-          <View style={{ paddingHorizontal: Spacing.base }}>
+          <View style={styles.skeletonContainer}>
             {/* Calendar skeleton */}
             <View style={styles.skeletonSection}>
               <View style={styles.skeletonTitleBar} />
@@ -505,22 +505,22 @@ export default function DailyCheckInPage() {
               <View style={styles.skeletonBonusDay} />
             </View>
             {/* Check-in button skeleton */}
-            <View style={[styles.skeletonBlock, { height: 48, borderRadius: BorderRadius['2xl'], marginBottom: Spacing.lg }]} />
+            <View style={[styles.skeletonBlock, styles.skeletonCheckInBtn]} />
             {/* Affiliate stats skeleton */}
             <View style={styles.skeletonSection}>
               <View style={styles.skeletonTitleBar} />
-              <View style={{ flexDirection: 'row', gap: Spacing.sm }}>
+              <View style={styles.skeletonStatsRow}>
                 {[1,2,3,4].map(i => (
-                  <View key={i} style={[styles.skeletonBlock, { flex: 1, height: 80, borderRadius: BorderRadius.md }]} />
+                  <View key={i} style={[styles.skeletonBlock, styles.skeletonStatItem]} />
                 ))}
               </View>
             </View>
             {/* Posters skeleton */}
             <View style={styles.skeletonSection}>
               <View style={styles.skeletonTitleBar} />
-              <View style={{ flexDirection: 'row', gap: Spacing.md }}>
+              <View style={styles.skeletonPostersRow}>
                 {[1,2].map(i => (
-                  <View key={i} style={[styles.skeletonBlock, { flex: 1, height: 140, borderRadius: BorderRadius.lg }]} />
+                  <View key={i} style={[styles.skeletonBlock, styles.skeletonPosterItem]} />
                 ))}
               </View>
             </View>
@@ -680,8 +680,8 @@ export default function DailyCheckInPage() {
 
           {/* Countdown to next check-in */}
           {hasCheckedInToday && countdown ? (
-            <View style={{ marginTop: Spacing.sm, alignItems: 'center' }}>
-              <Text style={{ fontSize: 13, color: Colors.text.tertiary }}>
+            <View style={styles.countdownContainer}>
+              <Text style={styles.countdownText}>
                 Next check-in in <Text style={{ fontWeight: '700', color: colors.brand.orange }}>{countdown}</Text>
               </Text>
             </View>
@@ -689,9 +689,9 @@ export default function DailyCheckInPage() {
 
           {/* Streak reset notification */}
           {streakWasReset && currentStreak === 1 ? (
-            <View style={{ marginTop: 10, backgroundColor: colors.errorScale[50], borderRadius: BorderRadius.sm, padding: 10, flexDirection: 'row', alignItems: 'center' }}>
+            <View style={styles.streakResetBanner}>
               <Ionicons name="alert-circle" size={16} color={Colors.error} />
-              <Text style={{ flex: 1, marginLeft: Spacing.sm, ...Typography.bodySmall, color: '#991B1B' }}>
+              <Text style={styles.streakResetText}>
                 Your streak was reset because you missed a day. Start building it back!
               </Text>
             </View>
@@ -757,7 +757,7 @@ export default function DailyCheckInPage() {
               colors={['rgba(245, 158, 11, 0.1)', 'rgba(249, 115, 22, 0.1)']}
               style={styles.affiliateCard}
             >
-              <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 20, height: 20 }} contentFit="contain" />
+              <CachedImage source={BRAND.COIN_IMAGE} style={styles.coinIcon20} contentFit="contain" />
               <Text style={styles.affiliateValue}>{currencySymbol}{affiliateStats.commissionEarned}</Text>
               <Text style={styles.affiliateLabel}>Commission Earned</Text>
             </LinearGradient>
@@ -992,7 +992,7 @@ export default function DailyCheckInPage() {
         </View>
         </>)}
 
-        <View style={{ height: 120 }} />
+        <View style={styles.bottomSpacer} />
       </ScrollView>
 
       {/* Reward Animation Modal (Gap 28 - animated) */}
@@ -2063,4 +2063,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.success,
   },
+
+  // Extracted inline styles
+  headerSpacer: { width: 40 },
+  coinIcon20: { width: 20, height: 20 },
+  skeletonContainer: { paddingHorizontal: Spacing.base },
+  skeletonCheckInBtn: { height: 48, borderRadius: BorderRadius['2xl'], marginBottom: Spacing.lg },
+  skeletonStatsRow: { flexDirection: 'row', gap: Spacing.sm },
+  skeletonStatItem: { flex: 1, height: 80, borderRadius: BorderRadius.md },
+  skeletonPostersRow: { flexDirection: 'row', gap: Spacing.md },
+  skeletonPosterItem: { flex: 1, height: 140, borderRadius: BorderRadius.lg },
+  countdownContainer: { marginTop: Spacing.sm, alignItems: 'center' },
+  countdownText: { fontSize: 13, color: Colors.text.tertiary },
+  streakResetBanner: { marginTop: 10, backgroundColor: colors.errorScale[50], borderRadius: BorderRadius.sm, padding: 10, flexDirection: 'row', alignItems: 'center' },
+  streakResetText: { flex: 1, marginLeft: Spacing.sm, ...Typography.bodySmall, color: '#991B1B' },
+  bottomSpacer: { height: 120 },
 });

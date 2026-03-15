@@ -7,12 +7,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   RefreshControl,
   ActivityIndicator,
   Text,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -219,7 +219,7 @@ export default function CollectionBrandsPage() {
       />
 
       <View style={styles.container}>
-        <FlatList
+        <FlashList
           data={brands}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
@@ -238,6 +238,7 @@ export default function CollectionBrandsPage() {
           }
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.3}
+          estimatedItemSize={100}
         />
       </View>
     </>

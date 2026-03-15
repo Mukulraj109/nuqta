@@ -10,12 +10,11 @@ import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { AppliedCoins } from '@/types/storePayment.types';
 import CoinToggleRow from './CoinToggleRow';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 interface ApplyCoinsSectionProps {
   appliedCoins: AppliedCoins;
@@ -95,8 +94,8 @@ export const ApplyCoinsSection: React.FC<ApplyCoinsSectionProps> = ({
           >
             <LinearGradient
               colors={isAutoOptimized
-                ? [COLORS.nuqta.mustard, COLORS.nuqta.peach]
-                : [COLORS.nuqta.lavender, colors.background.primary]
+                ? [colors.nuqta.mustard, colors.nuqta.peach]
+                : [colors.nuqta.lavender, colors.background.primary]
               }
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -105,7 +104,7 @@ export const ApplyCoinsSection: React.FC<ApplyCoinsSectionProps> = ({
               <Ionicons
                 name={isAutoOptimized ? 'checkmark-circle' : 'sparkles'}
                 size={14}
-                color={isAutoOptimized ? COLORS.nuqta.nileBlue : COLORS.nuqta.mustard}
+                color={isAutoOptimized ? colors.nuqta.nileBlue : colors.nuqta.mustard}
               />
               <Text style={[
                 styles.autoOptimizeText,
@@ -125,7 +124,7 @@ export const ApplyCoinsSection: React.FC<ApplyCoinsSectionProps> = ({
         {totalAvailable === 0 ? (
           <View style={styles.emptyState}>
             <View style={styles.emptyIconWrapper}>
-              <Ionicons name="wallet-outline" size={32} color={COLORS.nuqta.nileBlue} />
+              <Ionicons name="wallet-outline" size={32} color={colors.nuqta.nileBlue} />
             </View>
             <Text style={styles.emptyText}>No coins available</Text>
             <Text style={styles.emptySubtext}>Earn coins by making purchases!</Text>
@@ -183,13 +182,13 @@ export const ApplyCoinsSection: React.FC<ApplyCoinsSectionProps> = ({
         {/* Coins Applied Total Banner */}
         {(appliedCoins?.totalApplied || 0) > 0 && (
           <LinearGradient
-            colors={[COLORS.nuqta.lavender, COLORS.nuqta.linen]}
+            colors={[colors.nuqta.lavender, colors.nuqta.linen]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.appliedBanner}
           >
             <View style={styles.appliedIconWrapper}>
-              <Ionicons name="checkmark-circle" size={18} color={COLORS.nuqta.mustard} />
+              <Ionicons name="checkmark-circle" size={18} color={colors.nuqta.mustard} />
             </View>
             <Text style={styles.appliedText}>
               Coins Applied: <Text style={styles.appliedAmount}>{currencySymbol}{appliedCoins?.totalApplied || 0}</Text>
@@ -203,12 +202,12 @@ export const ApplyCoinsSection: React.FC<ApplyCoinsSectionProps> = ({
 
 const styles = StyleSheet.create({
   cardWrapper: {
-    marginBottom: SPACING.md,
-    borderRadius: BORDER_RADIUS.xl,
+    marginBottom: spacing.md,
+    borderRadius: borderRadius.xl,
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: COLORS.nuqta.nileBlue,
+        shadowColor: colors.nuqta.nileBlue,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -219,28 +218,28 @@ const styles = StyleSheet.create({
     }),
   },
   container: {
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.xl,
-    padding: SPACING.lg,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.xl,
+    padding: spacing.lg,
     borderWidth: 1,
-    borderColor: COLORS.nuqta.linen,
+    borderColor: colors.nuqta.linen,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SPACING.sm,
+    marginBottom: spacing.sm,
   },
   titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
+    gap: spacing.sm,
   },
   headerIconWrapper: {
     width: 36,
     height: 36,
     borderRadius: 12,
-    backgroundColor: COLORS.nuqta.linen,
+    backgroundColor: colors.nuqta.linen,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -249,72 +248,72 @@ const styles = StyleSheet.create({
     height: 24,
   },
   sectionTitle: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.nuqta.nileBlue,
+    ...typography.h4,
+    color: colors.nuqta.nileBlue,
     fontWeight: '700',
   },
   autoOptimizeButton: {
-    borderRadius: BORDER_RADIUS.full,
+    borderRadius: borderRadius.full,
     overflow: 'hidden',
   },
   autoOptimizeGradient: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: SPACING.sm,
+    paddingHorizontal: spacing.sm,
     paddingVertical: 6,
-    borderRadius: BORDER_RADIUS.full,
+    borderRadius: borderRadius.full,
     borderWidth: 1,
-    borderColor: COLORS.nuqta.peach,
+    borderColor: colors.nuqta.peach,
     gap: 4,
   },
   autoOptimizeText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.nuqta.nileBlue,
+    ...typography.caption,
+    color: colors.nuqta.nileBlue,
     fontWeight: '600',
   },
   autoOptimizeActiveText: {
-    color: COLORS.nuqta.nileBlue,
+    color: colors.nuqta.nileBlue,
     fontWeight: '700',
   },
   subtitle: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
-    marginBottom: SPACING.lg,
+    ...typography.caption,
+    color: colors.text.secondary,
+    marginBottom: spacing.lg,
   },
   coinsContainer: {
-    marginTop: SPACING.sm,
+    marginTop: spacing.sm,
   },
   emptyState: {
     alignItems: 'center',
-    paddingVertical: SPACING.xl,
+    paddingVertical: spacing.xl,
   },
   emptyIconWrapper: {
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: COLORS.nuqta.lavender,
+    backgroundColor: colors.nuqta.lavender,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: SPACING.sm,
+    marginBottom: spacing.sm,
   },
   emptyText: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.nuqta.nileBlue,
+    ...typography.body,
+    color: colors.nuqta.nileBlue,
     fontWeight: '600',
-    marginTop: SPACING.sm,
+    marginTop: spacing.sm,
   },
   emptySubtext: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
+    ...typography.caption,
+    color: colors.text.tertiary,
     marginTop: 4,
   },
   appliedBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: SPACING.md,
-    borderRadius: BORDER_RADIUS.lg,
-    marginTop: SPACING.md,
-    gap: SPACING.sm,
+    padding: spacing.md,
+    borderRadius: borderRadius.lg,
+    marginTop: spacing.md,
+    gap: spacing.sm,
   },
   appliedIconWrapper: {
     width: 28,
@@ -325,8 +324,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   appliedText: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.nuqta.nileBlue,
+    ...typography.body,
+    color: colors.nuqta.nileBlue,
   },
   appliedAmount: {
     fontWeight: '700',

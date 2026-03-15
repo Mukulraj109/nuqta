@@ -8,13 +8,13 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   SafeAreaView,
   StatusBar,
   Platform,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -429,7 +429,7 @@ export default function InsurancePage() {
         <View style={{ width: 32 }} />
       </View>
 
-      <FlatList
+      <FlashList
         data={plans}
         keyExtractor={(item) => item._id}
         renderItem={renderPlanItem}
@@ -446,6 +446,7 @@ export default function InsurancePage() {
         onEndReachedThreshold={0.3}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+        estimatedItemSize={120}
       />
     </SafeAreaView>
   );

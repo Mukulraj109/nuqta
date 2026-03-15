@@ -9,7 +9,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   ScrollView,
   Pressable,
   Platform,
@@ -18,6 +17,7 @@ import {
   Dimensions,
   Clipboard,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -508,11 +508,10 @@ const MyDealsPage: React.FC = () => {
       ) : redemptions.length === 0 ? (
         renderEmptyState()
       ) : (
-        <FlatList
+        <FlashList
           data={redemptions}
           renderItem={renderDealCard}
           keyExtractor={(item) => item._id}
-          style={styles.dealsList}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor={COLORS.green500} />
@@ -527,6 +526,7 @@ const MyDealsPage: React.FC = () => {
               </View>
             ) : null
           }
+          estimatedItemSize={120}
         />
       )}
     </View>

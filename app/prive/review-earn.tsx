@@ -10,12 +10,12 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
   RefreshControl,
   Animated,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -258,7 +258,7 @@ export default function PriveReviewEarnPage() {
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         data={filteredItems}
         keyExtractor={(item) => `${item.type}-${item.id}`}
         renderItem={renderItem}
@@ -277,6 +277,7 @@ export default function PriveReviewEarnPage() {
             colors={[PRIVE_COLORS.gold.primary]}
           />
         }
+        estimatedItemSize={100}
       />
     </View>
   );

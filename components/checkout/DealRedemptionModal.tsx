@@ -15,7 +15,7 @@ interface DealRedemptionModalProps {
   onApplyRedemptionCode: () => void;
 }
 
-export default function DealRedemptionModal({
+function DealRedemptionModal({
   visible,
   redemptionCode,
   validatingRedemption,
@@ -155,3 +155,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default React.memo(DealRedemptionModal);

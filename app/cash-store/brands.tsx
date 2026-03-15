@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   RefreshControl,
   ActivityIndicator,
@@ -16,6 +15,7 @@ import {
   StatusBar,
   Dimensions,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { platformAlertConfirm } from '@/utils/platformAlert';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -513,8 +513,7 @@ export default function CashStoreBrandsPage() {
         </View>
       </View>
 
-      <FlatList
-        style={{ flex: 1 }}
+      <FlashList
         data={brands}
         renderItem={renderBrandCard}
         keyExtractor={keyExtractor}
@@ -531,11 +530,9 @@ export default function CashStoreBrandsPage() {
         }
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.3}
-        initialNumToRender={10}
-        maxToRenderPerBatch={10}
-        windowSize={10}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+        estimatedItemSize={100}
       />
 
       {/* Sort Modal — Premium Bottom Sheet */}

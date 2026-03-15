@@ -8,8 +8,7 @@
 import React, { useState } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { ExpertReviews, ExpertReviewsSummary } from '@/components/product';
-import { SPACING } from '@/constants/DesignTokens';
-
+import { spacing } from '@/constants/theme';
 /**
  * Mock Expert Review Data
  * This structure represents what you would receive from your API
@@ -160,7 +159,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: SPACING.md,
+    padding: spacing.md,
   },
 });
 

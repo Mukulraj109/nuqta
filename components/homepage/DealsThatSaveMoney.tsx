@@ -135,7 +135,7 @@ const generateGradientColors = (bgColor: string, iconColor: string): readonly [s
   const gradientMap: Record<string, readonly [string, string, string]> = {
     [colors.brand.indigo]: ['#A5B4FC', '#818CF8', colors.brand.indigo], // Indigo - Student
     '#0EA5E9': ['#7DD3FC', '#38BDF8', '#0EA5E9'], // Sky - Corporate
-    colors.lightPeach: ['#F9A8D4', '#F472B6', colors.lightPeach], // Pink - Women
+    [colors.lightPeach]: ['#F9A8D4', '#F472B6', colors.lightPeach], // Pink - Women
     [colors.warningScale[400]]: ['#FCD34D', colors.warningScale[400], colors.warningScale[400]], // Amber - Birthday
     [colors.lightMustard]: ['#ffe5a3', '#ffd97a', colors.lightMustard], // Mustard gradient - Senior
     [colors.nileBlue]: ['#C4B5FD', colors.brand.purpleSoft, colors.nileBlue], // Violet - First time
@@ -143,7 +143,7 @@ const generateGradientColors = (bgColor: string, iconColor: string): readonly [s
     [colors.error]: ['#FCA5A5', colors.errorScale[400], colors.error], // Red - Healthcare
     '#243f55': ['#C4B5FD', colors.brand.purpleSoft, '#243f55'], // Purple - Senior
     '#2d4a5f': ['#93C5FD', colors.infoScale[400], '#2d4a5f'], // Blue - Teachers
-    colors.cyanDark: ['#67E8F9', '#22D3EE', colors.cyanDark], // Cyan - Government
+    [colors.cyanDark]: ['#67E8F9', '#22D3EE', colors.cyanDark], // Cyan - Government
     [colors.brand.sand]: ['#FDBA74', '#FB923C', colors.brand.sand], // Orange - Disabled
   };
   return gradientMap[iconColor] || [colors.neutral[200], colors.neutral[300], colors.neutral[400]];

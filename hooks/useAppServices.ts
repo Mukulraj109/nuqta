@@ -95,6 +95,12 @@ export function useAppServices(fontsLoaded: boolean) {
       apiClient.setAppUpdateCallback((_minVersion) => {
         try { router.replace('/system/app-update' as any); } catch (_e) { /* navigation may fail if unmounted */ }
       });
+      apiClient.setSlowRequestCallback(() => {
+        // Lazy-import ToastManager to avoid circular deps at init time
+        import('@/components/common/ToastManager').then(mod => {
+          mod.showToast?.({ message: 'Taking longer than usual...', type: 'info', duration: 3000 });
+        }).catch(() => {}); // Silent: toast is non-critical
+      });
 
       errorReporter.setAppVersion(APP_CONFIG.version);
       errorReporter.setEnabled(Boolean(

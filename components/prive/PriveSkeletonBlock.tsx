@@ -13,7 +13,7 @@ interface PriveSkeletonBlockProps {
   borderRadius?: number;
 }
 
-export const PriveSkeletonBlock = ({ width, height, style, borderRadius = 8 }: PriveSkeletonBlockProps) => {
+export const PriveSkeletonBlock = React.memo(({ width, height, style, borderRadius = 8 }: PriveSkeletonBlockProps) => {
   const shimmer = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -43,4 +43,4 @@ export const PriveSkeletonBlock = ({ width, height, style, borderRadius = 8 }: P
       ]}
     />
   );
-};
+});

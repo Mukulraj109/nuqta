@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -110,6 +110,25 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
     return date.toLocaleDateString();
   };
 
+  const renderCommentItem = useCallback(({ item }: { item: Comment }) => (
+    <View style={styles.commentItem}>
+      <View style={styles.commentAvatar}>
+        {item.user.profilePicture ? (
+          <CachedImage source={item.user.profilePicture} style={styles.commentAvatarImage} />
+        ) : (
+          <View style={styles.commentAvatarPlaceholder}>
+            <Text style={styles.commentAvatarText}>{item.user.name.charAt(0).toUpperCase()}</Text>
+          </View>
+        )}
+      </View>
+      <View style={styles.commentContent}>
+        <Text style={styles.commentUserName}>{item.user.name}</Text>
+        <Text style={styles.commentText}>{item.comment}</Text>
+        <Text style={styles.commentTime}>{formatTimeAgo(item.createdAt)}</Text>
+      </View>
+    </View>
+  ), []);
+
   const getActivityIcon = (type: string) => {
     const iconMap: Record<string, string> = {
       ORDER: 'checkmark-circle',
@@ -213,24 +232,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
             <FlatList
               data={comments}
               keyExtractor={(item) => item._id}
-              renderItem={({ item }) => (
-                <View style={styles.commentItem}>
-                  <View style={styles.commentAvatar}>
-                    {item.user.profilePicture ? (
-                      <CachedImage source={item.user.profilePicture} style={styles.commentAvatarImage} />
-                    ) : (
-                      <View style={styles.commentAvatarPlaceholder}>
-                        <Text style={styles.commentAvatarText}>{item.user.name.charAt(0).toUpperCase()}</Text>
-                      </View>
-                    )}
-                  </View>
-                  <View style={styles.commentContent}>
-                    <Text style={styles.commentUserName}>{item.user.name}</Text>
-                    <Text style={styles.commentText}>{item.comment}</Text>
-                    <Text style={styles.commentTime}>{formatTimeAgo(item.createdAt)}</Text>
-                  </View>
-                </View>
-              )}
+              renderItem={renderCommentItem}
               ListEmptyComponent={
                 <View style={styles.emptyContainer}>
                   <Text style={styles.emptyText}>No comments yet. Be the first to comment!</Text>

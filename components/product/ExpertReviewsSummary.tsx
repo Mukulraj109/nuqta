@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { SPACING, TYPOGRAPHY, COLORS, BORDER_RADIUS } from '@/constants/DesignTokens';
-
+import { borderRadius, colors, spacing, typography } from '@/constants/theme';
 interface ExpertReviewsSummaryProps {
   averageRating: number;
   totalReviews: number;
@@ -70,35 +69,35 @@ function ExpertReviewsSummary({
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: SPACING.md,
-    padding: SPACING.md,
-    backgroundColor: COLORS.background.secondary,
-    borderRadius: BORDER_RADIUS.lg,
+    marginVertical: spacing.md,
+    padding: spacing.md,
+    backgroundColor: colors.background.secondary,
+    borderRadius: borderRadius.lg,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SPACING.md,
+    marginBottom: spacing.md,
   },
   title: {
-    ...TYPOGRAPHY.h4,
-    color: COLORS.text.primary,
+    ...typography.h4,
+    color: colors.text.primary,
   },
   expertBadge: {
-    paddingHorizontal: SPACING.sm,
-    paddingVertical: SPACING.xs,
-    backgroundColor: COLORS.primary[500],
-    borderRadius: BORDER_RADIUS.full,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    backgroundColor: colors.primary[500],
+    borderRadius: borderRadius.full,
   },
   expertBadgeText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.inverse,
+    ...typography.caption,
+    color: colors.text.inverse,
     fontWeight: '600',
   },
   ratingSection: {
     flexDirection: 'row',
-    gap: SPACING.lg,
+    gap: spacing.lg,
   },
   averageRatingBox: {
     alignItems: 'center',
@@ -107,62 +106,62 @@ const styles = StyleSheet.create({
   averageRating: {
     fontSize: 48,
     fontWeight: '700',
-    color: COLORS.primary[500],
-    marginBottom: SPACING.xs,
+    color: colors.primary[500],
+    marginBottom: spacing.xs,
   },
   starsRow: {
     flexDirection: 'row',
-    marginBottom: SPACING.xs,
+    marginBottom: spacing.xs,
   },
   star: {
     fontSize: 20,
   },
   totalReviews: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
+    ...typography.caption,
+    color: colors.text.tertiary,
   },
   distributionBox: {
     flex: 1,
-    gap: SPACING.xs,
+    gap: spacing.xs,
   },
   distributionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.sm,
+    gap: spacing.sm,
   },
   starsLabel: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.secondary,
+    ...typography.bodySmall,
+    color: colors.text.secondary,
     width: 30,
   },
   barContainer: {
     flex: 1,
     height: 8,
-    backgroundColor: COLORS.neutral[200],
-    borderRadius: BORDER_RADIUS.sm,
+    backgroundColor: colors.neutral[200],
+    borderRadius: borderRadius.sm,
     overflow: 'hidden',
   },
   barFill: {
     height: '100%',
-    backgroundColor: COLORS.warning[500],
-    borderRadius: BORDER_RADIUS.sm,
+    backgroundColor: colors.warningScale[500],
+    borderRadius: borderRadius.sm,
   },
   countLabel: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
+    ...typography.caption,
+    color: colors.text.tertiary,
     width: 25,
     textAlign: 'right',
   },
   viewAllButton: {
-    marginTop: SPACING.md,
-    padding: SPACING.md,
-    backgroundColor: COLORS.background.primary,
-    borderRadius: BORDER_RADIUS.md,
+    marginTop: spacing.md,
+    padding: spacing.md,
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.md,
     alignItems: 'center',
   },
   viewAllText: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.primary[500],
+    ...typography.button,
+    color: colors.primary[500],
   },
 });
 

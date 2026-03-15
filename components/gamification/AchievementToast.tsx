@@ -34,7 +34,7 @@ function AchievementToast({
 
   useEffect(() => {
     // Slide in animation
-    Animated.parallel([
+    const _anim0 = Animated.parallel([
       Animated.spring(slideAnim, {
         toValue: 0,
         useNativeDriver: true,
@@ -47,14 +47,18 @@ function AchievementToast({
         tension: 50,
         friction: 7,
       }),
-    ]).start();
+    ]);
+    _anim0.start();
 
     // Auto-hide timer
     const timer = setTimeout(() => {
       handleDismiss();
     }, autoHideDuration);
 
-    return () => clearTimeout(timer);
+    return () => {
+      _anim0.stop();
+      clearTimeout(timer);
+    }
   }, []);
 
   const handleDismiss = () => {

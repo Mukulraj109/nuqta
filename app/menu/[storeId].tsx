@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   ScrollView,
-  FlatList,
   StyleSheet,
   Pressable,
   RefreshControl,
@@ -11,6 +10,7 @@ import {
   TextInput,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -496,11 +496,10 @@ export default function MenuPage() {
       </View>
 
       {/* Menu Items */}
-      <FlatList
+      <FlashList
         data={filteredItems}
         renderItem={renderMenuItem}
         keyExtractor={keyExtractor}
-        style={styles.menuContainer}
         contentContainerStyle={styles.menuContent}
         ListHeaderComponent={ListHeaderContent}
         ListEmptyComponent={ListEmptyContent}
@@ -508,10 +507,7 @@ export default function MenuPage() {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={Colors.brand.purple} />
         }
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={10}
-        initialNumToRender={8}
+        estimatedItemSize={100}
       />
 
       {/* Cart Footer */}

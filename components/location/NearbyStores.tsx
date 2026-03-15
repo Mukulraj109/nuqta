@@ -3,13 +3,13 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
   Alert,
   RefreshControl,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocationFeatures, useCurrentLocation } from '@/hooks/useLocation';
 import { locationService } from '@/services/locationService';
@@ -264,15 +264,11 @@ function NearbyStores({
       ) : error ? (
         renderErrorState()
       ) : (
-        <FlatList
+        <FlashList
           data={stores}
           renderItem={renderStoreItem}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={10}
-          windowSize={5}
-          initialNumToRender={8}
           refreshControl={
             <RefreshControl
               refreshing={isRefreshing}
@@ -283,6 +279,7 @@ function NearbyStores({
           }
           ListEmptyComponent={renderEmptyState}
           contentContainerStyle={stores.length === 0 ? styles.emptyContainer : undefined}
+          estimatedItemSize={100}
         />
       )}
     </View>

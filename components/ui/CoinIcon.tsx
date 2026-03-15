@@ -76,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CoinIcon;
+export default React.memo(CoinIcon);

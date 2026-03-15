@@ -6,9 +6,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  View, Text, StyleSheet, Pressable, FlatList,
+  View, Text, StyleSheet, Pressable,
   RefreshControl, ActivityIndicator, ScrollView, Clipboard,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { getCategoryTheme, SHARED_COLORS } from '@/config/categoryThemeConfig';
@@ -265,13 +266,14 @@ export default function OffersIndexPage() {
       {isLoading ? (
         <CardGridSkeleton />
       ) : (
-        <FlatList
+        <FlashList
           data={getFilteredData()}
           keyExtractor={(item, index) => item._id || item.id || `${index}`}
           renderItem={renderItem}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[theme.primaryColor]} />}
+          estimatedItemSize={120}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
               <Ionicons

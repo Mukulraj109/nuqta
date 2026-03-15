@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NearbyOffersSection;
+export default React.memo(NearbyOffersSection);

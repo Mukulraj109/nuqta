@@ -52,7 +52,7 @@ export default function TravelBookingConfirmationPage() {
   useEffect(() => {
     if (booking) {
       setShowConfetti(true);
-      Animated.sequence([
+      const anim = Animated.sequence([
         Animated.spring(successAnim, {
           toValue: 1,
           tension: 50,
@@ -64,7 +64,9 @@ export default function TravelBookingConfirmationPage() {
           duration: 300,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      anim.start();
+      return () => anim.stop();
     }
   }, [booking]);
 

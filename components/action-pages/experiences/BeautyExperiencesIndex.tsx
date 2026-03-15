@@ -239,6 +239,33 @@ function BeautyExperiencesPage() {
     router.push(`/MainCategory/beauty-wellness/experiences/${experienceId}` as any);
   };
 
+  const renderCategoryChip = useCallback(({ item }: { item: typeof CATEGORY_CHIPS[number] }) => {
+    const isActive = selectedCategory === item.key;
+    return (
+      <Pressable
+        style={[styles.chip, isActive && styles.chipActive]}
+        onPress={() => handleCategoryPress(item.key)}
+      >
+        <Ionicons
+          name={item.icon}
+          size={14}
+          color={isActive ? COLORS.white : COLORS.textSecondary}
+        />
+        <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
+          {item.label}
+        </Text>
+      </Pressable>
+    );
+  }, [selectedCategory]);
+
+  const renderExperienceItem = useCallback(({ item }: { item: Experience }) => (
+    <ExperienceCard
+      experience={item}
+      currencySymbol={currencySymbol}
+      onPress={() => handleExperiencePress(item)}
+    />
+  ), [currencySymbol]);
+
   // ─────────── Loading State ───────────
   if (isLoading && !refreshing) {
     return (
@@ -282,25 +309,7 @@ function BeautyExperiencesPage() {
           keyExtractor={(item) => item.key}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.chipsList}
-          renderItem={({ item }) => {
-            const isActive = selectedCategory === item.key;
-            return (
-              <Pressable
-                style={[styles.chip, isActive && styles.chipActive]}
-                onPress={() => handleCategoryPress(item.key)}
-               
-              >
-                <Ionicons
-                  name={item.icon}
-                  size={14}
-                  color={isActive ? COLORS.white : COLORS.textSecondary}
-                />
-                <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
-                  {item.label}
-                </Text>
-              </Pressable>
-            );
-          }}
+          renderItem={renderCategoryChip}
         />
       </View>
 
@@ -318,13 +327,7 @@ function BeautyExperiencesPage() {
         <FlatList
           data={filteredExperiences}
           keyExtractor={(item) => item._id || item.id || Math.random().toString()}
-          renderItem={({ item }) => (
-            <ExperienceCard
-              experience={item}
-              currencySymbol={currencySymbol}
-              onPress={() => handleExperiencePress(item)}
-            />
-          )}
+          renderItem={renderExperienceItem}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           refreshControl={

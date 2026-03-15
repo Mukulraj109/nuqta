@@ -53,4 +53,4 @@ export const PriveFeatureGate: React.FC<PriveFeatureGateProps> = ({
   return <>{children}</>;
 };
 
-export default PriveFeatureGate;
+export default React.memo(PriveFeatureGate);

@@ -129,8 +129,9 @@ function AboutModal({ visible, onClose, storeData }: AboutModalProps) {
   const store = storeData || defaultStoreData;
 
   useEffect(() => {
+    let _anim: Animated.CompositeAnimation;
     if (visible) {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 250,
@@ -148,9 +149,10 @@ function AboutModal({ visible, onClose, storeData }: AboutModalProps) {
           friction: 12,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     } else {
-      Animated.parallel([
+      _anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 150,
@@ -166,9 +168,12 @@ function AboutModal({ visible, onClose, storeData }: AboutModalProps) {
           duration: 200,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]);
+      _anim.start();
     }
-  }, [visible, fadeAnim, slideAnim, scaleAnim]);
+  
+    return () => _anim.stop();
+}, [visible, fadeAnim, slideAnim, scaleAnim]);
 
   const handleBackdropPress = () => {
     onClose();

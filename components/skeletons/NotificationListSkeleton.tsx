@@ -22,7 +22,7 @@ function NotificationRow() {
   );
 }
 
-export default function NotificationListSkeleton({ count = 10 }: { count?: number }) {
+function NotificationListSkeleton({ count = 10 }: { count?: number }) {
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -61,3 +61,5 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 });
+
+export default React.memo(NotificationListSkeleton);

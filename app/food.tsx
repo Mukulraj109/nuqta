@@ -24,6 +24,9 @@ import apiClient from '@/services/apiClient';
 import storesService from '@/services/storesApi';
 import categoriesService from '@/services/categoriesApi';
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { errorReporter } from '@/utils/errorReporter';
+import ErrorState from '@/components/common/ErrorState';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const FOOD_CATEGORY_SLUG = 'food-dining';
@@ -91,7 +94,8 @@ const FoodPage: React.FC = () => {
   const [totalStores, setTotalStores] = useState(0);
   const [maxCashback, setMaxCashback] = useState(0);
 
-  // Loading states
+  // Loading & error states
+  const [error, setError] = useState<string | null>(null);
   const [loadingSubcategories, setLoadingSubcategories] = useState(true);
   const [loadingStores, setLoadingStores] = useState(true);
   const [loadingCuisines, setLoadingCuisines] = useState(true);
@@ -107,6 +111,7 @@ const FoodPage: React.FC = () => {
   // ---------- Fetch subcategories (via parent category slug) ----------
   const fetchSubcategories = useCallback(async () => {
     setLoadingSubcategories(true);
+    setError(null);
     try {
       // Get the food-dining parent category which includes populated childCategories
       const response = await categoriesService.getCategoryBySlug(FOOD_CATEGORY_SLUG);
@@ -129,8 +134,13 @@ const FoodPage: React.FC = () => {
         if (parentCat.storeCount) setTotalStores(parentCat.storeCount);
         if (parentCat.maxCashback) setMaxCashback(parentCat.maxCashback);
       }
-    } catch {
-      // silent fail - subcategories are non-critical
+    } catch (err) {
+      setError('Failed to load food categories. Please try again.');
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to fetch food subcategories'),
+        { context: 'FoodPage.fetchSubcategories' },
+        'warning'
+      );
     } finally {
       setLoadingSubcategories(false);
     }
@@ -175,8 +185,12 @@ const FoodPage: React.FC = () => {
           if (mc > maxCashback) setMaxCashback(mc);
         }
       }
-    } catch {
-      // silent fail
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to fetch featured food stores'),
+        { context: 'FoodPage.fetchStores' },
+        'warning'
+      );
     } finally {
       if (page === 1) setLoadingStores(false);
       else setLoadingMoreStores(false);
@@ -193,8 +207,12 @@ const FoodPage: React.FC = () => {
         const items: CuisineCount[] = data.cuisines || (Array.isArray(data) ? data : []);
         setCuisines(items.slice(0, 8)); // Show top 8 cuisines
       }
-    } catch {
-      // silent fail
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to fetch cuisine counts'),
+        { context: 'FoodPage.fetchCuisines' },
+        'warning'
+      );
     } finally {
       setLoadingCuisines(false);
     }
@@ -209,8 +227,12 @@ const FoodPage: React.FC = () => {
         const items = Array.isArray(response.data) ? response.data : response.data.offers || [];
         setOffers(items.slice(0, 6));
       }
-    } catch {
-      // silent fail
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to fetch food offers'),
+        { context: 'FoodPage.fetchOffers' },
+        'warning'
+      );
     } finally {
       setLoadingOffers(false);
     }
@@ -281,7 +303,24 @@ const FoodPage: React.FC = () => {
 
   const isLoading = loadingSubcategories && loadingStores && loadingCuisines && loadingOffers;
 
+  const refetchAll = useCallback(() => {
+    setError(null);
+    fetchedRef.current = false;
+    fetchSubcategories();
+    fetchStores(1);
+    fetchCuisines();
+    fetchOffers();
+  }, [fetchSubcategories, fetchStores, fetchCuisines, fetchOffers]);
+
   // ---------- Render ----------
+  if (error && !isLoading) {
+    return (
+      <View style={styles.container}>
+        <ErrorState error={error} onRetry={refetchAll} title="Failed to Load Food" />
+      </View>
+    );
+  }
+
   if (isLoading) {
     return (
       <View style={styles.container}>
@@ -645,4 +684,4 @@ const styles = StyleSheet.create({
   loadMoreText: { fontSize: Typography.body.fontSize, fontWeight: '600', color: colors.brand.orange },
 });
 
-export default FoodPage;
+export default withErrorBoundary(FoodPage, 'Food & Dining');

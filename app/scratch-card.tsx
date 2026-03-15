@@ -91,10 +91,12 @@ export default function ScratchCardPage() {
       hasAnimatedRef.current = true;
       fadeAnim.setValue(0);
       scaleAnim.setValue(0.8);
-      Animated.parallel([
+      const anim = Animated.parallel([
         Animated.timing(fadeAnim, { toValue: 1, duration: 600, useNativeDriver: true }),
         Animated.spring(scaleAnim, { toValue: 1, tension: 50, friction: 7, useNativeDriver: true }),
-      ]).start();
+      ]);
+      anim.start();
+      return () => anim.stop();
     }
   }, [cardState]);
 

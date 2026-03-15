@@ -98,9 +98,11 @@ function ConfettiOverlay({ visible, onComplete }: ConfettiOverlayProps) {
       useNativeDriver: true,
     });
 
-    Animated.parallel([...animations, fadeOut]).start(() => {
+    const masterAnim = Animated.parallel([...animations, fadeOut]);
+    masterAnim.start(() => {
       onComplete?.();
     });
+    return () => masterAnim.stop();
   }, [visible]);
 
   if (!visible) return null;

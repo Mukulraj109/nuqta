@@ -15,7 +15,7 @@ interface ArticleSectionProps {
   loading?: boolean;
 }
 
-export default function ArticleSection({
+function ArticleSection({
   articles,
   onArticlePress,
   onViewAllPress,
@@ -67,3 +67,4 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 });
+export default React.memo(ArticleSection);

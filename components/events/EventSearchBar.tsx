@@ -47,12 +47,15 @@ function EventSearchBar({
   const placeholderColor = useThemeColor({ light: colors.neutral[400], dark: colors.neutral[500] }, 'text');
 
   useEffect(() => {
-    Animated.timing(animatedValue, {
+    const _anim0 = Animated.timing(animatedValue, {
       toValue: isFocused ? 1 : 0,
       duration: 200,
       useNativeDriver: false,
-    }).start();
-  }, [isFocused]);
+    });
+    _anim0.start();
+  
+    return () => { _anim0.stop(); };
+}, [isFocused]);
 
   const handleFocus = () => {
     setIsFocused(true);

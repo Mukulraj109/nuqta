@@ -4,13 +4,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   Pressable,
   StatusBar,
   Platform,
   RefreshControl,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
@@ -281,7 +281,7 @@ export default function TicketsPage() {
         {loading ? (
           renderSkeleton()
         ) : (
-          <FlatList
+          <FlashList
             data={tickets}
             renderItem={renderTicketCard}
             keyExtractor={item => item._id}
@@ -299,10 +299,7 @@ export default function TicketsPage() {
                 </View>
               ) : null
             }
-            removeClippedSubviews={Platform.OS !== 'web'}
-            maxToRenderPerBatch={10}
-            windowSize={5}
-            initialNumToRender={8}
+            estimatedItemSize={100}
           />
         )}
       </View>

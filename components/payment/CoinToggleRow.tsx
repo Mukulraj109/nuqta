@@ -13,11 +13,10 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Switch } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS } from '@/constants/DesignTokens';
 import CrossPlatformSlider from '@/components/common/CrossPlatformSlider';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
-import { colors } from '@/constants/theme';
+import { borderRadius, colors, spacing, typography } from '@/constants/theme';
 
 export type CoinType = 'rez' | 'nuqta' | 'promo' | 'branded';
 
@@ -167,11 +166,11 @@ export const CoinToggleRow: React.FC<CoinToggleRowProps> = ({
                 <Ionicons
                   name={expiryBadge.urgent ? 'warning' : 'time'}
                   size={10}
-                  color={expiryBadge.urgent ? colors.background.primary : COLORS.nuqta.nileBlue}
+                  color={expiryBadge.urgent ? colors.background.primary : colors.nuqta.nileBlue}
                 />
                 <Text style={[
                   styles.expiryText,
-                  !expiryBadge.urgent && { color: COLORS.nuqta.nileBlue }
+                  !expiryBadge.urgent && { color: colors.nuqta.nileBlue }
                 ]}>{expiryBadge.text}</Text>
               </View>
             )}
@@ -191,7 +190,7 @@ export const CoinToggleRow: React.FC<CoinToggleRowProps> = ({
           <Switch
             value={enabled}
             onValueChange={handleToggle}
-            trackColor={{ false: COLORS.neutral[200], true: style.color }}
+            trackColor={{ false: colors.neutral[200], true: style.color }}
             thumbColor={colors.background.primary}
             disabled={available === 0}
           />
@@ -216,7 +215,7 @@ export const CoinToggleRow: React.FC<CoinToggleRowProps> = ({
             maximumValue={maxUsable}
             step={1}
             minimumTrackTintColor={style.color}
-            maximumTrackTintColor={COLORS.neutral[200]}
+            maximumTrackTintColor={colors.neutral[200]}
             thumbTintColor={style.color}
           />
 
@@ -254,10 +253,10 @@ export const CoinToggleRow: React.FC<CoinToggleRowProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: SPACING.md,
-    paddingBottom: SPACING.md,
+    marginBottom: spacing.md,
+    paddingBottom: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border.light,
+    borderBottomColor: colors.border.light,
   },
   mainRow: {
     flexDirection: 'row',
@@ -266,10 +265,10 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 40,
     height: 40,
-    borderRadius: BORDER_RADIUS.md,
+    borderRadius: borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: SPACING.md,
+    marginRight: spacing.md,
   },
   coinIcon: {
     width: 24,
@@ -281,11 +280,11 @@ const styles = StyleSheet.create({
   nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: SPACING.xs,
+    gap: spacing.xs,
   },
   coinName: {
-    ...TYPOGRAPHY.button,
-    color: COLORS.text.primary,
+    ...typography.button,
+    color: colors.text.primary,
   },
   expiryBadge: {
     flexDirection: 'row',
@@ -293,11 +292,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightMustard, // Mustard for normal expiry
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: BORDER_RADIUS.full,
+    borderRadius: borderRadius.full,
     gap: 2,
   },
   expiryBadgeUrgent: {
-    backgroundColor: COLORS.error[500], // Red for urgent
+    backgroundColor: colors.errorScale[500], // Red for urgent
   },
   expiryText: {
     fontSize: 9,
@@ -305,71 +304,71 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
   balance: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
+    ...typography.caption,
+    color: colors.text.secondary,
     marginTop: 2,
   },
   subtitle: {
-    ...TYPOGRAPHY.caption,
+    ...typography.caption,
     fontSize: 10,
-    color: COLORS.text.tertiary,
+    color: colors.text.tertiary,
     marginTop: 1,
   },
   toggleContainer: {
     alignItems: 'flex-end',
   },
   usingAmount: {
-    ...TYPOGRAPHY.bodySmall,
+    ...typography.bodySmall,
     fontWeight: '700',
     marginBottom: 4,
   },
   sliderContainer: {
-    marginTop: SPACING.md,
+    marginTop: spacing.md,
     paddingLeft: 56, // Align with text after icon
   },
   sliderValueRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: SPACING.xs,
+    marginBottom: spacing.xs,
   },
   sliderMinValue: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
+    ...typography.caption,
+    color: colors.text.tertiary,
   },
   sliderCurrentValue: {
-    ...TYPOGRAPHY.h4,
+    ...typography.h4,
     fontWeight: '700',
   },
   sliderMaxValue: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.tertiary,
+    ...typography.caption,
+    color: colors.text.tertiary,
   },
   quickSelectRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: SPACING.sm,
-    marginTop: SPACING.sm,
+    gap: spacing.sm,
+    marginTop: spacing.sm,
   },
   quickSelectButton: {
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.xs,
-    borderRadius: BORDER_RADIUS.full,
-    backgroundColor: COLORS.nuqta.linen,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.full,
+    backgroundColor: colors.nuqta.linen,
     borderWidth: 1,
-    borderColor: COLORS.nuqta.peach,
+    borderColor: colors.nuqta.peach,
   },
   quickSelectActive: {
-    backgroundColor: COLORS.nuqta.mustard,
-    borderColor: COLORS.nuqta.mustard,
+    backgroundColor: colors.nuqta.mustard,
+    borderColor: colors.nuqta.mustard,
   },
   quickSelectText: {
-    ...TYPOGRAPHY.caption,
-    color: COLORS.text.secondary,
+    ...typography.caption,
+    color: colors.text.secondary,
     fontWeight: '600',
   },
   quickSelectTextActive: {
-    color: COLORS.nuqta.nileBlue,
+    color: colors.nuqta.nileBlue,
   },
 });
 

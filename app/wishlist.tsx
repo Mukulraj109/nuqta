@@ -14,6 +14,7 @@ import {
   TextInput,
   Modal,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -872,7 +873,7 @@ export default function WishlistPage() {
             </Pressable>
           </View>
         ) : (
-          <FlatList
+          <FlashList
             data={wishlists}
             renderItem={renderWishlist}
             keyExtractor={(item, index) => `wishlist-${item.id}-${index}`}
@@ -881,11 +882,7 @@ export default function WishlistPage() {
             }
             contentContainerStyle={styles.listContainer}
             showsVerticalScrollIndicator={false}
-            removeClippedSubviews={true}
-            maxToRenderPerBatch={5}
-            updateCellsBatchingPeriod={50}
-            initialNumToRender={5}
-            windowSize={5}
+            estimatedItemSize={200}
           />
         )}
       </View>

@@ -186,7 +186,7 @@ const CreatorPickDetail = () => {
       <Pressable style={s.headerBtn} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={20} color={Colors.text.inverse} />
       </Pressable>
-      <View style={{ flex: 1 }} />
+      <View style={s.flex1} />
       <Pressable style={s.headerBtn} onPress={handleShare}>
         <Ionicons name="share-social-outline" size={18} color={Colors.text.inverse} />
       </Pressable>
@@ -218,12 +218,12 @@ const CreatorPickDetail = () => {
         </LinearGradient>
         <View style={s.center}>
           <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
-          <Text style={{ fontSize: 17, fontWeight: '700', color: Colors.text.primary, marginTop: 14 }}>Unable to Load</Text>
-          <Text style={{ ...Typography.body, color: Colors.text.tertiary, textAlign: 'center', marginTop: 6, marginBottom: Spacing.lg, lineHeight: 20 }}>
+          <Text style={s.errorTitle}>Unable to Load</Text>
+          <Text style={s.errorBody}>
             {error || 'Pick details are not available'}
           </Text>
-          <Pressable style={{ backgroundColor: Colors.nileBlue, borderRadius: BorderRadius.md, paddingHorizontal: 28, paddingVertical: Spacing.md }} onPress={fetchPickData}>
-            <Text style={{ color: Colors.text.inverse, fontWeight: '600', fontSize: 15 }}>Try Again</Text>
+          <Pressable style={s.retryBtn} onPress={fetchPickData}>
+            <Text style={s.retryBtnText}>Try Again</Text>
           </Pressable>
         </View>
       </View>
@@ -247,17 +247,17 @@ const CreatorPickDetail = () => {
         {item.productImage ? (
           <CachedImage source={item.productImage} style={s.relImg} contentFit="cover" />
         ) : (
-          <View style={[s.relImg, { justifyContent: 'center', alignItems: 'center' }]}>
+          <View style={[s.relImg, s.centeredContent]}>
             <Ionicons name="image-outline" size={24} color={colors.neutral[300]} />
           </View>
         )}
         <View style={s.relCoinBadge}>
-          <CachedImage source={NUQTA_COIN} style={{ width: 12, height: 12, borderRadius: 6 }} />
+          <CachedImage source={NUQTA_COIN} style={s.coinIcon12} />
           <Text style={s.relCoinText}>{coins}</Text>
         </View>
-        <View style={{ padding: 10 }}>
-          <Text style={{ ...Typography.bodySmall, fontWeight: '600', color: Colors.text.primary }} numberOfLines={2}>{item.title}</Text>
-          <Text style={{ fontSize: 13, fontWeight: '700', color: Colors.nileBlue, marginTop: Spacing.xs }}>{BRAND.CURRENCY_CODE} {item.productPrice}</Text>
+        <View style={s.relCardContent}>
+          <Text style={s.relCardTitle} numberOfLines={2}>{item.title}</Text>
+          <Text style={s.relCardPrice}>{BRAND.CURRENCY_CODE} {item.productPrice}</Text>
         </View>
       </Pressable>
     );
@@ -276,18 +276,18 @@ const CreatorPickDetail = () => {
         {renderHeader()}
       </LinearGradient>
 
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 110 }}>
+      <ScrollView style={s.flex1} showsVerticalScrollIndicator={false} contentContainerStyle={s.scrollContentPadding}>
 
         {/* ---- VIDEO (if exists) ---- */}
         {pick.videoUrl && (
-          <View style={{ backgroundColor: colors.text.primary }}>
-            <VideoPlayer uri={pick.videoUrl} width={width} height={width * 0.56} autoPlay={false} loop={false} muted={true} style={{ borderRadius: 0 }} />
+          <View style={s.videoBg}>
+            <VideoPlayer uri={pick.videoUrl} width={width} height={width * 0.56} autoPlay={false} loop={false} muted={true} style={s.videoNoBorderRadius} />
           </View>
         )}
 
         {/* ---- PRODUCT IMAGE ---- */}
         {pick.productImage && !imageError ? (
-          <View style={{ position: 'relative', backgroundColor: Colors.background.primary }}>
+          <View style={s.productImageContainer}>
             <CachedImage
               source={pick.productImage}
               style={{ width, height: pick.videoUrl ? width * 0.5 : width * 0.8, backgroundColor: Colors.background.secondary }}
@@ -302,12 +302,12 @@ const CreatorPickDetail = () => {
             )}
             {/* Coin overlay */}
             <View style={s.imgCoinOverlay}>
-              <CachedImage source={NUQTA_COIN} style={{ width: 16, height: 16, borderRadius: 8 }} />
+              <CachedImage source={NUQTA_COIN} style={s.coinIcon16} />
               <Text style={s.imgCoinText}>Earn {estimatedCoins} {coinWord}</Text>
             </View>
           </View>
         ) : !pick.videoUrl ? (
-          <View style={{ width, height: width * 0.55, backgroundColor: Colors.background.secondary, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={[s.imageFallback, { width, height: width * 0.55 }]}>
             <Ionicons name="image-outline" size={56} color={colors.neutral[300]} />
           </View>
         ) : null}
@@ -315,7 +315,7 @@ const CreatorPickDetail = () => {
         {/* ---- PRODUCT INFO ---- */}
         <View style={s.infoCard}>
           {/* Brand + Time */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+          <View style={s.brandTimeRow}>
             <Text style={s.brand}>{pick.productBrand}</Text>
             {pick.createdAt && <Text style={s.timeText}>{timeAgo(pick.createdAt)}</Text>}
           </View>
@@ -326,7 +326,7 @@ const CreatorPickDetail = () => {
           <View style={s.priceRow}>
             <Text style={s.price}>{BRAND.CURRENCY_CODE} {pick.productPrice}</Text>
             <View style={s.coinPill}>
-              <CachedImage source={NUQTA_COIN} style={{ width: 18, height: 18, borderRadius: 9 }} />
+              <CachedImage source={NUQTA_COIN} style={s.coinIcon18} />
               <Text style={s.coinPillNum}>{estimatedCoins}</Text>
               <Text style={s.coinPillLabel}>{coinWord} back</Text>
             </View>
@@ -445,15 +445,15 @@ const CreatorPickDetail = () => {
               </LinearGradient>
             )}
             {/* Info */}
-            <View style={{ flex: 1 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <View style={s.flex1}>
+              <View style={s.creatorNameRow}>
                 <Text style={s.creatorName}>{pick.creator.name}</Text>
                 {pick.creator.verified && <Ionicons name="checkmark-circle" size={14} color={colors.infoScale[400]} />}
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 }}>
+              <View style={s.creatorMetaRow}>
                 {pick.creator.tier && (
                   <View style={s.tierBadge}>
-                    <CachedImage source={NUQTA_COIN} style={{ width: 10, height: 10, borderRadius: 5 }} />
+                    <CachedImage source={NUQTA_COIN} style={s.coinIcon10} />
                     <Text style={s.tierText}>{pick.creator.tier}</Text>
                   </View>
                 )}
@@ -491,11 +491,11 @@ const CreatorPickDetail = () => {
             {pick.store.logo ? (
               <CachedImage source={pick.store.logo} style={s.storeLogo} />
             ) : (
-              <View style={[s.storeLogo, { backgroundColor: '#E0E7FF', alignItems: 'center', justifyContent: 'center' }]}>
+              <View style={[s.storeLogo, s.storeLogoPlaceholder]}>
                 <Ionicons name="storefront" size={16} color={Colors.nileBlue} />
               </View>
             )}
-            <View style={{ flex: 1 }}>
+            <View style={s.flex1}>
               <Text style={s.storeLabel}>Available at</Text>
               <Text style={s.storeName}>{pick.store.name}</Text>
             </View>
@@ -513,17 +513,17 @@ const CreatorPickDetail = () => {
               </View>
               <Text style={s.stepLabel}>Buy this{'\n'}product</Text>
             </View>
-            <Ionicons name="chevron-forward" size={14} color={colors.neutral[300]} style={{ marginTop: 8 }} />
+            <Ionicons name="chevron-forward" size={14} color={colors.neutral[300]} style={s.chevronMarginTop} />
             <View style={s.stepItem}>
               <View style={[s.stepIcon, { backgroundColor: colors.successScale[50] }]}>
                 <Ionicons name="checkmark-circle-outline" size={18} color={colors.brand.greenDark} />
               </View>
               <Text style={s.stepLabel}>Order{'\n'}delivered</Text>
             </View>
-            <Ionicons name="chevron-forward" size={14} color={colors.neutral[300]} style={{ marginTop: 8 }} />
+            <Ionicons name="chevron-forward" size={14} color={colors.neutral[300]} style={s.chevronMarginTop} />
             <View style={s.stepItem}>
               <View style={[s.stepIcon, { backgroundColor: colors.tint.amber }]}>
-                <CachedImage source={NUQTA_COIN} style={{ width: 18, height: 18, borderRadius: 9 }} />
+                <CachedImage source={NUQTA_COIN} style={s.coinIcon18} />
               </View>
               <Text style={s.stepLabel}>Earn {estimatedCoins}{'\n'}{coinWord}</Text>
             </View>
@@ -569,8 +569,8 @@ const CreatorPickDetail = () => {
 
         {/* ---- RELATED PICKS ---- */}
         {relatedPicks.length > 0 && (
-          <View style={{ marginTop: Spacing.sm, paddingTop: 18, paddingBottom: Spacing.md, backgroundColor: Colors.background.primary }}>
-            <Text style={{ fontSize: 15, fontWeight: '700', color: Colors.text.primary, paddingHorizontal: Spacing.lg, marginBottom: 14 }}>
+          <View style={s.relatedSection}>
+            <Text style={s.relatedSectionTitle}>
               {pick.creator ? `More from ${pick.creator.name}` : 'You might also like'}
             </Text>
             <FlatList
@@ -588,14 +588,14 @@ const CreatorPickDetail = () => {
 
       {/* ---- FIXED BOTTOM CTA ---- */}
       <View style={s.bottomBar}>
-        <Pressable style={{ flex: 1, borderRadius: BorderRadius.md, overflow: 'hidden' }} onPress={handleBuy}>
+        <Pressable style={s.ctaPressable} onPress={handleBuy}>
           <LinearGradient colors={[colors.brand.greenDark, colors.successScale[700]] as const} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={s.ctaInner}>
-            <View style={{ flex: 1 }}>
+            <View style={s.flex1}>
               <Text style={s.ctaTitle}>Buy & Earn</Text>
               <Text style={s.ctaSub}>Purchase to earn {estimatedCoins} {coinWord}</Text>
             </View>
             <View style={s.ctaCoinBadge}>
-              <CachedImage source={NUQTA_COIN} style={{ width: 22, height: 22, borderRadius: 11 }} />
+              <CachedImage source={NUQTA_COIN} style={s.coinIcon22} />
               <Text style={s.ctaCoinNum}>+{estimatedCoins}</Text>
             </View>
           </LinearGradient>
@@ -798,6 +798,35 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 10, paddingVertical: 6, borderRadius: BorderRadius.lg,
   },
   ctaCoinNum: { ...Typography.bodyLarge, fontWeight: '800', color: Colors.text.inverse },
+
+  // Extracted inline styles
+  flex1: { flex: 1 },
+  centeredContent: { justifyContent: 'center', alignItems: 'center' },
+  scrollContentPadding: { paddingBottom: 110 },
+  errorTitle: { fontSize: 17, fontWeight: '700', color: Colors.text.primary, marginTop: 14 },
+  errorBody: { ...Typography.body, color: Colors.text.tertiary, textAlign: 'center', marginTop: 6, marginBottom: Spacing.lg, lineHeight: 20 },
+  retryBtn: { backgroundColor: Colors.nileBlue, borderRadius: BorderRadius.md, paddingHorizontal: 28, paddingVertical: Spacing.md },
+  retryBtnText: { color: Colors.text.inverse, fontWeight: '600', fontSize: 15 },
+  videoBg: { backgroundColor: colors.text.primary },
+  videoNoBorderRadius: { borderRadius: 0 },
+  productImageContainer: { position: 'relative', backgroundColor: Colors.background.primary },
+  imageFallback: { backgroundColor: Colors.background.secondary, justifyContent: 'center', alignItems: 'center' },
+  brandTimeRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 },
+  creatorNameRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  creatorMetaRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 },
+  storeLogoPlaceholder: { backgroundColor: '#E0E7FF', alignItems: 'center', justifyContent: 'center' },
+  relatedSection: { marginTop: Spacing.sm, paddingTop: 18, paddingBottom: Spacing.md, backgroundColor: Colors.background.primary },
+  relatedSectionTitle: { fontSize: 15, fontWeight: '700', color: Colors.text.primary, paddingHorizontal: Spacing.lg, marginBottom: 14 },
+  relCardContent: { padding: 10 },
+  relCardTitle: { ...Typography.bodySmall, fontWeight: '600', color: Colors.text.primary },
+  relCardPrice: { fontSize: 13, fontWeight: '700', color: Colors.nileBlue, marginTop: Spacing.xs },
+  ctaPressable: { flex: 1, borderRadius: BorderRadius.md, overflow: 'hidden' },
+  coinIcon10: { width: 10, height: 10, borderRadius: 5 },
+  coinIcon12: { width: 12, height: 12, borderRadius: 6 },
+  coinIcon16: { width: 16, height: 16, borderRadius: 8 },
+  coinIcon18: { width: 18, height: 18, borderRadius: 9 },
+  coinIcon22: { width: 22, height: 22, borderRadius: 11 },
+  chevronMarginTop: { marginTop: 8 },
 });
 
 export default CreatorPickDetail;

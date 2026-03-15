@@ -54,4 +54,4 @@ export const HorizontalScrollSection: React.FC<HorizontalScrollSectionProps> = (
   );
 };
 
-export default HorizontalScrollSection;
+export default React.memo(HorizontalScrollSection);

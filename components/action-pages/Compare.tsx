@@ -26,6 +26,7 @@ import apiClient from '@/services/apiClient';
 import productComparisonApi, { ProductComparison, ComparisonProduct } from '@/services/productComparisonApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { colors } from '@/constants/theme';
+import { errorReporter } from '@/utils/errorReporter';
 
 const COLORS = {
   primaryGold: colors.warningScale[400],
@@ -123,8 +124,12 @@ function ComparePage() {
         if (res.success && res.data?.comparisons) {
           setSavedComparisons(res.data.comparisons);
         }
-      } catch {
-        // Silent fail
+      } catch (err) {
+        errorReporter.captureError(
+          err instanceof Error ? err : new Error('Failed to fetch saved comparisons'),
+          { context: 'ComparePage.fetchSavedComparisons' },
+          'warning'
+        );
       } finally {
         setIsLoadingSaved(false);
       }
@@ -186,7 +191,12 @@ function ComparePage() {
         const selectedIds = new Set(selectedProducts.map(p => p._id));
         setSearchResults(products.filter((p: any) => !selectedIds.has(p._id || p.id)));
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to search products for comparison'),
+        { context: 'ComparePage.performSearch' },
+        'warning'
+      );
       setSearchResults([]);
     } finally {
       setIsSearching(false);
@@ -266,7 +276,12 @@ function ComparePage() {
       if (saved.success && saved.data?.comparisons) {
         setSavedComparisons(saved.data.comparisons);
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to save comparison'),
+        { context: 'ComparePage.handleSaveComparison' },
+        'warning'
+      );
       platformAlertSimple('Error', 'Could not save comparison');
     } finally {
       setIsSaving(false);
@@ -283,7 +298,12 @@ function ComparePage() {
         setCurrentComparisonId(comparisonId);
         setViewPhase('comparing');
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to load saved comparison'),
+        { context: 'ComparePage.handleLoadSavedComparison' },
+        'warning'
+      );
       platformAlertSimple('Error', 'Could not load comparison');
     }
   };
@@ -297,7 +317,12 @@ function ComparePage() {
           setCurrentComparisonId(null);
         }
       }
-    } catch {
+    } catch (err) {
+      errorReporter.captureError(
+        err instanceof Error ? err : new Error('Failed to delete comparison'),
+        { context: 'ComparePage.handleDeleteSavedComparison' },
+        'warning'
+      );
       platformAlertSimple('Error', 'Could not delete comparison');
     }
   };

@@ -128,6 +128,16 @@ const SimilarStoresSection: React.FC<SimilarStoresSectionProps> = ({
     fetchSimilarStores();
   };
 
+  const renderStoreItem = useCallback(({ item }: { item: Store }) => (
+    <View style={{ width: cardWidth }}>
+      <StoreCard
+        store={item}
+        onPress={() => handleStorePress(item)}
+        width={cardWidth}
+      />
+    </View>
+  ), [cardWidth, handleStorePress]);
+
   // Loading State
   if (loading) {
     return (
@@ -204,15 +214,7 @@ const SimilarStoresSection: React.FC<SimilarStoresSectionProps> = ({
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item, index) => item.id || item._id || `store-${index}`}
-        renderItem={({ item }) => (
-          <View style={{ width: cardWidth }}>
-            <StoreCard
-              store={item}
-              onPress={() => handleStorePress(item)}
-              width={cardWidth}
-            />
-          </View>
-        )}
+        renderItem={renderStoreItem}
         contentContainerStyle={styles.listContent}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListFooterComponent={() => <View style={styles.listFooter} />}

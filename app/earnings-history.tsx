@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
   ScrollView,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
@@ -12,6 +11,7 @@ import {
   Dimensions,
   Share,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter, useNavigation, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -660,10 +660,9 @@ export default function EarningsHistoryPage() {
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={transactions}
           keyExtractor={(item) => item._id}
-          style={styles.content}
           contentContainerStyle={[styles.contentContainer, { paddingBottom: 120 }]}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
@@ -687,10 +686,7 @@ export default function EarningsHistoryPage() {
             </View>
           }
           renderItem={renderTransactionItem}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={15}
-          windowSize={7}
-          initialNumToRender={8}
+          estimatedItemSize={80}
           ListFooterComponent={
             loading && transactions.length > 0 ? (
               <View style={styles.loadMoreContainer}>

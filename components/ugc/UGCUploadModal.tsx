@@ -101,19 +101,22 @@ function UGCUploadModal({
 
   // Reset state when modal closes
   useEffect(() => {
+    let anim: Animated.CompositeAnimation | undefined;
     if (!visible) {
       if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
       resetTimeoutRef.current = setTimeout(() => {
         resetState();
       }, 300);
     } else {
-      Animated.timing(fadeAnim, {
+      anim = Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 300,
         useNativeDriver: true,
-      }).start();
+      });
+      anim.start();
     }
     return () => {
+      anim?.stop();
       if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
     };
   }, [visible]);
