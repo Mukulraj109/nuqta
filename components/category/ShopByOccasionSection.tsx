@@ -17,6 +17,7 @@ import {
 import { useRouter } from 'expo-router';
 import categoryMetadataApi, { Occasion } from '@/services/categoryMetadataApi';
 import { getOccasionsForCategory } from '@/data/categoryDummyData';
+import { colors } from '@/constants/theme';
 
 interface ShopByOccasionSectionProps {
   categorySlug: string;
@@ -29,23 +30,23 @@ const CARD_WIDTH = 140;
 const getTagColor = (tag: string | null) => {
   switch (tag) {
     case 'Hot':
-      return { bg: '#FEE2E2', text: '#EF4444' };
+      return { bg: colors.errorScale[100], text: colors.error };
     case 'Trending':
-      return { bg: '#DBEAFE', text: '#2563EB' };
+      return { bg: colors.tint.blueLight, text: colors.brand.blue };
     case 'Coming Soon':
-      return { bg: '#FEF3C7', text: '#D97706' };
+      return { bg: colors.tint.amberLight, text: colors.warningScale[700] };
     case 'Premium':
-      return { bg: '#F3E8FF', text: '#7C3AED' };
+      return { bg: colors.tint.pink, text: colors.brand.purple };
     case 'Special':
-      return { bg: '#faf1e0', text: '#1a3a52' };
+      return { bg: colors.linen, text: colors.nileBlue };
     case 'Student':
-      return { bg: '#CFFAFE', text: '#0891B2' };
+      return { bg: '#CFFAFE', text: colors.cyanDark };
     case 'Popular':
-      return { bg: '#FCE7F3', text: '#DB2777' };
+      return { bg: colors.pinkMist, text: colors.deepPink };
     case 'Festive':
-      return { bg: '#FFEDD5', text: '#EA580C' };
+      return { bg: '#FFEDD5', text: colors.brand.orangeDark };
     default:
-      return { bg: '#F3F4F6', text: '#6B7280' };
+      return { bg: colors.neutral[100], text: colors.neutral[500] };
   }
 };
 
@@ -146,7 +147,7 @@ const ShopByOccasionSection: React.FC<ShopByOccasionSectionProps> = ({
   if (loading) {
     return (
       <View style={[styles.container, styles.loadingContainer]}>
-        <ActivityIndicator size="small" color="#6366F1" />
+        <ActivityIndicator size="small" color={colors.brand.indigo} />
       </View>
     );
   }
@@ -192,13 +193,13 @@ const ShopByOccasionSection: React.FC<ShopByOccasionSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     paddingVertical: 20,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -234,19 +235,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.4,
   },
   seeAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 8,
   },
   seeAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -286,7 +287,7 @@ const styles = StyleSheet.create({
   occasionName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -298,7 +299,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

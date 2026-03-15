@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { COLORS, FoodRestaurant } from './constants';
 import { platformAlertSimple } from '@/utils/platformAlert';
+import { colors } from '@/constants/theme';
 
 const MAX_COMPARE = 5;
 const MIN_COMPARE = 2;
@@ -248,13 +249,13 @@ const RestaurantCompareSection: React.FC<RestaurantCompareSectionProps> = ({
                     <Text style={styles.tableStoreName} numberOfLines={2}>{r.name}</Text>
                     {r.isVerified && (
                       <View style={styles.verifiedBadge}>
-                        <Ionicons name="checkmark-circle" size={12} color="#3B82F6" />
+                        <Ionicons name="checkmark-circle" size={12} color={colors.infoScale[400]} />
                         <Text style={styles.verifiedText}>Verified</Text>
                       </View>
                     )}
                     {bestPickId === id && (
                       <View style={styles.bestPickBadge}>
-                        <Ionicons name="trophy" size={10} color="#FFFFFF" />
+                        <Ionicons name="trophy" size={10} color={colors.background.primary} />
                         <Text style={styles.bestPickText}>Best Pick</Text>
                       </View>
                     )}
@@ -277,7 +278,7 @@ const RestaurantCompareSection: React.FC<RestaurantCompareSectionProps> = ({
                   return (
                     <View key={id} style={[styles.dataCell, { width: COL_W }]}>
                       {m.key === 'rating' && val != null && (
-                        <Ionicons name="star" size={12} color={isBest ? '#16A34A' : COLORS.primaryGold} style={{ marginRight: 3 }} />
+                        <Ionicons name="star" size={12} color={isBest ? colors.brand.greenDark : COLORS.primaryGold} style={{ marginRight: 3 }} />
                       )}
                       <Text style={[styles.dataText, isBest && styles.dataTextBest]}>{display}</Text>
                     </View>
@@ -371,7 +372,7 @@ const RestaurantCompareSection: React.FC<RestaurantCompareSectionProps> = ({
               accessibilityLabel={`Compare ${selectedIds.size} restaurants${selectedIds.size < MIN_COMPARE ? ', select at least 2' : ''}`}
               accessibilityRole="button"
             >
-              <Ionicons name="git-compare-outline" size={16} color="#FFFFFF" />
+              <Ionicons name="git-compare-outline" size={16} color={colors.background.primary} />
               <Text style={styles.compareBtnText}>Compare Now</Text>
             </Pressable>
           </View>
@@ -389,11 +390,11 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: 16,
     marginVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     ...Platform.select({
-      ios: { shadowColor: '#1a3a52', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.06, shadowRadius: 12 },
+      ios: { shadowColor: colors.nileBlue, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.06, shadowRadius: 12 },
       android: { elevation: 3 },
       web: { boxShadow: '0 2px 12px rgba(11,34,64,0.06)' },
     }),
@@ -428,7 +429,7 @@ const styles = StyleSheet.create({
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -438,7 +439,7 @@ const styles = StyleSheet.create({
   },
   chipSelected: {
     borderColor: COLORS.primaryGold,
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
   },
   chipLogo: {
     width: 24,
@@ -449,7 +450,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -461,7 +462,7 @@ const styles = StyleSheet.create({
   },
   chipTextSelected: {
     fontWeight: '600',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
   // --- Selection footer ---
   selectionFooter: {
@@ -490,7 +491,7 @@ const styles = StyleSheet.create({
   compareBtnText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // --- Table ---
   tableWrapper: {
@@ -499,7 +500,7 @@ const styles = StyleSheet.create({
   tableRow: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
     minHeight: 44,
   },
   labelCell: {
@@ -527,7 +528,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   dataTextBest: {
-    color: '#16A34A',
+    color: colors.brand.greenDark,
     fontWeight: '700',
   },
   dataTextSmall: {
@@ -543,7 +544,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   tableLogoFallback: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -561,13 +562,13 @@ const styles = StyleSheet.create({
   },
   verifiedText: {
     fontSize: 10,
-    color: '#3B82F6',
+    color: colors.infoScale[400],
     fontWeight: '500',
   },
   bestPickBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#16A34A',
+    backgroundColor: colors.brand.greenDark,
     borderRadius: 6,
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -577,7 +578,7 @@ const styles = StyleSheet.create({
   bestPickText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // --- Actions ---
   viewMenuBtn: {
@@ -589,7 +590,7 @@ const styles = StyleSheet.create({
   viewMenuText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   tableActions: {
     flexDirection: 'row',
@@ -599,12 +600,12 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   saveBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 10,
@@ -613,12 +614,12 @@ const styles = StyleSheet.create({
   saveBtnText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   resetBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 10,

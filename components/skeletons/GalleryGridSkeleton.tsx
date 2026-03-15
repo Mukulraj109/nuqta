@@ -4,6 +4,7 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const ITEM_SIZE = (SCREEN_WIDTH - 48) / 3;
@@ -47,7 +48,7 @@ function GalleryGridSkeleton() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 16,
   },
   header: {

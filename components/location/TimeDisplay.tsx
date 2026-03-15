@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { useGreetingTime } from '@/hooks/useGreeting';
 import { TimeOfDay } from '@/types/greeting.types';
+import { colors } from '@/constants/theme';
 
 interface TimeDisplayProps {
   showDate?: boolean;
@@ -78,13 +79,13 @@ function TimeDisplay({
       case 'morning':
         return '#FFA500';
       case 'afternoon':
-        return '#FFD700';
+        return colors.brand.goldBright;
       case 'evening':
         return '#FF6347';
       case 'night':
         return '#4169E1';
       default:
-        return '#333333';
+        return colors.darkGray;
     }
   };
 
@@ -191,18 +192,18 @@ const styles = StyleSheet.create({
   time: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 4,
   },
   compactTime: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333333',
+    color: colors.darkGray,
     marginRight: 8,
   },
   date: {
     fontSize: 16,
-    color: '#666666',
+    color: colors.midGray,
     marginBottom: 8,
     textAlign: 'center',
   },

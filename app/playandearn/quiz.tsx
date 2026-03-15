@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
@@ -38,10 +39,10 @@ const COLORS = {
   goldDark: Colors.primary[900],
   goldBg: Colors.background.accent,
 
-  purple: '#A855F7',
+  purple: colors.brand.purpleMedium,
   purpleLight: '#C084FC',
   purpleDark: Colors.brand.purple,
-  purpleBg: '#F5F3FF',
+  purpleBg: colors.tint.purpleLight,
 
   background: Colors.background.secondary,
   surface: Colors.background.primary,
@@ -424,7 +425,7 @@ const Quiz = () => {
                 {[
                   { num: '1', color: COLORS.purple, title: 'Answer 5 questions', desc: 'Each question has 15 seconds', icon: 'bulb' },
                   { num: '2', color: COLORS.gold, title: 'Earn 50 coins per correct answer', desc: 'Plus streak bonuses!', icon: 'cash' },
-                  { num: '3', color: '#EC4899', title: 'Get streak bonuses', desc: '3+ streak: +25% | 5 streak: +50%', icon: 'flash' },
+                  { num: '3', color: colors.brand.pink, title: 'Get streak bonuses', desc: '3+ streak: +25% | 5 streak: +50%', icon: 'flash' },
                 ].map((step, idx) => (
                   <View key={idx} style={styles.stepRow}>
                     <View style={[styles.stepBadge, { backgroundColor: `${step.color}15` }]}>
@@ -595,7 +596,7 @@ const Quiz = () => {
                   <ConfettiParticle
                     key={i}
                     delay={i * 150}
-                    color={[COLORS.purple, COLORS.gold, '#EC4899', COLORS.primary][i % 4]}
+                    color={[COLORS.purple, COLORS.gold, colors.brand.pink, COLORS.primary][i % 4]}
                   />
                 ))}
               </View>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonCard from '@/components/common/SkeletonCard';
+import { colors } from '@/constants/theme';
 
 interface EventCardSkeletonProps {
   width?: number;
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 20,
     overflow: 'hidden',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     position: 'relative',
     height: 160,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   image: {
     borderTopLeftRadius: 20,

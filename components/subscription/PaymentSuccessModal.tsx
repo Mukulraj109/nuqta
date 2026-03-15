@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface PaymentSuccessModalProps {
   visible: boolean;
@@ -73,10 +74,10 @@ function PaymentSuccessModal({
   if (!visible) return null;
 
   const tierName = tier === 'vip' ? 'VIP' : 'Premium';
-  const tierColor = tier === 'vip' ? '#F59E0B' : '#8B5CF6';
+  const tierColor = tier === 'vip' ? colors.warningScale[400] : colors.brand.purpleLight;
   const tierGradient = tier === 'vip'
-    ? ['#F59E0B', '#FBBF24']
-    : ['#8B5CF6', '#A855F7', '#EC4899'];
+    ? [colors.warningScale[400], colors.warningScale[400]]
+    : [colors.brand.purpleLight, colors.brand.purpleMedium, colors.brand.pink];
 
   return (
     <Modal
@@ -103,7 +104,7 @@ function PaymentSuccessModal({
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Ionicons name="checkmark" size={60} color="#FFFFFF" />
+                <Ionicons name="checkmark" size={60} color={colors.background.primary} />
               </LinearGradient>
             </Animated.View>
           </View>
@@ -216,7 +217,7 @@ function PaymentSuccessModal({
                 <ThemedText style={styles.primaryButtonText}>
                   View My Subscription
                 </ThemedText>
-                <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+                <Ionicons name="arrow-forward" size={20} color={colors.background.primary} />
               </LinearGradient>
             </Pressable>
 
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     width: '100%',
     maxWidth: 500,
@@ -291,13 +292,13 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
     textAlign: 'center',
   },
   successSubtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 24,
     textAlign: 'center',
   },
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -333,17 +334,17 @@ const styles = StyleSheet.create({
   },
   detailLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   detailValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   divider: {
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginVertical: 16,
   },
   benefitsContainer: {
@@ -352,7 +353,7 @@ const styles = StyleSheet.create({
   benefitsTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
   },
   benefitItem: {
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
   },
   benefitText: {
     fontSize: 13,
-    color: '#4B5563',
+    color: colors.neutral[600],
     flex: 1,
   },
   primaryButton: {
@@ -380,19 +381,19 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   primaryButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
   },
   secondaryButton: {
     width: '100%',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   secondaryButtonText: {
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontSize: 16,
     fontWeight: '600',
   },

@@ -15,6 +15,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -41,7 +42,7 @@ const EventsHeader: React.FC<EventsHeaderProps> = ({
 
   return (
     <LinearGradient
-      colors={['#1a3a52', '#2A5577']}
+      colors={[colors.nileBlue, '#2A5577']}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.container}
@@ -55,7 +56,7 @@ const EventsHeader: React.FC<EventsHeaderProps> = ({
           accessibilityLabel="Go back"
           accessibilityRole="button"
         >
-          <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+          <Ionicons name="chevron-back" size={24} color={colors.background.primary} />
         </Pressable>
 
         <ThemedText style={styles.title}>{title}</ThemedText>
@@ -75,13 +76,13 @@ const EventsHeader: React.FC<EventsHeaderProps> = ({
           <Ionicons
             name="search"
             size={20}
-            color={isFocused ? '#1a3a52' : '#9CA3AF'}
+            color={isFocused ? colors.nileBlue : colors.neutral[400]}
             style={styles.searchIcon}
           />
           <TextInput
             style={styles.searchInput}
             placeholder="Search events..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={searchQuery}
             onChangeText={onSearchChange}
             onFocus={() => setIsFocused(true)}
@@ -98,12 +99,12 @@ const EventsHeader: React.FC<EventsHeaderProps> = ({
              
               accessibilityLabel="Clear search"
             >
-              <Ionicons name="close-circle" size={20} color="#9CA3AF" />
+              <Ionicons name="close-circle" size={20} color={colors.neutral[400]} />
             </Pressable>
           )}
           {isLoading && (
             <View style={styles.loadingIndicator}>
-              <Ionicons name="ellipse" size={8} color="#1a3a52" />
+              <Ionicons name="ellipse" size={8} color={colors.nileBlue} />
             </View>
           )}
         </View>
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
   },
   spacer: {
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
   searchInputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 14,
     paddingHorizontal: 14,
     height: 48,
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#1F2937',
+    color: colors.neutral[800],
     paddingVertical: 0,
     ...Platform.select({
       web: {

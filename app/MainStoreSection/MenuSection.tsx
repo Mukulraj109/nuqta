@@ -18,6 +18,7 @@ import {
 } from "@/constants/DesignSystem";
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export interface MenuItem {
   id: string;
@@ -119,7 +120,7 @@ export default function MenuSection({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     paddingVertical: Spacing.sm,
   },
   menuItem: {

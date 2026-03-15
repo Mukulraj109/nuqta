@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useCurrentLocation } from '@/hooks/useLocation';
+import { colors } from '@/constants/theme';
 
 interface LocationNotification {
   id: string;
@@ -124,11 +125,11 @@ function LocationNotifications({
       case 'store':
         return '#34C759';
       case 'event':
-        return '#007AFF';
+        return colors.brand.ios;
       case 'reminder':
         return '#8E8E93';
       default:
-        return '#007AFF';
+        return colors.brand.ios;
     }
   };
 
@@ -174,7 +175,7 @@ function LocationNotifications({
           
           <View style={styles.notificationFooter}>
             <View style={styles.locationInfo}>
-              <Ionicons name="location" size={12} color="#666666" />
+              <Ionicons name="location" size={12} color={colors.midGray} />
               <Text style={styles.locationText}>
                 {item.location.name} • {formatDistance(item.location.distance)}
               </Text>
@@ -196,7 +197,7 @@ function LocationNotifications({
     <View style={styles.settingItem}>
       <View style={styles.settingContent}>
         <View style={styles.settingIcon}>
-          <Ionicons name={icon as any} size={20} color="#007AFF" />
+          <Ionicons name={icon as any} size={20} color={colors.brand.ios} />
         </View>
         <View style={styles.settingText}>
           <Text style={styles.settingTitle}>{title}</Text>
@@ -206,8 +207,8 @@ function LocationNotifications({
       <Switch
         value={value}
         onValueChange={onValueChange}
-        trackColor={{ false: '#E0E0E0', true: '#007AFF' }}
-        thumbColor="#FFFFFF"
+        trackColor={{ false: '#E0E0E0', true: colors.brand.ios }}
+        thumbColor={colors.background.primary}
       />
     </View>
   );
@@ -227,7 +228,7 @@ function LocationNotifications({
           )}
         </View>
         <Pressable onPress={onSettingsPress}>
-          <Ionicons name="settings" size={24} color="#007AFF" />
+          <Ionicons name="settings" size={24} color={colors.brand.ios} />
         </Pressable>
       </View>
 
@@ -301,7 +302,7 @@ function LocationNotifications({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.tint.warmGray,
   },
   header: {
     flexDirection: 'row',
@@ -319,7 +320,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#333333',
+    color: colors.darkGray,
   },
   badge: {
     backgroundColor: '#FF3B30',
@@ -350,7 +351,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 16,
   },
   settingItem: {
@@ -375,12 +376,12 @@ const styles = StyleSheet.create({
   settingTitle: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 2,
   },
   settingSubtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     lineHeight: 18,
   },
   notificationsSection: {
@@ -431,7 +432,7 @@ const styles = StyleSheet.create({
   notificationTitle: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333333',
+    color: colors.darkGray,
     flex: 1,
   },
   unreadText: {
@@ -441,12 +442,12 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     marginLeft: 8,
   },
   notificationMessage: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     lineHeight: 18,
     marginBottom: 8,
   },
@@ -462,7 +463,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 12,
-    color: '#666666',
+    color: colors.midGray,
   },
   timestampText: {
     fontSize: 12,
@@ -475,13 +476,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333333',
+    color: colors.darkGray,
     marginTop: 16,
     marginBottom: 8,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -498,7 +499,7 @@ const styles = StyleSheet.create({
   },
   locationStatusText: {
     fontSize: 14,
-    color: '#007AFF',
+    color: colors.brand.ios,
     marginLeft: 8,
   },
 });

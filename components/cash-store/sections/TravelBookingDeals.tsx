@@ -21,6 +21,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { TravelDeal } from '../../../types/cash-store.types';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const GRID_GAP = 10;
@@ -34,48 +35,48 @@ const CATEGORY_THEMES: Record<string, {
   accentColor: string;
 }> = {
   flights: {
-    gradient: ['#1a3a52', '#234b68'],
+    gradient: [colors.nileBlue, colors.brand.nileBlueLight],
     iconBg: 'rgba(255,215,181,0.2)',
-    iconColor: '#ffd7b5',
-    accentColor: '#ffd7b5',
+    iconColor: colors.lightPeach,
+    accentColor: colors.lightPeach,
   },
   hotels: {
-    gradient: ['#D4A07A', '#E8B896'],
+    gradient: [colors.brand.caramel, colors.brand.sand],
     iconBg: 'rgba(255,255,255,0.25)',
-    iconColor: '#FFFFFF',
-    accentColor: '#FFFFFF',
+    iconColor: colors.background.primary,
+    accentColor: colors.background.primary,
   },
   cabs: {
     gradient: ['#2d4a5f', '#3d6178'],
     iconBg: 'rgba(255,205,87,0.2)',
-    iconColor: '#ffcd57',
-    accentColor: '#ffcd57',
+    iconColor: colors.lightMustard,
+    accentColor: colors.lightMustard,
   },
   experiences: {
-    gradient: ['#E8B896', '#D4A07A'],
+    gradient: [colors.brand.sand, colors.brand.caramel],
     iconBg: 'rgba(26,58,82,0.15)',
-    iconColor: '#1a3a52',
-    accentColor: '#1a3a52',
+    iconColor: colors.nileBlue,
+    accentColor: colors.nileBlue,
   },
   buses: {
-    gradient: ['#1a3a52', '#2d4a5f'],
+    gradient: [colors.nileBlue, '#2d4a5f'],
     iconBg: 'rgba(255,215,181,0.2)',
-    iconColor: '#ffd7b5',
-    accentColor: '#ffd7b5',
+    iconColor: colors.lightPeach,
+    accentColor: colors.lightPeach,
   },
   trains: {
-    gradient: ['#3d6178', '#1a3a52'],
+    gradient: ['#3d6178', colors.nileBlue],
     iconBg: 'rgba(255,205,87,0.2)',
-    iconColor: '#ffcd57',
-    accentColor: '#ffcd57',
+    iconColor: colors.lightMustard,
+    accentColor: colors.lightMustard,
   },
 };
 
 const DEFAULT_THEME = {
-  gradient: ['#1a3a52', '#234b68'],
+  gradient: [colors.nileBlue, colors.brand.nileBlueLight],
   iconBg: 'rgba(255,215,181,0.2)',
-  iconColor: '#ffd7b5',
-  accentColor: '#ffd7b5',
+  iconColor: colors.lightPeach,
+  accentColor: colors.lightPeach,
 };
 
 interface TravelBookingDealsProps {
@@ -189,7 +190,7 @@ const TravelCard: React.FC<{
             </Animated.View>
             {deal.bonusCoins ? (
               <View style={styles.bonusPill}>
-                <Ionicons name="flash" size={9} color="#ffcd57" />
+                <Ionicons name="flash" size={9} color={colors.lightMustard} />
                 <Text style={styles.bonusText}>+{deal.bonusCoins}</Text>
               </View>
             ) : null}
@@ -207,7 +208,7 @@ const TravelCard: React.FC<{
               <Text style={styles.cashbackLabel}>cashback</Text>
             </View>
             <View style={styles.arrowCircle}>
-              <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={14} color={colors.background.primary} />
             </View>
           </View>
         </LinearGradient>
@@ -317,7 +318,7 @@ const TravelBookingDeals: React.FC<TravelBookingDealsProps> = ({
             <View style={styles.titleRow}>
               <Text style={styles.headerTitle}>Travel & Booking</Text>
               <Animated.View style={{ transform: [{ translateX: planeAnim }] }}>
-                <Ionicons name="airplane" size={16} color="#D4A07A" />
+                <Ionicons name="airplane" size={16} color={colors.brand.caramel} />
               </Animated.View>
             </View>
             <Text style={styles.subtitle}>Earn cashback on every trip</Text>
@@ -329,7 +330,7 @@ const TravelBookingDeals: React.FC<TravelBookingDealsProps> = ({
           >
             <Text style={styles.viewAllText}>See All</Text>
             <View style={styles.viewAllArrow}>
-              <Ionicons name="chevron-forward" size={12} color="#1a3a52" />
+              <Ionicons name="chevron-forward" size={12} color={colors.nileBlue} />
             </View>
           </Pressable>
         </Animated.View>
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#D4A07A',
+        shadowColor: colors.brand.caramel,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.12,
         shadowRadius: 12,
@@ -403,12 +404,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.2,
   },
   subtitle: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
   viewAllBtn: {
@@ -426,7 +427,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   viewAllArrow: {
     width: 22,
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.15,
         shadowRadius: 8,
@@ -508,14 +509,14 @@ const styles = StyleSheet.create({
   bonusText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 
   // ── Card Content ──
   cardTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginTop: 10,
     letterSpacing: -0.2,
   },

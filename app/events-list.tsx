@@ -35,6 +35,7 @@ import EventFiltersModal from '@/components/events/EventFilters';
 import { useEventsPage, EventSortOption } from '@/hooks/useEventsPage';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const { width: screenWidth } = Dimensions.get('window');
 
 export default function EventsListPage() {

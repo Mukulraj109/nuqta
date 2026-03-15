@@ -2,6 +2,7 @@
 // Manages app preferences and applies them globally across the app
 
 import React, { createContext, useContext, useEffect, useState, useCallback, useMemo, useRef, ReactNode } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // Deferred: expo-haptics is heavy native module
 let _haptics: typeof import('expo-haptics') | null = null;
@@ -238,28 +239,59 @@ export function AppPreferencesProvider({ children }: AppPreferencesProviderProps
     if (!isAuthenticated) _appPreferencesLoaded = false;
   }, [isAuthenticated]);
 
-  // Auto-sync with backend every 5 minutes
+  // Auto-sync with backend every 5 minutes, pausing when app is backgrounded
   useEffect(() => {
     if (!isAuthenticated || !user?.isOnboarded) return;
 
-    const interval = setInterval(async () => {
-      try {
-        const lastSync = await AsyncStorage.getItem(STORAGE_KEYS.LAST_SYNC);
-        if (lastSync) {
-          const lastSyncTime = new Date(lastSync).getTime();
-          const now = new Date().getTime();
-          const fiveMinutes = 5 * 60 * 1000;
+    let isMounted = true;
+    const appStateRef = { current: AppState.currentState };
+    let intervalId: ReturnType<typeof setInterval> | null = null;
 
-          if (now - lastSyncTime > fiveMinutes) {
-            await refreshPreferences();
+    const startInterval = () => {
+      if (intervalId) return; // already running
+      intervalId = setInterval(async () => {
+        if (!isMounted || appStateRef.current !== 'active') return;
+        try {
+          const lastSync = await AsyncStorage.getItem(STORAGE_KEYS.LAST_SYNC);
+          if (lastSync && isMounted) {
+            const lastSyncTime = new Date(lastSync).getTime();
+            const now = new Date().getTime();
+            const fiveMinutes = 5 * 60 * 1000;
+
+            if (now - lastSyncTime > fiveMinutes) {
+              await refreshPreferences();
+            }
           }
+        } catch (err) {
+          // silently handle
         }
-      } catch (err) {
-        // silently handle
-      }
-    }, 5 * 60 * 1000); // 5 minutes
+      }, 5 * 60 * 1000);
+    };
 
-    return () => clearInterval(interval);
+    const stopInterval = () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    };
+
+    // Only poll while app is in the foreground
+    const subscription = AppState.addEventListener('change', (nextState: AppStateStatus) => {
+      appStateRef.current = nextState;
+      if (nextState === 'active') {
+        startInterval();
+      } else {
+        stopInterval();
+      }
+    });
+
+    startInterval();
+
+    return () => {
+      isMounted = false;
+      stopInterval();
+      subscription.remove();
+    };
   }, [isAuthenticated, user]);
 
   const value = useMemo<AppPreferencesContextType>(() => ({

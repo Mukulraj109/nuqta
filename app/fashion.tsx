@@ -24,6 +24,7 @@ import apiClient from '@/services/apiClient';
 import { CachedImage } from '@/components/ui/CachedImage';
 
 import { Colors, Spacing, BorderRadius } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const FASHION_SLUG = 'fashion';
@@ -327,7 +328,7 @@ const FashionPage: React.FC = () => {
   if (loadingInitial && products.length === 0 && subcategories.length === 0) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#EC4899', '#DB2777']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
+        <LinearGradient colors={[colors.brand.pink, colors.deepPink]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
           <View style={styles.headerTop}>
             <Pressable onPress={() => router.back()} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
@@ -343,9 +344,9 @@ const FashionPage: React.FC = () => {
         </LinearGradient>
         <View style={styles.loadingContainer}>
           <View style={styles.emptyIconWrap}>
-            <Ionicons name="shirt-outline" size={36} color="#EC4899" />
+            <Ionicons name="shirt-outline" size={36} color={colors.brand.pink} />
           </View>
-          <ActivityIndicator size="large" color="#EC4899" style={{ marginTop: Spacing.md }} />
+          <ActivityIndicator size="large" color={colors.brand.pink} style={{ marginTop: Spacing.md }} />
           <Text style={styles.loadingText}>Loading fashion...</Text>
         </View>
       </View>
@@ -355,7 +356,7 @@ const FashionPage: React.FC = () => {
   return (
     <View style={styles.container}>
       {/* ── Header ─────────────────────────────────────── */}
-      <LinearGradient colors={['#EC4899', '#DB2777']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
+      <LinearGradient colors={[colors.brand.pink, colors.deepPink]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
         <View style={styles.headerTop}>
           <Pressable onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
@@ -429,9 +430,9 @@ const FashionPage: React.FC = () => {
                     >
                       <View style={styles.categoryIcon}>
                         {cat.icon ? (
-                          <Ionicons name={(cat.icon as any) || 'pricetag-outline'} size={24} color="#EC4899" />
+                          <Ionicons name={(cat.icon as any) || 'pricetag-outline'} size={24} color={colors.brand.pink} />
                         ) : (
-                          <Ionicons name="pricetag-outline" size={24} color="#EC4899" />
+                          <Ionicons name="pricetag-outline" size={24} color={colors.brand.pink} />
                         )}
                       </View>
                       <Text style={styles.categoryTitle} numberOfLines={1}>{cat.name}</Text>
@@ -538,14 +539,14 @@ const FashionPage: React.FC = () => {
           <>
             {loadingMore && (
               <View style={styles.footerLoader}>
-                <ActivityIndicator size="small" color="#EC4899" />
+                <ActivityIndicator size="small" color={colors.brand.pink} />
               </View>
             )}
 
             {/* ── Promo banner (after products) ────── */}
             {!loadingInitial && (
               <View style={styles.promoBanner}>
-                <LinearGradient colors={['#8B5CF6', '#7C3AED']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.promoGradient}>
+                <LinearGradient colors={[colors.brand.purpleLight, colors.brand.purple]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.promoGradient}>
                   <Ionicons name="shirt-outline" size={40} color="rgba(255,255,255,0.3)" style={{ marginBottom: 12 }} />
                   <Text style={styles.promoTitle}>End of Season Sale</Text>
                   <Text style={styles.promoSubtitle}>
@@ -592,13 +593,13 @@ const styles = StyleSheet.create({
   statDivider: { width: 1, height: 30, backgroundColor: 'rgba(255,255,255,0.3)' },
   filtersContainer: { height: 48, paddingHorizontal: Spacing.base, backgroundColor: Colors.background.primary, borderBottomWidth: 1, borderBottomColor: Colors.border.default, justifyContent: 'center' },
   filterChip: { paddingHorizontal: Spacing.base, paddingVertical: 7, borderRadius: BorderRadius.xl, backgroundColor: Colors.neutral[100], marginRight: Spacing.sm },
-  filterChipActive: { backgroundColor: '#EC4899' },
+  filterChipActive: { backgroundColor: colors.brand.pink },
   filterChipText: { fontSize: 14, color: Colors.neutral[500] },
   filterChipTextActive: { color: Colors.text.inverse, fontWeight: '600' },
   section: { paddingHorizontal: Spacing.base, paddingTop: Spacing.base },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.md },
   sectionTitle: { fontSize: 18, fontWeight: '700', color: Colors.nileBlue, marginBottom: Spacing.md },
-  viewAllText: { fontSize: 14, fontWeight: '600', color: '#EC4899' },
+  viewAllText: { fontSize: 14, fontWeight: '600', color: colors.brand.pink },
   categoriesGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.md },
   categoryCard: {
     width: (SCREEN_WIDTH - 56) / 3,
@@ -668,14 +669,14 @@ const styles = StyleSheet.create({
   ratingContainer: { flexDirection: 'row', alignItems: 'center', gap: Spacing.xs, marginBottom: Spacing.sm },
   ratingText: { fontSize: 12, color: Colors.nileBlue, fontWeight: '600' },
   priceRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm },
-  productPrice: { fontSize: 15, fontWeight: '700', color: '#111827' },
+  productPrice: { fontSize: 15, fontWeight: '700', color: colors.neutral[900] },
   originalPrice: { fontSize: 12, color: Colors.neutral[500], textDecorationLine: 'line-through' },
   promoBanner: { marginHorizontal: Spacing.base, marginTop: Spacing.base },
   promoGradient: { padding: Spacing.xl, borderRadius: BorderRadius.lg, alignItems: 'center' },
   promoTitle: { fontSize: 18, fontWeight: '700', color: Colors.text.inverse, marginBottom: Spacing.xs },
   promoSubtitle: { fontSize: 13, color: 'rgba(255,255,255,0.9)', textAlign: 'center', marginBottom: Spacing.base },
   promoButton: { backgroundColor: Colors.background.primary, paddingHorizontal: Spacing.xl, paddingVertical: Spacing.md, borderRadius: 24 },
-  promoButtonText: { fontSize: 14, fontWeight: '700', color: '#8B5CF6' },
+  promoButtonText: { fontSize: 14, fontWeight: '700', color: colors.brand.purpleLight },
   // Loading / empty states
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   loadingText: { fontSize: 14, color: Colors.neutral[500], marginTop: Spacing.md },
@@ -688,7 +689,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  emptyTitle: { fontSize: 16, fontWeight: '700', color: '#111827', marginTop: Spacing.md },
+  emptyTitle: { fontSize: 16, fontWeight: '700', color: colors.neutral[900], marginTop: Spacing.md },
   emptySubtitle: { fontSize: 13, color: Colors.neutral[500], marginTop: Spacing.xs, textAlign: 'center' },
   footerLoader: { paddingVertical: Spacing.lg, alignItems: 'center' },
   endText: { textAlign: 'center', fontSize: 13, color: Colors.neutral[400], paddingVertical: Spacing.base },

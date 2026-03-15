@@ -23,6 +23,7 @@ import PurchaseModal from '@/components/voucher/PurchaseModal';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -113,7 +114,7 @@ export default function BrandDetailPage() {
         id: brandRes.data._id,
         name: brandRes.data.name,
         logo: brandRes.data.logo,
-        backgroundColor: brandRes.data.backgroundColor || '#F3F4F6',
+        backgroundColor: brandRes.data.backgroundColor || colors.neutral[100],
         logoColor: brandRes.data.logoColor,
         cashbackRate: brandRes.data.cashbackRate || 0,
         rating: brandRes.data.rating || 0,
@@ -226,7 +227,7 @@ export default function BrandDetailPage() {
       <View style={styles.logoWrapper}>
         <View style={styles.logoGlow} />
         <LinearGradient
-          colors={[brand?.backgroundColor || '#F3F4F6', (brand?.backgroundColor || '#F3F4F6') + 'CC']}
+          colors={[brand?.backgroundColor || colors.neutral[100], (brand?.backgroundColor || colors.neutral[100]) + 'CC']}
           style={styles.brandLogo}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -521,7 +522,7 @@ export default function BrandDetailPage() {
 
       {/* Premium Background */}
       <LinearGradient
-        colors={['#E8F5E9', '#E0F2F1', '#F5F5F5', '#E8F5E9']}
+        colors={[colors.greenMist, '#E0F2F1', colors.tint.warmGray, colors.greenMist]}
         style={styles.backgroundGradient}
       >
         <View style={styles.bgOrb1} />

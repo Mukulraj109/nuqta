@@ -35,6 +35,7 @@ import specialProgramApi, {
 } from '@/services/specialProgramApi';
 import { platformAlert } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography, Shadows } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -47,9 +48,9 @@ interface ProgramDetailModalProps {
 
 // Icon mapping for program slugs
 const PROGRAM_ICONS: Record<string, { name: string; color: string; bgColor: string }> = {
-  student_zone: { name: 'school', color: '#3B82F6', bgColor: '#DBEAFE' },
-  corporate_perks: { name: 'briefcase', color: '#F59E0B', bgColor: '#FEF3C7' },
-  nuqta_prive: { name: 'diamond', color: '#C9A962', bgColor: '#1a1a2e' },
+  student_zone: { name: 'school', color: colors.infoScale[400], bgColor: colors.tint.blueLight },
+  corporate_perks: { name: 'briefcase', color: colors.warningScale[400], bgColor: colors.tint.amberLight },
+  nuqta_prive: { name: 'diamond', color: colors.brand.goldAccent, bgColor: colors.deepNavy },
 };
 
 export const ProgramDetailModal: React.FC<ProgramDetailModalProps> = ({
@@ -324,7 +325,7 @@ export const ProgramDetailModal: React.FC<ProgramDetailModalProps> = ({
        
       >
         {activating ? (
-          <ActivityIndicator color="#FFFFFF" />
+          <ActivityIndicator color={colors.background.primary} />
         ) : (
           <Text style={styles.activateButtonText}>Activate Now</Text>
         )}
@@ -394,7 +395,7 @@ export const ProgramDetailModal: React.FC<ProgramDetailModalProps> = ({
           onPress={handleVerify}
          
         >
-          <Ionicons name="shield-checkmark" size={20} color="#FFFFFF" />
+          <Ionicons name="shield-checkmark" size={20} color={colors.background.primary} />
           <Text style={styles.activateButtonText}>
             {eligibility!.verificationRejected ? 'Re-submit Verification' : 'Verify Now'}
           </Text>
@@ -408,7 +409,7 @@ export const ProgramDetailModal: React.FC<ProgramDetailModalProps> = ({
   const renderPendingVerification = () => (
     <View style={styles.centerContent}>
       <View style={styles.pendingIcon}>
-        <Ionicons name="time" size={48} color="#F59E0B" />
+        <Ionicons name="time" size={48} color={colors.warningScale[400]} />
       </View>
       <Text style={styles.pendingTitle}>Verification Under Review</Text>
       <Text style={styles.pendingSubtitle}>{eligibility!.message}</Text>
@@ -436,7 +437,7 @@ export const ProgramDetailModal: React.FC<ProgramDetailModalProps> = ({
       <Ionicons
         name={eligibility!.state === 'suspended' ? 'pause-circle' : 'close-circle'}
         size={48}
-        color={eligibility!.state === 'suspended' ? '#F59E0B' : Colors.error}
+        color={eligibility!.state === 'suspended' ? colors.warningScale[400] : Colors.error}
       />
       <Text style={styles.inactiveTitle}>
         {eligibility!.state === 'suspended' ? 'Membership Suspended' :
@@ -449,7 +450,7 @@ export const ProgramDetailModal: React.FC<ProgramDetailModalProps> = ({
           onPress={handleVerify}
          
         >
-          <Ionicons name="shield-checkmark" size={20} color="#FFFFFF" />
+          <Ionicons name="shield-checkmark" size={20} color={colors.background.primary} />
           <Text style={styles.activateButtonText}>Re-verify & Reactivate</Text>
         </Pressable>
       )}
@@ -469,7 +470,7 @@ export const ProgramDetailModal: React.FC<ProgramDetailModalProps> = ({
         {/* Header */}
         <View style={styles.header}>
           <Pressable onPress={onClose} style={styles.closeButton} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-            <Ionicons name="close" size={24} color={isPrive ? '#FFFFFF' : Colors.text.primary} />
+            <Ionicons name="close" size={24} color={isPrive ? colors.background.primary : Colors.text.primary} />
           </Pressable>
           <Text style={[styles.headerTitle, isPrive && styles.headerTitleDark]}>
             {eligibility?.program.name || 'Loading...'}
@@ -489,7 +490,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.secondary,
   },
   containerDark: {
-    backgroundColor: '#0A0A0A',
+    backgroundColor: colors.midGrayAlt,
   },
   header: {
     flexDirection: 'row',
@@ -512,7 +513,7 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
   headerTitleDark: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   scrollContent: {
     flex: 1,
@@ -545,7 +546,7 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     ...Typography.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   // Status Banner
@@ -747,7 +748,7 @@ const styles = StyleSheet.create({
   },
   activateButtonText: {
     ...Typography.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
 
@@ -772,7 +773,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.lg,
@@ -812,8 +813,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.success,
   },
   timelineDotActive: {
-    backgroundColor: '#F59E0B',
-    borderColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
+    borderColor: colors.warningScale[400],
   },
   timelineLine: {
     width: 2,

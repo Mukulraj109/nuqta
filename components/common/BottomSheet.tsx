@@ -16,6 +16,7 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
+import { colors } from '@/constants/theme';
 import {
   SPACING,
   TYPOGRAPHY,

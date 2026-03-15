@@ -9,6 +9,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { Typography, Spacing, BorderRadius } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type BadgeType =
   | 'discount'
@@ -38,50 +39,50 @@ export const DiscountBadge: React.FC<DiscountBadgeProps> = ({
     switch (type) {
       case 'discount':
         return {
-          backgroundColor: '#FEE2E2',
-          textColor: '#DC2626',
+          backgroundColor: colors.errorScale[100],
+          textColor: colors.error,
           icon: 'pricetag' as const,
           text: value ? `${value}% OFF` : 'SALE',
         };
       case 'cashback':
         return {
-          backgroundColor: isDark ? 'rgba(16, 185, 129, 0.2)' : '#D1FAE5',
-          textColor: isDark ? '#34D399' : '#059669',
+          backgroundColor: isDark ? 'rgba(16, 185, 129, 0.2)' : colors.tint.green,
+          textColor: isDark ? colors.successScale[400] : colors.successScale[700],
           icon: 'cash' as const,
           text: value ? `${value}% Cashback` : 'Cashback',
         };
       case 'new':
         return {
-          backgroundColor: isDark ? 'rgba(16, 185, 129, 0.2)' : '#D1FAE5',
-          textColor: isDark ? '#34D399' : '#059669',
+          backgroundColor: isDark ? 'rgba(16, 185, 129, 0.2)' : colors.tint.green,
+          textColor: isDark ? colors.successScale[400] : colors.successScale[700],
           icon: 'sparkles' as const,
           text: 'NEW',
         };
       case 'trending':
         return {
-          backgroundColor: isDark ? 'rgba(239, 68, 68, 0.2)' : '#FEE2E2',
-          textColor: isDark ? '#F87171' : '#DC2626',
+          backgroundColor: isDark ? 'rgba(239, 68, 68, 0.2)' : colors.errorScale[100],
+          textColor: isDark ? colors.errorScale[400] : colors.error,
           icon: 'trending-up' as const,
           text: 'TRENDING',
         };
       case 'lightning':
         return {
-          backgroundColor: isDark ? 'rgba(245, 158, 11, 0.2)' : '#FEF3C7',
-          textColor: isDark ? '#FBBF24' : '#D97706',
+          backgroundColor: isDark ? 'rgba(245, 158, 11, 0.2)' : colors.tint.amberLight,
+          textColor: isDark ? colors.warningScale[400] : colors.warningScale[700],
           icon: 'flash' as const,
           text: 'FLASH',
         };
       case 'freeDelivery':
         return {
-          backgroundColor: isDark ? 'rgba(59, 130, 246, 0.2)' : '#DBEAFE',
-          textColor: isDark ? '#60A5FA' : '#2563EB',
+          backgroundColor: isDark ? 'rgba(59, 130, 246, 0.2)' : colors.tint.blueLight,
+          textColor: isDark ? colors.infoScale[400] : colors.brand.blue,
           icon: 'car' as const,
           text: 'FREE DELIVERY',
         };
       case 'exclusive':
         return {
-          backgroundColor: isDark ? 'rgba(139, 92, 246, 0.2)' : '#EDE9FE',
-          textColor: isDark ? '#A78BFA' : '#7C3AED',
+          backgroundColor: isDark ? 'rgba(139, 92, 246, 0.2)' : colors.tint.purple,
+          textColor: isDark ? colors.brand.purpleSoft : colors.brand.purple,
           icon: 'star' as const,
           text: 'EXCLUSIVE',
         };

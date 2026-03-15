@@ -19,6 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../types/mall.types';
 import MallNewArrivalCard from './cards/MallNewArrivalCard';
+import { colors } from '@/constants/theme';
 
 interface MallNewArrivalsProps {
   brands: MallBrand[];
@@ -47,22 +48,22 @@ const MallNewArrivals: React.FC<MallNewArrivalsProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#dfebf7', '#EFF6FF', '#FFFFFF']}
+          colors={[colors.lavenderMist, colors.tint.blue, colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
         >
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#1a3a52', '#0284C7']}
+              colors={[colors.nileBlue, colors.brand.sky]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="sparkles" size={18} color="#FFFFFF" />
+              <Ionicons name="sparkles" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>New Arrivals</Text>
           </View>
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#0284C7" />
+            <ActivityIndicator size="small" color={colors.brand.sky} />
             <Text style={styles.loadingText}>Loading new brands...</Text>
           </View>
         </LinearGradient>
@@ -75,7 +76,7 @@ const MallNewArrivals: React.FC<MallNewArrivalsProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#dfebf7', '#EFF6FF', '#FFFFFF']}
+          colors={[colors.lavenderMist, colors.tint.blue, colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
@@ -83,17 +84,17 @@ const MallNewArrivals: React.FC<MallNewArrivalsProps> = ({
           {/* Section Header */}
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#1a3a52', '#0284C7']}
+              colors={[colors.nileBlue, colors.brand.sky]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="sparkles" size={18} color="#FFFFFF" />
+              <Ionicons name="sparkles" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>New Arrivals</Text>
           </View>
 
           {/* Empty State Placeholder */}
           <View style={styles.emptyStateContainer}>
-            <Ionicons name="sparkles-outline" size={24} color="#0369A1" />
+            <Ionicons name="sparkles-outline" size={24} color={colors.brand.skyDark} />
             <Text style={styles.emptyStateText}>New arrivals launching soon</Text>
           </View>
         </LinearGradient>
@@ -104,7 +105,7 @@ const MallNewArrivals: React.FC<MallNewArrivalsProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#dfebf7', '#EFF6FF', '#FFFFFF']}
+        colors={[colors.lavenderMist, colors.tint.blue, colors.background.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.gradientBackground}
@@ -118,10 +119,10 @@ const MallNewArrivals: React.FC<MallNewArrivalsProps> = ({
         {/* Section Header */}
         <View style={styles.headerRow}>
           <LinearGradient
-            colors={['#1a3a52', '#0284C7']}
+            colors={[colors.nileBlue, colors.brand.sky]}
             style={styles.iconWrapper}
           >
-            <Ionicons name="sparkles" size={18} color="#FFFFFF" />
+            <Ionicons name="sparkles" size={18} color={colors.background.primary} />
           </LinearGradient>
           <Text style={styles.title}>New Arrivals</Text>
           <View style={styles.newBadge}>
@@ -135,14 +136,14 @@ const MallNewArrivals: React.FC<MallNewArrivalsProps> = ({
              
             >
               <LinearGradient
-                colors={['#1a3a52', '#234b68']}
+                colors={[colors.nileBlue, colors.brand.nileBlueLight]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.viewAllGradient}
               >
                 <Text style={styles.viewAllText}>View All</Text>
                 <View style={styles.viewAllArrow}>
-                  <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+                  <Ionicons name="arrow-forward" size={14} color={colors.background.primary} />
                 </View>
               </LinearGradient>
             </Pressable>
@@ -157,16 +158,16 @@ const MallNewArrivals: React.FC<MallNewArrivalsProps> = ({
         {/* Early Bird Banner */}
         <View style={styles.earlyBirdWrapper}>
           <LinearGradient
-            colors={['#dfebf7', '#E0F2FE']}
+            colors={[colors.lavenderMist, '#E0F2FE']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.earlyBirdBanner}
           >
             <LinearGradient
-              colors={['#0284C7', '#0369A1']}
+              colors={[colors.brand.sky, colors.brand.skyDark]}
               style={styles.earlyBirdIcon}
             >
-              <Ionicons name="gift" size={16} color="#FFFFFF" />
+              <Ionicons name="gift" size={16} color={colors.background.primary} />
             </LinearGradient>
             <View style={styles.earlyBirdContent}>
               <Text style={styles.earlyBirdTitle}>Early Bird Bonus!</Text>
@@ -175,7 +176,7 @@ const MallNewArrivals: React.FC<MallNewArrivalsProps> = ({
               </Text>
             </View>
             <View style={styles.earlyBirdArrow}>
-              <Ionicons name="chevron-forward" size={18} color="#0284C7" />
+              <Ionicons name="chevron-forward" size={18} color={colors.brand.sky} />
             </View>
           </LinearGradient>
         </View>
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -261,11 +262,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   newBadge: {
-    backgroundColor: '#0284C7',
+    backgroundColor: colors.brand.sky,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 8,
@@ -273,12 +274,12 @@ const styles = StyleSheet.create({
   newBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 1,
   },
   subtitle: {
     fontSize: 13,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     paddingHorizontal: 16,
     marginBottom: 12,
   },
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -308,7 +309,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   viewAllArrow: {
     width: 24,
@@ -345,12 +346,12 @@ const styles = StyleSheet.create({
   earlyBirdTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 2,
   },
   earlyBirdText: {
     fontSize: 12,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     lineHeight: 16,
   },
   earlyBirdArrow: {
@@ -375,7 +376,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     fontWeight: '500',
   },
   emptyStateContainer: {
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 13,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     fontWeight: '500',
   },
 });

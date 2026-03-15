@@ -13,14 +13,15 @@ import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { CountdownTimer } from '../common/CountdownTimer';
 import { DoubleCashbackCampaign } from '@/types/offers.types';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // New Color Palette
 const PALETTE = {
-  nileBlue: '#1a3a52',
-  lightMustard: '#ffcd57',
-  linen: '#faf1e0',
-  lightPeach: '#ffd7b5',
-  lavenderMist: '#dfebf7',
+  nileBlue: colors.nileBlue,
+  lightMustard: colors.lightMustard,
+  linen: colors.linen,
+  lightPeach: colors.lightPeach,
+  lavenderMist: colors.lavenderMist,
 };
 
 interface DoubleCashbackBannerProps {
@@ -70,7 +71,7 @@ export const DoubleCashbackBanner: React.FC<DoubleCashbackBannerProps> = ({
     multiplierBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#ffcd57',
+      backgroundColor: colors.lightMustard,
       paddingHorizontal: 10,
       paddingVertical: 4,
       borderRadius: 8,
@@ -104,7 +105,7 @@ export const DoubleCashbackBanner: React.FC<DoubleCashbackBannerProps> = ({
     timerContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: isDark ? 'rgba(239, 68, 68, 0.2)' : '#FEE2E2',
+      backgroundColor: isDark ? 'rgba(239, 68, 68, 0.2)' : colors.errorScale[100],
       paddingHorizontal: 10,
       paddingVertical: 6,
       borderRadius: 8,
@@ -113,7 +114,7 @@ export const DoubleCashbackBanner: React.FC<DoubleCashbackBannerProps> = ({
     endsIn: {
       fontSize: 11,
       fontWeight: '600',
-      color: '#EF4444',
+      color: colors.error,
       marginRight: Spacing.xs,
     },
     storesText: {
@@ -122,13 +123,13 @@ export const DoubleCashbackBanner: React.FC<DoubleCashbackBannerProps> = ({
       color: theme.colors.text.secondary,
     },
     storesHighlight: {
-      color: isDark ? '#FBBF24' : '#D97706',
+      color: isDark ? colors.warningScale[400] : colors.warningScale[700],
       fontWeight: '700',
     },
     ctaButton: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#ffcd57',
+      backgroundColor: colors.lightMustard,
       paddingHorizontal: Spacing.md + 4,
       paddingVertical: Spacing.sm + 2,
       borderRadius: BorderRadius.md,
@@ -152,7 +153,7 @@ export const DoubleCashbackBanner: React.FC<DoubleCashbackBannerProps> = ({
         colors={
           isDark
             ? ['rgba(245, 158, 11, 0.15)', 'rgba(251, 191, 36, 0.1)', 'rgba(239, 68, 68, 0.1)']
-            : ['#FEF3C7', '#FEE2E2', '#FEF3C7']
+            : [colors.tint.amberLight, colors.errorScale[100], colors.tint.amberLight]
         }
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -163,7 +164,7 @@ export const DoubleCashbackBanner: React.FC<DoubleCashbackBannerProps> = ({
             <Ionicons
               name="sparkles"
               size={24}
-              color={isDark ? '#FBBF24' : '#ffcd57'}
+              color={isDark ? colors.warningScale[400] : colors.lightMustard}
             />
           </View>
           <View style={styles.titleContainer}>
@@ -171,7 +172,7 @@ export const DoubleCashbackBanner: React.FC<DoubleCashbackBannerProps> = ({
               <Ionicons
                 name="flash"
                 size={12}
-                color={isDark ? '#FFF' : '#78350F'}
+                color={isDark ? colors.background.primary : '#78350F'}
               />
               <Text style={styles.multiplierText}>
                 {campaign.multiplier}X CASHBACK
@@ -206,7 +207,7 @@ export const DoubleCashbackBanner: React.FC<DoubleCashbackBannerProps> = ({
             <Ionicons
               name="arrow-forward"
               size={14}
-              color={isDark ? '#000' : '#FFF'}
+              color={isDark ? colors.text.primary : colors.background.primary}
             />
           </View>
         </View>

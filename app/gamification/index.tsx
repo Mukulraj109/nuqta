@@ -17,6 +17,7 @@ import apiClient from '@/services/apiClient';
 import { useWalletContext } from '@/contexts/WalletContext';
 import coinSyncService from '@/services/coinSyncService';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function GamificationDashboard() {
   const { rezBalance: coinBalance, refreshWallet } = useWalletContext();
@@ -110,13 +111,13 @@ export default function GamificationDashboard() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor="#8B5CF6"
+            tintColor={colors.brand.purpleLight}
           />
         }
       >
         {/* Modern Gradient Header */}
         <LinearGradient
-          colors={['#8B5CF6', '#7C3AED', '#6D28D9']}
+          colors={[colors.brand.purpleLight, colors.brand.purple, colors.brand.purpleDeep]}
           style={styles.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -137,7 +138,7 @@ export default function GamificationDashboard() {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Ionicons name="star" size={24} color="#FFD700" />
+                <Ionicons name="star" size={24} color={colors.brand.goldBright} />
                 <Text style={styles.coinsText}>{coinBalance.toLocaleString()}</Text>
               </LinearGradient>
             </Pressable>
@@ -254,9 +255,9 @@ export default function GamificationDashboard() {
             style={styles.leaderboardCard}
             onPress={() => router.push('/leaderboard' as any)}
           >
-            <Ionicons name="trophy" size={24} color="#FFD700" />
+            <Ionicons name="trophy" size={24} color={colors.brand.goldBright} />
             <Text style={styles.leaderboardTitle}>View Leaderboards</Text>
-            <Ionicons name="chevron-forward" size={24} color="#666" />
+            <Ionicons name="chevron-forward" size={24} color={colors.midGray} />
           </Pressable>
         </View>
       )}
@@ -265,7 +266,7 @@ export default function GamificationDashboard() {
         <View style={styles.quickAccess}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Mini Games</Text>
-            <Ionicons name="game-controller" size={24} color="#8B5CF6" />
+            <Ionicons name="game-controller" size={24} color={colors.brand.purpleLight} />
           </View>
           <View style={styles.gameRow}>
             <Pressable
@@ -547,7 +548,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   activeTab: {
-    borderBottomColor: '#8B5CF6',
+    borderBottomColor: colors.brand.purpleLight,
   },
   tabText: {
     ...Typography.body,
@@ -555,7 +556,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   activeTabText: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: 'bold',
   },
   content: {
@@ -602,7 +603,7 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 4,
   },
   progressText: {
@@ -622,11 +623,11 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
   claimButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: Spacing.lg,
     paddingVertical: 10,
     borderRadius: BorderRadius.md,
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 6,
@@ -679,7 +680,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: 'bold',
     color: Colors.background.primary,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.sm,
@@ -746,12 +747,12 @@ const styles = StyleSheet.create({
     padding: Spacing['2xl'],
   },
   viewAllButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     padding: 18,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
     marginTop: Spacing.base,
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,

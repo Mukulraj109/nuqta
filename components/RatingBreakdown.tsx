@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import { RatingBreakdownProps } from '@/types/reviews';
+import { colors } from '@/constants/theme';
 
 const RatingBreakdown: React.FC<RatingBreakdownProps> = ({
   ratingBreakdown,
@@ -31,7 +32,7 @@ const RatingBreakdown: React.FC<RatingBreakdownProps> = ({
           <View style={styles.progressBarContainer}>
             <View style={styles.progressBarBackground}>
               <LinearGradient
-                colors={['#7C3AED', '#8B5CF6']}
+                colors={[colors.brand.purple, colors.brand.purpleLight]}
                 style={[styles.progressBar, { width: `${rating.percentage}%` }]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   starNumber: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     width: 12,
   },
   progressBarContainer: {
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
   },
   progressBarBackground: {
     height: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
   percentageText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

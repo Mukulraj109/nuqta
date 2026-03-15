@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
+import { colors } from '@/constants/theme';
 
 interface Variant {
   id: string;
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.background.primary,
     position: 'relative',
   },
   variantSelected: {

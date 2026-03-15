@@ -19,6 +19,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useWalletContext } from '@/contexts/WalletContext';
 import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
 import { profileMenuSections } from '@/data/profileData';
+import { colors } from '@/constants/theme';
 
 interface CategoryHeaderProps {
   category: Category;
@@ -111,7 +112,7 @@ function CategoryHeader({
               accessibilityRole="button"
               accessibilityHint="Double tap to view coin details"
             >
-              <Ionicons name="star" size={16} color="#FFD700" />
+              <Ionicons name="star" size={16} color={colors.brand.goldBright} />
               <ThemedText style={[styles.coinText, { color: category.headerConfig.textColor }]}>
                 {userPoints}
               </ThemedText>
@@ -163,7 +164,7 @@ function CategoryHeader({
             <Ionicons
               name="search"
               size={20}
-              color="#6B7280"
+              color={colors.neutral[500]}
               style={styles.searchIcon}
             />
 
@@ -173,7 +174,7 @@ function CategoryHeader({
               value={searchQuery}
               onChangeText={onSearch}
               placeholder={category.headerConfig.searchPlaceholder || 'Search...'}
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
               returnKeyType="search"
@@ -196,7 +197,7 @@ function CategoryHeader({
                 <Ionicons
                   name="close-circle"
                   size={18}
-                  color="#9CA3AF"
+                  color={colors.neutral[400]}
                 />
               </Pressable>
             )}
@@ -213,7 +214,7 @@ function CategoryHeader({
                 <Ionicons
                   name="filter"
                   size={18}
-                  color={showFilterBadge ? "#ffcd57" : "#6B7280"}
+                  color={showFilterBadge ? colors.lightMustard : colors.neutral[500]}
                 />
                 {showFilterBadge && <View style={styles.filterBadge} />}
               </Pressable>
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     borderBottomLeftRadius: 28,
     borderBottomRightRadius: 28,
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.25,
     shadowRadius: 16,
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
     gap: 6,
     borderWidth: 1,
     borderColor: 'rgba(255, 215, 0, 0.4)',
-    shadowColor: '#FFD700',
+    shadowColor: colors.brand.goldBright,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -360,10 +361,10 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#FFD700',
+    shadowColor: colors.brand.goldBright,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 8,
@@ -374,7 +375,7 @@ const styles = StyleSheet.create({
   profileText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   searchContainer: {
     paddingHorizontal: 16,
@@ -387,7 +388,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: Platform.OS === 'ios' ? 12 : 8,
     minHeight: 50,
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
@@ -400,7 +401,7 @@ const styles = StyleSheet.create({
     elevation: 8,
     borderWidth: 2,
     borderColor: 'rgba(255, 205, 87, 0.4)',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   searchIcon: {
     marginRight: 12,
@@ -408,7 +409,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#1F2937',
+    color: colors.neutral[800],
     fontWeight: '400',
     paddingVertical: 0,
     outlineWidth: 0, // Web only
@@ -437,9 +438,9 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   descriptionContainer: {
     paddingHorizontal: 16,

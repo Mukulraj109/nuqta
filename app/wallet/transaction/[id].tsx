@@ -20,25 +20,26 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import walletApi, { TransactionResponse } from '@/services/walletApi';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const CATEGORY_CONFIG: Record<string, { icon: string; color: string; label: string }> = {
-  earning: { icon: 'arrow-down-circle', color: '#10B981', label: 'Earning' },
-  spending: { icon: 'arrow-up-circle', color: '#EF4444', label: 'Spending' },
-  refund: { icon: 'refresh-circle', color: '#3B82F6', label: 'Refund' },
-  withdrawal: { icon: 'wallet', color: '#F59E0B', label: 'Withdrawal' },
-  topup: { icon: 'add-circle', color: '#10B981', label: 'Top Up' },
-  bonus: { icon: 'gift', color: '#8B5CF6', label: 'Bonus' },
-  penalty: { icon: 'warning', color: '#EF4444', label: 'Penalty' },
-  cashback: { icon: 'cash', color: '#10B981', label: 'Cashback' },
+  earning: { icon: 'arrow-down-circle', color: colors.successScale[400], label: 'Earning' },
+  spending: { icon: 'arrow-up-circle', color: colors.error, label: 'Spending' },
+  refund: { icon: 'refresh-circle', color: colors.infoScale[400], label: 'Refund' },
+  withdrawal: { icon: 'wallet', color: colors.warningScale[400], label: 'Withdrawal' },
+  topup: { icon: 'add-circle', color: colors.successScale[400], label: 'Top Up' },
+  bonus: { icon: 'gift', color: colors.brand.purpleLight, label: 'Bonus' },
+  penalty: { icon: 'warning', color: colors.error, label: 'Penalty' },
+  cashback: { icon: 'cash', color: colors.successScale[400], label: 'Cashback' },
 };
 
 const STATUS_COLORS: Record<string, { color: string; bg: string }> = {
-  completed: { color: '#10B981', bg: '#D1FAE5' },
-  pending: { color: '#F59E0B', bg: '#FEF3C7' },
-  processing: { color: '#3B82F6', bg: '#DBEAFE' },
-  failed: { color: '#EF4444', bg: '#FEE2E2' },
-  cancelled: { color: '#6B7280', bg: '#F3F4F6' },
-  reversed: { color: '#8B5CF6', bg: '#EDE9FE' },
+  completed: { color: colors.successScale[400], bg: colors.tint.green },
+  pending: { color: colors.warningScale[400], bg: colors.tint.amberLight },
+  processing: { color: colors.infoScale[400], bg: colors.tint.blueLight },
+  failed: { color: colors.error, bg: colors.errorScale[100] },
+  cancelled: { color: colors.neutral[500], bg: colors.neutral[100] },
+  reversed: { color: colors.brand.purpleLight, bg: colors.tint.purple },
 };
 
 export default function TransactionDetailPage() {
@@ -101,7 +102,7 @@ export default function TransactionDetailPage() {
         <LinearGradient colors={[Colors.primary[600], Colors.secondary[700]]} style={styles.header}>
           <View style={styles.headerContent}>
             <Pressable onPress={() => router.back()} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={24} color="#FFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Transaction</ThemedText>
             <View style={{ width: 40 }} />
@@ -119,7 +120,7 @@ export default function TransactionDetailPage() {
         <LinearGradient colors={[Colors.primary[600], Colors.secondary[700]]} style={styles.header}>
           <View style={styles.headerContent}>
             <Pressable onPress={() => router.back()} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={24} color="#FFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Transaction</ThemedText>
             <View style={{ width: 40 }} />
@@ -140,7 +141,7 @@ export default function TransactionDetailPage() {
   const statusStyle = STATUS_COLORS[transaction.status.current] || STATUS_COLORS.pending;
   const isCredit = transaction.type === 'credit';
   const sign = isCredit ? '+' : '-';
-  const amountColor = isCredit ? '#10B981' : '#EF4444';
+  const amountColor = isCredit ? colors.successScale[400] : colors.error;
 
   return (
     <View style={styles.container}>
@@ -149,11 +150,11 @@ export default function TransactionDetailPage() {
       <LinearGradient colors={[Colors.primary[600], Colors.secondary[700]]} style={styles.header}>
         <View style={styles.headerContent}>
           <Pressable onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Transaction Details</ThemedText>
           <Pressable onPress={handleShare} style={styles.shareButton}>
-            <Ionicons name="share-outline" size={22} color="#FFF" />
+            <Ionicons name="share-outline" size={22} color={colors.background.primary} />
           </Pressable>
         </View>
       </LinearGradient>
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
   },
   shareButton: {
@@ -302,7 +303,7 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   scrollContent: {
     padding: Spacing.base,

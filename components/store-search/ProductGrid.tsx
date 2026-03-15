@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ProductGridProps, ProductItem } from '@/types/store-search';
 import ProductCard from './ProductCard';
+import { colors } from '@/constants/theme';
 import {
   COLORS,
   TYPOGRAPHY,
@@ -144,7 +145,7 @@ const createStyles = (screenWidth: number, columns: number) => {
     },
     moreProductsText: {
       fontSize: TYPOGRAPHY.FONT_SIZE_SM,
-      color: '#059669',
+      color: colors.successScale[700],
       fontWeight: '600',
     },
     emptyContainer: {

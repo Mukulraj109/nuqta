@@ -9,6 +9,7 @@ import surveyApiService, { SurveyDetail, SurveyAnswer } from '@/services/surveyA
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const categoryEmojis: Record<string, string> = {
   'Shopping': '📦',
@@ -489,7 +490,7 @@ export default function SurveyDetailPage() {
             disabled={starting || survey.userStatus === 'completed'}
           >
             <LinearGradient
-              colors={survey.userStatus === 'completed' ? ['#9CA3AF', '#9CA3AF'] : ['#3B82F6', '#8B5CF6']}
+              colors={survey.userStatus === 'completed' ? [colors.neutral[400], colors.neutral[400]] : [colors.infoScale[400], colors.brand.purpleLight]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.startButtonGradient}

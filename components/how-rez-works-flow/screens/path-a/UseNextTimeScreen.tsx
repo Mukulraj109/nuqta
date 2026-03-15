@@ -6,6 +6,7 @@ import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -34,7 +35,7 @@ const UseNextTimeScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
 
                 <View style={[styles.row, styles.discountRow]}>
                     <View style={styles.discountLabel}>
-                        <Ionicons name="checkmark-circle" size={16} color="#1a3a52" />
+                        <Ionicons name="checkmark-circle" size={16} color={colors.nileBlue} />
                         <Text style={styles.discountText}>{`Use 100 ${BRAND.COIN_NAME}`}</Text>
                     </View>
                     <Text style={styles.discountValue}>- {currencySymbol}100</Text>
@@ -54,11 +55,11 @@ const UseNextTimeScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
 const styles = StyleSheet.create({
     billCard: {
         marginTop: 24,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.background.primary,
         borderRadius: 20,
         padding: 24,
         borderWidth: 1,
-        borderColor: '#E5E7EB',
+        borderColor: colors.neutral[200],
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.05,
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#6B7280',
+        color: colors.neutral[500],
         textTransform: 'uppercase',
         letterSpacing: 1,
     },
@@ -84,15 +85,15 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 16,
-        color: '#374151',
+        color: colors.neutral[700],
     },
     value: {
         fontSize: 16,
         fontWeight: '600',
-        color: '#1F2937',
+        color: colors.neutral[800],
     },
     discountRow: {
-        backgroundColor: '#faf1e0',
+        backgroundColor: colors.linen,
         padding: 12,
         borderRadius: 12,
         marginHorizontal: -12,
@@ -104,28 +105,28 @@ const styles = StyleSheet.create({
     },
     discountText: {
         fontSize: 15,
-        color: '#1a3a52',
+        color: colors.nileBlue,
         fontWeight: '500',
     },
     discountValue: {
         fontSize: 15,
         fontWeight: '700',
-        color: '#1a3a52',
+        color: colors.nileBlue,
     },
     divider: {
         height: 1,
-        backgroundColor: '#E5E7EB',
+        backgroundColor: colors.neutral[200],
         marginVertical: 12,
     },
     totalLabel: {
         fontSize: 18,
         fontWeight: '700',
-        color: '#1F2937',
+        color: colors.neutral[800],
     },
     totalValue: {
         fontSize: 24,
         fontWeight: '800',
-        color: '#1F2937',
+        color: colors.neutral[800],
     },
 });
 

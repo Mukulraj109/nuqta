@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -95,7 +96,7 @@ const FriendsCommunity = () => {
       case 'friend_saved':
         return <Ionicons name="wallet" size={16} color={Colors.gold} />;
       case 'trending':
-        return <Ionicons name="flame" size={16} color="#F97316" />;
+        return <Ionicons name="flame" size={16} color={colors.brand.orange} />;
       case 'review':
       case 'friend_review':
         return <Ionicons name="star" size={16} color={Colors.warning} />;
@@ -457,7 +458,7 @@ const styles = StyleSheet.create({
   },
   activityAmount: {
     fontWeight: '600',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   activityTime: {
     ...Typography.caption,

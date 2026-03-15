@@ -18,6 +18,7 @@ import Animated, {
 import { Ionicons } from '@expo/vector-icons';
 import { RezPayBadgeProps, PAYMENT_SEARCH_COLORS } from '@/types/paymentStoreSearch.types';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
@@ -82,7 +83,7 @@ export const RezPayBadge: React.FC<RezPayBadgeProps> = ({ size = 'medium' }) => 
         <Ionicons
           name="wallet"
           size={sizeConfig.iconSize}
-          color="#FFFFFF"
+          color={colors.background.primary}
           style={styles.icon}
         />
         <Text style={[styles.text, { fontSize: sizeConfig.fontSize }]}>{BRAND.PAY_NAME}</Text>
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   text: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
     letterSpacing: 0.5,
   },

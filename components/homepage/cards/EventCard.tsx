@@ -12,6 +12,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { EventCardProps } from '@/types/homepage.types';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import FastImage from '@/components/common/FastImage';
+import { colors } from '@/constants/theme';
 
 // Custom comparison function for React.memo
 const arePropsEqual = (prevProps: EventCardProps, nextProps: EventCardProps) => {
@@ -31,10 +32,10 @@ function EventCard({
   width = 280
 }: EventCardProps) {
   const backgroundColor = useThemeColor({}, 'background');
-  const cardBackground = useThemeColor({ light: '#FFFFFF', dark: '#1F2937' }, 'background');
+  const cardBackground = useThemeColor({ light: colors.background.primary, dark: colors.neutral[800] }, 'background');
   const textColor = useThemeColor({}, 'text');
-  const textSecondary = useThemeColor({ light: '#6B7280', dark: '#9CA3AF' }, 'text');
-  const borderColor = useThemeColor({ light: '#E5E7EB', dark: '#374151' }, 'border');
+  const textSecondary = useThemeColor({ light: colors.neutral[500], dark: colors.neutral[400] }, 'text');
+  const borderColor = useThemeColor({ light: colors.neutral[200], dark: colors.neutral[700] }, 'border');
 
   // Memoize date formatting
   const formattedDate = useMemo(() => {
@@ -65,12 +66,12 @@ function EventCard({
 
   // Memoize price badge background color
   const priceBadgeColor = useMemo(() => {
-    return event.price.isFree ? '#FFC857' : '#ffcd57'; // Sun Gold for free, Nuqta Gold for paid
+    return event.price.isFree ? colors.brand.goldWarm : colors.lightMustard; // Sun Gold for free, Nuqta Gold for paid
   }, [event.price.isFree]);
 
   // Memoize price badge text color
   const priceBadgeTextColor = useMemo(() => {
-    return event.price.isFree ? '#1a3a52' : '#FFFFFF'; // Nuqta Navy for free, White for paid
+    return event.price.isFree ? colors.nileBlue : colors.background.primary; // Nuqta Navy for free, White for paid
   }, [event.price.isFree]);
 
   return (
@@ -121,7 +122,7 @@ function EventCard({
 
         {/* Event Details */}
         <View style={styles.content}>
-          <ThemedText style={[styles.title, { color: '#1a3a52' }]} numberOfLines={2}>
+          <ThemedText style={[styles.title, { color: colors.nileBlue }]} numberOfLines={2}>
             {event.title}
           </ThemedText>
 
@@ -131,20 +132,20 @@ function EventCard({
 
           <View style={styles.metaInfo}>
             <View style={styles.locationContainer}>
-              <Ionicons name="location" size={16} color="#ffcd57" style={styles.icon} />
+              <Ionicons name="location" size={16} color={colors.lightMustard} style={styles.icon} />
               <ThemedText style={[styles.location, { color: textSecondary }]}>
                 {event.isOnline ? 'Online Event' : event.location}
               </ThemedText>
             </View>
 
             <View style={styles.dateContainer}>
-              <Ionicons name="calendar" size={16} color="#ffcd57" style={styles.icon} />
-              <ThemedText style={[styles.date, { color: '#1a3a52' }]}>
+              <Ionicons name="calendar" size={16} color={colors.lightMustard} style={styles.icon} />
+              <ThemedText style={[styles.date, { color: colors.nileBlue }]}>
                 {formattedDate}
               </ThemedText>
               {event.time && (
                 <>
-                  <Ionicons name="time" size={16} color="#ffcd57" style={styles.icon} />
+                  <Ionicons name="time" size={16} color={colors.lightMustard} style={styles.icon} />
                   <ThemedText style={[styles.time, { color: textSecondary }]}>
                     {event.time}
                   </ThemedText>
@@ -154,8 +155,8 @@ function EventCard({
           </View>
 
           {/* Category Badge */}
-          <View style={[styles.categoryBadge, { backgroundColor: '#1a3a52', borderColor: '#1a3a52' }]}>
-            <ThemedText style={[styles.categoryText, { color: '#FFFFFF' }]}>
+          <View style={[styles.categoryBadge, { backgroundColor: colors.nileBlue, borderColor: colors.nileBlue }]}>
+            <ThemedText style={[styles.categoryText, { color: colors.background.primary }]}>
               {event.category}
             </ThemedText>
           </View>
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     borderWidth: 1,
-    shadowColor: '#1a3a52',
+    shadowColor: colors.nileBlue,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     position: 'relative',
     height: 160,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   image: {
     width: '100%',
@@ -205,18 +206,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 16,
     left: 16,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
-    shadowColor: '#1a3a52',
+    shadowColor: colors.nileBlue,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 4,
   },
   onlineBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '700',
     textTransform: 'uppercase',
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    shadowColor: '#1a3a52',
+    shadowColor: colors.nileBlue,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 4,

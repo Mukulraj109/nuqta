@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface RatingStarsProps {
   rating: number;
@@ -20,8 +21,8 @@ function RatingStars({
   rating,
   maxRating = 5,
   size = 16,
-  color = '#F59E0B',
-  emptyColor = '#D1D5DB',
+  color = colors.warningScale[400],
+  emptyColor = colors.neutral[300],
   showCount = false,
   count = 0,
   interactive = false,
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
   },
   countText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
 });

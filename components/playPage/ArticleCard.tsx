@@ -5,13 +5,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { Article } from '@/types/article.types';
+import { colors } from '@/constants/theme';
 
 // ReZ Design System Colors
 const COLORS = {
-  primary: '#00C06A',
-  primaryDark: '#00796B',
-  gold: '#FFC857',
-  text: '#0B2240',
+  primary: colors.brand.green,
+  primaryDark: colors.brand.teal,
+  gold: colors.brand.goldWarm,
+  text: colors.brand.navyDark,
 };
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -73,7 +74,7 @@ function ArticleCard({ article, onPress, style }: ArticleCardProps) {
         {/* View count badge (top-left) */}
         <View style={styles.viewCountContainer}>
           <View style={styles.viewCountPill}>
-            <Ionicons name="eye" size={10} color="#FFFFFF" />
+            <Ionicons name="eye" size={10} color={colors.background.primary} />
             <ThemedText style={styles.viewCountText}>
               {article.viewCount}
             </ThemedText>
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 20,
     overflow: 'hidden',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     shadowColor: COLORS.gold,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.25,
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   viewCountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '600',
   },
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     minHeight: 70, // Fixed height to prevent misalignment
   },
   title: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
     fontSize: 12,
     lineHeight: 16,

@@ -14,6 +14,7 @@ import subscriptionAPI from '@/services/subscriptionApi';
 import { SubscriptionTier, TIER_NAMES, TIER_COLORS } from '@/types/subscription.types';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function DowngradeConfirmationPage() {
   const router = useRouter();
@@ -131,7 +132,7 @@ export default function DowngradeConfirmationPage() {
       <StatusBar barStyle="light-content" backgroundColor={Colors.warning} />
 
       {/* Header */}
-      <LinearGradient colors={[Colors.warning, '#D97706'] as any} style={styles.header}>
+      <LinearGradient colors={[Colors.warning, colors.warningScale[700]] as any} style={styles.header}>
         <View style={styles.headerContainer}>
           <Pressable
             onPress={() => router.back()}
@@ -318,23 +319,23 @@ const styles = StyleSheet.create({
   },
   warningBanner: {
     margin: Spacing.lg,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: BorderRadius.lg,
     padding: Spacing.xl,
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FDE68A',
+    borderColor: colors.warningScale[200],
   },
   warningTitle: {
     ...Typography.h3,
     fontWeight: 'bold',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     marginTop: Spacing.md,
     marginBottom: Spacing.sm,
   },
   warningMessage: {
     ...Typography.body,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -417,7 +418,7 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.lg,
     marginBottom: Spacing.xl,
     flexDirection: 'row',
-    backgroundColor: '#DCFCE7',
+    backgroundColor: colors.successScale[100],
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
     alignItems: 'center',
@@ -434,7 +435,7 @@ const styles = StyleSheet.create({
   },
   creditMessage: {
     ...Typography.bodySmall,
-    color: '#15803D',
+    color: colors.successScale[700],
     lineHeight: 18,
   },
   dateCard: {

@@ -17,6 +17,7 @@ import { useWalletContext } from '@/contexts/WalletContext';
 import { CHARITIES, Charity, DONATION_AMOUNTS } from '@/constants/priveCatalog';
 import { coinToFiatValue } from '@/constants/priveConversion';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const generateIdempotencyKey = () => `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
 
@@ -113,7 +114,7 @@ export default function CharityScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#1F2937', '#111827', '#0A0A0A']}
+        colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]}
         style={StyleSheet.absoluteFill}
       />
       <SafeAreaView style={styles.safeArea}>

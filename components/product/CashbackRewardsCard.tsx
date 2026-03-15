@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 /**
  * CashbackRewardsCard Component
@@ -98,7 +99,7 @@ export const CashbackRewardsCard: React.FC<CashbackRewardsCardProps> = ({
       icon: 'card',
       offer: 'Extra 5% off',
       cashbackValue: productPrice * 0.05,
-      color: '#8B5CF6',
+      color: colors.brand.purpleLight,
     },
     {
       id: 'wallet',
@@ -106,7 +107,7 @@ export const CashbackRewardsCard: React.FC<CashbackRewardsCardProps> = ({
       icon: 'wallet',
       offer: '10% instant discount',
       cashbackValue: productPrice * 0.10,
-      color: '#10B981',
+      color: colors.successScale[400],
     },
     {
       id: 'upi',
@@ -114,7 +115,7 @@ export const CashbackRewardsCard: React.FC<CashbackRewardsCardProps> = ({
       icon: 'phone-portrait',
       offer: '3% cashback',
       cashbackValue: productPrice * 0.03,
-      color: '#F59E0B',
+      color: colors.warningScale[400],
     },
   ];
 
@@ -159,7 +160,7 @@ export const CashbackRewardsCard: React.FC<CashbackRewardsCardProps> = ({
     <View style={styles.container}>
       {/* Main Cashback Card - Always Visible */}
       <LinearGradient
-        colors={['#8B5CF6', '#7C3AED']}
+        colors={[colors.brand.purpleLight, colors.brand.purple]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.mainCard}
@@ -168,7 +169,7 @@ export const CashbackRewardsCard: React.FC<CashbackRewardsCardProps> = ({
           {/* Cashback Section */}
           <View style={styles.cashbackSection}>
             <View style={styles.iconContainer}>
-              <Ionicons name="gift" size={24} color="#FFF" />
+              <Ionicons name="gift" size={24} color={colors.background.primary} />
             </View>
             <View style={styles.cashbackInfo}>
               <ThemedText style={styles.cashbackLabel}>Total Cashback & Rewards</ThemedText>
@@ -193,7 +194,7 @@ export const CashbackRewardsCard: React.FC<CashbackRewardsCardProps> = ({
             <Ionicons
               name={isExpanded ? 'chevron-up' : 'chevron-down'}
               size={16}
-              color="#FFF"
+              color={colors.background.primary}
             />
           </Pressable>
         </View>
@@ -205,7 +206,7 @@ export const CashbackRewardsCard: React.FC<CashbackRewardsCardProps> = ({
           {/* Cashback Breakdown */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Ionicons name="cash-outline" size={18} color="#8B5CF6" />
+              <Ionicons name="cash-outline" size={18} color={colors.brand.purpleLight} />
               <ThemedText style={styles.sectionTitle}>Cashback Breakdown</ThemedText>
             </View>
 
@@ -234,7 +235,7 @@ export const CashbackRewardsCard: React.FC<CashbackRewardsCardProps> = ({
           {/* Reward Points Breakdown */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Ionicons name="star-outline" size={18} color="#F59E0B" />
+              <Ionicons name="star-outline" size={18} color={colors.warningScale[400]} />
               <ThemedText style={styles.sectionTitle}>Reward Points</ThemedText>
             </View>
 
@@ -279,7 +280,7 @@ export const CashbackRewardsCard: React.FC<CashbackRewardsCardProps> = ({
           {payments.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Ionicons name="wallet-outline" size={18} color="#8B5CF6" />
+                <Ionicons name="wallet-outline" size={18} color={colors.brand.purpleLight} />
                 <ThemedText style={styles.sectionTitle}>Payment Offers</ThemedText>
               </View>
 
@@ -312,7 +313,7 @@ export const CashbackRewardsCard: React.FC<CashbackRewardsCardProps> = ({
           {specialOffers.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Ionicons name="pricetag-outline" size={18} color="#EF4444" />
+                <Ionicons name="pricetag-outline" size={18} color={colors.error} />
                 <ThemedText style={styles.sectionTitle}>Special Offers</ThemedText>
               </View>
 
@@ -333,7 +334,7 @@ export const CashbackRewardsCard: React.FC<CashbackRewardsCardProps> = ({
           {/* Terms & Conditions */}
           <View style={styles.termsSection}>
             <Pressable style={styles.termsButton}>
-              <Ionicons name="document-text-outline" size={16} color="#8B5CF6" />
+              <Ionicons name="document-text-outline" size={16} color={colors.brand.purpleLight} />
               <ThemedText style={styles.termsButtonText}>Terms & Conditions Apply</ThemedText>
             </Pressable>
           </View>
@@ -345,7 +346,7 @@ export const CashbackRewardsCard: React.FC<CashbackRewardsCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     marginBottom: 8,
   },
 
@@ -389,7 +390,7 @@ const styles = StyleSheet.create({
   cashbackAmount: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
     marginBottom: 2,
   },
   cashbackDescription: {
@@ -408,7 +409,7 @@ const styles = StyleSheet.create({
   expandButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
 
   // Details Container
@@ -430,7 +431,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   // Breakdown
@@ -442,22 +443,22 @@ const styles = StyleSheet.create({
   },
   breakdownLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     flex: 1,
   },
   breakdownValue: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   breakdownNote: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontStyle: 'italic',
     marginTop: 4,
   },
   bonusBadge: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -465,13 +466,13 @@ const styles = StyleSheet.create({
   bonusBadgeText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
 
   // Divider
   divider: {
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginVertical: 8,
   },
 
@@ -479,12 +480,12 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   totalValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 
   // Payment Offers
@@ -493,11 +494,11 @@ const styles = StyleSheet.create({
   },
   paymentCard: {
     width: 140,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     gap: 8,
   },
   paymentIcon: {
@@ -511,11 +512,11 @@ const styles = StyleSheet.create({
   paymentMethod: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
   },
   paymentOfferBadge: {
-    backgroundColor: '#DBEAFE',
+    backgroundColor: colors.tint.blueLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -529,7 +530,7 @@ const styles = StyleSheet.create({
   paymentValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#10B981',
+    color: colors.successScale[400],
     textAlign: 'center',
   },
 
@@ -537,7 +538,7 @@ const styles = StyleSheet.create({
   specialOfferCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 12,
     marginBottom: 8,
@@ -556,12 +557,12 @@ const styles = StyleSheet.create({
   offerTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 2,
   },
   offerDescription: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
 
@@ -578,7 +579,7 @@ const styles = StyleSheet.create({
   termsButtonText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     textDecorationLine: 'underline',
   },
 });

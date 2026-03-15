@@ -29,6 +29,7 @@ import logger from '@/utils/logger';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -241,9 +242,9 @@ export default function FlashSaleDetailPage() {
   };
 
   const getProgressColor = (percentage: number) => {
-    if (percentage >= 80) return ['#EF4444', '#DC2626'];
-    if (percentage >= 50) return ['#F59E0B', '#D97706'];
-    return ['#10B981', '#059669'];
+    if (percentage >= 80) return [colors.error, colors.error];
+    if (percentage >= 50) return [colors.warningScale[400], colors.warningScale[700]];
+    return [colors.successScale[400], colors.successScale[700]];
   };
 
   const getUrgencyText = (percentage: number) => {
@@ -280,7 +281,7 @@ export default function FlashSaleDetailPage() {
         <View style={styles.container}>
           <SafeAreaView style={styles.errorSafeArea}>
             <Pressable onPress={() => router.back()} style={styles.errorBackButton}>
-              <Ionicons name="chevron-back" size={28} color="#333" />
+              <Ionicons name="chevron-back" size={28} color={colors.darkGray} />
             </Pressable>
             <View style={styles.errorContainer}>
               <Ionicons name="alert-circle-outline" size={80} color={Colors.error} />
@@ -309,7 +310,7 @@ export default function FlashSaleDetailPage() {
           {/* Hero Image Section */}
           <View style={styles.heroSection}>
             {imageError || !flashSale.image ? (
-              <LinearGradient colors={['#EF4444', '#DC2626']} style={styles.imagePlaceholder}>
+              <LinearGradient colors={[colors.error, colors.error]} style={styles.imagePlaceholder}>
                 <Ionicons name="flash" size={80} color="white" />
               </LinearGradient>
             ) : (
@@ -331,19 +332,19 @@ export default function FlashSaleDetailPage() {
             <SafeAreaView style={styles.headerOverlay} edges={['top']}>
               <Pressable onPress={() => router.back()} style={styles.headerButton}>
                 <BlurView intensity={80} tint="light" style={styles.blurButton}>
-                  <Ionicons name="chevron-back" size={24} color="#333" />
+                  <Ionicons name="chevron-back" size={24} color={colors.darkGray} />
                 </BlurView>
               </Pressable>
               <Pressable onPress={handleShare} style={styles.headerButton}>
                 <BlurView intensity={80} tint="light" style={styles.blurButton}>
-                  <Ionicons name="share-social-outline" size={22} color="#333" />
+                  <Ionicons name="share-social-outline" size={22} color={colors.darkGray} />
                 </BlurView>
               </Pressable>
             </SafeAreaView>
 
             {/* Flash Deal Badge */}
             <View style={styles.flashBadgeContainer}>
-              <LinearGradient colors={['#EF4444', '#DC2626']} style={styles.flashBadge}>
+              <LinearGradient colors={[colors.error, colors.error]} style={styles.flashBadge}>
                 <Ionicons name="flash" size={14} color="white" />
                 <ThemedText style={styles.flashBadgeText}>FLASH DEAL</ThemedText>
               </LinearGradient>
@@ -487,7 +488,7 @@ export default function FlashSaleDetailPage() {
                     <View style={styles.stepNumber}>
                       <ThemedText style={styles.stepNumberText}>{item.step}</ThemedText>
                     </View>
-                    <Ionicons name={item.icon as any} size={20} color="#666" style={styles.stepIcon} />
+                    <Ionicons name={item.icon as any} size={20} color={colors.midGray} style={styles.stepIcon} />
                     <ThemedText style={styles.stepText}>{item.text}</ThemedText>
                   </View>
                 ))}
@@ -498,7 +499,7 @@ export default function FlashSaleDetailPage() {
             {((flashSale.termsAndConditions && flashSale.termsAndConditions.length > 0) || flashSale.minimumPurchase || flashSale.limitPerUser) && (
               <View style={styles.termsCard}>
                 <View style={styles.termsHeader}>
-                  <Ionicons name="document-text-outline" size={20} color="#666" />
+                  <Ionicons name="document-text-outline" size={20} color={colors.midGray} />
                   <ThemedText style={styles.sectionTitle}>Terms & Conditions</ThemedText>
                 </View>
                 <View style={styles.termsList}>
@@ -576,7 +577,7 @@ export default function FlashSaleDetailPage() {
                
               >
                 <LinearGradient
-                  colors={isEnded ? [Colors.text.tertiary, Colors.text.tertiary] : isProcessingPayment ? [Colors.brand.purple, Colors.brand.purple] : [Colors.error, '#DC2626']}
+                  colors={isEnded ? [Colors.text.tertiary, Colors.text.tertiary] : isProcessingPayment ? [Colors.brand.purple, Colors.brand.purple] : [Colors.error, colors.error]}
                   style={styles.getOfferButtonGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
@@ -604,7 +605,7 @@ export default function FlashSaleDetailPage() {
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
-              <LinearGradient colors={['#10B981', '#059669']} style={styles.modalSuccessIcon}>
+              <LinearGradient colors={[colors.successScale[400], colors.successScale[700]]} style={styles.modalSuccessIcon}>
                 <Ionicons name="checkmark" size={48} color="white" />
               </LinearGradient>
 
@@ -648,7 +649,7 @@ export default function FlashSaleDetailPage() {
                     }}
                   >
                     <LinearGradient
-                      colors={['#EF4444', '#DC2626']}
+                      colors={[colors.error, colors.error]}
                       style={styles.modalButtonPrimaryGradient}
                     >
                       <Ionicons name="storefront-outline" size={18} color="white" />
@@ -668,7 +669,7 @@ export default function FlashSaleDetailPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.tint.warmGray,
   },
   scrollView: {
     flex: 1,
@@ -704,11 +705,11 @@ const styles = StyleSheet.create({
   errorTitle: {
     ...Typography.h2,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
   },
   errorText: {
     ...Typography.bodyLarge,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
   },
   retryButton: {
@@ -836,7 +837,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.xl,
@@ -942,7 +943,7 @@ const styles = StyleSheet.create({
   stockTitle: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   stockTitleUrgent: {
     color: Colors.error,
@@ -953,7 +954,7 @@ const styles = StyleSheet.create({
   },
   stockCountBold: {
     fontWeight: '700',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   progressBarContainer: {
     height: 10,
@@ -1004,12 +1005,12 @@ const styles = StyleSheet.create({
   },
   promoCodeLabel: {
     ...Typography.bodySmall,
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   promoCode: {
     ...Typography.h3,
     fontWeight: '800',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     letterSpacing: 1,
   },
   copyButton: {
@@ -1043,7 +1044,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   stepsContainer: {
     gap: Spacing.md,
@@ -1133,7 +1134,7 @@ const styles = StyleSheet.create({
   statNumber: {
     ...Typography.h4,
     fontWeight: '700',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   statLabel: {
     ...Typography.bodySmall,
@@ -1262,7 +1263,7 @@ const styles = StyleSheet.create({
   modalCode: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     letterSpacing: 2,
   },
   modalCopyIcon: {

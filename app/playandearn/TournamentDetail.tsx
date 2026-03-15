@@ -22,6 +22,7 @@ import { useTournamentSocket } from '@/hooks/useTournamentSocket';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 const NUQTA_COIN = BRAND.COIN_IMAGE;
 
 const GAME_TYPE_ROUTES: Record<string, string> = {
@@ -206,7 +207,7 @@ const TournamentDetail = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Hero Header */}
         <LinearGradient
-          colors={['#1a3a52', '#234B6B']}
+          colors={[colors.nileBlue, '#234B6B']}
           style={styles.hero}
         >
           {/* Back button */}
@@ -216,7 +217,7 @@ const TournamentDetail = () => {
 
           {/* Status badge */}
           <View style={[styles.statusBadge, { backgroundColor: statusCfg.colors[0] }]}>
-            <Ionicons name={statusCfg.icon as any} size={12} color="#FFF" />
+            <Ionicons name={statusCfg.icon as any} size={12} color={colors.background.primary} />
             <Text style={styles.statusText}>{statusCfg.label}</Text>
           </View>
 
@@ -243,13 +244,13 @@ const TournamentDetail = () => {
               <Text style={styles.heroStatLabel}>Prize Pool</Text>
             </View>
             <View style={[styles.heroStatCard, styles.heroStatMiddle]}>
-              <Ionicons name="game-controller" size={20} color="#60A5FA" />
+              <Ionicons name="game-controller" size={20} color={colors.infoScale[400]} />
               <Text style={styles.heroStatValue}>{tournament.gameType?.replace('_', ' ') || 'Mixed'}</Text>
               <Text style={styles.heroStatLabel}>Game Type</Text>
             </View>
             <View style={styles.heroStatCard}>
-              <Ionicons name="time" size={20} color={tournament.status === 'active' ? '#F87171' : '#60A5FA'} />
-              <Text style={[styles.heroStatValue, { color: tournament.status === 'active' ? '#F87171' : '#60A5FA', fontSize: 14 }]}>
+              <Ionicons name="time" size={20} color={tournament.status === 'active' ? colors.errorScale[400] : colors.infoScale[400]} />
+              <Text style={[styles.heroStatValue, { color: tournament.status === 'active' ? colors.errorScale[400] : colors.infoScale[400], fontSize: 14 }]}>
                 {tournament.status === 'completed' ? 'Ended' : timeDisplay || '...'}
               </Text>
               <Text style={styles.heroStatLabel}>
@@ -264,7 +265,7 @@ const TournamentDetail = () => {
           {myRank && (
             <View style={styles.myRankCard}>
               <LinearGradient
-                colors={['#ffcd57', '#F59E0B']}
+                colors={[colors.lightMustard, colors.warningScale[400]]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.myRankGradient}
@@ -282,7 +283,7 @@ const TournamentDetail = () => {
                 </View>
                 {myRank.isWinner && myRank.prize && (
                   <View style={styles.prizeEligible}>
-                    <Ionicons name="star" size={14} color="#1a3a52" />
+                    <Ionicons name="star" size={14} color={colors.nileBlue} />
                     <Text style={styles.prizeEligibleText}>
                       Prize: {myRank.prize.coins.toLocaleString()} coins
                     </Text>
@@ -296,7 +297,7 @@ const TournamentDetail = () => {
           {tournament.prizes && tournament.prizes.length > 0 && (
             <View style={styles.sectionCard}>
               <View style={styles.sectionHeader}>
-                <View style={[styles.sectionIconBg, { backgroundColor: '#FEF3C7' }]}>
+                <View style={[styles.sectionIconBg, { backgroundColor: colors.tint.amberLight }]}>
                   <Ionicons name="gift" size={18} color={Colors.warning} />
                 </View>
                 <Text style={styles.sectionTitle}>Prize Breakdown</Text>
@@ -328,7 +329,7 @@ const TournamentDetail = () => {
           {tournament.rules && tournament.rules.length > 0 && (
             <View style={styles.sectionCard}>
               <View style={styles.sectionHeader}>
-                <View style={[styles.sectionIconBg, { backgroundColor: '#DBEAFE' }]}>
+                <View style={[styles.sectionIconBg, { backgroundColor: colors.tint.blueLight }]}>
                   <Ionicons name="document-text" size={18} color={Colors.info} />
                 </View>
                 <Text style={styles.sectionTitle}>Rules</Text>
@@ -347,7 +348,7 @@ const TournamentDetail = () => {
           {/* Leaderboard */}
           <View style={styles.sectionCard}>
             <View style={styles.sectionHeader}>
-              <View style={[styles.sectionIconBg, { backgroundColor: '#F3E8FF' }]}>
+              <View style={[styles.sectionIconBg, { backgroundColor: colors.tint.pink }]}>
                 <Ionicons name="ribbon" size={18} color={Colors.brand.purple} />
               </View>
               <Text style={styles.sectionTitle}>Leaderboard</Text>
@@ -360,7 +361,7 @@ const TournamentDetail = () => {
               <View style={styles.leaderboardList}>
                 {leaderboard.map((entry, idx) => {
                   const isTop3 = entry.rank <= 3;
-                  const rankColors = ['#F59E0B', '#94A3B8', '#CD7F32'];
+                  const rankColors = [colors.warningScale[400], '#94A3B8', '#CD7F32'];
                   const isCurrentUser = currentUserId && (
                     (entry as any).user?._id === currentUserId || (entry as any).userId === currentUserId
                   );
@@ -384,7 +385,7 @@ const TournamentDetail = () => {
                       )}
 
                       {/* Avatar */}
-                      <View style={[styles.lbAvatar, { backgroundColor: isTop3 ? `${rankColors[Math.min(entry.rank - 1, 2)]}25` : '#F1F5F9' }]}>
+                      <View style={[styles.lbAvatar, { backgroundColor: isTop3 ? `${rankColors[Math.min(entry.rank - 1, 2)]}25` : colors.tint.slate }]}>
                         <Text style={styles.lbAvatarText}>
                           {entry.user?.name ? entry.user.name.charAt(0).toUpperCase() : '?'}
                         </Text>
@@ -420,13 +421,13 @@ const TournamentDetail = () => {
           {/* CTA */}
           {tournament.status === 'active' && !isJoined && (
             <Pressable onPress={handleJoin} disabled={joining}>
-              <LinearGradient colors={['#059669', '#10B981']} style={styles.ctaGradient}>
+              <LinearGradient colors={[colors.successScale[700], colors.successScale[400]]} style={styles.ctaGradient}>
                 {joining ? (
                   <ActivityIndicator size="small" color={Colors.text.inverse} />
                 ) : (
                   <>
                     <Ionicons name="enter" size={18} color={Colors.text.inverse} />
-                    <Text style={[styles.ctaText, { color: '#FFFFFF' }]}>
+                    <Text style={[styles.ctaText, { color: colors.background.primary }]}>
                       {tournament.entryFee > 0 ? `Join Tournament (${tournament.entryFee} coins)` : 'Join Tournament'}
                     </Text>
                     <Ionicons name="arrow-forward" size={16} color={Colors.text.inverse} />
@@ -437,7 +438,7 @@ const TournamentDetail = () => {
           )}
           {tournament.status === 'active' && isJoined && (
             <Pressable onPress={handlePlayGame}>
-              <LinearGradient colors={['#1a3a52', '#234B6B']} style={styles.ctaGradient}>
+              <LinearGradient colors={[colors.nileBlue, '#234B6B']} style={styles.ctaGradient}>
                 <Ionicons name="game-controller" size={18} color={Colors.gold} />
                 <Text style={styles.ctaText}>Play Now</Text>
                 <Ionicons name="arrow-forward" size={16} color={Colors.gold} />
@@ -445,9 +446,9 @@ const TournamentDetail = () => {
             </Pressable>
           )}
           {tournament.status === 'upcoming' && (
-            <View style={[styles.ctaGradient, { backgroundColor: '#E2E8F0', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }]}>
-              <Ionicons name="time" size={18} color="#64748B" />
-              <Text style={{ ...Typography.body, fontWeight: '700', color: '#64748B' }}>
+            <View style={[styles.ctaGradient, { backgroundColor: colors.slateLight, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }]}>
+              <Ionicons name="time" size={18} color={colors.slateGray} />
+              <Text style={{ ...Typography.body, fontWeight: '700', color: colors.slateGray }}>
                 Starts in {timeDisplay || '...'}
               </Text>
             </View>
@@ -496,7 +497,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.base,
     paddingHorizontal: Spacing.lg,
     paddingVertical: 10,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: colors.tint.slate,
     borderRadius: 10,
   },
   errorBtnText: {
@@ -603,7 +604,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     overflow: 'hidden',
     ...Platform.select({
-      ios: { shadowColor: '#F59E0B', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 12 },
+      ios: { shadowColor: colors.warningScale[400], shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 12 },
       android: { elevation: 4 },
       web: { boxShadow: '0px 4px 16px rgba(245,158,11,0.2)' },
     }),
@@ -658,7 +659,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 18,
     ...Platform.select({
-      ios: { shadowColor: '#1a3a52', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 10 },
+      ios: { shadowColor: colors.nileBlue, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 10 },
       android: { elevation: 2 },
       web: { boxShadow: '0px 2px 10px rgba(26,58,82,0.06)' },
     }),
@@ -686,7 +687,7 @@ const styles = StyleSheet.create({
     ...Typography.caption,
     fontWeight: '600',
     color: Colors.brand.purple,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
     borderRadius: BorderRadius.sm,
@@ -766,10 +767,10 @@ const styles = StyleSheet.create({
   },
   lbItemBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: colors.tint.slate,
   },
   lbItemHighlight: {
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     marginHorizontal: -12,
     paddingHorizontal: 12,
     borderRadius: 10,
@@ -837,7 +838,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     ...Typography.body,
     fontWeight: '600',
-    color: '#64748B',
+    color: colors.slateGray,
     marginTop: Spacing.sm,
   },
   emptyText: {

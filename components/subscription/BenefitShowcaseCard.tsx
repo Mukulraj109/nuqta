@@ -6,6 +6,7 @@ import { View, StyleSheet, ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface BenefitShowcaseCardProps {
   icon: string;
@@ -25,12 +26,12 @@ function BenefitShowcaseCard({
   return (
     <View style={[styles.container, style]}>
       <LinearGradient
-        colors={['#8B5CF6', '#A78BFA', '#C4B5FD']}
+        colors={[colors.brand.purpleLight, colors.brand.purpleSoft, '#C4B5FD']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.iconContainer}
       >
-        <Ionicons name={icon as any} size={32} color="#FFFFFF" />
+        <Ionicons name={icon as any} size={32} color={colors.background.primary} />
       </LinearGradient>
 
       <View style={styles.content}>
@@ -38,7 +39,7 @@ function BenefitShowcaseCard({
           <ThemedText style={styles.title}>{title}</ThemedText>
           {isActive && (
             <View style={styles.activeBadge}>
-              <Ionicons name="checkmark-circle-outline" size={14} color="#10B981" />
+              <Ionicons name="checkmark-circle-outline" size={14} color={colors.successScale[400]} />
               <ThemedText style={styles.activeBadgeText}>Active</ThemedText>
             </View>
           )}
@@ -51,7 +52,7 @@ function BenefitShowcaseCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     flexDirection: 'row',
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
     borderLeftWidth: 4,
-    borderLeftColor: '#10B981',
+    borderLeftColor: colors.successScale[400],
   },
   iconContainer: {
     width: 56,
@@ -86,13 +87,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     flex: 1,
   },
   activeBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#DCFCE7',
+    backgroundColor: colors.successScale[100],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -101,11 +102,11 @@ const styles = StyleSheet.create({
   activeBadgeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   description: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
 });

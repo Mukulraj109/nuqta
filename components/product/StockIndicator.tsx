@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { colors } from '@/constants/theme';
 
 interface StockIndicatorProps {
   stock: number;
@@ -11,16 +12,16 @@ export default function StockIndicator({ stock, lowStockThreshold = 10 }: StockI
     if (stock === 0) {
       return {
         text: 'Out of Stock',
-        color: '#dc2626',
+        color: colors.error,
         bgColor: '#fee2e2',
-        dotColor: '#dc2626',
+        dotColor: colors.error,
       };
     } else if (stock <= lowStockThreshold) {
       return {
         text: `Only ${stock} left in stock!`,
-        color: '#d97706',
+        color: colors.warningScale[700],
         bgColor: '#fef3c7',
-        dotColor: '#f59e0b',
+        dotColor: colors.warningScale[400],
       };
     } else {
       return {

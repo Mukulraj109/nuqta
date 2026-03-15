@@ -20,6 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import ugcApi, { UGCComment } from '@/services/ugcApi';
 import { useToast } from '@/hooks/useToast';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -120,7 +121,7 @@ function CommentItem({
             <Ionicons
               name={comment.isLiked ? 'heart' : 'heart-outline'}
               size={16}
-              color={comment.isLiked ? '#EF4444' : '#6B7280'}
+              color={comment.isLiked ? colors.error : colors.neutral[500]}
             />
             {comment.likes > 0 && (
               <Text style={[styles.actionText, comment.isLiked && styles.likedText]}>
@@ -139,7 +140,7 @@ function CommentItem({
             onPress={() => setShowActions(!showActions)}
             style={styles.actionBtn}
           >
-            <Ionicons name="ellipsis-horizontal" size={16} color="#6B7280" />
+            <Ionicons name="ellipsis-horizontal" size={16} color={colors.neutral[500]} />
           </Pressable>
         </View>
 
@@ -154,8 +155,8 @@ function CommentItem({
                 }}
                 style={styles.actionMenuItem}
               >
-                <Ionicons name="trash-outline" size={18} color="#EF4444" />
-                <Text style={[styles.actionMenuText, { color: '#EF4444' }]}>Delete</Text>
+                <Ionicons name="trash-outline" size={18} color={colors.error} />
+                <Text style={[styles.actionMenuText, { color: colors.error }]}>Delete</Text>
               </Pressable>
             ) : (
               <Pressable
@@ -165,7 +166,7 @@ function CommentItem({
                 }}
                 style={styles.actionMenuItem}
               >
-                <Ionicons name="flag-outline" size={18} color="#6B7280" />
+                <Ionicons name="flag-outline" size={18} color={colors.neutral[500]} />
                 <Text style={styles.actionMenuText}>Report</Text>
               </Pressable>
             )}
@@ -578,7 +579,7 @@ function UGCCommentsModal({
                   style={styles.closeButton}
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
-                  <Ionicons name="close" size={24} color="#666" />
+                  <Ionicons name="close" size={24} color={colors.midGray} />
                 </Pressable>
               </View>
 
@@ -626,7 +627,7 @@ function UGCCommentsModal({
                 <RefreshControl
                   refreshing={refreshing}
                   onRefresh={handleRefresh}
-                  tintColor="#7C3AED"
+                  tintColor={colors.brand.purple}
                 />
               }
               ListEmptyComponent={
@@ -638,7 +639,7 @@ function UGCCommentsModal({
                   </View>
                 ) : error ? (
                   <View style={styles.emptyState}>
-                    <Ionicons name="alert-circle-outline" size={48} color="#9CA3AF" />
+                    <Ionicons name="alert-circle-outline" size={48} color={colors.neutral[400]} />
                     <Text style={styles.emptyText}>{error}</Text>
                     <Pressable
                       onPress={() => loadComments(0)}
@@ -649,7 +650,7 @@ function UGCCommentsModal({
                   </View>
                 ) : (
                   <View style={styles.emptyState}>
-                    <Ionicons name="chatbubble-outline" size={48} color="#9CA3AF" />
+                    <Ionicons name="chatbubble-outline" size={48} color={colors.neutral[400]} />
                     <Text style={styles.emptyText}>Be the first to comment!</Text>
                   </View>
                 )
@@ -657,7 +658,7 @@ function UGCCommentsModal({
               ListFooterComponent={
                 loadingMore ? (
                   <View style={styles.loadingMore}>
-                    <ActivityIndicator color="#7C3AED" />
+                    <ActivityIndicator color={colors.brand.purple} />
                   </View>
                 ) : null
               }
@@ -671,7 +672,7 @@ function UGCCommentsModal({
                     Replying to {replyingTo.user.profile.firstName}
                   </Text>
                   <Pressable onPress={handleCancelReply}>
-                    <Ionicons name="close-circle" size={20} color="#6B7280" />
+                    <Ionicons name="close-circle" size={20} color={colors.neutral[500]} />
                   </Pressable>
                 </View>
               )}
@@ -686,7 +687,7 @@ function UGCCommentsModal({
                   ref={inputRef}
                   style={styles.input}
                   placeholder="Add a comment..."
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.neutral[400]}
                   value={commentText}
                   onChangeText={setCommentText}
                   multiline
@@ -702,17 +703,17 @@ function UGCCommentsModal({
                   <LinearGradient
                     colors={
                       !commentText.trim() || posting || isOverLimit
-                        ? ['#D1D5DB', '#9CA3AF']
-                        : ['#7C3AED', '#6366F1']
+                        ? [colors.neutral[300], colors.neutral[400]]
+                        : [colors.brand.purple, colors.brand.indigo]
                     }
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                     style={styles.sendButton}
                   >
                     {posting ? (
-                      <ActivityIndicator color="#FFF" size="small" />
+                      <ActivityIndicator color={colors.background.primary} size="small" />
                     ) : (
-                      <Ionicons name="send" size={20} color="#FFF" />
+                      <Ionicons name="send" size={20} color={colors.background.primary} />
                     )}
                   </LinearGradient>
                 </Pressable>
@@ -741,7 +742,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalContainer: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     height: screenHeight * 0.9,
@@ -759,12 +760,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   dragIndicator: {
     width: 40,
     height: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 2,
     alignSelf: 'center',
     marginBottom: 16,
@@ -778,7 +779,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   closeButton: {
     padding: 4,
@@ -793,12 +794,12 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   caption: {
     flex: 1,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
   commentsList: {
@@ -824,7 +825,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   commentContent: {
     flex: 1,
@@ -838,15 +839,15 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   timestamp: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   commentText: {
     fontSize: 15,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 20,
     marginBottom: 8,
   },
@@ -863,17 +864,17 @@ const styles = StyleSheet.create({
   actionText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   likedText: {
-    color: '#EF4444',
+    color: colors.error,
   },
   actionsMenu: {
     marginTop: 8,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     overflow: 'hidden',
   },
   actionMenuItem: {
@@ -886,7 +887,7 @@ const styles = StyleSheet.create({
   actionMenuText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   repliesContainer: {
     marginTop: 8,
@@ -899,20 +900,20 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 12,
   },
   retryButton: {
     marginTop: 16,
     paddingVertical: 10,
     paddingHorizontal: 24,
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     borderRadius: 8,
   },
   retryButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   loadingMore: {
     paddingVertical: 20,
@@ -920,8 +921,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
-    backgroundColor: '#FFF',
+    borderTopColor: colors.neutral[100],
+    backgroundColor: colors.background.primary,
     paddingBottom: Platform.OS === 'ios' ? 20 : 12,
   },
   replyingToBar: {
@@ -930,11 +931,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 8,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
   },
   replyingToText: {
     fontSize: 13,
-    color: '#6366F1',
+    color: colors.brand.indigo,
     fontWeight: '500',
   },
   inputRow: {
@@ -948,18 +949,18 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   input: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 10,
     fontSize: 15,
-    color: '#111827',
+    color: colors.neutral[900],
     maxHeight: 100,
   },
   sendButtonWrapper: {
@@ -974,20 +975,20 @@ const styles = StyleSheet.create({
   },
   charCount: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'right',
     paddingHorizontal: 20,
     marginTop: 4,
   },
   charCountError: {
-    color: '#EF4444',
+    color: colors.error,
   },
   skeleton: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   skeletonLine: {
     height: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 6,
     marginBottom: 4,
   },

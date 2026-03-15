@@ -4,11 +4,12 @@
  */
 
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export const PRIVE_COLORS = {
   // Primary backgrounds
   background: {
-    primary: '#0A0A0A',      // Deep black
+    primary: colors.midGrayAlt,      // Deep black
     secondary: '#141414',    // Charcoal
     tertiary: '#1C1C1E',     // Dark grey
     elevated: '#1F1F1F',     // Elevated surfaces
@@ -17,26 +18,26 @@ export const PRIVE_COLORS = {
 
   // Gold accent system
   gold: {
-    primary: '#C9A962',      // Main gold
+    primary: colors.brand.goldAccent,      // Main gold
     light: '#D4B978',        // Light gold
     dark: '#A88B4A',         // Dark gold
     muted: '#8B7355',        // Muted gold
     glow: 'rgba(201, 169, 98, 0.15)',
-    gradient: ['#C9A962', '#A88B4A'] as const,
+    gradient: [colors.brand.goldAccent, '#A88B4A'] as const,
   },
 
   // Text hierarchy
   text: {
-    primary: '#FFFFFF',
+    primary: colors.background.primary,
     secondary: '#A0A0A0',
     tertiary: '#6B6B6B',
     disabled: '#4A4A4A',
-    inverse: '#0A0A0A',
+    inverse: colors.midGrayAlt,
   },
 
   // Status colors
   status: {
-    success: '#4CAF50',
+    success: colors.brand.emerald,
     successMuted: '#2E7D32',
     warning: '#FF9800',
     warningMuted: '#E65100',
@@ -49,7 +50,7 @@ export const PRIVE_COLORS = {
   border: {
     primary: '#2A2A2A',
     secondary: '#1F1F1F',
-    gold: '#C9A962',
+    gold: colors.brand.goldAccent,
     goldMuted: 'rgba(201, 169, 98, 0.3)',
   },
 
@@ -93,7 +94,7 @@ export const PILLAR_CONFIG = {
     name: 'Engagement',
     shortName: 'Engage',
     weight: 0.25,
-    color: '#4CAF50',
+    color: colors.brand.emerald,
     icon: '📊',
     description: `How deeply you use ${BRAND.APP_NAME}`,
   },

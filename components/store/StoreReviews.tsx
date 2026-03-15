@@ -13,6 +13,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { storeSearchService, Review, ReviewStats } from '@/services/storeSearchService';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -140,7 +141,7 @@ const StoreReviews: React.FC<StoreReviewsProps> = ({
         key={index}
         name={index < rating ? "star" : "star-outline"}
         size={size}
-        color="#FFD700"
+        color={colors.brand.goldBright}
         style={styles.star}
       />
     ));
@@ -156,7 +157,7 @@ const StoreReviews: React.FC<StoreReviewsProps> = ({
        
       >
         <Text style={styles.ratingNumber}>{rating}</Text>
-        <Ionicons name="star" size={12} color="#FFD700" />
+        <Ionicons name="star" size={12} color={colors.brand.goldBright} />
         <View style={styles.ratingBarContainer}>
           <View style={[styles.ratingBarFill, { width: `${percentage}%` }]} />
         </View>
@@ -212,7 +213,7 @@ const StoreReviews: React.FC<StoreReviewsProps> = ({
           style={styles.helpfulButton}
           onPress={() => handleMarkHelpful(review._id)}
         >
-          <Ionicons name="thumbs-up-outline" size={16} color="#666" />
+          <Ionicons name="thumbs-up-outline" size={16} color={colors.midGray} />
           <Text style={styles.helpfulText}>Helpful ({review.helpful})</Text>
         </Pressable>
       </View>
@@ -259,7 +260,7 @@ const StoreReviews: React.FC<StoreReviewsProps> = ({
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Reviews & Ratings</Text>
           <Pressable onPress={onClose}>
-            <Ionicons name="close" size={24} color="#333" />
+            <Ionicons name="close" size={24} color={colors.darkGray} />
           </Pressable>
         </View>
 
@@ -342,7 +343,7 @@ const StoreReviews: React.FC<StoreReviewsProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.offWhite,
   },
   header: {
     flexDirection: 'row',
@@ -350,20 +351,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
     borderBottomColor: '#e9ecef',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
   },
   content: {
     flex: 1,
   },
   ratingSummary: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     padding: 16,
     marginBottom: 16,
   },
@@ -374,7 +375,7 @@ const styles = StyleSheet.create({
   ratingNumber: {
     fontSize: 48,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 8,
   },
   ratingStars: {
@@ -386,7 +387,7 @@ const styles = StyleSheet.create({
   },
   totalReviews: {
     fontSize: 16,
-    color: '#666',
+    color: colors.midGray,
   },
   ratingBreakdown: {
     gap: 8,
@@ -406,12 +407,12 @@ const styles = StyleSheet.create({
   },
   ratingBarFill: {
     height: '100%',
-    backgroundColor: '#FFD700',
+    backgroundColor: colors.brand.goldBright,
     borderRadius: 4,
   },
   ratingCount: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     minWidth: 30,
     textAlign: 'right',
   },
@@ -427,7 +428,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
     borderColor: '#E5E5E5',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
   sortOptionActive: {
     backgroundColor: '#7B61FF',
@@ -435,14 +436,14 @@ const styles = StyleSheet.create({
   },
   sortOptionText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     fontWeight: '500',
   },
   sortOptionTextActive: {
-    color: '#fff',
+    color: colors.background.primary,
   },
   reviewsSection: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     padding: 16,
   },
   reviewsHeader: {
@@ -454,7 +455,7 @@ const styles = StyleSheet.create({
   reviewsTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
   },
   addReviewButton: {
     flexDirection: 'row',
@@ -464,7 +465,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
     borderColor: '#7B61FF',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
   addReviewText: {
     fontSize: 14,
@@ -502,7 +503,7 @@ const styles = StyleSheet.create({
   userAvatarText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.background.primary,
   },
   reviewUserInfo: {
     flex: 1,
@@ -515,7 +516,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginRight: 8,
   },
   reviewRating: {
@@ -524,12 +525,12 @@ const styles = StyleSheet.create({
   },
   reviewDate: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     marginLeft: 8,
   },
   reviewComment: {
     fontSize: 14,
-    color: '#333',
+    color: colors.darkGray,
     lineHeight: 20,
     marginBottom: 12,
   },
@@ -544,7 +545,7 @@ const styles = StyleSheet.create({
   },
   helpfulText: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     marginLeft: 4,
   },
   noReviews: {
@@ -558,12 +559,12 @@ const styles = StyleSheet.create({
   noReviewsTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 8,
   },
   noReviewsSubtitle: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
   },
   loadingContainer: {
@@ -572,7 +573,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#666',
+    color: colors.midGray,
     marginTop: 12,
   },
   loadMoreButton: {
@@ -590,7 +591,7 @@ const styles = StyleSheet.create({
   reviewTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 8,
   },
   reviewImages: {

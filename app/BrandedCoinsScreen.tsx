@@ -16,6 +16,7 @@ import { COIN_TYPES } from '@/types/wallet';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 export default function BrandedCoinsScreen() {
   const router = useRouter();
   const { walletData, brandedCoins: brandedCoinsFromCtx } = useWalletContext();
@@ -30,12 +31,12 @@ export default function BrandedCoinsScreen() {
     <View style={styles.root}>
       {/* Header */}
       <LinearGradient
-        colors={['#6366F1', '#4F46E5'] as const}
+        colors={[colors.brand.indigo, '#4F46E5'] as const}
         style={styles.headerBg}
       >
         <View style={styles.headerRow}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={22} color="#FFFFFF" />
+            <Ionicons name="arrow-back" size={22} color={colors.background.primary} />
           </Pressable>
           <Text style={styles.headerTitle}>Branded Coins</Text>
           <View style={styles.backButton} />
@@ -54,7 +55,7 @@ export default function BrandedCoinsScreen() {
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {brandedCoins.length === 0 ? (
           <View style={styles.emptyState}>
-            <Ionicons name="storefront-outline" size={48} color="#9CA3AF" />
+            <Ionicons name="storefront-outline" size={48} color={colors.neutral[400]} />
             <Text style={styles.emptyTitle}>No Branded Coins Yet</Text>
             <Text style={styles.emptySubtext}>
               When stores reward you with branded coins, they will appear here
@@ -98,7 +99,7 @@ export default function BrandedCoinsScreen() {
         {/* Info Section */}
         <View style={styles.infoSection}>
           <View style={styles.infoCard}>
-            <Ionicons name="information-circle-outline" size={20} color="#6366F1" />
+            <Ionicons name="information-circle-outline" size={20} color={colors.brand.indigo} />
             <View style={styles.infoContent}>
               <Text style={styles.infoTitle}>How Branded Coins Work</Text>
               <Text style={styles.infoText}>
@@ -246,7 +247,7 @@ const createStyles = (screenWidth: number) => {
     },
     infoCard: {
       flexDirection: 'row',
-      backgroundColor: '#EEF2FF',
+      backgroundColor: colors.indigoMist,
       borderRadius: 14,
       padding: Spacing.base,
       gap: Spacing.md,

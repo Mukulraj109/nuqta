@@ -4,6 +4,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { BonusZoneCampaign, UserCampaignState } from '@/services/bonusZoneApi';
+import { colors } from '@/constants/theme';
 
 // ============================================
 // TIMER HELPER
@@ -41,11 +42,11 @@ function getTimeRemaining(endTime: string) {
 
 const STATE_BADGE_CONFIG: Record<UserCampaignState, { label: string; bg: string; color: string } | null> = {
   eligible: null, // No badge for eligible (default state)
-  claimed: { label: 'Claimed', bg: '#DBEAFE', color: '#1D4ED8' },
-  limit_reached: { label: 'Limit Reached', bg: '#DBEAFE', color: '#1D4ED8' },
-  not_eligible: { label: 'Not Eligible', bg: '#F3F4F6', color: '#6B7280' },
-  budget_exhausted: { label: 'Sold Out', bg: '#FEE2E2', color: '#DC2626' },
-  expired: { label: 'Expired', bg: '#F3F4F6', color: '#6B7280' },
+  claimed: { label: 'Claimed', bg: colors.tint.blueLight, color: '#1D4ED8' },
+  limit_reached: { label: 'Limit Reached', bg: colors.tint.blueLight, color: '#1D4ED8' },
+  not_eligible: { label: 'Not Eligible', bg: colors.neutral[100], color: colors.neutral[500] },
+  budget_exhausted: { label: 'Sold Out', bg: colors.errorScale[100], color: colors.error },
+  expired: { label: 'Expired', bg: colors.neutral[100], color: colors.neutral[500] },
 };
 
 // ============================================
@@ -74,12 +75,12 @@ function getRewardDisplay(campaign: BonusZoneCampaign): string {
 // ============================================
 
 const CAMPAIGN_TYPE_LABELS: Record<string, { label: string; color: string }> = {
-  cashback_boost: { label: 'CASHBACK', color: '#059669' },
+  cashback_boost: { label: 'CASHBACK', color: colors.successScale[700] },
   bank_offer: { label: 'BANKS', color: '#1D4ED8' },
-  bill_upload_bonus: { label: 'BILL BONUS', color: '#DC2626' },
-  category_multiplier: { label: 'MULTIPLIER', color: '#7C3AED' },
-  first_transaction_bonus: { label: 'NEW USER', color: '#059669' },
-  festival_offer: { label: 'FESTIVAL', color: '#D97706' },
+  bill_upload_bonus: { label: 'BILL BONUS', color: colors.error },
+  category_multiplier: { label: 'MULTIPLIER', color: colors.brand.purple },
+  first_transaction_bonus: { label: 'NEW USER', color: colors.successScale[700] },
+  festival_offer: { label: 'FESTIVAL', color: colors.warningScale[700] },
 };
 
 // ============================================
@@ -127,7 +128,7 @@ function BonusZoneCard({ campaign, currencySymbol = 'د.إ' }: BonusZoneCardProp
 
   const isDisabled = ['expired', 'budget_exhausted'].includes(campaign.userState);
   const stateBadge = STATE_BADGE_CONFIG[campaign.userState];
-  const typeConfig = CAMPAIGN_TYPE_LABELS[campaign.campaignType] || { label: 'BONUS', color: '#D97706' };
+  const typeConfig = CAMPAIGN_TYPE_LABELS[campaign.campaignType] || { label: 'BONUS', color: colors.warningScale[700] };
   const rewardText = getRewardDisplay(campaign);
 
   // Scarcity: show "X left" when global claims are limited and running low
@@ -184,7 +185,7 @@ function BonusZoneCard({ campaign, currencySymbol = 'د.إ' }: BonusZoneCardProp
             {/* Scarcity indicator */}
             {showScarcity && (
               <View style={styles.scarcityBadge}>
-                <Ionicons name="flame" size={11} color="#DC2626" />
+                <Ionicons name="flame" size={11} color={colors.error} />
                 <Text style={styles.scarcityText}>{globalRemaining} left</Text>
               </View>
             )}
@@ -194,7 +195,7 @@ function BonusZoneCard({ campaign, currencySymbol = 'د.إ' }: BonusZoneCardProp
               <Ionicons
                 name="time"
                 size={14}
-                color={timeRemaining.urgent ? '#DC2626' : '#F97316'}
+                color={timeRemaining.urgent ? colors.error : colors.brand.orange}
               />
               <Text
                 style={[
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 16,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
     borderColor: '#FED7AA',
     marginBottom: 12,
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     flex: 1,
   },
   stateBadge: {
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 6,
   },
   footer: {
@@ -296,7 +297,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
   scarcityText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#DC2626',
+    color: colors.error,
   },
   timerContainer: {
     flexDirection: 'row',
@@ -314,9 +315,9 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   timerUrgent: {
-    color: '#DC2626',
+    color: colors.error,
   },
 });

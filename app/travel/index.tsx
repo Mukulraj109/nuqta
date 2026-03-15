@@ -23,46 +23,47 @@ import travelApi, { TravelService, TravelServiceCategory } from '@/services/trav
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width: SW } = Dimensions.get('window');
 const CARD_W = (SW - 48) / 2;
 
 // ─── Design Tokens ───────────────────────────────────────────────────────────
 const C = {
-  bg: '#F8FAFC',
-  white: '#FFFFFF',
+  bg: colors.tint.coolGray,
+  white: colors.background.primary,
   navy: '#0F172A',
   navyLight: '#1E293B',
-  slate500: '#64748B',
+  slate500: colors.slateGray,
   slate400: '#94A3B8',
-  slate200: '#E2E8F0',
-  slate100: '#F1F5F9',
-  cyan600: '#0891B2',
-  cyan500: '#06B6D4',
+  slate200: colors.slateLight,
+  slate100: colors.tint.slate,
+  cyan600: colors.cyanDark,
+  cyan500: colors.brand.cyan,
   cyan50: '#ECFEFF',
-  green600: '#16A34A',
-  green500: '#22C55E',
-  green50: '#F0FDF4',
-  amber500: '#F59E0B',
-  amber50: '#FFFBEB',
-  violet600: '#7C3AED',
-  violet50: '#F5F3FF',
+  green600: colors.brand.greenDark,
+  green500: colors.success,
+  green50: colors.successScale[50],
+  amber500: colors.warningScale[400],
+  amber50: colors.tint.amber,
+  violet600: colors.brand.purple,
+  violet50: colors.tint.purpleLight,
   rose500: '#F43F5E',
-  blue600: '#2563EB',
-  blue500: '#3B82F6',
-  orange500: '#F97316',
-  skeleton: '#E2E8F0',
-  skeletonShine: '#F1F5F9',
+  blue600: colors.brand.blue,
+  blue500: colors.infoScale[400],
+  orange500: colors.brand.orange,
+  skeleton: colors.slateLight,
+  skeletonShine: colors.tint.slate,
 };
 
 // ─── Category Config (Ionicons + gradients) ──────────────────────────────────
 const CATEGORY_CONFIG: Record<string, { icon: string; gradient: string[]; bg: string }> = {
-  flights:  { icon: 'airplane',       gradient: ['#3B82F6', '#1D4ED8'], bg: '#EFF6FF' },
-  hotels:   { icon: 'bed',            gradient: ['#EC4899', '#BE185D'], bg: '#FDF2F8' },
-  trains:   { icon: 'train',          gradient: ['#22C55E', '#15803D'], bg: '#F0FDF4' },
-  bus:      { icon: 'bus',            gradient: ['#F97316', '#C2410C'], bg: '#FFF7ED' },
-  cab:      { icon: 'car-sport',      gradient: ['#EAB308', '#A16207'], bg: '#FEFCE8' },
-  packages: { icon: 'globe',          gradient: ['#8B5CF6', '#6D28D9'], bg: '#F5F3FF' },
+  flights:  { icon: 'airplane',       gradient: [colors.infoScale[400], '#1D4ED8'], bg: colors.tint.blue },
+  hotels:   { icon: 'bed',            gradient: [colors.brand.pink, '#BE185D'], bg: '#FDF2F8' },
+  trains:   { icon: 'train',          gradient: [colors.success, colors.successScale[700]], bg: colors.successScale[50] },
+  bus:      { icon: 'bus',            gradient: [colors.brand.orange, '#C2410C'], bg: colors.tint.orange },
+  cab:      { icon: 'car-sport',      gradient: [colors.brand.amber, '#A16207'], bg: '#FEFCE8' },
+  packages: { icon: 'globe',          gradient: [colors.brand.purpleLight, colors.brand.purpleDeep], bg: colors.tint.purpleLight },
 };
 
 const getCategoryDetailRoute = (slug: string, id: string): string => {
@@ -302,7 +303,7 @@ const TravelPage: React.FC = () => {
     <View style={s.container}>
       {/* ── Header ────────────────────────────────────────────────────────── */}
       <LinearGradient
-        colors={['#0E7490', '#0891B2', '#06B6D4']}
+        colors={['#0E7490', colors.cyanDark, colors.brand.cyan]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={s.header}
@@ -542,7 +543,7 @@ const TravelPage: React.FC = () => {
         {/* ── Rewards Banner ──────────────────────────────────────────────── */}
         <View style={{ paddingHorizontal: 16, marginBottom: 20 }}>
           <LinearGradient
-            colors={['#7C3AED', '#6D28D9', '#5B21B6']}
+            colors={[colors.brand.purple, colors.brand.purpleDeep, '#5B21B6']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={s.rewardsBanner}
@@ -550,10 +551,10 @@ const TravelPage: React.FC = () => {
             <View style={s.rewardsLeft}>
               <View style={s.rewardsIconRow}>
                 <View style={s.rewardsIconCircle}>
-                  <Ionicons name="wallet" size={20} color="#7C3AED" />
+                  <Ionicons name="wallet" size={20} color={colors.brand.purple} />
                 </View>
                 <View style={s.rewardsIconCircle}>
-                  <Ionicons name="sparkles" size={20} color="#EAB308" />
+                  <Ionicons name="sparkles" size={20} color={colors.brand.amber} />
                 </View>
               </View>
               <Text style={s.rewardsTitle}>Travel & Earn</Text>
@@ -568,7 +569,7 @@ const TravelPage: React.FC = () => {
                
               >
                 <Text style={s.rewardsBtnText}>Explore Packages</Text>
-                <Ionicons name="arrow-forward" size={14} color="#7C3AED" />
+                <Ionicons name="arrow-forward" size={14} color={colors.brand.purple} />
               </Pressable>
             </View>
           </LinearGradient>
@@ -592,7 +593,7 @@ const TravelPage: React.FC = () => {
               onPress={() => router.push('/travel/deals' as any)}
              
             >
-              <View style={[s.qlIcon, { backgroundColor: '#FEF2F2' }]}>
+              <View style={[s.qlIcon, { backgroundColor: colors.errorScale[50] }]}>
                 <Ionicons name="flame" size={18} color={C.rose500} />
               </View>
               <Text style={s.qlText}>Hot Deals</Text>
@@ -841,7 +842,7 @@ const s = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: BorderRadius['2xl'],
   },
-  rewardsBtnText: { ...Typography.body, fontWeight: '700', color: '#7C3AED' },
+  rewardsBtnText: { ...Typography.body, fontWeight: '700', color: colors.brand.purple },
 
   // Quick Links
   quickLinks: {

@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Unified type for both Order and StorePayment records
 export interface ShareableOrder {
@@ -25,11 +26,11 @@ export interface ShareableOrder {
 
 // Type tag colors by order type
 const TYPE_TAG_CONFIG: Record<ShareableOrder['type'], { bg: string; color: string; icon: string }> = {
-  store_payment: { bg: '#EDE9FE', color: '#6D28D9', icon: 'storefront-outline' },
-  dine_in: { bg: '#FEF3C7', color: '#B45309', icon: 'restaurant-outline' },
-  pickup: { bg: '#DBEAFE', color: '#1D4ED8', icon: 'bag-handle-outline' },
-  drive_thru: { bg: '#D1FAE5', color: '#047857', icon: 'car-outline' },
-  delivery: { bg: '#FCE7F3', color: '#BE185D', icon: 'bicycle-outline' },
+  store_payment: { bg: colors.tint.purple, color: colors.brand.purpleDeep, icon: 'storefront-outline' },
+  dine_in: { bg: colors.tint.amberLight, color: colors.brand.amberDeep, icon: 'restaurant-outline' },
+  pickup: { bg: colors.tint.blueLight, color: '#1D4ED8', icon: 'bag-handle-outline' },
+  drive_thru: { bg: colors.tint.green, color: '#047857', icon: 'car-outline' },
+  delivery: { bg: colors.pinkMist, color: '#BE185D', icon: 'bicycle-outline' },
 };
 
 type SubmissionStatus = 'pending' | 'approved' | 'rejected' | 'credited' | null;
@@ -74,7 +75,7 @@ function CompletedOrderCard({
               <Ionicons
                 name={order.type === 'store_payment' ? 'storefront-outline' : 'cube-outline'}
                 size={32}
-                color="#9CA3AF"
+                color={colors.neutral[400]}
               />
             </View>
           )}
@@ -87,7 +88,7 @@ function CompletedOrderCard({
               #{order.orderNumber}
             </ThemedText>
             <View style={styles.statusBadgeSmall}>
-              <Ionicons name="checkmark-circle" size={12} color="#1a3a52" />
+              <Ionicons name="checkmark-circle" size={12} color={colors.nileBlue} />
               <ThemedText style={styles.statusBadgeSmallText}>
                 {order.statusLabel}
               </ThemedText>
@@ -121,7 +122,7 @@ function CompletedOrderCard({
 
           {/* Cashback Info */}
           <View style={styles.cashbackInfo}>
-            <Ionicons name="gift-outline" size={14} color="#1a3a52" />
+            <Ionicons name="gift-outline" size={14} color={colors.nileBlue} />
             <ThemedText style={styles.cashbackText}>
               Earn {order.cashbackAmount.toFixed(0)} coins
             </ThemedText>
@@ -133,7 +134,7 @@ function CompletedOrderCard({
       {submissionStatus === 'pending' ? (
         <View style={styles.statusContainer}>
           <View style={[styles.statusBadge, styles.pendingBadge]}>
-            <Ionicons name="time-outline" size={16} color="#B45309" />
+            <Ionicons name="time-outline" size={16} color={colors.brand.amberDeep} />
             <ThemedText style={styles.pendingText}>Pending Review</ThemedText>
           </View>
           <ThemedText style={styles.statusHint}>Will be verified within 24 hours</ThemedText>
@@ -141,7 +142,7 @@ function CompletedOrderCard({
       ) : submissionStatus === 'approved' || submissionStatus === 'credited' || alreadyEarned ? (
         <View style={styles.statusContainer}>
           <View style={[styles.statusBadge, styles.earnedBadge]}>
-            <Ionicons name="checkmark-circle" size={16} color="#1a3a52" />
+            <Ionicons name="checkmark-circle" size={16} color={colors.nileBlue} />
             <ThemedText style={styles.earnedText}>
               {submissionStatus === 'credited' ? 'Coins Credited' : 'Approved'}
             </ThemedText>
@@ -150,7 +151,7 @@ function CompletedOrderCard({
       ) : submissionStatus === 'rejected' ? (
         <View style={styles.statusContainer}>
           <View style={[styles.statusBadge, styles.rejectedBadge]}>
-            <Ionicons name="close-circle" size={16} color="#DC2626" />
+            <Ionicons name="close-circle" size={16} color={colors.error} />
             <ThemedText style={styles.rejectedText}>Rejected</ThemedText>
           </View>
           <Pressable
@@ -171,7 +172,7 @@ function CompletedOrderCard({
           accessibilityHint="Opens cashback info modal to submit social media post"
         >
           <LinearGradient
-            colors={['#1a3a52', '#2a4a62']}
+            colors={[colors.nileBlue, '#2a4a62']}
             style={styles.earnButtonGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
   placeholderImage: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -231,14 +232,14 @@ const styles = StyleSheet.create({
   orderNumber: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     flex: 1,
     marginRight: 8,
   },
   statusBadgeSmall: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
   statusBadgeSmallText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   typeTag: {
     flexDirection: 'row',
@@ -266,13 +267,13 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 2,
     lineHeight: 20,
   },
   storeName: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   priceRow: {
@@ -284,17 +285,17 @@ const styles = StyleSheet.create({
   orderAmount: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   orderDate: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   cashbackInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
@@ -303,7 +304,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   earnButton: {
     borderRadius: 12,
@@ -324,7 +325,7 @@ const styles = StyleSheet.create({
   earnedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 12,
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
   earnedText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   statusContainer: {
     alignItems: 'center',
@@ -349,24 +350,24 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   pendingBadge: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
   },
   pendingText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
   rejectedBadge: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
   },
   rejectedText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#DC2626',
+    color: colors.error,
   },
   statusHint: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
   },
   retryButton: {
@@ -374,12 +375,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   retryButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { PartnerLevel, PartnerBenefit } from '@/types/partner.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface BenefitsTableProps {
   levels: PartnerLevel[];
@@ -102,13 +103,13 @@ function BenefitsTable({
   const getLevelColor = (level: number): string[] => {
     switch (level) {
       case 1:
-        return ['#ffcd57', '#1a3a52'];
+        return [colors.lightMustard, colors.nileBlue];
       case 2:
-        return ['#ffcd57', '#ffe4a3'];
+        return [colors.lightMustard, '#ffe4a3'];
       case 3:
-        return ['#F59E0B', '#FBBF24'];
+        return [colors.warningScale[400], colors.warningScale[400]];
       default:
-        return ['#6B7280', '#9CA3AF'];
+        return [colors.neutral[500], colors.neutral[400]];
     }
   };
 
@@ -131,7 +132,7 @@ function BenefitsTable({
       <View style={styles.header}>
         <View style={styles.headerIcon}>
           <LinearGradient
-            colors={['#ffcd57', '#1a3a52']}
+            colors={[colors.lightMustard, colors.nileBlue]}
             style={styles.headerIconGradient}
           >
             <Ionicons name="grid" size={20} color="white" />
@@ -197,7 +198,7 @@ function BenefitsTable({
               {/* Benefit Name */}
               <View style={styles.benefitNameCell}>
                 <View style={styles.benefitIconContainer}>
-                  <Ionicons name={benefitType.icon as any} size={16} color="#ffcd57" />
+                  <Ionicons name={benefitType.icon as any} size={16} color={colors.lightMustard} />
                 </View>
                 <Text style={styles.benefitNameText}>{benefitType.name}</Text>
               </View>
@@ -223,7 +224,7 @@ function BenefitsTable({
                           <Ionicons 
                             name="checkmark-circle" 
                             size={16} 
-                            color={isCurrentLevel ? '#ffcd57' : '#ffcd57'} 
+                            color={isCurrentLevel ? colors.lightMustard : colors.lightMustard} 
                           />
                           <Text style={[
                             styles.benefitValue,
@@ -233,7 +234,7 @@ function BenefitsTable({
                           </Text>
                         </>
                       ) : (
-                        <Ionicons name="close-circle" size={16} color="#9CA3AF" />
+                        <Ionicons name="close-circle" size={16} color={colors.neutral[400]} />
                       )}
                     </View>
                   </View>
@@ -255,7 +256,7 @@ function BenefitsTable({
                   </View>
                 ) : level.level < currentLevel ? (
                   <View style={styles.completedLevelAction}>
-                    <Ionicons name="checkmark" size={16} color="#ffcd57" />
+                    <Ionicons name="checkmark" size={16} color={colors.lightMustard} />
                     <Text style={styles.completedLevelActionText}>Completed</Text>
                   </View>
                 ) : (
@@ -288,14 +289,14 @@ function BenefitsTable({
               level.level === currentLevel && styles.currentRequirementCard
             ]}>
               <LinearGradient
-                colors={(level.level === currentLevel ? getLevelColor(level.level) : ['#F9FAFB', '#F3F4F6']) as any}
+                colors={(level.level === currentLevel ? getLevelColor(level.level) : [colors.neutral[50], colors.neutral[100]]) as any}
                 style={styles.requirementCardGradient}
               >
                 <View style={styles.requirementHeader}>
                   <Ionicons 
                     name={getLevelIcon(level.level) as any} 
                     size={16} 
-                    color={level.level === currentLevel ? 'white' : '#6B7280'} 
+                    color={level.level === currentLevel ? 'white' : colors.neutral[500]} 
                   />
                   <Text style={[
                     styles.requirementLevelText,
@@ -352,28 +353,28 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   headerSubtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   currentLevelContainer: {
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderRadius: 8,
     padding: 12,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#ffcd57',
+    borderColor: colors.lightMustard,
   },
   currentLevelText: {
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
   },
   currentLevelName: {
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   tableContainer: {
     marginBottom: 20,
@@ -389,7 +390,7 @@ const styles = StyleSheet.create({
     width: 180,
     padding: 12,
     justifyContent: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderTopLeftRadius: 8,
   },
   levelColumn: {
@@ -402,7 +403,7 @@ const styles = StyleSheet.create({
   },
   currentLevelHeader: {
     borderWidth: 2,
-    borderColor: '#FBBF24',
+    borderColor: colors.warningScale[400],
   },
   levelIconContainer: {
     marginBottom: 4,
@@ -433,28 +434,28 @@ const styles = StyleSheet.create({
   tableHeaderText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   benefitRow: {
     flexDirection: 'row',
     marginBottom: 1,
   },
   alternateRow: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   benefitNameCell: {
     width: 180,
     padding: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   benefitIconContainer: {
     marginRight: 8,
   },
   benefitNameText: {
     fontSize: 12,
-    color: '#1F2937',
+    color: colors.neutral[800],
     fontWeight: '500',
     flex: 1,
   },
@@ -466,7 +467,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   currentLevelCell: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
   },
   benefitValueContainer: {
     flexDirection: 'row',
@@ -477,33 +478,33 @@ const styles = StyleSheet.create({
     minWidth: 60,
   },
   activeBenefitContainer: {
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
   },
   currentActiveBenefitContainer: {
     backgroundColor: '#ffcd5720',
     borderWidth: 1,
-    borderColor: '#ffcd57',
+    borderColor: colors.lightMustard,
   },
   benefitValue: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginLeft: 4,
   },
   currentBenefitValue: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   actionRow: {
     flexDirection: 'row',
     marginTop: 8,
     borderTopWidth: 2,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     paddingTop: 8,
   },
   actionRowLabel: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   actionCell: {
     width: 120,
@@ -511,7 +512,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   currentLevelAction: {
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderRadius: 6,
     paddingVertical: 6,
     paddingHorizontal: 12,
@@ -519,12 +520,12 @@ const styles = StyleSheet.create({
   currentLevelActionText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   completedLevelAction: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 6,
     paddingVertical: 6,
     paddingHorizontal: 12,
@@ -532,7 +533,7 @@ const styles = StyleSheet.create({
   completedLevelActionText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     marginLeft: 4,
   },
   upgradeButton: {
@@ -553,13 +554,13 @@ const styles = StyleSheet.create({
   },
   requirementsSection: {
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     paddingTop: 20,
   },
   requirementsSectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
   },
   requirementsGrid: {
@@ -573,7 +574,7 @@ const styles = StyleSheet.create({
   },
   currentRequirementCard: {
     borderWidth: 2,
-    borderColor: '#ffcd57',
+    borderColor: colors.lightMustard,
   },
   requirementCardGradient: {
     padding: 12,
@@ -587,7 +588,7 @@ const styles = StyleSheet.create({
   requirementLevelText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 6,
   },
   currentRequirementLevelText: {
@@ -595,7 +596,7 @@ const styles = StyleSheet.create({
   },
   requirementText: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
   },
   currentRequirementText: {

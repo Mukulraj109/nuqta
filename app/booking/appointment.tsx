@@ -21,6 +21,7 @@ import servicesApi, { ServiceItem } from '@/services/servicesApi';
 import bookingApi from '@/services/bookingApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Service type icon mapping
 const SERVICE_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
@@ -318,7 +319,7 @@ You will receive a confirmation message at ${customerPhone}${customerEmail ? ` a
 
       {/* Header with Purple Gradient */}
       <LinearGradient
-        colors={['#8B5CF6', '#7C3AED']}
+        colors={[colors.brand.purpleLight, colors.brand.purple]}
         style={styles.header}
       >
         <View style={styles.headerTop}>
@@ -347,7 +348,7 @@ You will receive a confirmation message at ${customerPhone}${customerEmail ? ` a
           <ThemedText style={styles.sectionTitle}>Select Service</ThemedText>
 
           {servicesLoading ? (
-            <ActivityIndicator color="#8B5CF6" style={{ marginVertical: 20 }} />
+            <ActivityIndicator color={colors.brand.purpleLight} style={{ marginVertical: 20 }} />
           ) : services.length > 0 ? (
             <View style={styles.servicesGrid}>
               {services.map((service) => {
@@ -373,7 +374,7 @@ You will receive a confirmation message at ${customerPhone}${customerEmail ? ` a
                       <Ionicons
                         name={iconName}
                         size={28}
-                        color={isSelected ? '#FFFFFF' : '#8B5CF6'}
+                        color={isSelected ? colors.background.primary : colors.brand.purpleLight}
                       />
                     </View>
                     <ThemedText
@@ -618,7 +619,7 @@ You will receive a confirmation message at ${customerPhone}${customerEmail ? ` a
             disabled={submitting}
           >
             <LinearGradient
-              colors={['#8B5CF6', '#7C3AED']}
+              colors={[colors.brand.purpleLight, colors.brand.purple]}
               style={styles.confirmButtonGradient}
             >
               {submitting ? (
@@ -655,7 +656,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: BorderRadius.sm,
   },
   backToStoreText: {
@@ -732,20 +733,20 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
   },
   serviceCardSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F3E8FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.pink,
   },
   serviceIconContainer: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.sm,
   },
   serviceIconContainerSelected: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   serviceName: {
     ...Typography.body,
@@ -755,7 +756,7 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
   serviceNameSelected: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   serviceDuration: {
     fontSize: 11,
@@ -763,7 +764,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xs,
   },
   serviceDurationSelected: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   servicePrice: {
     ...Typography.body,
@@ -771,7 +772,7 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
   servicePriceSelected: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   noDataText: {
     textAlign: 'center',
@@ -799,14 +800,14 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   dateCardSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F3E8FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.pink,
   },
   todayBadge: {
     position: 'absolute',
     top: Spacing.xs,
     right: Spacing.xs,
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: BorderRadius.sm,
@@ -832,7 +833,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   dateTextSelected: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   timeGrid: {
     flexDirection: 'row',
@@ -849,8 +850,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
   },
   timeSlotSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F3E8FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.pink,
   },
   timeSlotDisabled: {
     backgroundColor: Colors.background.secondary,
@@ -863,7 +864,7 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
   timeTextSelected: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '700',
   },
   timeTextDisabled: {
@@ -934,7 +935,7 @@ const styles = StyleSheet.create({
   summaryValueBold: {
     ...Typography.h4,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   bottomContainer: {
     position: 'absolute',

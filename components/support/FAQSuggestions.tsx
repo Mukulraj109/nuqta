@@ -12,6 +12,7 @@ import {
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import type { FAQSuggestion } from '@/types/supportChat.types';
+import { colors } from '@/constants/theme';
 
 interface FAQSuggestionsProps {
   suggestions: FAQSuggestion[];
@@ -56,12 +57,12 @@ function FAQSuggestions({
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Ionicons name="bulb" size={20} color="#F59E0B" />
+          <Ionicons name="bulb" size={20} color={colors.warningScale[400]} />
           <ThemedText style={styles.title}>Suggested Answers</ThemedText>
         </View>
         {onClose && (
           <Pressable onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close" size={20} color="#6B7280" />
+            <Ionicons name="close" size={20} color={colors.neutral[500]} />
           </Pressable>
         )}
       </View>
@@ -88,7 +89,7 @@ function FAQSuggestions({
                     <Ionicons
                       name="help-circle-outline"
                       size={18}
-                      color="#10B981"
+                      color={colors.successScale[400]}
                     />
                     <ThemedText style={styles.question}>
                       {suggestion.question}
@@ -97,7 +98,7 @@ function FAQSuggestions({
                   <Ionicons
                     name={isExpanded ? 'chevron-up' : 'chevron-down'}
                     size={20}
-                    color="#9CA3AF"
+                    color={colors.neutral[400]}
                   />
                 </View>
                 {suggestion.relevanceScore && suggestion.relevanceScore > 0.7 && (
@@ -116,11 +117,11 @@ function FAQSuggestions({
                       style={styles.articleButton}
                       onPress={() => handleArticlePress(suggestion.articleUrl)}
                     >
-                      <Ionicons name="document-text-outline" size={16} color="#3B82F6" />
+                      <Ionicons name="document-text-outline" size={16} color={colors.infoScale[400]} />
                       <ThemedText style={styles.articleButtonText}>
                         Read full article
                       </ThemedText>
-                      <Ionicons name="arrow-forward" size={14} color="#3B82F6" />
+                      <Ionicons name="arrow-forward" size={14} color={colors.infoScale[400]} />
                     </Pressable>
                   )}
 
@@ -140,7 +141,7 @@ function FAQSuggestions({
                           <Ionicons
                             name="thumbs-up"
                             size={16}
-                            color={suggestion.helpful === true ? '#10B981' : '#6B7280'}
+                            color={suggestion.helpful === true ? colors.successScale[400] : colors.neutral[500]}
                           />
                           <ThemedText
                             style={[
@@ -162,7 +163,7 @@ function FAQSuggestions({
                           <Ionicons
                             name="thumbs-down"
                             size={16}
-                            color={suggestion.helpful === false ? '#EF4444' : '#6B7280'}
+                            color={suggestion.helpful === false ? colors.error : colors.neutral[500]}
                           />
                           <ThemedText
                             style={[
@@ -184,7 +185,7 @@ function FAQSuggestions({
       </ScrollView>
 
       <View style={styles.footer}>
-        <Ionicons name="chatbubbles-outline" size={16} color="#6B7280" />
+        <Ionicons name="chatbubbles-outline" size={16} color={colors.neutral[500]} />
         <ThemedText style={styles.footerText}>
           Can't find what you need? Continue chatting with an agent
         </ThemedText>
@@ -195,7 +196,7 @@ function FAQSuggestions({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 16,
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   closeButton: {
     padding: 4,
@@ -248,12 +249,12 @@ const styles = StyleSheet.create({
   question: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     flex: 1,
     lineHeight: 20,
   },
   badge: {
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -272,7 +273,7 @@ const styles = StyleSheet.create({
   },
   answer: {
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
     lineHeight: 22,
   },
   articleButton: {
@@ -284,17 +285,17 @@ const styles = StyleSheet.create({
   articleButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#3B82F6',
+    color: colors.infoScale[400],
     flex: 1,
   },
   feedback: {
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   feedbackLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   feedbackButtons: {
@@ -309,20 +310,20 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     backgroundColor: 'white',
   },
   feedbackButtonActive: {
-    borderColor: '#10B981',
-    backgroundColor: '#F0FDF4',
+    borderColor: colors.successScale[400],
+    backgroundColor: colors.successScale[50],
   },
   feedbackButtonText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   feedbackButtonTextActive: {
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   footer: {
     flexDirection: 'row',
@@ -331,12 +332,12 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#FDE68A',
+    borderTopColor: colors.warningScale[200],
   },
   footerText: {
     flex: 1,
     fontSize: 12,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     lineHeight: 18,
   },
 });

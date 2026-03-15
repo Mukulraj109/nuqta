@@ -18,6 +18,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import Constants from 'expo-constants';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface UpdateInfo {
   currentVersion: string;
@@ -151,7 +152,7 @@ export default function AppUpdatePage() {
             colors={[Colors.primary[600], Colors.primary[700]]}
             style={styles.updateButtonGradient}
           >
-            <Ionicons name="download-outline" size={20} color="#FFF" />
+            <Ionicons name="download-outline" size={20} color={colors.background.primary} />
             <ThemedText style={styles.updateButtonText}>Update Now</ThemedText>
           </LinearGradient>
         </Pressable>
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
   },
   updateButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   laterButton: {
     alignItems: 'center',

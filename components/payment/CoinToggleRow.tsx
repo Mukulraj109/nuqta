@@ -17,6 +17,7 @@ import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS } from '@/constants/DesignTo
 import CrossPlatformSlider from '@/components/common/CrossPlatformSlider';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export type CoinType = 'rez' | 'nuqta' | 'promo' | 'branded';
 
@@ -40,30 +41,30 @@ interface CoinToggleRowProps {
 // All colors must follow the palette: Nile Blue, Mustard, Linen, Peach, Lavender
 const COIN_STYLES: Record<CoinType, { color: string; bgColor: string; gradientColors: string[]; icon: string; description: string }> = {
   rez: {
-    color: '#ffcd57', // Mustard
-    bgColor: '#faf1e0', // Linen
-    gradientColors: ['#ffcd57', '#ffd7b5'], // Mustard to Peach
+    color: colors.lightMustard, // Mustard
+    bgColor: colors.linen, // Linen
+    gradientColors: [colors.lightMustard, colors.lightPeach], // Mustard to Peach
     icon: 'diamond',
     description: 'Usable across all stores',
   },
   nuqta: {
-    color: '#ffcd57', // Mustard
-    bgColor: '#faf1e0', // Linen
-    gradientColors: ['#ffcd57', '#ffd7b5'], // Mustard to Peach
+    color: colors.lightMustard, // Mustard
+    bgColor: colors.linen, // Linen
+    gradientColors: [colors.lightMustard, colors.lightPeach], // Mustard to Peach
     icon: 'diamond',
     description: 'Usable across all stores',
   },
   promo: {
-    color: '#ffcd57', // Mustard
-    bgColor: '#faf1e0', // Linen
-    gradientColors: ['#ffcd57', '#ffd7b5'], // Mustard to Peach
+    color: colors.lightMustard, // Mustard
+    bgColor: colors.linen, // Linen
+    gradientColors: [colors.lightMustard, colors.lightPeach], // Mustard to Peach
     icon: 'flame',
     description: 'Limited-time campaign coins',
   },
   branded: {
-    color: '#1a3a52', // Nile Blue
-    bgColor: '#dfebf7', // Lavender Mist
-    gradientColors: ['#1a3a52', '#dfebf7'], // Nile Blue to Lavender
+    color: colors.nileBlue, // Nile Blue
+    bgColor: colors.lavenderMist, // Lavender Mist
+    gradientColors: [colors.nileBlue, colors.lavenderMist], // Nile Blue to Lavender
     icon: 'storefront',
     description: 'Store-specific rewards',
   },
@@ -166,7 +167,7 @@ export const CoinToggleRow: React.FC<CoinToggleRowProps> = ({
                 <Ionicons
                   name={expiryBadge.urgent ? 'warning' : 'time'}
                   size={10}
-                  color={expiryBadge.urgent ? '#FFFFFF' : COLORS.nuqta.nileBlue}
+                  color={expiryBadge.urgent ? colors.background.primary : COLORS.nuqta.nileBlue}
                 />
                 <Text style={[
                   styles.expiryText,
@@ -191,7 +192,7 @@ export const CoinToggleRow: React.FC<CoinToggleRowProps> = ({
             value={enabled}
             onValueChange={handleToggle}
             trackColor={{ false: COLORS.neutral[200], true: style.color }}
-            thumbColor="#FFFFFF"
+            thumbColor={colors.background.primary}
             disabled={available === 0}
           />
         </View>
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
   expiryBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ffcd57', // Mustard for normal expiry
+    backgroundColor: colors.lightMustard, // Mustard for normal expiry
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: BORDER_RADIUS.full,
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
   expiryText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   balance: {
     ...TYPOGRAPHY.caption,

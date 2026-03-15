@@ -20,6 +20,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { showAlert, alertOk } from '@/utils/alert';
 import ProjectSubmissionForm from '@/components/projects/ProjectSubmissionForm';
 import { DetailPageSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 interface ProjectSubmission {
   _id: string;
@@ -301,7 +302,7 @@ export default function ProjectDetailPage() {
           {/* Project Card */}
           <View style={styles.projectCard}>
             <LinearGradient
-              colors={['#FFFFFF', '#F9FAFB']}
+              colors={[colors.background.primary, colors.neutral[50]]}
               style={styles.cardGradient}
             >
               {/* Title */}
@@ -743,7 +744,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.lg,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
     marginRight: Spacing.sm,
     marginBottom: Spacing.sm,
   },
@@ -840,7 +841,7 @@ const styles = StyleSheet.create({
   paidAmountText: {
     ...Typography.body,
     fontWeight: '700',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   submissionForm: {
     marginTop: Spacing.sm,
@@ -870,7 +871,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.base,
     borderRadius: BorderRadius.md,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
     gap: Spacing.sm,
   },
   viewSubmissionButtonText: {

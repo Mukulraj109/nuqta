@@ -19,6 +19,7 @@ import { ThemedView } from '@/components/ThemedView';
 import ringSizeApi from '@/services/ringSizeApi';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -470,7 +471,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   methodButtonActive: {
-    backgroundColor: '#F3E8FF',  // purple scale tint
+    backgroundColor: colors.tint.pink,  // purple scale tint
   },
   methodButtonText: {
     fontSize: 14,
@@ -560,11 +561,11 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
   resultContainer: {
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#BBF7D0',
+    borderColor: colors.successScale[200],
   },
   resultTitle: {
     fontSize: 16,

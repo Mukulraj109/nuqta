@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StarRatingProps } from '@/types/reviews';
+import { colors } from '@/constants/theme';
 
 const StarRating: React.FC<StarRatingProps> = ({
   rating,
@@ -49,7 +50,7 @@ const StarRating: React.FC<StarRatingProps> = ({
         break;
       case 'empty':
         iconName = 'star-outline';
-        color = '#D1D5DB';
+        color = colors.neutral[300];
         break;
     }
 

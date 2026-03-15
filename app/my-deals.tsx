@@ -27,13 +27,14 @@ import { campaignsApi, DealRedemption, RedemptionSummary } from '@/services/camp
 import { useAuth } from '@/contexts/AuthContext';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#0B2240',
+  white: colors.background.primary,
+  navy: colors.brand.navyDark,
   gray50: Colors.background.secondary,
   gray100: Colors.background.secondary,
   gray200: Colors.border.default,
@@ -45,16 +46,16 @@ const COLORS = {
   green500: Colors.success,
   green600: Colors.success,
   emerald500: Colors.success,
-  amber50: '#FFFBEB',
+  amber50: colors.tint.amber,
   amber500: Colors.warning,
   amber600: Colors.warning,
-  blue50: '#EFF6FF',
+  blue50: colors.tint.blue,
   blue500: Colors.info,
   purple500: Colors.brand.purpleLight,
-  pink500: '#EC4899',
+  pink500: colors.brand.pink,
   red50: Colors.errorScale[50],
   red500: Colors.error,
-  cyan500: '#06B6D4',
+  cyan500: colors.brand.cyan,
 };
 
 const STATUS_CONFIG: Record<string, { color: string; bgColor: string; label: string; icon: string }> = {
@@ -251,7 +252,7 @@ const MyDealsPage: React.FC = () => {
     const dealValue = getDealValue(redemption.dealSnapshot);
     const gradientColors = redemption.campaignSnapshot?.gradientColors?.length >= 2
       ? redemption.campaignSnapshot.gradientColors
-      : ['#F97316', '#FB923C'];
+      : [colors.brand.orange, '#FB923C'];
     const timeRemaining = redemption.status === 'active' ? getTimeRemaining(redemption.expiresAt) : null;
     const code = redemption.code || redemption.redemptionCode || '';
     const isCopied = copiedCode === code;

@@ -23,6 +23,7 @@ import eventsApiService from '@/services/eventsApi';
 import stripeApi from '@/services/stripeApi';
 import eventAnalytics from '@/services/eventAnalytics';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 // Conditional import for native Stripe service
 let stripeReactNativeService: any = null;
 if (Platform.OS !== 'web') {
@@ -147,21 +148,21 @@ function WebPaymentForm({
     }
   };
 
-  const textColor = '#111827';
-  const tintColor = '#8B5CF6';
-  const placeholderColor = '#9CA3AF';
+  const textColor = colors.neutral[900];
+  const tintColor = colors.brand.purpleLight;
+  const placeholderColor = colors.neutral[400];
 
   const cardElementOptions = {
     style: {
       base: {
         fontSize: '16px',
-        color: '#111827',
-        '::placeholder': { color: '#9CA3AF' },
+        color: colors.neutral[900],
+        '::placeholder': { color: colors.neutral[400] },
         fontFamily: 'system-ui, -apple-system, sans-serif',
       },
       invalid: {
-        color: '#EF4444',
-        iconColor: '#EF4444',
+        color: colors.error,
+        iconColor: colors.error,
       },
     },
   };
@@ -179,10 +180,10 @@ function WebPaymentForm({
         </ThemedText>
         <View style={{ 
           borderWidth: 1, 
-          borderColor: cardError ? '#EF4444' : '#E5E7EB', 
+          borderColor: cardError ? colors.error : colors.neutral[200], 
           borderRadius: 8, 
           padding: 15, 
-          backgroundColor: '#FFFFFF',
+          backgroundColor: colors.background.primary,
           minHeight: 50
         }}>
           {CardNumberElement && (
@@ -199,10 +200,10 @@ function WebPaymentForm({
           </ThemedText>
           <View style={{ 
             borderWidth: 1, 
-            borderColor: cardError ? '#EF4444' : '#E5E7EB', 
+            borderColor: cardError ? colors.error : colors.neutral[200], 
             borderRadius: 8, 
             padding: 15, 
-            backgroundColor: '#FFFFFF',
+            backgroundColor: colors.background.primary,
             minHeight: 50
           }}>
             {CardExpiryElement && (
@@ -217,10 +218,10 @@ function WebPaymentForm({
           </ThemedText>
           <View style={{ 
             borderWidth: 1, 
-            borderColor: cardError ? '#EF4444' : '#E5E7EB', 
+            borderColor: cardError ? colors.error : colors.neutral[200], 
             borderRadius: 8, 
             padding: 15, 
-            backgroundColor: '#FFFFFF',
+            backgroundColor: colors.background.primary,
             minHeight: 50
           }}>
             {CardCvcElement && (
@@ -232,14 +233,14 @@ function WebPaymentForm({
 
       {cardError && (
         <View style={{ 
-          backgroundColor: '#FEE2E2', 
-          borderColor: '#EF4444', 
+          backgroundColor: colors.errorScale[100], 
+          borderColor: colors.error, 
           borderWidth: 1, 
           borderRadius: 8, 
           padding: 12, 
           marginBottom: 15 
         }}>
-          <ThemedText style={{ color: '#EF4444', fontSize: 14 }}>
+          <ThemedText style={{ color: colors.error, fontSize: 14 }}>
             {cardError}
           </ThemedText>
         </View>
@@ -257,9 +258,9 @@ function WebPaymentForm({
         disabled={isProcessing}
       >
         {isProcessing ? (
-          <ActivityIndicator color="#FFFFFF" />
+          <ActivityIndicator color={colors.background.primary} />
         ) : (
-          <ThemedText style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600' }}>
+          <ThemedText style={{ color: colors.background.primary, fontSize: 16, fontWeight: '600' }}>
             Pay {currency}{amount}
           </ThemedText>
         )}
@@ -318,11 +319,11 @@ function EventBookingModal({
 
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
-  const borderColor = useThemeColor({ light: '#E5E7EB', dark: '#374151' }, 'border');
+  const borderColor = useThemeColor({ light: colors.neutral[200], dark: colors.neutral[700] }, 'border');
   const tintColor = useThemeColor({}, 'tint');
-  const cardBackground = useThemeColor({ light: '#FFFFFF', dark: '#1F2937' }, 'background');
-  const placeholderColor = useThemeColor({ light: '#9CA3AF', dark: '#6B7280' }, 'text');
-  const errorColor = '#EF4444';
+  const cardBackground = useThemeColor({ light: colors.background.primary, dark: colors.neutral[800] }, 'background');
+  const placeholderColor = useThemeColor({ light: colors.neutral[400], dark: colors.neutral[500] }, 'text');
+  const errorColor = colors.error;
 
   // Validation functions
   const validateName = (name: string): string | undefined => {
@@ -930,7 +931,7 @@ function EventBookingModal({
             >
             {isProcessingPayment ? (
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <ActivityIndicator size="small" color="#FFFFFF" />
+                  <ActivityIndicator size="small" color={colors.background.primary} />
                   <ThemedText style={styles.bookButtonText}>
                     Processing Payment...
                   </ThemedText>
@@ -981,12 +982,12 @@ function EventBookingModal({
               width: 80,
               height: 80,
               borderRadius: 40,
-              backgroundColor: '#ffcd57',
+              backgroundColor: colors.lightMustard,
               justifyContent: 'center',
               alignItems: 'center',
               marginBottom: 20
             }}>
-              <Ionicons name="checkmark" size={50} color="#FFFFFF" />
+              <Ionicons name="checkmark" size={50} color={colors.background.primary} />
             </View>
 
             {/* Success Title */}
@@ -1055,7 +1056,7 @@ function EventBookingModal({
                   router.push('/my-events' as any);
                 }}
               >
-                <ThemedText style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600' }}>
+                <ThemedText style={{ color: colors.background.primary, fontSize: 16, fontWeight: '600' }}>
                   View Bookings
                 </ThemedText>
               </Pressable>
@@ -1096,7 +1097,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   closeButton: {
     padding: 8,
@@ -1184,7 +1185,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 12,
-    color: '#EF4444',
+    color: colors.error,
     marginTop: 4,
     fontWeight: '500',
   },
@@ -1219,7 +1220,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bookButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: '600',
   },

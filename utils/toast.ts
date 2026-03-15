@@ -3,6 +3,7 @@
 // For native platforms, use react-native-toast-message instead
 
 import { Platform } from 'react-native';
+import { colors } from '@/constants/theme';
 
 interface ToastOptions {
   duration?: number;
@@ -209,7 +210,7 @@ class ToastManager {
       case 'success':
         return '#10B981'; // Green
       case 'error':
-        return '#EF4444'; // Red
+        return colors.error; // Red
       case 'warning':
         return '#F59E0B'; // Orange
       case 'info':

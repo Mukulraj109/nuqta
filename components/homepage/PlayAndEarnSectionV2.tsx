@@ -16,22 +16,23 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import gameApi, { AvailableGame } from '@/services/gameApi';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Colors matching Nuqta design
 const COLORS = {
   // Light mode
-  white: '#FFFFFF',
-  navy: '#1a3a52',
-  gray600: '#6B7280',
-  gray200: '#E5E7EB',
-  nileBlue: '#1a3a52',
-  nileBlueLight: '#234b68',
-  mustard: '#ffcd57',
-  amber500: '#F59E0B',
-  amber600: '#D97706',
-  amber400: '#FBBF24',
+  white: colors.background.primary,
+  navy: colors.nileBlue,
+  gray600: colors.neutral[500],
+  gray200: colors.neutral[200],
+  nileBlue: colors.nileBlue,
+  nileBlueLight: colors.brand.nileBlueLight,
+  mustard: colors.lightMustard,
+  amber500: colors.warningScale[400],
+  amber600: colors.warningScale[700],
+  amber400: colors.warningScale[400],
   // Gradients
   nileBlueGradientStart: 'rgba(26, 58, 82, 0.2)',
   nileBlueGradientEnd: 'rgba(35, 75, 104, 0.1)',

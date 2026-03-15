@@ -19,6 +19,7 @@ import { useCart } from '@/contexts/CartContext';
 import { useCardOfferAutoApply } from '@/hooks/useCardOfferAutoApply';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -128,7 +129,7 @@ export default function PaymentMethodsPage() {
           >
             <View style={styles.quickPayContent}>
               <View style={styles.quickPayLeft}>
-                <Ionicons name="flash" size={24} color="#FFD700" />
+                <Ionicons name="flash" size={24} color={colors.brand.goldBright} />
                 <View>
                   <ThemedText style={styles.quickPayTitle}>Pay Instantly</ThemedText>
                   <ThemedText style={styles.quickPaySubtitle}>
@@ -420,7 +421,7 @@ const styles = StyleSheet.create({
   infoBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     padding: Spacing.md,
     borderRadius: BorderRadius.sm,
     gap: Spacing.sm,

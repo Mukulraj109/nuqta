@@ -11,6 +11,7 @@ import { SectionHeader, HorizontalScrollSection } from '../common';
 import { OfferCardCompact } from '../cards';
 import { TodaysOffer } from '@/types/offers.types';
 import { Spacing } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface NewTodaySectionProps {
   offers: TodaysOffer[];
@@ -35,7 +36,7 @@ export const NewTodaySection: React.FC<NewTodaySectionProps> = ({
         title="New Today"
         subtitle="Just added"
         icon="sparkles"
-        iconColor="#10B981"
+        iconColor={colors.successScale[400]}
         showViewAll={offers.length > 3}
         onViewAll={onViewAll}
       />

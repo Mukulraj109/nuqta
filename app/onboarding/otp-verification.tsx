@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { platformAlertSimple } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 export default function OTPVerificationScreen() {
   const router = useRouter();
   const { phoneNumber } = useLocalSearchParams<{ phoneNumber: string }>();
@@ -158,7 +159,7 @@ export default function OTPVerificationScreen() {
                 colors={[Colors.gold, Colors.nileBlue]}
                 style={styles.iconGradient}
               >
-                <Ionicons name="shield-checkmark" size={32} color="#FFFFFF" />
+                <Ionicons name="shield-checkmark" size={32} color={colors.background.primary} />
               </LinearGradient>
             </View>
 
@@ -243,7 +244,7 @@ export default function OTPVerificationScreen() {
             <LinearGradient
               colors={
                 state.isLoading || !otp.every(digit => digit.length === 1)
-                  ? ['#D1D5DB', '#D1D5DB']
+                  ? [colors.neutral[300], colors.neutral[300]]
                   : [Colors.gold, Colors.nileBlue]
               }
               start={{ x: 0, y: 0 }}
@@ -253,7 +254,7 @@ export default function OTPVerificationScreen() {
               <Text style={styles.primaryButtonText}>
                 {state.isLoading ? 'Verifying...' : 'Verify & Continue'}
               </Text>
-              {!state.isLoading && <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />}
+              {!state.isLoading && <Ionicons name="checkmark-circle" size={20} color={colors.background.primary} />}
             </LinearGradient>
           </Pressable>
         </View>

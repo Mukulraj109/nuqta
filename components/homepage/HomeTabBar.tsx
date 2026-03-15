@@ -7,6 +7,7 @@ import {
   Platform,
 } from 'react-native';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export type TabId = 'nuqta' | 'nuqta-mall' | 'cash-store';
 
@@ -108,11 +109,11 @@ const styles = StyleSheet.create({
   },
   // Active tab - Nile Blue background
   tabActive: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
   },
   // Inactive tab - White background
   tabInactive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -146,11 +147,11 @@ const styles = StyleSheet.create({
   },
   // Active text - White
   tabTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // Inactive text - Nile Blue
   tabTextInactive: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 });
 

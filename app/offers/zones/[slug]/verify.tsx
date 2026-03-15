@@ -16,20 +16,21 @@ import { useAuth } from '@/contexts/AuthContext';
 import apiClient from '@/services/apiClient';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Colors
 const COLORS = {
   primary: Colors.gold,
-  primaryDark: '#E6B84E',
-  white: '#FFFFFF',
+  primaryDark: colors.brand.goldRich,
+  white: colors.background.primary,
   black: '#000000',
   textDark: Colors.nileBlue,
   textMuted: Colors.text.tertiary,
-  background: '#faf1e0',
+  background: colors.linen,
   success: Colors.success,
   error: Colors.error,
   pending: Colors.warning,
-  cardBg: '#FFFFFF',
+  cardBg: colors.background.primary,
   border: Colors.border.default,
 };
 
@@ -66,7 +67,7 @@ const ZONE_CONFIG: Record<string, {
 }> = {
   student: {
     icon: 'school-outline',
-    gradient: ['#60A5FA', Colors.info, '#1D4ED8'],
+    gradient: [colors.infoScale[400], Colors.info, '#1D4ED8'],
     documentTypes: [
       { value: 'student_id', label: 'Student ID Card' },
       { value: 'edu_email', label: 'Educational Email (.edu)' },
@@ -77,7 +78,7 @@ const ZONE_CONFIG: Record<string, {
   },
   corporate: {
     icon: 'briefcase-outline',
-    gradient: ['#A78BFA', Colors.brand.purpleLight, '#6D28D9'],
+    gradient: [colors.brand.purpleSoft, Colors.brand.purpleLight, colors.brand.purpleDeep],
     documentTypes: [
       { value: 'corporate_email', label: 'Corporate Email' },
       { value: 'employee_id', label: 'Employee ID' },
@@ -87,7 +88,7 @@ const ZONE_CONFIG: Record<string, {
   },
   defence: {
     icon: 'shield-outline',
-    gradient: ['#34D399', Colors.success, Colors.success],
+    gradient: [colors.successScale[400], Colors.success, Colors.success],
     documentTypes: [
       { value: 'service_id', label: 'Service ID Card' },
       { value: 'veteran_card', label: 'Veteran Card' },

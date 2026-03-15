@@ -34,6 +34,7 @@ import DurationChips, {
   calculateLockFee,
 } from './DurationChips';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface LockProductSectionProps {
   /** Product ID */
@@ -186,7 +187,7 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
       >
         <View style={styles.headerLeft}>
           <View style={styles.lockIcon}>
-            <Ionicons name="lock-closed" size={20} color="#ffcd57" />
+            <Ionicons name="lock-closed" size={20} color={colors.lightMustard} />
           </View>
           <View>
             <Text style={styles.headerTitle}>Lock this product now</Text>
@@ -200,7 +201,7 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
         <Ionicons
           name={isExpanded ? 'chevron-up' : 'chevron-down'}
           size={24}
-          color="#6B7280"
+          color={colors.neutral[500]}
         />
       </Pressable>
 
@@ -234,16 +235,16 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
            
           >
             <LinearGradient
-              colors={hasEnoughBalance && !isLoading ? ['#ffcd57', '#E6B84E'] : ['#9CA3AF', '#6B7280']}
+              colors={hasEnoughBalance && !isLoading ? [colors.lightMustard, colors.brand.goldRich] : [colors.neutral[400], colors.neutral[500]]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.lockButtonGradient}
             >
               {isLoading ? (
-                <ActivityIndicator size="small" color="#FFFFFF" />
+                <ActivityIndicator size="small" color={colors.background.primary} />
               ) : (
                 <>
-                  <Ionicons name="lock-closed" size={18} color="#FFFFFF" />
+                  <Ionicons name="lock-closed" size={18} color={colors.background.primary} />
                   <Text style={styles.lockButtonText}>
                     Lock Product for {currencySymbol}{lockFee.toLocaleString(locale)}
                   </Text>
@@ -256,7 +257,7 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
           {!hasEnoughBalance && (
             <View style={styles.insufficientBalanceSection}>
               <View style={styles.warningCard}>
-                <Ionicons name="wallet-outline" size={18} color="#F59E0B" />
+                <Ionicons name="wallet-outline" size={18} color={colors.warningScale[400]} />
                 <Text style={styles.warningText}>
                   Add {currencySymbol}{(lockFee - walletBalance).toFixed(0)} to your wallet to lock this price
                 </Text>
@@ -280,15 +281,15 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
                 disabled={isAddingToCart || isInCart}
               >
                 {isAddingToCart ? (
-                  <ActivityIndicator size="small" color="#1a3a52" />
+                  <ActivityIndicator size="small" color={colors.nileBlue} />
                 ) : isInCart ? (
                   <>
-                    <Ionicons name="checkmark-circle" size={20} color="#16A34A" />
+                    <Ionicons name="checkmark-circle" size={20} color={colors.brand.greenDark} />
                     <Text style={styles.addToCartTextSuccess}>Added to Cart</Text>
                   </>
                 ) : (
                   <>
-                    <Ionicons name="cart-outline" size={20} color="#1a3a52" />
+                    <Ionicons name="cart-outline" size={20} color={colors.nileBlue} />
                     <Text style={styles.addToCartText}>Add to Cart without Lock</Text>
                   </>
                 )}
@@ -309,7 +310,7 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
           {/* Error Message */}
           {error && (
             <View style={styles.errorCard}>
-              <Ionicons name="alert-circle" size={18} color="#EF4444" />
+              <Ionicons name="alert-circle" size={18} color={colors.error} />
               <Text style={styles.errorText}>{error}</Text>
             </View>
           )}
@@ -329,8 +330,8 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
 
           {/* Price Protected Badge */}
           <View style={styles.protectedBadge}>
-            <Ionicons name="shield-checkmark" size={18} color="#ffcd57" />
-            <Ionicons name="lock-closed" size={14} color="#F59E0B" style={{ marginLeft: -4 }} />
+            <Ionicons name="shield-checkmark" size={18} color={colors.lightMustard} />
+            <Ionicons name="lock-closed" size={14} color={colors.warningScale[400]} style={{ marginLeft: -4 }} />
             <Text style={styles.protectedText}>Price Protected</Text>
           </View>
         </View>
@@ -350,14 +351,14 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     marginHorizontal: 16,
     marginVertical: 8,
     borderWidth: 1,
     borderColor: '#E8F5EE',
     overflow: 'hidden',
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 16,
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
   },
 
   headerLeft: {
@@ -391,7 +392,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
     letterSpacing: -0.3,
   },
@@ -401,7 +402,7 @@ const styles = StyleSheet.create({
   },
 
   uniqueBadge: {
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
@@ -410,7 +411,7 @@ const styles = StyleSheet.create({
   uniqueBadgeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
 
   // Content
@@ -420,7 +421,7 @@ const styles = StyleSheet.create({
   },
 
   descriptionCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 14,
     marginBottom: 16,
@@ -428,13 +429,13 @@ const styles = StyleSheet.create({
 
   description: {
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
     lineHeight: 22,
   },
 
   descriptionHighlight: {
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 
   durationChips: {
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     overflow: 'hidden',
     marginBottom: 12,
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -470,7 +471,7 @@ const styles = StyleSheet.create({
   lockButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.2,
   },
 
@@ -483,7 +484,7 @@ const styles = StyleSheet.create({
   warningCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     padding: 12,
     borderRadius: 10,
     gap: 10,
@@ -492,7 +493,7 @@ const styles = StyleSheet.create({
   warningText: {
     flex: 1,
     fontSize: 13,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     fontWeight: '500',
   },
 
@@ -506,13 +507,13 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
 
   orText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginHorizontal: 12,
   },
 
@@ -521,42 +522,42 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 20,
     gap: 10,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
 
   addToCartText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 
   addToCartHint: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     marginTop: 8,
   },
 
   addToCartButtonSuccess: {
-    backgroundColor: '#DCFCE7',
-    borderColor: '#16A34A',
+    backgroundColor: colors.successScale[100],
+    borderColor: colors.brand.greenDark,
   },
 
   addToCartTextSuccess: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#16A34A',
+    color: colors.brand.greenDark,
   },
 
   addToCartSuccessHint: {
     fontSize: 11,
-    color: '#16A34A',
+    color: colors.brand.greenDark,
     textAlign: 'center',
     marginTop: 8,
     fontWeight: '500',
@@ -565,7 +566,7 @@ const styles = StyleSheet.create({
   errorCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     padding: 12,
     borderRadius: 10,
     gap: 10,
@@ -575,13 +576,13 @@ const styles = StyleSheet.create({
   errorText: {
     flex: 1,
     fontSize: 13,
-    color: '#DC2626',
+    color: colors.error,
     fontWeight: '500',
   },
 
   // Info Section
   infoSection: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 14,
     marginBottom: 12,
@@ -590,7 +591,7 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 12,
   },
 
@@ -613,13 +614,13 @@ const styles = StyleSheet.create({
   infoNumberText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 
   infoText: {
     flex: 1,
     fontSize: 13,
-    color: '#4B5563',
+    color: colors.neutral[600],
   },
 
   // Protected Badge
@@ -627,19 +628,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ECFDF5',
+    backgroundColor: colors.tint.greenLight,
     borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 16,
     gap: 8,
     borderWidth: 1,
-    borderColor: '#D1FAE5',
+    borderColor: colors.tint.green,
   },
 
   protectedText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 
   // Collapsed Preview
@@ -650,7 +651,7 @@ const styles = StyleSheet.create({
 
   collapsedText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

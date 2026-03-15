@@ -16,6 +16,7 @@ import { useLocationHistory } from '@/hooks/useLocation';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { LocationHistoryEntry } from '@/types/location.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function LocationHistoryScreen() {
   const router = useRouter();
@@ -84,7 +85,7 @@ export default function LocationHistoryScreen() {
       case 'gps':
         return '#34C759';
       case 'manual':
-        return '#007AFF';
+        return colors.brand.ios;
       case 'ip':
         return '#FF9500';
       default:
@@ -174,7 +175,7 @@ export default function LocationHistoryScreen() {
       <View style={styles.content}>
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#007AFF" />
+            <ActivityIndicator size="large" color={colors.brand.ios} />
             <Text style={styles.loadingText}>Loading history...</Text>
           </View>
         ) : error ? (
@@ -189,8 +190,8 @@ export default function LocationHistoryScreen() {
               <RefreshControl
                 refreshing={isRefreshing}
                 onRefresh={handleRefresh}
-                tintColor="#007AFF"
-                colors={['#007AFF']}
+                tintColor={colors.brand.ios}
+                colors={[colors.brand.ios]}
               />
             }
             ListEmptyComponent={renderEmptyState}
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   retryButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.sm,

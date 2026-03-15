@@ -7,6 +7,7 @@ import {
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface PaymentMethodsCardProps {
   acceptPromoCoins?: boolean;
@@ -32,7 +33,7 @@ export default function PaymentMethodsCard({
       accepted: acceptPromoCoins,
       icon: 'ticket-percent-outline',
       iconType: 'material',
-      color: '#ffd7b5',
+      color: colors.lightPeach,
     },
     {
       id: 'branded',
@@ -40,7 +41,7 @@ export default function PaymentMethodsCard({
       accepted: acceptBrandedCoins,
       icon: 'star',
       iconType: 'ionicon',
-      color: '#1a3a52',
+      color: colors.nileBlue,
     },
     {
       id: 'rez',
@@ -48,7 +49,7 @@ export default function PaymentMethodsCard({
       accepted: acceptRezCoins,
       icon: 'server',
       iconType: 'ionicon',
-      color: '#ffcd57',
+      color: colors.lightMustard,
     },
     {
       id: 'upi',
@@ -56,7 +57,7 @@ export default function PaymentMethodsCard({
       accepted: acceptUPI || acceptCards,
       icon: 'card-outline',
       iconType: 'ionicon',
-      color: '#dfebf7',
+      color: colors.lavenderMist,
     },
   ];
 
@@ -91,12 +92,12 @@ export default function PaymentMethodsCard({
                   <Ionicons
                     name={method.accepted ? "checkmark" : "close"}
                     size={14}
-                    color={method.accepted ? "#ffcd57" : "#DC2626"}
+                    color={method.accepted ? colors.lightMustard : colors.error}
                   />
                   <ThemedText
                     style={[
                       styles.statusText,
-                      { color: method.accepted ? "#ffcd57" : "#DC2626" }
+                      { color: method.accepted ? colors.lightMustard : colors.error }
                     ]}
                   >
                     {method.accepted ? "Accepted" : "Not accepted"}
@@ -109,7 +110,7 @@ export default function PaymentMethodsCard({
 
         {/* Info Note */}
         <View style={styles.infoNote}>
-          <Ionicons name="information-circle" size={18} color="#1a3a52" />
+          <Ionicons name="information-circle" size={18} color={colors.nileBlue} />
           <ThemedText style={styles.infoText}>
             Coins are auto-applied for maximum savings
           </ThemedText>
@@ -127,11 +128,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#1a3a52",
+    color: colors.nileBlue,
     marginBottom: 12,
   },
   card: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     shadowColor: "#000",
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
   methodName: {
     fontSize: 13,
     fontWeight: "600",
-    color: "#1a3a52",
+    color: colors.nileBlue,
     marginBottom: 2,
   },
   statusRow: {
@@ -183,14 +184,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    backgroundColor: "#dfebf7",
+    backgroundColor: colors.lavenderMist,
     padding: 12,
     borderRadius: 10,
     marginTop: 16,
   },
   infoText: {
     fontSize: 13,
-    color: "#1a3a52",
+    color: colors.nileBlue,
     flex: 1,
   },
 });

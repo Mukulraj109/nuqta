@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import paymentVerificationService from '@/services/paymentVerificationService';
 import { DocumentType, type KYCDocumentUpload } from '@/types/paymentVerification.types';
+import { colors } from '@/constants/theme';
 
 interface KYCUploadModalProps {
   visible: boolean;
@@ -118,7 +119,7 @@ function KYCUploadModal({
       <View style={styles.container}>
         <View style={styles.header}>
           <Pressable onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close" size={24} color="#1F2937" />
+            <Ionicons name="close" size={24} color={colors.neutral[800]} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>KYC Verification</ThemedText>
           <View style={styles.closeButton} />
@@ -141,7 +142,7 @@ function KYCUploadModal({
                   <Ionicons
                     name={doc.icon as any}
                     size={24}
-                    color={selectedDocType === doc.type ? '#8B5CF6' : '#6B7280'}
+                    color={selectedDocType === doc.type ? colors.brand.purpleLight : colors.neutral[500]}
                   />
                   <ThemedText style={[
                     styles.documentTypeLabel,
@@ -156,7 +157,7 @@ function KYCUploadModal({
 
           {/* Upload Instructions */}
           <View style={styles.infoCard}>
-            <Ionicons name="information-circle" size={24} color="#3B82F6" />
+            <Ionicons name="information-circle" size={24} color={colors.infoScale[400]} />
             <ThemedText style={styles.infoText}>
               • Ensure the document is clear and readable{'\n'}
               • All corners should be visible{'\n'}
@@ -176,7 +177,7 @@ function KYCUploadModal({
                 <CachedImage source={frontImage} style={styles.uploadedImage} />
               ) : (
                 <View style={styles.uploadPlaceholder}>
-                  <Ionicons name="cloud-upload" size={48} color="#8B5CF6" />
+                  <Ionicons name="cloud-upload" size={48} color={colors.brand.purpleLight} />
                   <ThemedText style={styles.uploadText}>Tap to upload front side</ThemedText>
                 </View>
               )}
@@ -195,7 +196,7 @@ function KYCUploadModal({
                   <CachedImage source={backImage} style={styles.uploadedImage} />
                 ) : (
                   <View style={styles.uploadPlaceholder}>
-                    <Ionicons name="cloud-upload" size={48} color="#8B5CF6" />
+                    <Ionicons name="cloud-upload" size={48} color={colors.brand.purpleLight} />
                     <ThemedText style={styles.uploadText}>Tap to upload back side</ThemedText>
                   </View>
                 )}
@@ -224,7 +225,7 @@ function KYCUploadModal({
         </ScrollView>
 
         <View style={styles.securityInfo}>
-          <Ionicons name="lock-closed" size={16} color="#6B7280" />
+          <Ionicons name="lock-closed" size={16} color={colors.neutral[500]} />
           <ThemedText style={styles.securityText}>
             Your documents are encrypted and stored securely
           </ThemedText>
@@ -237,7 +238,7 @@ function KYCUploadModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   header: {
     flexDirection: 'row',
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     backgroundColor: 'white',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   closeButton: {
     width: 40,
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   content: {
     flex: 1,
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
   },
   documentTypeGrid: {
@@ -287,25 +288,25 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   documentTypeCardSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F5F3FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.purpleLight,
   },
   documentTypeLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 8,
     textAlign: 'center',
   },
   documentTypeLabelSelected: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   infoCard: {
     flexDirection: 'row',
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     borderRadius: 12,
     padding: 16,
     marginBottom: 24,
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 13,
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginLeft: 12,
     lineHeight: 20,
   },
@@ -321,7 +322,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderStyle: 'dashed',
     overflow: 'hidden',
   },
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
   },
   uploadText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 12,
   },
   uploadedImage: {
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
   },
   uploadButton: {
     flexDirection: 'row',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
@@ -366,11 +367,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: 'white',
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   securityText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 8,
   },
 });

@@ -17,6 +17,7 @@ import { Article } from '@/types/article.types';
 import articlesService from '@/services/articlesApi';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -60,7 +61,7 @@ export default function ArticleDetailPage() {
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#8B5CF6', '#A855F7', '#C084FC']}
+          colors={[colors.brand.purpleLight, colors.brand.purpleMedium, '#C084FC']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.headerGradient}
@@ -88,7 +89,7 @@ export default function ArticleDetailPage() {
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#8B5CF6', '#A855F7', '#C084FC']}
+          colors={[colors.brand.purpleLight, colors.brand.purpleMedium, '#C084FC']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.headerGradient}
@@ -117,7 +118,7 @@ export default function ArticleDetailPage() {
             onPress={() => router.back()}
           >
             <LinearGradient
-              colors={['#8B5CF6', '#A855F7']}
+              colors={[colors.brand.purpleLight, colors.brand.purpleMedium]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.backToListGradient}

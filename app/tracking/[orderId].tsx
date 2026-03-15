@@ -18,6 +18,7 @@ import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } f
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 interface DeliveryPartner {
   name: string;
   phone: string;
@@ -523,7 +524,7 @@ export default function DetailedOrderTrackingPage() {
                 <ThemedText style={styles.partnerName}>{order.deliveryPartnerData.name}</ThemedText>
                 {order.deliveryPartnerData.rating > 0 && (
                   <View style={styles.partnerRating}>
-                    <Ionicons name="star" size={14} color="#FFD700" />
+                    <Ionicons name="star" size={14} color={colors.brand.goldBright} />
                     <ThemedText style={styles.ratingText}>{order.deliveryPartnerData.rating.toFixed(1)}</ThemedText>
                   </View>
                 )}

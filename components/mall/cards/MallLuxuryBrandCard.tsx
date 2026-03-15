@@ -18,6 +18,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../../types/mall.types';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = SCREEN_WIDTH * 0.75;
@@ -62,7 +63,7 @@ const MallLuxuryBrandCard: React.FC<MallLuxuryBrandCardProps> = ({
             />
           ) : (
             <LinearGradient
-              colors={['#234b68', '#2d5c7e']}
+              colors={[colors.brand.nileBlueLight, '#2d5c7e']}
               style={styles.imageFallback}
             >
               <Text style={styles.fallbackText}>{getInitials(brand.name || 'Brand')}</Text>
@@ -78,12 +79,12 @@ const MallLuxuryBrandCard: React.FC<MallLuxuryBrandCardProps> = ({
           {/* Luxury Badge */}
           <View style={styles.luxuryBadgeContainer}>
             <LinearGradient
-              colors={['#F59E0B', '#D97706']}
+              colors={[colors.warningScale[400], colors.warningScale[700]]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.luxuryBadge}
             >
-              <Ionicons name="diamond" size={10} color="#1a3a52" />
+              <Ionicons name="diamond" size={10} color={colors.nileBlue} />
               <Text style={styles.luxuryBadgeText}>LUXURY</Text>
             </LinearGradient>
           </View>
@@ -91,7 +92,7 @@ const MallLuxuryBrandCard: React.FC<MallLuxuryBrandCardProps> = ({
           {/* Logo Circle */}
           <View style={styles.logoWrapper}>
             <LinearGradient
-              colors={['#F59E0B', '#D97706']}
+              colors={[colors.warningScale[400], colors.warningScale[700]]}
               style={styles.logoBorder}
             >
               <View style={styles.logoInner}>
@@ -103,7 +104,7 @@ const MallLuxuryBrandCard: React.FC<MallLuxuryBrandCardProps> = ({
                   />
                 ) : (
                   <LinearGradient
-                    colors={['#F59E0B', '#D97706']}
+                    colors={[colors.warningScale[400], colors.warningScale[700]]}
                     style={styles.logoFallback}
                   >
                     <Text style={styles.logoFallbackText}>{getInitials(brand.name || 'Brand')}</Text>
@@ -131,7 +132,7 @@ const MallLuxuryBrandCard: React.FC<MallLuxuryBrandCardProps> = ({
             {/* Rating */}
             {(brand.ratings?.average || 0) > 0 && (
               <View style={styles.ratingBadge}>
-                <Ionicons name="star" size={12} color="#F59E0B" />
+                <Ionicons name="star" size={12} color={colors.warningScale[400]} />
                 <Text style={styles.ratingText}>
                   {(brand.ratings?.average || 0).toFixed(1)}
                 </Text>
@@ -140,7 +141,7 @@ const MallLuxuryBrandCard: React.FC<MallLuxuryBrandCardProps> = ({
 
             {/* Cashback */}
             <View style={styles.cashbackBadge}>
-              <Ionicons name="gift" size={12} color="#F59E0B" />
+              <Ionicons name="gift" size={12} color={colors.warningScale[400]} />
               <Text style={styles.cashbackText}>
                 {brand.cashback?.percentage ?? 0}% rewards
               </Text>
@@ -154,14 +155,14 @@ const MallLuxuryBrandCard: React.FC<MallLuxuryBrandCardProps> = ({
            
           >
             <LinearGradient
-              colors={['#F59E0B', '#D97706', '#1a3a52']}
+              colors={[colors.warningScale[400], colors.warningScale[700], colors.nileBlue]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.exploreGradient}
             >
               <Text style={styles.exploreButtonText}>Explore Collection</Text>
               <View style={styles.exploreArrow}>
-                <Ionicons name="arrow-forward" size={14} color="#F59E0B" />
+                <Ionicons name="arrow-forward" size={14} color={colors.warningScale[400]} />
               </View>
             </LinearGradient>
           </Pressable>
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
     marginRight: 14,
   },
   card: {
-    backgroundColor: '#234b68',
+    backgroundColor: colors.brand.nileBlueLight,
     borderRadius: 20,
     overflow: 'hidden',
     borderWidth: 1,
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
   luxuryBadgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: 1,
   },
   logoWrapper: {
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
     padding: 2,
     ...Platform.select({
       ios: {
-        shadowColor: '#F59E0B',
+        shadowColor: colors.warningScale[400],
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.4,
         shadowRadius: 8,
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 14,
     overflow: 'hidden',
-    backgroundColor: '#234b68',
+    backgroundColor: colors.brand.nileBlueLight,
   },
   logo: {
     width: '100%',
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
   logoFallbackText: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   content: {
     padding: 16,
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 4,
     letterSpacing: 0.3,
   },
@@ -321,7 +322,7 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   cashbackBadge: {
     flexDirection: 'row',
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   exploreButton: {
     borderRadius: 12,
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
   exploreButtonText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: 0.3,
   },
   exploreArrow: {

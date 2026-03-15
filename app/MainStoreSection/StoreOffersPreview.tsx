@@ -10,6 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export interface StoreOffer {
   id: string;
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
   coinsText: {
     fontSize: 13,
     fontWeight: "600",
-    color: "#B45309",
+    color: colors.brand.amberDeep,
   },
   applyButton: {
     backgroundColor: Colors.gold,

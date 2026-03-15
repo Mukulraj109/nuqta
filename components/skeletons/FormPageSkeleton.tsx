@@ -7,6 +7,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 export default function FormPageSkeleton({ fields = 5 }: { fields?: number }) {
   return (
@@ -32,7 +33,7 @@ export default function FormPageSkeleton({ fields = 5 }: { fields?: number }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
   },
   title: {

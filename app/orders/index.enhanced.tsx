@@ -17,6 +17,7 @@ import ordersService, { Order } from '@/services/ordersApi';
 import { mapBackendOrderToFrontend } from '@/utils/dataMappers';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type OrderStatus = 'all' | 'placed' | 'confirmed' | 'preparing' | 'ready' | 'dispatched' | 'delivered' | 'cancelled' | 'returned' | 'refunded';
 
@@ -334,7 +335,7 @@ export default function OrdersListScreen() {
             placeholder="Search by order number or product..."
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholderTextColor="#9ca3af"
+            placeholderTextColor={colors.neutral[400]}
           />
           {searchQuery ? (
             <Pressable onPress={() => setSearchQuery('')}>

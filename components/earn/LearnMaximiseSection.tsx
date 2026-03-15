@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import learningApi, { LearningContent } from '@/services/learningApi';
+import { colors } from '@/constants/theme';
 
 // ============================================
 // EXPLAINER VIDEO CONFIG
@@ -64,7 +65,7 @@ function ExplainerVideo() {
          
         >
           <View style={styles.playButtonContainer}>
-            <Ionicons name="play-circle" size={56} color="#FFFFFF" />
+            <Ionicons name="play-circle" size={56} color={colors.background.primary} />
           </View>
           <Text style={styles.tapToWatchText}>Tap to watch on YouTube</Text>
         </Pressable>
@@ -111,13 +112,13 @@ const LearnMaximiseSection = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#EFF6FF', '#F5F3FF']}
+        colors={[colors.tint.blue, colors.tint.purpleLight]}
         style={styles.card}
       >
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.iconContainer}>
-            <Ionicons name="sparkles" size={28} color="#3B82F6" />
+            <Ionicons name="sparkles" size={28} color={colors.infoScale[400]} />
           </View>
           <View style={styles.headerText}>
             <Text style={styles.title}>Learn & Maximise</Text>
@@ -138,7 +139,7 @@ const LearnMaximiseSection = () => {
         {/* Topics List (from API, if any) */}
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#3B82F6" />
+            <ActivityIndicator size="small" color={colors.infoScale[400]} />
           </View>
         ) : content.length > 0 ? (
           <View style={styles.topicsList}>
@@ -150,12 +151,12 @@ const LearnMaximiseSection = () => {
               >
                 <View style={styles.topicLeft}>
                   {item.rewardClaimed ? (
-                    <Ionicons name="checkmark-circle" size={20} color="#10B981" />
+                    <Ionicons name="checkmark-circle" size={20} color={colors.successScale[400]} />
                   ) : (
                     <Ionicons
                       name={item.contentType === 'video' ? 'videocam-outline' : 'document-text-outline'}
                       size={18}
-                      color="#6B7280"
+                      color={colors.neutral[500]}
                     />
                   )}
                   <Text
@@ -172,7 +173,7 @@ const LearnMaximiseSection = () => {
                   {!item.rewardClaimed && (
                     <Text style={styles.coinBadge}>+{item.coinReward}</Text>
                   )}
-                  <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
+                  <Ionicons name="chevron-forward" size={18} color={colors.neutral[400]} />
                 </View>
               </Pressable>
             ))}
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: colors.infoScale[200],
   },
   header: {
     flexDirection: 'row',
@@ -218,12 +219,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // ---- Video Section ----
@@ -233,12 +234,12 @@ const styles = StyleSheet.create({
   videoTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   videoDescription: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 12,
     lineHeight: 18,
   },
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: 16 / 9,
     borderRadius: 12,
-    backgroundColor: '#1F2937',
+    backgroundColor: colors.neutral[800],
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
   },
   tapToWatchText: {
     fontSize: 13,
-    color: '#D1D5DB',
+    color: colors.neutral[300],
     marginTop: 10,
     fontWeight: '500',
   },
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 14,
     borderRadius: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   topicLeft: {
     flexDirection: 'row',
@@ -300,12 +301,12 @@ const styles = StyleSheet.create({
   },
   topicTitle: {
     fontSize: 14,
-    color: '#1F2937',
+    color: colors.neutral[800],
     fontWeight: '500',
     flex: 1,
   },
   topicTitleCompleted: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   topicRight: {
@@ -316,8 +317,8 @@ const styles = StyleSheet.create({
   coinBadge: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#F59E0B',
-    backgroundColor: '#FEF3C7',
+    color: colors.warningScale[400],
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,

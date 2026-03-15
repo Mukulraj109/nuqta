@@ -21,6 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import creatorsApi, { EligibilityResult } from '@/services/creatorsApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const categoryOptions = [
   { id: 'fashion', name: 'Fashion', icon: 'shirt-outline' },
@@ -174,7 +175,7 @@ export default function CreatorApplyPage() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#1a3a52" />
+        <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
         <Header onBack={() => router.back()} title="Become a Creator" />
         <View style={styles.centerContainer}>
           <FormPageSkeleton />
@@ -190,7 +191,7 @@ export default function CreatorApplyPage() {
   if (step === -1) {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#1a3a52" />
+        <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
         <Header onBack={() => router.back()} title="Application Status" />
         <View style={styles.centerContainer}>
           <View style={styles.statusIcon}>
@@ -217,12 +218,12 @@ export default function CreatorApplyPage() {
 
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#1a3a52" />
+        <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
         <Header onBack={() => router.back()} title="Become a Creator" />
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           <View style={styles.eligibilityCard}>
             <View style={[styles.statusIcon, { backgroundColor: Colors.warningScale[50] }]}>
-              <Ionicons name={needsVideos ? 'videocam-outline' : 'rocket-outline'} size={48} color="#D97706" />
+              <Ionicons name={needsVideos ? 'videocam-outline' : 'rocket-outline'} size={48} color={colors.warningScale[700]} />
             </View>
             <Text style={styles.statusTitle}>Almost There!</Text>
             <Text style={styles.statusSubtitle}>
@@ -272,7 +273,7 @@ export default function CreatorApplyPage() {
               onPress={checkEligibility}
              
             >
-              <Ionicons name="refresh-outline" size={16} color="#7C3AED" />
+              <Ionicons name="refresh-outline" size={16} color={colors.brand.purple} />
               <Text style={styles.recheckBtnText}>Re-check Eligibility</Text>
             </Pressable>
 
@@ -300,10 +301,10 @@ export default function CreatorApplyPage() {
   if (step === 5) {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#1a3a52" />
+        <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
         <Header onBack={() => router.back()} title="Application Submitted" />
         <View style={styles.centerContainer}>
-          <LinearGradient colors={[Colors.brand.purple, '#EC4899']} style={styles.successIcon}>
+          <LinearGradient colors={[Colors.brand.purple, colors.brand.pink]} style={styles.successIcon}>
             <Ionicons name="checkmark" size={48} color={Colors.text.inverse} />
           </LinearGradient>
           <Text style={styles.statusTitle}>Application Submitted!</Text>
@@ -327,7 +328,7 @@ export default function CreatorApplyPage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#1a3a52" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
       <Header onBack={() => step > 1 ? setStep(step - 1) : router.back()} title="Become a Creator" />
 
       {/* Progress Bar */}
@@ -403,7 +404,7 @@ export default function CreatorApplyPage() {
                   value={displayName}
                   onChangeText={setDisplayName}
                   placeholder="Your creator name"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.neutral[400]}
                   maxLength={50}
                 />
                 <Text style={styles.charCount}>{displayName.length}/50</Text>
@@ -416,7 +417,7 @@ export default function CreatorApplyPage() {
                   value={bio}
                   onChangeText={setBio}
                   placeholder="Tell people what you're about... (min 20 characters)"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.neutral[400]}
                   multiline
                   numberOfLines={4}
                   textAlignVertical="top"
@@ -433,7 +434,7 @@ export default function CreatorApplyPage() {
                     value={tagInput}
                     onChangeText={setTagInput}
                     placeholder="Add a tag..."
-                    placeholderTextColor="#9CA3AF"
+                    placeholderTextColor={colors.neutral[400]}
                     onSubmitEditing={addTag}
                     maxLength={20}
                   />
@@ -478,7 +479,7 @@ export default function CreatorApplyPage() {
                     value={getSocialUrl(platform.id)}
                     onChangeText={(url) => updateSocialLink(platform.id, url)}
                     placeholder={`Your ${platform.name} URL`}
-                    placeholderTextColor="#9CA3AF"
+                    placeholderTextColor={colors.neutral[400]}
                     autoCapitalize="none"
                     keyboardType="url"
                   />
@@ -550,7 +551,7 @@ export default function CreatorApplyPage() {
               disabled={submitting}
             >
               <LinearGradient
-                colors={[Colors.brand.purple, '#EC4899']}
+                colors={[Colors.brand.purple, colors.brand.pink]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.submitGradient}

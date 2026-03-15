@@ -2,6 +2,7 @@ import React from 'react';
 import { View, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { UGCVideoItem } from '@/types/playPage.types';
 import VideoCard from './VideoCard';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 

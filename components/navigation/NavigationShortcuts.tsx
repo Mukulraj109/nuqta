@@ -1,6 +1,7 @@
 // Navigation Shortcuts Component
 // Horizontal scrollable shortcuts for quick access to key features
 
+import { colors } from '@/constants/theme';
 import React from 'react';
 import { ScrollView, Pressable, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     borderWidth: 1,
     borderColor: 'rgba(0, 192, 106, 0.15)',
-    shadowColor: '#00C06A',
+    shadowColor: colors.brand.green,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#0B2240',
+    color: colors.brand.navyDark,
     textAlign: 'center',
   },
   badge: {
@@ -113,10 +114,10 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   newBadge: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
   },
   hotBadge: {
-    backgroundColor: '#FFC857',
+    backgroundColor: colors.brand.goldWarm,
   },
   badgeText: {
     fontSize: 8,
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   hotBadgeText: {
-    color: '#0B2240',
+    color: colors.brand.navyDark,
   },
 });
 

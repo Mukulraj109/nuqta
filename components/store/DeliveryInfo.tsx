@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface DeliveryDetails {
   estimatedTime?: string;
@@ -110,7 +111,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
         <Ionicons
           name={icon as any}
           size={18}
-          color={isAvailable ? '#7C3AED' : '#9CA3AF'}
+          color={isAvailable ? colors.brand.purple : colors.neutral[400]}
         />
         <View style={styles.slotInfo}>
           <Text
@@ -131,7 +132,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
           </Text>
         </View>
         {isAvailable && (
-          <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+          <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
         )}
       </View>
     );
@@ -146,12 +147,12 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Ionicons name={getDeliveryIcon() as any} size={24} color="#7C3AED" />
+          <Ionicons name={getDeliveryIcon() as any} size={24} color={colors.brand.purple} />
           <Text style={styles.headerTitle}>{getDeliveryLabel()}</Text>
         </View>
         {deliveryInfo.trackingAvailable && (
           <View style={styles.trackingBadge}>
-            <Ionicons name="location-outline" size={14} color="#7C3AED" />
+            <Ionicons name="location-outline" size={14} color={colors.brand.purple} />
             <Text style={styles.trackingText}>Track Order</Text>
           </View>
         )}
@@ -164,7 +165,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
         {/* Delivery Time Badge */}
         {deliveryInfo.estimatedTime && (
           <View style={styles.deliveryTimeBadge}>
-            <Ionicons name="time-outline" size={24} color="#FFFFFF" />
+            <Ionicons name="time-outline" size={24} color={colors.background.primary} />
             <View style={styles.deliveryTimeInfo}>
               <Text style={styles.deliveryTimeLabel}>Estimated Delivery</Text>
               <Text style={styles.deliveryTimeValue}>
@@ -177,7 +178,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
         {/* Express Delivery */}
         {deliveryInfo.expressDelivery?.available && (
           <View style={styles.expressDeliveryCard}>
-            <Ionicons name="flash" size={20} color="#F59E0B" />
+            <Ionicons name="flash" size={20} color={colors.warningScale[400]} />
             <View style={styles.expressDeliveryInfo}>
               <Text style={styles.expressDeliveryTitle}>
                 Express Delivery Available
@@ -196,7 +197,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
         <View style={styles.infoCard}>
           <View style={styles.infoRow}>
             <View style={styles.infoLeft}>
-              <Ionicons name="cash-outline" size={20} color="#6B7280" />
+              <Ionicons name="cash-outline" size={20} color={colors.neutral[500]} />
               <Text style={styles.infoLabel}>Delivery Fee</Text>
             </View>
             <Text style={styles.infoValue}>
@@ -208,7 +209,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
 
           {deliveryInfo.freeDeliveryAbove && deliveryInfo.deliveryFee !== 0 && (
             <View style={styles.freeDeliveryBanner}>
-              <Ionicons name="gift-outline" size={16} color="#10B981" />
+              <Ionicons name="gift-outline" size={16} color={colors.successScale[400]} />
               <Text style={styles.freeDeliveryText}>
                 Free delivery on orders above {currencySymbol}{deliveryInfo.freeDeliveryAbove}
               </Text>
@@ -221,7 +222,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
           <View style={styles.infoCard}>
             <View style={styles.infoRow}>
               <View style={styles.infoLeft}>
-                <Ionicons name="navigate-circle-outline" size={20} color="#6B7280" />
+                <Ionicons name="navigate-circle-outline" size={20} color={colors.neutral[500]} />
                 <Text style={styles.infoLabel}>Delivery Radius</Text>
               </View>
               <Text style={styles.infoValue}>
@@ -230,7 +231,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
             </View>
             <View style={styles.radiusVisualization}>
               <View style={styles.radiusCenter}>
-                <Ionicons name="storefront" size={16} color="#7C3AED" />
+                <Ionicons name="storefront" size={16} color={colors.brand.purple} />
               </View>
               <View style={styles.radiusCircle} />
               <Text style={styles.radiusLabel}>
@@ -245,7 +246,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
           <View style={styles.infoCard}>
             <View style={styles.infoRow}>
               <View style={styles.infoLeft}>
-                <Ionicons name="bicycle-outline" size={20} color="#6B7280" />
+                <Ionicons name="bicycle-outline" size={20} color={colors.neutral[500]} />
                 <Text style={styles.infoLabel}>Delivery Partner</Text>
               </View>
               <Text style={styles.infoValue}>{deliveryInfo.deliveryPartner}</Text>
@@ -292,12 +293,12 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
           onPress={() => setShowDeliveryDate(!showDeliveryDate)}
         >
           <View style={styles.deliveryDateHeader}>
-            <Ionicons name="calendar-outline" size={20} color="#7C3AED" />
+            <Ionicons name="calendar-outline" size={20} color={colors.brand.purple} />
             <Text style={styles.deliveryDateTitle}>Estimated Delivery Date</Text>
             <Ionicons
               name={showDeliveryDate ? 'chevron-up' : 'chevron-down'}
               size={20}
-              color="#6B7280"
+              color={colors.neutral[500]}
             />
           </View>
           {showDeliveryDate && (
@@ -319,7 +320,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
             <View style={styles.areasList}>
               {visibleAreas?.map((area, index) => (
                 <View key={index} style={styles.areaItem}>
-                  <Ionicons name="location" size={14} color="#7C3AED" />
+                  <Ionicons name="location" size={14} color={colors.brand.purple} />
                   <Text style={styles.areaName}>{area}</Text>
                 </View>
               ))}
@@ -337,7 +338,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
                 <Ionicons
                   name={showAllAreas ? 'chevron-up' : 'chevron-down'}
                   size={16}
-                  color="#7C3AED"
+                  color={colors.brand.purple}
                 />
               </Pressable>
             )}
@@ -347,7 +348,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
         {/* Packaging Info */}
         {deliveryInfo.packagingInfo && (
           <View style={styles.packagingCard}>
-            <Ionicons name="cube-outline" size={20} color="#6B7280" />
+            <Ionicons name="cube-outline" size={20} color={colors.neutral[500]} />
             <View style={styles.packagingInfo}>
               <Text style={styles.packagingTitle}>Packaging Information</Text>
               <Text style={styles.packagingText}>
@@ -359,7 +360,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
 
         {/* Delivery Note */}
         <View style={styles.deliveryNote}>
-          <Ionicons name="information-circle-outline" size={18} color="#6B7280" />
+          <Ionicons name="information-circle-outline" size={18} color={colors.neutral[500]} />
           <Text style={styles.deliveryNoteText}>
             Delivery times may vary based on traffic and weather conditions
           </Text>
@@ -371,7 +372,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.gray[200],
   },
   headerLeft: {
     flexDirection: 'row',
@@ -398,12 +399,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.gray[900],
   },
   trackingBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EDE9FE',
+    backgroundColor: colors.tint.purple,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 12,
@@ -412,7 +413,7 @@ const styles = StyleSheet.create({
   trackingText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   scrollContent: {
     paddingBottom: 8,
@@ -420,7 +421,7 @@ const styles = StyleSheet.create({
   deliveryTimeBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -437,13 +438,13 @@ const styles = StyleSheet.create({
   deliveryTimeValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text.white,
     marginTop: 2,
   },
   expressDeliveryCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 10,
     padding: 12,
     marginBottom: 16,
@@ -457,7 +458,7 @@ const styles = StyleSheet.create({
   expressDeliveryTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   expressDeliveryDetails: {
     fontSize: 12,
@@ -465,12 +466,12 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   infoCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 10,
     padding: 14,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
   },
   infoRow: {
     flexDirection: 'row',
@@ -485,19 +486,19 @@ const styles = StyleSheet.create({
   },
   infoLabel: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
   },
   infoValue: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.gray[900],
   },
   freeDeliveryBanner: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     paddingVertical: 8,
     paddingHorizontal: 10,
     borderRadius: 6,
@@ -506,13 +507,13 @@ const styles = StyleSheet.create({
   freeDeliveryText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#059669',
+    color: colors.successScale[700],
     flex: 1,
   },
   radiusVisualization: {
     marginTop: 16,
     height: 120,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     borderRadius: 8,
     position: 'relative',
     alignItems: 'center',
@@ -522,7 +523,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 2,
@@ -533,7 +534,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     borderWidth: 2,
-    borderColor: '#A78BFA',
+    borderColor: colors.brand.purpleSoft,
     borderStyle: 'dashed',
   },
   radiusLabel: {
@@ -541,7 +542,7 @@ const styles = StyleSheet.create({
     bottom: 10,
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   slotsContainer: {
     marginTop: 8,
@@ -550,7 +551,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.gray[900],
     marginBottom: 12,
   },
   slotsGrid: {
@@ -564,14 +565,14 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   slotAvailable: {
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
     borderWidth: 1,
     borderColor: '#DDD6FE',
   },
   slotUnavailable: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
   },
   slotInfo: {
     flex: 1,
@@ -579,23 +580,23 @@ const styles = StyleSheet.create({
   slotName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   slotTime: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   slotDisabledText: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   deliveryDateCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 10,
     padding: 14,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
   },
   deliveryDateHeader: {
     flexDirection: 'row',
@@ -606,23 +607,23 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   deliveryDateContent: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.gray[200],
   },
   deliveryDateValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     marginBottom: 6,
   },
   deliveryDateNote: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontStyle: 'italic',
   },
   areasContainer: {
@@ -640,7 +641,7 @@ const styles = StyleSheet.create({
   },
   areaName: {
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   showMoreButton: {
     flexDirection: 'row',
@@ -649,23 +650,23 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: 10,
     marginTop: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     borderRadius: 8,
   },
   showMoreText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   packagingCard: {
     flexDirection: 'row',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 10,
     padding: 14,
     marginBottom: 12,
     gap: 10,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
   },
   packagingInfo: {
     flex: 1,
@@ -673,19 +674,19 @@ const styles = StyleSheet.create({
   packagingTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 4,
   },
   packagingText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
   deliveryNote: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 8,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     padding: 12,
     borderRadius: 8,
     marginTop: 8,

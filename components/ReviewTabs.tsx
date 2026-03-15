@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ReviewTabsProps, TabType } from '@/types/reviews';
+import { colors } from '@/constants/theme';
 
 const ReviewTabs: React.FC<ReviewTabsProps> = ({
   activeTab,
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     borderRadius: 20,
     padding: 6,
     position: 'relative',
@@ -115,9 +116,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 4,
     bottom: 4,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
-    shadowColor: '#7C3AED',
+    shadowColor: colors.brand.purple,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.12,
     shadowRadius: 6,
@@ -136,11 +137,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   activeTabText: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '700',
   },
   inactiveTabText: {
-    color: '#64748B',
+    color: colors.slateGray,
   },
 });
 

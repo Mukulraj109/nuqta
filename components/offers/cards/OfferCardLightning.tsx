@@ -22,6 +22,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { CountdownTimer } from '../common/CountdownTimer';
 import { ProgressBar } from '../common/ProgressBar';
 import { Typography, Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface OfferCardLightningProps {
   id: string;
@@ -77,15 +78,15 @@ export const OfferCardLightning: React.FC<OfferCardLightningProps> = ({
 
   // Determine urgency color based on remaining stock
   const getUrgencyColor = () => {
-    if (claimedPercentage >= 80) return '#EF4444';
-    if (claimedPercentage >= 60) return '#F59E0B';
+    if (claimedPercentage >= 80) return colors.error;
+    if (claimedPercentage >= 60) return colors.warningScale[400];
     return Colors.primary[600];
   };
 
   const styles = StyleSheet.create({
     container: {
       width: 200,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       overflow: 'hidden',
       borderWidth: 1.5,
@@ -103,7 +104,7 @@ export const OfferCardLightning: React.FC<OfferCardLightningProps> = ({
     flashBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FEF3C7',
+      backgroundColor: colors.tint.amberLight,
       paddingHorizontal: 8,
       paddingVertical: 4,
       borderRadius: 8,
@@ -114,13 +115,13 @@ export const OfferCardLightning: React.FC<OfferCardLightningProps> = ({
     flashText: {
       fontSize: 10,
       fontWeight: '800',
-      color: '#D97706',
+      color: colors.warningScale[700],
       letterSpacing: 0.5,
     },
     timerBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: isDark ? 'rgba(239, 68, 68, 0.2)' : '#FEE2E2',
+      backgroundColor: isDark ? 'rgba(239, 68, 68, 0.2)' : colors.errorScale[100],
       paddingHorizontal: 8,
       paddingVertical: 4,
       borderRadius: 8,
@@ -131,7 +132,7 @@ export const OfferCardLightning: React.FC<OfferCardLightningProps> = ({
     timerText: {
       fontSize: 11,
       fontWeight: '700',
-      color: '#EF4444',
+      color: colors.error,
     },
     storeRow: {
       flexDirection: 'row',
@@ -145,7 +146,7 @@ export const OfferCardLightning: React.FC<OfferCardLightningProps> = ({
       borderRadius: 10,
       backgroundColor: '#F7FAFC',
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.neutral[200],
       overflow: 'hidden',
       marginRight: Spacing.sm,
       alignItems: 'center',
@@ -163,7 +164,7 @@ export const OfferCardLightning: React.FC<OfferCardLightningProps> = ({
       justifyContent: 'center',
     },
     storeLogoText: {
-      color: '#FFFFFF',
+      color: colors.background.primary,
       fontSize: 16,
       fontWeight: '700',
     },
@@ -207,7 +208,7 @@ export const OfferCardLightning: React.FC<OfferCardLightningProps> = ({
       marginLeft: 8,
     },
     discountBadge: {
-      backgroundColor: '#FEE2E2',
+      backgroundColor: colors.errorScale[100],
       paddingHorizontal: 8,
       paddingVertical: 3,
       borderRadius: 6,
@@ -216,7 +217,7 @@ export const OfferCardLightning: React.FC<OfferCardLightningProps> = ({
     discountText: {
       fontSize: 12,
       fontWeight: '800',
-      color: '#DC2626',
+      color: colors.error,
     },
     progressSection: {
       paddingHorizontal: Spacing.md,
@@ -273,11 +274,11 @@ export const OfferCardLightning: React.FC<OfferCardLightningProps> = ({
       {/* Header with flash badge and timer */}
       <View style={styles.header}>
         <View style={styles.flashBadge}>
-          <Ionicons name="flash" size={12} color="#D97706" style={styles.flashIcon} />
+          <Ionicons name="flash" size={12} color={colors.warningScale[700]} style={styles.flashIcon} />
           <Text style={styles.flashText}>FLASH</Text>
         </View>
         <View style={styles.timerBadge}>
-          <Ionicons name="time" size={12} color="#EF4444" style={styles.timerIcon} />
+          <Ionicons name="time" size={12} color={colors.error} style={styles.timerIcon} />
           <CountdownTimer endTime={endTime} size="small" showIcon={false} />
         </View>
       </View>

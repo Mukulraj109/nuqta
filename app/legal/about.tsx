@@ -19,6 +19,7 @@ import Constants from 'expo-constants';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const SOCIAL_LINKS = {
   facebook: 'https://facebook.com/nuqtaapp',
@@ -67,7 +68,7 @@ export default function AboutPage() {
             accessibilityLabel="Go back"
             accessibilityRole="button"
           >
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>{`About ${BRAND.APP_NAME}`}</ThemedText>
           <View style={styles.placeholder} />
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h2,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },

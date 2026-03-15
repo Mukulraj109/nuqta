@@ -18,6 +18,7 @@ import {
   LeaderboardEntry
 } from '../../types/referral.types';
 import { ProfileSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -136,7 +137,7 @@ export default function ReferralDashboard() {
       <LinearGradient colors={tierGradient as any} style={styles.header}>
         <View style={styles.headerContent}>
           <View style={styles.tierBadge}>
-            <Ionicons name="ribbon" size={32} color="#fff" />
+            <Ionicons name="ribbon" size={32} color={colors.background.primary} />
             <Text style={styles.tierName}>{currentTierData.name}</Text>
             <Text style={styles.tierBadgeText}>{currentTierData.badge}</Text>
           </View>
@@ -440,7 +441,7 @@ const styles = StyleSheet.create({
   },
   progressSubtitle: {
     ...Typography.body,
-    color: '#64748b',
+    color: colors.slateGray,
     marginTop: Spacing.xs
   },
   progressBarContainer: {
@@ -448,7 +449,7 @@ const styles = StyleSheet.create({
   },
   progressBarBackground: {
     height: 12,
-    backgroundColor: '#e2e8f0',
+    backgroundColor: colors.slateLight,
     borderRadius: 6,
     overflow: 'hidden'
   },
@@ -458,7 +459,7 @@ const styles = StyleSheet.create({
   },
   progressPercentage: {
     ...Typography.bodySmall,
-    color: '#64748b',
+    color: colors.slateGray,
     marginTop: Spacing.sm,
     textAlign: 'right'
   },
@@ -543,7 +544,7 @@ const styles = StyleSheet.create({
   },
   referralCodeLabel: {
     ...Typography.body,
-    color: '#64748b',
+    color: colors.slateGray,
     marginBottom: Spacing.sm
   },
   referralCode: {
@@ -610,7 +611,7 @@ const styles = StyleSheet.create({
   totalClaimable: {
     paddingTop: Spacing.base,
     borderTopWidth: 1,
-    borderTopColor: '#e2e8f0'
+    borderTopColor: colors.slateLight
   },
   totalClaimableText: {
     ...Typography.bodyLarge,
@@ -678,7 +679,7 @@ const styles = StyleSheet.create({
   },
   leaderboardStats: {
     ...Typography.bodySmall,
-    color: '#64748b'
+    color: colors.slateGray
   },
   leaderboardTierBadge: {
     paddingVertical: Spacing.xs,

@@ -10,6 +10,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import FastImage from '@/components/common/FastImage';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 export interface PopularStoreCardProps {
   store: {
@@ -126,7 +127,7 @@ function PopularStoreCard({ store, onPress, width = 170 }: PopularStoreCardProps
               />
             ) : (
               <View style={[styles.logo, styles.placeholderLogo]}>
-                <Ionicons name="storefront-outline" size={24} color="#9CA3AF" />
+                <Ionicons name="storefront-outline" size={24} color={colors.neutral[400]} />
               </View>
             )}
           </View>
@@ -140,7 +141,7 @@ function PopularStoreCard({ store, onPress, width = 170 }: PopularStoreCardProps
 
             {/* Rating */}
             <View style={styles.ratingRow}>
-              <Ionicons name="star" size={12} color="#ffcd57" />
+              <Ionicons name="star" size={12} color={colors.lightMustard} />
               <ThemedText style={styles.ratingText}>
                 {formattedRating}
               </ThemedText>
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     padding: 12,
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.06)',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.06,
         shadowRadius: 8,
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 10,
     overflow: 'hidden',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     marginRight: 10,
   },
   logo: {
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
   placeholderLogo: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   infoContainer: {
     flex: 1,
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
   },
   ratingRow: {
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginLeft: 3,
   },
   bottomRow: {
@@ -244,11 +245,11 @@ const styles = StyleSheet.create({
   },
   distanceText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   rewardText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 });

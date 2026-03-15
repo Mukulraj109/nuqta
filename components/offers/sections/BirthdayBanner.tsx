@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface BirthdayBannerProps {
   isActive: boolean;
@@ -87,14 +88,14 @@ export const BirthdayBanner: React.FC<BirthdayBannerProps> = ({
     badgeText: {
       fontSize: 10,
       fontWeight: '800',
-      color: '#FFFFFF',
+      color: colors.background.primary,
       marginLeft: 4,
       letterSpacing: 0.5,
     },
     title: {
       fontSize: 18,
       fontWeight: '800',
-      color: '#FFFFFF',
+      color: colors.background.primary,
       marginBottom: 4,
     },
     subtitle: {
@@ -103,7 +104,7 @@ export const BirthdayBanner: React.FC<BirthdayBannerProps> = ({
       color: 'rgba(255, 255, 255, 0.9)',
     },
     ctaButton: {
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.background.primary,
       paddingHorizontal: Spacing.md + 4,
       paddingVertical: Spacing.sm + 2,
       borderRadius: BorderRadius.md,
@@ -112,7 +113,7 @@ export const BirthdayBanner: React.FC<BirthdayBannerProps> = ({
     ctaText: {
       fontSize: 12,
       fontWeight: '800',
-      color: '#EC4899',
+      color: colors.brand.pink,
     },
     daysRemaining: {
       marginTop: Spacing.sm,
@@ -134,7 +135,7 @@ export const BirthdayBanner: React.FC<BirthdayBannerProps> = ({
      
     >
       <LinearGradient
-        colors={['#EC4899', '#F472B6', '#F9A8D4']}
+        colors={[colors.brand.pink, '#F472B6', '#F9A8D4']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -154,12 +155,12 @@ export const BirthdayBanner: React.FC<BirthdayBannerProps> = ({
 
         <View style={styles.content}>
           <View style={styles.iconContainer}>
-            <Ionicons name="gift" size={32} color="#FFFFFF" />
+            <Ionicons name="gift" size={32} color={colors.background.primary} />
           </View>
 
           <View style={styles.textContainer}>
             <View style={styles.badge}>
-              <Ionicons name="balloon" size={12} color="#FFFFFF" />
+              <Ionicons name="balloon" size={12} color={colors.background.primary} />
               <Text style={styles.badgeText}>BIRTHDAY MONTH</Text>
             </View>
             <Text style={styles.title}>It's Your Special Month!</Text>

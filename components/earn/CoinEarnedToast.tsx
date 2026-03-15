@@ -12,6 +12,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -154,7 +155,7 @@ const CoinEarnedToast: React.FC<CoinEarnedToastProps> = ({
             },
           ]}
         >
-          <Ionicons name="diamond" size={24} color="#FFD700" />
+          <Ionicons name="diamond" size={24} color={colors.brand.goldBright} />
         </Animated.View>
 
         {/* Content */}
@@ -171,7 +172,7 @@ const CoinEarnedToast: React.FC<CoinEarnedToastProps> = ({
 
         {/* Dismiss indicator */}
         <View style={styles.dismissHint}>
-          <Ionicons name="close" size={16} color="#9CA3AF" />
+          <Ionicons name="close" size={16} color={colors.neutral[400]} />
         </View>
       </Pressable>
     </Animated.View>
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
   toast: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 14,
     paddingVertical: 12,
     paddingHorizontal: 14,
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: 4,
-    backgroundColor: '#FFD700',
+    backgroundColor: colors.brand.goldBright,
     borderTopLeftRadius: 14,
     borderBottomLeftRadius: 14,
   },
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 12,
     borderWidth: 2,
-    borderColor: '#FDE68A',
+    borderColor: colors.warningScale[200],
   },
   content: {
     flex: 1,
@@ -239,22 +240,22 @@ const styles = StyleSheet.create({
   plusSign: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#16A34A',
+    color: colors.brand.greenDark,
   },
   amountText: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   coinsLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 4,
   },
   sourceText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
     marginTop: 1,
   },
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 8,

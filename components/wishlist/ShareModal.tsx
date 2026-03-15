@@ -22,6 +22,7 @@ import wishlistSharingService, {
   ShareableLink,
   PrivacySettings,
 } from '@/services/wishlistSharingApi';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -89,14 +90,14 @@ const SHARE_PLATFORMS: SharePlatform[] = [
     id: 'sms',
     name: 'SMS',
     icon: 'chatbubble',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     action: 'sms',
   },
   {
     id: 'link',
     name: 'Copy Link',
     icon: 'link',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     action: 'link',
   },
 ];
@@ -257,8 +258,8 @@ function ShareModal({
               visibility: value ? 'public' : 'private',
             })
           }
-          trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
-          thumbColor="#FFFFFF"
+          trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
+          thumbColor={colors.background.primary}
           disabled={isSaving}
         />
       </View>
@@ -275,8 +276,8 @@ function ShareModal({
           onValueChange={(value) =>
             handleUpdatePrivacySettings({ allowComments: value })
           }
-          trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
-          thumbColor="#FFFFFF"
+          trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
+          thumbColor={colors.background.primary}
           disabled={isSaving}
         />
       </View>
@@ -293,8 +294,8 @@ function ShareModal({
           onValueChange={(value) =>
             handleUpdatePrivacySettings({ allowGiftReservation: value })
           }
-          trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
-          thumbColor="#FFFFFF"
+          trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
+          thumbColor={colors.background.primary}
           disabled={isSaving}
         />
       </View>
@@ -309,8 +310,8 @@ function ShareModal({
         <Switch
           value={privacySettings.showPrices}
           onValueChange={(value) => handleUpdatePrivacySettings({ showPrices: value })}
-          trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
-          thumbColor="#FFFFFF"
+          trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
+          thumbColor={colors.background.primary}
           disabled={isSaving}
         />
       </View>
@@ -327,8 +328,8 @@ function ShareModal({
           onValueChange={(value) =>
             handleUpdatePrivacySettings({ notifyOnLike: value })
           }
-          trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
-          thumbColor="#FFFFFF"
+          trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
+          thumbColor={colors.background.primary}
           disabled={isSaving}
         />
       </View>
@@ -347,7 +348,7 @@ function ShareModal({
             disabled={!shareLink || isLoading}
           >
             <View style={[styles.platformIcon, { backgroundColor: platform.color }]}>
-              <Ionicons name={platform.icon as any} size={24} color="#FFFFFF" />
+              <Ionicons name={platform.icon as any} size={24} color={colors.background.primary} />
             </View>
             <ThemedText style={styles.platformName}>{platform.name}</ThemedText>
           </Pressable>
@@ -358,8 +359,8 @@ function ShareModal({
           onPress={() => setShowQRCode(true)}
           disabled={!shareLink || isLoading}
         >
-          <View style={[styles.platformIcon, { backgroundColor: '#6B7280' }]}>
-            <Ionicons name="qr-code" size={24} color="#FFFFFF" />
+          <View style={[styles.platformIcon, { backgroundColor: colors.neutral[500] }]}>
+            <Ionicons name="qr-code" size={24} color={colors.background.primary} />
           </View>
           <ThemedText style={styles.platformName}>QR Code</ThemedText>
         </Pressable>
@@ -372,7 +373,7 @@ function ShareModal({
       <ThemedText style={styles.sectionTitle}>Preview</ThemedText>
       <View style={styles.previewCard}>
         <View style={styles.previewHeader}>
-          <Ionicons name="heart-outline" size={24} color="#8B5CF6" />
+          <Ionicons name="heart-outline" size={24} color={colors.brand.purpleLight} />
           <ThemedText style={styles.previewTitle}>{wishlistName}</ThemedText>
         </View>
         <ThemedText style={styles.previewDescription}>
@@ -395,7 +396,7 @@ function ShareModal({
           <View style={styles.qrModalHeader}>
             <ThemedText style={styles.qrModalTitle}>Share QR Code</ThemedText>
             <Pressable onPress={() => setShowQRCode(false)}>
-              <Ionicons name="close" size={28} color="#1F2937" />
+              <Ionicons name="close" size={28} color={colors.neutral[800]} />
             </Pressable>
           </View>
 
@@ -436,14 +437,14 @@ function ShareModal({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <LinearGradient
-              colors={['#8B5CF6', '#7C3AED']}
+              colors={[colors.brand.purpleLight, colors.brand.purple]}
               style={styles.modalHeader}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
               <ThemedText style={styles.modalTitle}>Share Wishlist</ThemedText>
               <Pressable onPress={onClose}>
-                <Ionicons name="close" size={28} color="#FFFFFF" />
+                <Ionicons name="close" size={28} color={colors.background.primary} />
               </Pressable>
             </LinearGradient>
 
@@ -453,7 +454,7 @@ function ShareModal({
             >
               {isLoading ? (
                 <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color="#8B5CF6" />
+                  <ActivityIndicator size="large" color={colors.brand.purpleLight} />
                   <ThemedText style={styles.loadingText}>
                     Generating share link...
                   </ThemedText>
@@ -484,7 +485,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -500,7 +501,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   modalBody: {
     flex: 1,
@@ -508,20 +509,20 @@ const styles = StyleSheet.create({
   section: {
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 16,
   },
   previewCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   previewHeader: {
     flexDirection: 'row',
@@ -532,16 +533,16 @@ const styles = StyleSheet.create({
   previewTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   previewDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   previewItems: {
     fontSize: 14,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '500',
   },
   platformsGrid: {
@@ -563,7 +564,7 @@ const styles = StyleSheet.create({
   },
   platformName: {
     fontSize: 12,
-    color: '#4B5563',
+    color: colors.neutral[600],
     textAlign: 'center',
   },
   settingRow: {
@@ -572,7 +573,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   settingInfo: {
     flex: 1,
@@ -581,12 +582,12 @@ const styles = StyleSheet.create({
   settingLabel: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
   },
   settingDescription: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   loadingContainer: {
     flex: 1,
@@ -596,7 +597,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 12,
   },
   bottomSpace: {
@@ -610,7 +611,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   qrModalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 24,
     padding: 24,
     width: '100%',
@@ -627,10 +628,10 @@ const styles = StyleSheet.create({
   qrModalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   qrCodeContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     borderRadius: 16,
     marginBottom: 16,
@@ -642,12 +643,12 @@ const styles = StyleSheet.create({
   },
   qrInstructions: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 24,
   },
   qrCloseButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: 32,
     paddingVertical: 14,
     borderRadius: 12,
@@ -657,7 +658,7 @@ const styles = StyleSheet.create({
   qrCloseButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

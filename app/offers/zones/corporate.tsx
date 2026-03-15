@@ -23,6 +23,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
 import realOffersApi from '@/services/realOffersApi';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const ZONE_SLUG = 'corporate';
@@ -60,9 +61,9 @@ const TIME_SLOTS = [
 ];
 
 const QUICK_CATEGORIES = [
-  { icon: 'cafe', label: 'Coffee', color: '#F59E0B' },
-  { icon: 'restaurant', label: 'Lunch', color: '#F97316' },
-  { icon: 'car', label: 'Commute', color: '#3B82F6' },
+  { icon: 'cafe', label: 'Coffee', color: colors.warningScale[400] },
+  { icon: 'restaurant', label: 'Lunch', color: colors.brand.orange },
+  { icon: 'car', label: 'Commute', color: colors.infoScale[400] },
   { icon: 'barbell', label: 'Fitness', color: Colors.success },
 ];
 
@@ -217,7 +218,7 @@ export default function CorporateZonePage() {
         <SafeAreaView edges={['top']} style={styles.safeHeader}>
           <View style={styles.headerContent}>
             <Pressable style={styles.backButton} onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
 
             <View style={styles.headerTitleContainer}>
@@ -274,7 +275,7 @@ export default function CorporateZonePage() {
               ) : (
                 <View style={styles.unverifiedStatus}>
                   <View style={styles.unverifiedLeft}>
-                    <Ionicons name="alert-circle" size={20} color="#FBBF24" />
+                    <Ionicons name="alert-circle" size={20} color={colors.warningScale[400]} />
                     <ThemedText style={styles.unverifiedText}>Verify to unlock deals</ThemedText>
                   </View>
                   <Pressable style={styles.verifyButton} onPress={handleVerify}>
@@ -383,13 +384,13 @@ const styles = StyleSheet.create({
   centerContent: { justifyContent: 'center', alignItems: 'center', padding: Spacing.xl },
   errorText: { ...Typography.body, color: Colors.text.secondary, textAlign: 'center', marginTop: Spacing.md, marginBottom: Spacing.lg },
   retryButton: { backgroundColor: Colors.primary[600], paddingHorizontal: Spacing.lg, paddingVertical: Spacing.md, borderRadius: BorderRadius.md },
-  retryButtonText: { ...Typography.button, color: '#FFFFFF' },
+  retryButtonText: { ...Typography.button, color: colors.background.primary },
   header: { paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight || 0 },
   safeHeader: { paddingBottom: Spacing.base },
   headerContent: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: Spacing.base, paddingVertical: Spacing.md },
   backButton: { padding: Spacing.sm, marginRight: Spacing.sm },
   headerTitleContainer: { flex: 1, alignItems: 'center' },
-  headerTitle: { ...Typography.h3, color: '#FFFFFF', fontWeight: '700' },
+  headerTitle: { ...Typography.h3, color: colors.background.primary, fontWeight: '700' },
   headerSubtitle: { ...Typography.bodySmall, color: 'rgba(255, 255, 255, 0.8)', marginTop: 2 },
   headerIcon: { width: 40, alignItems: 'center' },
   emoji: { fontSize: 32 },
@@ -407,12 +408,12 @@ const styles = StyleSheet.create({
   verifiedLeft: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm },
   verifiedText: { ...Typography.label, color: Colors.success },
   activeBadge: { backgroundColor: Colors.success, paddingHorizontal: Spacing.sm, paddingVertical: 4, borderRadius: BorderRadius.sm },
-  activeBadgeText: { ...Typography.caption, color: '#FFFFFF', fontWeight: '600' },
+  activeBadgeText: { ...Typography.caption, color: colors.background.primary, fontWeight: '600' },
   unverifiedStatus: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   unverifiedLeft: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm },
-  unverifiedText: { ...Typography.body, color: '#FBBF24' },
-  verifyButton: { backgroundColor: '#FBBF24', paddingHorizontal: Spacing.base, paddingVertical: Spacing.sm, borderRadius: BorderRadius.md },
-  verifyButtonText: { ...Typography.labelSmall, color: '#FFFFFF', fontWeight: '600' },
+  unverifiedText: { ...Typography.body, color: colors.warningScale[400] },
+  verifyButton: { backgroundColor: colors.warningScale[400], paddingHorizontal: Spacing.base, paddingVertical: Spacing.sm, borderRadius: BorderRadius.md },
+  verifyButtonText: { ...Typography.labelSmall, color: colors.background.primary, fontWeight: '600' },
   timeFilterSection: { marginBottom: Spacing.lg },
   sectionHeader: { paddingHorizontal: Spacing.base, marginBottom: Spacing.md },
   sectionTitle: { ...Typography.h4, color: Colors.text.primary, fontWeight: '600', marginBottom: 4 },
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
   timeSlotActive: { backgroundColor: 'rgba(71, 85, 105, 0.3)', borderWidth: 1, borderColor: 'rgba(148, 163, 184, 0.5)' },
   timeSlotIcon: { fontSize: 24, marginBottom: 4 },
   timeSlotLabel: { ...Typography.labelSmall, color: Colors.text.secondary },
-  timeSlotLabelActive: { color: '#FFFFFF' },
+  timeSlotLabelActive: { color: colors.background.primary },
   quickCategories: { flexDirection: 'row', paddingHorizontal: Spacing.base, gap: Spacing.sm, marginBottom: Spacing.lg },
   quickCategory: { flex: 1, alignItems: 'center', padding: Spacing.md, borderRadius: BorderRadius.lg, gap: Spacing.xs },
   quickCategoryLabel: { ...Typography.caption, color: Colors.text.secondary },
@@ -451,9 +452,9 @@ const styles = StyleSheet.create({
   teamOrdersTitle: { ...Typography.label, color: Colors.text.primary, fontWeight: '600', marginBottom: 2 },
   teamOrdersSubtitle: { ...Typography.bodySmall, color: Colors.text.secondary },
   teamOrdersButton: { backgroundColor: Colors.primary[600], paddingHorizontal: Spacing.base, paddingVertical: Spacing.sm, borderRadius: BorderRadius.md },
-  teamOrdersButtonText: { ...Typography.labelSmall, color: '#FFFFFF', fontWeight: '600' },
+  teamOrdersButtonText: { ...Typography.labelSmall, color: colors.background.primary, fontWeight: '600' },
   fixedCTA: { position: 'absolute', bottom: 70, left: 0, right: 0, padding: Spacing.base, backgroundColor: Colors.background.primary, borderTopWidth: 1, borderTopColor: Colors.border.light, ...Shadows.medium },
   ctaButton: { borderRadius: BorderRadius.lg, overflow: 'hidden' },
   ctaGradient: { paddingVertical: Spacing.base, alignItems: 'center', justifyContent: 'center' },
-  ctaButtonText: { ...Typography.button, color: '#FFFFFF', fontWeight: '600' },
+  ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' },
 });

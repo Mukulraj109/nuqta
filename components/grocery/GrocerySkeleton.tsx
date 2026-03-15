@@ -4,6 +4,7 @@
  */
 
 import React, { useEffect, useRef } from 'react';
+import { colors } from '@/constants/theme';
 import {
   View,
   StyleSheet,
@@ -14,9 +15,9 @@ import {
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const COLORS = {
-  gray100: '#F3F4F6',
-  gray200: '#E5E7EB',
-  white: '#FFFFFF',
+  gray100: colors.neutral[100],
+  gray200: colors.neutral[200],
+  white: colors.background.primary,
 };
 
 // Shimmer animation component

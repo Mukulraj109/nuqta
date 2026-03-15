@@ -10,6 +10,7 @@ import {
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { useAddressSearch } from '@/hooks/useLocation';
 import { AddressSearchResult } from '@/types/location.types';
+import { colors } from '@/constants/theme';
 
 interface AddressSearchProps {
   placeholder?: string;
@@ -146,7 +147,7 @@ function AddressSearch({
         {isSearching && (
           <ActivityIndicator
             size="small"
-            color="#007AFF"
+            color={colors.brand.ios}
             style={styles.loadingIndicator}
           />
         )}
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#333333',
+    color: colors.darkGray,
     paddingVertical: 4,
   },
   clearButton: {
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
   },
   clearButtonText: {
     fontSize: 18,
-    color: '#666666',
+    color: colors.midGray,
   },
   loadingIndicator: {
     marginLeft: 8,
@@ -248,16 +249,16 @@ const styles = StyleSheet.create({
   },
   resultAddress: {
     fontSize: 16,
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 2,
   },
   resultCoordinates: {
     fontSize: 12,
-    color: '#666666',
+    color: colors.midGray,
   },
   resultArrow: {
     fontSize: 18,
-    color: '#007AFF',
+    color: colors.brand.ios,
     marginLeft: 8,
   },
   noResultsContainer: {
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
   },
   noResultsText: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     textAlign: 'center',
   },
 });

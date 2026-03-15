@@ -20,6 +20,7 @@ import realOffersApi from '@/services/realOffersApi';
 import { useRegion } from '@/contexts/RegionContext';
 import logger from '@/utils/logger';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -143,7 +144,7 @@ export default function FlashSaleSuccessPage() {
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />
       <LinearGradient
-        colors={['#10B981', '#059669']}
+        colors={[colors.successScale[400], colors.successScale[700]]}
         style={styles.successGradient}
       >
         <SafeAreaView style={styles.safeArea}>
@@ -256,7 +257,7 @@ export default function FlashSaleSuccessPage() {
                 onPress={() => router.replace('/offers')}
               >
                 <LinearGradient
-                  colors={['#8B5CF6', '#7C3AED']}
+                  colors={[colors.brand.purpleLight, colors.brand.purple]}
                   style={styles.primaryButtonGradient}
                 >
                   <ThemedText style={styles.primaryButtonText}>
@@ -412,17 +413,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
     borderWidth: 2,
-    borderColor: '#F59E0B',
+    borderColor: colors.warningScale[400],
     borderStyle: 'dashed',
   },
   voucherCode: {
     ...Typography.h2,
     fontWeight: 'bold',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     letterSpacing: 2,
   },
   copyIcon: {

@@ -19,6 +19,7 @@ import { useRouter } from 'expo-router';
 import bonusZoneApi, { BonusZoneCampaign } from '@/services/bonusZoneApi';
 import BonusZoneCard from '@/components/earn/BonusZoneCard';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const MAX_FEATURED = 2;
 
@@ -64,7 +65,7 @@ const BonusZoneHighlight: React.FC = () => {
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={styles.iconWrapper}>
-            <Ionicons name="gift" size={16} color="#F97316" />
+            <Ionicons name="gift" size={16} color={colors.brand.orange} />
           </View>
           <Text style={styles.headerTitle}>Bonus Zone</Text>
         </View>
@@ -74,7 +75,7 @@ const BonusZoneHighlight: React.FC = () => {
          
         >
           <Text style={styles.viewAllText}>View All</Text>
-          <Ionicons name="chevron-forward" size={14} color="#F97316" />
+          <Ionicons name="chevron-forward" size={14} color={colors.brand.orange} />
         </Pressable>
       </View>
 
@@ -114,14 +115,14 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 8,
-    backgroundColor: '#FFF7ED',
+    backgroundColor: colors.tint.orange,
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   viewAllButton: {
     flexDirection: 'row',
@@ -131,11 +132,11 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   subtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 12,
     marginLeft: 36,
   },

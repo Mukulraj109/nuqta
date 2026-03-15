@@ -19,6 +19,7 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import { CategoryCarouselItem } from '@/types/category.types';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.75;
@@ -196,7 +197,7 @@ const CategoryCarousel: React.FC<CategoryCarouselProps> = ({
           style={[
             styles.dot,
             {
-              backgroundColor: activeIndex === index ? '#ffcd57' : '#E5E7EB',
+              backgroundColor: activeIndex === index ? colors.lightMustard : colors.neutral[200],
               width: activeIndex === index ? 20 : 8,
             },
           ]}
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   scrollContent: {
     paddingHorizontal: (width - CARD_WIDTH) / 2,
@@ -269,8 +270,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     borderRadius: 20,
     overflow: 'hidden',
-    backgroundColor: '#fff',
-    shadowColor: '#ffcd57',
+    backgroundColor: colors.background.primary,
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.35,
     shadowRadius: 20,
@@ -296,13 +297,13 @@ const styles = StyleSheet.create({
     left: 16,
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.background.primary,
   },
   ribbon: {
     position: 'absolute',
     top: 16,
     right: -40,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingVertical: 4,
     paddingHorizontal: 40,
     transform: [{ rotate: '45deg' }],
@@ -310,7 +311,7 @@ const styles = StyleSheet.create({
   ribbonText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.background.primary,
   },
   textContainer: {
     marginBottom: 50,
@@ -318,12 +319,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.background.primary,
   },
   subtitle: {
     fontSize: 14,
     fontWeight: '400',
-    color: '#fff',
+    color: colors.background.primary,
     opacity: 0.8,
     marginTop: 2,
   },
@@ -344,12 +345,12 @@ const styles = StyleSheet.create({
   cashbackInfo: {
     flex: 1,
     fontSize: 14,
-    color: '#fff',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   arrow: {
     fontSize: 18,
-    color: '#fff',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   dotsContainer: {
@@ -361,7 +362,7 @@ const styles = StyleSheet.create({
   dot: {
     height: 8,
     borderRadius: 4,
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,

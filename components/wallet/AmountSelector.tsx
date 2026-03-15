@@ -7,6 +7,7 @@ import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface AmountSelectorProps {
   amounts: number[];
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
   pillTextSelected: {
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
 });
 

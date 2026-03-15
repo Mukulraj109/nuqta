@@ -25,6 +25,7 @@ import apiClient from '@/services/apiClient';
 import { getCurrencySymbol } from '@/config/payment';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const DealPaymentPage: React.FC = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
@@ -286,7 +287,7 @@ const DealPaymentPage: React.FC = () => {
              
             >
               <LinearGradient
-                colors={[Colors.warning, '#D97706']}
+                colors={[Colors.warning, colors.warningScale[700]]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.payButtonGradient}
@@ -414,7 +415,7 @@ const styles = StyleSheet.create({
   totalValue: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   paymentMethods: {
     marginHorizontal: Spacing.base,

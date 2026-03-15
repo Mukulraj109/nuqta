@@ -31,14 +31,15 @@ import {
   InsuranceType,
 } from '@/services/insuranceApi';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const TYPE_META: Record<string, { icon: string; color: string; label: string }> = {
   health: { icon: 'medkit', color: Colors.error, label: 'Health Insurance' },
-  life: { icon: 'heart', color: '#EC4899', label: 'Life Insurance' },
-  vehicle: { icon: 'car-sport', color: '#3B82F6', label: 'Vehicle Insurance' },
-  travel: { icon: 'airplane', color: '#8B5CF6', label: 'Travel Insurance' },
-  home: { icon: 'home', color: '#10B981', label: 'Home Insurance' },
-  business: { icon: 'briefcase', color: '#F59E0B', label: 'Business Insurance' },
+  life: { icon: 'heart', color: colors.brand.pink, label: 'Life Insurance' },
+  vehicle: { icon: 'car-sport', color: colors.infoScale[400], label: 'Vehicle Insurance' },
+  travel: { icon: 'airplane', color: colors.brand.purpleLight, label: 'Travel Insurance' },
+  home: { icon: 'home', color: colors.successScale[400], label: 'Home Insurance' },
+  business: { icon: 'briefcase', color: colors.warningScale[400], label: 'Business Insurance' },
 };
 
 export default function InsurancePage() {
@@ -156,7 +157,7 @@ export default function InsurancePage() {
           colors={['rgba(139, 92, 246, 0.15)', 'rgba(59, 130, 246, 0.15)']}
           style={styles.bannerGradient}
         >
-          <Ionicons name="shield-checkmark" size={32} color="#8B5CF6" />
+          <Ionicons name="shield-checkmark" size={32} color={colors.brand.purpleLight} />
           <View style={styles.bannerText}>
             <Text style={styles.bannerTitle}>Protect & Earn Rewards</Text>
             <Text style={styles.bannerSubtitle}>
@@ -180,7 +181,7 @@ export default function InsurancePage() {
         ) : (
           <View style={styles.typesGrid}>
             {types.map((t) => {
-              const meta = TYPE_META[t.type] || { icon: 'help-circle', color: '#6B7280', label: t.type };
+              const meta = TYPE_META[t.type] || { icon: 'help-circle', color: colors.neutral[500], label: t.type };
               return (
                 <Pressable
                   key={t.type}
@@ -261,7 +262,7 @@ export default function InsurancePage() {
                       <View style={styles.planDetail}>
                         <Text style={styles.planDetailLabel}>Rating</Text>
                         <View style={styles.ratingRow}>
-                          <Ionicons name="star" size={14} color="#F59E0B" />
+                          <Ionicons name="star" size={14} color={colors.warningScale[400]} />
                           <Text style={styles.planDetailValue}> {plan.rating.toFixed(1)}</Text>
                         </View>
                       </View>
@@ -302,7 +303,7 @@ export default function InsurancePage() {
   ), [types, typesLoading, featuredPlans, featuredLoading, selectedType, handleTypePress, handlePlanPress, formatPremium, currencySymbol]);
 
   const renderPlanItem = useCallback(({ item }: { item: InsurancePlan }) => {
-    const meta = TYPE_META[item.type] || { icon: 'help-circle', color: '#6B7280', label: item.type };
+    const meta = TYPE_META[item.type] || { icon: 'help-circle', color: colors.neutral[500], label: item.type };
     return (
       <Pressable
         style={styles.planListCard}
@@ -338,7 +339,7 @@ export default function InsurancePage() {
 
         {item.claimSettlementRatio > 0 && (
           <View style={styles.claimRatioRow}>
-            <Ionicons name="checkmark-shield" size={14} color="#10B981" />
+            <Ionicons name="checkmark-shield" size={14} color={colors.successScale[400]} />
             <Text style={styles.claimRatioText}>
               {item.claimSettlementRatio.toFixed(1)}% claim settlement ratio
             </Text>
@@ -581,7 +582,7 @@ const styles = StyleSheet.create({
   typeCountText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
 
   // Featured cards
@@ -635,11 +636,11 @@ const styles = StyleSheet.create({
   planCashbackText: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   planCashbackLabel: {
     fontSize: 10,
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   planDetails: {
     flexDirection: 'row',
@@ -754,7 +755,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   cashbackChip: {
-    backgroundColor: '#10B981' + '18',
+    backgroundColor: colors.successScale[400] + '18',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 12,
@@ -762,7 +763,7 @@ const styles = StyleSheet.create({
   cashbackChipText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   claimRatioRow: {
     flexDirection: 'row',
@@ -775,7 +776,7 @@ const styles = StyleSheet.create({
   },
   claimRatioText: {
     fontSize: 12,
-    color: '#10B981',
+    color: colors.successScale[400],
     fontWeight: '500',
   },
 
@@ -816,7 +817,7 @@ const styles = StyleSheet.create({
   clearFilterText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
 
   // Footer loader

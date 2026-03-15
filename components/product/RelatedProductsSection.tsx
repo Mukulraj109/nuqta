@@ -14,6 +14,7 @@ import { useRouter } from 'expo-router';
 import { useRelatedProducts, RelatedProduct } from '@/hooks/useRelatedProducts';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 /**
  * RelatedProductsSection Component
@@ -80,7 +81,7 @@ export const RelatedProductsSection: React.FC<RelatedProductsSectionProps> = ({
            
           >
             <ThemedText style={styles.viewAllText}>View All</ThemedText>
-            <Ionicons name="chevron-forward" size={16} color="#ffcd57" />
+            <Ionicons name="chevron-forward" size={16} color={colors.lightMustard} />
           </Pressable>
         )}
       </View>
@@ -88,7 +89,7 @@ export const RelatedProductsSection: React.FC<RelatedProductsSectionProps> = ({
       {/* Loading State */}
       {isLoading && (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#ffcd57" />
+          <ActivityIndicator size="small" color={colors.lightMustard} />
           <ThemedText style={styles.loadingText}>Loading recommendations...</ThemedText>
         </View>
       )}
@@ -96,10 +97,10 @@ export const RelatedProductsSection: React.FC<RelatedProductsSectionProps> = ({
       {/* Error State */}
       {error && !isLoading && (
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle-outline" size={32} color="#EF4444" />
+          <Ionicons name="alert-circle-outline" size={32} color={colors.error} />
           <ThemedText style={styles.errorText}>{error}</ThemedText>
           <Pressable style={styles.retryButton} onPress={refresh}>
-            <Ionicons name="reload" size={16} color="#ffcd57" />
+            <Ionicons name="reload" size={16} color={colors.lightMustard} />
             <ThemedText style={styles.retryText}>Retry</ThemedText>
           </Pressable>
         </View>
@@ -178,7 +179,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress, isFirst, is
         {/* Cashback Badge */}
         {product.cashback && (
           <View style={styles.cashbackBadge}>
-            <Ionicons name="gift-outline" size={11} color="#FFF" />
+            <Ionicons name="gift-outline" size={11} color={colors.background.primary} />
             <ThemedText style={styles.cashbackText}>Cashback</ThemedText>
           </View>
         )}
@@ -207,7 +208,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress, isFirst, is
 
         {/* Rating */}
         <View style={styles.ratingRow}>
-          <Ionicons name="star" size={13} color="#F59E0B" />
+          <Ionicons name="star" size={13} color={colors.warningScale[400]} />
           <ThemedText style={styles.rating}>{rating.toFixed(1)}</ThemedText>
           <ThemedText style={styles.reviewCount}>({reviewCount})</ThemedText>
         </View>
@@ -237,7 +238,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress, isFirst, is
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 24,
     paddingHorizontal: 0,
     marginTop: 8,
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.5,
   },
   viewAllButton: {
@@ -267,7 +268,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     letterSpacing: 0.2,
   },
 
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // Error
@@ -293,7 +294,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#EF4444',
+    color: colors.error,
     textAlign: 'center',
   },
   retryButton: {
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 
   // Scroll Content
@@ -321,10 +322,10 @@ const styles = StyleSheet.create({
   // Product Card
   card: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     marginRight: 16,
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 12,
@@ -344,7 +345,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     height: 180,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     position: 'relative',
     overflow: 'hidden',
     borderTopLeftRadius: 16,
@@ -358,7 +359,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     left: 10,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 8,
@@ -371,7 +372,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
     letterSpacing: 0.3,
   },
   cashbackBadge: {
@@ -385,7 +386,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 8,
     gap: 4,
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -394,7 +395,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
     letterSpacing: 0.2,
   },
 
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
   category: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     marginBottom: 4,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
@@ -414,14 +415,14 @@ const styles = StyleSheet.create({
   brand: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 5,
     lineHeight: 16,
   },
   name: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     lineHeight: 20,
     marginBottom: 8,
     minHeight: 40,
@@ -436,12 +437,12 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginLeft: 2,
   },
   reviewCount: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginLeft: 2,
   },
   priceRow: {
@@ -453,12 +454,12 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.3,
   },
   originalPrice: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
     fontWeight: '500',
   },
@@ -467,17 +468,17 @@ const styles = StyleSheet.create({
   coinsBadge: {
     marginTop: 4,
     alignSelf: 'flex-start',
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#FEF3C7',
+    borderColor: colors.tint.amberLight,
   },
   coinsText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     letterSpacing: 0.2,
   },
 });

@@ -21,6 +21,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import logger from '@/utils/logger';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -383,7 +384,7 @@ export default function ChallengesPage() {
         }}
       >
         <LinearGradient
-          colors={isClaimed ? [Colors.border.default, '#D1D5DB'] : difficultyColors}
+          colors={isClaimed ? [Colors.border.default, colors.neutral[300]] : difficultyColors}
           style={styles.challengeGradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -425,7 +426,7 @@ export default function ChallengesPage() {
               {/* Rewards */}
               <View style={styles.rewardRow}>
                 <View style={styles.rewardInfo}>
-                  <Ionicons name="star" size={16} color="#FFD700" />
+                  <Ionicons name="star" size={16} color={colors.brand.goldBright} />
                   <Text style={styles.rewardText}>
                     {challenge.challenge.rewards.coins} coins
                   </Text>
@@ -458,7 +459,7 @@ export default function ChallengesPage() {
                   disabled={claimingId === challenge._id}
                 >
                   <LinearGradient
-                    colors={['#10B981', '#059669']}
+                    colors={[colors.successScale[400], colors.successScale[700]]}
                     style={styles.claimGradient}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
@@ -507,7 +508,7 @@ export default function ChallengesPage() {
       <View style={styles.container}>
         {/* Modern Gradient Header */}
         <LinearGradient
-          colors={['#8B5CF6', '#7C3AED', '#6D28D9']}
+          colors={[colors.brand.purpleLight, colors.brand.purple, colors.brand.purpleDeep]}
           style={styles.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -537,7 +538,7 @@ export default function ChallengesPage() {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Ionicons name="star" size={20} color="#FFD700" />
+                <Ionicons name="star" size={20} color={colors.brand.goldBright} />
                 <Text style={styles.coinsText}>{coinBalance.toLocaleString()}</Text>
               </LinearGradient>
             </Pressable>
@@ -579,7 +580,7 @@ export default function ChallengesPage() {
                 <LinearGradient
                   colors={
                     activeTab === tab
-                      ? ['#8B5CF6', '#7C3AED']
+                      ? [colors.brand.purpleLight, colors.brand.purple]
                       : ['transparent', 'transparent']
                   }
                   style={styles.tabGradient}
@@ -631,7 +632,7 @@ export default function ChallengesPage() {
                
               >
                 <LinearGradient
-                  colors={['#8B5CF6', '#7C3AED']}
+                  colors={[colors.brand.purpleLight, colors.brand.purple]}
                   style={styles.refreshGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
@@ -902,7 +903,7 @@ const styles = StyleSheet.create({
   },
   multiplierText: {
     ...Typography.bodySmall,
-    color: '#FFD700',
+    color: colors.brand.goldBright,
     fontWeight: 'bold',
     backgroundColor: 'rgba(255, 215, 0, 0.2)',
     paddingHorizontal: 6,

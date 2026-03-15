@@ -12,6 +12,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { ThemedText } from '@/components/ThemedText';
 import { useRouter } from 'expo-router';
 import { productApi, HomepageProduct } from '@/services/productApi';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 // Parent content has padding: 20 on each side, so available width is screenWidth - 40
@@ -189,7 +190,7 @@ function HotDealsSection({
       {/* Content */}
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#ffcd57" />
+          <ActivityIndicator size="large" color={colors.lightMustard} />
           <ThemedText style={styles.loadingText}>Fetching hot deals...</ThemedText>
         </View>
       ) : error ? (
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontFamily: 'Poppins-Bold',
   },
   viewAllButton: {
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontFamily: 'Inter-SemiBold',
   },
   listContent: {
@@ -260,14 +261,14 @@ const styles = StyleSheet.create({
   },
   card: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'visible',
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.04)',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
         shadowRadius: 12,
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     aspectRatio: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     position: 'relative',
     overflow: 'hidden',
     borderTopLeftRadius: 16,
@@ -297,13 +298,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 4,
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
   cashbackBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: 0.3,
   },
   cardContent: {
@@ -327,7 +328,7 @@ const styles = StyleSheet.create({
   dealText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     lineHeight: 20,
     fontFamily: 'Inter-SemiBold',
   },
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#9AA7B2',
+    color: colors.gray[400],
   },
   errorContainer: {
     height: 200,
@@ -357,13 +358,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   retryButton: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 12,
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -376,7 +377,7 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

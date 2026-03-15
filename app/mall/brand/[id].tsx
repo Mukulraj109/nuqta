@@ -29,6 +29,7 @@ import { mallApi } from '../../../services/mallApi';
 import { MallBrand, BrandBadge, BrandTier } from '../../../types/mall.types';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const HERO_HEIGHT = SCREEN_HEIGHT * 0.35;
@@ -37,7 +38,7 @@ const BADGE_COLORS: Record<BrandBadge, { bg: string; text: string }> = {
   exclusive: { bg: Colors.warning, text: Colors.text.inverse },
   premium: { bg: Colors.brand.purple, text: Colors.text.inverse },
   new: { bg: Colors.warning, text: Colors.text.inverse },
-  trending: { bg: '#EC4899', text: Colors.text.inverse },
+  trending: { bg: colors.brand.pink, text: Colors.text.inverse },
   'top-rated': { bg: Colors.info, text: Colors.text.inverse },
   verified: { bg: Colors.warning, text: Colors.text.inverse },
 };
@@ -46,7 +47,7 @@ const TIER_COLORS: Record<BrandTier, { gradient: string[]; badge: string }> = {
   standard: { gradient: [Colors.text.tertiary, Colors.text.secondary], badge: Colors.text.tertiary },
   premium: { gradient: [Colors.brand.purple, Colors.brand.purple], badge: Colors.brand.purple },
   exclusive: { gradient: [Colors.warning, Colors.nileBlue], badge: Colors.nileBlue },
-  luxury: { gradient: [Colors.warning, '#D97706'], badge: '#B45309' },
+  luxury: { gradient: [Colors.warning, colors.warningScale[700]], badge: colors.brand.amberDeep },
 };
 
 export default function BrandDetailPage() {
@@ -191,7 +192,7 @@ export default function BrandDetailPage() {
             <RefreshControl
               refreshing={isRefreshing}
               onRefresh={handleRefresh}
-              tintColor="#FFFFFF"
+              tintColor={colors.background.primary}
             />
           }
         >
@@ -285,19 +286,19 @@ export default function BrandDetailPage() {
           {/* Stats Row */}
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
-              <Ionicons name="checkmark-circle" size={24} color="#D97706" />
+              <Ionicons name="checkmark-circle" size={24} color={colors.warningScale[700]} />
               <Text style={styles.statValue}>{brand.ratings?.successRate ?? 0}%</Text>
               <Text style={styles.statLabel}>Success Rate</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <Ionicons name="eye-outline" size={24} color="#6366F1" />
+              <Ionicons name="eye-outline" size={24} color={colors.brand.indigo} />
               <Text style={styles.statValue}>{brand.analytics?.views || 0}</Text>
               <Text style={styles.statLabel}>Views</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <Ionicons name="cart-outline" size={24} color="#D97706" />
+              <Ionicons name="cart-outline" size={24} color={colors.warningScale[700]} />
               <Text style={styles.statValue}>{brand.analytics?.purchases || 0}</Text>
               <Text style={styles.statLabel}>Purchases</Text>
             </View>
@@ -321,7 +322,7 @@ export default function BrandDetailPage() {
                     key={badge}
                     style={[
                       styles.badge,
-                      { backgroundColor: BADGE_COLORS[badge]?.bg || '#6B7280' },
+                      { backgroundColor: BADGE_COLORS[badge]?.bg || colors.neutral[500] },
                     ]}
                   >
                     <Text style={styles.badgeText}>
@@ -388,7 +389,7 @@ export default function BrandDetailPage() {
                
               >
                 <LinearGradient
-                  colors={['#F59E0B', '#D97706']}
+                  colors={[colors.warningScale[400], colors.warningScale[700]]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.ctaGradient}
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   retryButton: {
-    backgroundColor: '#D97706',
+    backgroundColor: colors.warningScale[700],
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
@@ -469,7 +470,7 @@ const styles = StyleSheet.create({
   },
   backLinkText: {
     ...Typography.body,
-    color: '#D97706',
+    color: colors.warningScale[700],
     fontWeight: '500',
   },
   // Hero Section
@@ -608,7 +609,7 @@ const styles = StyleSheet.create({
   cashbackValue: {
     fontSize: 36,
     fontWeight: '800',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   cashbackCondition: {
     ...Typography.bodySmall,
@@ -629,7 +630,7 @@ const styles = StyleSheet.create({
   bonusText: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
   // Stats Row
   statsRow: {

@@ -15,6 +15,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import paymentVerificationService from '@/services/paymentVerificationService';
 import type { UPIVerificationResponse } from '@/types/paymentVerification.types';
+import { colors } from '@/constants/theme';
 
 interface UPIVerificationModalProps {
   visible: boolean;
@@ -93,7 +94,7 @@ function UPIVerificationModal({
       <View style={styles.container}>
         <View style={styles.header}>
           <Pressable onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close" size={24} color="#1F2937" />
+            <Ionicons name="close" size={24} color={colors.neutral[800]} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>UPI Verification</ThemedText>
           <View style={styles.closeButton} />
@@ -102,7 +103,7 @@ function UPIVerificationModal({
         <View style={styles.content}>
           {verificationData?.status === 'VERIFIED' && verificationData?.vpaValid ? (
             <View style={styles.successContainer}>
-              <Ionicons name="checkmark-circle" size={64} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={64} color={colors.successScale[400]} />
               <ThemedText style={styles.successTitle}>UPI ID Verified!</ThemedText>
               {verificationData.nameAtBank && (
                 <ThemedText style={styles.nameText}>Name: {verificationData.nameAtBank}</ThemedText>
@@ -112,7 +113,7 @@ function UPIVerificationModal({
           ) : (
             <>
               <View style={styles.infoCard}>
-                <Ionicons name="flash" size={32} color="#F59E0B" />
+                <Ionicons name="flash" size={32} color={colors.warningScale[400]} />
                 <ThemedText style={styles.infoTitle}>Verify UPI ID</ThemedText>
                 <ThemedText style={styles.infoText}>
                   We'll verify your UPI ID to ensure secure payments
@@ -122,11 +123,11 @@ function UPIVerificationModal({
               <View style={styles.inputSection}>
                 <ThemedText style={styles.label}>UPI ID</ThemedText>
                 <View style={styles.inputContainer}>
-                  <Ionicons name="at" size={20} color="#8B5CF6" style={styles.inputIcon} />
+                  <Ionicons name="at" size={20} color={colors.brand.purpleLight} style={styles.inputIcon} />
                   <TextInput
                     style={styles.input}
                     placeholder="username@upi"
-                    placeholderTextColor="#9CA3AF"
+                    placeholderTextColor={colors.neutral[400]}
                     value={testVPA}
                     onChangeText={setTestVPA}
                     keyboardType="email-address"
@@ -140,7 +141,7 @@ function UPIVerificationModal({
 
                 {error && (
                   <View style={styles.errorBanner}>
-                    <Ionicons name="alert-circle" size={20} color="#EF4444" />
+                    <Ionicons name="alert-circle" size={20} color={colors.error} />
                     <ThemedText style={styles.errorText}>{error}</ThemedText>
                   </View>
                 )}
@@ -162,7 +163,7 @@ function UPIVerificationModal({
         </View>
 
         <View style={styles.securityInfo}>
-          <Ionicons name="lock-closed" size={16} color="#6B7280" />
+          <Ionicons name="lock-closed" size={16} color={colors.neutral[500]} />
           <ThemedText style={styles.securityText}>
             Verification is done securely through UPI network
           </ThemedText>
@@ -175,7 +176,7 @@ function UPIVerificationModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   header: {
     flexDirection: 'row',
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     backgroundColor: 'white',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   closeButton: {
     width: 40,
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   content: {
     flex: 1,
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
   },
 
   infoCard: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 12,
     padding: 20,
     alignItems: 'center',
@@ -214,12 +215,12 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 12,
   },
   infoText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 8,
     textAlign: 'center',
   },
@@ -233,16 +234,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     paddingHorizontal: 12,
   },
   inputIcon: {
@@ -252,18 +253,18 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 48,
     fontSize: 16,
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   hint: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 8,
   },
 
   errorBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     borderRadius: 8,
     padding: 12,
     marginTop: 12,
@@ -271,12 +272,12 @@ const styles = StyleSheet.create({
   errorText: {
     flex: 1,
     fontSize: 13,
-    color: '#EF4444',
+    color: colors.error,
     marginLeft: 8,
   },
 
   verifyButton: {
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
@@ -299,17 +300,17 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 16,
   },
   nameText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 12,
   },
   vpaText: {
     fontSize: 14,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     marginTop: 4,
     fontWeight: '600',
   },
@@ -322,11 +323,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: 'white',
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   securityText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 8,
   },
 });

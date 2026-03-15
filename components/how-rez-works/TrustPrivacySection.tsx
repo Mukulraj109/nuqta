@@ -6,6 +6,7 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface Guarantee {
   icon: keyof typeof Ionicons.glyphMap;
@@ -26,9 +27,9 @@ interface UserAction {
 }
 
 const userActions: UserAction[] = [
-  { icon: 'download-outline', text: 'Export your data', color: '#3B82F6' },
-  { icon: 'time-outline', text: 'See reward history', color: '#8B5CF6' },
-  { icon: 'eye-off-outline', text: 'Disable sharing anytime', color: '#6B7280' },
+  { icon: 'download-outline', text: 'Export your data', color: colors.infoScale[400] },
+  { icon: 'time-outline', text: 'See reward history', color: colors.brand.purpleLight },
+  { icon: 'eye-off-outline', text: 'Disable sharing anytime', color: colors.neutral[500] },
 ];
 
 const TrustPrivacySection: React.FC = () => {
@@ -37,7 +38,7 @@ const TrustPrivacySection: React.FC = () => {
       {/* Section Header */}
       <View style={styles.headerContainer}>
         <View style={styles.iconCircle}>
-          <Ionicons name="shield-checkmark" size={28} color="#1F2937" />
+          <Ionicons name="shield-checkmark" size={28} color={colors.neutral[800]} />
         </View>
         <Text style={styles.sectionTitle}>Trust, Privacy & Control</Text>
       </View>
@@ -49,7 +50,7 @@ const TrustPrivacySection: React.FC = () => {
         <View style={styles.guaranteesContainer}>
           {guarantees.map((guarantee, index) => (
             <View key={index} style={styles.guaranteeRow}>
-              <Ionicons name={guarantee.icon} size={18} color="#059669" />
+              <Ionicons name={guarantee.icon} size={18} color={colors.successScale[700]} />
               <Text style={styles.guaranteeText}>{guarantee.text}</Text>
             </View>
           ))}
@@ -78,7 +79,7 @@ const TrustPrivacySection: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   headerContainer: {
     alignItems: 'center',
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -96,16 +97,16 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     textAlign: 'center',
   },
   guaranteesCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 14,
   },
   guaranteesContainer: {
@@ -134,15 +135,15 @@ const styles = StyleSheet.create({
   },
   guaranteeText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     flex: 1,
   },
   actionsCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     ...Platform.select({
       ios: {
         shadowColor: '#000',

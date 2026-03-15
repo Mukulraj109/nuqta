@@ -9,6 +9,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from './constants';
+import { colors } from '@/constants/theme';
 
 interface FoodDish {
   _id?: string;
@@ -47,7 +48,7 @@ const DishCard: React.FC<DishCardProps> = ({ dish, currencySymbol }) => {
       {imgUri && !imgErr ? (
         <CachedImage source={{ uri: imgUri }} style={styles.dishImage} contentFit="cover" cachePolicy="memory-disk" onError={() => setImgErr(true)} />
       ) : (
-        <View style={[styles.dishImage, { backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center' }]}>
+        <View style={[styles.dishImage, { backgroundColor: colors.neutral[100], justifyContent: 'center', alignItems: 'center' }]}>
           <Ionicons name="fast-food-outline" size={28} color={COLORS.textSecondary} />
         </View>
       )}

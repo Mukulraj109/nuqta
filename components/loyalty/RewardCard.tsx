@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { RewardItem } from '@/types/loyaltyRedemption.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface RewardCardProps {
   reward: RewardItem;
@@ -26,7 +27,7 @@ function RewardCard({
   canRedeem,
   onRedeem,
   userPoints = 0,
-  tierColor = '#8B5CF6',
+  tierColor = colors.brand.purpleLight,
   compact = false,
 }: RewardCardProps) {
   const { getCurrencySymbol } = useRegion();
@@ -85,19 +86,19 @@ function RewardCard({
           </ThemedText>
           <View style={styles.compactFooter}>
             <View style={styles.pointsBadge}>
-              <Ionicons name="diamond" size={12} color="#F59E0B" />
+              <Ionicons name="diamond" size={12} color={colors.warningScale[400]} />
               <ThemedText style={styles.pointsText}>{reward.points}</ThemedText>
             </View>
             {reward.featured && (
               <View style={styles.featuredBadge}>
-                <Ionicons name="star" size={10} color="#F59E0B" />
+                <Ionicons name="star" size={10} color={colors.warningScale[400]} />
               </View>
             )}
           </View>
         </View>
 
         {canRedeem && (
-          <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+          <Ionicons name="chevron-forward" size={20} color={colors.neutral[400]} />
         )}
       </Pressable>
     );
@@ -112,7 +113,7 @@ function RewardCard({
     >
       {reward.featured && (
         <View style={styles.featuredCorner}>
-          <Ionicons name="star" size={16} color="#FFFFFF" />
+          <Ionicons name="star" size={16} color={colors.background.primary} />
         </View>
       )}
 
@@ -153,7 +154,7 @@ function RewardCard({
           </View>
 
           <View style={styles.pointsContainer}>
-            <Ionicons name="diamond" size={16} color="#F59E0B" />
+            <Ionicons name="diamond" size={16} color={colors.warningScale[400]} />
             <ThemedText style={styles.pointsAmount}>{reward.points}</ThemedText>
             <ThemedText style={styles.pointsLabel}>points</ThemedText>
           </View>
@@ -161,7 +162,7 @@ function RewardCard({
 
         {!canRedeem && pointsNeeded > 0 && (
           <View style={styles.insufficientBadge}>
-            <Ionicons name="alert-circle" size={14} color="#EF4444" />
+            <Ionicons name="alert-circle" size={14} color={colors.error} />
             <ThemedText style={styles.insufficientText}>
               Need {pointsNeeded} more points
             </ThemedText>
@@ -170,7 +171,7 @@ function RewardCard({
 
         {reward.stockRemaining !== undefined && reward.stockRemaining > 0 && reward.stockRemaining <= 10 && (
           <View style={styles.stockWarning}>
-            <Ionicons name="warning" size={14} color="#F59E0B" />
+            <Ionicons name="warning" size={14} color={colors.warningScale[400]} />
             <ThemedText style={styles.stockText}>
               Only {reward.stockRemaining} left
             </ThemedText>
@@ -185,7 +186,7 @@ function RewardCard({
 
         {reward.validUntil && (
           <View style={styles.validityInfo}>
-            <Ionicons name="time-outline" size={12} color="#6B7280" />
+            <Ionicons name="time-outline" size={12} color={colors.neutral[500]} />
             <ThemedText style={styles.validityText}>
               Valid until {new Date(reward.validUntil).toLocaleDateString()}
             </ThemedText>
@@ -199,7 +200,7 @@ function RewardCard({
           onPress={() => onRedeem(reward)}
         >
           <ThemedText style={styles.redeemButtonText}>Redeem Now</ThemedText>
-          <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
+          <Ionicons name="arrow-forward" size={16} color={colors.background.primary} />
         </Pressable>
       )}
     </Pressable>
@@ -208,7 +209,7 @@ function RewardCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     marginBottom: 16,
     shadowColor: '#000',
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     width: 40,
     height: 40,
     borderBottomLeftRadius: 20,
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     flex: 1,
     marginRight: 8,
   },
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 12,
     lineHeight: 20,
   },
@@ -283,20 +284,20 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
   },
   valueBox: {
     flex: 1,
   },
   valueLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   valueAmount: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   pointsContainer: {
     flexDirection: 'row',
@@ -306,16 +307,16 @@ const styles = StyleSheet.create({
   pointsAmount: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   pointsLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   insufficientBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
@@ -324,13 +325,13 @@ const styles = StyleSheet.create({
   },
   insufficientText: {
     fontSize: 13,
-    color: '#EF4444',
+    color: colors.error,
     fontWeight: '600',
   },
   stockWarning: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
@@ -339,11 +340,11 @@ const styles = StyleSheet.create({
   },
   stockText: {
     fontSize: 13,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontWeight: '600',
   },
   unavailableBadge: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
   unavailableText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   validityInfo: {
     flexDirection: 'row',
@@ -362,7 +363,7 @@ const styles = StyleSheet.create({
   },
   validityText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   redeemButton: {
     flexDirection: 'row',
@@ -377,13 +378,13 @@ const styles = StyleSheet.create({
   redeemButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // Compact styles
   compactCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 12,
     marginBottom: 12,
@@ -407,7 +408,7 @@ const styles = StyleSheet.create({
   compactTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   compactFooter: {
@@ -423,10 +424,10 @@ const styles = StyleSheet.create({
   pointsText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   featuredBadge: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     width: 20,
     height: 20,
     borderRadius: 10,

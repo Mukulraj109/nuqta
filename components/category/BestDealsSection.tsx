@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { getProductsForCategory, DummyProduct } from '@/data/categoryDummyData';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface BestDealsSectionProps {
   categorySlug: string;
@@ -112,7 +113,7 @@ const BestDealsSection: React.FC<BestDealsSectionProps> = ({
       <View style={styles.header}>
         <View style={styles.titleRow}>
           <View style={styles.dealIcon}>
-            <Ionicons name="pricetag" size={18} color="#FFFFFF" />
+            <Ionicons name="pricetag" size={18} color={colors.background.primary} />
           </View>
           <View>
             <Text style={styles.sectionTitle}>Best Deals</Text>
@@ -145,14 +146,14 @@ const BestDealsSection: React.FC<BestDealsSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     paddingVertical: 20,
     paddingHorizontal: 16,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -180,31 +181,31 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     justifyContent: 'center',
     alignItems: 'center',
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.4,
   },
   subtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   seeAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     borderRadius: 8,
   },
   seeAllText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#EF4444',
+    color: colors.error,
   },
   grid: {
     flexDirection: 'row',
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     height: 100,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -243,12 +244,12 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   discountLabel: {
     fontSize: 8,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginTop: -2,
   },
   productInfo: {
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 9,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 2,
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 6,
   },
   priceRow: {
@@ -277,11 +278,11 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   originalPrice: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   coinsRow: {
@@ -295,7 +296,7 @@ const styles = StyleSheet.create({
   coinsText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 });
 

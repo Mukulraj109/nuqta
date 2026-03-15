@@ -20,16 +20,17 @@ import { NuqtaCoin as ReZCoin } from '@/components/homepage/ReZCoin';
 import { Colors, Spacing, Typography, Shadows, BorderRadius } from '@/constants/DesignSystem';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
 // New Color Palette
 const PALETTE = {
-  nileBlue: '#1a3a52',
-  lightMustard: '#ffcd57',
-  linen: '#faf1e0',
-  lightPeach: '#ffd7b5',
-  lavenderMist: '#dfebf7',
+  nileBlue: colors.nileBlue,
+  lightMustard: colors.lightMustard,
+  linen: colors.linen,
+  lightPeach: colors.lightPeach,
+  lavenderMist: colors.lavenderMist,
 };
 
 export default function OffersScreen() {
@@ -91,7 +92,7 @@ export default function OffersScreen() {
 
         {/* Gradient Header - Linen to White */}
         <LinearGradient
-          colors={[PALETTE.linen, '#fdf8f0', '#FFFFFF']}
+          colors={[PALETTE.linen, '#fdf8f0', colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.headerGradient}
@@ -138,7 +139,7 @@ export default function OffersScreen() {
             {/* Hero Banner - Nile Blue with Mustard accent */}
             <View style={styles.heroBanner}>
               <LinearGradient
-                colors={[PALETTE.nileBlue, '#234a64', '#1a3a52']}
+                colors={[PALETTE.nileBlue, '#234a64', colors.nileBlue]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.heroBannerGradient}
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
     ...Shadows.subtle,
   },
   iconButtonActive: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
   },
   // Hero Banner
   heroBanner: {
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
   heroSubtitle: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   heroIconContainer: {
     width: 60,

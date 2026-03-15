@@ -38,17 +38,18 @@ import EmptyState from '@/components/common/EmptyState';
 import { LoadingState } from '@/components/common/LoadingState';
 import { healthcareCategoryData, healthcareServiceFilters, healthcareModeFilters, healthcareQuickActions, ALL_HEALTHCARE_SERVICES } from '@/data/category/healthcareCategoryData';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
   primary: '#0EA5E9',
-  primaryDark: '#0284C7',
+  primaryDark: colors.brand.sky,
   primaryLight: '#F0F9FF',
-  primaryGold: '#F59E0B',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  border: '#E5E7EB',
+  primaryGold: colors.warningScale[400],
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  border: colors.neutral[200],
 };
 
 // All healthcare services with tags for filter matching
@@ -86,9 +87,9 @@ function storeMatchesFilter(store: any, filterId: string): boolean {
 
 function getPriceTier(priceForTwo?: number): { label: string; color: string } {
   if (!priceForTwo) return { label: '', color: '' };
-  if (priceForTwo < 500) return { label: '$', color: '#22C55E' };
-  if (priceForTwo < 1500) return { label: '$$', color: '#F59E0B' };
-  return { label: '$$$', color: '#8B5CF6' };
+  if (priceForTwo < 500) return { label: '$', color: colors.success };
+  if (priceForTwo < 1500) return { label: '$$', color: colors.warningScale[400] };
+  return { label: '$$$', color: colors.brand.purpleLight };
 }
 
 function HealthcareCategoryPage() {
@@ -354,7 +355,7 @@ function HealthcareCategoryPage() {
       {/* Emergency CTA Banner */}
       <View style={styles.section}>
         <Pressable style={styles.emergencyBanner} onPress={() => router.push('/MainCategory/healthcare/search?q=emergency' as any)}>
-          <LinearGradient colors={['#DC2626', '#B91C1C']} style={styles.emergencyGradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+          <LinearGradient colors={[colors.error, colors.errorScale[700]]} style={styles.emergencyGradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
             <View style={styles.emergencyContent}>
               <Text style={styles.emergencyEmoji}>🚑</Text>
               <View style={styles.emergencyText}>
@@ -460,7 +461,7 @@ const styles = StyleSheet.create({
   emergencyTitle: { fontSize: 16, fontWeight: '700', color: COLORS.white },
   emergencySubtitle: { fontSize: 12, color: 'rgba(255,255,255,0.8)', marginTop: 2 },
   emergencyBtn: { backgroundColor: COLORS.white, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 },
-  emergencyBtnText: { fontSize: 13, fontWeight: '600', color: '#DC2626' },
+  emergencyBtnText: { fontSize: 13, fontWeight: '600', color: colors.error },
 });
 
 export default React.memo(HealthcareCategoryPage);

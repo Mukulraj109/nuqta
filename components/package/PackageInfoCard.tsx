@@ -6,6 +6,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface PackageDetails {
   destination?: string;
@@ -33,7 +34,7 @@ const PackageInfoCard: React.FC<PackageInfoCardProps> = ({ package: pkg }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#8B5CF6', '#7C3AED']}
+        colors={[colors.brand.purpleLight, colors.brand.purple]}
         style={styles.gradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -42,7 +43,7 @@ const PackageInfoCard: React.FC<PackageInfoCardProps> = ({ package: pkg }) => {
         <View style={styles.headerContainer}>
           <View style={styles.destinationContainer}>
             <View style={styles.iconContainer}>
-              <Ionicons name="location" size={24} color="#FFFFFF" />
+              <Ionicons name="location" size={24} color={colors.background.primary} />
             </View>
             <View style={styles.destinationInfo}>
               <Text style={styles.destinationLabel}>Destination</Text>
@@ -54,7 +55,7 @@ const PackageInfoCard: React.FC<PackageInfoCardProps> = ({ package: pkg }) => {
 
           <View style={styles.durationContainer}>
             <View style={styles.iconContainer}>
-              <Ionicons name="calendar" size={24} color="#FFFFFF" />
+              <Ionicons name="calendar" size={24} color={colors.background.primary} />
             </View>
             <View style={styles.durationInfo}>
               <Text style={styles.durationLabel}>Duration</Text>
@@ -67,19 +68,19 @@ const PackageInfoCard: React.FC<PackageInfoCardProps> = ({ package: pkg }) => {
         <View style={styles.detailsRow}>
           {pkg.packageType && (
             <View style={styles.detailItem}>
-              <Ionicons name="bag" size={16} color="#FFFFFF" />
+              <Ionicons name="bag" size={16} color={colors.background.primary} />
               <Text style={styles.detailText}>{pkg.packageType}</Text>
             </View>
           )}
           {pkg.rating > 0 && (
             <View style={styles.detailItem}>
-              <Ionicons name="star" size={16} color="#FFD700" />
+              <Ionicons name="star" size={16} color={colors.brand.goldBright} />
               <Text style={styles.detailText}>{pkg.rating.toFixed(1)}</Text>
             </View>
           )}
           {pkg.inclusions && pkg.inclusions.length > 0 && (
             <View style={styles.detailItem}>
-              <Ionicons name="checkmark-circle" size={16} color="#FFFFFF" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.background.primary} />
               <Text style={styles.detailText}>{pkg.inclusions.length} Inclusions</Text>
             </View>
           )}
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
   destinationName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.3,
   },
   durationInfo: {
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
   durationValue: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   detailsRow: {
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '500',
   },
 });

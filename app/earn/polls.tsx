@@ -21,6 +21,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import pollApi, { Poll, PollOption, PollVoteHistory } from '@/services/pollApi';
 import { platformAlert } from '@/utils/platformAlert';
+import { colors } from '@/constants/theme';
 
 type TabType = 'active' | 'history';
 
@@ -149,7 +150,7 @@ export default function PollsPage() {
           <View style={styles.pollHeaderLeft}>
             {isDaily && (
               <View style={styles.dailyBadge}>
-                <Ionicons name="star" size={12} color="#FFF" />
+                <Ionicons name="star" size={12} color={colors.background.primary} />
                 <ThemedText style={styles.dailyBadgeText}>Daily Poll</ThemedText>
               </View>
             )}
@@ -270,7 +271,7 @@ export default function PollsPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Vote in Polls</ThemedText>
           <View style={styles.headerRight}>
@@ -361,7 +362,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   headerRight: {
     flexDirection: 'row',
@@ -442,7 +443,7 @@ const styles = StyleSheet.create({
   },
   dailyBadgeText: {
     ...Typography.caption,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   pollTitle: {

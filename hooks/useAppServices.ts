@@ -109,9 +109,10 @@ export function useAppServices(fontsLoaded: boolean) {
         // silently handle
       }
 
-      import('@/services/cacheWarmingService').then(mod => {
-        mod.default.startWarming();
-      }).catch(() => {});
+      // Cache warming is handled by the deferred startCacheWarming() (3s after
+      // first interactive render). Calling startWarming() here too would either
+      // duplicate the work or trigger an unnecessary early warm before the UI
+      // is ready — so it's intentionally omitted.
 
       if (netInfoUnsubscribeRef.current) {
         netInfoUnsubscribeRef.current();

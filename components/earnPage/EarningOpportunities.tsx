@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface EarningOpportunity {
   id: string;
@@ -36,7 +37,7 @@ const opportunities: EarningOpportunity[] = [
     description: 'Earn 5% cashback on offline purchases',
     icon: 'document-text',
     coins: '100+',
-    gradient: ['#10B981', '#059669', '#047857'], // Enhanced green gradient
+    gradient: [colors.successScale[400], colors.successScale[700], '#047857'], // Enhanced green gradient
     route: '/bill-upload',
     highlight: true,
     badge: 'HOT',
@@ -47,7 +48,7 @@ const opportunities: EarningOpportunity[] = [
     description: 'Share products, earn per click',
     icon: 'share-social',
     coins: '50+',
-    gradient: ['#8B5CF6', '#7C3AED', '#6D28D9'], // Purple gradient
+    gradient: [colors.brand.purpleLight, colors.brand.purple, colors.brand.purpleDeep], // Purple gradient
     route: '/earn/share',
     badge: 'NEW',
   },
@@ -57,7 +58,7 @@ const opportunities: EarningOpportunity[] = [
     description: 'Write reviews, get rewarded',
     icon: 'star',
     coins: '25-100',
-    gradient: ['#EC4899', '#DB2777', '#BE185D'], // Pink gradient
+    gradient: [colors.brand.pink, colors.deepPink, '#BE185D'], // Pink gradient
     route: '/earn/review',
   },
   {
@@ -66,7 +67,7 @@ const opportunities: EarningOpportunity[] = [
     description: 'Get 100 coins per referral',
     icon: 'people',
     coins: '100',
-    gradient: ['#EF4444', '#DC2626', '#B91C1C'], // Enhanced red gradient
+    gradient: [colors.error, colors.error, colors.errorScale[700]], // Enhanced red gradient
     route: '/referral',
     highlight: true,
   },
@@ -76,7 +77,7 @@ const opportunities: EarningOpportunity[] = [
     description: '2x Cashback + Free Delivery',
     icon: 'diamond',
     coins: '2x',
-    gradient: ['#F59E0B', '#D97706', '#B45309'], // Enhanced gold gradient
+    gradient: [colors.warningScale[400], colors.warningScale[700], colors.brand.amberDeep], // Enhanced gold gradient
     route: '/subscription/plans',
     badge: 'NEW',
   },
@@ -86,7 +87,7 @@ const opportunities: EarningOpportunity[] = [
     description: 'Daily chance to win coins',
     icon: 'radio-button-on',
     coins: '50-500',
-    gradient: ['#00C06A', '#00A85C', '#00796B'], // ReZ green gradient
+    gradient: [colors.brand.green, '#00A85C', colors.brand.teal], // ReZ green gradient
     route: '/games/spin-wheel',
   },
   {
@@ -95,7 +96,7 @@ const opportunities: EarningOpportunity[] = [
     description: 'Win instant rewards',
     icon: 'gift',
     coins: '25-1000',
-    gradient: ['#F97316', '#EA580C', '#C2410C'], // Enhanced orange gradient
+    gradient: [colors.brand.orange, colors.brand.orangeDark, '#C2410C'], // Enhanced orange gradient
     route: '/scratch-card',
   },
 ];
@@ -230,7 +231,7 @@ function EarningOpportunities() {
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                   >
-                    <Ionicons name="star" size={18} color="#FFFFFF" style={styles.starIcon} />
+                    <Ionicons name="star" size={18} color={colors.background.primary} style={styles.starIcon} />
                     <Text style={styles.coinsText}>
                       {opportunity.coins}
                     </Text>
@@ -313,19 +314,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 26,
     fontWeight: '800',
-    color: '#1F2937',
+    color: colors.neutral[800],
     letterSpacing: -0.5,
     marginBottom: 6,
   },
   titleUnderline: {
     width: 50,
     height: 4,
-    backgroundColor: '#FFC857',
+    backgroundColor: colors.brand.goldWarm,
     borderRadius: 2,
   },
   sectionSubtitle: {
     fontSize: 15,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     letterSpacing: 0.2,
   },

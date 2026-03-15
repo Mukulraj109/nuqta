@@ -6,12 +6,13 @@ import { View, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { WishlistEmptyProps } from '@/types/wishlist.types';
+import { colors } from '@/constants/theme';
 
 function WishlistEmpty({ onShopPress }: WishlistEmptyProps) {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        <Ionicons name="heart-outline" size={80} color="#D1D5DB" />
+        <Ionicons name="heart-outline" size={80} color={colors.neutral[300]} />
       </View>
 
       <ThemedText style={styles.title}>Your wishlist is empty</ThemedText>
@@ -29,21 +30,21 @@ function WishlistEmpty({ onShopPress }: WishlistEmptyProps) {
         <ThemedText style={styles.tipsTitle}>Why use a wishlist?</ThemedText>
 
         <View style={styles.tipItem}>
-          <Ionicons name="bookmark-outline" size={18} color="#8B5CF6" />
+          <Ionicons name="bookmark-outline" size={18} color={colors.brand.purpleLight} />
           <ThemedText style={styles.tipText}>
             Save items for later purchase
           </ThemedText>
         </View>
 
         <View style={styles.tipItem}>
-          <Ionicons name="notifications-outline" size={18} color="#8B5CF6" />
+          <Ionicons name="notifications-outline" size={18} color={colors.brand.purpleLight} />
           <ThemedText style={styles.tipText}>
             Get notified on price drops
           </ThemedText>
         </View>
 
         <View style={styles.tipItem}>
-          <Ionicons name="share-social-outline" size={18} color="#8B5CF6" />
+          <Ionicons name="share-social-outline" size={18} color={colors.brand.purpleLight} />
           <ThemedText style={styles.tipText}>
             Share your wishlist with friends
           </ThemedText>
@@ -67,13 +68,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 12,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: 32,
@@ -83,11 +84,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: 28,
     paddingVertical: 14,
     borderRadius: 10,
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
   tipsTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 16,
   },
   tipItem: {
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
   },
   tipText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     flex: 1,
   },
 });

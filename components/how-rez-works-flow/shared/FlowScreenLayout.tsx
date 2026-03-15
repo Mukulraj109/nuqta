@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
+import { colors } from '@/constants/theme';
 
 interface FlowScreenLayoutProps {
     title: string;
@@ -22,7 +23,7 @@ const FlowScreenLayout: React.FC<FlowScreenLayoutProps> = ({
     children,
     footer,
     noScroll = false,
-    headerAccent = '#059669',
+    headerAccent = colors.successScale[700],
 }) => {
     const insets = useSafeAreaInsets();
 
@@ -47,7 +48,7 @@ const FlowScreenLayout: React.FC<FlowScreenLayoutProps> = ({
                 style={styles.header}
             >
                 <LinearGradient
-                    colors={['#FFFFFF', '#FAFAFA']}
+                    colors={[colors.background.primary, '#FAFAFA']}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 0, y: 1 }}
                     style={styles.headerGradient}
@@ -59,7 +60,7 @@ const FlowScreenLayout: React.FC<FlowScreenLayoutProps> = ({
                            
                         >
                             <View style={styles.backButtonInner}>
-                                <Ionicons name="chevron-back" size={22} color="#374151" />
+                                <Ionicons name="chevron-back" size={22} color={colors.neutral[700]} />
                             </View>
                         </Pressable>
                     )}
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 14,
-        backgroundColor: '#F3F4F6',
+        backgroundColor: colors.neutral[100],
         justifyContent: 'center',
         alignItems: 'center',
         ...Platform.select({
@@ -187,13 +188,13 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 24,
         fontWeight: '800',
-        color: '#111827',
+        color: colors.neutral[900],
         lineHeight: 32,
         letterSpacing: -0.5,
     },
     subtitle: {
         fontSize: 15,
-        color: '#6B7280',
+        color: colors.neutral[500],
         marginTop: 8,
         marginLeft: 16,
         lineHeight: 22,
@@ -221,12 +222,12 @@ const styles = StyleSheet.create({
         paddingTop: 24,
     },
     footerContent: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.background.primary,
         paddingHorizontal: 20,
         paddingTop: 20,
         paddingBottom: 8,
         borderTopWidth: 1,
-        borderTopColor: '#F3F4F6',
+        borderTopColor: colors.neutral[100],
         ...Platform.select({
             ios: {
                 shadowColor: '#000',

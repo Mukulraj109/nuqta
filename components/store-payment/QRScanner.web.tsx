@@ -28,16 +28,17 @@ import jsQR from 'jsqr';
 import { QRCodeData } from '@/types/storePayment.types';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const SCANNER_SIZE = Math.min(SCREEN_WIDTH * 0.7, 280);
 
 // Nuqta Brand Colors
 const NUQTA_COLORS = {
-  primary: '#ffcd57',
+  primary: colors.lightMustard,
   primaryGlow: 'rgba(255, 205, 87, 0.5)',
-  orange: '#F97316',
-  navy: '#0B2240',
+  orange: colors.brand.orange,
+  navy: colors.brand.navyDark,
   background: '#18181B',
   surface: '#27272A',
   border: 'rgba(255, 255, 255, 0.1)',
@@ -289,14 +290,14 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
       {/* Header */}
       <View style={styles.header}>
         <Pressable style={styles.headerBtn} onPress={handleClose}>
-          <Ionicons name="close" size={24} color="#FFFFFF" />
+          <Ionicons name="close" size={24} color={colors.background.primary} />
         </Pressable>
         <Text style={styles.headerTitle}>Scan & Pay</Text>
         <Pressable
           style={styles.headerBtn}
           onPress={() => setShowManualEntry(!showManualEntry)}
         >
-          <Ionicons name={showManualEntry ? "camera" : "keypad"} size={22} color="#FFFFFF" />
+          <Ionicons name={showManualEntry ? "camera" : "keypad"} size={22} color={colors.background.primary} />
         </Pressable>
       </View>
 
@@ -379,19 +380,19 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
           <View style={styles.statusContainer}>
             {scannerStatus === 'scanning' && (
               <View style={[styles.statusBadge, styles.statusScanning]}>
-                <Ionicons name="scan" size={16} color="#FFFFFF" />
+                <Ionicons name="scan" size={16} color={colors.background.primary} />
                 <Text style={styles.statusText}>Scanner Active - Looking for QR</Text>
               </View>
             )}
             {scannerStatus === 'no-detector' && (
               <View style={[styles.statusBadge, styles.statusError]}>
-                <Ionicons name="warning" size={16} color="#FFFFFF" />
+                <Ionicons name="warning" size={16} color={colors.background.primary} />
                 <Text style={styles.statusText}>QR Detection Not Supported - Use Manual Entry</Text>
               </View>
             )}
             {scannerStatus === 'detected' && (
               <View style={[styles.statusBadge, styles.statusSuccess]}>
-                <Ionicons name="checkmark-circle" size={16} color="#FFFFFF" />
+                <Ionicons name="checkmark-circle" size={16} color={colors.background.primary} />
                 <Text style={styles.statusText}>QR Detected!</Text>
               </View>
             )}
@@ -402,7 +403,7 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
       {/* Error Message */}
       {error && (
         <View style={styles.errorBanner}>
-          <Ionicons name="alert-circle" size={18} color="#FFFFFF" />
+          <Ionicons name="alert-circle" size={18} color={colors.background.primary} />
           <Text style={styles.errorBannerText}>{error}</Text>
         </View>
       )}
@@ -433,7 +434,7 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
             disabled={!manualCode}
           >
             <Text style={styles.submitBtnText}>Continue</Text>
-            <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+            <Ionicons name="arrow-forward" size={20} color={colors.background.primary} />
           </Pressable>
         </View>
       )}
@@ -442,7 +443,7 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
       {isScanning && cameraReady && !showManualEntry && (
         <View style={styles.cameraControls}>
           <Pressable style={styles.controlBtn} onPress={() => setShowManualEntry(true)}>
-            <Ionicons name="keypad" size={24} color="#FFFFFF" />
+            <Ionicons name="keypad" size={24} color={colors.background.primary} />
             <Text style={styles.controlBtnText}>Enter Code</Text>
           </Pressable>
         </View>
@@ -452,7 +453,7 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
       {!isScanning && hasWebcam && !showManualEntry && (
         <View style={styles.startCameraSection}>
           <Pressable style={styles.startCameraBtn} onPress={startScanning}>
-            <Ionicons name="camera" size={24} color="#FFFFFF" />
+            <Ionicons name="camera" size={24} color={colors.background.primary} />
             <Text style={styles.startCameraBtnText}>Start Camera</Text>
           </Pressable>
         </View>
@@ -522,7 +523,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   promoBanner: {
     alignItems: 'center',
@@ -550,7 +551,7 @@ const styles = StyleSheet.create({
   promoIconText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   promoText: {
     fontSize: 13,
@@ -636,7 +637,7 @@ const styles = StyleSheet.create({
   },
   scanningText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginTop: 12,
   },
   scanHint: {
@@ -659,7 +660,7 @@ const styles = StyleSheet.create({
   errorBannerText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     flex: 1,
   },
   entrySection: {
@@ -671,7 +672,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 15,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     backgroundColor: NUQTA_COLORS.surface,
     borderWidth: 1,
     borderColor: NUQTA_COLORS.border,
@@ -696,7 +697,7 @@ const styles = StyleSheet.create({
   submitBtnText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   cameraControls: {
     flexDirection: 'row',
@@ -716,7 +717,7 @@ const styles = StyleSheet.create({
   controlBtnText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   startCameraSection: {
     paddingHorizontal: 20,
@@ -734,7 +735,7 @@ const styles = StyleSheet.create({
   startCameraBtnText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   bottomSection: {
     position: 'absolute',
@@ -781,7 +782,7 @@ const styles = StyleSheet.create({
   paymentIconText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   infoSubtext: {
     fontSize: 11,
@@ -802,7 +803,7 @@ const styles = StyleSheet.create({
   rezLogoText: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   securityBadges: {
     flexDirection: 'row',
@@ -816,7 +817,7 @@ const styles = StyleSheet.create({
   badgeTitle: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   badgeSubtitle: {
     fontSize: 6,
@@ -839,14 +840,14 @@ const styles = StyleSheet.create({
     backgroundColor: NUQTA_COLORS.primary,
   },
   statusError: {
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
   },
   statusSuccess: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   statusText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });

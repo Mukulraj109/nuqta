@@ -20,6 +20,7 @@ import earningsApi, { PartnerEarningsSummary } from '@/services/earningsApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface EarningsBreakdownProps {
   onViewDetails?: () => void;
@@ -48,17 +49,17 @@ type EarningsState =
   | { status: 'empty' };
 
 const COLORS = {
-  primary: '#ffcd57',
-  primaryDark: '#1a3a52',
-  gold: '#B45309',
-  navy: '#1a3a52',
-  surface: '#faf1e0',
-  white: '#FFFFFF',
-  textPrimary: '#1F2937',
-  textSecondary: '#6B7280',
-  success: '#10B981',
-  warning: '#F59E0B',
-  error: '#EF4444',
+  primary: colors.lightMustard,
+  primaryDark: colors.nileBlue,
+  gold: colors.brand.amberDeep,
+  navy: colors.nileBlue,
+  surface: colors.linen,
+  white: colors.text.white,
+  textPrimary: colors.neutral[800],
+  textSecondary: colors.neutral[500],
+  success: colors.success,
+  warning: colors.warning,
+  error: colors.error,
 };
 
 const BREAKDOWN_TOOLTIPS: Record<string, string> = {
@@ -432,7 +433,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.gray[100],
   },
   headerLeft: {
     flexDirection: 'row',
@@ -485,7 +486,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statCardPending: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
   },
   statValue: {
     fontSize: 18,
@@ -512,7 +513,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.gray[100],
   },
   breakdownLeft: {
     flexDirection: 'row',
@@ -569,7 +570,7 @@ const styles = StyleSheet.create({
 
   // Skeleton / shimmer
   skeleton: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.gray[200],
   },
   shimmerOverlay: {
     ...StyleSheet.absoluteFillObject,
@@ -652,7 +653,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingVertical: 6,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
   },
   staleBannerText: {
     fontSize: 11,

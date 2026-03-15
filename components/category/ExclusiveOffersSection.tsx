@@ -18,6 +18,7 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import exclusiveOffersApi, { ExclusiveOffer } from '@/services/exclusiveOffersApi';
 import { exclusiveOffersData } from '@/data/categoryDummyData';
+import { colors } from '@/constants/theme';
 
 interface ExclusiveOffersSectionProps {
   categorySlug?: string;
@@ -120,7 +121,7 @@ const ExclusiveOffersSection: React.FC<ExclusiveOffersSectionProps> = ({
   if (loading) {
     return (
       <View style={[styles.container, styles.loadingContainer]}>
-        <ActivityIndicator size="small" color="#D97706" />
+        <ActivityIndicator size="small" color={colors.warningScale[700]} />
       </View>
     );
   }
@@ -166,13 +167,13 @@ const ExclusiveOffersSection: React.FC<ExclusiveOffersSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     paddingVertical: 20,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -208,19 +209,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.4,
   },
   seeAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 8,
   },
   seeAllText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -251,13 +252,13 @@ const styles = StyleSheet.create({
   offerTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 2,
   },
   offerDiscount: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 4,
   },
   offerDescription: {
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
   claimText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

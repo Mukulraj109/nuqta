@@ -16,14 +16,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import storesApi from '@/services/storesApi';
 import categoriesApi from '@/services/categoriesApi';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#1a3a52',
-  gray600: '#6B7280',
-  nileBlue: '#1a3a52',
-  lightPeach: '#ffd7b5',
-  lightMustard: '#ffcd57',
+  white: colors.background.primary,
+  navy: colors.nileBlue,
+  gray600: colors.neutral[500],
+  nileBlue: colors.nileBlue,
+  lightPeach: colors.lightPeach,
+  lightMustard: colors.lightMustard,
 };
 
 // Card configurations with API tags - Nuqta palette
@@ -35,10 +36,10 @@ const cardConfigs = [
     icon: '💇‍♀️',
     route: '/beauty/salon',
     tags: ['salon', 'spa', 'beauty'],
-    gradientColors: ['#ffd7b5', '#E8B896', '#D4A07A'] as const,
+    gradientColors: [colors.lightPeach, colors.brand.sand, colors.brand.caramel] as const,
     iconBgColor: 'rgba(255, 215, 181, 0.3)',
-    badgeColor: '#1a3a52',
-    textColor: '#1a3a52',
+    badgeColor: colors.nileBlue,
+    textColor: colors.nileBlue,
     defaultDiscount: '30% OFF',
     defaultCount: '350+ Partners',
   },
@@ -49,10 +50,10 @@ const cardConfigs = [
     icon: '💄',
     route: '/beauty/products',
     tags: ['cosmetics', 'makeup', 'skincare'],
-    gradientColors: ['#faf1e0', '#ffd7b5', '#E8B896'] as const,
+    gradientColors: [colors.linen, colors.lightPeach, colors.brand.sand] as const,
     iconBgColor: 'rgba(255, 205, 87, 0.3)',
-    badgeColor: '#ffcd57',
-    textColor: '#1a3a52',
+    badgeColor: colors.lightMustard,
+    textColor: colors.nileBlue,
     defaultDiscount: '25% OFF',
     defaultCount: '500+ Brands',
   },
@@ -63,10 +64,10 @@ const cardConfigs = [
     icon: '🧘',
     route: '/beauty/wellness',
     tags: ['wellness', 'yoga', 'meditation'],
-    gradientColors: ['#dfebf7', '#cce0f2', '#b8d4ed'] as const,
+    gradientColors: [colors.lavenderMist, '#cce0f2', '#b8d4ed'] as const,
     iconBgColor: 'rgba(26, 58, 82, 0.2)',
-    badgeColor: '#1a3a52',
-    textColor: '#1a3a52',
+    badgeColor: colors.nileBlue,
+    textColor: colors.nileBlue,
     defaultDiscount: '20% OFF',
     defaultCount: '200+ Centers',
   },

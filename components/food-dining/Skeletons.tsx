@@ -5,6 +5,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import SkeletonLoader from '@/components/skeletons/SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 export const SectionHeaderSkeleton = () => (
   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12, paddingHorizontal: 16 }}>
@@ -20,7 +21,7 @@ export const RestaurantCardSkeleton = ({ count = 3, variant = 'default' }: { cou
   return (
     <View style={{ paddingHorizontal: 16, gap: 12 }}>
       {Array.from({ length: count }).map((_, i) => (
-        <View key={i} style={{ backgroundColor: '#fff', borderRadius: 12, overflow: 'hidden' }}>
+        <View key={i} style={{ backgroundColor: colors.background.primary, borderRadius: 12, overflow: 'hidden' }}>
           {!isCompact && <SkeletonLoader width="100%" height={140} borderRadius={0} />}
           <View style={{ padding: 12, gap: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>

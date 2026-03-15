@@ -27,6 +27,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import cashStoreApi from '../../services/cashStoreApi';
 import { CashStoreBrand, CashStoreCategoryFilter } from '../../types/cash-store.types';
 import CashStoreBrandCard from '../../components/cash-store/pages/CashStoreBrandCard';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -209,7 +210,7 @@ export default function CashStoreBrandsPage() {
 
         await WebBrowser.openBrowserAsync(url, {
           toolbarColor: Colors.nileBlue,
-          controlsColor: '#FFFFFF',
+          controlsColor: colors.background.primary,
         });
       } else if (brand.storeId) {
         router.push(`/MainStorePage?storeId=${brand.storeId}` as any);
@@ -272,7 +273,7 @@ export default function CashStoreBrandsPage() {
             >
               {isActive ? (
                 <LinearGradient
-                  colors={['#1a3a52', '#234b68']}
+                  colors={[colors.nileBlue, colors.brand.nileBlueLight]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={[styles.chip, styles.chipActive]}
@@ -483,7 +484,7 @@ export default function CashStoreBrandsPage() {
 
         {/* Search */}
         <View style={[styles.searchBar, searchFocused && styles.searchBarFocused]}>
-          <Ionicons name="search" size={16} color={searchFocused ? '#1a3a52' : '#94A3B8'} />
+          <Ionicons name="search" size={16} color={searchFocused ? colors.nileBlue : '#94A3B8'} />
           <TextInput
             style={styles.searchInput}
             value={searchQuery}
@@ -574,7 +575,7 @@ export default function CashStoreBrandsPage() {
                     <Ionicons
                       name={option.icon as any}
                       size={16}
-                      color={isActive ? '#FFFFFF' : '#9CA3AF'}
+                      color={isActive ? colors.background.primary : colors.neutral[400]}
                     />
                   </View>
                   <Text style={[styles.modalOptionText, isActive && styles.modalOptionTextActive]}>
@@ -657,7 +658,7 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.md,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.06,
         shadowRadius: 8,
@@ -706,7 +707,7 @@ const styles = StyleSheet.create({
   countText: {
     ...Typography.bodySmall,
     fontWeight: '700',
-    color: '#64748B',
+    color: colors.slateGray,
   },
   headerSortBtn: {
     width: 36,

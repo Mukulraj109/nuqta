@@ -31,6 +31,7 @@ import {
   GOING_OUT_COLORS,
 } from '@/config/goingOutSectionConfig';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Animated components
 const AnimatedTouchable = Animated.createAnimatedComponent(Pressable);
@@ -141,7 +142,7 @@ const StoreListItem = memo(({
           </View>
           {isBestSeller && (
             <View style={styles.bestSellerBadge}>
-              <Ionicons name="checkmark-circle" size={10} color="#fff" />
+              <Ionicons name="checkmark-circle" size={10} color={colors.background.primary} />
               <Text style={styles.bestSellerText}>Best Seller</Text>
             </View>
           )}
@@ -403,7 +404,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 4,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   listImageWrapper: {
     position: 'relative',
@@ -413,7 +414,7 @@ const styles = StyleSheet.create({
     height: LIST_IMAGE_SIZE,
     borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   listImage: {
     width: '100%',
@@ -424,7 +425,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   // Best Seller Badge
   bestSellerBadge: {
@@ -442,7 +443,7 @@ const styles = StyleSheet.create({
   bestSellerText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.background.primary,
   },
   // List Item Content (right side)
   listItemContent: {
@@ -495,7 +496,7 @@ const styles = StyleSheet.create({
   saveBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.background.primary,
   },
   // Brand Logo (right side)
   brandLogoContainer: {
@@ -503,7 +504,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     marginLeft: 8,
   },
   brandLogo: {
@@ -524,10 +525,10 @@ const styles = StyleSheet.create({
   },
   // Skeleton styles
   skeletonImage: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   skeletonText: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
   },
   // Error state

@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface Product {
   id: string;
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
   },
   count: {
     fontSize: 13,
-    color: '#666666',
+    color: colors.midGray,
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#ffffff',
+    color: colors.background.primary,
   },
   productInfo: {
     gap: 4,

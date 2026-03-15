@@ -11,6 +11,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import { UGCContent } from '@/types/reviews';
+import { colors } from '@/constants/theme';
 
 interface UGCGridProps {
   ugcContent: UGCContent[];
@@ -84,7 +85,7 @@ const UGCGrid: React.FC<UGCGridProps> = ({
         {/* Content type indicator */}
         {item.contentType === 'video' && (
           <View style={styles.videoIndicator}>
-            <Ionicons name="play-circle" size={24} color="#FFFFFF" />
+            <Ionicons name="play-circle" size={24} color={colors.background.primary} />
           </View>
         )}
 
@@ -107,7 +108,7 @@ const UGCGrid: React.FC<UGCGridProps> = ({
             <Ionicons
               name={item.isBookmarked ? "bookmark" : "bookmark-outline"}
               size={20}
-              color={item.isBookmarked ? "#7C3AED" : "#FFFFFF"}
+              color={item.isBookmarked ? colors.brand.purple : colors.background.primary}
             />
           </Animated.View>
         </Pressable>
@@ -125,7 +126,7 @@ const UGCGrid: React.FC<UGCGridProps> = ({
             <Ionicons
               name={item.isLiked ? "heart" : "heart-outline"}
               size={18}
-              color={item.isLiked ? "#EF4444" : "#FFFFFF"}
+              color={item.isLiked ? colors.error : colors.background.primary}
             />
             {item.likes > 0 && (
               <ThemedText style={styles.likeCount}>{formatLikeCount(item.likes)}</ThemedText>
@@ -144,7 +145,7 @@ const UGCGrid: React.FC<UGCGridProps> = ({
         
         <View style={styles.contentStats}>
           <View style={styles.likesContainer}>
-            <Ionicons name="heart" size={12} color="#EF4444" />
+            <Ionicons name="heart" size={12} color={colors.error} />
             <ThemedText style={styles.likesText}>{item.likes}</ThemedText>
           </View>
           <ThemedText style={styles.dateText}>{formatDate(item.date)}</ThemedText>
@@ -174,7 +175,7 @@ const UGCGrid: React.FC<UGCGridProps> = ({
   if (ugcContent.length === 0) {
     return (
       <View style={styles.emptyContainer}>
-        <Ionicons name="images-outline" size={48} color="#D1D5DB" />
+        <Ionicons name="images-outline" size={48} color={colors.neutral[300]} />
         <ThemedText style={styles.emptyText}>
           No UGC content available yet
         </ThemedText>
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     // Width is set dynamically
   },
   ugcItem: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   bookmarkButton: {
     position: 'absolute',
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
   likeCount: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginLeft: 4,
     letterSpacing: 0.2,
   },
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
   },
   caption: {
     fontSize: 12,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 16,
     marginBottom: 8,
   },
@@ -340,12 +341,12 @@ const styles = StyleSheet.create({
   },
   likesText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   dateText: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   tagsContainer: {
     flexDirection: 'row',
@@ -354,32 +355,32 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   tag: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
   },
   tagText: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   moreTagsText: {
     fontSize: 10,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
   emptyText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 16,
     marginBottom: 8,
     textAlign: 'center',
   },
   emptySubtext: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     lineHeight: 18,
     paddingHorizontal: 20,

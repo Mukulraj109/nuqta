@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import type { FulfillmentType, FulfillmentOption } from '@/types/checkout.types';
+import { colors } from '@/constants/theme';
 
 interface FulfillmentTypeSelectorProps {
   availableTypes: FulfillmentOption[];
@@ -54,7 +55,7 @@ const FulfillmentTypeSelector = memo(({
                 <Ionicons
                   name={iconName}
                   size={22}
-                  color={isSelected ? '#fff' : '#1a3a52'}
+                  color={isSelected ? colors.background.primary : colors.nileBlue}
                 />
               </View>
               <Text style={[styles.label, isSelected && styles.labelSelected]}>
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 12,
   },
   scrollContent: {
@@ -96,11 +97,11 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 1.5,
     borderColor: '#e0e0e0',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     minWidth: 100,
   },
   cardSelected: {
-    borderColor: '#1a3a52',
+    borderColor: colors.nileBlue,
     backgroundColor: '#f0f6fa',
   },
   iconCircle: {
@@ -113,16 +114,16 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   iconCircleSelected: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
   },
   label: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     textAlign: 'center',
   },
   labelSelected: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   time: {
     fontSize: 11,
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   timeSelected: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 });
 

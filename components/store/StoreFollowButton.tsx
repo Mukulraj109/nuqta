@@ -13,6 +13,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/useToast';
 import storesApi from '@/services/storesApi';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 interface StoreFollowButtonProps {
   storeId: string;
@@ -238,13 +239,13 @@ function StoreFollowButton({
           accessibilityState={{ disabled: isLoading }}
         >
           {isLoading ? (
-            <ActivityIndicator size="small" color={isFollowing ? '#FFFFFF' : '#7C3AED'} />
+            <ActivityIndicator size="small" color={isFollowing ? colors.text.white : colors.brand.purple} />
           ) : (
             <Animated.View style={{ transform: [{ scale: heartScale }] }}>
               <Ionicons
                 name={isFollowing ? 'heart' : 'heart-outline'}
                 size={20}
-                color={isFollowing ? '#FFFFFF' : '#7C3AED'}
+                color={isFollowing ? colors.text.white : colors.brand.purple}
               />
             </Animated.View>
           )}
@@ -275,14 +276,14 @@ function StoreFollowButton({
           accessibilityState={{ disabled: isLoading }}
         >
           {isLoading ? (
-            <ActivityIndicator size="small" color={isFollowing ? '#FFFFFF' : '#7C3AED'} />
+            <ActivityIndicator size="small" color={isFollowing ? colors.text.white : colors.brand.purple} />
           ) : (
             <>
               <Animated.View style={{ transform: [{ scale: heartScale }] }}>
                 <Ionicons
                   name={isFollowing ? 'heart' : 'heart-outline'}
                   size={16}
-                  color={isFollowing ? '#FFFFFF' : '#7C3AED'}
+                  color={isFollowing ? colors.text.white : colors.brand.purple}
                 />
               </Animated.View>
               <Text
@@ -328,7 +329,7 @@ function StoreFollowButton({
       >
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color={isFollowing ? '#FFFFFF' : '#7C3AED'} />
+            <ActivityIndicator size="small" color={isFollowing ? colors.text.white : colors.brand.purple} />
             <Text
               style={[
                 styles.defaultButtonText,
@@ -345,7 +346,7 @@ function StoreFollowButton({
                 <Ionicons
                   name={isFollowing ? 'heart' : 'heart-outline'}
                   size={20}
-                  color={isFollowing ? '#FFFFFF' : '#7C3AED'}
+                  color={isFollowing ? colors.text.white : colors.brand.purple}
                 />
               </Animated.View>
               <Text
@@ -388,9 +389,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1.5,
-    borderColor: '#7C3AED',
+    borderColor: colors.brand.purple,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
@@ -400,8 +401,8 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   iconOnlyButtonFollowing: {
-    backgroundColor: '#7C3AED',
-    borderColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
+    borderColor: colors.brand.purple,
   },
 
   // Compact variant
@@ -411,9 +412,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1.5,
-    borderColor: '#7C3AED',
+    borderColor: colors.brand.purple,
     gap: 6,
     minWidth: 90,
     justifyContent: 'center',
@@ -424,16 +425,16 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   compactButtonFollowing: {
-    backgroundColor: '#7C3AED',
-    borderColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
+    borderColor: colors.brand.purple,
   },
   compactButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   compactButtonTextFollowing: {
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
 
   // Default variant
@@ -444,9 +445,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 2,
-    borderColor: '#7C3AED',
+    borderColor: colors.brand.purple,
     minWidth: 140,
     minHeight: 44, // Minimum touch target
     shadowColor: '#000',
@@ -456,8 +457,8 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   defaultButtonFollowing: {
-    backgroundColor: '#7C3AED',
-    borderColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
+    borderColor: colors.brand.purple,
   },
   defaultButtonContent: {
     flexDirection: 'row',
@@ -468,10 +469,10 @@ const styles = StyleSheet.create({
   defaultButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   defaultButtonTextFollowing: {
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
 
   // Loading state
@@ -486,7 +487,7 @@ const styles = StyleSheet.create({
 
   // Follower count badge
   followerCountBadge: {
-    backgroundColor: '#EDE9FE',
+    backgroundColor: colors.tint.purple,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -499,10 +500,10 @@ const styles = StyleSheet.create({
   followerCountText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   followerCountTextFollowing: {
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
 });
 

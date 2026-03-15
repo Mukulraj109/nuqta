@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Animated, Dimensions, Platform } from 'react-native';
 import { useSharedShimmer } from './SharedSkeletonContext';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -214,10 +215,10 @@ export function HomepageSkeleton() {
 
 const styles = StyleSheet.create({
   skeleton: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   cardSkeleton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     shadowColor: '#000',
@@ -230,7 +231,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   brandedCardSkeleton: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.offWhite,
     borderRadius: 16,
     padding: 16,
     alignItems: 'center',
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   headerSkeleton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingTop: 50,
     paddingHorizontal: 20,
     paddingBottom: 20,

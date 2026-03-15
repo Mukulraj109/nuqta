@@ -20,6 +20,7 @@ import { COLORS } from './constants';
 import asyncStorageService from '@/services/asyncStorageService';
 import { storesApi } from '@/services/storesApi';
 import { useLocation } from '@/contexts/LocationContext';
+import { colors } from '@/constants/theme';
 
 interface StoreItem {
   _id?: string;
@@ -197,7 +198,7 @@ const PersonalizedSections: React.FC = () => {
       {hasFavorites && (
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="heart" size={18} color="#EF4444" />
+            <Ionicons name="heart" size={18} color={colors.error} />
             <Text style={styles.sectionTitle}>Your Favorites</Text>
             <Pressable
               onPress={() => router.push('/wishlist' as any)}
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     ...Platform.select({
-      ios: { shadowColor: '#1a3a52', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8 },
+      ios: { shadowColor: colors.nileBlue, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8 },
       android: { elevation: 2 },
       web: { boxShadow: '0 1px 6px rgba(11,34,64,0.06)' },
     }),
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
     height: 80,
   },
   storeImageFallback: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
   },

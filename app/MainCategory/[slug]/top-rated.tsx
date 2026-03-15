@@ -25,6 +25,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { storesApi } from '@/services/storesApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type SortOption = 'popularity' | 'rating' | 'newest' | 'price-low' | 'price-high';
 
@@ -125,7 +126,7 @@ function StoreCard({ store, currencySymbol, onVisitNow, primaryColor }: { store:
          
         >
           <LinearGradient
-            colors={[Colors.info, '#2563EB']}
+            colors={[Colors.info, colors.brand.blue]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.visitNowGradient}
@@ -239,7 +240,7 @@ export default function SharedCategoryPage() {
     <SafeAreaView style={styles.container}>
       {/* Header with gradient */}
       <LinearGradient
-        colors={[Colors.info, '#2563EB']}
+        colors={[Colors.info, colors.brand.blue]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.headerGradient}
@@ -344,7 +345,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: BorderRadius.lg,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     gap: Spacing.xs,
   },
   sortChipActive: {
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
   },
   storeImageContainer: { height: 160, position: 'relative' },
   storeImage: { width: '100%', height: '100%' },
-  storeImagePlaceholder: { backgroundColor: '#EFF6FF', justifyContent: 'center', alignItems: 'center' },
+  storeImagePlaceholder: { backgroundColor: colors.tint.blue, justifyContent: 'center', alignItems: 'center' },
   storeImageGradient: { position: 'absolute', bottom: 0, left: 0, right: 0, height: '50%' },
   storeBadges: {
     position: 'absolute', top: 8, left: 8, flexDirection: 'row', gap: Spacing.xs, flexWrap: 'wrap',

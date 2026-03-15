@@ -1,6 +1,7 @@
 import { UserLocation } from '@/types/location.types';
 import apiClient from './apiClient';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export interface StoreProduct {
   _id: string;
@@ -966,11 +967,11 @@ class StoreSearchService {
       fastDelivery: { name: '30 min delivery', icon: '🚀', color: '#7B61FF' },
       budgetFriendly: { name: '1 rupees store', icon: '💰', color: '#6E56CF' },
       premium: { name: 'Luxury store', icon: '👑', color: '#A78BFA' },
-      organic: { name: 'Organic Store', icon: '🌱', color: '#34D399' },
+      organic: { name: 'Organic Store', icon: '🌱', color: colors.successScale[400] },
       alliance: { name: 'Alliance Store', icon: '🤝', color: '#9F7AEA' },
       lowestPrice: { name: 'Lowest Price', icon: '💸', color: '#22D3EE' },
       mall: { name: `${BRAND.APP_NAME} Mall`, icon: '🏬', color: '#1a3a52' },
-      cashStore: { name: 'Cash Store', icon: '💵', color: '#8B5CF6' },
+      cashStore: { name: 'Cash Store', icon: '💵', color: colors.brand.purpleLight },
     };
 
     return categoryInfo[categoryId] || { name: 'Store', icon: '🏪', color: '#666' };

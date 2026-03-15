@@ -17,6 +17,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface EMIPlan {
   tenure: number;
@@ -91,14 +92,14 @@ export default function StoreEMIInfoPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>EMI Options</ThemedText>
           <View style={styles.placeholder} />
         </View>
 
         <View style={styles.heroSection}>
-          <Ionicons name="card" size={40} color="#FFF" />
+          <Ionicons name="card" size={40} color={colors.background.primary} />
           <ThemedText style={styles.heroTitle}>Easy EMI</ThemedText>
           <ThemedText style={styles.heroSubtitle}>
             Split your payment into easy monthly installments
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -297,7 +298,7 @@ const styles = StyleSheet.create({
   },
   heroTitle: {
     ...Typography.h2,
-    color: '#FFF',
+    color: colors.background.primary,
     marginTop: Spacing.md,
   },
   heroSubtitle: {
@@ -369,7 +370,7 @@ const styles = StyleSheet.create({
   },
   noCostText: {
     ...Typography.caption,
-    color: '#FFF',
+    color: colors.background.primary,
     fontSize: 8,
     fontWeight: '700',
   },
@@ -503,6 +504,6 @@ const styles = StyleSheet.create({
   },
   proceedButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
 });

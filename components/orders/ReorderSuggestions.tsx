@@ -17,6 +17,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { useCart } from '@/contexts/CartContext';
 import { platformAlert } from '@/utils/platformAlert';
 import SkeletonLoader from '@/components/common/SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 interface ReorderSuggestionsProps {
   onAddToCart?: (productId: string, quantity: number) => void;
@@ -49,13 +50,13 @@ function ReorderSuggestions({ onAddToCart }: ReorderSuggestionsProps) {
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'consumable':
-        return '#f59e0b';
+        return colors.warningScale[400];
       case 'frequent':
         return '#8b5cf6';
       case 'subscription':
-        return '#3b82f6';
+        return colors.infoScale[400];
       default:
-        return '#6b7280';
+        return colors.neutral[500];
     }
   };
 
@@ -142,7 +143,7 @@ function ReorderSuggestions({ onAddToCart }: ReorderSuggestionsProps) {
 
             {item.isAvailable ? (
               addedItems.has(`${item.productId}-${item.type}`) ? (
-                <View style={[styles.quickAddButton, { backgroundColor: '#2ECC71' }]}>
+                <View style={[styles.quickAddButton, { backgroundColor: colors.success }]}>
                   <Text style={styles.quickAddText}>Added ✓</Text>
                 </View>
               ) : (
@@ -260,19 +261,19 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4
   },
   headerSubtitle: {
     fontSize: 13,
-    color: '#6b7280'
+    color: colors.neutral[500]
   },
   listContent: {
     paddingHorizontal: 16
   },
   suggestionCard: {
     width: 280,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     marginRight: 12,
     shadowColor: '#000',
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
   cardHeader: {
     padding: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6'
+    borderBottomColor: colors.neutral[100]
   },
   typeBadge: {
     flexDirection: 'row',
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 8,
-    backgroundColor: '#f3f4f6'
+    backgroundColor: colors.neutral[100]
   },
   productInfo: {
     flex: 1,
@@ -320,12 +321,12 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4
   },
   storeName: {
     fontSize: 12,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 8
   },
   reason: {
@@ -343,7 +344,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827'
+    color: colors.neutral[900]
   },
   quickAddButton: {
     backgroundColor: '#6366f1',
@@ -352,7 +353,7 @@ const styles = StyleSheet.create({
     borderRadius: 6
   },
   quickAddText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '600'
   },
@@ -364,18 +365,18 @@ const styles = StyleSheet.create({
   },
   unavailableText: {
     fontSize: 11,
-    color: '#dc2626',
+    color: colors.error,
     fontWeight: '600'
   },
   frequencyInfo: {
     padding: 12,
-    backgroundColor: '#f9fafb',
+    backgroundColor: colors.neutral[50],
     borderTopWidth: 1,
-    borderTopColor: '#e5e7eb'
+    borderTopColor: colors.neutral[200]
   },
   frequencyText: {
     fontSize: 12,
-    color: '#6b7280',
+    color: colors.neutral[500],
     textAlign: 'center'
   },
   loadingContainer: {
@@ -385,7 +386,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6b7280'
+    color: colors.neutral[500]
   },
   errorContainer: {
     padding: 20,
@@ -393,7 +394,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#dc2626',
+    color: colors.error,
     textAlign: 'center',
     marginBottom: 12
   },
@@ -404,7 +405,7 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   retryButtonText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600'
   },
@@ -419,12 +420,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8
   },
   emptyText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
     textAlign: 'center'
   }
 });

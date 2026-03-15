@@ -7,6 +7,7 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -55,7 +56,7 @@ function DetailPageSkeleton() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   content: {
     padding: 16,

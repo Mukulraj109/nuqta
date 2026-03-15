@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { navigationDebugger } from '@/utils/navigationDebug';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Nuqta Design System Colors
 
@@ -140,7 +141,7 @@ export default function CategorySelectionScreen() {
                       <Ionicons
                         name={category.icon as any}
                         size={22}
-                        color={!category.isEnabled ? '#9CA3AF' : isSelected ? category.color : Colors.text.primary}
+                        color={!category.isEnabled ? colors.neutral[400] : isSelected ? category.color : Colors.text.primary}
                       />
                     </View>
                     <Text

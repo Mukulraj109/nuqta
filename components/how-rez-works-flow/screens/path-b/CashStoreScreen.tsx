@@ -5,6 +5,7 @@ import FlowScreenLayout from '../../shared/FlowScreenLayout';
 import ActionBtn from '../../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -27,14 +28,14 @@ const CashStoreScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
         >
             <View style={styles.card}>
                 <View style={styles.header}>
-                    <Ionicons name="globe" size={32} color="#F97316" />
+                    <Ionicons name="globe" size={32} color={colors.brand.orange} />
                     <Text style={styles.headerText}>Universal Savings</Text>
                 </View>
 
                 <View style={styles.list}>
                     {steps.map((step, index) => (
                         <View key={index} style={styles.item}>
-                            <Ionicons name="checkmark-circle" size={20} color="#F97316" />
+                            <Ionicons name="checkmark-circle" size={20} color={colors.brand.orange} />
                             <Text style={styles.itemText}>{step.text}</Text>
                         </View>
                     ))}
@@ -46,7 +47,7 @@ const CashStoreScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#FFF7ED',
+        backgroundColor: colors.tint.orange,
         borderRadius: 24,
         padding: 24,
         marginTop: 20,
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     },
     itemText: {
         fontSize: 16,
-        color: '#374151',
+        color: colors.neutral[700],
     },
 });
 

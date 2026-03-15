@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { colors } from '@/constants/theme';
 
 interface RetryButtonProps {
   /**
@@ -192,11 +193,11 @@ export const RetryButton: React.FC<RetryButtonProps> = ({
   // Get icon color
   const getIconColor = (): string => {
     if (variant === 'primary') {
-      return '#FFFFFF';
+      return colors.text.white;
     } else if (variant === 'secondary' || variant === 'ghost') {
-      return '#8B5CF6';
+      return colors.brand.purpleLight;
     }
-    return '#FFFFFF';
+    return colors.text.white;
   };
 
   // Get icon size
@@ -269,8 +270,8 @@ const styles = StyleSheet.create({
 
   // Variants
   buttonPrimary: {
-    backgroundColor: '#8B5CF6',
-    shadowColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -279,7 +280,7 @@ const styles = StyleSheet.create({
   buttonSecondary: {
     backgroundColor: 'white',
     borderWidth: 2,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
   },
   buttonGhost: {
     backgroundColor: 'transparent',
@@ -302,13 +303,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   buttonTextPrimary: {
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
   buttonTextSecondary: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   buttonTextGhost: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 });
 

@@ -13,6 +13,7 @@ import {
   Pressable,
   LayoutChangeEvent,
 } from 'react-native';
+import { colors } from '@/constants/theme';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -31,10 +32,10 @@ export interface StoreTabsProps {
 }
 
 const COLORS = {
-  primary: '#1a3a52',      // Nile Blue
-  gray: '#6B7280',
-  border: '#E5E7EB',
-  background: '#FFFFFF',
+  primary: colors.nileBlue,      // Nile Blue
+  gray: colors.neutral[500],
+  border: colors.neutral[200],
+  background: colors.background.primary,
 };
 
 interface TabConfig {

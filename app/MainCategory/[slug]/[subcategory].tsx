@@ -27,6 +27,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { storesApi } from '@/services/storesApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { getCategoryConfig } from '@/config/categoryConfig';
+import { colors } from '@/constants/theme';
 
 // Subcategory metadata for icons and colors
 const SUBCATEGORY_META: Record<string, { title: string; description: string; icon: string; color: string; emoji: string; filterTags: string[] }> = {
@@ -34,7 +35,7 @@ const SUBCATEGORY_META: Record<string, { title: string; description: string; ico
     title: 'Mobile Phones',
     description: 'Smartphones & feature phones',
     icon: 'phone-portrait-outline',
-    color: '#3B82F6',
+    color: colors.infoScale[400],
     emoji: '\uD83D\uDCF1',
     filterTags: ['5G', 'Flagship', 'Budget', 'Refurbished', 'Foldable'],
   },
@@ -42,7 +43,7 @@ const SUBCATEGORY_META: Record<string, { title: string; description: string; ico
     title: 'Laptops',
     description: 'Notebooks, ultrabooks & workstations',
     icon: 'laptop-outline',
-    color: '#6366F1',
+    color: colors.brand.indigo,
     emoji: '\uD83D\uDCBB',
     filterTags: ['Gaming', 'Business', 'Ultrabook', 'Budget', '2-in-1'],
   },
@@ -50,7 +51,7 @@ const SUBCATEGORY_META: Record<string, { title: string; description: string; ico
     title: 'Televisions',
     description: 'Smart TVs, OLED, QLED & LED',
     icon: 'tv-outline',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     emoji: '\uD83D\uDCFA',
     filterTags: ['4K', 'OLED', 'QLED', 'Smart TV', 'Budget'],
   },
@@ -58,7 +59,7 @@ const SUBCATEGORY_META: Record<string, { title: string; description: string; ico
     title: 'Cameras',
     description: 'DSLR, mirrorless & action cameras',
     icon: 'camera-outline',
-    color: '#EC4899',
+    color: colors.brand.pink,
     emoji: '\uD83D\uDCF7',
     filterTags: ['DSLR', 'Mirrorless', 'Action', 'Instant', 'Drone'],
   },
@@ -66,7 +67,7 @@ const SUBCATEGORY_META: Record<string, { title: string; description: string; ico
     title: 'Audio & Headphones',
     description: 'Headphones, speakers & soundbars',
     icon: 'headset-outline',
-    color: '#EF4444',
+    color: colors.error,
     emoji: '\uD83C\uDFA7',
     filterTags: ['Wireless', 'ANC', 'Earbuds', 'Speakers', 'Soundbar'],
   },
@@ -74,7 +75,7 @@ const SUBCATEGORY_META: Record<string, { title: string; description: string; ico
     title: 'Gaming',
     description: 'Consoles, gaming PCs & accessories',
     icon: 'game-controller-outline',
-    color: '#22C55E',
+    color: colors.success,
     emoji: '\uD83C\uDFAE',
     filterTags: ['Console', 'PC Gaming', 'VR', 'Controllers', 'Monitors'],
   },
@@ -82,7 +83,7 @@ const SUBCATEGORY_META: Record<string, { title: string; description: string; ico
     title: 'Accessories',
     description: 'Cases, chargers, cables & more',
     icon: 'hardware-chip-outline',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     emoji: '\uD83D\uDD0C',
     filterTags: ['Chargers', 'Cases', 'Cables', 'Adapters', 'Storage'],
   },
@@ -90,7 +91,7 @@ const SUBCATEGORY_META: Record<string, { title: string; description: string; ico
     title: 'Smartwatches',
     description: 'Wearables & fitness trackers',
     icon: 'watch-outline',
-    color: '#14B8A6',
+    color: colors.tealGreen,
     emoji: '\u231A',
     filterTags: ['Fitness', 'Premium', 'Kids', 'Budget', 'LTE'],
   },
@@ -157,7 +158,7 @@ function StoreCard({ store, currencySymbol }: { store: any; currencySymbol: stri
         <View style={styles.storeBadges}>
           {store.deliveryCategories?.fastDelivery && (
             <View style={styles.badge60Min}>
-              <Ionicons name="flash" size={10} color="#000" />
+              <Ionicons name="flash" size={10} color={colors.text.primary} />
               <Text style={styles.badge60MinText}>60 min</Text>
             </View>
           )}
@@ -632,7 +633,7 @@ const styles = StyleSheet.create({
   badge60MinText: {
     ...Typography.overline,
     fontWeight: '700',
-    color: '#000',
+    color: colors.text.primary,
   },
   badgeTag: {
     paddingHorizontal: Spacing.sm,

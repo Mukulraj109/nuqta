@@ -13,17 +13,18 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_GAP = 10;
 
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#1a3a52',
-  gray600: '#6B7280',
-  mustard: '#ffcd57',
+  white: colors.background.primary,
+  navy: colors.nileBlue,
+  gray600: colors.neutral[500],
+  mustard: colors.lightMustard,
   mustardDark: '#e6b84e',
-  green500: '#ffcd57', // Migrated to mustard
+  green500: colors.lightMustard, // Migrated to mustard
 };
 
 const GroceryEssentialsSection: React.FC = () => {
@@ -59,7 +60,7 @@ const GroceryEssentialsSection: React.FC = () => {
          
         >
           <LinearGradient
-            colors={['#1a3a52', '#234b68', '#2d5c7e']}
+            colors={[colors.nileBlue, colors.brand.nileBlueLight, '#2d5c7e']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.quickDeliveryGradient}
@@ -290,7 +291,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   categoryContent: {
     flex: 1,
@@ -318,7 +319,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     padding: 12,
     alignItems: 'center',
   },

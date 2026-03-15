@@ -20,17 +20,18 @@ import * as Location from 'expo-location';
 import nearbyEarnApi, { NearbyStore, EarningOpportunity } from '@/services/nearbyEarnApi';
 import { MapViewSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
 // Marker colors for the decorative map
 const markerColors = [
-  { bg: '#ffcd57', shadow: 'rgba(255, 205, 87, 0.4)' },
-  { bg: '#3B82F6', shadow: 'rgba(59, 130, 246, 0.4)' },
-  { bg: '#F59E0B', shadow: 'rgba(245, 158, 11, 0.4)' },
-  { bg: '#EC4899', shadow: 'rgba(236, 72, 153, 0.4)' },
-  { bg: '#8B5CF6', shadow: 'rgba(139, 92, 246, 0.4)' },
-  { bg: '#EF4444', shadow: 'rgba(239, 68, 68, 0.4)' },
+  { bg: colors.lightMustard, shadow: 'rgba(255, 205, 87, 0.4)' },
+  { bg: colors.infoScale[400], shadow: 'rgba(59, 130, 246, 0.4)' },
+  { bg: colors.warningScale[400], shadow: 'rgba(245, 158, 11, 0.4)' },
+  { bg: colors.brand.pink, shadow: 'rgba(236, 72, 153, 0.4)' },
+  { bg: colors.brand.purpleLight, shadow: 'rgba(139, 92, 246, 0.4)' },
+  { bg: colors.error, shadow: 'rgba(239, 68, 68, 0.4)' },
 ];
 
 // Pre-defined marker positions for the decorative map (percentages)
@@ -61,13 +62,13 @@ const formatDistance = (meters: number): string => {
 const getChipColor = (type: EarningOpportunity['type']): { bg: string; text: string } => {
   switch (type) {
     case 'cashback':
-      return { bg: '#ECFDF5', text: '#059669' };
+      return { bg: colors.tint.greenLight, text: colors.successScale[700] };
     case 'bonus_campaign':
-      return { bg: '#EFF6FF', text: '#2563EB' };
+      return { bg: colors.tint.blue, text: colors.brand.blue };
     case 'multiplier':
-      return { bg: '#FFF7ED', text: '#D97706' };
+      return { bg: colors.tint.orange, text: colors.warningScale[700] };
     default:
-      return { bg: '#F3F4F6', text: '#6B7280' };
+      return { bg: colors.neutral[100], text: colors.neutral[500] };
   }
 };
 
@@ -165,7 +166,7 @@ const NearbyEarnPage = () => {
   const renderNoLocation = () => (
     <View style={styles.centeredContainer}>
       <View style={styles.noLocationIconWrap}>
-        <Ionicons name="location-outline" size={56} color="#B45309" />
+        <Ionicons name="location-outline" size={56} color={colors.brand.amberDeep} />
       </View>
       <Text style={styles.noLocationTitle}>Enable Location to Find Nearby Stores</Text>
       <Text style={styles.noLocationSubtitle}>
@@ -177,16 +178,16 @@ const NearbyEarnPage = () => {
        
       >
         <LinearGradient
-          colors={['#ffcd57', '#F59E0B']}
+          colors={[colors.lightMustard, colors.warningScale[400]]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.enableLocationGradient}
         >
           {locationLoading ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={colors.background.primary} />
           ) : (
             <>
-              <Ionicons name="navigate" size={18} color="#FFFFFF" />
+              <Ionicons name="navigate" size={18} color={colors.background.primary} />
               <Text style={styles.enableLocationText}>Enable Location</Text>
             </>
           )}
@@ -199,7 +200,7 @@ const NearbyEarnPage = () => {
   const renderEmpty = () => (
     <View style={styles.centeredContainer}>
       <View style={styles.emptyIconWrap}>
-        <Ionicons name="storefront-outline" size={56} color="#9CA3AF" />
+        <Ionicons name="storefront-outline" size={56} color={colors.neutral[400]} />
       </View>
       <Text style={styles.emptyTitle}>No Stores Nearby</Text>
       <Text style={styles.emptySubtitle}>
@@ -211,7 +212,7 @@ const NearbyEarnPage = () => {
   // --- Render: Error State ---
   const renderError = () => (
     <View style={styles.centeredContainer}>
-      <Ionicons name="alert-circle" size={52} color="#EF4444" />
+      <Ionicons name="alert-circle" size={52} color={colors.error} />
       <Text style={styles.errorText}>{error}</Text>
       <Pressable style={styles.retryButton} onPress={() => fetchStores()}>
         <Text style={styles.retryButtonText}>Try Again</Text>
@@ -258,12 +259,12 @@ const NearbyEarnPage = () => {
 
           <View style={styles.storeCardMeta}>
             <View style={styles.metaItem}>
-              <Ionicons name="location-outline" size={13} color="#6B7280" />
+              <Ionicons name="location-outline" size={13} color={colors.neutral[500]} />
               <Text style={styles.metaText}>{formatDistance(store.distance)}</Text>
             </View>
             {store.category ? (
               <View style={styles.metaItem}>
-                <Ionicons name="pricetag-outline" size={12} color="#6B7280" />
+                <Ionicons name="pricetag-outline" size={12} color={colors.neutral[500]} />
                 <Text style={styles.metaText}>{store.category}</Text>
               </View>
             ) : null}
@@ -295,7 +296,7 @@ const NearbyEarnPage = () => {
         </View>
 
         {/* Arrow */}
-        <Ionicons name="chevron-forward" size={18} color="#D1D5DB" style={styles.cardArrow} />
+        <Ionicons name="chevron-forward" size={18} color={colors.neutral[300]} style={styles.cardArrow} />
       </Pressable>
     );
   };
@@ -307,7 +308,7 @@ const NearbyEarnPage = () => {
       <View style={styles.mapContainer}>
         <View style={styles.mapBackground}>
           <LinearGradient
-            colors={['#E8F4F8', '#D1E7DD', '#E2E8F0']}
+            colors={['#E8F4F8', '#D1E7DD', colors.slateLight]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={StyleSheet.absoluteFill}
@@ -377,12 +378,12 @@ const NearbyEarnPage = () => {
           {/* Floating Info Card */}
           <View style={styles.mapInfoCardContainer}>
             <LinearGradient
-              colors={['#FFFFFF', '#F8FAFC']}
+              colors={[colors.background.primary, colors.tint.coolGray]}
               style={styles.mapInfoCard}
             >
               <View style={styles.mapInfoLeft}>
                 <View style={styles.mapInfoIconWrap}>
-                  <Ionicons name="navigate" size={14} color="#FFFFFF" />
+                  <Ionicons name="navigate" size={14} color={colors.background.primary} />
                 </View>
                 <View>
                   <Text style={styles.mapInfoTitle}>Your Location</Text>
@@ -402,7 +403,7 @@ const NearbyEarnPage = () => {
             <Ionicons
               name="navigate"
               size={14}
-              color="#EF4444"
+              color={colors.error}
               style={{ transform: [{ rotate: '-45deg' }] }}
             />
           </View>
@@ -465,8 +466,8 @@ const NearbyEarnPage = () => {
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-          colors={['#ffcd57']}
-          tintColor="#ffcd57"
+          colors={[colors.lightMustard]}
+          tintColor={colors.lightMustard}
         />
       }
     >
@@ -498,12 +499,12 @@ const NearbyEarnPage = () => {
   // --- Main Render ---
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background.primary} />
 
       {/* Header */}
       <View style={styles.header}>
         <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#1a3a52" />
+          <Ionicons name="arrow-back" size={24} color={colors.nileBlue} />
         </Pressable>
         <Text style={styles.headerTitle}>Earn Near You</Text>
         <View style={styles.headerRight} />
@@ -521,7 +522,7 @@ const NearbyEarnPage = () => {
               <Ionicons
                 name="list"
                 size={16}
-                color={viewMode === 'list' ? '#FFFFFF' : '#6B7280'}
+                color={viewMode === 'list' ? colors.background.primary : colors.neutral[500]}
               />
               <Text
                 style={[styles.toggleText, viewMode === 'list' && styles.toggleTextActive]}
@@ -537,7 +538,7 @@ const NearbyEarnPage = () => {
               <Ionicons
                 name="map"
                 size={16}
-                color={viewMode === 'map' ? '#FFFFFF' : '#6B7280'}
+                color={viewMode === 'map' ? colors.background.primary : colors.neutral[500]}
               />
               <Text
                 style={[styles.toggleText, viewMode === 'map' && styles.toggleTextActive]}
@@ -563,8 +564,8 @@ const NearbyEarnPage = () => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              colors={['#ffcd57']}
-              tintColor="#ffcd57"
+              colors={[colors.lightMustard]}
+              tintColor={colors.lightMustard}
             />
           }
         >
@@ -669,7 +670,7 @@ const styles = StyleSheet.create({
     width: 96,
     height: 96,
     borderRadius: 48,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.lg,
@@ -803,7 +804,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -4,
     right: -4,
-    backgroundColor: '#059669',
+    backgroundColor: colors.successScale[700],
     borderRadius: BorderRadius.sm,
     paddingHorizontal: 5,
     paddingVertical: 2,
@@ -1031,7 +1032,7 @@ const styles = StyleSheet.create({
   markerCashback: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#059669',
+    color: colors.successScale[700],
   },
 
   // Current Location (blue dot)
@@ -1061,10 +1062,10 @@ const styles = StyleSheet.create({
     width: Spacing.base,
     height: Spacing.base,
     borderRadius: BorderRadius.sm,
-    backgroundColor: '#3B82F6',
+    backgroundColor: colors.infoScale[400],
     borderWidth: 3,
     borderColor: Colors.background.primary,
-    shadowColor: '#3B82F6',
+    shadowColor: colors.infoScale[400],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 4,
@@ -1193,15 +1194,15 @@ const styles = StyleSheet.create({
   mapStoreName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   mapStoreDist: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   mapStoreCashback: {
-    backgroundColor: '#ECFDF5',
+    backgroundColor: colors.tint.greenLight,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 8,
@@ -1209,7 +1210,7 @@ const styles = StyleSheet.create({
   mapStoreCashbackText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#059669',
+    color: colors.successScale[700],
   },
 });
 

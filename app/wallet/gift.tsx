@@ -28,13 +28,14 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { generateIdempotencyKey } from '@/utils/idempotencyKey';
 import { handleWalletError, parseWalletError } from '@/utils/walletErrorHandler';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const nuqtaCoinImage = BRAND.COIN_IMAGE;
 
 // Fallback values used while config is loading or if fetch fails
 const FALLBACK_THEMES = [
   { id: 'birthday', emoji: '🎂', label: 'Birthday', colors: ['#FF6B6B', '#FF8E8E'], tags: [] },
-  { id: 'christmas', emoji: '🎄', label: 'Christmas', colors: ['#2ECC71', '#27AE60'], tags: [] },
+  { id: 'christmas', emoji: '🎄', label: 'Christmas', colors: [colors.success, '#27AE60'], tags: [] },
   { id: 'gift', emoji: '🎁', label: 'Gift', colors: ['#9B59B6', '#8E44AD'], tags: [] },
   { id: 'love', emoji: '💝', label: 'Love', colors: ['#E91E63', '#C2185B'], tags: [] },
   { id: 'thanks', emoji: '🙏', label: 'Thanks', colors: ['#00BCD4', '#0097A7'], tags: [] },
@@ -274,7 +275,7 @@ export default function GiftPage() {
           </View>
 
           <View style={styles.successIconContainer}>
-            <Ionicons name="checkmark-circle" size={56} color="#10B981" />
+            <Ionicons name="checkmark-circle" size={56} color={colors.successScale[400]} />
           </View>
           <ThemedText style={styles.successTitle}>Gift Sent Successfully!</ThemedText>
           <ThemedText style={styles.successSubtitle}>
@@ -354,7 +355,7 @@ export default function GiftPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Gift Coins</ThemedText>
           <View style={styles.placeholder} />
@@ -404,7 +405,7 @@ export default function GiftPage() {
           <View style={styles.section}>
             <ThemedText style={styles.sectionTitle}>Recipient Phone Number</ThemedText>
             <View style={[styles.inputContainer, recipientError ? styles.inputContainerError : undefined]}>
-              <Ionicons name="call" size={20} color={recipientError ? '#DC2626' : Colors.text.tertiary} />
+              <Ionicons name="call" size={20} color={recipientError ? colors.error : Colors.text.tertiary} />
               <TextInput
                 style={styles.input}
                 placeholder="Enter phone number"
@@ -422,7 +423,7 @@ export default function GiftPage() {
                 <ActivityIndicator size="small" color={Colors.primary[600]} />
               )}
               {recipientInfo?.exists && !recipientInfo.isSelf && (
-                <Ionicons name="checkmark-circle" size={20} color="#16A34A" />
+                <Ionicons name="checkmark-circle" size={20} color={colors.brand.greenDark} />
               )}
             </View>
             {recipientError ? (
@@ -557,7 +558,7 @@ export default function GiftPage() {
         <View style={styles.buttonContainer}>
           {amount && Number(amount) > walletBalance && (
             <View style={styles.balanceWarning}>
-              <Ionicons name="warning" size={14} color="#DC2626" />
+              <Ionicons name="warning" size={14} color={colors.error} />
               <ThemedText style={styles.balanceWarningText}>
                 Insufficient balance ({walletBalance} {BRAND.CURRENCY_CODE} available)
               </ThemedText>
@@ -572,10 +573,10 @@ export default function GiftPage() {
             disabled={!recipient || !amount || Number(amount) > walletBalance || loading}
           >
             {loading ? (
-              <ActivityIndicator color="#FFF" />
+              <ActivityIndicator color={colors.background.primary} />
             ) : (
               <>
-                <Ionicons name="gift" size={20} color="#FFF" />
+                <Ionicons name="gift" size={20} color={colors.background.primary} />
                 <ThemedText style={styles.sendButtonText}>Send Gift</ThemedText>
               </>
             )}
@@ -607,7 +608,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -627,7 +628,7 @@ const styles = StyleSheet.create({
   },
   balanceChipAmount: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   content: {
@@ -690,16 +691,16 @@ const styles = StyleSheet.create({
   },
   inputContainerError: {
     borderWidth: 1,
-    borderColor: '#DC2626',
+    borderColor: colors.error,
   },
   errorText: {
     ...Typography.caption,
-    color: '#DC2626',
+    color: colors.error,
     marginTop: Spacing.xs,
   },
   recipientName: {
     ...Typography.caption,
-    color: '#16A34A',
+    color: colors.brand.greenDark,
     marginTop: Spacing.xs,
   },
   input: {
@@ -751,7 +752,7 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
   quickAmountTextSelected: {
-    color: '#FFF',
+    color: colors.background.primary,
   },
   messageInput: {
     backgroundColor: Colors.background.primary,
@@ -826,7 +827,7 @@ const styles = StyleSheet.create({
   },
   previewAmount: {
     ...Typography.h2,
-    color: '#FFF',
+    color: colors.background.primary,
     marginBottom: Spacing.sm,
   },
   previewMessage: {
@@ -859,7 +860,7 @@ const styles = StyleSheet.create({
   },
   balanceWarningText: {
     ...Typography.caption,
-    color: '#DC2626',
+    color: colors.error,
   },
   sendButton: {
     flexDirection: 'row',
@@ -875,7 +876,7 @@ const styles = StyleSheet.create({
   },
   sendButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   // Balance coin icon
   balanceCoinIcon: {
@@ -917,7 +918,7 @@ const styles = StyleSheet.create({
   },
   successAmount: {
     ...Typography.h2,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   successMessage: {
     ...Typography.body,
@@ -1016,6 +1017,6 @@ const styles = StyleSheet.create({
   },
   doneButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
 });

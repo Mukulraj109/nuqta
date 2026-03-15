@@ -18,40 +18,41 @@ import { useGamification } from '@/contexts/GamificationContext';
 import { useWalletContext } from '@/contexts/WalletContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
 // Nuqta App Theme Colors
 const COLORS = {
-  primary: '#ffcd57',
+  primary: colors.lightMustard,
   primaryLight: '#ffe082',
-  primaryDark: '#E6B84E',
-  primaryBg: '#dfebf7',
+  primaryDark: colors.brand.goldRich,
+  primaryBg: colors.lavenderMist,
 
-  gold: '#FFC857',
+  gold: colors.brand.goldWarm,
   goldLight: '#FFE4A0',
   goldDark: '#F5A623',
-  goldBg: '#FFFBEB',
+  goldBg: colors.tint.amber,
 
-  amber: '#F59E0B',
-  amberDark: '#D97706',
-  amberBg: '#FEF3C7',
+  amber: colors.warningScale[400],
+  amberDark: colors.warningScale[700],
+  amberBg: colors.tint.amberLight,
 
-  background: '#faf1e0',
-  surface: '#FFFFFF',
+  background: colors.linen,
+  surface: colors.background.primary,
   surfaceSecondary: '#F0F4F8',
 
-  navy: '#1a3a52',
-  text: '#1a3a52',
+  navy: colors.nileBlue,
+  text: colors.nileBlue,
   textSecondary: '#334E68',
   textMuted: '#627D98',
-  textLight: '#9AA7B2',
+  textLight: colors.gray[400],
 
-  border: '#E2E8F0',
-  success: '#22C55E',
-  successBg: '#F0FDF4',
-  error: '#EF4444',
-  errorBg: '#FEF2F2',
+  border: colors.slateLight,
+  success: colors.success,
+  successBg: colors.successScale[50],
+  error: colors.error,
+  errorBg: colors.errorScale[50],
 
   shadow: 'rgba(26, 58, 82, 0.08)',
 };
@@ -381,7 +382,7 @@ const CoinHunt = () => {
                 {[
                   { num: '1', color: COLORS.amber, title: 'Tap coins before they vanish', desc: 'Each coin appears for 2 seconds', icon: 'hand-left' },
                   { num: '2', color: COLORS.gold, title: 'Each coin is worth 5-25 points', desc: 'Bigger coins = more points', icon: 'cash' },
-                  { num: '3', color: '#EC4899', title: 'Collect as many as you can', desc: '30 seconds on the clock!', icon: 'timer' },
+                  { num: '3', color: colors.brand.pink, title: 'Collect as many as you can', desc: '30 seconds on the clock!', icon: 'timer' },
                 ].map((step, idx) => (
                   <View key={idx} style={styles.stepRow}>
                     <View style={[styles.stepBadge, { backgroundColor: `${step.color}15` }]}>
@@ -492,7 +493,7 @@ const CoinHunt = () => {
                   <ConfettiParticle
                     key={i}
                     delay={i * 150}
-                    color={[COLORS.amber, COLORS.gold, '#EC4899', COLORS.primary][i % 4]}
+                    color={[COLORS.amber, COLORS.gold, colors.brand.pink, COLORS.primary][i % 4]}
                   />
                 ))}
               </View>
@@ -544,7 +545,7 @@ const CoinHunt = () => {
               </View>
 
               <View style={styles.statCard}>
-                <View style={[styles.statIconBg, { backgroundColor: '#DBEAFE' }]}>
+                <View style={[styles.statIconBg, { backgroundColor: colors.tint.blueLight }]}>
                   <Ionicons name="time" size={22} color={Colors.info} />
                 </View>
                 <Text style={styles.statValue}>30s</Text>

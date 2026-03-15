@@ -33,6 +33,7 @@ import TrainInfoCard from '../../components/train/TrainInfoCard';
 import TrainAmenities from '../../components/train/TrainAmenities';
 import TrainCancellationPolicy from '../../components/train/TrainCancellationPolicy';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -723,7 +724,7 @@ export default function TrainDetailsPage() {
          
         >
           <LinearGradient
-            colors={['#ffcd57', '#e6b84d']}
+            colors={[colors.lightMustard, '#e6b84d']}
             style={styles.bookButtonGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -1090,7 +1091,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
@@ -1102,7 +1103,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -1158,7 +1159,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: BorderRadius['2xl'],
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.sm,

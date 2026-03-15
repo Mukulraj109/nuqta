@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { RechargeWalletCardProps } from "@/types/profile";
 import { useRegion } from "@/contexts/RegionContext";
 import paymentService from "@/services/paymentService";
+import { colors } from '@/constants/theme';
 
 const RechargeWalletCard: React.FC<RechargeWalletCardProps> = ({
   cashbackText = "Upto 10% cashback on wallet recharge",
@@ -85,10 +86,10 @@ const RechargeWalletCard: React.FC<RechargeWalletCardProps> = ({
       {/* Cashback Banner */}
       <Pressable style={styles.header}>
         <View style={styles.headerLeft}>
-          <Ionicons name="gift-outline" size={16} color="#1a3a52" />
+          <Ionicons name="gift-outline" size={16} color={colors.nileBlue} />
           <Text style={styles.cashback}>{displayCashback}</Text>
         </View>
-        <Ionicons name="chevron-forward" size={16} color="#1a3a52" />
+        <Ionicons name="chevron-forward" size={16} color={colors.nileBlue} />
       </Pressable>
 
       {/* Amount Chips */}
@@ -137,7 +138,7 @@ const RechargeWalletCard: React.FC<RechargeWalletCardProps> = ({
         <TextInput
           style={styles.input}
           placeholder="Enter amount"
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.neutral[400]}
           keyboardType="numeric"
           value={customAmount}
           onChangeText={(text) => {
@@ -152,7 +153,7 @@ const RechargeWalletCard: React.FC<RechargeWalletCardProps> = ({
 
       {/* Payment Methods Info */}
       <View style={styles.paymentInfoRow}>
-        <Ionicons name="shield-checkmark-outline" size={14} color="#6B7280" />
+        <Ionicons name="shield-checkmark-outline" size={14} color={colors.neutral[500]} />
         <Text style={styles.paymentText}>
           Recharge using UPI, Debit/Credit, Wallet, Netbanking
         </Text>
@@ -165,10 +166,10 @@ const RechargeWalletCard: React.FC<RechargeWalletCardProps> = ({
         disabled={!isValid || isLoading}
       >
         {isLoading ? (
-          <ActivityIndicator size="small" color="#fff" />
+          <ActivityIndicator size="small" color={colors.background.primary} />
         ) : (
           <View style={styles.buttonContent}>
-            <Ionicons name="wallet-outline" size={18} color="#fff" />
+            <Ionicons name="wallet-outline" size={18} color={colors.background.primary} />
             <Text style={styles.rechargeButtonText}>Add Money</Text>
           </View>
         )}
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginVertical: 12,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: colors.slateLight,
   },
   header: {
     backgroundColor: "#E8EEF4",
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
   },
   cashback: {
     fontSize: 13,
-    color: "#1a3a52",
+    color: colors.nileBlue,
     fontWeight: "600",
     flex: 1,
   },
@@ -218,42 +219,42 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 10,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     borderWidth: 1.5,
-    borderColor: "#D1D5DB",
+    borderColor: colors.neutral[300],
   },
   selectedButton: {
-    backgroundColor: "#1a3a52",
-    borderColor: "#1a3a52",
+    backgroundColor: colors.nileBlue,
+    borderColor: colors.nileBlue,
   },
   amountText: {
-    color: "#374151",
+    color: colors.neutral[700],
     fontSize: 13,
     fontWeight: "600",
   },
   selectedText: {
-    color: "#FFFFFF",
+    color: colors.background.primary,
   },
   inputWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: "#D1D5DB",
+    borderColor: colors.neutral[300],
     paddingHorizontal: 14,
     marginBottom: 10,
   },
   inputPrefix: {
     fontSize: 15,
     fontWeight: "700",
-    color: "#1a3a52",
+    color: colors.nileBlue,
     marginRight: 6,
   },
   input: {
     flex: 1,
     paddingVertical: 11,
-    color: "#1F2937",
+    color: colors.neutral[800],
     fontSize: 15,
     fontWeight: "600",
   },
@@ -265,10 +266,10 @@ const styles = StyleSheet.create({
   },
   paymentText: {
     fontSize: 11,
-    color: "#6B7280",
+    color: colors.neutral[500],
   },
   rechargeButton: {
-    backgroundColor: "#1a3a52",
+    backgroundColor: colors.nileBlue,
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: "center",
@@ -279,7 +280,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   rechargeButtonText: {
-    color: "#FFFFFF",
+    color: colors.background.primary,
     fontSize: 15,
     fontWeight: "700",
   },

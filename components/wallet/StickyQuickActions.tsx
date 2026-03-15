@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface QuickAction {
   id: string;
@@ -18,12 +19,12 @@ interface QuickAction {
 }
 
 const ACTIONS: QuickAction[] = [
-  { id: 'transfer', icon: 'swap-horizontal', label: 'Transfer', route: '/wallet/transfer', color: '#6366F1' },
-  { id: 'gift', icon: 'gift', label: 'Gift', route: '/wallet/gift', color: '#EC4899' },
-  { id: 'expiry', icon: 'time', label: 'Expiry', route: '/wallet/expiry-tracker', color: '#F59E0B' },
-  { id: 'gift-cards', icon: 'card', label: 'Gift Cards', route: '/wallet/gift-cards', color: '#ffcd57' },
-  { id: 'drops', icon: 'calendar', label: 'Drops', route: '/wallet/scheduled-drops', color: '#8B5CF6' },
-  { id: 'transactions', icon: 'receipt', label: 'History', route: '/earnings-history', color: '#1a3a52' },
+  { id: 'transfer', icon: 'swap-horizontal', label: 'Transfer', route: '/wallet/transfer', color: colors.brand.indigo },
+  { id: 'gift', icon: 'gift', label: 'Gift', route: '/wallet/gift', color: colors.brand.pink },
+  { id: 'expiry', icon: 'time', label: 'Expiry', route: '/wallet/expiry-tracker', color: colors.warning },
+  { id: 'gift-cards', icon: 'card', label: 'Gift Cards', route: '/wallet/gift-cards', color: colors.lightMustard },
+  { id: 'drops', icon: 'calendar', label: 'Drops', route: '/wallet/scheduled-drops', color: colors.brand.purpleLight },
+  { id: 'transactions', icon: 'receipt', label: 'History', route: '/earnings-history', color: colors.nileBlue },
 ];
 
 interface StickyQuickActionsProps {

@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 /**
  * QuantitySelector Component
@@ -104,7 +105,7 @@ function QuantitySelector({
         <Ionicons
           name="remove"
           size={size === 'small' ? 14 : 18}
-          color={isDecreaseDisabled ? 'rgba(0, 192, 106, 0.4)' : '#ffcd57'}
+          color={isDecreaseDisabled ? 'rgba(0, 192, 106, 0.4)' : colors.lightMustard}
         />
       </Pressable>
 
@@ -150,7 +151,7 @@ function QuantitySelector({
         <Ionicons
           name="add"
           size={size === 'small' ? 14 : 18}
-          color={isIncreaseDisabled ? 'rgba(0, 192, 106, 0.4)' : '#ffcd57'}
+          color={isIncreaseDisabled ? 'rgba(0, 192, 106, 0.4)' : colors.lightMustard}
         />
       </Pressable>
     </View>
@@ -179,8 +180,8 @@ const stylesNormal = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#ffcd57',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.lightMustard,
+    backgroundColor: colors.background.primary,
   },
   decreaseButton: {
     // Base style, specific styles applied via array
@@ -198,7 +199,7 @@ const stylesNormal = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1.5,
     borderColor: 'rgba(0, 192, 106, 0.2)',
   },
@@ -208,7 +209,7 @@ const stylesNormal = StyleSheet.create({
   quantityText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textAlign: 'center',
   },
   quantityTextDisabled: {
@@ -239,8 +240,8 @@ const stylesSmall = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: '#ffcd57',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.lightMustard,
+    backgroundColor: colors.background.primary,
   },
   decreaseButton: {
     // Base style, specific styles applied via array
@@ -258,7 +259,7 @@ const stylesSmall = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
     borderColor: 'rgba(0, 192, 106, 0.2)',
     paddingHorizontal: 8,
@@ -269,7 +270,7 @@ const stylesSmall = StyleSheet.create({
   quantityText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textAlign: 'center',
   },
   quantityTextDisabled: {

@@ -22,6 +22,7 @@ import { BackendBrandedCoin } from '@/services/walletApi';
 import { useWalletContext } from '@/contexts/WalletContext';
 import { showToast } from '@/components/common/ToastManager';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Store coin display item (mapped from BackendBrandedCoin)
 interface StoreCoinItem {
@@ -262,7 +263,7 @@ export default function StorePromoCoinsPage() {
                   </View>
 
                   <View style={styles.coinBadge}>
-                    <Ionicons name="diamond" size={16} color="#FFD700" />
+                    <Ionicons name="diamond" size={16} color={colors.brand.goldBright} />
                     <ThemedText style={styles.coinBadgeText}>
                       {storeCoin.amount}
                     </ThemedText>
@@ -387,7 +388,7 @@ const styles = StyleSheet.create({
   infoBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     padding: Spacing.md,
     borderRadius: BorderRadius.sm,
     marginBottom: Spacing.lg,
@@ -464,7 +465,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius['2xl'],
   },
   storeLogoPlaceholder: {
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -485,7 +486,7 @@ const styles = StyleSheet.create({
   coinBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.xl,

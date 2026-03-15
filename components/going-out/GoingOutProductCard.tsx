@@ -14,6 +14,7 @@ import { GoingOutProductCardProps } from '@/types/going-out.types';
 import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDataNormalizer';
 import { formatPrice } from '@/utils/priceFormatter';
 import { useCart } from '@/contexts/CartContext';
+import { colors } from '@/constants/theme';
 
 function _GoingOutProductCardInner({
   product,
@@ -188,7 +189,7 @@ function _GoingOutProductCardInner({
               <Ionicons 
                 name="image-outline" 
                 size={48} 
-                color="#D1D5DB" 
+                color={colors.neutral[300]} 
               />
               <ThemedText style={styles.placeholderText}>
                 No Image
@@ -201,7 +202,7 @@ function _GoingOutProductCardInner({
               <Ionicons 
                 name="hourglass-outline" 
                 size={24} 
-                color="#8B5CF6" 
+                color={colors.brand.purpleLight} 
               />
             </View>
           )}
@@ -209,7 +210,7 @@ function _GoingOutProductCardInner({
           {/* Cashback Badge */}
           {product.cashback?.percentage && (
             <LinearGradient
-              colors={['#8B5CF6', '#A855F7']}
+              colors={[colors.brand.purpleLight, colors.brand.purpleMedium]}
               style={styles.cashbackBadge}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
@@ -249,7 +250,7 @@ function _GoingOutProductCardInner({
             <Ionicons
               name={isInWishlist ? "heart" : "heart-outline"}
               size={16}
-              color={isInWishlist ? "#EF4444" : "#6B7280"}
+              color={isInWishlist ? colors.error : colors.neutral[500]}
             />
           </Pressable>
         </View>
@@ -271,7 +272,7 @@ function _GoingOutProductCardInner({
           {/* Rating */}
           {normalizedRating.value !== null && (
             <View style={styles.ratingContainer}>
-              <Ionicons name="star" size={12} color="#F59E0B" />
+              <Ionicons name="star" size={12} color={colors.warningScale[400]} />
               <ThemedText style={styles.ratingText}>
                 {normalizedRating.value.toFixed(1)}
               </ThemedText>
@@ -308,7 +309,7 @@ function _GoingOutProductCardInner({
                     onPress={handleDecreaseQuantity}
                    
                   >
-                    <Ionicons name="remove" size={16} color="#FFFFFF" />
+                    <Ionicons name="remove" size={16} color={colors.background.primary} />
                   </Pressable>
 
                   <View style={styles.quantityDisplay}>
@@ -320,7 +321,7 @@ function _GoingOutProductCardInner({
                     onPress={handleIncreaseQuantity}
                    
                   >
-                    <Ionicons name="add" size={16} color="#FFFFFF" />
+                    <Ionicons name="add" size={16} color={colors.background.primary} />
                   </Pressable>
                 </View>
               ) : (
@@ -333,7 +334,7 @@ function _GoingOutProductCardInner({
                   accessibilityRole="button"
                   accessibilityHint="Double tap to add this product to your shopping cart"
                 >
-                  <Ionicons name="cart-outline" size={16} color="#FFFFFF" />
+                  <Ionicons name="cart-outline" size={16} color={colors.background.primary} />
                   <ThemedText style={styles.addToCartText}>Add to Cart</ThemedText>
                 </Pressable>
               )}
@@ -358,11 +359,11 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#F1F5F9',
+    borderColor: colors.tint.slate,
     height: 380, // Fixed height for all cards
     ...Platform.select({
       ios: {
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     position: 'relative',
     height: 160,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
@@ -393,7 +394,7 @@ const styles = StyleSheet.create({
   imagePlaceholder: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     justifyContent: 'center',
     alignItems: 'center',
     borderTopLeftRadius: 20,
@@ -401,7 +402,7 @@ const styles = StyleSheet.create({
   },
   placeholderText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
     marginTop: 8,
   },
@@ -428,7 +429,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#8B5CF6',
+        shadowColor: colors.brand.purpleLight,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -442,7 +443,7 @@ const styles = StyleSheet.create({
     }),
   },
   cashbackText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '700',
     textAlign: 'center',
@@ -452,13 +453,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     left: 8,
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 4,
   },
   newBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 9,
     fontWeight: '700',
   },
@@ -466,13 +467,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     left: 8,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 4,
   },
   discountBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 9,
     fontWeight: '700',
   },
@@ -512,7 +513,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
     lineHeight: 20,
     letterSpacing: -0.2,
@@ -520,7 +521,7 @@ const styles = StyleSheet.create({
   },
   brandName: {
     fontSize: 12,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '500',
     marginBottom: 6,
     minHeight: 16, // Ensure consistent height
@@ -534,12 +535,12 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginLeft: 4,
   },
   ratingCount: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 4,
     fontWeight: '500',
   },
@@ -552,26 +553,26 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginRight: 8,
     letterSpacing: -0.3,
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   addToCartButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderRadius: 10,
     ...Platform.select({
       ios: {
-        shadowColor: '#00C06A',
+        shadowColor: colors.brand.green,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
@@ -586,7 +587,7 @@ const styles = StyleSheet.create({
   },
   addToCartText: {
     fontSize: 12,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
     marginLeft: 6,
     letterSpacing: 0.2,
@@ -595,7 +596,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     borderRadius: 10,
     paddingVertical: 6,
     paddingHorizontal: 8,
@@ -615,11 +616,11 @@ const styles = StyleSheet.create({
   },
   quantityText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   outOfStockContainer: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderRadius: 6,
@@ -627,7 +628,7 @@ const styles = StyleSheet.create({
   },
   outOfStockText: {
     fontSize: 10,
-    color: '#DC2626',
+    color: colors.error,
     fontWeight: '600',
   },
 });

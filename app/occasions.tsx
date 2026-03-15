@@ -21,13 +21,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import categoryMetadataApi, { Occasion } from '@/services/categoryMetadataApi';
 import { getOccasionsForCategory, getAllOccasions } from '@/data/categoryDummyData';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
 
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#0B2240',
+  white: colors.background.primary,
+  navy: colors.brand.navyDark,
   gray50: Colors.background.secondary,
   gray100: Colors.background.secondary,
   gray200: Colors.border.default,
@@ -48,13 +49,13 @@ const getTagColor = (tag: string | null) => {
     case 'Premium':
       return { bg: Colors.brand.purpleLight + '20', text: Colors.brand.purple };
     case 'Special':
-      return { bg: '#faf1e0', text: Colors.nileBlue };
+      return { bg: colors.linen, text: Colors.nileBlue };
     case 'Student':
-      return { bg: '#CFFAFE', text: '#0891B2' };
+      return { bg: '#CFFAFE', text: colors.cyanDark };
     case 'Popular':
-      return { bg: '#FCE7F3', text: '#DB2777' };
+      return { bg: colors.pinkMist, text: colors.deepPink };
     case 'Festive':
-      return { bg: '#FFEDD5', text: '#EA580C' };
+      return { bg: '#FFEDD5', text: colors.brand.orangeDark };
     default:
       return { bg: Colors.background.secondary, text: Colors.text.tertiary };
   }

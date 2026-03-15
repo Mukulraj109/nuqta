@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface DeliveryInfo {
   estimatedDate: string;
@@ -81,7 +82,7 @@ function DeliveryEstimator({ productId, onCheckDelivery }: DeliveryEstimatorProp
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color="#ffffff" size="small" />
+            <ActivityIndicator color={colors.background.primary} size="small" />
           ) : (
             <Text style={styles.buttonText}>Check</Text>
           )}
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 14,
     color: '#1a1a1a',
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.background.primary,
   },
   checkButton: {
     height: 44,
@@ -152,11 +153,11 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffffff',
+    color: colors.background.primary,
   },
   error: {
     fontSize: 12,
-    color: '#dc2626',
+    color: colors.error,
     marginTop: 8,
   },
   infoContainer: {
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
   },
   charge: {
     fontSize: 13,
-    color: '#666666',
+    color: colors.midGray,
     marginBottom: 6,
   },
   freeDelivery: {

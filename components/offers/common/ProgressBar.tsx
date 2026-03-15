@@ -8,6 +8,7 @@ import React from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { BorderRadius } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface ProgressBarProps {
   progress: number; // 0-100
@@ -34,8 +35,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   // Determine fill color based on progress
   const getProgressColor = () => {
     if (fillColor) return fillColor;
-    if (clampedProgress >= 80) return '#EF4444'; // Red - almost gone
-    if (clampedProgress >= 60) return '#F59E0B'; // Amber - selling fast
+    if (clampedProgress >= 80) return colors.error; // Red - almost gone
+    if (clampedProgress >= 60) return colors.warningScale[400]; // Amber - selling fast
     return theme.colors.accent.primary; // Green - plenty left
   };
 

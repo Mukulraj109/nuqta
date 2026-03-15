@@ -14,6 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { EventSortOption } from '@/hooks/useEventsPage';
+import { colors } from '@/constants/theme';
 
 interface SortOption {
   id: EventSortOption;
@@ -94,7 +95,7 @@ const EventsSortModal: React.FC<EventsSortModalProps> = ({
               style={styles.closeButton}
               accessibilityLabel="Close sort options"
             >
-              <Ionicons name="close" size={24} color="#6B7280" />
+              <Ionicons name="close" size={24} color={colors.neutral[500]} />
             </Pressable>
           </View>
 
@@ -124,7 +125,7 @@ const EventsSortModal: React.FC<EventsSortModalProps> = ({
                       <Ionicons
                         name={option.icon}
                         size={18}
-                        color={isActive ? '#FFFFFF' : '#6B7280'}
+                        color={isActive ? colors.background.primary : colors.neutral[500]}
                       />
                     </View>
                     <View style={styles.optionText}>
@@ -145,7 +146,7 @@ const EventsSortModal: React.FC<EventsSortModalProps> = ({
                     <Ionicons
                       name="checkmark-circle"
                       size={22}
-                      color="#1a3a52"
+                      color={colors.nileBlue}
                     />
                   )}
                 </Pressable>
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingTop: 20,
@@ -179,12 +180,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   closeButton: {
     padding: 4,
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 14,
     borderRadius: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   optionItemActive: {
     backgroundColor: 'rgba(0, 192, 106, 0.1)',
@@ -213,13 +214,13 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
   },
   optionIconActive: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
   },
   optionText: {
     flex: 1,
@@ -227,15 +228,15 @@ const styles = StyleSheet.create({
   optionLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
   },
   optionLabelActive: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   optionDescription: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

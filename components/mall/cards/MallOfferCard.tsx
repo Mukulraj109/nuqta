@@ -17,6 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallOffer, OfferBadge } from '../../../types/mall.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface MallOfferCardProps {
   offer: MallOffer;
@@ -25,10 +26,10 @@ interface MallOfferCardProps {
 }
 
 const BADGE_COLORS: Record<OfferBadge, { bg: string; text: string }> = {
-  'limited-time': { bg: '#ffd7b5', text: '#92400E' },
-  'mall-exclusive': { bg: '#1a3a52', text: '#FFFFFF' },
-  'flash-sale': { bg: '#EF4444', text: '#FFFFFF' },
-  'best-deal': { bg: '#1a3a52', text: '#FFFFFF' },
+  'limited-time': { bg: colors.lightPeach, text: colors.brand.amberDark },
+  'mall-exclusive': { bg: colors.nileBlue, text: colors.background.primary },
+  'flash-sale': { bg: colors.error, text: colors.background.primary },
+  'best-deal': { bg: colors.nileBlue, text: colors.background.primary },
 };
 
 // Helper to check if string is a valid image URL
@@ -78,7 +79,7 @@ const MallOfferCard: React.FC<MallOfferCardProps> = ({
             />
           ) : (
             <LinearGradient
-              colors={['#1a3a52', '#234b68']}
+              colors={[colors.nileBlue, colors.brand.nileBlueLight]}
               style={styles.offerImage}
             />
           )}
@@ -87,9 +88,9 @@ const MallOfferCard: React.FC<MallOfferCardProps> = ({
           {offer.badge && (
             <View style={[
               styles.badge,
-              { backgroundColor: BADGE_COLORS[offer.badge]?.bg || '#6B7280' }
+              { backgroundColor: BADGE_COLORS[offer.badge]?.bg || colors.neutral[500] }
             ]}>
-              <Text style={[styles.badgeText, { color: BADGE_COLORS[offer.badge]?.text || '#FFFFFF' }]}>
+              <Text style={[styles.badgeText, { color: BADGE_COLORS[offer.badge]?.text || colors.background.primary }]}>
                 {offer.badge === 'mall-exclusive' ? 'Mall Exclusive' :
                  offer.badge === 'limited-time' ? 'Limited Time' :
                  offer.badge === 'flash-sale' ? 'Flash Sale' : 'Best Deal'}
@@ -134,7 +135,7 @@ const MallOfferCard: React.FC<MallOfferCardProps> = ({
             </Text>
             <Pressable style={styles.shopButton} onPress={() => onPress(offer)}>
               <Text style={styles.shopButtonText}>Shop Now</Text>
-              <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={14} color={colors.background.primary} />
             </Pressable>
           </View>
         </View>
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
     marginRight: 14,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     ...Platform.select({
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   detailsContainer: {
     padding: 14,
@@ -197,11 +198,11 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     flex: 1,
   },
   exclusiveTag: {
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
@@ -209,12 +210,12 @@ const styles = StyleSheet.create({
   exclusiveTagText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   offerTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
     lineHeight: 20,
   },
@@ -227,10 +228,10 @@ const styles = StyleSheet.create({
   valueText: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   coinsContainer: {
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 4,
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
   coinsText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   footerRow: {
     flexDirection: 'row',
@@ -247,12 +248,12 @@ const styles = StyleSheet.create({
   },
   validityText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   shopButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 8,
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
   shopButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

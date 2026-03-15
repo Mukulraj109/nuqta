@@ -1,6 +1,7 @@
 // StoreProducts.tsx - Premium Glassmorphism Design
 // Green & Gold color theme following TASK.md
 
+import { colors } from '@/constants/theme';
 import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
@@ -45,15 +46,15 @@ const GLASS = {
 
 const COLORS = {
   primary: Colors.gold,
-  primaryDark: '#E6B84E',   // Mustard Dark — brand-specific
-  gold: '#FFC857',          // Sun Gold — brand-specific
+  primaryDark: colors.brand.goldRich,   // Mustard Dark — brand-specific
+  gold: colors.brand.goldWarm,          // Sun Gold — brand-specific
   goldDark: '#E5A500',      // Darker Gold — brand-specific
   navy: Colors.nileBlue,
   textPrimary: Colors.text.primary,
   textSecondary: Colors.text.tertiary,
   white: Colors.background.primary,
-  surface: '#faf1e0',       // Brand linen — keep unique
-  discount: '#ffd7b5',      // Light Peach for discount badges — brand-specific
+  surface: colors.linen,       // Brand linen — keep unique
+  discount: colors.lightPeach,      // Light Peach for discount badges — brand-specific
 };
 
 interface StoreProductsProps {

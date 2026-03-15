@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable, Platform, ScrollView } from 'react-n
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import SkeletonLoader from '@/components/common/SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 interface StoreVisitLoadingSkeletonProps {
   onBackPress: () => void;
@@ -13,7 +14,7 @@ const StoreVisitLoadingSkeleton: React.FC<StoreVisitLoadingSkeletonProps> = ({ o
     <View style={styles.container}>
       {/* Header */}
       <LinearGradient
-        colors={['#8B5CF6', '#7C3AED']}
+        colors={[colors.brand.purpleLight, colors.brand.purple]}
         style={styles.header}
       >
         <Pressable onPress={onBackPress} style={styles.backButton}>
@@ -118,7 +119,7 @@ const StoreVisitLoadingSkeleton: React.FC<StoreVisitLoadingSkeletonProps> = ({ o
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   header: {
     paddingTop: Platform.OS === 'ios' ? 50 : 25,
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: Platform.OS === 'ios' ? 34 : 16,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -3 },
     shadowOpacity: 0.1,

@@ -22,6 +22,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import offerCommentApi, { CommentableOffer, MyCommentItem } from '@/services/offerCommentApi';
 import { platformAlert } from '@/utils/platformAlert';
+import { colors } from '@/constants/theme';
 
 type TabType = 'offers' | 'my-comments';
 
@@ -199,7 +200,7 @@ export default function OfferCommentsPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Comment on Offers</ThemedText>
           <View style={styles.headerRight}>
@@ -283,10 +284,10 @@ export default function OfferCommentsPage() {
                   disabled={commentText.trim().length < 20 || submitting}
                 >
                   {submitting ? (
-                    <ActivityIndicator size="small" color="#FFF" />
+                    <ActivityIndicator size="small" color={colors.background.primary} />
                   ) : (
                     <>
-                      <Ionicons name="send" size={16} color="#FFF" />
+                      <Ionicons name="send" size={16} color={colors.background.primary} />
                       <ThemedText style={styles.submitButtonText}>Submit</ThemedText>
                     </>
                   )}
@@ -336,7 +337,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   headerRight: {
     flexDirection: 'row',
@@ -509,7 +510,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   myCommentCard: {
     backgroundColor: Colors.background.primary,

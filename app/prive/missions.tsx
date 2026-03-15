@@ -10,6 +10,7 @@ import { PriveProgressRing } from '@/components/prive/PriveProgressRing';
 import priveApi from '@/services/priveApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type Tab = 'available' | 'active' | 'completed';
 
@@ -87,7 +88,7 @@ export default function MissionsScreen() {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <CardGridSkeleton />
       </View>
     );
@@ -96,7 +97,7 @@ export default function MissionsScreen() {
   if (error && !available.length && !active.length && !completed.length) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 }}>
           <Text style={{ color: PRIVE_COLORS.status.error, fontSize: 14, textAlign: 'center', marginBottom: 16 }}>{error}</Text>
           <Pressable
@@ -112,7 +113,7 @@ export default function MissionsScreen() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+      <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
 
       {/* Tab Switcher */}
       <View style={styles.tabBar}>

@@ -10,6 +10,7 @@ import { Colors } from '@/constants/DesignSystem';
 import { PriveEmptyState } from '@/components/prive/PriveEmptyState';
 import priveApi from '@/services/priveApi';
 import { NotificationListSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 interface NotificationItem {
   id: string;
@@ -102,7 +103,7 @@ export default function NotificationsScreen() {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <NotificationListSkeleton />
       </View>
     );
@@ -112,7 +113,7 @@ export default function NotificationsScreen() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+      <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
 
       {/* Urgency Banner */}
       {counts.critical > 0 && (

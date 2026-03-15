@@ -10,6 +10,7 @@ import React from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 export interface ProductActionsProps {
   isOutOfStock: boolean;
@@ -57,7 +58,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
           accessibilityHint="Double tap to subscribe to notifications when this product is available"
           accessibilityState={{ disabled: subscribing }}
         >
-          <Ionicons name="notifications-outline" size={18} color="#1a3a52" />
+          <Ionicons name="notifications-outline" size={18} color={colors.nileBlue} />
           <ThemedText style={styles.notifyMeText}>
             {subscribing ? 'Subscribing...' : 'Notify Me'}
           </ThemedText>
@@ -82,7 +83,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
                 : 'Double tap to remove product from cart'
             }
           >
-            <Ionicons name="remove" size={18} color="#FFFFFF" />
+            <Ionicons name="remove" size={18} color={colors.background.primary} />
           </Pressable>
 
           <View
@@ -110,7 +111,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
             }
             accessibilityState={{ disabled: quantityInCart >= stock }}
           >
-            <Ionicons name="add" size={18} color="#FFFFFF" />
+            <Ionicons name="add" size={18} color={colors.background.primary} />
           </Pressable>
         </View>
       ) : (
@@ -126,7 +127,7 @@ const ProductActions: React.FC<ProductActionsProps> = ({
           accessibilityHint="Double tap to add this product to your shopping cart"
           accessibilityState={{ disabled: !canAddToCart }}
         >
-          <Ionicons name="cart" size={18} color="#FFFFFF" />
+          <Ionicons name="cart" size={18} color={colors.background.primary} />
           <ThemedText style={styles.addToCartText}>Add to Cart</ThemedText>
         </Pressable>
       )}
@@ -146,21 +147,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,
   },
   addToCartText: {
     fontSize: 13,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   quantityControls: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     borderRadius: 8,
     paddingVertical: 6,
     paddingHorizontal: 4,
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
   },
   quantityText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   quantityButtonDisabled: {
@@ -189,23 +190,23 @@ const styles = StyleSheet.create({
   },
   addToCartButtonDisabled: {
     opacity: 0.5,
-    backgroundColor: '#A78BFA',
+    backgroundColor: colors.brand.purpleSoft,
   },
   notifyMeButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,
     borderWidth: 1.5,
-    borderColor: '#1a3a52',
+    borderColor: colors.nileBlue,
   },
   notifyMeText: {
     fontSize: 13,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
   },
   notifyMeButtonDisabled: {

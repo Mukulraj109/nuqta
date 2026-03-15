@@ -21,6 +21,7 @@ import ordersApi, { Order } from '@/services/ordersApi';
 import { useRegion } from '@/contexts/RegionContext';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const INCOMPLETE_STATUSES = ['pending', 'payment_failed', 'cancelled', 'payment_pending'];
 
 const IncompleteTransactionsPage = () => {

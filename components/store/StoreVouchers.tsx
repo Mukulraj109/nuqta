@@ -13,6 +13,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import storeVouchersApi, { StoreVoucher } from '@/services/storeVouchersApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface StoreVouchersProps {
   storeId: string;
@@ -129,7 +130,7 @@ const StoreVouchers: React.FC<StoreVouchersProps> = ({
       <View style={styles.container}>
         <Text style={styles.sectionTitle}>Available Vouchers</Text>
         <View style={styles.emptyState}>
-          <Ionicons name="ticket-outline" size={48} color="#D1D5DB" />
+          <Ionicons name="ticket-outline" size={48} color={colors.neutral[300]} />
           <Text style={styles.emptyText}>No vouchers available</Text>
           <Text style={styles.emptySubtext}>Check back later for new offers</Text>
         </View>
@@ -175,7 +176,7 @@ const StoreVouchers: React.FC<StoreVouchersProps> = ({
                 {/* Min Purchase */}
                 {voucher.minBillAmount > 0 && (
                   <View style={styles.minPurchaseContainer}>
-                    <Ionicons name="cart-outline" size={14} color="#6B7280" />
+                    <Ionicons name="cart-outline" size={14} color={colors.neutral[500]} />
                     <Text style={styles.minPurchaseText}>
                       Min purchase: {currencySymbol}{voucher.minBillAmount}
                     </Text>
@@ -187,7 +188,7 @@ const StoreVouchers: React.FC<StoreVouchersProps> = ({
                   <Ionicons
                     name="time-outline"
                     size={14}
-                    color={isExpiringSoon ? '#EF4444' : '#6B7280'}
+                    color={isExpiringSoon ? colors.error : colors.neutral[500]}
                   />
                   <Text style={[styles.expiryText, isExpiringSoon && styles.expiryTextUrgent]}>
                     {formatExpiry(voucher.validUntil)}
@@ -197,7 +198,7 @@ const StoreVouchers: React.FC<StoreVouchersProps> = ({
                 {/* Terms */}
                 {voucher.restrictions && (
                   <View style={styles.termsContainer}>
-                    <Ionicons name="information-circle-outline" size={12} color="#9CA3AF" />
+                    <Ionicons name="information-circle-outline" size={12} color={colors.neutral[400]} />
                     <Text style={styles.termsText} numberOfLines={1}>
                       {voucher.restrictions.isOfflineOnly ? 'Offline only' : 'Online & offline'}
                       {voucher.restrictions.singleVoucherPerBill ? ' • One per bill' : ''}
@@ -217,7 +218,7 @@ const StoreVouchers: React.FC<StoreVouchersProps> = ({
                
               >
                 {isClaiming ? (
-                  <ActivityIndicator color="#FFFFFF" size="small" />
+                  <ActivityIndicator color={colors.background.primary} size="small" />
                 ) : (
                   <Text style={styles.claimButtonText}>
                     {voucher.isAssigned ? 'Claimed' : 'Claim Now'}
@@ -254,12 +255,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   voucherCount: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -267,7 +268,7 @@ const styles = StyleSheet.create({
   },
   voucherCard: {
     width: 280,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     shadowColor: '#000',
@@ -276,10 +277,10 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
   },
   discountBadge: {
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
   voucherContent: {
     marginBottom: 12,
@@ -297,12 +298,12 @@ const styles = StyleSheet.create({
   voucherName: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 6,
   },
   voucherDescription: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
     marginBottom: 8,
   },
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
   },
   minPurchaseText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   expiryContainer: {
     flexDirection: 'row',
@@ -323,17 +324,17 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   expiryUrgent: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
   },
   expiryText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   expiryTextUrgent: {
-    color: '#EF4444',
+    color: colors.error,
     fontWeight: '600',
   },
   termsContainer: {
@@ -343,21 +344,21 @@ const styles = StyleSheet.create({
   },
   termsText: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   claimButton: {
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',
   },
   claimButtonDisabled: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   claimButtonText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
   codeContainer: {
     flexDirection: 'row',
@@ -366,17 +367,17 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.gray[200],
     gap: 6,
   },
   codeLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   codeText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   // Empty State
   emptyState: {
@@ -387,21 +388,21 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 12,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 4,
   },
   // Skeleton
   skeletonCard: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
   },
   skeletonLine: {
     height: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.gray[200],
     borderRadius: 6,
     marginBottom: 8,
   },

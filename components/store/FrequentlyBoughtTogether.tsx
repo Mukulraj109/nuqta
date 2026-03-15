@@ -17,6 +17,7 @@ import ProductVariantModal, { VariantSelection } from '@/components/cart/Product
 import productsService from '@/services/productsApi';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 export interface BundleProduct extends ProductItem {
   bundleDiscount?: number; // Additional discount when bundled
@@ -405,7 +406,7 @@ function FrequentlyBoughtTogether({
       <View style={styles.container}>
         <Text style={styles.title}>{sectionTitle}</Text>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#ffcd57" />
+          <ActivityIndicator size="large" color={colors.lightMustard} />
           <Text style={styles.loadingText}>Loading products...</Text>
         </View>
       </View>
@@ -423,7 +424,7 @@ function FrequentlyBoughtTogether({
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Ionicons name={storeId ? "cube" : "gift"} size={20} color="#ffcd57" />
+          <Ionicons name={storeId ? "cube" : "gift"} size={20} color={colors.lightMustard} />
           <Text style={styles.title}>{sectionTitle}</Text>
         </View>
         {savings > 0 && (
@@ -453,7 +454,7 @@ function FrequentlyBoughtTogether({
               isCurrentProduct={true}
             />
             <View style={styles.plusIconContainer}>
-              <Ionicons name="add" size={18} color="#9CA3AF" />
+              <Ionicons name="add" size={18} color={colors.neutral[400]} />
             </View>
           </>
         )}
@@ -469,7 +470,7 @@ function FrequentlyBoughtTogether({
             />
             {index < bundleProducts.length - 1 && (
               <View style={styles.plusIconContainer}>
-                <Ionicons name="add" size={18} color="#9CA3AF" />
+                <Ionicons name="add" size={18} color={colors.neutral[400]} />
               </View>
             )}
           </React.Fragment>
@@ -492,7 +493,7 @@ function FrequentlyBoughtTogether({
 
         {savings > 0 && (
           <View style={styles.savingsRow}>
-            <Ionicons name="pricetag" size={14} color="#ffcd57" />
+            <Ionicons name="pricetag" size={14} color={colors.lightMustard} />
             <Text style={styles.savingsAmount}>
               You save {currencySymbol}{savings.toFixed(0)} ({savingsPercent}% off)
             </Text>
@@ -508,19 +509,19 @@ function FrequentlyBoughtTogether({
        
       >
         <LinearGradient
-          colors={selectedProducts.size === 0 ? ['#D1D5DB', '#9CA3AF'] : ['#ffcd57', '#1a3a52']}
+          colors={selectedProducts.size === 0 ? [colors.neutral[300], colors.neutral[400]] : [colors.lightMustard, colors.nileBlue]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.addButtonGradient}
         >
           {addingToCart ? (
             <>
-              <ActivityIndicator size="small" color="#FFFFFF" />
+              <ActivityIndicator size="small" color={colors.background.primary} />
               <Text style={styles.addButtonText}>Adding to Cart...</Text>
             </>
           ) : (
             <>
-              <Ionicons name="cart" size={16} color="#FFFFFF" />
+              <Ionicons name="cart" size={16} color={colors.background.primary} />
               <Text style={styles.addButtonText}>Add All to Cart</Text>
             </>
           )}
@@ -573,7 +574,7 @@ function BundleProductCard({
       {/* Selection Checkbox */}
       <View style={styles.checkboxContainer}>
         <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
-          {isSelected && <Ionicons name="checkmark" size={14} color="#FFFFFF" />}
+          {isSelected && <Ionicons name="checkmark" size={14} color={colors.background.primary} />}
         </View>
       </View>
 
@@ -609,7 +610,7 @@ function BundleProductCard({
         {/* Rating */}
         {product.rating && (
           <View style={styles.ratingContainer}>
-            <Ionicons name="star" size={10} color="#F59E0B" />
+            <Ionicons name="star" size={10} color={colors.warningScale[400]} />
             <Text style={styles.ratingText}>
               {typeof product.rating.value === 'number'
                 ? product.rating.value.toFixed(1)
@@ -641,11 +642,11 @@ function BundleProductCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 12,
     paddingHorizontal: 0,
     borderTopWidth: 0,
-    borderTopColor: '#F9FAFB',
+    borderTopColor: colors.neutral[50],
   },
   header: {
     flexDirection: 'row',
@@ -661,15 +662,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.gray[900],
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 10,
   },
   savingsBadge: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
@@ -677,7 +678,7 @@ const styles = StyleSheet.create({
   savingsText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   loadingContainer: {
     paddingVertical: 30,
@@ -686,7 +687,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   productsContainer: {
@@ -700,10 +701,10 @@ const styles = StyleSheet.create({
   },
   productCard: {
     width: 150,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
     padding: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -712,9 +713,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   productCardSelected: {
-    borderColor: '#ffcd57',
+    borderColor: colors.lightMustard,
     backgroundColor: 'rgba(255, 205, 87, 0.08)',
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOpacity: 0.2,
     elevation: 4,
   },
@@ -729,20 +730,20 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[300],
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkboxSelected: {
-    backgroundColor: '#ffcd57',
-    borderColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
+    borderColor: colors.lightMustard,
   },
   productImageContainer: {
     width: '100%',
     height: 100,
     borderRadius: 8,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     marginBottom: 8,
     position: 'relative',
     overflow: 'hidden',
@@ -755,7 +756,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 6,
     right: 6,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 4,
@@ -763,14 +764,14 @@ const styles = StyleSheet.create({
   currentBadgeText: {
     fontSize: 8,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text.white,
     textTransform: 'uppercase',
   },
   bundleDiscountBadge: {
     position: 'absolute',
     bottom: 6,
     right: 6,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 4,
@@ -778,7 +779,7 @@ const styles = StyleSheet.create({
   bundleDiscountText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
   productInfo: {
     gap: 4,
@@ -786,7 +787,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.gray[900],
     lineHeight: 15,
     height: 30,
   },
@@ -799,12 +800,12 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   productOriginalPrice: {
     fontSize: 11,
     fontWeight: '500',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   ratingContainer: {
@@ -843,11 +844,11 @@ const styles = StyleSheet.create({
   },
   coinEarningsText: {
     fontSize: 10,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '700',
   },
   stockBadge: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -857,10 +858,10 @@ const styles = StyleSheet.create({
   stockText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#DC2626',
+    color: colors.error,
   },
   priceContainer: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 10,
     padding: 12,
     marginTop: 10,
@@ -874,21 +875,21 @@ const styles = StyleSheet.create({
   selectedCountText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#4B5563',
+    color: colors.neutral[600],
   },
   priceColumn: {
     alignItems: 'flex-end',
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
     fontWeight: '500',
   },
   totalPrice: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#111827',
+    color: colors.gray[900],
   },
   savingsRow: {
     flexDirection: 'row',
@@ -897,17 +898,17 @@ const styles = StyleSheet.create({
     marginTop: 6,
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.gray[200],
   },
   savingsAmount: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   addButton: {
     borderRadius: 12,
     overflow: 'hidden',
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.25,
     shadowRadius: 6,
@@ -928,7 +929,7 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text.white,
     letterSpacing: 0.3,
   },
 });

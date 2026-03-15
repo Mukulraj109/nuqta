@@ -25,6 +25,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@
 import realOffersApi from '@/services/realOffersApi';
 import verificationService, { VerificationStatus } from '@/services/verificationApi';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const ZONE_SLUG = 'student';
@@ -304,11 +305,11 @@ export default function StudentZonePage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#3B82F6" translucent />
+      <StatusBar barStyle="light-content" backgroundColor={colors.infoScale[400]} translucent />
 
       {/* Header with Gradient */}
       <LinearGradient
-        colors={['#3B82F6', '#2563EB', '#1D4ED8']}
+        colors={[colors.infoScale[400], colors.brand.blue, '#1D4ED8']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.header}
@@ -320,7 +321,7 @@ export default function StudentZonePage() {
               onPress={() => router.back()}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
 
             <View style={styles.headerTitleContainer}>
@@ -354,7 +355,7 @@ export default function StudentZonePage() {
           >
             <View style={styles.heroContent}>
               <View style={styles.heroIconContainer}>
-                <Ionicons name="school" size={32} color="#60A5FA" />
+                <Ionicons name="school" size={32} color={colors.infoScale[400]} />
               </View>
               <View style={styles.heroTextContainer}>
                 <ThemedText style={styles.heroTitle}>Exclusive Student Discounts</ThemedText>
@@ -379,11 +380,11 @@ export default function StudentZonePage() {
               ) : isPending ? (
                 <View style={styles.verifiedStatus}>
                   <View style={styles.verifiedLeft}>
-                    <Ionicons name="time" size={20} color="#F59E0B" />
-                    <ThemedText style={[styles.verifiedText, { color: '#F59E0B' }]}>Verification Under Review</ThemedText>
+                    <Ionicons name="time" size={20} color={colors.warningScale[400]} />
+                    <ThemedText style={[styles.verifiedText, { color: colors.warningScale[400] }]}>Verification Under Review</ThemedText>
                   </View>
-                  <View style={[styles.activeBadge, { backgroundColor: '#FEF3C7' }]}>
-                    <ThemedText style={[styles.activeBadgeText, { color: '#D97706' }]}>Pending</ThemedText>
+                  <View style={[styles.activeBadge, { backgroundColor: colors.tint.amberLight }]}>
+                    <ThemedText style={[styles.activeBadgeText, { color: colors.warningScale[700] }]}>Pending</ThemedText>
                   </View>
                 </View>
               ) : isRejected ? (
@@ -403,7 +404,7 @@ export default function StudentZonePage() {
               ) : (
                 <View style={styles.unverifiedStatus}>
                   <View style={styles.unverifiedLeft}>
-                    <Ionicons name="alert-circle" size={20} color="#FBBF24" />
+                    <Ionicons name="alert-circle" size={20} color={colors.warningScale[400]} />
                     <ThemedText style={styles.unverifiedText}>Verify to unlock all deals</ThemedText>
                   </View>
                   <Pressable
@@ -422,13 +423,13 @@ export default function StudentZonePage() {
         {/* Quick Stats - Dynamic */}
         <View style={styles.statsContainer}>
           <View style={styles.statCard}>
-            <ThemedText style={[styles.statValue, { color: '#60A5FA' }]}>
+            <ThemedText style={[styles.statValue, { color: colors.infoScale[400] }]}>
               {loading ? '...' : `${stats.totalDeals}+`}
             </ThemedText>
             <ThemedText style={styles.statLabel}>Active Deals</ThemedText>
           </View>
           <View style={styles.statCard}>
-            <ThemedText style={[styles.statValue, { color: '#A78BFA' }]}>
+            <ThemedText style={[styles.statValue, { color: colors.brand.purpleSoft }]}>
               {loading ? '...' : `${stats.maxDiscount}%`}
             </ThemedText>
             <ThemedText style={styles.statLabel}>Max Discount</ThemedText>
@@ -534,7 +535,7 @@ export default function StudentZonePage() {
           disabled={isPending}
         >
           <LinearGradient
-            colors={isPending ? ['#F59E0B', '#D97706'] : Gradients.primary}
+            colors={isPending ? [colors.warningScale[400], colors.warningScale[700]] : Gradients.primary}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.ctaGradient}
@@ -580,7 +581,7 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     ...Typography.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   header: {
     paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight || 0,
@@ -604,7 +605,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...Typography.h3,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   headerSubtitle: {
@@ -692,7 +693,7 @@ const styles = StyleSheet.create({
   },
   activeBadgeText: {
     ...Typography.caption,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   unverifiedStatus: {
@@ -707,17 +708,17 @@ const styles = StyleSheet.create({
   },
   unverifiedText: {
     ...Typography.body,
-    color: '#FBBF24',
+    color: colors.warningScale[400],
   },
   verifyButton: {
-    backgroundColor: '#FBBF24',
+    backgroundColor: colors.warningScale[400],
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.md,
   },
   verifyButtonText: {
     ...Typography.labelSmall,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   statsContainer: {
@@ -767,7 +768,7 @@ const styles = StyleSheet.create({
     gap: Spacing.xs,
   },
   categoryChipActive: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: colors.infoScale[400],
   },
   categoryIcon: {
     fontSize: 16,
@@ -777,7 +778,7 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
   },
   categoryLabelActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   dealsSection: {
     paddingHorizontal: Spacing.base,
@@ -839,7 +840,7 @@ const styles = StyleSheet.create({
   },
   discountText: {
     ...Typography.labelSmall,
-    color: '#3B82F6',
+    color: colors.infoScale[400],
     fontWeight: '700',
   },
   dealDescription: {
@@ -915,7 +916,7 @@ const styles = StyleSheet.create({
   },
   stepNumberText: {
     ...Typography.caption,
-    color: '#3B82F6',
+    color: colors.infoScale[400],
     fontWeight: '700',
   },
   stepText: {
@@ -946,7 +947,7 @@ const styles = StyleSheet.create({
   },
   ctaButtonText: {
     ...Typography.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
 });

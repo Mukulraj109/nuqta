@@ -4,6 +4,7 @@
  */
 
 import React, { memo, useEffect, useRef } from 'react';
+import { colors } from '@/constants/theme';
 import {
   View,
   StyleSheet,
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     ...Platform.select({
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
   imageSkeleton: {
     width: '100%',
     height: CARD_IMAGE_HEIGHT,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   content: {
     padding: 10,
@@ -122,28 +123,28 @@ const styles = StyleSheet.create({
   titleLine1: {
     height: 14,
     width: '90%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 6,
   },
   titleLine2: {
     height: 14,
     width: '60%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 8,
   },
   dateLine: {
     height: 12,
     width: '70%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 8,
   },
   priceLine: {
     height: 16,
     width: '40%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
   },
 });

@@ -40,6 +40,7 @@ import {
 } from '@/types/mode.types';
 import { triggerImpact } from '@/utils/haptics';
 import { Timing } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Mode configurations
 const MODES: ModeConfig[] = [
@@ -47,34 +48,34 @@ const MODES: ModeConfig[] = [
     id: 'near-u',
     label: 'Near U',
     icon: '📍',
-    activeColor: '#ffcd57', // Nuqta Gold
+    activeColor: colors.lightMustard, // Nuqta Gold
     microcopy: 'Save around you',
   },
   {
     id: 'mall',
     label: 'Mall',
     icon: '🛍',
-    activeColor: '#1a3a52', // Nile Blue
+    activeColor: colors.nileBlue, // Nile Blue
     microcopy: 'Curated brands',
   },
   {
     id: 'cash',
     label: 'Cash',
     icon: '💰',
-    activeColor: '#F59E0B', // Orange/Gold
+    activeColor: colors.warningScale[400], // Orange/Gold
     microcopy: 'Cashback deals',
   },
   {
     id: 'prive',
     label: 'Privé',
     icon: '✦',
-    activeColor: '#C9A962', // Gold
+    activeColor: colors.brand.goldAccent, // Gold
     microcopy: 'Exclusive access',
   },
 ];
 
 // Privé gradient colors
-const PRIVE_GRADIENT: [string, string] = ['#1F2937', '#C9A962'];
+const PRIVE_GRADIENT: [string, string] = [colors.neutral[800], colors.brand.goldAccent];
 
 interface ModeSwitcherProps {
   activeMode: ModeId;
@@ -195,8 +196,8 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
   const activeLayout = tabLayouts[activeMode];
 
   // Determine container background based on mode
-  const containerBg = isPriveMode || activeMode === 'prive' ? '#0A0A0A' : '#F3F4F6';
-  const borderColor = isPriveMode || activeMode === 'prive' ? '#2A2A2A' : '#E5E7EB';
+  const containerBg = isPriveMode || activeMode === 'prive' ? colors.midGrayAlt : colors.neutral[100];
+  const borderColor = isPriveMode || activeMode === 'prive' ? '#2A2A2A' : colors.neutral[200];
 
   return (
     <View style={[styles.container, { backgroundColor: containerBg, borderColor }]}>
@@ -278,7 +279,7 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
                 <Ionicons
                   name="lock-closed"
                   size={12}
-                  color={isPriveMode || activeMode === 'prive' ? '#6B7280' : '#9CA3AF'}
+                  color={isPriveMode || activeMode === 'prive' ? colors.neutral[500] : colors.neutral[400]}
                   style={styles.lockIcon}
                 />
               )}
@@ -342,10 +343,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     gap: 6,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     zIndex: 1,
     minHeight: 40,
     ...Platform.select({
@@ -381,17 +382,17 @@ const styles = StyleSheet.create({
   modeLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#6B7280', // Muted gray
+    color: colors.neutral[500], // Muted gray
   },
   modeLabelActive: {
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   modeLabelPrive: {
-    color: '#0A0A0A', // Dark text on gold
+    color: colors.midGrayAlt, // Dark text on gold
   },
   modeLabelLocked: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   modeLabelDarkMode: {
     color: '#A0A0A0',

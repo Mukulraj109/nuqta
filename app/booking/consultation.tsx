@@ -19,19 +19,20 @@ import { ThemedView } from '@/components/ThemedView';
 import storesApi, { Store } from '@/services/storesApi';
 import consultationApi from '@/services/consultationApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
 // Medical consultation types with icons
 const CONSULTATION_TYPES = [
-  { id: 'general', name: 'General Physician', icon: 'medical' as const, color: '#8B5CF6' },
-  { id: 'pediatrician', name: 'Pediatrician', icon: 'people' as const, color: '#EC4899' },
-  { id: 'dentist', name: 'Dentist', icon: 'happy' as const, color: '#10B981' },
-  { id: 'eye', name: 'Eye Care', icon: 'eye' as const, color: '#3B82F6' },
-  { id: 'cardio', name: 'Cardiologist', icon: 'heart' as const, color: '#EF4444' },
-  { id: 'derma', name: 'Dermatologist', icon: 'body' as const, color: '#F59E0B' },
-  { id: 'ortho', name: 'Orthopedic', icon: 'walk' as const, color: '#6366F1' },
-  { id: 'gynae', name: 'Gynecologist', icon: 'woman' as const, color: '#EC4899' },
+  { id: 'general', name: 'General Physician', icon: 'medical' as const, color: colors.brand.purpleLight },
+  { id: 'pediatrician', name: 'Pediatrician', icon: 'people' as const, color: colors.brand.pink },
+  { id: 'dentist', name: 'Dentist', icon: 'happy' as const, color: colors.successScale[400] },
+  { id: 'eye', name: 'Eye Care', icon: 'eye' as const, color: colors.infoScale[400] },
+  { id: 'cardio', name: 'Cardiologist', icon: 'heart' as const, color: colors.error },
+  { id: 'derma', name: 'Dermatologist', icon: 'body' as const, color: colors.warningScale[400] },
+  { id: 'ortho', name: 'Orthopedic', icon: 'walk' as const, color: colors.brand.indigo },
+  { id: 'gynae', name: 'Gynecologist', icon: 'woman' as const, color: colors.brand.pink },
 ];
 
 interface TimeSlot {
@@ -696,7 +697,7 @@ const styles = StyleSheet.create({
   },
   consultationCardSelected: {
     borderColor: Colors.brand.purple,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
   },
   consultationIcon: {
     width: 56,
@@ -738,7 +739,7 @@ const styles = StyleSheet.create({
   },
   dateCardSelected: {
     borderColor: Colors.brand.purple,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
   },
   dateDay: {
     ...Typography.bodySmall,
@@ -783,7 +784,7 @@ const styles = StyleSheet.create({
   },
   timeSlotSelected: {
     borderColor: Colors.brand.purple,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
   },
   timeSlotDisabled: {
     backgroundColor: Colors.background.secondary,
@@ -793,7 +794,7 @@ const styles = StyleSheet.create({
   timeSlotText: {
     ...Typography.body,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   timeSlotTextSelected: {
     color: Colors.brand.purple,
@@ -819,7 +820,7 @@ const styles = StyleSheet.create({
   label: {
     ...Typography.body,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: Spacing.sm,
   },
   input: {

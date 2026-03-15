@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { loadStripe } from '@stripe/stripe-js';
 import * as authStorage from '@/utils/authStorage';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface StripePaymentModalProps {
   visible: boolean;
@@ -135,12 +136,12 @@ function StripePaymentModal({
             <View style={styles.header}>
               <ThemedText style={styles.headerTitle}>Payment</ThemedText>
               <Pressable onPress={onClose} style={styles.closeButton}>
-                <Ionicons name="close" size={24} color="#6B7280" />
+                <Ionicons name="close" size={24} color={colors.neutral[500]} />
               </Pressable>
             </View>
 
             <View style={styles.content}>
-              <Ionicons name="information-circle" size={64} color="#8B5CF6" />
+              <Ionicons name="information-circle" size={64} color={colors.brand.purpleLight} />
               <ThemedText style={styles.nativeMessage}>
                 Native Stripe payments require the mobile app.
               </ThemedText>
@@ -170,7 +171,7 @@ function StripePaymentModal({
               style={styles.closeButton}
               disabled={processingPayment}
             >
-              <Ionicons name="close" size={24} color="#6B7280" />
+              <Ionicons name="close" size={24} color={colors.neutral[500]} />
             </Pressable>
           </View>
 
@@ -178,7 +179,7 @@ function StripePaymentModal({
           <View style={styles.content}>
             {loading ? (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#8B5CF6" />
+                <ActivityIndicator size="large" color={colors.brand.purpleLight} />
                 <ThemedText style={styles.loadingText}>Loading payment...</ThemedText>
               </View>
             ) : (
@@ -205,7 +206,7 @@ function StripePaymentModal({
 
                 {/* Payment Info */}
                 <View style={styles.infoBox}>
-                  <Ionicons name="shield-checkmark" size={24} color="#ffcd57" />
+                  <Ionicons name="shield-checkmark" size={24} color={colors.lightMustard} />
                   <ThemedText style={styles.infoText}>
                     Secure payment powered by Stripe
                   </ThemedText>
@@ -214,15 +215,15 @@ function StripePaymentModal({
                 <View style={styles.benefitsBox}>
                   <ThemedText style={styles.benefitsTitle}>You'll get:</ThemedText>
                   <View style={styles.benefitItem}>
-                    <Ionicons name="checkmark-circle" size={20} color="#ffcd57" />
+                    <Ionicons name="checkmark-circle" size={20} color={colors.lightMustard} />
                     <ThemedText style={styles.benefitText}>7-day free trial</ThemedText>
                   </View>
                   <View style={styles.benefitItem}>
-                    <Ionicons name="checkmark-circle" size={20} color="#ffcd57" />
+                    <Ionicons name="checkmark-circle" size={20} color={colors.lightMustard} />
                     <ThemedText style={styles.benefitText}>Cancel anytime</ThemedText>
                   </View>
                   <View style={styles.benefitItem}>
-                    <Ionicons name="checkmark-circle" size={20} color="#ffcd57" />
+                    <Ionicons name="checkmark-circle" size={20} color={colors.lightMustard} />
                     <ThemedText style={styles.benefitText}>Full refund if cancelled within 24hrs</ThemedText>
                   </View>
                 </View>
@@ -235,12 +236,12 @@ function StripePaymentModal({
                 >
                   {processingPayment ? (
                     <>
-                      <ActivityIndicator size="small" color="#FFFFFF" />
+                      <ActivityIndicator size="small" color={colors.background.primary} />
                       <ThemedText style={styles.payButtonText}>Processing...</ThemedText>
                     </>
                   ) : (
                     <>
-                      <Ionicons name="lock-closed" size={20} color="#FFFFFF" />
+                      <Ionicons name="lock-closed" size={20} color={colors.background.primary} />
                       <ThemedText style={styles.payButtonText}>
                         Pay {currencySymbol}{amount} Securely
                       </ThemedText>
@@ -273,7 +274,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     width: '100%',
     maxWidth: 500,
@@ -290,12 +291,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   closeButton: {
     padding: 4,
@@ -310,10 +311,10 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   planDetails: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
@@ -325,16 +326,16 @@ const styles = StyleSheet.create({
   },
   planLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   planValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   totalRow: {
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     paddingTop: 12,
     marginTop: 4,
     marginBottom: 0,
@@ -342,17 +343,17 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   totalValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   infoBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderRadius: 8,
     padding: 12,
     marginBottom: 20,
@@ -360,7 +361,7 @@ const styles = StyleSheet.create({
   infoText: {
     marginLeft: 12,
     fontSize: 14,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     flex: 1,
   },
   benefitsBox: {
@@ -369,7 +370,7 @@ const styles = StyleSheet.create({
   benefitsTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   benefitItem: {
@@ -380,13 +381,13 @@ const styles = StyleSheet.create({
   benefitText: {
     marginLeft: 8,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   payButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -396,7 +397,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   payButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -405,32 +406,32 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   cancelButtonText: {
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontSize: 14,
     fontWeight: '600',
   },
   nativeMessage: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
     marginTop: 20,
     marginBottom: 8,
   },
   nativeSubtext: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   closeOnlyButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 12,
     padding: 16,
     margin: 20,
     alignItems: 'center',
   },
   closeButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
   },

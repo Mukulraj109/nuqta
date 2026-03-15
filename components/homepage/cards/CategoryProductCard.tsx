@@ -13,6 +13,7 @@ import { HomepageProduct } from '@/services/productApi';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface CategoryProductCardProps {
   product: HomepageProduct;
@@ -80,7 +81,7 @@ function CategoryProductCard({
           {hasCashback && (
             <View style={styles.cashbackBadge}>
               <LinearGradient
-                colors={['#ffcd57', '#1a3a52']}
+                colors={[colors.lightMustard, colors.nileBlue]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.cashbackGradient}
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     marginRight: 14,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     height: 210,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
         shadowRadius: 12,
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 205, 87, 0.15)',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
   cashbackBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontFamily: 'Inter',
     letterSpacing: 0.3,
   },
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontFamily: 'Inter',
     lineHeight: 17,
     letterSpacing: -0.1,
@@ -270,13 +271,13 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 6,
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.3,
         shadowRadius: 2,
@@ -289,12 +290,12 @@ const styles = StyleSheet.create({
   coinText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   cashbackPillText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontFamily: 'Inter',
   },
 });

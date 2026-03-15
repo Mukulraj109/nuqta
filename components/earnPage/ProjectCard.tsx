@@ -5,6 +5,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ProjectCardProps } from '@/types/earnPage.types';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 function ProjectCard({
   project,
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   startButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

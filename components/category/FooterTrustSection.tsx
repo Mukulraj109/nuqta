@@ -16,6 +16,7 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import userLoyaltyApi from '@/services/userLoyaltyApi';
+import { colors } from '@/constants/theme';
 
 interface FooterTrustSectionProps {
   categorySlug?: string;
@@ -24,9 +25,9 @@ interface FooterTrustSectionProps {
 
 // Default hardcoded trust badges (used when pageConfig doesn't provide them)
 const DEFAULT_TRUST_BADGES = [
-  { icon: 'shield-checkmark', color: '#ffcd57', text: 'Secure Payments' },
-  { icon: 'refresh', color: '#3B82F6', text: 'Easy Returns' },
-  { icon: 'headset', color: '#8B5CF6', text: '24/7 Support' },
+  { icon: 'shield-checkmark', color: colors.lightMustard, text: 'Secure Payments' },
+  { icon: 'refresh', color: colors.infoScale[400], text: 'Easy Returns' },
+  { icon: 'headset', color: colors.brand.purpleLight, text: '24/7 Support' },
 ];
 
 const FooterTrustSection: React.FC<FooterTrustSectionProps> = ({
@@ -82,7 +83,7 @@ const FooterTrustSection: React.FC<FooterTrustSectionProps> = ({
             style={styles.expiryWarning}
             onPress={() => router.push(loyaltyRoute as any)}
           >
-            <Ionicons name="alert-circle" size={14} color="#EF4444" />
+            <Ionicons name="alert-circle" size={14} color={colors.error} />
             <Text style={styles.expiryText}>
               {expiringCoins} coins expiring in {expiryDays} days - Use them now!
             </Text>
@@ -102,14 +103,14 @@ const FooterTrustSection: React.FC<FooterTrustSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     padding: 20,
     alignItems: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
   },
   trustText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   coinsInfo: {
@@ -151,14 +152,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
   },
   expiryText: {
     fontSize: 11,
-    color: '#EF4444',
+    color: colors.error,
     fontWeight: '500',
   },
   appBadge: {
@@ -167,12 +168,12 @@ const styles = StyleSheet.create({
   appName: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     letterSpacing: -0.5,
   },
   appTagline: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 2,
   },
 });

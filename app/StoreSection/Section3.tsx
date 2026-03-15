@@ -19,6 +19,7 @@ import {
   IconSize,
   Timing,
 } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = SCREEN_WIDTH * 0.7; // 70% of screen width
@@ -146,7 +147,7 @@ export default memo(function Section3({ productPrice = 1000, storeId }: Section3
       >
         {/* Gradient Background */}
         <LinearGradient
-          colors={meetsMinimum ? ['#ffcd57', '#E6B84E'] : ['#1a3a52', '#0f2535']}
+          colors={meetsMinimum ? [colors.lightMustard, colors.brand.goldRich] : [colors.nileBlue, '#0f2535']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.cardGradient}
@@ -160,7 +161,7 @@ export default memo(function Section3({ productPrice = 1000, storeId }: Section3
           {/* Lock Icon for Ineligible */}
           {!meetsMinimum && (
             <View style={styles.lockBadge}>
-              <Ionicons name="lock-closed" size={14} color="#FFF" />
+              <Ionicons name="lock-closed" size={14} color={colors.background.primary} />
             </View>
           )}
 
@@ -186,7 +187,7 @@ export default memo(function Section3({ productPrice = 1000, storeId }: Section3
               </View>
             ) : (
               <View style={styles.eligibleRow}>
-                <Ionicons name="checkmark-circle" size={12} color="#34D399" />
+                <Ionicons name="checkmark-circle" size={12} color={colors.successScale[400]} />
                 <ThemedText style={styles.eligibleText}>Ready to use</ThemedText>
               </View>
             )}
@@ -241,7 +242,7 @@ export default memo(function Section3({ productPrice = 1000, storeId }: Section3
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={styles.headerIconContainer}>
-            <Ionicons name="flash" size={16} color="#FFF" />
+            <Ionicons name="flash" size={16} color={colors.background.primary} />
           </View>
           <ThemedText style={styles.headerTitle}>Mega Sale Offers</ThemedText>
           <View style={styles.countBadge}>
@@ -288,7 +289,7 @@ export default memo(function Section3({ productPrice = 1000, storeId }: Section3
               <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={false}>
                 {/* Offer Header */}
                 <LinearGradient
-                  colors={['#ffcd57', '#E6B84E']}
+                  colors={[colors.lightMustard, colors.brand.goldRich]}
                   style={styles.modalOfferHeader}
                 >
                   <ThemedText style={styles.modalOfferValue}>
@@ -386,7 +387,7 @@ export default memo(function Section3({ productPrice = 1000, storeId }: Section3
                     disabled={isApplying}
                   >
                     <LinearGradient
-                      colors={['#ffcd57', '#E6B84E']}
+                      colors={[colors.lightMustard, colors.brand.goldRich]}
                       style={styles.applyButtonGradient}
                     >
                       <ThemedText style={styles.applyButtonText}>
@@ -416,7 +417,7 @@ export default memo(function Section3({ productPrice = 1000, storeId }: Section3
 const styles = StyleSheet.create({
   container: {
     paddingVertical: Spacing.lg,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
 
   // Header Styles
@@ -435,11 +436,11 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 12,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -448,11 +449,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     letterSpacing: -0.3,
   },
   countBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 10,
@@ -461,7 +462,7 @@ const styles = StyleSheet.create({
   countText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   // Scroll Content
@@ -476,7 +477,7 @@ const styles = StyleSheet.create({
     marginRight: CARD_MARGIN,
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.2,
     shadowRadius: 12,
@@ -484,7 +485,7 @@ const styles = StyleSheet.create({
   },
   discountCardLocked: {
     opacity: 0.9,
-    shadowColor: '#6B7280',
+    shadowColor: colors.neutral[500],
   },
   cardGradient: {
     flexDirection: 'row',
@@ -507,7 +508,7 @@ const styles = StyleSheet.create({
   discountBadgeText: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#FFF',
+    color: colors.background.primary,
     lineHeight: 26,
   },
   discountBadgeSubtext: {
@@ -543,7 +544,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     ...Typography.bodyLarge,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
     marginBottom: 4,
   },
   minOrderRow: {
@@ -572,7 +573,7 @@ const styles = StyleSheet.create({
   },
   eligibleText: {
     ...Typography.caption,
-    color: '#34D399',
+    color: colors.successScale[400],
     fontWeight: '600',
     marginLeft: 4,
   },
@@ -642,7 +643,7 @@ const styles = StyleSheet.create({
   modalOfferValue: {
     fontSize: 48,
     fontWeight: '800',
-    color: '#FFF',
+    color: colors.background.primary,
     lineHeight: 52,
   },
   modalOfferLabel: {
@@ -737,7 +738,7 @@ const styles = StyleSheet.create({
   },
   applyButtonText: {
     ...Typography.bodyLarge,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   lockedButtonContainer: {

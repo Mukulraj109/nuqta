@@ -11,6 +11,7 @@ import { SectionHeader, HorizontalScrollSection } from '../common';
 import { OfferCardDefault } from '../cards';
 import { NearbyOffer } from '@/types/offers.types';
 import { Spacing } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface NearbyOffersSectionProps {
   offers: NearbyOffer[];
@@ -35,7 +36,7 @@ export const NearbyOffersSection: React.FC<NearbyOffersSectionProps> = ({
         title="Nearby Offers"
         subtitle="Deals close to you"
         icon="location"
-        iconColor="#3B82F6"
+        iconColor={colors.infoScale[400]}
         showViewAll={offers.length > 3}
         onViewAll={onViewAll}
       />

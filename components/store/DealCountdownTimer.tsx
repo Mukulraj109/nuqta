@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useCountdown, getUrgencyColor, getUrgencyBadge } from '@/hooks/useCountdown';
+import { colors } from '@/constants/theme';
 
 export type CountdownSize = 'small' | 'normal' | 'large';
 
@@ -204,9 +205,9 @@ const getStyles = (size: CountdownSize) => {
       paddingVertical: isSmall ? 4 : isLarge ? 10 : 6,
       paddingHorizontal: isSmall ? 8 : isLarge ? 14 : 10,
       borderRadius: isSmall ? 6 : isLarge ? 10 : 8,
-      backgroundColor: '#F9FAFB',
+      backgroundColor: colors.neutral[50],
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.gray[200],
     },
     icon: {
       marginRight: isSmall ? 4 : isLarge ? 8 : 6,
@@ -249,7 +250,7 @@ const getStyles = (size: CountdownSize) => {
     progressBarBg: {
       width: '100%',
       height: isSmall ? 4 : isLarge ? 8 : 6,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.gray[200],
       borderRadius: isSmall ? 2 : isLarge ? 4 : 3,
       overflow: 'hidden',
     },

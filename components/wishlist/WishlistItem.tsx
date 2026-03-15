@@ -8,6 +8,7 @@ import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformA
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { WishlistItemProps } from '@/types/wishlist.types';
+import { colors } from '@/constants/theme';
 
 function WishlistItem({
   item,
@@ -51,7 +52,7 @@ function WishlistItem({
             onPress={handleRemove}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons name="heart" size={20} color="#EF4444" />
+            <Ionicons name="heart" size={20} color={colors.error} />
           </Pressable>
         </View>
 
@@ -63,7 +64,7 @@ function WishlistItem({
         {/* Rating and Availability */}
         <View style={styles.detailsRow}>
           <View style={styles.ratingContainer}>
-            <Ionicons name="star" size={12} color="#FFD700" />
+            <Ionicons name="star" size={12} color={colors.brand.goldBright} />
             <ThemedText style={styles.ratingText}>{item.rating}</ThemedText>
             <ThemedText style={styles.reviewText}>
               ({item.reviewCount})
@@ -76,10 +77,10 @@ function WishlistItem({
               {
                 backgroundColor:
                   item.availability === 'IN_STOCK'
-                    ? '#ffcd57'
+                    ? colors.lightMustard
                     : item.availability === 'LIMITED'
-                    ? '#F59E0B'
-                    : '#EF4444',
+                    ? colors.warningScale[400]
+                    : colors.error,
               },
             ]}
           >
@@ -121,7 +122,7 @@ function WishlistItem({
             onPress={handleAddToCart}
             disabled={item.availability === 'OUT_OF_STOCK'}
           >
-            <Ionicons name="cart-outline" size={16} color="#8B5CF6" />
+            <Ionicons name="cart-outline" size={16} color={colors.brand.purpleLight} />
             <ThemedText style={styles.addToCartText}>Add to Cart</ThemedText>
           </Pressable>
         </View>
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   infoContainer: {
     flex: 1,
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
   },
   brand: {
     fontSize: 12,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
   },
   removeButton: {
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 6,
     lineHeight: 18,
   },
@@ -191,13 +192,13 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 12,
-    color: '#333',
+    color: colors.darkGray,
     fontWeight: '600',
     marginLeft: 2,
   },
   reviewText: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     marginLeft: 2,
   },
   availabilityBadge: {
@@ -224,31 +225,31 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
   },
   originalPrice: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     textDecorationLine: 'line-through',
   },
   discount: {
     fontSize: 10,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
   },
   addToCartButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
   },
   addToCartText: {
     fontSize: 11,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
     marginLeft: 4,
   },

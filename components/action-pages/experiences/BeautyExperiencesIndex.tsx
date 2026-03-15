@@ -22,17 +22,18 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  pink: '#EC4899',
+  pink: colors.brand.pink,
   pinkDark: '#BE185D',
-  pinkLight: '#FCE7F3',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F8F9FA',
-  border: '#E5E7EB',
-  gold: '#F59E0B',
+  pinkLight: colors.pinkMist,
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.offWhite,
+  border: colors.neutral[200],
+  gold: colors.warningScale[400],
 };
 
 interface Experience {
@@ -254,7 +255,7 @@ function BeautyExperiencesPage() {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <LinearGradient
-        colors={['#EC4899', '#D946EF']}
+        colors={[colors.brand.pink, '#D946EF']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.headerGradient}

@@ -19,6 +19,7 @@ import gamificationAPI from '@/services/gamificationApi';
 import { useGamification } from '@/contexts/GamificationContext';
 import type { ScratchCardPrize } from '@/types/gamification.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.85;
@@ -182,7 +183,7 @@ function ScratchCardGame({
     return (
       <ThemedView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#8B5CF6" />
+          <ActivityIndicator size="large" color={colors.brand.purpleLight} />
           <ThemedText style={styles.loadingText}>Checking availability...</ThemedText>
         </View>
       </ThemedView>
@@ -194,7 +195,7 @@ function ScratchCardGame({
     return (
       <ThemedView style={styles.container}>
         <View style={styles.notAvailableContainer}>
-          <Ionicons name="time-outline" size={80} color="#E5E7EB" />
+          <Ionicons name="time-outline" size={80} color={colors.neutral[200]} />
           <ThemedText style={styles.notAvailableTitle}>Scratch Card Not Available</ThemedText>
           <ThemedText style={styles.notAvailableDescription}>
             {nextAvailableTime
@@ -229,7 +230,7 @@ function ScratchCardGame({
             ]}
           >
             <View style={[styles.prizeIcon, { backgroundColor: prize.color }]}>
-              <Ionicons name={prize.icon as any} size={48} color="#FFFFFF" />
+              <Ionicons name={prize.icon as any} size={48} color={colors.background.primary} />
             </View>
             <ThemedText style={styles.prizeTitle}>{prize.title}</ThemedText>
             <ThemedText style={styles.prizeDescription}>{prize.description}</ThemedText>
@@ -269,12 +270,12 @@ function ScratchCardGame({
             >
               {isLoading ? (
                 <>
-                  <ActivityIndicator size={60} color="#FFFFFF" />
+                  <ActivityIndicator size={60} color={colors.background.primary} />
                   <ThemedText style={styles.scratchText}>SCRATCHING...</ThemedText>
                 </>
               ) : (
                 <>
-                  <Ionicons name="hand-left" size={60} color="#FFFFFF" style={styles.scratchIcon} />
+                  <Ionicons name="hand-left" size={60} color={colors.background.primary} style={styles.scratchIcon} />
                   <ThemedText style={styles.scratchText}>SCRATCH HERE</ThemedText>
                   <ThemedText style={styles.scratchSubtext}>
                     Tap to reveal your prize!
@@ -294,18 +295,18 @@ function ScratchCardGame({
           disabled={isLoading}
         >
           <LinearGradient
-            colors={isLoading ? ['#9CA3AF', '#6B7280'] : ['#8B5CF6', '#7C3AED']}
+            colors={isLoading ? [colors.neutral[400], colors.neutral[500]] : [colors.brand.purpleLight, colors.brand.purple]}
             style={styles.createButtonGradient}
           >
             {isLoading ? (
               <>
-                <ActivityIndicator size={24} color="#FFFFFF" />
+                <ActivityIndicator size={24} color={colors.background.primary} />
                 <ThemedText style={styles.createButtonText}>Creating...</ThemedText>
               </>
             ) : (
               <>
                 <ThemedText style={styles.createButtonText}>Create Scratch Card</ThemedText>
-                <Ionicons name="add-circle" size={24} color="#FFFFFF" />
+                <Ionicons name="add-circle" size={24} color={colors.background.primary} />
               </>
             )}
           </LinearGradient>
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   notAvailableContainer: {
     flex: 1,
@@ -342,24 +343,24 @@ const styles = StyleSheet.create({
   notAvailableTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
   },
   notAvailableDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
   },
   refreshButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 12,
     marginTop: 8,
   },
   refreshButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
   },
   prizeContent: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -393,18 +394,18 @@ const styles = StyleSheet.create({
   prizeTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
     textAlign: 'center',
   },
   prizeDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 16,
   },
   prizeValue: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
@@ -412,7 +413,7 @@ const styles = StyleSheet.create({
   prizeValueText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   scratchSurface: {
     position: 'absolute',
@@ -435,14 +436,14 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   scratchText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
   },
   scratchSubtext: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     textAlign: 'center',
     opacity: 0.9,
@@ -465,7 +466,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   createButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
   },

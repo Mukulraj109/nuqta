@@ -12,6 +12,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, useColorScheme } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface SkeletonLoaderProps {
   width?: number | string;
@@ -56,10 +57,10 @@ function SkeletonLoader({
   const finalWidth = variant === 'circle' ? height : width;
 
   // Theme-aware colors
-  const backgroundColor = colorScheme === 'dark' ? '#374151' : '#E5E7EB';
+  const backgroundColor = colorScheme === 'dark' ? colors.neutral[700] : colors.neutral[200];
   const shimmerColors = colorScheme === 'dark'
-    ? ['#374151', '#4B5563', '#374151']
-    : ['#E5E7EB', '#F3F4F6', '#EDE9FE', '#F3F4F6', '#E5E7EB'];
+    ? [colors.neutral[700], colors.neutral[600], colors.neutral[700]]
+    : [colors.neutral[200], colors.neutral[100], colors.tint.purple, colors.neutral[100], colors.neutral[200]];
 
   return (
     <View

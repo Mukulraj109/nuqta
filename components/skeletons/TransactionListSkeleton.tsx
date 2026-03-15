@@ -7,6 +7,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 function TransactionRow() {
   return (
@@ -52,12 +53,12 @@ function TransactionListSkeleton({ count = 8 }: { count?: number }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 16,
     paddingTop: 16,
   },
   summaryCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 14,
     padding: 16,
     marginBottom: 16,
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   rowText: {
     flex: 1,

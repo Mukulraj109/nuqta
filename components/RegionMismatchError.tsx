@@ -14,6 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useRegion, RegionId } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Region data with flags
 const REGION_DATA: Record<RegionId, { name: string; flag: string; description: string }> = {
@@ -69,7 +70,7 @@ export function RegionMismatchError({
         <View style={styles.iconContainer}>
           <Ionicons name="location-outline" size={64} color="#FF6B6B" />
           <View style={styles.iconBadge}>
-            <Ionicons name="close" size={20} color="#fff" />
+            <Ionicons name="close" size={20} color={colors.background.primary} />
           </View>
         </View>
 
@@ -124,7 +125,7 @@ export function RegionMismatchError({
               onPress={handleSwitchRegion}
              
             >
-              <Ionicons name="swap-horizontal" size={20} color="#fff" />
+              <Ionicons name="swap-horizontal" size={20} color={colors.background.primary} />
               <Text style={styles.primaryButtonText}>
                 Switch to {suggestedRegionData?.name}
               </Text>
@@ -136,7 +137,7 @@ export function RegionMismatchError({
             onPress={handleGoBack}
            
           >
-            <Ionicons name="arrow-back" size={20} color="#007AFF" />
+            <Ionicons name="arrow-back" size={20} color={colors.brand.ios} />
             <Text style={styles.secondaryButtonText}>Go Back</Text>
           </Pressable>
 
@@ -200,7 +201,7 @@ export function RegionMismatchBanner({
           style={styles.bannerDismiss}
           onPress={onDismiss}
         >
-          <Ionicons name="close" size={20} color="#666" />
+          <Ionicons name="close" size={20} color={colors.midGray} />
         </Pressable>
       )}
     </View>
@@ -210,7 +211,7 @@ export function RegionMismatchBanner({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -238,24 +239,24 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     textAlign: 'center',
     marginBottom: 12,
   },
   description: {
     fontSize: 15,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: 24,
   },
   itemName: {
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   regionName: {
     fontWeight: '600',
-    color: '#007AFF',
+    color: colors.brand.ios,
   },
   suggestionBox: {
     backgroundColor: '#F5F9FF',
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
   },
   suggestionTitle: {
     fontSize: 13,
-    color: '#666',
+    color: colors.midGray,
     marginBottom: 12,
     fontWeight: '500',
   },
@@ -283,11 +284,11 @@ const styles = StyleSheet.create({
   suggestionName: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   suggestionDescription: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     marginTop: 2,
   },
   actions: {
@@ -295,7 +296,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   primaryButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 24,
@@ -305,7 +306,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   primaryButtonText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -319,10 +320,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     borderWidth: 1,
-    borderColor: '#007AFF',
+    borderColor: colors.brand.ios,
   },
   secondaryButtonText: {
-    color: '#007AFF',
+    color: colors.brand.ios,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tertiaryButtonText: {
-    color: '#666',
+    color: colors.midGray,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -367,7 +368,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   bannerButtonText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 13,
     fontWeight: '600',
   },

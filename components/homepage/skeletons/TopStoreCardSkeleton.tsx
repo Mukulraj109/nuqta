@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import SkeletonCard from '@/components/common/SkeletonCard';
+import { colors } from '@/constants/theme';
 
 interface TopStoreCardSkeletonProps {
   width?: number;
@@ -81,14 +82,14 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(255, 205, 87, 0.08)',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
         shadowRadius: 12,
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginHorizontal: 6,
   },
 });

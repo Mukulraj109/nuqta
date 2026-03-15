@@ -27,16 +27,17 @@ import * as Location from 'expo-location';
 import apiClient from '@/services/apiClient';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 
 // Category configuration for UI
 const categoryConfig: Record<string, { title: string; icon: string; gradientColors: [string, string] }> = {
-  gyms: { title: 'Gyms', icon: '🏋️', gradientColors: ['#F97316', '#EA580C'] },
-  studios: { title: 'Fitness Studios', icon: '🧘', gradientColors: ['#8B5CF6', '#7C3AED'] },
-  trainers: { title: 'Personal Trainers', icon: '💪', gradientColors: ['#10B981', '#059669'] },
-  store: { title: 'Sports Store', icon: '🛒', gradientColors: ['#3B82F6', '#2563EB'] },
-  challenges: { title: 'Fitness Challenges', icon: '🏆', gradientColors: ['#EAB308', '#CA8A04'] },
-  nutrition: { title: 'Nutrition Plans', icon: '🥗', gradientColors: ['#22C55E', '#16A34A'] },
+  gyms: { title: 'Gyms', icon: '🏋️', gradientColors: [colors.brand.orange, colors.brand.orangeDark] },
+  studios: { title: 'Fitness Studios', icon: '🧘', gradientColors: [colors.brand.purpleLight, colors.brand.purple] },
+  trainers: { title: 'Personal Trainers', icon: '💪', gradientColors: [colors.successScale[400], colors.successScale[700]] },
+  store: { title: 'Sports Store', icon: '🛒', gradientColors: [colors.infoScale[400], colors.brand.blue] },
+  challenges: { title: 'Fitness Challenges', icon: '🏆', gradientColors: [colors.brand.amber, '#CA8A04'] },
+  nutrition: { title: 'Nutrition Plans', icon: '🥗', gradientColors: [colors.success, colors.brand.greenDark] },
 };
 
 interface StoreItem {
@@ -605,7 +606,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: Spacing.sm,
     padding: Spacing.md,
-    backgroundColor: '#FFF7ED',
+    backgroundColor: colors.tint.orange,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border.default,
   },

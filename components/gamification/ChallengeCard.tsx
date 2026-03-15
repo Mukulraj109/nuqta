@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import type { Challenge } from '@/types/gamification.types';
+import { colors } from '@/constants/theme';
 
 interface ChallengeCardProps {
   challenge: Challenge;
@@ -14,9 +15,9 @@ interface ChallengeCardProps {
 }
 
 const DIFFICULTY_COLORS = {
-  easy: '#10B981',
-  medium: '#F59E0B',
-  hard: '#EF4444',
+  easy: colors.successScale[400],
+  medium: colors.warningScale[400],
+  hard: colors.error,
 };
 
 function ChallengeCard({ challenge, onClaim }: ChallengeCardProps) {
@@ -33,7 +34,7 @@ function ChallengeCard({ challenge, onClaim }: ChallengeCardProps) {
         end={{ x: 1, y: 1 }}
         style={styles.iconContainer}
       >
-        <Ionicons name={challenge.icon as any} size={32} color="#FFFFFF" />
+        <Ionicons name={challenge.icon as any} size={32} color={colors.background.primary} />
       </LinearGradient>
 
       <View style={styles.content}>
@@ -69,12 +70,12 @@ function ChallengeCard({ challenge, onClaim }: ChallengeCardProps) {
         {/* Rewards */}
         <View style={styles.rewardsSection}>
           <View style={styles.rewardItem}>
-            <Ionicons name="diamond" size={16} color="#F59E0B" />
+            <Ionicons name="diamond" size={16} color={colors.warningScale[400]} />
             <ThemedText style={styles.rewardText}>{challenge.rewards.coins} Coins</ThemedText>
           </View>
           {challenge.rewards.badges && challenge.rewards.badges.length > 0 && (
             <View style={styles.rewardItem}>
-              <Ionicons name="trophy" size={16} color="#8B5CF6" />
+              <Ionicons name="trophy" size={16} color={colors.brand.purpleLight} />
               <ThemedText style={styles.rewardText}>
                 {challenge.rewards.badges.length} Badge{challenge.rewards.badges.length > 1 ? 's' : ''}
               </ThemedText>
@@ -82,7 +83,7 @@ function ChallengeCard({ challenge, onClaim }: ChallengeCardProps) {
           )}
           {challenge.rewards.vouchers && challenge.rewards.vouchers.length > 0 && (
             <View style={styles.rewardItem}>
-              <Ionicons name="gift" size={16} color="#EF4444" />
+              <Ionicons name="gift" size={16} color={colors.error} />
               <ThemedText style={styles.rewardText}>Voucher</ThemedText>
             </View>
           )}
@@ -91,7 +92,7 @@ function ChallengeCard({ challenge, onClaim }: ChallengeCardProps) {
         {/* Action Button */}
         {isClaimed ? (
           <View style={styles.claimedButton}>
-            <Ionicons name="checkmark-circle" size={20} color="#10B981" />
+            <Ionicons name="checkmark-circle" size={20} color={colors.successScale[400]} />
             <ThemedText style={styles.claimedText}>Claimed</ThemedText>
           </View>
         ) : isCompleted ? (
@@ -100,11 +101,11 @@ function ChallengeCard({ challenge, onClaim }: ChallengeCardProps) {
             onPress={() => onClaim?.(challenge.id)}
           >
             <LinearGradient
-              colors={['#10B981', '#059669']}
+              colors={[colors.successScale[400], colors.successScale[700]]}
               style={styles.claimButtonGradient}
             >
               <ThemedText style={styles.claimButtonText}>Claim Reward</ThemedText>
-              <Ionicons name="arrow-forward-circle" size={20} color="#FFFFFF" />
+              <Ionicons name="arrow-forward-circle" size={20} color={colors.background.primary} />
             </LinearGradient>
           </Pressable>
         ) : (
@@ -120,7 +121,7 @@ function ChallengeCard({ challenge, onClaim }: ChallengeCardProps) {
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     flex: 1,
     marginRight: 8,
   },
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 12,
     lineHeight: 18,
   },
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
   progressBar: {
     flex: 1,
     height: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     minWidth: 50,
   },
   rewardsSection: {
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
   },
   rewardText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   claimButton: {
     borderRadius: 10,
@@ -219,12 +220,12 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   claimButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: 'bold',
   },
   inProgressButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: 'center',
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
   inProgressText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   claimedButton: {
     flexDirection: 'row',
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
   claimedText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
 });
 

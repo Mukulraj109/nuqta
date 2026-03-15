@@ -29,6 +29,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -524,7 +525,7 @@ export default function BookingPage() {
         {validatedDeal && !dealValidationError && (
           <View style={styles.activeDealBanner}>
             <LinearGradient
-              colors={['#22C55E', '#16A34A']}
+              colors={[colors.success, colors.brand.greenDark]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.activeDealGradient}
@@ -1426,7 +1427,7 @@ const styles = StyleSheet.create({
     right: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     borderRadius: BorderRadius.md,
     padding: Spacing.md,
     gap: Spacing.sm,
@@ -1582,10 +1583,10 @@ const styles = StyleSheet.create({
     marginTop: Spacing.sm,
     marginBottom: Spacing.sm,
     padding: Spacing.md,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: colors.errorScale[200],
     gap: 10,
   },
   dealErrorText: {
@@ -1602,7 +1603,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-    shadowColor: '#22C55E',
+    shadowColor: colors.success,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,

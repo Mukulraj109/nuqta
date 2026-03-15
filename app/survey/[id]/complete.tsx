@@ -15,6 +15,7 @@ import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 export default function SurveyCompletePage() {
   const router = useRouter();
   const { coinsEarned, timeSpent } = useLocalSearchParams<{
@@ -148,7 +149,7 @@ export default function SurveyCompletePage() {
             ]}
           >
             <LinearGradient
-              colors={['#FFD700', '#FFA500']}
+              colors={[colors.brand.goldBright, '#FFA500']}
               style={styles.coinsGradient}
             >
               <Ionicons name="wallet" size={32} color={Colors.text.inverse} />
@@ -274,7 +275,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: Typography.h1.fontSize,
     fontWeight: '700',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
     textAlign: 'center',
     marginBottom: Spacing.sm,
   },
@@ -295,7 +296,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#FFD700',
+        shadowColor: colors.brand.goldBright,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.4,
         shadowRadius: 12,
@@ -356,7 +357,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: Typography.h3.fontSize,
     fontWeight: '700',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
     marginTop: Spacing.sm,
   },
   statLabel: {

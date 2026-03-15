@@ -14,6 +14,7 @@ import { SectionHeader } from '../common';
 import { ProgressBar } from '../common/ProgressBar';
 import { LoyaltyProgress } from '@/types/offers.types';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface LoyaltyProgressSectionProps {
   progress: LoyaltyProgress[];
@@ -39,7 +40,7 @@ export const LoyaltyProgressSection: React.FC<LoyaltyProgressSectionProps> = ({
     },
     card: {
       marginHorizontal: Spacing.base,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 1.5,
       borderColor: isDark ? 'rgba(0, 192, 106, 0.3)' : Colors.primary[200],
@@ -136,7 +137,7 @@ export const LoyaltyProgressSection: React.FC<LoyaltyProgressSectionProps> = ({
     rewardCoins: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FEF3C7',
+      backgroundColor: colors.tint.amberLight,
       paddingHorizontal: 8,
       paddingVertical: 4,
       borderRadius: 6,
@@ -145,7 +146,7 @@ export const LoyaltyProgressSection: React.FC<LoyaltyProgressSectionProps> = ({
     rewardCoinsText: {
       fontSize: 12,
       fontWeight: '800',
-      color: '#D97706',
+      color: colors.warningScale[700],
       marginLeft: 4,
     },
     rewardLabel: {
@@ -168,7 +169,7 @@ export const LoyaltyProgressSection: React.FC<LoyaltyProgressSectionProps> = ({
       <View style={styles.card}>
         <View style={styles.header}>
           <View style={styles.headerIcon}>
-            <Ionicons name="trophy" size={20} color="#FFFFFF" />
+            <Ionicons name="trophy" size={20} color={colors.background.primary} />
           </View>
           <View style={styles.headerText}>
             <Text style={styles.headerTitle}>Your Progress</Text>
@@ -231,7 +232,7 @@ export const LoyaltyProgressSection: React.FC<LoyaltyProgressSectionProps> = ({
 
                 <View style={styles.rewardBadge}>
                   <View style={styles.rewardCoins}>
-                    <Ionicons name="star" size={12} color="#D97706" />
+                    <Ionicons name="star" size={12} color={colors.warningScale[700]} />
                     <Text style={styles.rewardCoinsText}>{item.rewardCoins}</Text>
                   </View>
                   <Text style={styles.rewardLabel}>coins</Text>

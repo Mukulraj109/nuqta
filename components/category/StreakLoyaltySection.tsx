@@ -19,6 +19,7 @@ import userLoyaltyApi, { UserLoyalty } from '@/services/userLoyaltyApi';
 import { LoyaltyData } from '@/data/categoryDummyData';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/constants/theme';
 
 interface StreakLoyaltySectionProps {
   data?: LoyaltyData;
@@ -78,7 +79,7 @@ const StreakLoyaltySection: React.FC<StreakLoyaltySectionProps> = ({
   onMissionPress,
   pageConfig,
 }) => {
-  const accentColor = primaryColor || '#ffcd57';
+  const accentColor = primaryColor || colors.lightMustard;
   const router = useRouter();
   const { state: authState } = useAuth();
   const isAuthenticated = authState.isAuthenticated;
@@ -174,7 +175,7 @@ const StreakLoyaltySection: React.FC<StreakLoyaltySectionProps> = ({
               ]}
             >
               {i < displayData.streak.current && (
-                <Ionicons name="checkmark" size={12} color="#FFFFFF" />
+                <Ionicons name="checkmark" size={12} color={colors.background.primary} />
               )}
             </View>
           ))}
@@ -272,13 +273,13 @@ const StreakLoyaltySection: React.FC<StreakLoyaltySectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     padding: 20,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   streakRow: {
     flexDirection: 'row',
@@ -328,16 +329,16 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
   streakDotActive: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   streakText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   loyaltyList: {
     gap: 12,
@@ -353,28 +354,28 @@ const styles = StyleSheet.create({
   loyaltyBrand: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   loyaltyTier: {
     fontSize: 10,
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     fontWeight: '600',
   },
   progressBar: {
     flex: 1,
     height: 6,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 3,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 3,
   },
   progressText: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     width: 30,
     textAlign: 'right',
   },
@@ -384,7 +385,7 @@ const styles = StyleSheet.create({
   missionItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     padding: 12,
     borderRadius: 12,
   },
@@ -392,7 +393,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
   missionTitle: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   missionProgress: {
@@ -417,24 +418,24 @@ const styles = StyleSheet.create({
   missionProgressBar: {
     flex: 1,
     height: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 2,
     overflow: 'hidden',
   },
   missionProgressFill: {
     height: '100%',
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 2,
   },
   missionProgressText: {
     fontSize: 10,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   missionReward: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -446,11 +447,11 @@ const styles = StyleSheet.create({
   rewardText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   emptyText: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     paddingVertical: 12,
   },

@@ -23,6 +23,7 @@ import * as WebBrowser from 'expo-web-browser';
 
 import cashStoreApi from '../../services/cashStoreApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -113,10 +114,10 @@ function transformOffer(o: any): TransformedOffer {
 }
 
 const BADGE_CONFIG: Record<OfferBadge, { label: string; bg: string; text: string; icon: string }> = {
-  'flash-sale': { label: 'Flash Sale', bg: '#FEE2E2', text: '#DC2626', icon: 'flash' },
-  'limited-time': { label: 'Limited Time', bg: '#FEF3C7', text: '#B45309', icon: 'time' },
-  'best-deal': { label: 'Best Deal', bg: '#E0F2FE', text: '#0369A1', icon: 'ribbon' },
-  'mall-exclusive': { label: 'Exclusive', bg: '#EDE9FE', text: '#7C3AED', icon: 'diamond' },
+  'flash-sale': { label: 'Flash Sale', bg: colors.errorScale[100], text: colors.error, icon: 'flash' },
+  'limited-time': { label: 'Limited Time', bg: colors.tint.amberLight, text: colors.brand.amberDeep, icon: 'time' },
+  'best-deal': { label: 'Best Deal', bg: '#E0F2FE', text: colors.brand.skyDark, icon: 'ribbon' },
+  'mall-exclusive': { label: 'Exclusive', bg: colors.tint.purple, text: colors.brand.purple, icon: 'diamond' },
 };
 
 // ─── Retry Helper ───────────────────────────────────────────
@@ -204,8 +205,8 @@ export default function TrendingOffersPage() {
         if (!url) throw new Error('No URL available');
 
         await WebBrowser.openBrowserAsync(url, {
-          toolbarColor: '#1a3a52',
-          controlsColor: '#FFFFFF',
+          toolbarColor: colors.nileBlue,
+          controlsColor: colors.background.primary,
         });
       } else if (brand.storeId) {
         router.push(`/MainStorePage?storeId=${brand.storeId}` as any);
@@ -242,8 +243,8 @@ export default function TrendingOffersPage() {
         if (!url) throw new Error('No URL available');
 
         await WebBrowser.openBrowserAsync(url, {
-          toolbarColor: '#1a3a52',
-          controlsColor: '#FFFFFF',
+          toolbarColor: colors.nileBlue,
+          controlsColor: colors.background.primary,
         });
       } else if (offer.storeId) {
         router.push(`/MainStorePage?storeId=${offer.storeId}` as any);
@@ -288,7 +289,7 @@ export default function TrendingOffersPage() {
         <View style={[styles.stickyHeader, { paddingTop: headerTop }]}>
           <View style={styles.headerRow}>
             <Pressable onPress={() => router.back()} style={styles.backBtn}>
-              <Ionicons name="chevron-back" size={20} color="#1a3a52" />
+              <Ionicons name="chevron-back" size={20} color={colors.nileBlue} />
             </Pressable>
             <Text style={styles.headerTitle}>Trending Offers</Text>
             <View style={{ width: 36 }} />
@@ -338,7 +339,7 @@ export default function TrendingOffersPage() {
         <View style={[styles.stickyHeader, { paddingTop: headerTop }]}>
           <View style={styles.headerRow}>
             <Pressable onPress={() => router.back()} style={styles.backBtn}>
-              <Ionicons name="chevron-back" size={20} color="#1a3a52" />
+              <Ionicons name="chevron-back" size={20} color={colors.nileBlue} />
             </Pressable>
             <Text style={styles.headerTitle}>Trending Offers</Text>
             <View style={{ width: 36 }} />
@@ -457,7 +458,7 @@ export default function TrendingOffersPage() {
             <View style={styles.sectionHeader}>
               <View style={styles.sectionTitleRow}>
                 <LinearGradient
-                  colors={['#E8744F', '#DC2626']}
+                  colors={['#E8744F', colors.error]}
                   style={styles.sectionIconWrap}
                 >
                   <Ionicons name="flash" size={14} color={Colors.text.inverse} />
@@ -486,7 +487,7 @@ export default function TrendingOffersPage() {
             <View style={styles.sectionHeader}>
               <View style={styles.sectionTitleRow}>
                 <LinearGradient
-                  colors={['#1a3a52', '#234b68']}
+                  colors={[colors.nileBlue, colors.brand.nileBlueLight]}
                   style={styles.sectionIconWrap}
                 >
                   <Ionicons name="trending-up" size={14} color={Colors.gold} />
@@ -515,7 +516,7 @@ export default function TrendingOffersPage() {
             <View style={styles.sectionHeader}>
               <View style={styles.sectionTitleRow}>
                 <LinearGradient
-                  colors={['#059669', '#10B981']}
+                  colors={[colors.successScale[700], colors.successScale[400]]}
                   style={styles.sectionIconWrap}
                 >
                   <Ionicons name="flame" size={14} color={Colors.text.inverse} />
@@ -645,7 +646,7 @@ const OfferCard = React.memo(({
               onError={() => setLogoError(true)}
             />
           ) : (
-            <LinearGradient colors={['#1a3a52', '#234b68']} style={styles.offerLogoPlaceholder}>
+            <LinearGradient colors={[colors.nileBlue, colors.brand.nileBlueLight]} style={styles.offerLogoPlaceholder}>
               <Text style={styles.offerLogoInitial}>
                 {offer.brand.name.charAt(0).toUpperCase()}
               </Text>
@@ -674,7 +675,7 @@ const OfferCard = React.memo(({
             <Ionicons
               name={ended ? 'close-circle' : 'time-outline'}
               size={10}
-              color={ended ? '#9CA3AF' : urgent ? '#DC2626' : '#7C8A97'}
+              color={ended ? colors.neutral[400] : urgent ? colors.error : '#7C8A97'}
             />
             <Text
               style={[
@@ -750,8 +751,8 @@ const BrandCard = React.memo(({
   };
 
   const isHot = showHotTag || brand.cashbackRate >= 10;
-  const cashbackColor = isHot ? '#059669' : Colors.nileBlue;
-  const cashbackBg = isHot ? '#ECFDF5' : '#F0F4F8';
+  const cashbackColor = isHot ? colors.successScale[700] : Colors.nileBlue;
+  const cashbackBg = isHot ? colors.tint.greenLight : '#F0F4F8';
 
   return (
     <Animated.View
@@ -787,7 +788,7 @@ const BrandCard = React.memo(({
               onError={() => setLogoError(true)}
             />
           ) : (
-            <LinearGradient colors={['#1a3a52', '#234b68']} style={styles.brandLogoPlaceholder}>
+            <LinearGradient colors={[colors.nileBlue, colors.brand.nileBlueLight]} style={styles.brandLogoPlaceholder}>
               <Text style={styles.brandLogoInitial}>{brand.name.charAt(0).toUpperCase()}</Text>
             </LinearGradient>
           )}
@@ -800,7 +801,7 @@ const BrandCard = React.memo(({
               {brand.name}
             </Text>
             {brand.isFeatured && (
-              <Ionicons name="checkmark-circle" size={13} color="#3B82F6" />
+              <Ionicons name="checkmark-circle" size={13} color={colors.infoScale[400]} />
             )}
           </View>
 
@@ -812,7 +813,7 @@ const BrandCard = React.memo(({
             ) : null}
             {brand.rating ? (
               <View style={styles.ratingPill}>
-                <Ionicons name="star" size={9} color="#F59E0B" />
+                <Ionicons name="star" size={9} color={colors.warningScale[400]} />
                 <Text style={styles.ratingText}>{brand.rating.toFixed(1)}</Text>
                 {brand.ratingCount ? (
                   <Text style={styles.ratingCount}>
@@ -835,7 +836,7 @@ const BrandCard = React.memo(({
         <View style={styles.cashbackOuter}>
           <View style={[styles.cashbackBadge, { backgroundColor: cashbackBg }]}>
             <Text style={[styles.cashbackRate, { color: cashbackColor }]}>{brand.cashbackRate}%</Text>
-            <Text style={[styles.cashbackLabel, { color: isHot ? '#059669' : '#6B7280' }]}>cashback</Text>
+            <Text style={[styles.cashbackLabel, { color: isHot ? colors.successScale[700] : colors.neutral[500] }]}>cashback</Text>
           </View>
           <View style={styles.arrowCircle}>
             {isTracking ? (
@@ -976,7 +977,7 @@ const styles = StyleSheet.create({
   headerCountText: {
     ...Typography.bodySmall,
     fontWeight: '700',
-    color: '#64748B',
+    color: colors.slateGray,
   },
 
   // ── Stats Bar ──
@@ -1054,7 +1055,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.3,
   },
   sectionCountBadge: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: 9,
     paddingVertical: 3,
     borderRadius: 10,
@@ -1090,7 +1091,7 @@ const styles = StyleSheet.create({
     }),
   },
   offerCardUrgent: {
-    borderColor: '#FECACA',
+    borderColor: colors.errorScale[200],
     borderWidth: 1.5,
   },
   offerCardEnded: {
@@ -1166,7 +1167,7 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   offerCashbackPillHot: {
-    backgroundColor: '#ECFDF5',
+    backgroundColor: colors.tint.greenLight,
   },
   offerCashbackValue: {
     ...Typography.h4,
@@ -1175,15 +1176,15 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   offerCashbackValueHot: {
-    color: '#059669',
+    color: colors.successScale[700],
   },
   offerCashbackLabel: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   offerCashbackLabelHot: {
-    color: '#059669',
+    color: colors.successScale[700],
   },
 
   // Timer
@@ -1198,7 +1199,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   offerTimerUrgent: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
   },
   offerTimerText: {
     fontSize: 10,
@@ -1206,10 +1207,10 @@ const styles = StyleSheet.create({
     color: '#7C8A97',
   },
   offerTimerEnded: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   offerTimerTextUrgent: {
-    color: '#DC2626',
+    color: colors.error,
   },
 
   // Tracking / Ended Overlays
@@ -1223,7 +1224,7 @@ const styles = StyleSheet.create({
   trackingText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   endedOverlay: {
     ...StyleSheet.absoluteFillObject,
@@ -1235,7 +1236,7 @@ const styles = StyleSheet.create({
   endedText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 
   // ── Brand Cards (full-width vertical) ──
@@ -1249,7 +1250,7 @@ const styles = StyleSheet.create({
   brandCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 18,
     padding: 14,
     gap: 12,
@@ -1257,7 +1258,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#F0EBE4',
     ...Platform.select({
-      ios: { shadowColor: '#1a3a52', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 10 },
+      ios: { shadowColor: colors.nileBlue, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 10 },
       android: { elevation: 2 },
       web: { boxShadow: '0 2px 10px rgba(26,58,82,0.06)' },
     }),
@@ -1270,7 +1271,7 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: 4,
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     borderTopLeftRadius: 18,
     borderBottomLeftRadius: 18,
   },
@@ -1303,7 +1304,7 @@ const styles = StyleSheet.create({
   brandLogoInitial: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   // Brand Info
@@ -1362,7 +1363,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 3,
     alignSelf: 'flex-start',
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     paddingHorizontal: 7,
     paddingVertical: 2.5,
     borderRadius: 6,
@@ -1370,7 +1371,7 @@ const styles = StyleSheet.create({
   hotTagText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   // Cashback
@@ -1409,7 +1410,7 @@ const styles = StyleSheet.create({
     marginTop: 32,
     marginHorizontal: 16,
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     gap: 10,
     borderWidth: 1,
@@ -1423,7 +1424,7 @@ const styles = StyleSheet.create({
   trustText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#64748B',
+    color: colors.slateGray,
   },
 
   // ── Empty State ──
@@ -1460,7 +1461,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: 22,
     paddingVertical: 11,
     borderRadius: 14,
@@ -1469,7 +1470,7 @@ const styles = StyleSheet.create({
   retryBtnText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   // ── Skeletons ──
@@ -1482,7 +1483,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 14,
     borderRadius: 18,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     gap: 12,
     borderWidth: 1,
     borderColor: '#F0EBE4',

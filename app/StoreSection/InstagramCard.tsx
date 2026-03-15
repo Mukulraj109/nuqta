@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface InstagramCardProps {
   productData?: {
@@ -101,7 +102,7 @@ export default function InstagramCard({ productData, disabled = false, onError }
       accessibilityState={{ disabled: disabled || isNavigating, busy: isNavigating }}
     >
       <LinearGradient
-        colors={disabled ? ['#dfebf7', '#b8d4ed'] : ['#ffd7b5', Colors.gold, Colors.nileBlue]}
+        colors={disabled ? [colors.lavenderMist, '#b8d4ed'] : [colors.lightPeach, Colors.gold, Colors.nileBlue]}
         style={[styles.gradientBackground, { padding: responsivePadding }]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}

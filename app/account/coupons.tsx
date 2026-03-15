@@ -26,13 +26,14 @@ import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { CardGridSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 type CouponTab = 'available' | 'my-coupons' | 'expired';
 
 // ── Palette ───────────────────────────────────────────────────
 const C = {
-  headerDark: Colors.secondary[900],     // was '#1A1A2E'
+  headerDark: Colors.secondary[900],     // was colors.deepNavy
   headerMid: Colors.secondary[800],      // was '#16213E'
   accent: '#FF6B35',                     // keep - unique orange for deals
   accentDark: '#E85D2C',                 // keep - unique
@@ -40,11 +41,11 @@ const C = {
   danger: Colors.error,                  // was '#FF4757'
   amber: Colors.warning,                 // was '#FFB23F'
   bg: Colors.background.secondary,       // was '#F5F5FA'
-  card: Colors.background.primary,       // was '#FFFFFF'
-  textPrimary: Colors.text.primary,      // was '#1A1A2E'
-  textSecondary: Colors.text.secondary,  // was '#6B7280'
-  textMuted: Colors.text.tertiary,       // was '#9CA3AF'
-  border: Colors.border.medium,          // was '#E5E7EB'
+  card: Colors.background.primary,       // was colors.background.primary
+  textPrimary: Colors.text.primary,      // was colors.deepNavy
+  textSecondary: Colors.text.secondary,  // was colors.neutral[500]
+  textMuted: Colors.text.tertiary,       // was colors.neutral[400]
+  border: Colors.border.medium,          // was colors.neutral[200]
   discountGradient: ['#FF6B35', '#FF4757'] as [string, string],  // keep unique
   discountGradientDimmed: [Colors.text.tertiary, '#B0B0B0'] as [string, string],
 };
@@ -456,11 +457,11 @@ export default function CouponsPage() {
               disabled={claiming}
             >
               {claiming ? (
-                <ActivityIndicator size="small" color="#FFF" />
+                <ActivityIndicator size="small" color={colors.background.primary} />
               ) : (
                 <LinearGradient colors={C.discountGradient} style={s.claimBtnGrad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
                   <ThemedText style={s.claimBtnText}>Claim</ThemedText>
-                  <Ionicons name="arrow-forward" size={14} color="#FFF" />
+                  <Ionicons name="arrow-forward" size={14} color={colors.background.primary} />
                 </LinearGradient>
               )}
             </Pressable>
@@ -776,9 +777,9 @@ export default function CouponsPage() {
                 >
                   <LinearGradient colors={C.discountGradient} style={s.modalMainBtnGrad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
                     {claimingId === coupon._id
-                      ? <ActivityIndicator size="small" color="#FFF" />
+                      ? <ActivityIndicator size="small" color={colors.background.primary} />
                       : <>
-                          <Ionicons name="gift-outline" size={16} color="#FFF" />
+                          <Ionicons name="gift-outline" size={16} color={colors.background.primary} />
                           <ThemedText style={s.modalMainBtnText}>Claim Coupon</ThemedText>
                         </>
                     }
@@ -788,7 +789,7 @@ export default function CouponsPage() {
                 <Pressable style={s.modalMainBtn} onPress={() => handleUseCoupon(coupon)}>
                   <LinearGradient colors={[C.success, '#00A87D']} style={s.modalMainBtnGrad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
                     <ThemedText style={s.modalMainBtnText}>Use Now</ThemedText>
-                    <Ionicons name="arrow-forward" size={16} color="#FFF" />
+                    <Ionicons name="arrow-forward" size={16} color={colors.background.primary} />
                   </LinearGradient>
                 </Pressable>
               )}
@@ -853,11 +854,11 @@ export default function CouponsPage() {
       <LinearGradient colors={[C.headerDark, C.headerMid]} style={s.header}>
         <View style={s.headerRow}>
           <Pressable onPress={() => router.back()} style={s.headerBtn}>
-            <Ionicons name="arrow-back" size={22} color="#FFF" />
+            <Ionicons name="arrow-back" size={22} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={s.headerTitle}>Coupons</ThemedText>
           <Pressable onPress={handleRefresh} style={s.headerBtn}>
-            <Ionicons name="refresh" size={20} color="#FFF" />
+            <Ionicons name="refresh" size={20} color={colors.background.primary} />
           </Pressable>
         </View>
 
@@ -938,7 +939,7 @@ export default function CouponsPage() {
                     disabled={!codeInput.trim()}
                   >
                     {searching
-                      ? <ActivityIndicator size="small" color="#FFF" />
+                      ? <ActivityIndicator size="small" color={colors.background.primary} />
                       : <ThemedText style={s.searchBtnText}>Apply</ThemedText>
                     }
                   </Pressable>
@@ -1154,7 +1155,7 @@ const s = StyleSheet.create({
   // ═══ MODAL ═══════════════════════════════════════════════════
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'flex-end' },
   modalSheet: { backgroundColor: Colors.background.primary, borderTopLeftRadius: BorderRadius['2xl'], borderTopRightRadius: BorderRadius['2xl'], maxHeight: '90%', minHeight: '50%' },
-  handleBar: { width: 36, height: 4, borderRadius: BorderRadius.xs, backgroundColor: '#D1D5DB', alignSelf: 'center', marginTop: Spacing.md, marginBottom: Spacing.xs },
+  handleBar: { width: 36, height: 4, borderRadius: BorderRadius.xs, backgroundColor: colors.neutral[300], alignSelf: 'center', marginTop: Spacing.md, marginBottom: Spacing.xs },
 
   modalHero: { marginHorizontal: Spacing.base, marginTop: Spacing.sm, padding: Spacing.xl, borderRadius: 14, alignItems: 'center' },
   modalHeroDiscount: { fontSize: 34, fontWeight: '900', color: Colors.text.inverse },

@@ -24,6 +24,7 @@ import photoUploadApi, { PhotoUploadItem } from '@/services/photoUploadApi';
 import apiClient from '@/services/apiClient';
 import { platformAlert } from '@/utils/platformAlert';
 import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.config';
+import { colors } from '@/constants/theme';
 
 type TabType = 'upload' | 'history';
 
@@ -191,7 +192,7 @@ export default function PhotoUploadPage() {
     switch (status) {
       case 'approved': return Colors.success;
       case 'rejected': return Colors.error;
-      default: return '#F59E0B';
+      default: return colors.warningScale[400];
     }
   };
 
@@ -254,7 +255,7 @@ export default function PhotoUploadPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Upload Photos</ThemedText>
           <View style={styles.placeholder} />
@@ -379,10 +380,10 @@ export default function PhotoUploadPage() {
             disabled={photos.length === 0 || uploading}
           >
             {uploading ? (
-              <ActivityIndicator color="#FFF" />
+              <ActivityIndicator color={colors.background.primary} />
             ) : (
               <>
-                <Ionicons name="cloud-upload" size={20} color="#FFF" />
+                <Ionicons name="cloud-upload" size={20} color={colors.background.primary} />
                 <ThemedText style={styles.uploadButtonText}>Upload Photos</ThemedText>
               </>
             )}
@@ -416,12 +417,12 @@ const styles = StyleSheet.create({
   header: { paddingTop: Platform.OS === 'ios' ? 50 : StatusBar.currentHeight || 40, paddingBottom: 0 },
   headerContent: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: Spacing.lg, marginBottom: Spacing.sm },
   backButton: { padding: Spacing.sm, marginRight: Spacing.sm },
-  headerTitle: { flex: 1, ...Typography.h3, color: '#FFF', textAlign: 'center', marginRight: 40 },
+  headerTitle: { flex: 1, ...Typography.h3, color: colors.background.primary, textAlign: 'center', marginRight: 40 },
   placeholder: { width: 40 },
   headerSubtitle: { ...Typography.bodySmall, color: 'rgba(255,255,255,0.8)', textAlign: 'center', marginBottom: Spacing.md },
   tabContainer: { flexDirection: 'row', marginHorizontal: Spacing.lg, backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: BorderRadius.md, padding: 4 },
   tab: { flex: 1, paddingVertical: Spacing.sm, alignItems: 'center', borderRadius: BorderRadius.sm },
-  activeTab: { backgroundColor: '#FFF' },
+  activeTab: { backgroundColor: colors.background.primary },
   tabText: { ...Typography.label, color: 'rgba(255,255,255,0.7)' },
   activeTabText: { color: Colors.primary[600] },
   content: { flex: 1, padding: Spacing.lg },
@@ -430,7 +431,7 @@ const styles = StyleSheet.create({
   photoGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm },
   photoItem: { width: 100, height: 100, borderRadius: BorderRadius.md, overflow: 'hidden' },
   photoImage: { width: '100%', height: '100%' },
-  removePhotoButton: { position: 'absolute', top: -4, right: -4, backgroundColor: '#FFF', borderRadius: 12 },
+  removePhotoButton: { position: 'absolute', top: -4, right: -4, backgroundColor: colors.background.primary, borderRadius: 12 },
   addPhotoButton: { width: 100, height: 100, borderRadius: BorderRadius.md, borderWidth: 2, borderColor: Colors.primary[200], borderStyle: 'dashed', justifyContent: 'center', alignItems: 'center' },
   addPhotoText: { ...Typography.caption, color: Colors.primary[600], marginTop: 4 },
   addPhotoSubtext: { ...Typography.caption, color: Colors.text.tertiary, fontSize: 10 },
@@ -443,14 +444,14 @@ const styles = StyleSheet.create({
   captionInput: { borderWidth: 1, borderColor: Colors.gray[300], borderRadius: BorderRadius.md, padding: Spacing.md, ...Typography.body, color: Colors.text.primary, minHeight: 80, textAlignVertical: 'top' },
   charCount: { ...Typography.caption, color: Colors.text.tertiary, textAlign: 'right', marginTop: 4 },
   coinPreview: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, backgroundColor: '#FFF9E6', padding: Spacing.md, borderRadius: BorderRadius.md, marginBottom: Spacing.lg },
-  coinPreviewText: { ...Typography.label, color: '#B45309' },
+  coinPreviewText: { ...Typography.label, color: colors.brand.amberDeep },
   uploadButton: { backgroundColor: Colors.primary[600], flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.sm, padding: Spacing.md, borderRadius: BorderRadius.md },
   uploadButtonDisabled: { opacity: 0.5 },
-  uploadButtonText: { ...Typography.label, color: '#FFF' },
+  uploadButtonText: { ...Typography.label, color: colors.background.primary },
   historyList: { padding: Spacing.lg, paddingBottom: Spacing['3xl'] },
   historyCard: { flexDirection: 'row', backgroundColor: Colors.background.primary, borderRadius: BorderRadius.lg, padding: Spacing.md, marginBottom: Spacing.sm, gap: Spacing.md, ...Shadows.subtle },
   historyPhotos: { flexDirection: 'row', alignItems: 'center' },
-  historyPhoto: { width: 48, height: 48, borderRadius: BorderRadius.md, borderWidth: 2, borderColor: '#FFF' },
+  historyPhoto: { width: 48, height: 48, borderRadius: BorderRadius.md, borderWidth: 2, borderColor: colors.background.primary },
   morePhotos: { backgroundColor: Colors.gray[200], justifyContent: 'center', alignItems: 'center' },
   morePhotosText: { ...Typography.caption, color: Colors.text.secondary, fontWeight: '600' },
   historyInfo: { flex: 1 },

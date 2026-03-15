@@ -6,6 +6,7 @@ import { View, Pressable, StyleSheet, Animated, Platform } from 'react-native';
 import { router } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface QuickAction {
   icon: string;
@@ -15,9 +16,9 @@ interface QuickAction {
 }
 
 const actions: QuickAction[] = [
-  { icon: '📄', label: 'Upload Bill', route: '/bill-upload', color: '#1a3a52' },
+  { icon: '📄', label: 'Upload Bill', route: '/bill-upload', color: colors.nileBlue },
   { icon: '🎁', label: 'Refer', route: '/referral', color: '#FF6B6B' },
-  { icon: '👑', label: 'Premium', route: '/subscription/plans', color: '#FFD700' },
+  { icon: '👑', label: 'Premium', route: '/subscription/plans', color: colors.brand.goldBright },
   { icon: '🎮', label: 'Games', route: '/games', color: '#9C27B0' },
 ];
 
@@ -93,7 +94,7 @@ function QuickAccessFAB() {
         style={styles.fabTouchable}
       >
         <LinearGradient
-          colors={expanded ? ['#EF4444', '#DC2626'] : ['#ffcd57', '#e6b84e']}
+          colors={expanded ? [colors.error, colors.error] : [colors.lightMustard, '#e6b84e']}
           style={styles.fab}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
   actionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   fabTouchable: {
     width: 56,
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.4,
         shadowRadius: 8,
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
   },
   fabIcon: {
     fontSize: 24,
-    color: '#FFF',
+    color: colors.background.primary,
   },
 });
 

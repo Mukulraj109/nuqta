@@ -26,6 +26,7 @@ import { platformAlert } from '@/utils/platformAlert';
 import walletApi from '@/services/walletApi';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const nuqtaCoinImage = BRAND.COIN_IMAGE;
 
@@ -104,7 +105,7 @@ export default function CoinDetailPage() {
           style={{ marginTop: 16, paddingHorizontal: 20, paddingVertical: 10, backgroundColor: coinInfo.amountColor, borderRadius: 8 }}
           onPress={handleRefresh}
         >
-          <ThemedText style={{ color: '#FFF', fontWeight: '600' }}>Retry</ThemedText>
+          <ThemedText style={{ color: colors.background.primary, fontWeight: '600' }}>Retry</ThemedText>
         </Pressable>
       </View>
     );
@@ -121,7 +122,7 @@ export default function CoinDetailPage() {
       >
         <View style={styles.headerRow}>
           <Pressable style={styles.backBtn} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={22} color="#FFF" />
+            <Ionicons name="arrow-back" size={22} color={colors.background.primary} />
           </Pressable>
           <Text style={styles.headerTitle}>{coinInfo.name}</Text>
           <View style={{ width: 36 }} />
@@ -154,7 +155,7 @@ export default function CoinDetailPage() {
         {/* Expiry Info (Promo only) */}
         {type === 'promo' && coin?.expiryDate && (
           <View style={[styles.card, styles.warningCard]}>
-            <Ionicons name="time" size={18} color="#D97706" />
+            <Ionicons name="time" size={18} color={colors.warningScale[700]} />
             <View style={{ flex: 1, marginLeft: 10 }}>
               <ThemedText style={styles.warningTitle}>Expires Soon</ThemedText>
               <ThemedText style={styles.warningText}>
@@ -169,7 +170,7 @@ export default function CoinDetailPage() {
           <ThemedText style={styles.sectionTitle}>Usage Rules</ThemedText>
           {rules.usageRules.map((rule, i) => (
             <View key={i} style={styles.ruleRow}>
-              <Ionicons name="checkmark-circle" size={16} color="#15803D" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.successScale[700]} />
               <ThemedText style={styles.ruleText}>{rule}</ThemedText>
             </View>
           ))}
@@ -192,8 +193,8 @@ export default function CoinDetailPage() {
             <ThemedText style={styles.sectionTitle}>By Merchant</ThemedText>
             {walletData.brandedCoins.map((bc, i) => (
               <View key={bc.merchantId} style={[styles.merchantRow, i < walletData.brandedCoins.length - 1 && styles.merchantBorder]}>
-                <View style={[styles.merchantIcon, { backgroundColor: (bc.merchantColor || '#6366F1') + '15' }]}>
-                  <Ionicons name="storefront" size={16} color={bc.merchantColor || '#6366F1'} />
+                <View style={[styles.merchantIcon, { backgroundColor: (bc.merchantColor || colors.brand.indigo) + '15' }]}>
+                  <Ionicons name="storefront" size={16} color={bc.merchantColor || colors.brand.indigo} />
                 </View>
                 <View style={{ flex: 1 }}>
                   <ThemedText style={styles.merchantName}>{bc.merchantName}</ThemedText>
@@ -222,7 +223,7 @@ export default function CoinDetailPage() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#FFFFFF' },
+  root: { flex: 1, backgroundColor: colors.background.primary },
   header: {
     paddingTop: Platform.OS === 'ios' ? 50 : 40,
     paddingBottom: 24,
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.2)',
     alignItems: 'center', justifyContent: 'center',
   },
-  headerTitle: { color: '#FFF', fontSize: 18, fontWeight: '700' },
+  headerTitle: { color: colors.background.primary, fontSize: 18, fontWeight: '700' },
   heroBalance: { alignItems: 'center' },
   heroIcon: {
     width: 56, height: 56, borderRadius: 20,
@@ -252,19 +253,19 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
   },
-  heroAmount: { color: '#FFF', fontSize: 32, fontWeight: '800', letterSpacing: -0.5 },
+  heroAmount: { color: colors.background.primary, fontSize: 32, fontWeight: '800', letterSpacing: -0.5 },
   heroLabel: { color: 'rgba(255,255,255,0.8)', fontSize: 12, fontWeight: '500', marginTop: 4, textAlign: 'center' },
   content: { flex: 1, paddingHorizontal: 22, paddingTop: 16 },
   card: {
-    backgroundColor: '#FFF', borderRadius: 16, padding: 16, marginBottom: 12,
+    backgroundColor: colors.background.primary, borderRadius: 16, padding: 16, marginBottom: 12,
     ...Shadows.subtle,
   },
   warningCard: {
     flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#FEF3C7', borderColor: 'rgba(245, 158, 11, 0.13)', borderWidth: 1,
+    backgroundColor: colors.tint.amberLight, borderColor: 'rgba(245, 158, 11, 0.13)', borderWidth: 1,
   },
-  warningTitle: { fontSize: 13, fontWeight: '700', color: '#92400E' },
-  warningText: { fontSize: 11, color: '#92400E', marginTop: 1 },
+  warningTitle: { fontSize: 13, fontWeight: '700', color: colors.brand.amberDark },
+  warningText: { fontSize: 11, color: colors.brand.amberDark, marginTop: 1 },
   sectionTitle: { fontSize: 14, fontWeight: '700', color: Colors.text.primary, marginBottom: 10 },
   ruleRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 5 },
   ruleText: { fontSize: 13, color: Colors.text.secondary, flex: 1 },

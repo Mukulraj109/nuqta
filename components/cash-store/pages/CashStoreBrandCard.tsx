@@ -11,6 +11,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { CashStoreBrand } from '../../../types/cash-store.types';
+import { colors } from '@/constants/theme';
 
 interface CashStoreBrandCardProps {
   brand: CashStoreBrand;
@@ -49,8 +50,8 @@ const CashStoreBrandCard: React.FC<CashStoreBrandCardProps> = ({ brand, index, o
   };
 
   const isHot = brand.cashbackRate >= 10;
-  const cashbackColor = isHot ? '#059669' : '#1a3a52';
-  const cashbackBg = isHot ? '#ECFDF5' : '#F0F4F8';
+  const cashbackColor = isHot ? colors.successScale[700] : colors.nileBlue;
+  const cashbackBg = isHot ? colors.tint.greenLight : '#F0F4F8';
 
   return (
     <Animated.View
@@ -85,7 +86,7 @@ const CashStoreBrandCard: React.FC<CashStoreBrandCardProps> = ({ brand, index, o
               onError={() => setLogoError(true)}
             />
           ) : (
-            <LinearGradient colors={['#1a3a52', '#234b68']} style={styles.logoPlaceholder}>
+            <LinearGradient colors={[colors.nileBlue, colors.brand.nileBlueLight]} style={styles.logoPlaceholder}>
               <Text style={styles.logoInitial}>{(!brand.logo || logoError) ? brand.name.charAt(0).toUpperCase() : brand.logo}</Text>
             </LinearGradient>
           )}
@@ -99,7 +100,7 @@ const CashStoreBrandCard: React.FC<CashStoreBrandCardProps> = ({ brand, index, o
             </Text>
             {brand.isFeatured && (
               <View style={styles.verifiedBadge}>
-                <Ionicons name="checkmark-circle" size={13} color="#3B82F6" />
+                <Ionicons name="checkmark-circle" size={13} color={colors.infoScale[400]} />
               </View>
             )}
           </View>
@@ -112,7 +113,7 @@ const CashStoreBrandCard: React.FC<CashStoreBrandCardProps> = ({ brand, index, o
             ) : null}
             {brand.rating ? (
               <View style={styles.ratingPill}>
-                <Ionicons name="star" size={9} color="#F59E0B" />
+                <Ionicons name="star" size={9} color={colors.warningScale[400]} />
                 <Text style={styles.ratingText}>{brand.rating.toFixed(1)}</Text>
                 {brand.ratingCount ? (
                   <Text style={styles.ratingCount}>
@@ -127,13 +128,13 @@ const CashStoreBrandCard: React.FC<CashStoreBrandCardProps> = ({ brand, index, o
           <View style={styles.trustRow}>
             {isHot && (
               <View style={styles.hotTag}>
-                <Ionicons name="flame" size={10} color="#FFFFFF" />
+                <Ionicons name="flame" size={10} color={colors.background.primary} />
                 <Text style={styles.hotTagText}>Hot Deal</Text>
               </View>
             )}
             {brand.successRate && brand.successRate >= 90 ? (
               <View style={styles.trustPill}>
-                <Ionicons name="shield-checkmark" size={9} color="#059669" />
+                <Ionicons name="shield-checkmark" size={9} color={colors.successScale[700]} />
                 <Text style={styles.trustText}>{Math.round(brand.successRate)}% success</Text>
               </View>
             ) : null}
@@ -148,13 +149,13 @@ const CashStoreBrandCard: React.FC<CashStoreBrandCardProps> = ({ brand, index, o
         <View style={styles.cashbackOuter}>
           <View style={[styles.cashbackBadge, { backgroundColor: cashbackBg }]}>
             {brand.maxCashback ? (
-              <Text style={[styles.cashbackUpTo, { color: isHot ? '#059669' : '#9CA3AF' }]}>Up to</Text>
+              <Text style={[styles.cashbackUpTo, { color: isHot ? colors.successScale[700] : colors.neutral[400] }]}>Up to</Text>
             ) : null}
             <Text style={[styles.cashbackRate, { color: cashbackColor }]}>{brand.cashbackRate}%</Text>
-            <Text style={[styles.cashbackLabel, { color: isHot ? '#059669' : '#6B7280' }]}>cashback</Text>
+            <Text style={[styles.cashbackLabel, { color: isHot ? colors.successScale[700] : colors.neutral[500] }]}>cashback</Text>
           </View>
           <View style={styles.arrowCircle}>
-            <Ionicons name="arrow-forward" size={12} color="#1a3a52" />
+            <Ionicons name="arrow-forward" size={12} color={colors.nileBlue} />
           </View>
         </View>
       </Pressable>
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 18,
     padding: 14,
     gap: 12,
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     borderColor: '#F0EBE4',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.06,
         shadowRadius: 10,
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: 4,
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     borderTopLeftRadius: 18,
     borderBottomLeftRadius: 18,
   },
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
   logoInitial: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   // Info
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     paddingHorizontal: 7,
     paddingVertical: 2.5,
     borderRadius: 6,
@@ -308,7 +309,7 @@ const styles = StyleSheet.create({
   hotTagText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   trustPill: {
     flexDirection: 'row',

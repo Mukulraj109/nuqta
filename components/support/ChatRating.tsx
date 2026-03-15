@@ -14,6 +14,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import type { ConversationRating } from '@/types/supportChat.types';
+import { colors } from '@/constants/theme';
 
 interface ChatRatingProps {
   visible: boolean;
@@ -104,7 +105,7 @@ function ChatRating({
           >
             <View style={styles.header}>
               <View style={styles.iconContainer}>
-                <Ionicons name="star" size={32} color="#F59E0B" />
+                <Ionicons name="star" size={32} color={colors.warningScale[400]} />
               </View>
               <ThemedText style={styles.title}>Rate Your Experience</ThemedText>
               {agentName && (
@@ -125,7 +126,7 @@ function ChatRating({
                   <Ionicons
                     name={rating && value <= rating ? 'star' : 'star-outline'}
                     size={40}
-                    color={rating && value <= rating ? '#F59E0B' : '#D1D5DB'}
+                    color={rating && value <= rating ? colors.warningScale[400] : colors.neutral[300]}
                   />
                 </Pressable>
               ))}
@@ -176,7 +177,7 @@ function ChatRating({
                 <TextInput
                   style={styles.commentInput}
                   placeholder="Tell us more about your experience..."
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.neutral[400]}
                   value={comment}
                   onChangeText={setComment}
                   multiline
@@ -202,7 +203,7 @@ function ChatRating({
                 disabled={!rating}
               >
                 <LinearGradient
-                  colors={rating ? ['#10B981', '#059669'] : ['#E5E7EB', '#D1D5DB']}
+                  colors={rating ? [colors.successScale[400], colors.successScale[700]] : [colors.neutral[200], colors.neutral[300]]}
                   style={styles.submitButtonGradient}
                 >
                   <ThemedText style={styles.submitButtonText}>Submit</ThemedText>
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
   handle: {
     width: 40,
     height: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 2,
     alignSelf: 'center',
     marginTop: 12,
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
@@ -266,13 +267,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 15,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 22,
   },
@@ -288,7 +289,7 @@ const styles = StyleSheet.create({
   ratingLabel: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     textAlign: 'center',
     marginBottom: 24,
   },
@@ -298,7 +299,7 @@ const styles = StyleSheet.create({
   tagsTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
   },
   tagsContainer: {
@@ -311,20 +312,20 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     backgroundColor: 'white',
   },
   tagSelected: {
-    borderColor: '#10B981',
-    backgroundColor: '#D1FAE5',
+    borderColor: colors.successScale[400],
+    backgroundColor: colors.tint.green,
   },
   tagText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   tagTextSelected: {
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   commentSection: {
     marginBottom: 24,
@@ -332,22 +333,22 @@ const styles = StyleSheet.create({
   commentTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
   },
   commentInput: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     fontSize: 15,
-    color: '#1F2937',
+    color: colors.neutral[800],
     minHeight: 100,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   characterCount: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'right',
     marginTop: 6,
   },
@@ -361,13 +362,13 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     alignItems: 'center',
   },
   skipButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   submitButton: {
     flex: 1,
@@ -387,7 +388,7 @@ const styles = StyleSheet.create({
   },
   disclaimer: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     lineHeight: 18,
   },

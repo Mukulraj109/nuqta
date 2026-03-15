@@ -21,6 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LOCK_FEE_PERCENTAGES } from './DurationChips';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface ProductStickyBottomBarProps {
   /** Current product price */
@@ -98,7 +99,7 @@ export const ProductStickyBottomBar: React.FC<ProductStickyBottomBarProps> = ({
             disabled={quantity <= 1}
            
           >
-            <Ionicons name="remove" size={18} color={quantity <= 1 ? '#D1D5DB' : '#374151'} />
+            <Ionicons name="remove" size={18} color={quantity <= 1 ? colors.neutral[300] : colors.neutral[700]} />
           </Pressable>
           <Text style={styles.qtyText}>{quantity}</Text>
           <Pressable
@@ -107,7 +108,7 @@ export const ProductStickyBottomBar: React.FC<ProductStickyBottomBarProps> = ({
             disabled={quantity >= maxQuantity}
            
           >
-            <Ionicons name="add" size={18} color={quantity >= maxQuantity ? '#D1D5DB' : '#374151'} />
+            <Ionicons name="add" size={18} color={quantity >= maxQuantity ? colors.neutral[300] : colors.neutral[700]} />
           </Pressable>
         </View>
       )}
@@ -120,7 +121,7 @@ export const ProductStickyBottomBar: React.FC<ProductStickyBottomBarProps> = ({
         disabled={isLocked}
       >
         <LinearGradient
-          colors={isLocked ? ['#9CA3AF', '#6B7280'] : ['#1a3a52', '#0f2636']}
+          colors={isLocked ? [colors.neutral[400], colors.neutral[500]] : [colors.nileBlue, '#0f2636']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.lockButtonGradient}
@@ -128,7 +129,7 @@ export const ProductStickyBottomBar: React.FC<ProductStickyBottomBarProps> = ({
           <Ionicons
             name={isLocked ? 'checkmark-circle' : 'lock-closed'}
             size={18}
-            color="#FFFFFF"
+            color={colors.background.primary}
           />
           <Text style={styles.lockButtonText}>
             {isLocked ? 'Locked' : 'Lock Now'}
@@ -148,11 +149,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -184,21 +185,21 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.5,
   },
 
   originalPrice: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
 
   lockFeeText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     marginTop: 2,
   },
 
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
   quantitySection: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 8,
     marginRight: 12,
   },
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
   qtyText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     minWidth: 24,
     textAlign: 'center',
   },
@@ -250,7 +251,7 @@ const styles = StyleSheet.create({
   lockButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.3,
   },
 });

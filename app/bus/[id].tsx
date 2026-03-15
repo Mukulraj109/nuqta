@@ -34,6 +34,7 @@ import BusInfoCard from '../../components/bus/BusInfoCard';
 import BusAmenities from '../../components/bus/BusAmenities';
 import BusCancellationPolicy from '../../components/bus/BusCancellationPolicy';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -479,7 +480,7 @@ export default function BusDetailsPage() {
                 <Ionicons
                   name={isInWishlist(bus.id) ? 'heart' : 'heart-outline'}
                   size={24}
-                  color={isInWishlist(bus.id) ? '#EF4444' : '#FFFFFF'}
+                  color={isInWishlist(bus.id) ? colors.error : colors.background.primary}
                 />
               </Pressable>
               <Pressable style={styles.actionButton}>
@@ -512,7 +513,7 @@ export default function BusDetailsPage() {
         {/* Store/Provider Info */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="business" size={24} color="#F97316" />
+            <Ionicons name="business" size={24} color={colors.brand.orange} />
             <Text style={styles.sectionTitle}>Service Provider</Text>
           </View>
           <View style={styles.storeCard}>
@@ -564,13 +565,13 @@ export default function BusDetailsPage() {
         {/* Details Grid */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="information-circle" size={24} color="#F97316" />
+            <Ionicons name="information-circle" size={24} color={colors.brand.orange} />
             <Text style={styles.sectionTitle}>Trip Details</Text>
           </View>
           <View style={styles.detailsGrid}>
             <View style={styles.detailItem}>
               <View style={styles.detailIconContainer}>
-                <Ionicons name="time-outline" size={20} color="#F97316" />
+                <Ionicons name="time-outline" size={20} color={colors.brand.orange} />
               </View>
               <Text style={styles.detailLabel}>Duration</Text>
               <Text style={styles.detailValue}>
@@ -579,21 +580,21 @@ export default function BusDetailsPage() {
             </View>
             <View style={styles.detailItem}>
               <View style={styles.detailIconContainer}>
-                <Ionicons name="bus-outline" size={20} color="#F97316" />
+                <Ionicons name="bus-outline" size={20} color={colors.brand.orange} />
               </View>
               <Text style={styles.detailLabel}>Bus Type</Text>
               <Text style={styles.detailValue}>{bus.busType || 'Sleeper'}</Text>
             </View>
             <View style={styles.detailItem}>
               <View style={styles.detailIconContainer}>
-                <Ionicons name="ticket-outline" size={20} color="#F97316" />
+                <Ionicons name="ticket-outline" size={20} color={colors.brand.orange} />
               </View>
               <Text style={styles.detailLabel}>Bus Number</Text>
               <Text style={styles.detailValue}>{bus.busNumber || 'N/A'}</Text>
             </View>
             <View style={styles.detailItem}>
               <View style={styles.detailIconContainer}>
-                <Ionicons name="star" size={20} color="#F97316" />
+                <Ionicons name="star" size={20} color={colors.brand.orange} />
               </View>
               <Text style={styles.detailLabel}>Rating</Text>
               <Text style={styles.detailValue}>{bus.rating.toFixed(1)}</Text>
@@ -604,7 +605,7 @@ export default function BusDetailsPage() {
         {/* Amenities */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="sparkles" size={24} color="#F97316" />
+            <Ionicons name="sparkles" size={24} color={colors.brand.orange} />
             <Text style={styles.sectionTitle}>Amenities</Text>
           </View>
           <BusAmenities amenities={bus.amenities} />
@@ -659,7 +660,7 @@ export default function BusDetailsPage() {
               </View>
             </View>
             <View style={styles.cashbackInfo}>
-              <Ionicons name="cash" size={18} color="#F97316" />
+              <Ionicons name="cash" size={18} color={colors.brand.orange} />
               <Text style={styles.cashbackInfoText}>{bus.cashback.percentage}% Cashback</Text>
             </View>
           </View>
@@ -673,7 +674,7 @@ export default function BusDetailsPage() {
            
           >
             <LinearGradient
-              colors={['#F97316', '#EA580C', '#C2410C']}
+              colors={[colors.brand.orange, colors.brand.orangeDark, '#C2410C']}
               style={styles.bookButtonGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -780,7 +781,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xl,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
     borderRadius: BorderRadius.md,
   },
   retryButtonText: {
@@ -917,7 +918,7 @@ const styles = StyleSheet.create({
   viewStoreButton: {
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
     borderRadius: BorderRadius.sm,
   },
   viewStoreButtonText: {
@@ -948,7 +949,7 @@ const styles = StyleSheet.create({
   priceValue: {
     ...Typography.h1,
     fontWeight: '800',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   originalPrice: {
     ...Typography.h4,
@@ -956,7 +957,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
   },
   cashbackBadge: {
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
@@ -1003,7 +1004,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: BorderRadius.xl,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.sm,
@@ -1093,23 +1094,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: colors.warningScale[200],
   },
   cashbackInfoText: {
     ...Typography.bodySmall,
     fontSize: 13,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   bookButton: {
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
-    shadowColor: '#F97316',
+    shadowColor: colors.brand.orange,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,

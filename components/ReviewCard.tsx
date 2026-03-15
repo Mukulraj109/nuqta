@@ -11,6 +11,7 @@ import StarRating from '@/components/StarRating';
 import { Ionicons } from '@expo/vector-icons';
 import { ReviewCardProps } from '@/types/reviews';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/constants/theme';
 
 const ReviewCard: React.FC<ReviewCardProps> = ({
   review,
@@ -118,7 +119,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
       {/* Pending Badge - Only show for user's own pending reviews */}
       {isPending && (
         <View style={styles.pendingBadge}>
-          <Ionicons name="time-outline" size={14} color="#F59E0B" />
+          <Ionicons name="time-outline" size={14} color={colors.warningScale[400]} />
           <ThemedText style={styles.pendingBadgeText}>
             Pending Approval
           </ThemedText>
@@ -135,7 +136,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           />
           {imageError && (
             <View style={[styles.avatar, styles.avatarFallback]}>
-              <Ionicons name="person" size={20} color="#9CA3AF" />
+              <Ionicons name="person" size={20} color={colors.neutral[400]} />
             </View>
           )}
           
@@ -143,7 +144,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             <View style={styles.nameRow}>
               <ThemedText style={styles.userName}>{review.userName}</ThemedText>
               {review.isVerified && (
-                <Ionicons name="checkmark-circle" size={14} color="#10B981" />
+                <Ionicons name="checkmark-circle" size={14} color={colors.successScale[400]} />
               )}
             </View>
             <ThemedText style={styles.reviewDate}>{formatDate(review.date)}</ThemedText>
@@ -183,7 +184,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
       {showStoreResponse && review.storeResponse && (
         <View style={styles.storeResponse}>
           <View style={styles.storeResponseHeader}>
-            <Ionicons name="storefront" size={16} color="#ffcd57" />
+            <Ionicons name="storefront" size={16} color={colors.lightMustard} />
             <ThemedText style={styles.storeResponseTitle}>
               Response from {review.storeResponse.responderName}
             </ThemedText>
@@ -203,7 +204,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           <Ionicons
             name={review.isLiked ? "thumbs-up" : "thumbs-up-outline"}
             size={16}
-            color={review.isLiked ? "#ffcd57" : "#6B7280"}
+            color={review.isLiked ? colors.lightMustard : colors.neutral[500]}
           />
           <ThemedText style={[
             styles.actionText,
@@ -217,18 +218,18 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           <Ionicons
             name={review.isHelpful ? "heart" : "heart-outline"}
             size={16}
-            color={review.isHelpful ? "#EF4444" : "#6B7280"}
+            color={review.isHelpful ? colors.error : colors.neutral[500]}
           />
           <ThemedText style={[
             styles.actionText,
-            review.isHelpful && { color: "#EF4444" }
+            review.isHelpful && { color: colors.error }
           ]}>
             Helpful ({review.helpfulCount || 0})
           </ThemedText>
         </Pressable>
 
         <Pressable style={styles.actionButton} onPress={handleReport}>
-          <Ionicons name="flag-outline" size={16} color="#6B7280" />
+          <Ionicons name="flag-outline" size={16} color={colors.neutral[500]} />
           <ThemedText style={styles.actionText}>Report</ThemedText>
         </Pressable>
       </View>
@@ -238,7 +239,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 18,
     marginBottom: 16,
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
     borderWidth: 1,
-    borderColor: '#F8FAFC',
+    borderColor: colors.tint.coolGray,
   },
   header: {
     flexDirection: 'row',
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   avatarFallback: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
@@ -284,11 +285,11 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   reviewDate: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   ratingContainer: {
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
   reviewText: {
     fontSize: 14,
     lineHeight: 20,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   imagesContainer: {
     marginBottom: 12,
@@ -314,12 +315,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   storeResponse: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     borderRadius: 8,
     padding: 12,
     marginTop: 8,
     borderLeftWidth: 3,
-    borderLeftColor: '#ffcd57',
+    borderLeftColor: colors.lightMustard,
   },
   storeResponseHeader: {
     flexDirection: 'row',
@@ -330,17 +331,17 @@ const styles = StyleSheet.create({
   storeResponseTitle: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     flex: 1,
   },
   storeResponseDate: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   storeResponseText: {
     fontSize: 13,
     lineHeight: 18,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   actions: {
     flexDirection: 'row',
@@ -348,7 +349,7 @@ const styles = StyleSheet.create({
     gap: 20,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   actionButton: {
     flexDirection: 'row',
@@ -357,17 +358,17 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   actionTextActive: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
   pendingBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
@@ -379,7 +380,7 @@ const styles = StyleSheet.create({
   pendingBadgeText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },

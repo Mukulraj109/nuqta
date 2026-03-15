@@ -17,6 +17,7 @@ import QuantitySelector from '@/components/cart/QuantitySelector';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/useToast';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 function CartItem({
   item,
@@ -178,7 +179,7 @@ function CartItem({
               accessibilityLabel="No product image available"
               accessible={true}
             >
-              <Ionicons name="image-outline" size={32} color="#9CA3AF" />
+              <Ionicons name="image-outline" size={32} color={colors.neutral[400]} />
             </View>
           )}
         </View>
@@ -202,7 +203,7 @@ function CartItem({
                 <View style={styles.eventDetails}>
                   {(item as any).metadata.slotTime && (
                     <View style={styles.eventDetailRow}>
-                      <Ionicons name="time-outline" size={12} color="#6B7280" />
+                      <Ionicons name="time-outline" size={12} color={colors.neutral[500]} />
                       <ThemedText style={styles.eventDetailText}>
                         {(item as any).metadata.slotTime}
                       </ThemedText>
@@ -210,7 +211,7 @@ function CartItem({
                   )}
                   {(item as any).metadata.location && (
                     <View style={styles.eventDetailRow}>
-                      <Ionicons name="location-outline" size={12} color="#6B7280" />
+                      <Ionicons name="location-outline" size={12} color={colors.neutral[500]} />
                       <ThemedText style={styles.eventDetailText}>
                         {(item as any).metadata.location}
                       </ThemedText>
@@ -218,7 +219,7 @@ function CartItem({
                   )}
                   {(item as any).metadata.date && (
                     <View style={styles.eventDetailRow}>
-                      <Ionicons name="calendar-outline" size={12} color="#6B7280" />
+                      <Ionicons name="calendar-outline" size={12} color={colors.neutral[500]} />
                       <ThemedText style={styles.eventDetailText}>
                         {(item as any).metadata.date}
                       </ThemedText>
@@ -257,7 +258,7 @@ function CartItem({
                         </ThemedText>
                       </View>
                       <View style={styles.lockFeeBadge}>
-                        <Ionicons name="lock-closed" size={10} color="#1a3a52" />
+                        <Ionicons name="lock-closed" size={10} color={colors.nileBlue} />
                         <ThemedText style={styles.lockFeeText}>
                           {currencySymbol}{lockFeeDiscount?.toLocaleString(locale)} paid at lock
                         </ThemedText>
@@ -319,7 +320,7 @@ function CartItem({
               {/* Cashback Badge */}
               {item.cashback && (
                 <View style={styles.cashbackBadge}>
-                  <Ionicons name="gift" size={12} color="#ffcd57" />
+                  <Ionicons name="gift" size={12} color={colors.lightMustard} />
                   <ThemedText style={styles.cashbackText}>
                     {item.cashback}
                   </ThemedText>
@@ -348,7 +349,7 @@ function CartItem({
                 accessibilityLabel="Remove item from cart"
                 accessibilityRole="button"
               >
-                <Ionicons name="trash-outline" size={20} color="#EF4444" />
+                <Ionicons name="trash-outline" size={20} color={colors.error} />
               </Pressable>
             )}
           </View>
@@ -356,7 +357,7 @@ function CartItem({
           {/* Quantity Warning - Show if cart quantity exceeds available stock */}
           {(item.quantity || 1) > stock && stock > 0 && (
             <View style={styles.quantityWarning}>
-              <Ionicons name="alert-circle" size={12} color="#D97706" />
+              <Ionicons name="alert-circle" size={12} color={colors.warningScale[700]} />
               <ThemedText style={styles.quantityWarningText}>
                 Only {stock} available
               </ThemedText>
@@ -379,7 +380,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 14,
     flexDirection: 'row',
-    shadowColor: '#1a3a52', // Nile Blue shadow
+    shadowColor: colors.nileBlue, // Nile Blue shadow
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
@@ -393,16 +394,16 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 14,
     overflow: 'hidden',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   productImage: {
     width: '100%',
     height: '100%',
   },
   placeholderImage: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 6,
     lineHeight: 20,
   },
@@ -435,12 +436,12 @@ const styles = StyleSheet.create({
   },
   eventDetailText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '400',
   },
   productPrice: {
     fontWeight: '800',
-    color: '#1a3a52', // Nile Blue for better readability
+    color: colors.nileBlue, // Nile Blue for better readability
     marginTop: 4,
     fontSize: 17,
   },
@@ -454,7 +455,7 @@ const styles = StyleSheet.create({
   },
   originalPriceStrike: {
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   lockFeeBadge: {
@@ -466,7 +467,7 @@ const styles = StyleSheet.create({
   lockFeeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   bottomRow: {
     flexDirection: 'row',
@@ -488,14 +489,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 8,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     alignSelf: 'flex-start',
     marginTop: 8,
   },
   quantityWarningText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   cashbackBadge: {
     flexDirection: 'row',
@@ -509,7 +510,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 205, 87, 0.15)',
   },
   cashbackText: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
     fontSize: 11,
   },

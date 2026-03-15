@@ -4,6 +4,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { VariantOptionButton } from './VariantOptionButton';
 import { useProductVariants } from '@/hooks/useProductVariants';
 import { IProductVariant, IVariantOption } from '@/types/product-variants.types';
+import { colors } from '@/constants/theme';
 
 /**
  * ProductVariantSelector Component
@@ -69,20 +70,20 @@ export const ProductVariantSelector: React.FC<ProductVariantSelectorProps> = ({
     // Map common color names to hex codes
     const colorMap: { [key: string]: string } = {
       black: '#000000',
-      white: '#FFFFFF',
-      red: '#EF4444',
-      blue: '#3B82F6',
-      green: '#10B981',
-      yellow: '#FBBF24',
-      orange: '#F97316',
-      purple: '#8B5CF6',
-      pink: '#EC4899',
-      gray: '#6B7280',
-      grey: '#6B7280',
-      brown: '#92400E',
+      white: colors.background.primary,
+      red: colors.error,
+      blue: colors.infoScale[400],
+      green: colors.successScale[400],
+      yellow: colors.warningScale[400],
+      orange: colors.brand.orange,
+      purple: colors.brand.purpleLight,
+      pink: colors.brand.pink,
+      gray: colors.neutral[500],
+      grey: colors.neutral[500],
+      brown: colors.brand.amberDark,
       navy: '#1E3A8A',
       beige: '#F5F5DC',
-      gold: '#FFD700',
+      gold: colors.brand.goldBright,
       silver: '#C0C0C0',
     };
 
@@ -182,13 +183,13 @@ export const ProductVariantSelector: React.FC<ProductVariantSelectorProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 16,
   },
   mainTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 20,
     paddingHorizontal: 16,
   },
@@ -206,12 +207,12 @@ const styles = StyleSheet.create({
   optionName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   selectedValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     marginLeft: 4,
   },
 
@@ -223,32 +224,32 @@ const styles = StyleSheet.create({
 
   // Status Message
   statusContainer: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingVertical: 12,
     paddingHorizontal: 16,
     marginTop: 8,
     marginHorizontal: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: colors.warningScale[200],
   },
   statusText: {
     fontSize: 14,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontWeight: '500',
     textAlign: 'center',
   },
 
   // Variant Info
   variantInfoContainer: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     paddingVertical: 12,
     paddingHorizontal: 16,
     marginTop: 12,
     marginHorizontal: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   variantInfoRow: {
     flexDirection: 'row',
@@ -258,19 +259,19 @@ const styles = StyleSheet.create({
   variantInfoLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginRight: 8,
   },
   variantInfoValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   inStock: {
-    color: '#059669',
+    color: colors.successScale[700],
   },
   outOfStock: {
-    color: '#DC2626',
+    color: colors.error,
   },
 });
 

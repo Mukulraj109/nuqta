@@ -16,6 +16,7 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { quickActionsData, QuickAction } from '@/data/categoryDummyData';
+import { colors } from '@/constants/theme';
 
 interface QuickActionBarProps {
   categorySlug?: string;
@@ -148,13 +149,13 @@ const QuickActionBar: React.FC<QuickActionBarProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 16,
     paddingVertical: 14,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
   actionName: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
     maxWidth: 60,
   },
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 4,
     right: 4,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     paddingHorizontal: 5,
     paddingVertical: 2,
     borderRadius: 4,
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   newBadgeText: {
     fontSize: 8,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
 });
 

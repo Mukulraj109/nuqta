@@ -25,6 +25,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface SocialPost {
   _id: string;
@@ -241,7 +242,7 @@ export default function AdminSocialMediaPosts() {
       case 'facebook': return '#1877F2';
       case 'twitter': return '#1DA1F2';
       case 'tiktok': return '#000000';
-      default: return '#6B7280';
+      default: return colors.neutral[500];
     }
   };
 
@@ -409,7 +410,7 @@ export default function AdminSocialMediaPosts() {
             accessibilityRole="text"
             accessibilityLabel={selectedStatus === 'all' ? 'No submissions yet' : `No ${selectedStatus} posts found`}
           >
-            <Ionicons name="document-text-outline" size={64} color="#D1D5DB" />
+            <Ionicons name="document-text-outline" size={64} color={colors.neutral[300]} />
             <Text style={styles.emptyTitle}>No Posts Found</Text>
             <Text style={styles.emptyText}>
               {selectedStatus === 'all' ? 'No submissions yet' : `No ${selectedStatus} posts`}
@@ -509,7 +510,7 @@ export default function AdminSocialMediaPosts() {
                 </View>
                 <View style={styles.metaRow}>
                   <Text style={styles.metaLabel}>Cashback:</Text>
-                  <Text style={[styles.metaValue, { color: '#10B981', fontWeight: '700' }]}>
+                  <Text style={[styles.metaValue, { color: colors.successScale[400], fontWeight: '700' }]}>
                     {currencySymbol}{post.cashbackAmount}
                   </Text>
                 </View>
@@ -654,7 +655,7 @@ export default function AdminSocialMediaPosts() {
             <TextInput
               style={styles.modalInput}
               placeholder="Enter reason for rejection..."
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               value={rejectionReason}
               onChangeText={setRejectionReason}
               multiline
@@ -841,7 +842,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.sm,

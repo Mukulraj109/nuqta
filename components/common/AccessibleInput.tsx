@@ -26,6 +26,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 import {
   getAccessibleInputProps,
   announceValidationError,
@@ -211,9 +212,9 @@ const AccessibleInput: React.FC<AccessibleInputProps> = ({
    * Get container border color
    */
   const getBorderColor = (): string => {
-    if (error) return '#EF4444';
+    if (error) return colors.error;
     if (isFocused) return '#9333EA';
-    return '#D1D5DB';
+    return colors.neutral[300];
   };
 
   /**
@@ -257,7 +258,7 @@ const AccessibleInput: React.FC<AccessibleInputProps> = ({
           <Ionicons
             name={leftIcon}
             size={20}
-            color="#6B7280"
+            color={colors.neutral[500]}
             style={styles.leftIcon}
           />
         )}
@@ -300,7 +301,7 @@ const AccessibleInput: React.FC<AccessibleInputProps> = ({
               <Ionicons
                 name={showPassword ? 'eye-off' : 'eye'}
                 size={20}
-                color="#6B7280"
+                color={colors.neutral[500]}
               />
             </Pressable>
           )}
@@ -310,7 +311,7 @@ const AccessibleInput: React.FC<AccessibleInputProps> = ({
             <Ionicons
               name={rightIcon}
               size={20}
-              color="#6B7280"
+              color={colors.neutral[500]}
               style={styles.rightIcon}
             />
           )}
@@ -325,7 +326,7 @@ const AccessibleInput: React.FC<AccessibleInputProps> = ({
               accessibilityLabel="Clear input"
               accessibilityHint="Clears the input field"
             >
-              <Ionicons name="close-circle" size={20} color="#6B7280" />
+              <Ionicons name="close-circle" size={20} color={colors.neutral[500]} />
             </Pressable>
           )}
         </View>
@@ -339,7 +340,7 @@ const AccessibleInput: React.FC<AccessibleInputProps> = ({
           accessibilityRole="alert"
           accessibilityLiveRegion="polite"
         >
-          <Ionicons name="alert-circle" size={14} color="#EF4444" />
+          <Ionicons name="alert-circle" size={14} color={colors.error} />
           <ThemedText style={styles.errorText}>{error}</ThemedText>
         </View>
       )}
@@ -365,26 +366,26 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   required: {
-    color: '#EF4444',
+    color: colors.error,
   },
   charCount: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 2,
     borderRadius: 12,
     paddingHorizontal: 12,
     minHeight: MIN_TOUCH_TARGET_SIZE,
   },
   disabled: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     opacity: 0.6,
   },
   leftIcon: {
@@ -393,7 +394,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#111827',
+    color: colors.gray[900],
     paddingVertical: 12,
     minHeight: MIN_TOUCH_TARGET_SIZE,
   },
@@ -420,12 +421,12 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 12,
-    color: '#EF4444',
+    color: colors.error,
     flex: 1,
   },
   helperText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 6,
   },
 });

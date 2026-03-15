@@ -23,6 +23,7 @@ import storesApi from '@/services/storesApi';
 import productsApi from '@/services/productsApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 
 // Category configuration with API tags
@@ -37,7 +38,7 @@ const categoryConfig: Record<string, {
   salon: {
     title: 'Salons',
     icon: '💇‍♀️',
-    gradientColors: ['#EC4899', '#F43F5E'],
+    gradientColors: [colors.brand.pink, '#F43F5E'],
     tags: ['salon', 'beauty', 'hair'],
     type: 'store',
     subtitle: 'Book hair, beauty & grooming services',
@@ -45,7 +46,7 @@ const categoryConfig: Record<string, {
   spa: {
     title: 'Spa & Massage',
     icon: '💆‍♀️',
-    gradientColors: ['#8B5CF6', '#7C3AED'],
+    gradientColors: [colors.brand.purpleLight, colors.brand.purple],
     tags: ['spa', 'massage', 'wellness'],
     type: 'store',
     subtitle: 'Relax and rejuvenate',
@@ -61,7 +62,7 @@ const categoryConfig: Record<string, {
   wellness: {
     title: 'Wellness Centers',
     icon: '🧘‍♀️',
-    gradientColors: ['#10B981', '#059669'],
+    gradientColors: [colors.successScale[400], colors.successScale[700]],
     tags: ['wellness', 'yoga', 'meditation', 'fitness'],
     type: 'store',
     subtitle: 'Yoga, meditation & holistic health',
@@ -69,7 +70,7 @@ const categoryConfig: Record<string, {
   skincare: {
     title: 'Skincare',
     icon: '✨',
-    gradientColors: ['#F59E0B', '#D97706'],
+    gradientColors: [colors.warningScale[400], colors.warningScale[700]],
     tags: ['skincare', 'beauty', 'cosmetics'],
     type: 'product',
     subtitle: 'Serums, moisturizers & treatments',
@@ -77,7 +78,7 @@ const categoryConfig: Record<string, {
   haircare: {
     title: 'Hair Care',
     icon: '💇',
-    gradientColors: ['#3B82F6', '#2563EB'],
+    gradientColors: [colors.infoScale[400], colors.brand.blue],
     tags: ['haircare', 'hair', 'beauty'],
     type: 'product',
     subtitle: 'Shampoos, treatments & styling',

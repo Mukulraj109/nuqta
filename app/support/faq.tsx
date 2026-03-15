@@ -11,6 +11,7 @@ import supportService, { FAQ, FAQCategory } from '@/services/supportApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Gradients, Spacing } from '@/constants/DesignSystem';
 import { SectionListSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 export default function FAQPage() {
   const router = useRouter();
@@ -190,7 +191,7 @@ export default function FAQPage() {
       product: Colors.warning,
       account: Colors.error,
       technical: Colors.secondary[500],
-      delivery: '#EC4899',
+      delivery: colors.brand.pink,
       refund: Colors.success,
       other: Colors.gray[600],
     };

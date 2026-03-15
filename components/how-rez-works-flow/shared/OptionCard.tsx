@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, StyleSheet, View, Platform, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
@@ -26,8 +27,8 @@ const OptionCard: React.FC<OptionCardProps> = ({
     subtitle,
     icon,
     onPress,
-    colors = ['#F3F4F6', '#F9FAFB'],
-    iconColor = '#3B82F6',
+    colors = [colors.neutral[100], colors.neutral[50]],
+    iconColor = colors.infoScale[400],
     index = 0,
 }) => {
     const scale = useSharedValue(1);
@@ -163,13 +164,13 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 17,
         fontWeight: '700',
-        color: '#1F2937',
+        color: colors.neutral[800],
         marginBottom: 4,
         letterSpacing: -0.3,
     },
     subtitle: {
         fontSize: 14,
-        color: '#6B7280',
+        color: colors.neutral[500],
         lineHeight: 20,
     },
     arrowContainer: {

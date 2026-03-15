@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
@@ -6,9 +7,9 @@ import { SectionHeaderProps, PLAY_PAGE_COLORS } from '@/types/playPage.types';
 
 // ReZ Design System Colors
 const COLORS = {
-  primary: '#00C06A',
-  gold: '#FFC857',
-  text: '#0B2240',
+  primary: colors.brand.green,
+  gold: colors.brand.goldWarm,
+  text: colors.brand.navyDark,
 };
 
 function SectionHeader({

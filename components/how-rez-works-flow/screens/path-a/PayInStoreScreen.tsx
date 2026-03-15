@@ -4,6 +4,7 @@ import FlowScreenLayout from '../../shared/FlowScreenLayout';
 import ActionBtn from '../../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -29,7 +30,7 @@ const PayInStoreScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                 {steps.map((step, index) => (
                     <View key={index} style={styles.stepRow}>
                         <View style={styles.stepIconContainer}>
-                            <Ionicons name={step.icon as any} size={24} color="#3B82F6" />
+                            <Ionicons name={step.icon as any} size={24} color={colors.infoScale[400]} />
                             {index < steps.length - 1 && <View style={styles.connector} />}
                         </View>
                         <View style={styles.stepTextContainer}>
@@ -45,7 +46,7 @@ const PayInStoreScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
 const styles = StyleSheet.create({
     stepsContainer: {
         marginTop: 24,
-        backgroundColor: '#F8FAFC',
+        backgroundColor: colors.tint.coolGray,
         padding: 24,
         borderRadius: 24,
     },
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     connector: {
         width: 2,
         height: 32,
-        backgroundColor: '#DBEAFE',
+        backgroundColor: colors.tint.blueLight,
         marginVertical: 4,
     },
     stepTextContainer: {
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     },
     stepText: {
         fontSize: 16,
-        color: '#374151',
+        color: colors.neutral[700],
         fontWeight: '500',
         lineHeight: 24,
     },

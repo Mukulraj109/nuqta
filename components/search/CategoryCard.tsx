@@ -11,6 +11,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { CategoryCardProps } from '@/types/search.types';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -106,7 +107,7 @@ function CategoryCard({
 
       {/* Arrow Icon */}
       <View style={styles.arrowContainer}>
-        <Ionicons name="chevron-forward" size={16} color="#9CA3AF" />
+        <Ionicons name="chevron-forward" size={16} color={colors.neutral[400]} />
       </View>
     </Pressable>
 );
@@ -167,18 +168,18 @@ const getCardSize = (size: 'small' | 'medium' | 'large') => {
 const getCategoryGradient = (categoryName: string): string[] => {
   const gradients: Record<string, string[]> = {
     'Perfume': ['#FF6B9D', '#C44569'],
-    'Gold': ['#FFD700', '#FFA500'],
-    'Fashion': ['#1a3a52', '#243f55'],
-    'Gifts': ['#10B981', '#059669'],
-    'Electronic': ['#3B82F6', '#1E40AF'],
-    'Restaurant': ['#EF4444', '#DC2626'],
-    'Groceries': ['#22C55E', '#16A34A'],
-    'Fruits': ['#F59E0B', '#D97706'],
-    'Meat & Seafood': ['#DC2626', '#B91C1C'],
-    'Pet Care': ['#1a3a52', '#0f2637'],
+    'Gold': [colors.brand.goldBright, '#FFA500'],
+    'Fashion': [colors.nileBlue, '#243f55'],
+    'Gifts': [colors.successScale[400], colors.successScale[700]],
+    'Electronic': [colors.infoScale[400], '#1E40AF'],
+    'Restaurant': [colors.error, colors.error],
+    'Groceries': [colors.success, colors.brand.greenDark],
+    'Fruits': [colors.warningScale[400], colors.warningScale[700]],
+    'Meat & Seafood': [colors.error, colors.errorScale[700]],
+    'Pet Care': [colors.nileBlue, '#0f2637'],
   };
 
-  return gradients[categoryName] || ['#6B7280', '#4B5563'];
+  return gradients[categoryName] || [colors.neutral[500], colors.neutral[600]];
 };
 
 const styles = StyleSheet.create({
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(26, 58, 82, 0.08)',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
         shadowRadius: 12,
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
   },
   categoryImage: {
     width: '100%',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
   },
   categoryImagePlaceholder: {
     width: '100%',
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     left: 8,
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 8,
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
     gap: 4,
     ...Platform.select({
       ios: {
-        shadowColor: '#10B981',
+        shadowColor: colors.successScale[400],
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -294,18 +295,18 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 6,
     lineHeight: 20,
   },
   categoryCashback: {
-    color: '#10B981',
+    color: colors.successScale[400],
     fontWeight: '600',
     marginBottom: 4,
     letterSpacing: 0.3,
   },
   categoryDescription: {
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
     fontWeight: '500',
   },
@@ -316,11 +317,11 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: colors.slateLight,
     ...Platform.select({
       ios: {
         shadowColor: '#000',

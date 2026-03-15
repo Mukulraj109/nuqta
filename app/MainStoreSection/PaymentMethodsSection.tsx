@@ -12,6 +12,7 @@ import {
   BorderRadius,
 } from "@/constants/DesignSystem";
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export interface PaymentMethod {
   id: string;
@@ -31,7 +32,7 @@ const DEFAULT_METHODS: PaymentMethod[] = [
     id: "promo",
     name: "Promo Coins",
     icon: "ticket-outline",
-    iconColor: "#ffcd57",
+    iconColor: colors.lightMustard,
     iconBgColor: "rgba(255, 205, 87, 0.1)",
     isAccepted: true,
   },
@@ -39,7 +40,7 @@ const DEFAULT_METHODS: PaymentMethod[] = [
     id: "branded",
     name: "Branded Coins",
     icon: "star",
-    iconColor: "#007AFF",
+    iconColor: colors.brand.ios,
     iconBgColor: "rgba(0, 122, 255, 0.1)",
     isAccepted: true,
   },
@@ -55,7 +56,7 @@ const DEFAULT_METHODS: PaymentMethod[] = [
     id: "upi",
     name: "UPI / Card",
     icon: "card-outline",
-    iconColor: "#ffcd57",
+    iconColor: colors.lightMustard,
     iconBgColor: "rgba(255, 205, 87, 0.1)",
     isAccepted: true,
   },
@@ -80,7 +81,7 @@ export default function PaymentMethodsSection({
               <ThemedText style={styles.methodName}>{method.name}</ThemedText>
               {method.isAccepted && (
                 <View style={styles.acceptedRow}>
-                  <Ionicons name="checkmark" size={14} color="#ffcd57" />
+                  <Ionicons name="checkmark" size={14} color={colors.lightMustard} />
                   <ThemedText style={styles.acceptedText}>Accepted</ThemedText>
                 </View>
               )}
@@ -91,7 +92,7 @@ export default function PaymentMethodsSection({
 
       {/* Info Banner */}
       <View style={styles.infoBanner}>
-        <Ionicons name="information-circle" size={18} color="#007AFF" />
+        <Ionicons name="information-circle" size={18} color={colors.brand.ios} />
         <ThemedText style={styles.infoText}>
           Coins are auto-applied for maximum savings
         </ThemedText>
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     width: "48%",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
   },
   acceptedText: {
     fontSize: 12,
-    color: "#ffcd57",
+    color: colors.lightMustard,
     fontWeight: "500",
   },
   infoBanner: {
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 13,
-    color: "#007AFF",
+    color: colors.brand.ios,
     fontWeight: "500",
     flex: 1,
   },

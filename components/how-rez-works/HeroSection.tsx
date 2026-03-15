@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface FeaturePill {
   icon: keyof typeof Ionicons.glyphMap;
@@ -16,15 +17,15 @@ interface FeaturePill {
 }
 
 const features: FeaturePill[] = [
-  { icon: 'cash-outline', label: 'Cashback', bgColor: '#DCFCE7', iconColor: '#059669' },
-  { icon: 'gift-outline', label: 'Rewards', bgColor: '#FEF3C7', iconColor: '#D97706' },
-  { icon: 'pricetag-outline', label: 'Deals', bgColor: '#EDE9FE', iconColor: '#7C3AED' },
+  { icon: 'cash-outline', label: 'Cashback', bgColor: colors.successScale[100], iconColor: colors.successScale[700] },
+  { icon: 'gift-outline', label: 'Rewards', bgColor: colors.tint.amberLight, iconColor: colors.warningScale[700] },
+  { icon: 'pricetag-outline', label: 'Deals', bgColor: colors.tint.purple, iconColor: colors.brand.purple },
 ];
 
 const HeroSection: React.FC = () => {
   return (
     <LinearGradient
-      colors={['#059669', '#047857', '#065F46']}
+      colors={[colors.successScale[700], '#047857', '#065F46']}
       start={{ x: 0.5, y: 0 }}
       end={{ x: 0.5, y: 1 }}
       style={styles.container}
@@ -32,7 +33,7 @@ const HeroSection: React.FC = () => {
       {/* Light Bulb Icon */}
       <View style={styles.iconContainer}>
         <View style={styles.iconCircle}>
-          <Ionicons name="bulb" size={32} color="#FFC857" />
+          <Ionicons name="bulb" size={32} color={colors.brand.goldWarm} />
         </View>
       </View>
 
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
     lineHeight: 30,
     marginBottom: 16,
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
   },
   boldText: {
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   pillsContainer: {
     flexDirection: 'row',
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
   walletBadgeText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   decorativeCircle1: {
     position: 'absolute',

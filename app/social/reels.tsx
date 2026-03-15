@@ -26,6 +26,7 @@ import ugcApi, { UgcReel } from '@/services/ugcApi';
 import reelApi from '@/services/reelApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -297,7 +298,7 @@ export default function ReelsPage() {
               <Ionicons
                 name={isLiked ? 'heart' : 'heart-outline'}
                 size={30}
-                color={isLiked ? '#FF2D55' : '#FFF'}
+                color={isLiked ? '#FF2D55' : colors.background.primary}
               />
             </Animated.View>
             <Text style={styles.actionCount}>{formatNumber(item.likes)}</Text>
@@ -317,7 +318,7 @@ export default function ReelsPage() {
             <Ionicons
               name={isBookmarked ? 'bookmark' : 'bookmark-outline'}
               size={28}
-              color={isBookmarked ? '#FFD93D' : '#FFF'}
+              color={isBookmarked ? '#FFD93D' : colors.background.primary}
             />
           </Pressable>
 
@@ -511,7 +512,7 @@ export default function ReelsPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: colors.text.primary,
   },
 
   // ===== Header =====
@@ -668,7 +669,7 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 22.5,
     borderWidth: 2,
-    borderColor: '#000',
+    borderColor: colors.text.primary,
   },
   avatarFallback: {
     width: 45,
@@ -676,7 +677,7 @@ const styles = StyleSheet.create({
     borderRadius: 22.5,
     backgroundColor: Colors.text.primary,
     borderWidth: 2,
-    borderColor: '#000',
+    borderColor: colors.text.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -696,7 +697,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: '#000',
+    borderColor: colors.text.primary,
   },
 
   // Action buttons

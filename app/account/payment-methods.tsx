@@ -31,6 +31,7 @@ import {
 } from '@/services/paymentMethodApi';
 import { SectionListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type ModalMode = 'add' | 'edit' | null;
 
@@ -378,7 +379,7 @@ export default function PaymentMethodsManagementPage() {
       case CardBrand.MASTERCARD: return '#EB001B';
       case CardBrand.AMEX: return '#006FCF';
       case CardBrand.RUPAY: return '#097969';
-      default: return '#6B7280';
+      default: return colors.neutral[500];
     }
   };
 
@@ -749,7 +750,7 @@ export default function PaymentMethodsManagementPage() {
                     <Ionicons
                       name="card"
                       size={20}
-                      color={selectedType === PaymentMethodType.CARD ? 'white' : '#6B7280'}
+                      color={selectedType === PaymentMethodType.CARD ? 'white' : colors.neutral[500]}
                     />
                     <ThemedText
                       style={[
@@ -770,7 +771,7 @@ export default function PaymentMethodsManagementPage() {
                     <Ionicons
                       name="flash"
                       size={20}
-                      color={selectedType === PaymentMethodType.UPI ? 'white' : '#6B7280'}
+                      color={selectedType === PaymentMethodType.UPI ? 'white' : colors.neutral[500]}
                     />
                     <ThemedText
                       style={[
@@ -791,7 +792,7 @@ export default function PaymentMethodsManagementPage() {
                     <Ionicons
                       name="business"
                       size={20}
-                      color={selectedType === PaymentMethodType.BANK_ACCOUNT ? 'white' : '#6B7280'}
+                      color={selectedType === PaymentMethodType.BANK_ACCOUNT ? 'white' : colors.neutral[500]}
                     />
                     <ThemedText
                       style={[

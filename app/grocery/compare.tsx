@@ -24,6 +24,7 @@ import { storesApi } from '@/services/storesApi';
 import { useRegion } from '@/contexts/RegionContext';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 interface CompareItem {
   id: string;
   name: string;
@@ -220,7 +221,7 @@ const GroceryComparePage: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <LinearGradient
-        colors={['#8B5CF6', '#7C3AED']}
+        colors={[colors.brand.purpleLight, colors.brand.purple]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}
@@ -280,8 +281,8 @@ const GroceryComparePage: React.FC = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#8B5CF6']}
-            tintColor="#8B5CF6"
+            colors={[colors.brand.purpleLight]}
+            tintColor={colors.brand.purpleLight}
           />
         }
       >
@@ -476,7 +477,7 @@ const styles = StyleSheet.create({
   savingsText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#16A34A',
+    color: colors.brand.greenDark,
   },
   storesList: {
     padding: Spacing.sm,
@@ -547,7 +548,7 @@ const styles = StyleSheet.create({
   },
   cashbackText: {
     fontSize: 11,
-    color: '#16A34A',
+    color: colors.brand.greenDark,
     marginTop: 2,
   },
   outOfStock: {

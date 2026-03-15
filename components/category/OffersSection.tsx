@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRegion } from '@/contexts/RegionContext';
 import apiClient from '@/services/apiClient';
+import { colors } from '@/constants/theme';
 
 interface OffersSectionProps {
   categorySlug: string;
@@ -23,12 +24,12 @@ interface OffersSectionProps {
 }
 
 const COLORS = {
-  primaryGold: '#F59E0B',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  border: '#E5E7EB',
+  primaryGold: colors.warningScale[400],
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  border: colors.neutral[200],
 };
 
 const BANK_GRADIENTS: Record<string, string[]> = {
@@ -37,7 +38,7 @@ const BANK_GRADIENTS: Record<string, string[]> = {
   ICICI: ['#F58220', '#C15A00'],
   AXIS: ['#800020', '#5A0016'],
   KOTAK: ['#ED232A', '#B01B20'],
-  DEFAULT: ['#3B82F6', '#1D4ED8'],
+  DEFAULT: [colors.infoScale[400], '#1D4ED8'],
 };
 
 function getBankGradient(bankName: string): string[] {
@@ -113,20 +114,20 @@ function OffersSection({ categorySlug, categoryId, title, onSeeAll, filterTags }
 
   const getDealDisplay = (deal: any) => {
     if (deal.bogoType || deal.type === 'bogo') {
-      return { title: 'BOGO', subtitle: 'Buy 1 Get 1 Free', icon: '🎁', color: '#F59E0B' };
+      return { title: 'BOGO', subtitle: 'Buy 1 Get 1 Free', icon: '🎁', color: colors.warningScale[400] };
     }
     if (deal.isFreeDelivery) {
-      return { title: 'Free Delivery', subtitle: `Orders above ${currencySymbol}199`, icon: '🚚', color: '#3B82F6' };
+      return { title: 'Free Delivery', subtitle: `Orders above ${currencySymbol}199`, icon: '🚚', color: colors.infoScale[400] };
     }
     if (deal.cashbackPercentage && deal.cashbackPercentage >= 20) {
-      return { title: `${deal.cashbackPercentage}% Cashback`, subtitle: deal.title || 'On eligible orders', icon: '💰', color: '#8B5CF6' };
+      return { title: `${deal.cashbackPercentage}% Cashback`, subtitle: deal.title || 'On eligible orders', icon: '💰', color: colors.brand.purpleLight };
     }
     const discount = deal.cashbackPercentage || deal.discountPercentage || deal.discountValue || 0;
     return {
       title: discount > 0 ? `Flat ${discount}% Off` : (deal.title || 'Special Deal'),
       subtitle: deal.subtitle || deal.description || 'Limited time offer',
       icon: '🎉',
-      color: '#EC4899',
+      color: colors.brand.pink,
     };
   };
 
@@ -168,7 +169,7 @@ function OffersSection({ categorySlug, categoryId, title, onSeeAll, filterTags }
       {bankOffers.length > 0 && (
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="card-outline" size={20} color="#3B82F6" />
+            <Ionicons name="card-outline" size={20} color={colors.infoScale[400]} />
             <Text style={styles.sectionTitle}>Bank Offers</Text>
             <Pressable onPress={() => router.push(`/MainCategory/${categorySlug}/offers?tab=bank` as any)}>
               <Text style={styles.sectionSeeAll}>View All</Text>
@@ -247,7 +248,7 @@ function OffersSection({ categorySlug, categoryId, title, onSeeAll, filterTags }
       {coupons.length > 0 && (
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="ticket-outline" size={20} color="#8B5CF6" />
+            <Ionicons name="ticket-outline" size={20} color={colors.brand.purpleLight} />
             <Text style={styles.sectionTitle}>Promo Codes</Text>
             <Pressable onPress={() => router.push(`/MainCategory/${categorySlug}/offers?tab=promos` as any)}>
               <Text style={styles.sectionSeeAll}>View All</Text>
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
   sectionHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 8 },
   sectionEmoji: { fontSize: 20 },
   sectionTitle: { flex: 1, fontSize: 18, fontWeight: '600', color: COLORS.textPrimary },
-  sectionSeeAll: { fontSize: 12, color: '#F59E0B', fontWeight: '600' },
+  sectionSeeAll: { fontSize: 12, color: colors.warningScale[400], fontWeight: '600' },
   bankOffersList: { gap: 12, paddingRight: 16 },
   bankOfferCard: { width: 220, borderRadius: 12, overflow: 'hidden' },
   bankOfferGradient: { padding: 16 },
@@ -326,10 +327,10 @@ const styles = StyleSheet.create({
   promoList: { gap: 12 },
   promoCard: {
     flexDirection: 'row', backgroundColor: COLORS.white, borderRadius: 12,
-    padding: 16, borderLeftWidth: 4, borderLeftColor: '#8B5CF6',
+    padding: 16, borderLeftWidth: 4, borderLeftColor: colors.brand.purpleLight,
   },
   promoLeft: { flex: 1 },
-  promoDiscount: { fontSize: 18, fontWeight: '700', color: '#8B5CF6', marginBottom: 4 },
+  promoDiscount: { fontSize: 18, fontWeight: '700', color: colors.brand.purpleLight, marginBottom: 4 },
   promoDescription: { fontSize: 13, color: COLORS.textPrimary, marginBottom: 2 },
   promoMinOrder: { fontSize: 11, color: COLORS.textSecondary, marginBottom: 2 },
   promoExpiry: { fontSize: 11, color: COLORS.textSecondary },
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
   promoCode: { fontSize: 12, fontWeight: '600', color: COLORS.textPrimary, letterSpacing: 1 },
   copyButton: {
     paddingHorizontal: 16, paddingVertical: 6,
-    backgroundColor: '#8B5CF6', borderRadius: 6,
+    backgroundColor: colors.brand.purpleLight, borderRadius: 6,
   },
   copyButtonText: { fontSize: 11, fontWeight: '600', color: COLORS.white },
 });

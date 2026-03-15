@@ -19,6 +19,7 @@ import { triggerImpact } from "@/utils/haptics";
 import { ThemedText } from "@/components/ThemedText";
 import discountsApi, { Discount } from "@/services/discountsApi";
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Premium Glass Design Tokens - Mustard & Gold Theme
 const GLASS = {
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
         shadowRadius: 12,
@@ -290,7 +291,7 @@ const styles = StyleSheet.create({
     marginRight: Spacing.md,
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.3,
         shadowRadius: 6,
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.secondary,
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 2, height: 3 },
         shadowOpacity: 0.2,
         shadowRadius: 8,
@@ -395,10 +396,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     transform: [{ rotate: "-6deg" }],
     borderWidth: 2,
-    borderColor: '#ffcd57',
+    borderColor: colors.lightMustard,
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,

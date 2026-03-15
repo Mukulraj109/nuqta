@@ -19,6 +19,7 @@ import * as Brightness from 'expo-brightness';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -161,12 +162,12 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
             style={styles.closeButton}
             onPress={handleModalClose}
           >
-            <Ionicons name="close" size={24} color="#6B7280" />
+            <Ionicons name="close" size={24} color={colors.neutral[500]} />
           </Pressable>
 
           {/* Header */}
           <View style={styles.header}>
-            <Ionicons name="qr-code" size={32} color="#F59E0B" />
+            <Ionicons name="qr-code" size={32} color={colors.warningScale[400]} />
             <Text style={styles.modalTitle}>Scan to Redeem</Text>
             <Text style={styles.modalSubtitle}>{voucher.brandName}</Text>
           </View>
@@ -178,7 +179,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
                 value={generateQRData()}
                 size={width * 0.6}
                 color="#000000"
-                backgroundColor="#FFFFFF"
+                backgroundColor={colors.background.primary}
                 getRef={(ref) => setQrRef(ref)}
                 logo={voucher.brandLogo ? { uri: voucher.brandLogo } : undefined}
                 logoSize={50}
@@ -187,7 +188,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
               />
             </View>
             <View style={styles.brightnessIndicator}>
-              <Ionicons name="sunny" size={16} color="#F59E0B" />
+              <Ionicons name="sunny" size={16} color={colors.warningScale[400]} />
               <Text style={styles.brightnessText}>Brightness increased for scanning</Text>
             </View>
           </View>
@@ -203,7 +204,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
                 style={styles.copyButton}
                 onPress={handleCopyCode}
               >
-                <Ionicons name="copy-outline" size={20} color="#F59E0B" />
+                <Ionicons name="copy-outline" size={20} color={colors.warningScale[400]} />
                 <Text style={styles.copyText}>Copy</Text>
               </Pressable>
             </View>
@@ -228,7 +229,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
 
           {/* Instructions */}
           <View style={styles.instructionsContainer}>
-            <Ionicons name="information-circle-outline" size={20} color="#6B7280" />
+            <Ionicons name="information-circle-outline" size={20} color={colors.neutral[500]} />
             <Text style={styles.instructionsText}>
               Show this QR code to the cashier at the store to redeem your voucher
             </Text>
@@ -240,7 +241,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
               style={styles.actionButton}
               onPress={handleShareQR}
             >
-              <Ionicons name="share-social-outline" size={20} color="#F59E0B" />
+              <Ionicons name="share-social-outline" size={20} color={colors.warningScale[400]} />
               <Text style={styles.actionButtonText}>Share</Text>
             </Pressable>
 
@@ -248,7 +249,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
               style={styles.actionButton}
               onPress={handleDownloadQR}
             >
-              <Ionicons name="download-outline" size={20} color="#F59E0B" />
+              <Ionicons name="download-outline" size={20} color={colors.warningScale[400]} />
               <Text style={styles.actionButtonText}>Save</Text>
             </Pressable>
           </View>
@@ -259,7 +260,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
               style={styles.markUsedButton}
               onPress={handleMarkAsUsed}
             >
-              <Ionicons name="checkmark-circle-outline" size={20} color="#FFFFFF" />
+              <Ionicons name="checkmark-circle-outline" size={20} color={colors.background.primary} />
               <Text style={styles.markUsedButtonText}>Mark as Used</Text>
             </Pressable>
           )}
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -295,12 +296,12 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 12,
   },
   modalSubtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 4,
   },
   qrContainer: {
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
   },
   qrCodeWrapper: {
     padding: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -324,16 +325,16 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 12,
   },
   brightnessText: {
     fontSize: 11,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontWeight: '500',
   },
   detailsSection: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
@@ -345,37 +346,37 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     marginBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   codeInfo: {
     flex: 1,
   },
   codeLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   codeText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     letterSpacing: 1.5,
   },
   copyButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#F59E0B',
+    borderColor: colors.warningScale[400],
   },
   copyText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   detailsGrid: {
     flexDirection: 'row',
@@ -386,19 +387,19 @@ const styles = StyleSheet.create({
   },
   detailLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   detailValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   instructionsContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 8,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     padding: 12,
     borderRadius: 12,
     marginBottom: 16,
@@ -420,30 +421,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#F59E0B',
+    borderColor: colors.warningScale[400],
   },
   actionButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   markUsedButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     paddingVertical: 16,
     borderRadius: 12,
   },
   markUsedButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

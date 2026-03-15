@@ -18,6 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand, BrandBadge } from '../../../types/mall.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface MallBrandCardProps {
   brand: MallBrand;
@@ -28,23 +29,23 @@ interface MallBrandCardProps {
 
 // Nuqta palette gradient colors for fallback backgrounds
 const GRADIENT_COLORS: string[][] = [
-  ['#1a3a52', '#234b68'],
-  ['#0284C7', '#0369A1'],
-  ['#dfebf7', '#1a3a52'],
-  ['#234b68', '#1a3a52'],
-  ['#0369A1', '#0284C7'],
-  ['#1a3a52', '#2d5c7e'],
-  ['#234b68', '#0369A1'],
-  ['#0284C7', '#1a3a52'],
+  [colors.nileBlue, colors.brand.nileBlueLight],
+  [colors.brand.sky, colors.brand.skyDark],
+  [colors.lavenderMist, colors.nileBlue],
+  [colors.brand.nileBlueLight, colors.nileBlue],
+  [colors.brand.skyDark, colors.brand.sky],
+  [colors.nileBlue, '#2d5c7e'],
+  [colors.brand.nileBlueLight, colors.brand.skyDark],
+  [colors.brand.sky, colors.nileBlue],
 ];
 
 const BADGE_COLORS: Record<BrandBadge, { bg: string; text: string }> = {
-  exclusive: { bg: '#0284C7', text: '#FFFFFF' },
-  premium: { bg: '#1a3a52', text: '#FFFFFF' },
-  new: { bg: '#0284C7', text: '#FFFFFF' },
-  trending: { bg: '#EF4444', text: '#FFFFFF' },
-  'top-rated': { bg: '#059669', text: '#FFFFFF' },
-  verified: { bg: '#7C3AED', text: '#FFFFFF' },
+  exclusive: { bg: colors.brand.sky, text: colors.background.primary },
+  premium: { bg: colors.nileBlue, text: colors.background.primary },
+  new: { bg: colors.brand.sky, text: colors.background.primary },
+  trending: { bg: colors.error, text: colors.background.primary },
+  'top-rated': { bg: colors.successScale[700], text: colors.background.primary },
+  verified: { bg: colors.brand.purple, text: colors.background.primary },
 };
 
 const MallBrandCard: React.FC<MallBrandCardProps> = ({
@@ -128,7 +129,7 @@ const MallBrandCard: React.FC<MallBrandCardProps> = ({
           {/* Coin reward pill - bottom left of image */}
           {rewardPercent > 0 && (
             <View style={styles.coinPill}>
-              <Ionicons name="flash" size={10} color="#FFFFFF" />
+              <Ionicons name="flash" size={10} color={colors.background.primary} />
               <Text style={styles.coinPillText}>{rewardPercent}% coins</Text>
             </View>
           )}
@@ -142,14 +143,14 @@ const MallBrandCard: React.FC<MallBrandCardProps> = ({
               {brandName}
             </Text>
             {brand.badges?.includes('verified') && (
-              <Ionicons name="checkmark-circle" size={14} color="#0284C7" />
+              <Ionicons name="checkmark-circle" size={14} color={colors.brand.sky} />
             )}
           </View>
 
           {/* Rating + Badge row */}
           <View style={styles.metaRow}>
             <View style={styles.ratingPill}>
-              <Ionicons name="star" size={10} color="#F59E0B" />
+              <Ionicons name="star" size={10} color={colors.warningScale[400]} />
               <Text style={styles.ratingText}>
                 {(brand.ratings?.average || 0) > 0 ? (brand.ratings?.average || 0).toFixed(1) : 'New'}
               </Text>
@@ -158,10 +159,10 @@ const MallBrandCard: React.FC<MallBrandCardProps> = ({
               <View
                 style={[
                   styles.badge,
-                  { backgroundColor: BADGE_COLORS[displayBadge]?.bg || '#0284C7' },
+                  { backgroundColor: BADGE_COLORS[displayBadge]?.bg || colors.brand.sky },
                 ]}
               >
-                <Text style={[styles.badgeText, { color: BADGE_COLORS[displayBadge]?.text || '#FFFFFF' }]}>
+                <Text style={[styles.badgeText, { color: BADGE_COLORS[displayBadge]?.text || colors.background.primary }]}>
                   {displayBadge.charAt(0).toUpperCase() + displayBadge.slice(1)}
                 </Text>
               </View>
@@ -186,14 +187,14 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#E8F0F8',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.08,
         shadowRadius: 10,
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
   fallbackText: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     ...Platform.select({
       ios: {
         textShadowColor: 'rgba(0, 0, 0, 0.2)',
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
   newBadgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   coinPill: {
@@ -280,7 +281,7 @@ const styles = StyleSheet.create({
   coinPillText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // Info area
   infoArea: {
@@ -297,7 +298,7 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     flex: 1,
   },
   metaRow: {
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   badge: {
     paddingHorizontal: 8,
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 6,
   },
 });

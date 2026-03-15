@@ -6,27 +6,28 @@ import { ThemedText } from '@/components/ThemedText';
 import { EarningsCardProps } from '@/types/earnPage.types';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
 import EarningsChart from './EarningsChart';
+import { colors } from '@/constants/theme';
 
 const earningSources = [
   {
     label: 'Projects',
     icon: 'briefcase-outline',
-    gradient: ['#00C06A', '#00A85C', '#00796B'],
+    gradient: [colors.brand.green, '#00A85C', colors.brand.teal],
   },
   { 
     label: 'Referrals', 
     icon: 'people-outline',
-    gradient: ['#10B981', '#059669', '#047857'],
+    gradient: [colors.successScale[400], colors.successScale[700], '#047857'],
   },
   { 
     label: 'Share & earn', 
     icon: 'share-social-outline',
-    gradient: ['#F59E0B', '#D97706', '#B45309'],
+    gradient: [colors.warningScale[400], colors.warningScale[700], colors.brand.amberDeep],
   },
   { 
     label: 'Spin', 
     icon: 'trophy-outline',
-    gradient: ['#EC4899', '#DB2777', '#BE185D'],
+    gradient: [colors.brand.pink, colors.deepPink, '#BE185D'],
   },
 ];
 
@@ -136,13 +137,13 @@ function EarningsCard({
           accessibilityHint="Double tap to view your wallet details and transaction history"
         >
           <LinearGradient
-            colors={['#00C06A', '#00A85C', '#00796B']}
+            colors={[colors.brand.green, '#00A85C', colors.brand.teal]}
             style={styles.walletButtonGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
           >
             <ThemedText style={styles.seeWalletText}>See wallet</ThemedText>
-            <Ionicons name="chevron-forward" size={16} color="#FFFFFF" />
+            <Ionicons name="chevron-forward" size={16} color={colors.background.primary} />
           </LinearGradient>
         </Pressable>
       </Animated.View>
@@ -172,9 +173,9 @@ function EarningsCard({
           <Ionicons
             name={showChart ? 'stats-chart' : 'bar-chart-outline'}
             size={18}
-            color={showChart ? '#D97706' : EARN_COLORS.primary}
+            color={showChart ? colors.warningScale[700] : EARN_COLORS.primary}
           />
-          <ThemedText style={[styles.chartToggleText, showChart && { color: '#D97706' }]}>
+          <ThemedText style={[styles.chartToggleText, showChart && { color: colors.warningScale[700] }]}>
             {showChart ? 'Hide Chart' : 'View Chart'}
           </ThemedText>
         </LinearGradient>
@@ -239,7 +240,7 @@ function EarningsCard({
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                 >
-                  <Ionicons name={item.icon as any} size={20} color="#FFFFFF" />
+                  <Ionicons name={item.icon as any} size={20} color={colors.background.primary} />
                 </LinearGradient>
               </View>
 
@@ -273,7 +274,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#FFC857',
+        shadowColor: colors.brand.goldWarm,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.2,
         shadowRadius: 16,
@@ -320,14 +321,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#1F2937',
+    color: colors.neutral[800],
     letterSpacing: -0.5,
     marginBottom: 4,
   },
   titleUnderline: {
     width: 50,
     height: 4,
-    backgroundColor: '#FFC857',
+    backgroundColor: colors.brand.goldWarm,
     borderRadius: 2,
   },
   earningAmount: {
@@ -339,7 +340,7 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 34,
     fontWeight: '800',
-    color: '#00796B',
+    color: colors.brand.teal,
     letterSpacing: -0.5,
     ...Platform.select({
       ios: {
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   },
   earned: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '600',
   },
   seeWalletButton: {
@@ -367,7 +368,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#00C06A',
+        shadowColor: colors.brand.green,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -393,7 +394,7 @@ const styles = StyleSheet.create({
   seeWalletText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.2,
   },
   separator: {
@@ -411,7 +412,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 200, 87, 0.25)',
     ...Platform.select({
       ios: {
-        shadowColor: '#FFC857',
+        shadowColor: colors.brand.goldWarm,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.15,
         shadowRadius: 6,
@@ -481,14 +482,14 @@ const styles = StyleSheet.create({
   breakdownAmount: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
     letterSpacing: -0.3,
     textAlign: 'center',
   },
   breakdownLabel: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     fontWeight: '600',
     letterSpacing: 0.2,

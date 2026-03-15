@@ -15,6 +15,7 @@ import streakApi from '../../services/streakApi';
 import achievementApi from '../../services/achievementApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -244,13 +245,13 @@ const Achievements = () => {
               style={styles.ctaGradient}
             >
               <View style={[styles.ctaIconContainer, { backgroundColor: '#A855F730' }]}>
-                <Ionicons name="bag" size={20} color="#A855F7" />
+                <Ionicons name="bag" size={20} color={colors.brand.purpleMedium} />
               </View>
               <View style={styles.ctaContent}>
                 <Text style={styles.ctaCardTitle}>Shop & Unlock Deals</Text>
                 <Text style={styles.ctaCardDesc}>Complete shopping achievements</Text>
               </View>
-              <Ionicons name="trending-up" size={20} color="#A855F7" />
+              <Ionicons name="trending-up" size={20} color={colors.brand.purpleMedium} />
             </LinearGradient>
           </Pressable>
 
@@ -263,13 +264,13 @@ const Achievements = () => {
               style={styles.ctaGradient}
             >
               <View style={[styles.ctaIconContainer, { backgroundColor: '#3B82F630' }]}>
-                <Ionicons name="people" size={20} color="#3B82F6" />
+                <Ionicons name="people" size={20} color={colors.infoScale[400]} />
               </View>
               <View style={styles.ctaContent}>
                 <Text style={styles.ctaCardTitle}>Refer Friends</Text>
                 <Text style={styles.ctaCardDesc}>Unlock social achievements & earn</Text>
               </View>
-              <Ionicons name="trending-up" size={20} color="#3B82F6" />
+              <Ionicons name="trending-up" size={20} color={colors.infoScale[400]} />
             </LinearGradient>
           </Pressable>
 
@@ -306,7 +307,7 @@ const Achievements = () => {
               </View>
               <Pressable style={styles.checkinButton}>
                 <LinearGradient
-                  colors={['#F59E0B', '#EAB308']}
+                  colors={[colors.warningScale[400], colors.brand.amber]}
                   style={styles.checkinButtonGradient}
                 >
                   <Text style={styles.checkinButtonText}>Check In</Text>
@@ -325,7 +326,7 @@ const Achievements = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: colors.text.primary,
   },
   header: {
     flexDirection: 'row',
@@ -554,7 +555,7 @@ const styles = StyleSheet.create({
   retryButtonText: {
     ...Typography.body,
     fontWeight: '600',
-    color: '#000',
+    color: colors.text.primary,
   },
 });
 

@@ -20,6 +20,7 @@ import travelApi, { TravelService } from '@/services/travelApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const CATEGORIES = [
   { slug: 'flights', label: 'Flights', icon: 'airplane' },
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
   searchBtnText: { ...Typography.bodyLarge, fontWeight: '600', color: Colors.text.inverse },
 
   loadingContainer: { alignItems: 'center', paddingTop: 40 },
-  loadingText: { marginTop: Spacing.md, color: '#64748B', fontSize: 14 },
+  loadingText: { marginTop: Spacing.md, color: colors.slateGray, fontSize: 14 },
 
   emptyContainer: { alignItems: 'center', paddingTop: 40 },
   emptyText: { ...Typography.bodyLarge, fontWeight: '600', color: '#475569', marginTop: Spacing.md },
@@ -404,14 +405,14 @@ const styles = StyleSheet.create({
   },
   resultCardContent: { flexDirection: 'row', justifyContent: 'space-between' },
   resultName: { ...Typography.body, fontWeight: '600', color: '#1E293B', marginBottom: Spacing.xs },
-  resultStore: { ...Typography.bodySmall, color: '#64748B', marginBottom: 6 },
+  resultStore: { ...Typography.bodySmall, color: colors.slateGray, marginBottom: 6 },
   resultRating: { flexDirection: 'row', alignItems: 'center', gap: Spacing.xs },
-  resultRatingText: { ...Typography.bodySmall, color: '#64748B' },
+  resultRatingText: { ...Typography.bodySmall, color: colors.slateGray },
   resultPriceSection: { alignItems: 'flex-end' },
   resultOriginalPrice: { ...Typography.bodySmall, color: '#94A3B8', textDecorationLine: 'line-through' },
   resultPrice: { ...Typography.h4, fontWeight: '700', color: Colors.nileBlue },
   cashbackBadge: {
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     paddingHorizontal: Spacing.sm, paddingVertical: 3, borderRadius: 6,
     marginTop: Spacing.xs,
   },

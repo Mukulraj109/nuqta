@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRegion } from '@/contexts/RegionContext';
 import { COLORS, FoodRestaurant } from './constants';
 import { isRestaurantOpen } from './helpers';
+import { colors } from '@/constants/theme';
 
 interface RestaurantCardProps {
   restaurant: FoodRestaurant;
@@ -108,15 +109,15 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
               <Text style={styles.badgeNewText}>NEW</Text>
             </View>
           )}
-          <View style={[styles.badgeStatus, { backgroundColor: openStatus.isOpen ? '#ECFDF5' : '#FEF2F2' }]}>
-            <View style={[styles.statusDot, { backgroundColor: openStatus.isOpen ? '#22C55E' : '#EF4444' }]} />
-            <Text style={{ fontSize: 10, fontWeight: '600', color: openStatus.isOpen ? '#059669' : '#DC2626' }}>
+          <View style={[styles.badgeStatus, { backgroundColor: openStatus.isOpen ? colors.tint.greenLight : colors.errorScale[50] }]}>
+            <View style={[styles.statusDot, { backgroundColor: openStatus.isOpen ? colors.success : colors.error }]} />
+            <Text style={{ fontSize: 10, fontWeight: '600', color: openStatus.isOpen ? colors.successScale[700] : colors.error }}>
               {openStatus.isOpen ? 'Open' : 'Closed'}
             </Text>
           </View>
           {restaurant.deliveryCategories?.fastDelivery && (
             <View style={styles.badge60Min}>
-              <Ionicons name="flash" size={10} color="#000" />
+              <Ionicons name="flash" size={10} color={colors.text.primary} />
               <Text style={styles.badge60MinText}>60 min</Text>
             </View>
           )}
@@ -146,7 +147,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
               <Text style={styles.restaurantRatingCount}>({restaurant.ratings?.count || 0})</Text>
             </>
           ) : (
-            <Text style={[styles.restaurantRatingText, { color: '#22C55E', fontWeight: '700' }]}>New</Text>
+            <Text style={[styles.restaurantRatingText, { color: colors.success, fontWeight: '700' }]}>New</Text>
           )}
         </View>
       </View>
@@ -237,7 +238,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
             accessibilityLabel={`Reserve a table at ${restaurant.name}`}
             accessibilityRole="button"
           >
-            <Ionicons name="restaurant-outline" size={14} color="#FFFFFF" />
+            <Ionicons name="restaurant-outline" size={14} color={colors.background.primary} />
             <Text style={styles.reserveButtonText}>Reserve a Table</Text>
           </Pressable>
         )}
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   restaurantImagePlaceholder: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -308,7 +309,7 @@ const styles = StyleSheet.create({
   badge60MinText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#000',
+    color: colors.text.primary,
   },
   badgeHalal: {
     paddingHorizontal: 8,
@@ -319,29 +320,29 @@ const styles = StyleSheet.create({
   badgeHalalText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   badgePureVeg: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    backgroundColor: '#22C55E',
+    backgroundColor: colors.success,
   },
   badgePureVegText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   badgeCashbackPurple: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   badgeCashbackPurpleText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   badgeStatus: {
     flexDirection: 'row',
@@ -365,7 +366,7 @@ const styles = StyleSheet.create({
   badgeNewText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   restaurantRating: {
     position: 'absolute',
@@ -432,12 +433,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: colors.tint.greenLight,
   },
   freeDeliveryText: {
     fontSize: 10,
     fontWeight: '500',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   restaurantRewardsRow: {
     flexDirection: 'row',
@@ -445,7 +446,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   restaurantCoins: {
     flexDirection: 'row',
@@ -482,7 +483,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingVertical: 10,
     borderRadius: 12,
     marginTop: 10,
@@ -490,7 +491,7 @@ const styles = StyleSheet.create({
   reserveButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

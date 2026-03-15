@@ -21,6 +21,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../types/mall.types';
+import { colors } from '@/constants/theme';
 
 interface MallRewardBoostersProps {
   brands: MallBrand[];
@@ -52,10 +53,10 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
           {/* Big Coin Badge */}
           <View style={styles.coinBadgeWrapper}>
             <LinearGradient
-              colors={['#0284C7', '#0369A1']}
+              colors={[colors.brand.sky, colors.brand.skyDark]}
               style={styles.coinBadge}
             >
-              <Ionicons name="flash" size={12} color="#FFF" />
+              <Ionicons name="flash" size={12} color={colors.background.primary} />
               <Text style={styles.coinBadgeText}>{coinPercent}%</Text>
             </LinearGradient>
           </View>
@@ -70,7 +71,7 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
               />
             ) : (
               <LinearGradient
-                colors={['#1a3a52', '#234b68']}
+                colors={[colors.nileBlue, colors.brand.nileBlueLight]}
                 style={styles.logoFallback}
               >
                 <Text style={styles.logoInitials}>{getInitials(item.name || 'Store')}</Text>
@@ -90,7 +91,7 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
 
           {/* Rating */}
           <View style={styles.ratingRow}>
-            <Ionicons name="star" size={11} color="#F59E0B" />
+            <Ionicons name="star" size={11} color={colors.warningScale[400]} />
             <Text style={styles.ratingText}>
               {(item.ratings?.average || 0) > 0 ? (item.ratings?.average || 0).toFixed(1) : 'New'}
             </Text>
@@ -99,7 +100,7 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
           {/* Earn More CTA */}
           <View style={styles.earnMore}>
             <Text style={styles.earnMoreText}>Earn Coins</Text>
-            <Ionicons name="chevron-forward" size={12} color="#0284C7" />
+            <Ionicons name="chevron-forward" size={12} color={colors.brand.sky} />
           </View>
         </Pressable>
       );
@@ -113,22 +114,22 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#dfebf7', '#EFF6FF', '#FFFFFF']}
+          colors={[colors.lavenderMist, colors.tint.blue, colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
         >
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#0284C7', '#0369A1']}
+              colors={[colors.brand.sky, colors.brand.skyDark]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="rocket" size={18} color="#FFFFFF" />
+              <Ionicons name="rocket" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Reward Boosters</Text>
           </View>
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#0284C7" />
+            <ActivityIndicator size="small" color={colors.brand.sky} />
             <Text style={styles.loadingText}>Loading reward boosters...</Text>
           </View>
         </LinearGradient>
@@ -140,7 +141,7 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#dfebf7', '#EFF6FF', '#FFFFFF']}
+          colors={[colors.lavenderMist, colors.tint.blue, colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
@@ -148,17 +149,17 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
           {/* Header */}
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#0284C7', '#0369A1']}
+              colors={[colors.brand.sky, colors.brand.skyDark]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="rocket" size={18} color="#FFFFFF" />
+              <Ionicons name="rocket" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Reward Boosters</Text>
           </View>
 
           {/* Empty State Placeholder */}
           <View style={styles.emptyStateContainer}>
-            <Ionicons name="trophy-outline" size={24} color="#0369A1" />
+            <Ionicons name="trophy-outline" size={24} color={colors.brand.skyDark} />
             <Text style={styles.emptyStateText}>Reward boosters loading</Text>
           </View>
         </LinearGradient>
@@ -175,7 +176,7 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#dfebf7', '#EFF6FF', '#FFFFFF']}
+        colors={[colors.lavenderMist, colors.tint.blue, colors.background.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.gradientBackground}
@@ -189,10 +190,10 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
         {/* Header */}
         <View style={styles.headerRow}>
           <LinearGradient
-            colors={['#0284C7', '#0369A1']}
+            colors={[colors.brand.sky, colors.brand.skyDark]}
             style={styles.iconWrapper}
           >
-            <Ionicons name="rocket" size={18} color="#FFFFFF" />
+            <Ionicons name="rocket" size={18} color={colors.background.primary} />
           </LinearGradient>
           <Text style={styles.title}>Reward Boosters</Text>
           <View style={styles.headerSpacer} />
@@ -203,14 +204,14 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
              
             >
               <LinearGradient
-                colors={['#0284C7', '#0369A1']}
+                colors={[colors.brand.sky, colors.brand.skyDark]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.viewAllGradient}
               >
                 <Text style={styles.viewAllText}>View All</Text>
                 <View style={styles.viewAllArrow}>
-                  <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+                  <Ionicons name="arrow-forward" size={14} color={colors.background.primary} />
                 </View>
               </LinearGradient>
             </Pressable>
@@ -231,7 +232,7 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
           >
             <View style={styles.statItem}>
               <View style={[styles.statIconWrapper, { backgroundColor: 'rgba(2, 132, 199, 0.15)' }]}>
-                <Ionicons name="flash" size={14} color="#0284C7" />
+                <Ionicons name="flash" size={14} color={colors.brand.sky} />
               </View>
               <View>
                 <Text style={styles.statValue}>Up to {maxCoin}%</Text>
@@ -241,7 +242,7 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
               <View style={[styles.statIconWrapper, { backgroundColor: 'rgba(2, 132, 199, 0.1)' }]}>
-                <Ionicons name="trending-up" size={14} color="#0284C7" />
+                <Ionicons name="trending-up" size={14} color={colors.brand.sky} />
               </View>
               <View>
                 <Text style={styles.statValue}>{avgCoin}% Avg</Text>
@@ -251,7 +252,7 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
               <View style={[styles.statIconWrapper, { backgroundColor: 'rgba(26, 58, 82, 0.1)' }]}>
-                <Ionicons name="storefront" size={14} color="#1a3a52" />
+                <Ionicons name="storefront" size={14} color={colors.nileBlue} />
               </View>
               <View>
                 <Text style={styles.statValue}>{brands.length}</Text>
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#0284C7',
+        shadowColor: colors.brand.sky,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -343,12 +344,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 13,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     paddingHorizontal: 16,
     marginBottom: 12,
   },
@@ -357,7 +358,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#0284C7',
+        shadowColor: colors.brand.sky,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -376,7 +377,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   viewAllArrow: {
     width: 24,
@@ -415,11 +416,11 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   statLabel: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   statDivider: {
@@ -434,17 +435,17 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 140,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 12,
     marginRight: 12,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#DBEAFE',
+    borderColor: colors.tint.blueLight,
     position: 'relative',
     ...Platform.select({
       ios: {
-        shadowColor: '#0284C7',
+        shadowColor: colors.brand.sky,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -470,7 +471,7 @@ const styles = StyleSheet.create({
   coinBadgeText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   logoContainer: {
     width: 56,
@@ -494,19 +495,19 @@ const styles = StyleSheet.create({
   logoInitials: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   storeName: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textAlign: 'center',
     marginBottom: 2,
     width: '100%',
   },
   categoryText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 4,
   },
@@ -519,13 +520,13 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   earnMore: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 8,
@@ -534,7 +535,7 @@ const styles = StyleSheet.create({
   earnMoreText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#0284C7',
+    color: colors.brand.sky,
   },
   loadingContainer: {
     flexDirection: 'row',
@@ -545,7 +546,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     fontWeight: '500',
   },
   emptyStateContainer: {
@@ -558,7 +559,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 13,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     fontWeight: '500',
   },
 });

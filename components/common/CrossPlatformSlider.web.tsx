@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
+import { colors } from '@/constants/theme';
 
 interface CrossPlatformSliderProps {
   value: number;
@@ -27,9 +28,9 @@ const CrossPlatformSlider: React.FC<CrossPlatformSliderProps> = ({
   minimumValue = 0,
   maximumValue = 100,
   step = 1,
-  minimumTrackTintColor = '#00C06A',
-  maximumTrackTintColor = '#E5E7EB',
-  thumbTintColor = '#00C06A',
+  minimumTrackTintColor = colors.brand.green,
+  maximumTrackTintColor = colors.gray[200],
+  thumbTintColor = colors.brand.green,
   disabled = false,
   style,
 }) => {

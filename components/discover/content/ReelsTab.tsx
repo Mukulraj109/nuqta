@@ -15,16 +15,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { DiscoverReel } from '@/types/discover.types';
 import DiscoverReelCard from '../cards/DiscoverReelCard';
+import { colors } from '@/constants/theme';
 
 // Nuqta Brand Colors
 const NUQTA_COLORS = {
-  nileBlue: '#1a3a52',
+  nileBlue: colors.nileBlue,
   nileBlueLight: '#2a4a62',
-  mustard: '#ffcd57',
-  primaryGold: '#FFC857',
-  navy: '#0B2240',
-  gray: '#6B7280',
-  lightGray: '#F3F4F6',
+  mustard: colors.lightMustard,
+  primaryGold: colors.brand.goldWarm,
+  navy: colors.brand.navyDark,
+  gray: colors.neutral[500],
+  lightGray: colors.neutral[100],
 };
 
 interface ReelsTabProps {
@@ -104,7 +105,7 @@ function ReelsTab({
     if (!loading || data.length === 0) return null;
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color="#1a3a52" />
+        <ActivityIndicator size="small" color={colors.nileBlue} />
       </View>
     );
   }, [loading, data.length]);
@@ -128,7 +129,7 @@ function ReelsTab({
           colors={[NUQTA_COLORS.nileBlue, NUQTA_COLORS.nileBlueLight]}
           style={styles.emptyIconContainer}
         >
-          <Ionicons name="play-circle" size={40} color="#FFFFFF" />
+          <Ionicons name="play-circle" size={40} color={colors.background.primary} />
         </LinearGradient>
         <Text style={styles.emptyTitle}>No Reels Yet</Text>
         <Text style={styles.emptyText}>

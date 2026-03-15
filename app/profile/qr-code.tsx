@@ -13,6 +13,7 @@ import * as Clipboard from 'expo-clipboard';
 import QRCode from 'react-native-qrcode-svg';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const QRCodePage = () => {
   const router = useRouter();
@@ -54,7 +55,7 @@ const QRCodePage = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#ffcd57" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.lightMustard} />
 
       {/* Header */}
       <LinearGradient colors={[Colors.gold, Colors.nileBlue]} style={styles.header}>
@@ -212,7 +213,7 @@ const QRCodePage = () => {
 
               <View style={styles.featureItem}>
                 <View style={styles.featureIcon}>
-                  <Ionicons name="gift" size={20} color="#EC4899" />
+                  <Ionicons name="gift" size={20} color={colors.brand.pink} />
                 </View>
                 <ThemedText style={styles.featureText}>
                   Earn referral bonus when they sign up

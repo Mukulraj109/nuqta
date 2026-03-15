@@ -12,6 +12,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from "@expo/vector-icons";
 import { triggerImpact } from "@/utils/haptics";
 import { ThemedText } from "@/components/ThemedText";
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -130,7 +131,7 @@ export default function LocationSection({
           accessibilityRole="button"
           accessibilityLabel="Get Directions"
         >
-          <Ionicons name="navigate" size={18} color="#FFFFFF" />
+          <Ionicons name="navigate" size={18} color={colors.background.primary} />
           <ThemedText style={styles.directionsText}>Get Directions</ThemedText>
         </Pressable>
       </Animated.View>
@@ -307,7 +308,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#ffcd57",
+    backgroundColor: colors.lightMustard,
     paddingVertical: 14,
     borderRadius: BorderRadius.md,
     gap: 8,
@@ -316,6 +317,6 @@ const styles = StyleSheet.create({
   directionsText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: colors.background.primary,
   },
 });

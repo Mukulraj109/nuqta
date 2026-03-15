@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Href } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 interface Props {
   children: ReactNode;
@@ -112,7 +113,7 @@ export class NavigationErrorBoundary extends Component<Props, State> {
         <View style={styles.container}>
           <View style={styles.content}>
             <View style={styles.iconContainer}>
-              <Ionicons name="warning-outline" size={64} color="#EF4444" />
+              <Ionicons name="warning-outline" size={64} color={colors.error} />
             </View>
 
             <Text style={styles.title}>Navigation Error</Text>
@@ -140,7 +141,7 @@ export class NavigationErrorBoundary extends Component<Props, State> {
                 style={styles.primaryButton}
                 onPress={this.handleReset}
               >
-                <Ionicons name="refresh" size={20} color="#FFFFFF" />
+                <Ionicons name="refresh" size={20} color={colors.background.primary} />
                 <Text style={styles.primaryButtonText}>Try Again</Text>
               </Pressable>
 
@@ -148,7 +149,7 @@ export class NavigationErrorBoundary extends Component<Props, State> {
                 style={styles.secondaryButton}
                 onPress={this.handleGoHome}
               >
-                <Ionicons name="home" size={20} color="#6B7280" />
+                <Ionicons name="home" size={20} color={colors.neutral[500]} />
                 <Text style={styles.secondaryButtonText}>Go Home</Text>
               </Pressable>
             </View>
@@ -168,7 +169,7 @@ export class NavigationErrorBoundary extends Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 24,
@@ -190,13 +191,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
     textAlign: 'center',
   },
   message: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 24,
     lineHeight: 24,
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
   errorDetails: {
     width: '100%',
     maxHeight: 200,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 8,
     padding: 12,
     marginBottom: 24,
@@ -212,12 +213,12 @@ const styles = StyleSheet.create({
   errorDetailsTitle: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
   },
   errorDetailsText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontFamily: 'monospace',
   },
   actions: {
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#3B82F6',
+    backgroundColor: colors.infoScale[400],
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 8,
@@ -237,28 +238,28 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   secondaryButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   secondaryButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   helpText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     marginTop: 24,
   },

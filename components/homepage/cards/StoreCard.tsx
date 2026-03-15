@@ -18,6 +18,7 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import QuickActions from '@/components/store/QuickActions';
 import FastImage from '@/components/common/FastImage';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Custom comparison function for React.memo
 const arePropsEqual = (prevProps: any, nextProps: any) => {
@@ -51,10 +52,10 @@ function StoreCard({
 }) {
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
-  const cardBackground = useThemeColor({ light: '#FFFFFF', dark: '#1F2937' }, 'background');
+  const cardBackground = useThemeColor({ light: colors.background.primary, dark: colors.neutral[800] }, 'background');
   const textColor = useThemeColor({}, 'text');
-  const textSecondary = useThemeColor({ light: '#6B7280', dark: '#9CA3AF' }, 'text');
-  const borderColor = useThemeColor({ light: '#E5E7EB', dark: '#374151' }, 'border');
+  const textSecondary = useThemeColor({ light: colors.neutral[500], dark: colors.neutral[400] }, 'text');
+  const borderColor = useThemeColor({ light: colors.neutral[200], dark: colors.neutral[700] }, 'border');
   const primaryColor = useThemeColor({}, 'tint');
   
   // State for banner slider
@@ -267,11 +268,11 @@ function StoreCard({
   const renderRating = useMemo(() => {
     return (
       <View style={styles.ratingContainer}>
-        <Ionicons name="star" size={16} color="#ffcd57" />
-        <ThemedText style={[styles.ratingText, { color: '#1a3a52' }]}>
+        <Ionicons name="star" size={16} color={colors.lightMustard} />
+        <ThemedText style={[styles.ratingText, { color: colors.nileBlue }]}>
           {formattedRating}
         </ThemedText>
-        <ThemedText style={[styles.ratingCount, { color: '#666' }]}>
+        <ThemedText style={[styles.ratingCount, { color: colors.midGray }]}>
           ({store.rating.count})
         </ThemedText>
       </View>
@@ -293,7 +294,7 @@ function StoreCard({
       badges.push(
         <LinearGradient
           key="trending"
-          colors={['#ffcd57', '#1a3a52']}
+          colors={[colors.lightMustard, colors.nileBlue]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={[styles.badge, styles.trendingBadge]}
@@ -407,7 +408,7 @@ function StoreCard({
             </>
           ) : (
             <View style={[styles.image, styles.placeholderImage]}>
-              <Ionicons name="storefront-outline" size={48} color="#9CA3AF" />
+              <Ionicons name="storefront-outline" size={48} color={colors.neutral[400]} />
             </View>
           )}
           {renderBadges}
@@ -430,7 +431,7 @@ function StoreCard({
           <View style={styles.locationInfo}>
             {store.location && (
               <View style={styles.locationContainer}>
-                <Ionicons name="location-outline" size={14} color="#666" />
+                <Ionicons name="location-outline" size={14} color={colors.midGray} />
                 <ThemedText style={styles.locationText}>
                   {store.location.distance || store.location.city}
                 </ThemedText>
@@ -439,7 +440,7 @@ function StoreCard({
 
             {store.deliveryTime && (
               <View style={styles.deliveryContainer}>
-                <Ionicons name="time-outline" size={14} color="#666" />
+                <Ionicons name="time-outline" size={14} color={colors.midGray} />
                 <ThemedText style={styles.deliveryText}>
                   {store.deliveryTime}
                 </ThemedText>
@@ -494,7 +495,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
@@ -502,7 +503,7 @@ const styles = StyleSheet.create({
     minHeight: 320, // Fixed minimum height to ensure consistency
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.08,
         shadowRadius: 24,
@@ -519,7 +520,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     height: 140,
     width: '100%',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     overflow: 'hidden',
   },
   image: {
@@ -529,7 +530,7 @@ const styles = StyleSheet.create({
   placeholderImage: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   paginationContainer: {
     position: 'absolute',
@@ -549,7 +550,7 @@ const styles = StyleSheet.create({
   },
   paginationDotActive: {
     width: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   badgesContainer: {
     position: 'absolute',
@@ -564,10 +565,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   newBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   newBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -575,7 +576,7 @@ const styles = StyleSheet.create({
     // Gradient background applied via LinearGradient
   },
   trendingBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -591,7 +592,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     flex: 1,
     marginRight: 8,
   },
@@ -603,15 +604,15 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   ratingCount: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
   },
   description: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 12,
     lineHeight: 18,
     minHeight: 36, // Fixed height for 2 lines (18 * 2)
@@ -630,7 +631,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 13,
-    color: '#666',
+    color: colors.midGray,
   },
   deliveryContainer: {
     flexDirection: 'row',
@@ -639,7 +640,7 @@ const styles = StyleSheet.create({
   },
   deliveryText: {
     fontSize: 13,
-    color: '#666',
+    color: colors.midGray,
   },
   footer: {
     flexDirection: 'row',
@@ -647,25 +648,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cashbackContainer: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
   },
   cashbackText: {
     fontSize: 12,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
   },
   minOrderText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   quickActionsContainer: {
     marginTop: 16,
     marginHorizontal: -16, // Compensate for card padding
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     paddingTop: 12,
   },
 });

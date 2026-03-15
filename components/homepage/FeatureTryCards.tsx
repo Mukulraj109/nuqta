@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface FeatureCard {
   id: string;
@@ -92,8 +93,8 @@ const FeatureTryCards: React.FC<FeatureTryCardsProps> = ({
       saveAmount: lockProduct ? `${currencySymbol}${formatCurrencyValue(lockProduct.savings, locale)}` : `${currencySymbol}5,000`,
       coinsEarned: lockProduct ? formatCoins(lockProduct.cashbackCoins, locale) : '2,499',
       ctaText: 'Try Now',
-      ctaColor: '#A855F7', // Purple
-      gradientColors: ['#dfebf7', '#ffd7b5'], // Lavender Mist to Light Peach
+      ctaColor: colors.brand.purpleMedium, // Purple
+      gradientColors: [colors.lavenderMist, colors.lightPeach], // Lavender Mist to Light Peach
       onPress: onProductLockPress || (() => {
         if (lockProduct?.productId) {
           router.push(`/product-page?cardId=${lockProduct.productId}&cardType=product` as any);
@@ -116,8 +117,8 @@ const FeatureTryCards: React.FC<FeatureTryCardsProps> = ({
       saveAmount: trendingService ? `${currencySymbol}${formatCurrencyValue(trendingService.savings, locale)}` : `${currencySymbol}1,000`,
       coinsEarned: trendingService ? formatCoins(trendingService.cashbackCoins, locale) : '250',
       ctaText: 'Book Now',
-      ctaColor: '#ffd7b5', // Light Peach
-      gradientColors: ['#ffd7b5', '#E8B896'], // Light Peach gradient
+      ctaColor: colors.lightPeach, // Light Peach
+      gradientColors: [colors.lightPeach, colors.brand.sand], // Light Peach gradient
       onPress: onServiceBookingPress || (() => {
         if (trendingService?.productId) {
           router.push(`/service/${trendingService.productId}`);
@@ -215,8 +216,8 @@ const FeatureTryCards: React.FC<FeatureTryCardsProps> = ({
   if (isLoading) {
     return (
       <View style={styles.container}>
-        {renderSkeletonCard(0, ['#dfebf7', '#ffd7b5'])}
-        {renderSkeletonCard(1, ['#faf1e0', '#ffd7b5'])}
+        {renderSkeletonCard(0, [colors.lavenderMist, colors.lightPeach])}
+        {renderSkeletonCard(1, [colors.linen, colors.lightPeach])}
       </View>
     );
   }
@@ -279,18 +280,18 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937', // Dark grey
+    color: colors.neutral[800], // Dark grey
     letterSpacing: -0.3,
   },
   subtitleText: {
     fontSize: 12,
-    color: '#6B7280', // Light grey
+    color: colors.neutral[500], // Light grey
     marginTop: 2,
   },
   itemNameText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937', // Dark grey
+    color: colors.neutral[800], // Dark grey
     marginTop: 4,
   },
   offerRow: {
@@ -302,7 +303,7 @@ const styles = StyleSheet.create({
   offerText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57', // Mustard
+    color: colors.lightMustard, // Mustard
     flex: 1,
     marginRight: 8,
   },

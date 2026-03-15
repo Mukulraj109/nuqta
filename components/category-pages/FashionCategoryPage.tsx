@@ -38,17 +38,18 @@ import EmptyState from '@/components/common/EmptyState';
 import { LoadingState } from '@/components/common/LoadingState';
 import { fashionCategoryData, fashionServiceFilters, fashionModeFilters, fashionQuickActions } from '@/data/category/fashionCategoryData';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  purple: '#A855F7',
-  purpleDark: '#7C3AED',
+  purple: colors.brand.purpleMedium,
+  purpleDark: colors.brand.purple,
   purpleLight: '#FAF5FF',
-  primaryGold: '#F59E0B',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  border: '#E5E7EB',
+  primaryGold: colors.warningScale[400],
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  border: colors.neutral[200],
 };
 
 // All fashion services with tags for filter matching
@@ -99,9 +100,9 @@ function storeMatchesFilter(store: any, filterId: string): boolean {
 
 function getPriceTier(priceForTwo?: number): { label: string; color: string } {
   if (!priceForTwo) return { label: '', color: '' };
-  if (priceForTwo < 1000) return { label: '$', color: '#22C55E' };
-  if (priceForTwo < 3000) return { label: '$$', color: '#F59E0B' };
-  return { label: '$$$', color: '#8B5CF6' };
+  if (priceForTwo < 1000) return { label: '$', color: colors.success };
+  if (priceForTwo < 3000) return { label: '$$', color: colors.warningScale[400] };
+  return { label: '$$$', color: colors.brand.purpleLight };
 }
 
 function FashionCategoryPage() {
@@ -306,7 +307,7 @@ function FashionCategoryPage() {
       {filteredTrending.length > 0 && (
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="flame" size={20} color="#EF4444" />
+            <Ionicons name="flame" size={20} color={colors.error} />
             <Text style={styles.sectionTitle}>Trending This Week</Text>
             <Pressable onPress={() => router.push('/MainCategory/fashion/search?q=trending' as any)}>
               <Text style={styles.sectionSeeAll}>View All</Text>

@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { storesApi } from '@/services/storesApi';
 import { useCurrentRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Web Video Component - renders native HTML5 video on web platform
 const WebVideoPlayer: React.FC<{ uri: string; poster?: string }> = ({ uri, poster }) => {
@@ -66,7 +67,7 @@ const WebVideoPlayer: React.FC<{ uri: string; poster?: string }> = ({ uri, poste
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            backgroundColor: '#F3F4F6',
+            backgroundColor: colors.neutral[100],
           } as any}
         />
       </View>
@@ -343,14 +344,14 @@ const TrendingNearYou: React.FC<TrendingNearYouProps> = ({
   // Render error state
   const renderError = () => (
     <View style={styles.errorContainer}>
-      <Ionicons name="alert-circle-outline" size={48} color="#ffcd57" />
+      <Ionicons name="alert-circle-outline" size={48} color={colors.lightMustard} />
       <Text style={styles.errorText}>{error}</Text>
       <Pressable
         onPress={handleRetry}
        
         style={styles.retryButton}
       >
-        <Ionicons name="refresh" size={16} color="#FFFFFF" />
+        <Ionicons name="refresh" size={16} color={colors.background.primary} />
         <Text style={styles.retryText}>Retry</Text>
       </Pressable>
     </View>
@@ -359,7 +360,7 @@ const TrendingNearYou: React.FC<TrendingNearYouProps> = ({
   // Render empty state
   const renderEmpty = () => (
     <View style={styles.emptyContainer}>
-      <Ionicons name="storefront-outline" size={48} color="#9CA3AF" />
+      <Ionicons name="storefront-outline" size={48} color={colors.neutral[400]} />
       <Text style={styles.emptyText}>No trending stores found</Text>
     </View>
   );
@@ -393,13 +394,13 @@ const TrendingNearYou: React.FC<TrendingNearYouProps> = ({
             )}
             {/* Trending Badge */}
             <View style={styles.trendingBadge}>
-              <Ionicons name="flame" size={10} color="#FFFFFF" />
+              <Ionicons name="flame" size={10} color={colors.background.primary} />
               <Text style={styles.trendingText}>{store.trending}</Text>
             </View>
             {/* Video indicator badge */}
             {store.video && (
               <View style={styles.videoBadge}>
-                <Ionicons name="videocam" size={10} color="#FFFFFF" />
+                <Ionicons name="videocam" size={10} color={colors.background.primary} />
               </View>
             )}
           </View>
@@ -417,7 +418,7 @@ const TrendingNearYou: React.FC<TrendingNearYouProps> = ({
                 {store.cashback} cashback
               </Text>
               <View style={styles.coinsContainer}>
-                <Ionicons name="star" size={12} color="#FBBF24" />
+                <Ionicons name="star" size={12} color={colors.warningScale[400]} />
                 <Text style={styles.coinsText}>Coins</Text>
               </View>
             </View>
@@ -433,7 +434,7 @@ const TrendingNearYou: React.FC<TrendingNearYouProps> = ({
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={styles.headerIconContainer}>
-            <Ionicons name="flame" size={20} color="#ffcd57" />
+            <Ionicons name="flame" size={20} color={colors.lightMustard} />
           </View>
           <View style={styles.headerTextContainer}>
             <Text style={styles.title}>Trending Near You</Text>
@@ -446,7 +447,7 @@ const TrendingNearYou: React.FC<TrendingNearYouProps> = ({
           style={styles.viewAllButton}
         >
           <Text style={styles.viewAllText}>View All</Text>
-          <Ionicons name="chevron-forward" size={14} color="#ffcd57" />
+          <Ionicons name="chevron-forward" size={14} color={colors.lightMustard} />
         </Pressable>
       </View>
 
@@ -492,13 +493,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '400',
   },
   viewAllButton: {
@@ -515,7 +516,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   grid: {
     flexDirection: 'row',
@@ -524,14 +525,14 @@ const styles = StyleSheet.create({
   },
   storeCard: {
     width: '47%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(255, 205, 87, 0.08)',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -549,12 +550,12 @@ const styles = StyleSheet.create({
   storeImage: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   storeVideo: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   videoPoster: {
     width: '100%',
@@ -585,7 +586,7 @@ const styles = StyleSheet.create({
   trendingText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   storeInfo: {
     padding: 12,
@@ -593,13 +594,13 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
     letterSpacing: -0.2,
   },
   storeCategory: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   storeFooter: {
@@ -610,7 +611,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   coinsContainer: {
     flexDirection: 'row',
@@ -620,38 +621,38 @@ const styles = StyleSheet.create({
   coinsText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FBBF24',
+    color: colors.warningScale[400],
   },
   // Skeleton styles
   skeletonImage: {
     width: '100%',
     height: 96,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   skeletonName: {
     width: '80%',
     height: 14,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 4,
   },
   skeletonCategory: {
     width: '50%',
     height: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 8,
   },
   skeletonCashback: {
     width: 60,
     height: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
   },
   skeletonCoins: {
     width: 40,
     height: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
   },
   // Error styles
@@ -663,14 +664,14 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   retryButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
@@ -678,7 +679,7 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // Empty styles
   emptyContainer: {
@@ -689,7 +690,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
   },
 });

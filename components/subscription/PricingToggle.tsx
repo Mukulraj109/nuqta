@@ -6,6 +6,7 @@ import { View, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface PricingToggleProps {
   billingCycle: 'monthly' | 'yearly';
@@ -140,7 +141,7 @@ function PricingToggle({
             <View style={styles.savingsColumn}>
               <ThemedText style={styles.savingsLabel}>You Save</ThemedText>
               <View style={styles.savingsValueRow}>
-                <Ionicons name="checkmark-circle" size={16} color="#ffcd57" />
+                <Ionicons name="checkmark-circle" size={16} color={colors.lightMustard} />
                 <ThemedText style={styles.savingsAmountValue}>
                   {currencySymbol}{monthlyPrice * 12 - yearlyPrice}
                 </ThemedText>
@@ -158,7 +159,7 @@ function PricingToggle({
         accessibilityLabel="Projected return on investment: Based on average usage, plus 2400 rupees per year"
       >
         <View style={styles.roiHeader}>
-          <Ionicons name="sparkles" size={16} color="#F59E0B" />
+          <Ionicons name="sparkles" size={16} color={colors.warningScale[400]} />
           <ThemedText style={styles.roiTitle}>Projected ROI</ThemedText>
         </View>
         <View style={styles.roiContent}>
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   toggleContainer: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 12,
     padding: 4,
     flexDirection: 'row',
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   toggleOptionActive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
@@ -200,23 +201,23 @@ const styles = StyleSheet.create({
   toggleOptionText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   toggleOptionTextActive: {
-    color: '#111827',
+    color: colors.neutral[900],
   },
   togglePrice: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 4,
   },
   togglePriceActive: {
-    color: '#111827',
+    color: colors.neutral[900],
   },
   toggleDivider: {
     width: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginHorizontal: 4,
   },
   yearlyLabelContainer: {
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   },
   savingsBadge: {
     marginTop: 6,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 8,
@@ -232,14 +233,14 @@ const styles = StyleSheet.create({
   savingsText: {
     fontSize: 10,
     fontWeight: 'bold',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   savingsInfo: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     borderLeftWidth: 4,
-    borderLeftColor: '#ffcd57',
+    borderLeftColor: colors.lightMustard,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
@@ -257,18 +258,18 @@ const styles = StyleSheet.create({
   savingsDivider: {
     width: 1,
     height: 40,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   savingsLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     marginBottom: 4,
   },
   savingsValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   savingsValueRow: {
     flexDirection: 'row',
@@ -278,14 +279,14 @@ const styles = StyleSheet.create({
   savingsAmountValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   roiContainer: {
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     borderRadius: 12,
     padding: 16,
     borderLeftWidth: 4,
-    borderLeftColor: '#F59E0B',
+    borderLeftColor: colors.warningScale[400],
   },
   roiHeader: {
     flexDirection: 'row',
@@ -296,7 +297,7 @@ const styles = StyleSheet.create({
   roiTitle: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   roiContent: {
     gap: 8,
@@ -308,12 +309,12 @@ const styles = StyleSheet.create({
   },
   roiItemLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   roiItemValue: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
 });
 

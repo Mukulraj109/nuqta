@@ -21,6 +21,7 @@ import walletApi from '@/services/walletApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface ExpiringCoin {
   id: string;
@@ -180,7 +181,7 @@ export default function ExpiryTrackerPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Coin Expiry</ThemedText>
           <View style={styles.placeholder} />
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -386,7 +387,7 @@ const styles = StyleSheet.create({
   },
   useNowText: {
     ...Typography.labelSmall,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   section: {
     marginBottom: Spacing.lg,
@@ -534,7 +535,7 @@ const styles = StyleSheet.create({
   },
   retryText: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   emptyTitle: {
     ...Typography.label,

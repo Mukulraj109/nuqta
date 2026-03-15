@@ -8,6 +8,7 @@
 import React, { lazy, Suspense, ComponentType, ReactNode } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import { errorReporter } from './errorReporter';
+import { colors } from '@/constants/theme';
 
 // ============================================================================
 // Types
@@ -40,7 +41,7 @@ interface RetryState {
  */
 const DefaultLoadingFallback: React.FC<{ message?: string }> = ({ message = 'Loading...' }) => (
   <View style={styles.container}>
-    <ActivityIndicator size="large" color="#8B5CF6" />
+    <ActivityIndicator size="large" color={colors.brand.purpleLight} />
     <Text style={styles.loadingText}>{message}</Text>
   </View>
 );
@@ -392,7 +393,7 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#EF4444',
+    color: colors.error,
     marginBottom: 8,
   },
   errorComponent: {
@@ -407,7 +408,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   retryButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,

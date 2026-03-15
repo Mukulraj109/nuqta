@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface RelatedCabsSectionProps {
   currentCabId: string;
@@ -57,7 +58,7 @@ const RelatedCabsSection: React.FC<RelatedCabsSectionProps> = ({ currentCabId })
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Related Cabs</Text>
-        <ActivityIndicator size="small" color="#EAB308" style={styles.loader} />
+        <ActivityIndicator size="small" color={colors.brand.amber} style={styles.loader} />
       </View>
     );
   }
@@ -69,7 +70,7 @@ const RelatedCabsSection: React.FC<RelatedCabsSectionProps> = ({ currentCabId })
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="car" size={24} color="#EAB308" />
+        <Ionicons name="car" size={24} color={colors.brand.amber} />
         <Text style={styles.title}>Related Cabs</Text>
       </View>
       
@@ -105,7 +106,7 @@ const RelatedCabsSection: React.FC<RelatedCabsSectionProps> = ({ currentCabId })
                   {cab.name}
                 </Text>
                 <View style={styles.cabInfo}>
-                  <Ionicons name="star" size={14} color="#F59E0B" />
+                  <Ionicons name="star" size={14} color={colors.warningScale[400]} />
                   <Text style={styles.rating}>
                     {rating.toFixed(1) || '4.5'}
                   </Text>
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   loader: {
     marginTop: 16,
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
   },
   cabCard: {
     width: 200,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     shadowColor: '#000',
@@ -162,12 +163,12 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   cabImage: {
     width: '100%',
     height: 120,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   cabContent: {
     padding: 12,
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   cabName: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
     minHeight: 40,
   },
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   priceRow: {
     flexDirection: 'row',
@@ -198,10 +199,10 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#EAB308',
+    color: colors.brand.amber,
   },
   cashbackBadge: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,

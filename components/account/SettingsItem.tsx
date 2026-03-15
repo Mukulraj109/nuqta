@@ -12,10 +12,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { SettingsItemProps } from '@/types/account.types';
 import { Colors, Spacing, BorderRadius } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Semantic chip color map
 const CHIP_COLORS: Record<string, { bg: string; text: string }> = {
-  PREMIUM: { bg: Colors.secondary[600], text: '#FFFFFF' },
+  PREMIUM: { bg: Colors.secondary[600], text: colors.background.primary },
   ONLINE: { bg: '#E8F8EF', text: '#1B9E5A' },
   NEW: { bg: '#FFF3E0', text: '#E67E22' },
 };
@@ -25,7 +26,7 @@ function getChipStyle(badge: string | number) {
     return { bg: `${Colors.primary[500]}20`, text: Colors.secondary[600] };
   }
   const key = String(badge).toUpperCase();
-  return CHIP_COLORS[key] || { bg: Colors.secondary[600], text: '#FFFFFF' };
+  return CHIP_COLORS[key] || { bg: Colors.secondary[600], text: colors.background.primary };
 }
 
 function SettingsItem({ category, onPress, style, isLast }: SettingsItemProps & { isLast?: boolean }) {
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 14,
     paddingHorizontal: Spacing.base,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   containerBorder: {
     borderBottomWidth: StyleSheet.hairlineWidth,

@@ -15,6 +15,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { SectionHeader, HorizontalScrollSection } from '../common';
 import { FriendRedeemedOffer } from '@/types/offers.types';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface FriendsRedeemedSectionProps {
   offers: FriendRedeemedOffer[];
@@ -54,7 +55,7 @@ export const FriendsRedeemedSection: React.FC<FriendsRedeemedSectionProps> = ({
     },
     card: {
       width: 200,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 1.5,
       borderColor: isDark ? 'rgba(236, 72, 153, 0.3)' : '#FBCFE8',
@@ -74,7 +75,7 @@ export const FriendsRedeemedSection: React.FC<FriendsRedeemedSectionProps> = ({
       borderRadius: 16,
       marginRight: Spacing.sm,
       borderWidth: 2,
-      borderColor: '#EC4899',
+      borderColor: colors.brand.pink,
     },
     friendInfo: {
       flex: 1,
@@ -125,7 +126,7 @@ export const FriendsRedeemedSection: React.FC<FriendsRedeemedSectionProps> = ({
     savingsBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#faf1e0',
+      backgroundColor: colors.linen,
       paddingHorizontal: 6,
       paddingVertical: 3,
       borderRadius: 5,
@@ -133,7 +134,7 @@ export const FriendsRedeemedSection: React.FC<FriendsRedeemedSectionProps> = ({
     savingsText: {
       fontSize: 11,
       fontWeight: '700',
-      color: '#1a3a52',
+      color: colors.nileBlue,
       marginLeft: 3,
     },
     cashbackBadge: {
@@ -158,7 +159,7 @@ export const FriendsRedeemedSection: React.FC<FriendsRedeemedSectionProps> = ({
         title="Friends Redeemed"
         subtitle="See what your friends saved"
         icon="people"
-        iconColor="#EC4899"
+        iconColor={colors.brand.pink}
         showViewAll={offers.length > 2}
         onViewAll={onViewAll}
       />
@@ -204,7 +205,7 @@ export const FriendsRedeemedSection: React.FC<FriendsRedeemedSectionProps> = ({
               </Text>
               <View style={styles.savingsRow}>
                 <View style={styles.savingsBadge}>
-                  <Ionicons name="checkmark-circle" size={12} color="#1a3a52" />
+                  <Ionicons name="checkmark-circle" size={12} color={colors.nileBlue} />
                   <Text style={styles.savingsText}>
                     {currencySymbol}{item.offer.savings.toFixed(0)} saved
                   </Text>

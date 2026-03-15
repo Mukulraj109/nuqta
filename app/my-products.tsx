@@ -29,6 +29,7 @@ import { useReorder } from '@/hooks/useReorder';
 import { useCart } from '@/contexts/CartContext';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type ProductStatus = 'all' | 'delivered' | 'in_transit' | 'cancelled';
 
@@ -368,10 +369,10 @@ const MyProductsPage = () => {
               accessibilityState={{ disabled: reorderingProductId === item.orderId }}
             >
               {reorderingProductId === item.orderId ? (
-                <ActivityIndicator size="small" color="#00C06A" />
+                <ActivityIndicator size="small" color={colors.brand.green} />
               ) : (
                 <>
-                  <Ionicons name="repeat-outline" size={20} color="#00C06A" />
+                  <Ionicons name="repeat-outline" size={20} color={colors.brand.green} />
                   <Text style={styles.actionText}>Reorder</Text>
                 </>
               )}
@@ -424,14 +425,14 @@ const MyProductsPage = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#00796B" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.brand.teal} />
 
       {/* Header */}
-      <LinearGradient colors={['#00796B', '#00C06A']} style={styles.header}>
+      <LinearGradient colors={[colors.brand.teal, colors.brand.green]} style={styles.header}>
         <View style={styles.headerContent}>
           <HeaderBackButton
             onPress={handleBackPress}
-            iconColor="#FFFFFF"
+            iconColor={colors.background.primary}
             style={styles.backButton}
           />
           <Text style={styles.headerTitle}>My Products</Text>
@@ -481,7 +482,7 @@ const MyProductsPage = () => {
         ListFooterComponent={
           loadingMore ? (
             <View style={{ paddingVertical: 20, alignItems: 'center' }}>
-              <ActivityIndicator size="small" color="#00C06A" />
+              <ActivityIndicator size="small" color={colors.brand.green} />
             </View>
           ) : null
         }
@@ -625,7 +626,7 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.7)',
   },
   activeTabText: {
-    color: '#00C06A',
+    color: colors.brand.green,
   },
   listContainer: {
     padding: Spacing.base,
@@ -667,7 +668,7 @@ const styles = StyleSheet.create({
   productPrice: {
     ...Typography.bodyLarge,
     fontWeight: '700',
-    color: '#00C06A',
+    color: colors.brand.green,
     marginRight: Spacing.md,
   },
   productQuantity: {
@@ -746,7 +747,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   shopButton: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.sm,
@@ -821,7 +822,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalButtonPrimary: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
   },
   modalButtonSecondary: {
     backgroundColor: Colors.background.secondary,

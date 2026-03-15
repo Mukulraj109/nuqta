@@ -11,6 +11,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { storeSearchService } from '@/services/storeSearchService';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface SearchSuggestion {
   id: string;
@@ -194,7 +195,7 @@ const StoreSearchBar: React.FC<StoreSearchBarProps> = ({
     <View style={[styles.container, style]}>
       <View style={styles.searchContainer}>
         <View style={styles.inputContainer}>
-          <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
+          <Ionicons name="search" size={20} color={colors.midGray} style={styles.searchIcon} />
           <TextInput
             ref={inputRef}
             style={styles.input}
@@ -244,7 +245,7 @@ const StoreSearchBar: React.FC<StoreSearchBarProps> = ({
           accessibilityLabel="Search"
           accessibilityHint="Double tap to perform search"
         >
-          <Ionicons name="arrow-forward" size={20} color="#fff" />
+          <Ionicons name="arrow-forward" size={20} color={colors.background.primary} />
         </Pressable>
       </View>
 
@@ -273,7 +274,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     elevation: 2,
     shadowColor: '#000',
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
+    color: colors.darkGray,
     padding: 0,
   },
   clearButton: {
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
     top: '100%',
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     marginTop: 4,
     elevation: 4,
@@ -351,11 +352,11 @@ const styles = StyleSheet.create({
   suggestionName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   suggestionDescription: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     marginTop: 2,
   },
   suggestionType: {
@@ -366,7 +367,7 @@ const styles = StyleSheet.create({
   },
   suggestionTypeText: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     fontWeight: '500',
   },
 });

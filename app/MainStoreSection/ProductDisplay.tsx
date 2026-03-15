@@ -18,6 +18,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { triggerImpact, triggerNotification } from "@/utils/haptics";
 import { GlassCard } from "@/components/ui";
 import { ThemedText } from "@/components/ThemedText";
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -302,7 +303,7 @@ export default memo(function ProductDisplay({
                       }) || 8,
                       backgroundColor: dotAnimations[i]?.interpolate({
                         inputRange: [0, 1],
-                        outputRange: ['rgba(255,255,255,0.5)', '#ffcd57'],
+                        outputRange: ['rgba(255,255,255,0.5)', colors.lightMustard],
                       }) || 'rgba(255,255,255,0.5)',
                     },
                   ]}
@@ -490,7 +491,7 @@ const styles = StyleSheet.create({
     width: 110,
     borderRadius: 8,
     overflow: "hidden",
-    shadowColor: "#ffcd57",
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 4,
@@ -505,7 +506,7 @@ const styles = StyleSheet.create({
   },
   directionsButtonText: {
     fontSize: 12,
-    color: "#FFFFFF",
+    color: colors.background.primary,
     fontWeight: "600",
   },
   callButton: {
@@ -515,7 +516,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 7,
     gap: 5,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     borderRadius: 8,
     borderWidth: 1.5,
     borderColor: "rgba(255, 205, 87, 0.25)",

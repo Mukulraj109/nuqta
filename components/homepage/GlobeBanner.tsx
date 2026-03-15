@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 const PADDING = 16;

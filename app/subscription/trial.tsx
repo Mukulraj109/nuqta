@@ -18,6 +18,7 @@ import subscriptionAPI from '@/services/subscriptionApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -462,7 +463,7 @@ export default function TrialPage() {
       {/* Trial Ending Soon Banner */}
       {isTrialEnding && (
         <LinearGradient
-          colors={[Colors.error, '#DC2626']}
+          colors={[Colors.error, colors.error]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.urgentBanner}

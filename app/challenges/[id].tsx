@@ -24,6 +24,7 @@ import ActivityTimeline from '@/components/challenges/ActivityTimeline';
 import coinSyncService from '@/services/coinSyncService';
 import logger from '@/utils/logger';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -392,7 +393,7 @@ export default function ChallengeDetailPage() {
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Hero Section */}
-        <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple, '#6D28D9']} style={styles.heroSection}>
+        <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple, colors.brand.purpleDeep]} style={styles.heroSection}>
           <View style={styles.iconContainer}>
             <Ionicons name={challenge.icon as any} size={60} color={Colors.text.inverse} />
           </View>
@@ -555,7 +556,7 @@ export default function ChallengeDetailPage() {
               disabled={claiming}
              
             >
-              <LinearGradient colors={[Colors.success, '#059669']} style={styles.claimButtonGradient}>
+              <LinearGradient colors={[Colors.success, colors.successScale[700]]} style={styles.claimButtonGradient}>
                 {claiming ? (
                   <ActivityIndicator size="small" color={Colors.text.inverse} />
                 ) : (

@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import programApi from '../../services/programApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -189,7 +190,7 @@ const CollegeAmbassador = () => {
       icon: 'gift',
       title: 'Free Products',
       description: 'Get free samples & merch',
-      color: '#A855F7',
+      color: colors.brand.purpleMedium,
       bg: 'rgba(168, 85, 247, 0.2)'
     },
     {
@@ -236,7 +237,7 @@ const CollegeAmbassador = () => {
       case 'Easy':
         return { color: Colors.success, bg: 'rgba(16, 185, 129, 0.1)', border: 'rgba(16, 185, 129, 0.3)' };
       case 'Medium':
-        return { color: '#F97316', bg: 'rgba(249, 115, 22, 0.1)', border: 'rgba(249, 115, 22, 0.3)' };
+        return { color: colors.brand.orange, bg: 'rgba(249, 115, 22, 0.1)', border: 'rgba(249, 115, 22, 0.3)' };
       case 'Hard':
         return { color: Colors.error, bg: 'rgba(239, 68, 68, 0.1)', border: 'rgba(239, 68, 68, 0.3)' };
       default:
@@ -245,7 +246,7 @@ const CollegeAmbassador = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#000' : Colors.background.primary }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? colors.text.primary : Colors.background.primary }]}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={[styles.header, { backgroundColor: isDark ? 'rgba(0,0,0,0.95)' : 'rgba(255,255,255,0.95)' }]}>
@@ -287,7 +288,7 @@ const CollegeAmbassador = () => {
               </View>
               <View style={[styles.statCard, { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : Colors.background.primary }]}>
                 <View style={styles.statHeader}>
-                  <Ionicons name="calendar" size={16} color="#A855F7" />
+                  <Ionicons name="calendar" size={16} color={colors.brand.purpleMedium} />
                   <Text style={[styles.statLabel, { color: isDark ? Colors.text.tertiary : Colors.text.tertiary }]}>Events</Text>
                 </View>
                 <Text style={[styles.statValue, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>{myStats.eventsAttended}</Text>
@@ -304,7 +305,7 @@ const CollegeAmbassador = () => {
               <Text style={[styles.progressLabel, { color: isDark ? Colors.text.tertiary : Colors.text.tertiary }]}>Progress to Gold Ambassador</Text>
               <View style={[styles.progressBar, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : Colors.border.default }]}>
                 <LinearGradient
-                  colors={[Colors.info, '#A855F7']}
+                  colors={[Colors.info, colors.brand.purpleMedium]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={[styles.progressFill, { width: '65%' }]}
@@ -367,16 +368,16 @@ const CollegeAmbassador = () => {
                     </View>
                   </View>
 
-                  <View style={[styles.progressContainer, { backgroundColor: isDark ? 'rgba(59, 130, 246, 0.1)' : Colors.infoScale[50], borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : '#BFDBFE' }]}>
+                  <View style={[styles.progressContainer, { backgroundColor: isDark ? 'rgba(59, 130, 246, 0.1)' : Colors.infoScale[50], borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : colors.infoScale[200] }]}>
                     <View style={styles.progressHeader}>
                       <Text style={[styles.progressLabel, { color: isDark ? '#93C5FD' : '#1E40AF' }]}>Progress</Text>
-                      <Text style={[styles.progressValue, { color: isDark ? '#60A5FA' : '#2563EB' }]}>
+                      <Text style={[styles.progressValue, { color: isDark ? colors.infoScale[400] : colors.brand.blue }]}>
                         {task.progress}/{task.total}
                       </Text>
                     </View>
                     <View style={[styles.progressBar, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : Colors.border.default }]}>
                       <LinearGradient
-                        colors={[Colors.info, '#A855F7']}
+                        colors={[Colors.info, colors.brand.purpleMedium]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}
                         style={[styles.progressFill, { width: `${(task.progress / task.total) * 100}%` }]}
@@ -404,14 +405,14 @@ const CollegeAmbassador = () => {
                       </View>
                       {task.brandedReward > 0 && (
                         <View style={styles.rewardItem}>
-                          <Ionicons name="bag" size={20} color="#A855F7" />
-                          <Text style={[styles.rewardText, { color: '#A855F7' }]}>+{task.brandedReward}</Text>
+                          <Ionicons name="bag" size={20} color={colors.brand.purpleMedium} />
+                          <Text style={[styles.rewardText, { color: colors.brand.purpleMedium }]}>+{task.brandedReward}</Text>
                         </View>
                       )}
                     </View>
                     <Pressable style={styles.startButton}>
                       <LinearGradient
-                        colors={[Colors.info, '#A855F7']}
+                        colors={[Colors.info, colors.brand.purpleMedium]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}
                         style={styles.startButtonGradient}
@@ -440,7 +441,7 @@ const CollegeAmbassador = () => {
                   <View style={styles.eventInfo}>
                     <View style={styles.eventBadges}>
                       <View style={[styles.badge, { backgroundColor: 'rgba(168, 85, 247, 0.2)' }]}>
-                        <Text style={[styles.badgeText, { color: '#A855F7' }]}>{event.type}</Text>
+                        <Text style={[styles.badgeText, { color: colors.brand.purpleMedium }]}>{event.type}</Text>
                       </View>
                       {event.status === 'full' && (
                         <View style={[styles.badge, { backgroundColor: 'rgba(239, 68, 68, 0.2)' }]}>
@@ -462,16 +463,16 @@ const CollegeAmbassador = () => {
                   </View>
                 </View>
 
-                <View style={[styles.progressContainer, { backgroundColor: isDark ? 'rgba(168, 85, 247, 0.1)' : '#F3E8FF', borderColor: isDark ? 'rgba(168, 85, 247, 0.3)' : '#C084FC' }]}>
+                <View style={[styles.progressContainer, { backgroundColor: isDark ? 'rgba(168, 85, 247, 0.1)' : colors.tint.pink, borderColor: isDark ? 'rgba(168, 85, 247, 0.3)' : '#C084FC' }]}>
                   <View style={styles.progressHeader}>
-                    <Text style={[styles.progressLabel, { color: isDark ? '#C084FC' : '#7C3AED' }]}>Participants</Text>
-                    <Text style={[styles.progressValue, { color: isDark ? '#A78BFA' : '#8B5CF6' }]}>
+                    <Text style={[styles.progressLabel, { color: isDark ? '#C084FC' : colors.brand.purple }]}>Participants</Text>
+                    <Text style={[styles.progressValue, { color: isDark ? colors.brand.purpleSoft : colors.brand.purpleLight }]}>
                       {event.participants}/{event.maxParticipants}
                     </Text>
                   </View>
                   <View style={[styles.progressBar, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : Colors.border.default }]}>
                     <LinearGradient
-                      colors={['#A855F7', '#EC4899']}
+                      colors={[colors.brand.purpleMedium, colors.brand.pink]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 0 }}
                       style={[styles.progressFill, { width: `${(event.participants / event.maxParticipants) * 100}%` }]}
@@ -490,7 +491,7 @@ const CollegeAmbassador = () => {
                   >
                     {event.status !== 'full' ? (
                       <LinearGradient
-                        colors={['#A855F7', '#EC4899']}
+                        colors={[colors.brand.purpleMedium, colors.brand.pink]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 0 }}
                         style={styles.registerButtonGradient}

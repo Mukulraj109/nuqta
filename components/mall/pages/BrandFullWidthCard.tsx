@@ -19,6 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand, BrandBadge, BrandTier } from '../../../types/mall.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface BrandFullWidthCardProps {
   brand: MallBrand;
@@ -28,19 +29,19 @@ interface BrandFullWidthCardProps {
 }
 
 const BADGE_CONFIG: Record<BrandBadge, { colors: [string, string]; icon: string }> = {
-  exclusive: { colors: ['#F59E0B', '#1a3a52'], icon: 'diamond' },
-  premium: { colors: ['#1a3a52', '#234b68'], icon: 'star' },
-  new: { colors: ['#F59E0B', '#F97316'], icon: 'sparkles' },
-  trending: { colors: ['#F97316', '#F59E0B'], icon: 'trending-up' },
-  'top-rated': { colors: ['#dfebf7', '#1a3a52'], icon: 'trophy' },
-  verified: { colors: ['#F59E0B', '#1a3a52'], icon: 'checkmark-circle' },
+  exclusive: { colors: [colors.warningScale[400], colors.nileBlue], icon: 'diamond' },
+  premium: { colors: [colors.nileBlue, colors.brand.nileBlueLight], icon: 'star' },
+  new: { colors: [colors.warningScale[400], colors.brand.orange], icon: 'sparkles' },
+  trending: { colors: [colors.brand.orange, colors.warningScale[400]], icon: 'trending-up' },
+  'top-rated': { colors: [colors.lavenderMist, colors.nileBlue], icon: 'trophy' },
+  verified: { colors: [colors.warningScale[400], colors.nileBlue], icon: 'checkmark-circle' },
 };
 
 const TIER_CONFIG: Record<BrandTier, { colors: [string, string]; icon: string }> = {
-  standard: { colors: ['#9CA3AF', '#6B7280'], icon: 'storefront-outline' },
-  premium: { colors: ['#1a3a52', '#234b68'], icon: 'diamond-outline' },
-  exclusive: { colors: ['#F59E0B', '#1a3a52'], icon: 'ribbon-outline' },
-  luxury: { colors: ['#F59E0B', '#D97706'], icon: 'crown-outline' },
+  standard: { colors: [colors.neutral[400], colors.neutral[500]], icon: 'storefront-outline' },
+  premium: { colors: [colors.nileBlue, colors.brand.nileBlueLight], icon: 'diamond-outline' },
+  exclusive: { colors: [colors.warningScale[400], colors.nileBlue], icon: 'ribbon-outline' },
+  luxury: { colors: [colors.warningScale[400], colors.warningScale[700]], icon: 'crown-outline' },
 };
 
 const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
@@ -89,10 +90,10 @@ const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
           <View style={styles.rankContainer}>
             <LinearGradient
               colors={
-                rank === 1 ? ['#F59E0B', '#F97316'] :
-                rank === 2 ? ['#dfebf7', '#E5E7EB'] :
-                rank === 3 ? ['#ffd7b5', '#faf1e0'] :
-                ['#E5E7EB', '#D1D5DB']
+                rank === 1 ? [colors.warningScale[400], colors.brand.orange] :
+                rank === 2 ? [colors.lavenderMist, colors.neutral[200]] :
+                rank === 3 ? [colors.lightPeach, colors.linen] :
+                [colors.neutral[200], colors.neutral[300]]
               }
               style={styles.rankBadge}
             >
@@ -100,7 +101,7 @@ const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
                 <Ionicons
                   name={rank === 1 ? 'trophy' : 'medal'}
                   size={14}
-                  color="#1a3a52"
+                  color={colors.nileBlue}
                 />
               ) : (
                 <Text style={styles.rankText}>{rank}</Text>
@@ -112,7 +113,7 @@ const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
         {/* Left: Logo with Gradient Border */}
         <View style={styles.logoWrapper}>
           <LinearGradient
-            colors={['#F59E0B', '#1a3a52']}
+            colors={[colors.warningScale[400], colors.nileBlue]}
             style={styles.logoBorder}
           >
             <View style={styles.logoContainer}>
@@ -125,7 +126,7 @@ const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
                 />
               ) : (
                 <LinearGradient
-                  colors={['#F59E0B', '#1a3a52']}
+                  colors={[colors.warningScale[400], colors.nileBlue]}
                   style={styles.logoFallback}
                 >
                   <Text style={styles.logoFallbackText}>{getInitials(brand.name)}</Text>
@@ -137,7 +138,7 @@ const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
           {rewardPercentage > 0 && (
             <View style={styles.coinBadgeOnLogo}>
               <LinearGradient
-                colors={['#F59E0B', '#1a3a52']}
+                colors={[colors.warningScale[400], colors.nileBlue]}
                 style={styles.coinBadgeGradient}
               >
                 <Text style={styles.coinBadgeText}>{rewardPercentage}%</Text>
@@ -155,10 +156,10 @@ const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
             </Text>
             {brand.isNewArrival && (
               <LinearGradient
-                colors={['#F59E0B', '#1a3a52']}
+                colors={[colors.warningScale[400], colors.nileBlue]}
                 style={styles.newBadge}
               >
-                <Ionicons name="sparkles" size={8} color="#FFFFFF" />
+                <Ionicons name="sparkles" size={8} color={colors.background.primary} />
                 <Text style={styles.newBadgeText}>NEW</Text>
               </LinearGradient>
             )}
@@ -168,7 +169,7 @@ const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
           <View style={styles.ratingRow}>
             {(brand.ratings?.average || 0) > 0 && (
               <View style={styles.ratingBadge}>
-                <Ionicons name="star" size={12} color="#FFFFFF" />
+                <Ionicons name="star" size={12} color={colors.background.primary} />
                 <Text style={styles.ratingValue}>
                   {(brand.ratings?.average || 0).toFixed(1)}
                 </Text>
@@ -180,7 +181,7 @@ const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
               </Text>
             )}
             <View style={styles.successBadge}>
-              <Ionicons name="checkmark-circle" size={12} color="#1a3a52" />
+              <Ionicons name="checkmark-circle" size={12} color={colors.nileBlue} />
               <Text style={styles.successText}>
                 {brand.ratings?.successRate || 0}%
               </Text>
@@ -190,7 +191,7 @@ const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
           {/* Reward Display */}
           <View style={styles.rewardRow}>
             <View style={styles.rewardBadge}>
-              <Ionicons name="gift" size={14} color="#D97706" />
+              <Ionicons name="gift" size={14} color={colors.warningScale[700]} />
               <Text style={styles.rewardText}>
                 {isInAppStore
                   ? `Earn ${rewardPercentage}% ${BRAND.COIN_NAME}`
@@ -222,7 +223,7 @@ const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
               return (
                 <LinearGradient
                   key={badge}
-                  colors={config?.colors || ['#6B7280', '#4B5563']}
+                  colors={config?.colors || [colors.neutral[500], colors.neutral[600]]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.badge}
@@ -246,10 +247,10 @@ const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
         {/* Right: Arrow Button */}
         <View style={styles.arrowContainer}>
           <LinearGradient
-            colors={['#F3F4F6', '#E5E7EB']}
+            colors={[colors.neutral[100], colors.neutral[200]]}
             style={styles.arrowButton}
           >
-            <Ionicons name="chevron-forward" size={18} color="#6B7280" />
+            <Ionicons name="chevron-forward" size={18} color={colors.neutral[500]} />
           </LinearGradient>
         </View>
       </View>
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     padding: 14,
     ...Platform.select({
@@ -297,12 +298,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   rankText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   logoWrapper: {
     position: 'relative',
@@ -318,7 +319,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 16,
     overflow: 'hidden',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   logo: {
     width: '100%',
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
   logoFallbackText: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   coinBadgeOnLogo: {
     position: 'absolute',
@@ -345,12 +346,12 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   coinBadgeText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   infoContainer: {
     flex: 1,
@@ -364,7 +365,7 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     flex: 1,
   },
   newBadge: {
@@ -378,7 +379,7 @@ const styles = StyleSheet.create({
   newBadgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   ratingRow: {
@@ -391,7 +392,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -399,17 +400,17 @@ const styles = StyleSheet.create({
   ratingValue: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   ratingCount: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   successBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -417,7 +418,7 @@ const styles = StyleSheet.create({
   successText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   rewardRow: {
     marginBottom: 10,
@@ -426,18 +427,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 10,
     alignSelf: 'flex-start',
     borderWidth: 1,
-    borderColor: '#dfebf7',
+    borderColor: colors.lavenderMist,
   },
   rewardText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   badgesRow: {
     flexDirection: 'row',
@@ -452,7 +453,7 @@ const styles = StyleSheet.create({
   tierBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   badge: {
     paddingHorizontal: 10,
@@ -462,10 +463,10 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   categoryBadge: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 8,
@@ -473,7 +474,7 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   arrowContainer: {
     marginLeft: 10,

@@ -5,6 +5,7 @@ import React from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface TrialStatCardProps {
   icon: string;
@@ -28,7 +29,7 @@ function TrialStatCard({
   return (
     <View style={[styles.container, style]}>
       <View style={styles.iconContainer}>
-        <Ionicons name={icon as any} size={24} color="#8B5CF6" />
+        <Ionicons name={icon as any} size={24} color={colors.brand.purpleLight} />
       </View>
 
       <View style={styles.content}>
@@ -45,7 +46,7 @@ function TrialStatCard({
               <Ionicons
                 name={isPositiveChange ? 'arrow-up-outline' : 'arrow-down-outline'}
                 size={12}
-                color={isPositiveChange ? '#10B981' : '#EF4444'}
+                color={isPositiveChange ? colors.successScale[400] : colors.error}
               />
               <ThemedText
                 style={[
@@ -68,7 +69,7 @@ function TrialStatCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     marginBottom: 4,
   },
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     flex: 1,
   },
   changeBadge: {
@@ -117,24 +118,24 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   changePositive: {
-    backgroundColor: '#DCFCE7',
+    backgroundColor: colors.successScale[100],
   },
   changeNegative: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
   },
   changeText: {
     fontSize: 12,
     fontWeight: '600',
   },
   changeTextPositive: {
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   changeTextNegative: {
-    color: '#EF4444',
+    color: colors.error,
   },
   changeLabel: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 4,
   },
 });

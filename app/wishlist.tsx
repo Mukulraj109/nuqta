@@ -28,6 +28,7 @@ import ShareModal from '@/components/wishlist/ShareModal';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { WishlistItemSkeleton } from '@/components/common/SkeletonLoader';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface WishlistItem {
   id: string;
@@ -514,7 +515,7 @@ export default function WishlistPage() {
             </View>
           ) : daysLeft !== null && daysLeft <= 7 ? (
             <View style={[styles.expiryBadge, daysLeft <= 3 && styles.expiryBadgeUrgent]}>
-              <Ionicons name="time-outline" size={12} color={daysLeft <= 3 ? '#F59E0B' : Colors.primary[500]} />
+              <Ionicons name="time-outline" size={12} color={daysLeft <= 3 ? colors.warningScale[400] : Colors.primary[500]} />
               <ThemedText style={[styles.expiryText, daysLeft <= 3 && styles.expiryTextUrgent]}>
                 {daysLeft <= 0 ? 'Today' : `${daysLeft}d left`}
               </ThemedText>
@@ -799,7 +800,7 @@ export default function WishlistPage() {
       <ThemedView style={styles.container}>
         <Stack.Screen options={{ headerShown: false }} />
         <StatusBar barStyle="light-content" backgroundColor={Colors.primary[500]} />
-        <LinearGradient colors={[Colors.primary[500], '#00796B']} style={styles.header}>
+        <LinearGradient colors={[Colors.primary[500], colors.brand.teal]} style={styles.header}>
           <Pressable style={styles.backBtn} onPress={handleBackPress}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
@@ -825,7 +826,7 @@ export default function WishlistPage() {
       <ThemedView style={styles.container}>
         <Stack.Screen options={{ headerShown: false }} />
         <StatusBar barStyle="light-content" backgroundColor={Colors.primary[500]} />
-        <LinearGradient colors={[Colors.primary[500], '#00796B']} style={styles.header}>
+        <LinearGradient colors={[Colors.primary[500], colors.brand.teal]} style={styles.header}>
           <Pressable style={styles.backBtn} onPress={handleBackPress}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
@@ -848,7 +849,7 @@ export default function WishlistPage() {
     <ThemedView style={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />
       <StatusBar barStyle="light-content" backgroundColor={Colors.primary[500]} />
-      <LinearGradient colors={[Colors.primary[500], '#00796B']} style={styles.header}>
+      <LinearGradient colors={[Colors.primary[500], colors.brand.teal]} style={styles.header}>
         <Pressable style={styles.backBtn} onPress={handleBackPress}>
           <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
         </Pressable>
@@ -1061,8 +1062,8 @@ const styles = StyleSheet.create({
     borderColor: '#B8E5D6',
   },
   dealCardExpired: {
-    backgroundColor: '#FEF2F2',
-    borderColor: '#FECACA',
+    backgroundColor: colors.errorScale[50],
+    borderColor: colors.errorScale[200],
     opacity: 0.85,
   },
   discountBadge: {
@@ -1077,7 +1078,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   discountBadgeExpired: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
   },
   discountBadgeText: {
     fontSize: 12,
@@ -1124,7 +1125,7 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   expiryBadgeUrgent: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -1135,13 +1136,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   expiryTextUrgent: {
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   expiredBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,

@@ -13,6 +13,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { triggerImpact } from '@/utils/haptics';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Lock duration options
 export type LockDuration = 2 | 4 | 8;
@@ -91,7 +92,7 @@ export const DurationChips: React.FC<DurationChipsProps> = ({
               <Ionicons
                 name="time-outline"
                 size={20}
-                color={isSelected ? '#FFFFFF' : '#6B7280'}
+                color={isSelected ? colors.background.primary : colors.neutral[500]}
               />
 
               {/* Duration Label */}
@@ -136,7 +137,7 @@ export const DurationChips: React.FC<DurationChipsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 14,
   },
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 12,
   },
 
@@ -163,9 +164,9 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 12,
     borderRadius: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
@@ -175,9 +176,9 @@ const styles = StyleSheet.create({
   },
 
   chipSelected: {
-    backgroundColor: '#ffcd57',
-    borderColor: '#ffcd57',
-    shadowColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
+    borderColor: colors.lightMustard,
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.25,
     shadowRadius: 6,
@@ -187,12 +188,12 @@ const styles = StyleSheet.create({
   chipLabel: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
   },
 
   chipLabelSelected: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   feeBadge: {
@@ -206,15 +207,15 @@ const styles = StyleSheet.create({
   feeText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   feeBadgeUnselected: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
 
   feeTextUnselected: {
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   feeInfo: {
@@ -223,19 +224,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
 
   feeInfoText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
 
   feeAmount: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     letterSpacing: -0.3,
   },
 });

@@ -8,6 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 export type SortOption = 'newest' | 'price_low' | 'price_high' | 'rating' | 'popularity';
 
@@ -48,14 +49,14 @@ const SortDropdown: React.FC<SortDropdownProps> = ({ currentSort, onSortChange }
         onPress={() => setModalVisible(true)}
        
       >
-        <Ionicons name="swap-vertical" size={18} color="#7C3AED" />
+        <Ionicons name="swap-vertical" size={18} color={colors.brand.purple} />
         <Text style={styles.buttonText} numberOfLines={1}>
           {currentLabel}
         </Text>
         <Ionicons
           name={modalVisible ? 'chevron-up' : 'chevron-down'}
           size={18}
-          color="#7C3AED"
+          color={colors.brand.purple}
         />
       </Pressable>
 
@@ -78,7 +79,7 @@ const SortDropdown: React.FC<SortDropdownProps> = ({ currentSort, onSortChange }
                 onPress={() => setModalVisible(false)}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
-                <Ionicons name="close" size={24} color="#64748B" />
+                <Ionicons name="close" size={24} color={colors.slateGray} />
               </Pressable>
             </View>
 
@@ -102,7 +103,7 @@ const SortDropdown: React.FC<SortDropdownProps> = ({ currentSort, onSortChange }
                     <Ionicons
                       name={option.icon}
                       size={20}
-                      color={isSelected ? '#7C3AED' : '#64748B'}
+                      color={isSelected ? colors.brand.purple : colors.slateGray}
                     />
                     <Text
                       style={[
@@ -114,7 +115,7 @@ const SortDropdown: React.FC<SortDropdownProps> = ({ currentSort, onSortChange }
                     </Text>
                   </View>
                   {isSelected && (
-                    <Ionicons name="checkmark-circle" size={22} color="#7C3AED" />
+                    <Ionicons name="checkmark-circle" size={22} color={colors.brand.purple} />
                   )}
                 </Pressable>
               );
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     flex: 1,
   },
   modalOverlay: {
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     width: '100%',
     maxWidth: 400,
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: '#E2E8F0',
+    backgroundColor: colors.slateLight,
   },
   optionItem: {
     flexDirection: 'row',
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: colors.tint.slate,
   },
   lastOptionItem: {
     borderBottomWidth: 0,
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     color: '#475569',
   },
   optionLabelSelected: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '600',
   },
 });

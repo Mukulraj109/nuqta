@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useCart } from '@/contexts/CartContext';
 import useOfflineCart from '@/hooks/useOfflineCart';
 import useNetworkStatus from '@/hooks/useNetworkStatus';
+import { colors } from '@/constants/theme';
 
 interface CartSyncStatusProps {
   showDetails?: boolean;
@@ -44,7 +45,7 @@ export function CartSyncStatus({ showDetails = false, compact = false }: CartSyn
 
   const getSyncColor = () => {
     if (isSyncing) {
-      return '#007AFF';
+      return colors.brand.ios;
     }
     if (syncError) {
       return '#FF3B30';
@@ -158,7 +159,7 @@ export function CartSyncStatus({ showDetails = false, compact = false }: CartSyn
             style={styles.syncButton}
             onPress={handleSyncPress}
           >
-            <Ionicons name="sync" size={20} color="#007AFF" />
+            <Ionicons name="sync" size={20} color={colors.brand.ios} />
           </Pressable>
         )}
       </View>
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 12,
-    color: '#666666',
+    color: colors.midGray,
   },
   errorText: {
     fontSize: 12,
@@ -219,11 +220,11 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#007AFF',
+    borderColor: colors.brand.ios,
   },
 });
 

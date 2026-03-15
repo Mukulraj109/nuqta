@@ -8,6 +8,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { GlassCard } from "@/components/ui";
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -107,8 +108,8 @@ export default memo(function StoreHeroMetrics({
             style={styles.metricPill}
           >
             <View style={styles.metricInner}>
-              <View style={[styles.iconCircle, { backgroundColor: "#faf1e0" }]}>
-                <Ionicons name="thumbs-up-outline" size={14} color="#1a3a52" />
+              <View style={[styles.iconCircle, { backgroundColor: colors.linen }]}>
+                <Ionicons name="thumbs-up-outline" size={14} color={colors.nileBlue} />
               </View>
               <View>
                 <ThemedText style={styles.metricValue}>{saveRate}%</ThemedText>
@@ -128,8 +129,8 @@ export default memo(function StoreHeroMetrics({
             style={styles.metricPill}
           >
             <View style={styles.metricInner}>
-              <View style={[styles.iconCircle, { backgroundColor: "#dfebf7" }]}>
-                <Ionicons name="time-outline" size={14} color="#1a3a52" />
+              <View style={[styles.iconCircle, { backgroundColor: colors.lavenderMist }]}>
+                <Ionicons name="time-outline" size={14} color={colors.nileBlue} />
               </View>
               <View>
                 <ThemedText style={styles.metricValue}>{responseTime}</ThemedText>
@@ -149,7 +150,7 @@ export default memo(function StoreHeroMetrics({
             style={StyleSheet.flatten([styles.metricPill, styles.savingsPill])}
           >
             <View style={styles.metricInner}>
-              <View style={[styles.iconCircle, { backgroundColor: "#faf1e0" }]}>
+              <View style={[styles.iconCircle, { backgroundColor: colors.linen }]}>
                 <Ionicons name="pricetag" size={14} color={Colors.gold} />
               </View>
               <View>
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255, 200, 87, 0.3)",
   },
   savingsValue: {
-    color: "#ffcd57",
+    color: colors.lightMustard,
   },
   verifiedPill: {
     borderWidth: 1,

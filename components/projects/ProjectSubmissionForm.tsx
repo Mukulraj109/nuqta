@@ -17,6 +17,7 @@ import { showAlert, alertOk } from '@/utils/alert';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { uploadProjectFile, uploadMultipleProjectFiles } from '@/services/projectUploadService';
+import { colors } from '@/constants/theme';
 
 interface Project {
   _id: string;
@@ -431,7 +432,7 @@ function ProjectSubmissionForm({
             <TextInput
               style={styles.textInput}
               placeholder="Enter your submission content..."
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               value={submissionText}
               onChangeText={setSubmissionText}
               multiline
@@ -458,10 +459,10 @@ function ProjectSubmissionForm({
               disabled={uploading}
             >
               <LinearGradient
-                colors={['#8B5CF6', '#7C3AED']}
+                colors={[colors.brand.purpleLight, colors.brand.purple]}
                 style={styles.uploadButtonGradient}
               >
-                <Ionicons name="images-outline" size={20} color="#FFFFFF" />
+                <Ionicons name="images-outline" size={20} color={colors.background.primary} />
                 <ThemedText style={styles.uploadButtonText}>
                   {selectedImages.length > 0 ? `Add More (${selectedImages.length})` : 'Select Photos'}
                 </ThemedText>
@@ -476,7 +477,7 @@ function ProjectSubmissionForm({
                       style={styles.removeImageButton}
                       onPress={() => setSelectedImages(prev => prev.filter((_, i) => i !== index))}
                     >
-                      <Ionicons name="close-circle" size={24} color="#EF4444" />
+                      <Ionicons name="close-circle" size={24} color={colors.error} />
                     </Pressable>
                   </View>
                 ))}
@@ -505,10 +506,10 @@ function ProjectSubmissionForm({
               disabled={uploading}
             >
               <LinearGradient
-                colors={['#8B5CF6', '#7C3AED']}
+                colors={[colors.brand.purpleLight, colors.brand.purple]}
                 style={styles.uploadButtonGradient}
               >
-                <Ionicons name="videocam-outline" size={20} color="#FFFFFF" />
+                <Ionicons name="videocam-outline" size={20} color={colors.background.primary} />
                 <ThemedText style={styles.uploadButtonText}>
                   {selectedVideo ? 'Change Video' : 'Select Video'}
                 </ThemedText>
@@ -521,7 +522,7 @@ function ProjectSubmissionForm({
                   style={styles.removeVideoButton}
                   onPress={() => setSelectedVideo(null)}
                 >
-                  <Ionicons name="close-circle" size={24} color="#EF4444" />
+                  <Ionicons name="close-circle" size={24} color={colors.error} />
                 </Pressable>
               </View>
             )}
@@ -542,7 +543,7 @@ function ProjectSubmissionForm({
                   <Ionicons
                     name={star <= rating ? 'star' : 'star-outline'}
                     size={40}
-                    color={star <= rating ? '#F59E0B' : '#D1D5DB'}
+                    color={star <= rating ? colors.warningScale[400] : colors.neutral[300]}
                   />
                 </Pressable>
               ))}
@@ -558,7 +559,7 @@ function ProjectSubmissionForm({
                 <TextInput
                   style={styles.textInput}
                   placeholder="Add your comments..."
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.neutral[400]}
                   value={submissionText}
                   onChangeText={setSubmissionText}
                   multiline
@@ -580,13 +581,13 @@ function ProjectSubmissionForm({
               disabled={uploading}
             >
               <LinearGradient
-                colors={location ? ['#10B981', '#059669'] : ['#8B5CF6', '#7C3AED']}
+                colors={location ? [colors.successScale[400], colors.successScale[700]] : [colors.brand.purpleLight, colors.brand.purple]}
                 style={styles.uploadButtonGradient}
               >
                 <Ionicons
                   name={location ? 'checkmark-circle' : 'location-outline'}
                   size={20}
-                  color="#FFFFFF"
+                  color={colors.background.primary}
                 />
                 <ThemedText style={styles.uploadButtonText}>
                   {location ? locationName || 'Location Set' : 'Get My Location'}
@@ -595,7 +596,7 @@ function ProjectSubmissionForm({
             </Pressable>
             {location && (
               <View style={styles.locationInfo}>
-                <Ionicons name="location" size={16} color="#10B981" />
+                <Ionicons name="location" size={16} color={colors.successScale[400]} />
                 <ThemedText style={styles.locationText}>
                   {locationName || `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}`}
                 </ThemedText>
@@ -606,7 +607,7 @@ function ProjectSubmissionForm({
               <TextInput
                 style={styles.textInput}
                 placeholder="Add a description or note..."
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={submissionText}
                 onChangeText={setSubmissionText}
                 multiline
@@ -620,10 +621,10 @@ function ProjectSubmissionForm({
               disabled={uploading}
             >
               <LinearGradient
-                colors={['#8B5CF6', '#7C3AED']}
+                colors={[colors.brand.purpleLight, colors.brand.purple]}
                 style={styles.uploadButtonGradient}
               >
-                <Ionicons name="camera-outline" size={20} color="#FFFFFF" />
+                <Ionicons name="camera-outline" size={20} color={colors.background.primary} />
                 <ThemedText style={styles.uploadButtonText}>
                   {selectedImages.length > 0 ? `Add More Photos (${selectedImages.length})` : 'Add Photo (Optional)'}
                 </ThemedText>
@@ -638,7 +639,7 @@ function ProjectSubmissionForm({
                       style={styles.removeImageButton}
                       onPress={() => setSelectedImages(prev => prev.filter((_, i) => i !== index))}
                     >
-                      <Ionicons name="close-circle" size={24} color="#EF4444" />
+                      <Ionicons name="close-circle" size={24} color={colors.error} />
                     </Pressable>
                   </View>
                 ))}
@@ -666,7 +667,7 @@ function ProjectSubmissionForm({
       <ThemedText style={styles.formTitle}>{formTitle}</ThemedText>
       {isEditing && (existingSubmission.status === 'pending' || existingSubmission.status === 'under_review') && (
         <View style={styles.editNotice}>
-          <Ionicons name="information-circle-outline" size={16} color="#F59E0B" />
+          <Ionicons name="information-circle-outline" size={16} color={colors.warningScale[400]} />
           <ThemedText style={styles.editNoticeText}>
             {existingSubmission.status === 'under_review' 
               ? 'Your submission is under review. You can still edit it before the review is completed.'
@@ -689,7 +690,7 @@ function ProjectSubmissionForm({
           disabled={submitting || uploading}
         >
           {submitting || uploading ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={colors.background.primary} />
           ) : (
             <ThemedText style={styles.submitButtonText}>
               {isEditing && existingSubmission?.status === 'rejected' 
@@ -712,13 +713,13 @@ const styles = StyleSheet.create({
   formTitle: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
   },
   editNotice: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,
@@ -727,7 +728,7 @@ const styles = StyleSheet.create({
   editNoticeText: {
     flex: 1,
     fontSize: 13,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     lineHeight: 18,
   },
   formSection: {
@@ -736,25 +737,25 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
   },
   textInput: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     fontSize: 15,
-    color: '#1F2937',
+    color: colors.neutral[800],
     minHeight: 120,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   textInputContainer: {
     marginTop: 16,
   },
   helperText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 4,
   },
   uploadButton: {
@@ -773,7 +774,7 @@ const styles = StyleSheet.create({
   uploadButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   imagePreviewContainer: {
     marginTop: 12,
@@ -787,13 +788,13 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   removeImageButton: {
     position: 'absolute',
     top: -8,
     right: -8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
   },
   videoPreviewContainer: {
@@ -805,13 +806,13 @@ const styles = StyleSheet.create({
   videoPreview: {
     width: '100%',
     height: 200,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   removeVideoButton: {
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
   },
   ratingContainer: {
@@ -828,7 +829,7 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginTop: 8,
   },
@@ -837,13 +838,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
     padding: 12,
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     borderRadius: 8,
     gap: 8,
   },
   locationText: {
     fontSize: 14,
-    color: '#059669',
+    color: colors.successScale[700],
     flex: 1,
   },
   formActions: {
@@ -855,14 +856,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
   },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   submitButton: {
     flex: 1,
@@ -871,7 +872,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     gap: 8,
   },
   submitButtonDisabled: {
@@ -880,7 +881,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

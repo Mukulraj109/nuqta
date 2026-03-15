@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface PurpleGradientBgProps {
   children: React.ReactNode;
@@ -10,7 +11,7 @@ interface PurpleGradientBgProps {
 export default function PurpleGradientBg({ children, style }: PurpleGradientBgProps) {
   return (
     <LinearGradient
-      colors={['#ffcd57', '#1a3a52', '#1a3a52']}  // Nuqta: Mustard to Nile Blue
+      colors={[colors.lightMustard, colors.nileBlue, colors.nileBlue]}  // Nuqta: Mustard to Nile Blue
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={[styles.gradient, style]}

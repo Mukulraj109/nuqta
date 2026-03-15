@@ -18,6 +18,7 @@ import userLoyaltyApi, { Mission } from '@/services/userLoyaltyApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type TabKey = 'active' | 'completed';
 
@@ -263,7 +264,7 @@ const styles = StyleSheet.create({
   rewardBadge: {
     flexDirection: 'row', alignItems: 'center', gap: Spacing.xs,
     paddingHorizontal: 10, paddingVertical: Spacing.xs, borderRadius: BorderRadius.md,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
   },
   rewardText: { ...Typography.body, fontWeight: '700', color: Colors.info },
   progressSection: { marginBottom: Spacing.md },

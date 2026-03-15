@@ -3,6 +3,7 @@ import { View, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
 import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 /**
  * VideoPlayer Component
@@ -103,7 +104,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return (
       <View style={[styles.container, { width, height }, style]}>
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle-outline" size={48} color="#EF4444" />
+          <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
           <ThemedText style={styles.errorText}>{error}</ThemedText>
         </View>
       </View>
@@ -127,7 +128,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       {/* Loading Indicator */}
       {isLoading && (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#8B5CF6" />
+          <ActivityIndicator size="large" color={colors.brand.purpleLight} />
           <ThemedText style={styles.loadingText}>Loading video...</ThemedText>
         </View>
       )}
@@ -141,7 +142,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         >
           {!isPlaying && (
             <View style={styles.playButton}>
-              <Ionicons name="play" size={40} color="#FFF" />
+              <Ionicons name="play" size={40} color={colors.background.primary} />
             </View>
           )}
         </Pressable>
@@ -159,7 +160,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             <Ionicons
               name={isPlaying ? 'pause' : 'play'}
               size={24}
-              color="#FFF"
+              color={colors.background.primary}
             />
           </Pressable>
 
@@ -169,7 +170,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             onPress={replay}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons name="reload" size={24} color="#FFF" />
+            <Ionicons name="reload" size={24} color={colors.background.primary} />
           </Pressable>
 
           <View style={{ flex: 1 }} />
@@ -183,7 +184,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             <Ionicons
               name={isMuted ? 'volume-mute' : 'volume-high'}
               size={24}
-              color="#FFF"
+              color={colors.background.primary}
             />
           </Pressable>
         </View>
@@ -191,7 +192,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       {/* Video Badge */}
       <View style={styles.videoBadge}>
-        <Ionicons name="videocam" size={14} color="#FFF" />
+        <Ionicons name="videocam" size={14} color={colors.background.primary} />
         <ThemedText style={styles.videoBadgeText}>VIDEO</ThemedText>
       </View>
     </View>
@@ -200,7 +201,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000',
+    backgroundColor: colors.text.primary,
     borderRadius: 12,
     overflow: 'hidden',
     position: 'relative',
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.background.primary,
   },
 
   // Error
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#EF4444',
+    color: colors.error,
     textAlign: 'center',
   },
 
@@ -295,7 +296,7 @@ const styles = StyleSheet.create({
   videoBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
 });

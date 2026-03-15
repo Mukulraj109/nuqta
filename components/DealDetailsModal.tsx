@@ -21,6 +21,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Deal } from '@/types/deals';
 import { calculateDealDiscount } from '@/utils/deal-validation';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Premium Glass Design Tokens - Green & Gold Theme
 const GLASS = {
@@ -35,16 +36,16 @@ const GLASS = {
 };
 
 const COLORS = {
-  primary: '#ffcd57',
-  primaryDark: '#00796B',
-  gold: '#FFC857',
+  primary: colors.lightMustard,
+  primaryDark: colors.brand.teal,
+  gold: colors.brand.goldWarm,
   goldDark: '#E5A500',
-  navy: '#0B2240',
-  textPrimary: '#1F2937',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
+  navy: colors.brand.navyDark,
+  textPrimary: colors.neutral[800],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
   surface: '#F7FAFC',
-  success: '#10B981',
+  success: colors.successScale[400],
 };
 
 interface DealDetailsModalProps {

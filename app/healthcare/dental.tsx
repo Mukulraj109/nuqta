@@ -21,6 +21,7 @@ import { useRouter } from 'expo-router';
 import apiClient from '@/services/apiClient';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -280,7 +281,7 @@ export default function DentalCarePage() {
           <Ionicons
             name={service.icon as any}
             size={24}
-            color={isSelected ? Colors.text.inverse : '#06B6D4'}
+            color={isSelected ? Colors.text.inverse : colors.brand.cyan}
           />
         </View>
         <Text style={[styles.serviceName, isSelected && styles.serviceNameSelected]}>
@@ -304,7 +305,7 @@ export default function DentalCarePage() {
             <CachedImage source={dentist.logo} style={styles.dentistImage} />
           ) : (
             <View style={styles.dentistImagePlaceholder}>
-              <Ionicons name="person" size={32} color="#06B6D4" />
+              <Ionicons name="person" size={32} color={colors.brand.cyan} />
             </View>
           )}
         </View>
@@ -370,7 +371,7 @@ export default function DentalCarePage() {
           style={styles.callButton}
           onPress={() => callDentist(dentist.contact.phone)}
         >
-          <Ionicons name="call-outline" size={18} color="#06B6D4" />
+          <Ionicons name="call-outline" size={18} color={colors.brand.cyan} />
           <Text style={styles.callButtonText}>Call</Text>
         </Pressable>
         <Pressable
@@ -387,7 +388,7 @@ export default function DentalCarePage() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
-      <LinearGradient colors={['#06B6D4', '#0891B2']} style={styles.header}>
+      <LinearGradient colors={[colors.brand.cyan, colors.cyanDark]} style={styles.header}>
         <View style={styles.headerContent}>
           <Pressable onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
@@ -423,7 +424,7 @@ export default function DentalCarePage() {
         style={styles.content}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#06B6D4']} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.brand.cyan]} />
         }
       >
         {/* Dental Services */}
@@ -469,7 +470,7 @@ export default function DentalCarePage() {
           <View style={styles.tipsCard}>
             <View style={styles.tipItem}>
               <View style={styles.tipIcon}>
-                <Ionicons name="time-outline" size={20} color="#06B6D4" />
+                <Ionicons name="time-outline" size={20} color={colors.brand.cyan} />
               </View>
               <View style={styles.tipContent}>
                 <Text style={styles.tipTitle}>Brush Twice Daily</Text>
@@ -478,7 +479,7 @@ export default function DentalCarePage() {
             </View>
             <View style={styles.tipItem}>
               <View style={styles.tipIcon}>
-                <Ionicons name="water-outline" size={20} color="#06B6D4" />
+                <Ionicons name="water-outline" size={20} color={colors.brand.cyan} />
               </View>
               <View style={styles.tipContent}>
                 <Text style={styles.tipTitle}>Floss Daily</Text>
@@ -487,7 +488,7 @@ export default function DentalCarePage() {
             </View>
             <View style={styles.tipItem}>
               <View style={styles.tipIcon}>
-                <Ionicons name="calendar-outline" size={20} color="#06B6D4" />
+                <Ionicons name="calendar-outline" size={20} color={colors.brand.cyan} />
               </View>
               <View style={styles.tipContent}>
                 <Text style={styles.tipTitle}>Regular Checkups</Text>
@@ -496,7 +497,7 @@ export default function DentalCarePage() {
             </View>
             <View style={styles.tipItem}>
               <View style={styles.tipIcon}>
-                <Ionicons name="nutrition-outline" size={20} color="#06B6D4" />
+                <Ionicons name="nutrition-outline" size={20} color={colors.brand.cyan} />
               </View>
               <View style={styles.tipContent}>
                 <Text style={styles.tipTitle}>Limit Sugar</Text>
@@ -521,7 +522,7 @@ export default function DentalCarePage() {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Book Appointment</Text>
               <Pressable onPress={() => setBookingModalVisible(false)}>
-                <Ionicons name="close" size={24} color="#374151" />
+                <Ionicons name="close" size={24} color={colors.neutral[700]} />
               </Pressable>
             </View>
 
@@ -532,7 +533,7 @@ export default function DentalCarePage() {
                     {selectedDentist.logo ? (
                       <CachedImage source={selectedDentist.logo} style={styles.dentistImageSmallImg} />
                     ) : (
-                      <Ionicons name="person" size={24} color="#06B6D4" />
+                      <Ionicons name="person" size={24} color={colors.brand.cyan} />
                     )}
                   </View>
                   <View>
@@ -769,7 +770,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   serviceCardSelected: {
-    borderColor: '#06B6D4',
+    borderColor: colors.brand.cyan,
     backgroundColor: '#ECFEFF',
   },
   serviceIcon: {
@@ -782,17 +783,17 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   serviceIconSelected: {
-    backgroundColor: '#06B6D4',
+    backgroundColor: colors.brand.cyan,
   },
   serviceName: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
     marginBottom: Spacing.xs,
   },
   serviceNameSelected: {
-    color: '#0891B2',
+    color: colors.cyanDark,
   },
   servicePrice: {
     ...Typography.caption,
@@ -815,7 +816,7 @@ const styles = StyleSheet.create({
   emptyText: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginTop: Spacing.base,
   },
   emptySubtext: {
@@ -863,7 +864,7 @@ const styles = StyleSheet.create({
   },
   dentistSpecialty: {
     fontSize: 13,
-    color: '#06B6D4',
+    color: colors.brand.cyan,
     marginTop: 2,
   },
   dentistExperience: {
@@ -910,7 +911,7 @@ const styles = StyleSheet.create({
   },
   serviceTagText: {
     fontSize: 11,
-    color: '#0891B2',
+    color: colors.cyanDark,
     fontWeight: '500',
   },
   cardActions: {
@@ -926,12 +927,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: BorderRadius.sm,
     borderWidth: 1,
-    borderColor: '#06B6D4',
+    borderColor: colors.brand.cyan,
   },
   callButtonText: {
     ...Typography.body,
     fontWeight: '600',
-    color: '#06B6D4',
+    color: colors.brand.cyan,
     marginLeft: 6,
   },
   bookButton: {
@@ -941,7 +942,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 10,
     borderRadius: BorderRadius.sm,
-    backgroundColor: '#06B6D4',
+    backgroundColor: colors.brand.cyan,
   },
   bookButtonText: {
     ...Typography.body,
@@ -1048,7 +1049,7 @@ const styles = StyleSheet.create({
   modalSectionTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     paddingHorizontal: Spacing.base,
     marginTop: Spacing.base,
     marginBottom: Spacing.md,
@@ -1064,7 +1065,7 @@ const styles = StyleSheet.create({
   },
   serviceChipSelected: {
     backgroundColor: '#ECFEFF',
-    borderColor: '#06B6D4',
+    borderColor: colors.brand.cyan,
   },
   serviceChipText: {
     fontSize: 13,
@@ -1072,7 +1073,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   serviceChipTextSelected: {
-    color: '#0891B2',
+    color: colors.cyanDark,
   },
   dateCard: {
     width: 60,
@@ -1083,7 +1084,7 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.base,
   },
   dateCardSelected: {
-    backgroundColor: '#06B6D4',
+    backgroundColor: colors.brand.cyan,
   },
   dateDay: {
     ...Typography.bodySmall,
@@ -1119,11 +1120,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.border.default,
   },
   slotSelected: {
-    backgroundColor: '#06B6D4',
+    backgroundColor: colors.brand.cyan,
   },
   slotText: {
     ...Typography.bodySmall,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
   },
   slotTextUnavailable: {
@@ -1155,18 +1156,18 @@ const styles = StyleSheet.create({
   },
   feeLabel: {
     ...Typography.body,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   feeAmount: {
     ...Typography.h4,
     fontWeight: '700',
-    color: '#0891B2',
+    color: colors.cyanDark,
   },
   confirmButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#06B6D4',
+    backgroundColor: colors.brand.cyan,
     marginHorizontal: Spacing.base,
     marginTop: Spacing.lg,
     paddingVertical: 14,

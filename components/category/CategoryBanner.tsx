@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { ThemedText } from '@/components/ThemedText';
 import { CategoryBanner as CategoryBannerType } from '@/types/category.types';
+import { colors } from '@/constants/theme';
 
 interface CategoryBannerProps {
   banner: CategoryBannerType;
@@ -166,10 +167,10 @@ const styles = StyleSheet.create({
   actionButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   cashbackBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 16,
@@ -179,12 +180,12 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   cashbackLabel: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     opacity: 0.9,
   },
 });

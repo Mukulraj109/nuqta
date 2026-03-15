@@ -22,6 +22,7 @@ import { Shadows } from '@/constants/DesignSystem';
 import mallApi from '@/services/mallApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface AllianceStore {
   _id: string;
@@ -81,7 +82,7 @@ export default function AllianceStorePage() {
           />
         ) : (
           <LinearGradient
-            colors={['#0284C7', '#0369A1']}
+            colors={[colors.brand.sky, colors.brand.skyDark]}
             style={styles.storeLogoFallback}
           >
             <ThemedText style={styles.storeInitials}>{getInitials(item.name)}</ThemedText>
@@ -89,7 +90,7 @@ export default function AllianceStorePage() {
         )}
         {item.isVerified && (
           <View style={styles.verifiedBadge}>
-            <Ionicons name="checkmark-circle" size={16} color="#0284C7" />
+            <Ionicons name="checkmark-circle" size={16} color={colors.brand.sky} />
           </View>
         )}
       </View>
@@ -102,7 +103,7 @@ export default function AllianceStorePage() {
       {/* Rating */}
       {item.ratings && item.ratings.count > 0 && (
         <View style={styles.ratingRow}>
-          <Ionicons name="star" size={12} color="#F59E0B" />
+          <Ionicons name="star" size={12} color={colors.warningScale[400]} />
           <ThemedText style={styles.ratingText}>
             {item.ratings.average.toFixed(1)}
           </ThemedText>
@@ -115,7 +116,7 @@ export default function AllianceStorePage() {
       <View style={styles.benefitsContainer}>
         <View style={styles.benefitRow}>
           <View style={styles.benefitIconContainer}>
-            <Ionicons name="flash" size={12} color="#0284C7" />
+            <Ionicons name="flash" size={12} color={colors.brand.sky} />
           </View>
           <ThemedText style={styles.benefitText} numberOfLines={1}>
             {item.offers?.cashback ? `${item.offers.cashback}% Coins` : 'Earn Coins'}
@@ -123,7 +124,7 @@ export default function AllianceStorePage() {
         </View>
         <View style={styles.benefitRow}>
           <View style={styles.benefitIconContainer}>
-            <Ionicons name="link" size={12} color="#059669" />
+            <Ionicons name="link" size={12} color={colors.successScale[700]} />
           </View>
           <ThemedText style={styles.benefitText} numberOfLines={1}>
             Partner Points
@@ -135,12 +136,12 @@ export default function AllianceStorePage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#0284C7" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.brand.sky} />
 
       <SafeAreaView style={styles.safeArea}>
         {/* Header */}
         <LinearGradient
-          colors={['#0284C7', '#0369A1', '#075985']}
+          colors={[colors.brand.sky, colors.brand.skyDark, '#075985']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.header}
@@ -152,7 +153,7 @@ export default function AllianceStorePage() {
              
             >
               <View style={styles.backButtonInner}>
-                <Ionicons name="chevron-back" size={22} color="#0284C7" />
+                <Ionicons name="chevron-back" size={22} color={colors.brand.sky} />
               </View>
             </Pressable>
 
@@ -165,7 +166,7 @@ export default function AllianceStorePage() {
 
           <View style={styles.heroSection}>
             <View style={styles.heroIconContainer}>
-              <Ionicons name="link" size={32} color="#FFF" />
+              <Ionicons name="link" size={32} color={colors.background.primary} />
             </View>
             <ThemedText style={styles.heroTitle}>Partner Benefits</ThemedText>
             <ThemedText style={styles.heroSubtitle}>
@@ -179,7 +180,7 @@ export default function AllianceStorePage() {
           <CardGridSkeleton />
         ) : error ? (
           <View style={styles.errorContainer}>
-            <Ionicons name="alert-circle-outline" size={48} color="#9CA3AF" />
+            <Ionicons name="alert-circle-outline" size={48} color={colors.neutral[400]} />
             <ThemedText style={styles.errorText}>{error}</ThemedText>
             <Pressable style={styles.retryButton} onPress={() => fetchStores()}>
               <ThemedText style={styles.retryText}>Try Again</ThemedText>
@@ -198,24 +199,24 @@ export default function AllianceStorePage() {
               <RefreshControl
                 refreshing={isRefreshing}
                 onRefresh={() => fetchStores(true)}
-                tintColor="#0284C7"
-                colors={['#0284C7']}
+                tintColor={colors.brand.sky}
+                colors={[colors.brand.sky]}
               />
             }
             ListHeaderComponent={
               <View style={styles.infoCard}>
                 <LinearGradient
-                  colors={['#EFF6FF', '#DBEAFE']}
+                  colors={[colors.tint.blue, colors.tint.blueLight]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.infoCardGradient}
                 >
                   <View style={styles.infoIconContainer}>
                     <LinearGradient
-                      colors={['#0284C7', '#0369A1']}
+                      colors={[colors.brand.sky, colors.brand.skyDark]}
                       style={styles.infoIconGradient}
                     >
-                      <Ionicons name="gift" size={20} color="#FFF" />
+                      <Ionicons name="gift" size={20} color={colors.background.primary} />
                     </LinearGradient>
                   </View>
                   <View style={styles.infoContent}>
@@ -229,7 +230,7 @@ export default function AllianceStorePage() {
             }
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <Ionicons name="storefront-outline" size={64} color="#9CA3AF" />
+                <Ionicons name="storefront-outline" size={64} color={colors.neutral[400]} />
                 <ThemedText style={styles.emptyText}>No alliance stores yet</ThemedText>
                 <ThemedText style={styles.emptySubtext}>
                   Partner stores will appear here soon
@@ -246,7 +247,7 @@ export default function AllianceStorePage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   safeArea: {
     flex: 1,
@@ -274,7 +275,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     ...Shadows.subtle,
@@ -286,7 +287,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
     letterSpacing: -0.5,
   },
   placeholder: {
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#FFF',
+    color: colors.background.primary,
     marginBottom: 6,
     letterSpacing: -0.5,
   },
@@ -363,12 +364,12 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 13,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     lineHeight: 18,
   },
   storeCard: {
     width: '48%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
@@ -387,7 +388,7 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   storeLogoFallback: {
     width: 72,
@@ -399,27 +400,27 @@ const styles = StyleSheet.create({
   storeInitials: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   verifiedBadge: {
     position: 'absolute',
     bottom: -4,
     right: '25%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 10,
     padding: 1,
   },
   storeName: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
     marginBottom: 4,
     width: '100%',
   },
   storeCategory: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
     textAlign: 'center',
     width: '100%',
@@ -433,11 +434,11 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   ratingCount: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   benefitsContainer: {
     width: '100%',
@@ -462,7 +463,7 @@ const styles = StyleSheet.create({
   },
   benefitText: {
     fontSize: 11,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     fontWeight: '600',
     flex: 1,
   },
@@ -474,7 +475,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   errorContainer: {
@@ -486,11 +487,11 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   retryButton: {
-    backgroundColor: '#0284C7',
+    backgroundColor: colors.brand.sky,
     paddingHorizontal: 24,
     paddingVertical: 10,
     borderRadius: 20,
@@ -499,7 +500,7 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   emptyContainer: {
     flex: 1,
@@ -510,12 +511,12 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginTop: 16,
     marginBottom: 8,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 });

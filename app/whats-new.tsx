@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, StatusBar } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import WhatsNewStoriesFlow from '@/components/whats-new/WhatsNewStoriesFlow';
+import { colors } from '@/constants/theme';
 
 const WhatsNewPage: React.FC = () => {
   const router = useRouter();

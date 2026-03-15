@@ -21,6 +21,7 @@ import { ThemedText } from '@/components/ThemedText';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const SETTINGS_STORAGE_KEY = 'app_settings';
 
@@ -192,7 +193,7 @@ export default function SettingsPage() {
           type: 'switch',
           value: settings.emailNotifications,
           icon: 'mail-outline',
-          iconColor: '#06B6D4',
+          iconColor: colors.brand.cyan,
           onPress: () => handleToggleSetting('emailNotifications'),
         },
       ],
@@ -254,7 +255,7 @@ export default function SettingsPage() {
           type: 'switch',
           value: settings.dataOptimization,
           icon: 'cellular-outline',
-          iconColor: '#06B6D4',
+          iconColor: colors.brand.cyan,
           onPress: () => handleToggleSetting('dataOptimization'),
         },
         {
@@ -329,7 +330,7 @@ export default function SettingsPage() {
           description: 'Get help from our customer support team',
           type: 'navigation',
           icon: 'chatbubble-outline',
-          iconColor: '#06B6D4',
+          iconColor: colors.brand.cyan,
           route: '/help/chat',
         },
         {
@@ -446,7 +447,7 @@ export default function SettingsPage() {
       
       {/* Header */}
       <LinearGradient
-        colors={[Colors.brand.purpleLight, '#A855F7']}
+        colors={[Colors.brand.purpleLight, colors.brand.purpleMedium]}
         style={styles.header}
       >
         <View style={styles.headerContent}>

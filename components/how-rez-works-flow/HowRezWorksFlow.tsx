@@ -33,6 +33,7 @@ import SocialEarningScreen from './screens/SocialEarningScreen';
 import TrustControlScreen from './screens/TrustControlScreen';
 // Final
 import FinalScreen from './screens/FinalScreen';
+import { colors } from '@/constants/theme';
 
 const HowRezWorksFlow: React.FC = () => {
     const [currentScreen, setCurrentScreen] = useState<ScreenId>('ROOT');
@@ -131,7 +132,7 @@ const HowRezWorksFlow: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.background.primary,
         overflow: 'hidden',
     },
     screenContainer: {

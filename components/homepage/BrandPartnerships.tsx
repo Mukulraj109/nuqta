@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useBrandPartnerships } from '@/hooks/useHomepage';
 import brandApiService, { BrandPartnership } from '@/services/brandApi';
+import { colors } from '@/constants/theme';
 
 interface BrandPartnershipsProps {
   onBrandPress?: (brandId: string) => void;
@@ -20,10 +21,10 @@ interface BrandPartnershipsProps {
 
 // Fallback gradient colors if not provided by backend - Nuqta palette
 const DEFAULT_GRADIENTS: Record<string, [string, string]> = {
-  luxury: ['#1a3a52', '#243f55'],
-  exclusive: ['#1a3a52', '#2d4a5f'],
-  premium: ['#dfebf7', '#ffd7b5'],
-  standard: ['#faf1e0', '#ffd7b5'],
+  luxury: [colors.nileBlue, '#243f55'],
+  exclusive: [colors.nileBlue, '#2d4a5f'],
+  premium: [colors.lavenderMist, colors.lightPeach],
+  standard: [colors.linen, colors.lightPeach],
 };
 
 // Fallback emoji icons for brands without logos
@@ -94,7 +95,7 @@ const BrandPartnerships: React.FC<BrandPartnershipsProps> = ({
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <View style={styles.headerIconContainer}>
-              <Ionicons name="pricetag" size={20} color="#ffcd57" />
+              <Ionicons name="pricetag" size={20} color={colors.lightMustard} />
             </View>
             <View style={styles.headerTextContainer}>
               <Text style={styles.title}>Brand Partnerships</Text>
@@ -103,7 +104,7 @@ const BrandPartnerships: React.FC<BrandPartnershipsProps> = ({
           </View>
         </View>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#ffcd57" />
+          <ActivityIndicator size="large" color={colors.lightMustard} />
         </View>
       </View>
     );
@@ -120,7 +121,7 @@ const BrandPartnerships: React.FC<BrandPartnershipsProps> = ({
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={styles.headerIconContainer}>
-            <Ionicons name="pricetag" size={20} color="#ffcd57" />
+            <Ionicons name="pricetag" size={20} color={colors.lightMustard} />
           </View>
           <View style={styles.headerTextContainer}>
             <Text style={styles.title}>Brand Partnerships</Text>
@@ -216,13 +217,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '400',
   },
   loadingContainer: {
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -263,7 +264,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
   exclusiveBadgeText: {
     fontSize: 8,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   iconContainer: {
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 8,
     textAlign: 'center',
     letterSpacing: -0.2,
@@ -328,7 +329,7 @@ const styles = StyleSheet.create({
   dealText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textAlign: 'center',
   },
 });

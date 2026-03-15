@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -302,14 +303,14 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
   const getModalIcon = () => {
     switch (modal.type) {
       case 'success':
-        return { name: 'checkmark-circle' as const, color: '#ffcd57' };
+        return { name: 'checkmark-circle' as const, color: colors.lightMustard };
       case 'error':
-        return { name: 'close-circle' as const, color: '#1a3a52' };
+        return { name: 'close-circle' as const, color: colors.nileBlue };
       case 'warning':
-        return { name: 'warning' as const, color: '#ffcd57' };
+        return { name: 'warning' as const, color: colors.lightMustard };
       case 'info':
       default:
-        return { name: 'information-circle' as const, color: '#ffcd57' };
+        return { name: 'information-circle' as const, color: colors.lightMustard };
     }
   };
 
@@ -436,7 +437,7 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
                       router.push('/wishlist');
                     }}
                   >
-                    <Ionicons name="heart-outline" size={18} color="#ffcd57" />
+                    <Ionicons name="heart-outline" size={18} color={colors.lightMustard} />
                     <ThemedText style={styles.modalButtonSecondaryText}>View Saved</ThemedText>
                   </Pressable>
                 )}
@@ -530,7 +531,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 24,
     padding: 24,
     width: '100%',
@@ -553,13 +554,13 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
     textAlign: 'center',
   },
   modalMessage: {
     fontSize: 15,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: 24,
@@ -571,14 +572,14 @@ const styles = StyleSheet.create({
   },
   modalButtonPrimary: {
     flex: 1,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
   modalButtonPrimaryText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -593,7 +594,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   modalButtonSecondaryText: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontSize: 16,
     fontWeight: '600',
   },

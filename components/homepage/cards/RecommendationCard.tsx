@@ -16,6 +16,7 @@ import { useStockStatus } from '@/hooks/useStockStatus';
 import { useStockNotifications } from '@/hooks/useStockNotifications';
 import FastImage from '@/components/common/FastImage';
 import { formatPrice } from '@/utils/priceFormatter';
+import { colors } from '@/constants/theme';
 
 // Custom comparison function for React.memo
 const arePropsEqual = (prevProps: RecommendationCardProps, nextProps: RecommendationCardProps) => {
@@ -237,7 +238,7 @@ function RecommendationCard({
             <Ionicons
               name={isInWishlist(productId) ? "heart" : "heart-outline"}
               size={20}
-              color={isInWishlist(productId) ? "#ffcd57" : "#FFFFFF"}
+              color={isInWishlist(productId) ? colors.lightMustard : colors.background.primary}
             />
           </Pressable>
         </View>
@@ -255,7 +256,7 @@ function RecommendationCard({
           {/* Recommendation Reason */}
           {showReason && (
             <View style={styles.reasonContainer}>
-              <Ionicons name="bulb-outline" size={12} color="#ffcd57" />
+              <Ionicons name="bulb-outline" size={12} color={colors.lightMustard} />
               <ThemedText style={styles.reasonText} numberOfLines={1}>
                 {recommendation.recommendationReason}
               </ThemedText>
@@ -277,7 +278,7 @@ function RecommendationCard({
           {/* Rating */}
           {recommendation.rating && formattedRating && (
             <View style={styles.ratingContainer}>
-              <Ionicons name="star" size={12} color="#F59E0B" />
+              <Ionicons name="star" size={12} color={colors.warningScale[400]} />
               <ThemedText style={styles.ratingText}>
                 {formattedRating}
               </ThemedText>
@@ -326,7 +327,7 @@ function RecommendationCard({
                  
                   disabled={subscribing[productId]}
                 >
-                  <Ionicons name="notifications-outline" size={18} color="#ffcd57" />
+                  <Ionicons name="notifications-outline" size={18} color={colors.lightMustard} />
                   <ThemedText style={styles.notifyMeText}>
                     {subscribing[productId] ? 'Subscribing...' : 'Notify Me'}
                   </ThemedText>
@@ -339,7 +340,7 @@ function RecommendationCard({
                     onPress={handleDecreaseQuantity}
                    
                   >
-                    <Ionicons name="remove" size={18} color="#FFFFFF" />
+                    <Ionicons name="remove" size={18} color={colors.background.primary} />
                   </Pressable>
 
                   <View style={styles.quantityDisplay}>
@@ -355,7 +356,7 @@ function RecommendationCard({
                    
                     disabled={quantityInCart >= stock}
                   >
-                    <Ionicons name="add" size={18} color="#FFFFFF" />
+                    <Ionicons name="add" size={18} color={colors.background.primary} />
                   </Pressable>
                 </View>
               ) : (
@@ -370,7 +371,7 @@ function RecommendationCard({
                  
                   disabled={!canAddToCartStock}
                 >
-                  <Ionicons name="add-circle" size={18} color="#FFFFFF" />
+                  <Ionicons name="add-circle" size={18} color={colors.background.primary} />
                   <ThemedText style={styles.addToCartText}>Add to Cart</ThemedText>
                 </Pressable>
               )}
@@ -391,14 +392,14 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(255, 205, 87, 0.08)',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.08,
         shadowRadius: 24,
@@ -425,7 +426,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#FFC857',
+    backgroundColor: colors.brand.goldWarm,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 4,
@@ -455,7 +456,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   discountText: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontSize: 10,
     fontWeight: '700',
   },
@@ -465,7 +466,7 @@ const styles = StyleSheet.create({
   },
   brand: {
     fontSize: 12,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
     marginBottom: 4,
     textTransform: 'uppercase',
@@ -473,7 +474,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 6,
     lineHeight: 18,
   },
@@ -489,7 +490,7 @@ const styles = StyleSheet.create({
   },
   reasonText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     flex: 1,
   },
   priceContainer: {
@@ -501,11 +502,11 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   originalPrice: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   ratingContainer: {
@@ -517,11 +518,11 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   ratingCount: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   cashbackContainer: {
     alignSelf: 'flex-start',
@@ -533,7 +534,7 @@ const styles = StyleSheet.create({
   },
   cashbackText: {
     fontSize: 11,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
   },
   scoreContainer: {
@@ -541,18 +542,18 @@ const styles = StyleSheet.create({
   },
   scoreBar: {
     height: 3,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 2,
     marginBottom: 2,
   },
   scoreProgress: {
     height: '100%',
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 2,
   },
   scoreText: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   addToCartButton: {
@@ -560,21 +561,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
   },
   addToCartText: {
     fontSize: 12,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   quantityControls: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 8,
     paddingVertical: 6,
     paddingHorizontal: 4,
@@ -595,7 +596,7 @@ const styles = StyleSheet.create({
   },
   quantityText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   quantityButtonDisabled: {
@@ -603,23 +604,23 @@ const styles = StyleSheet.create({
   },
   addToCartButtonDisabled: {
     opacity: 0.5,
-    backgroundColor: '#E6B84E',
+    backgroundColor: colors.brand.goldRich,
   },
   notifyMeButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
     borderWidth: 1.5,
-    borderColor: '#ffcd57',
+    borderColor: colors.lightMustard,
   },
   notifyMeText: {
     fontSize: 12,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
   notifyMeButtonDisabled: {

@@ -29,6 +29,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { platformAlert, platformAlertSimple } from '@/utils/platformAlert';
 import { SkeletonBox } from '@/components/earn/SkeletonLoader';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -37,14 +38,14 @@ const REZ_COIN_IMAGE = BRAND.COIN_IMAGE;
 
 // Theme colors (extending DesignTokens for mission-specific colors)
 const THEME = {
-  purple500: '#8B5CF6',
-  purple600: '#7C3AED',
-  indigo500: '#6366F1',
+  purple500: colors.brand.purpleLight,
+  purple600: colors.brand.purple,
+  indigo500: colors.brand.indigo,
   indigo600: '#4F46E5',
-  amber400: '#FBBF24',
+  amber400: colors.warningScale[400],
   orange400: '#FB923C',
-  orange600: '#EA580C',
-  emerald500: '#10B981',
+  orange600: colors.brand.orangeDark,
+  emerald500: colors.successScale[400],
 };
 
 interface Mission {
@@ -224,7 +225,7 @@ const MissionCard: React.FC<{
                   if (msLeft > 0 && msLeft < 2 * 60 * 60 * 1000) {
                     return (
                       <View style={styles.urgencyBadge}>
-                        <Ionicons name="flame" size={10} color="#EF4444" />
+                        <Ionicons name="flame" size={10} color={colors.error} />
                         <Text style={styles.urgencyText}>Ending Soon!</Text>
                       </View>
                     );
@@ -913,7 +914,7 @@ const styles = StyleSheet.create({
   urgencyText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#EF4444',
+    color: colors.error,
   },
   missionContent: {
     flex: 1,

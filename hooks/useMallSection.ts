@@ -13,6 +13,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { mallApi } from '../services/mallApi';
+import { colors } from '@/constants/theme';
 import {
   MallBrand,
   MallCategory,
@@ -202,7 +203,7 @@ export function useMallSection(options: UseMallSectionOptions = {}): UseMallSect
             name: cat.name,
             slug: cat.slug,
             icon: cat.icon || 'storefront',
-            color: cat.color || '#1a3a52',
+            color: cat.color || colors.nileBlue,
             brandCount: cat.storeCount || 0,
             maxCashback: cat.maxCoinReward || 0,
             sortOrder: cat.sortOrder || 0,

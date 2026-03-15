@@ -9,6 +9,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Category } from '@/services/categoriesApi';
 import FastImage from '@/components/common/FastImage';
+import { colors } from '@/constants/theme';
 
 interface CategorySectionCardProps {
   category: Category;
@@ -131,14 +132,14 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(255, 205, 87, 0.08)',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
         shadowRadius: 12,
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     height: 100,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     overflow: 'hidden',
   },
   image: {
@@ -163,19 +164,19 @@ const styles = StyleSheet.create({
   placeholderImage: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
   placeholderText: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   emojiContainer: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -188,12 +189,12 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
   },
   cashback: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 });

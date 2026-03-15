@@ -26,6 +26,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@
 import { useRegion } from '@/contexts/RegionContext';
 import realOffersApi from '@/services/realOffersApi';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -312,7 +313,7 @@ export default function LoyaltyRewardsPage() {
                 <Ionicons
                   name={isAlmostDone ? 'flash' : 'flag'}
                   size={12}
-                  color={isAlmostDone ? '#F59E0B' : Colors.text.secondary}
+                  color={isAlmostDone ? colors.warningScale[400] : Colors.text.secondary}
                 />
                 <ThemedText style={[styles.milestoneText, isAlmostDone && styles.almostDoneText]}>
                   {getRemainingLabel(milestone, currencySymbol)}
@@ -335,9 +336,9 @@ export default function LoyaltyRewardsPage() {
   if (error && !loading) {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#1a3a52" translucent />
+        <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} translucent />
         <LinearGradient
-          colors={['#1a3a52', '#047857', '#065F46']}
+          colors={[colors.nileBlue, '#047857', '#065F46']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.header}
@@ -349,7 +350,7 @@ export default function LoyaltyRewardsPage() {
                 onPress={() => router.back()}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
-                <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+                <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
               </Pressable>
               <View style={styles.headerTitleContainer}>
                 <ThemedText style={styles.headerTitle}>Loyalty Rewards</ThemedText>
@@ -373,11 +374,11 @@ export default function LoyaltyRewardsPage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#1a3a52" translucent />
+      <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} translucent />
 
       {/* Header with Gradient */}
       <LinearGradient
-        colors={['#1a3a52', '#047857', '#065F46']}
+        colors={[colors.nileBlue, '#047857', '#065F46']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.header}
@@ -389,7 +390,7 @@ export default function LoyaltyRewardsPage() {
               onPress={() => router.back()}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
 
             <View style={styles.headerTitleContainer}>
@@ -409,7 +410,7 @@ export default function LoyaltyRewardsPage() {
         contentContainerStyle={[styles.scrollContent, { paddingBottom: bottomPadding }]}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#1a3a52']} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.nileBlue]} />
         }
       >
         {/* Overall Progress */}
@@ -422,7 +423,7 @@ export default function LoyaltyRewardsPage() {
           >
             <View style={styles.progressHeaderContent}>
               <View style={styles.progressIconContainer}>
-                <Ionicons name="flag" size={32} color="#ffcd57" />
+                <Ionicons name="flag" size={32} color={colors.lightMustard} />
               </View>
               <View style={styles.progressTextContainer}>
                 <ThemedText style={styles.progressTitle}>Your Progress</ThemedText>
@@ -453,19 +454,19 @@ export default function LoyaltyRewardsPage() {
             {/* Stats */}
             <View style={styles.statsGrid}>
               <View style={styles.statCard}>
-                <ThemedText style={[styles.statValue, { color: '#ffcd57' }]}>
+                <ThemedText style={[styles.statValue, { color: colors.lightMustard }]}>
                   {loading ? '-' : milestones.length}
                 </ThemedText>
                 <ThemedText style={styles.statLabel}>Active</ThemedText>
               </View>
               <View style={styles.statCard}>
-                <ThemedText style={[styles.statValue, { color: '#F59E0B' }]}>
+                <ThemedText style={[styles.statValue, { color: colors.warningScale[400] }]}>
                   {loading ? '-' : almostDoneCount}
                 </ThemedText>
                 <ThemedText style={styles.statLabel}>Almost Done</ThemedText>
               </View>
               <View style={styles.statCard}>
-                <ThemedText style={[styles.statValue, { color: '#A78BFA' }]}>
+                <ThemedText style={[styles.statValue, { color: colors.brand.purpleSoft }]}>
                   {loading ? '-' : completedMilestones.length}
                 </ThemedText>
                 <ThemedText style={styles.statLabel}>Completed</ThemedText>
@@ -478,7 +479,7 @@ export default function LoyaltyRewardsPage() {
         <View style={styles.almostThereSection}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionHeaderRow}>
-              <Ionicons name="trending-up" size={20} color="#F59E0B" />
+              <Ionicons name="trending-up" size={20} color={colors.warningScale[400]} />
               <ThemedText style={styles.sectionTitle}>
                 {almostDoneCount > 0 ? 'Almost There!' : 'Your Milestones'}
               </ThemedText>
@@ -510,7 +511,7 @@ export default function LoyaltyRewardsPage() {
           <View style={styles.completedSection}>
             <View style={styles.sectionHeader}>
               <View style={styles.sectionHeaderRow}>
-                <Ionicons name="star" size={20} color="#A78BFA" />
+                <Ionicons name="star" size={20} color={colors.brand.purpleSoft} />
                 <ThemedText style={styles.sectionTitle}>Completed Rewards</ThemedText>
               </View>
             </View>
@@ -586,7 +587,7 @@ export default function LoyaltyRewardsPage() {
             end={{ x: 1, y: 0 }}
             style={styles.ctaGradient}
           >
-            <Ionicons name="gift" size={20} color="#FFFFFF" style={{ marginRight: Spacing.sm }} />
+            <Ionicons name="gift" size={20} color={colors.background.primary} style={{ marginRight: Spacing.sm }} />
             <ThemedText style={styles.ctaButtonText}>Find More Loyalty Programs</ThemedText>
           </LinearGradient>
         </Pressable>
@@ -622,7 +623,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...Typography.h3,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   headerSubtitle: {
@@ -696,7 +697,7 @@ const styles = StyleSheet.create({
   },
   overallProgressValue: {
     ...Typography.label,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
   overallProgressBar: {
@@ -707,7 +708,7 @@ const styles = StyleSheet.create({
   },
   overallProgressFill: {
     height: '100%',
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: BorderRadius.full,
   },
   statsGrid: {
@@ -792,7 +793,7 @@ const styles = StyleSheet.create({
   },
   loyaltyReward: {
     ...Typography.bodySmall,
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   rewardValueContainer: {
     alignItems: 'flex-end',
@@ -804,7 +805,7 @@ const styles = StyleSheet.create({
   },
   rewardValue: {
     ...Typography.label,
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     fontWeight: '600',
   },
   progressContainer: {
@@ -821,7 +822,7 @@ const styles = StyleSheet.create({
   },
   progressPercentage: {
     ...Typography.labelSmall,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
   progressBar: {
@@ -857,7 +858,7 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
   },
   almostDoneText: {
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     fontWeight: '600',
   },
   milestoneDescription: {
@@ -900,7 +901,7 @@ const styles = StyleSheet.create({
   },
   completedBadgeText: {
     ...Typography.caption,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   completedReward: {
@@ -944,7 +945,7 @@ const styles = StyleSheet.create({
   },
   stepNumberText: {
     ...Typography.caption,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '700',
   },
   stepText: {
@@ -976,12 +977,12 @@ const styles = StyleSheet.create({
   },
   ctaButtonText: {
     ...Typography.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   // Shimmer styles
   shimmerContainer: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
   },
@@ -1035,14 +1036,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   retryButton: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.lg,
   },
   retryButtonText: {
     ...Typography.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   emptyState: {

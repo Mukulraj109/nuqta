@@ -26,6 +26,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import usePostOrderRewards from '@/hooks/usePostOrderRewards';
 import RewardsBreakdownCard from '@/components/rewards/RewardsBreakdownCard';
 import ConfettiOverlay from '@/components/ui/ConfettiOverlay';
+import { colors } from '@/constants/theme';
 
 export default function OrderConfirmationPage() {
   const router = useRouter();
@@ -47,7 +48,7 @@ export default function OrderConfirmationPage() {
     message: string;
     icon: 'checkmark-circle' | 'alert-circle';
     iconColor: string;
-  }>({ title: '', message: '', icon: 'checkmark-circle', iconColor: '#22C55E' });
+  }>({ title: '', message: '', icon: 'checkmark-circle', iconColor: colors.success });
 
   // Animation values
   const [successAnim] = useState(new Animated.Value(0));
@@ -116,7 +117,7 @@ export default function OrderConfirmationPage() {
       title,
       message,
       icon: isSuccess ? 'checkmark-circle' : 'alert-circle',
-      iconColor: isSuccess ? '#22C55E' : '#F59E0B',
+      iconColor: isSuccess ? colors.success : colors.warningScale[400],
     });
     setModalVisible(true);
   };
@@ -197,7 +198,7 @@ export default function OrderConfirmationPage() {
   if (loading) {
     return (
       <ThemedView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#8B5CF6" />
+        <StatusBar barStyle="light-content" backgroundColor={colors.brand.purpleLight} />
         <DetailPageSkeleton />
       </ThemedView>
     );
@@ -206,8 +207,8 @@ export default function OrderConfirmationPage() {
   if (error || !order) {
     return (
       <ThemedView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#8B5CF6" />
-        <LinearGradient colors={['#8B5CF6', '#7C3AED']} style={styles.headerGradient}>
+        <StatusBar barStyle="light-content" backgroundColor={colors.brand.purpleLight} />
+        <LinearGradient colors={[colors.brand.purpleLight, colors.brand.purple]} style={styles.headerGradient}>
           <View style={styles.headerContent}>
             <ThemedText style={styles.headerTitle}>Order Not Found</ThemedText>
           </View>
@@ -226,10 +227,10 @@ export default function OrderConfirmationPage() {
 
   return (
     <ThemedView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#8B5CF6" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.brand.purpleLight} />
 
       {/* Header */}
-      <LinearGradient colors={['#8B5CF6', '#7C3AED']} style={styles.headerGradient}>
+      <LinearGradient colors={[colors.brand.purpleLight, colors.brand.purple]} style={styles.headerGradient}>
         <View style={styles.headerContent}>
           <ThemedText style={styles.headerTitle}>Order Confirmed</ThemedText>
         </View>
@@ -691,7 +692,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     padding: 12,
     borderRadius: 8,
   },

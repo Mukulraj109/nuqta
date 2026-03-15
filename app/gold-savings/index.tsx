@@ -27,9 +27,10 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
-const GOLD_COLOR = '#F59E0B';
-const GOLD_DARK = '#D97706';
+const GOLD_COLOR = colors.warningScale[400];
+const GOLD_DARK = colors.warningScale[700];
 const QUICK_AMOUNTS = ['100', '500', '1000', '2000', '5000', '10000'];
 
 function generateIdempotencyKey(): string {
@@ -307,10 +308,10 @@ export default function GoldSavingsPage() {
       {/* Error Banner */}
       {error && (
         <View style={styles.errorBanner}>
-          <Ionicons name="warning-outline" size={18} color="#DC2626" />
+          <Ionicons name="warning-outline" size={18} color={colors.error} />
           <Text style={styles.errorBannerText}>{error}</Text>
           <Pressable onPress={() => setError(null)}>
-            <Ionicons name="close" size={18} color="#DC2626" />
+            <Ionicons name="close" size={18} color={colors.error} />
           </Pressable>
         </View>
       )}
@@ -333,7 +334,7 @@ export default function GoldSavingsPage() {
               <Ionicons name="diamond" size={24} color={Colors.background.primary} />
             </View>
             {loadingHolding ? (
-              <ActivityIndicator color="#fff" size="small" style={{ marginVertical: Spacing.lg }} />
+              <ActivityIndicator color={colors.background.primary} size="small" style={{ marginVertical: Spacing.lg }} />
             ) : (
               <>
                 <Text style={styles.balanceAmount}>{goldBalance.toFixed(4)} gm</Text>
@@ -452,7 +453,7 @@ export default function GoldSavingsPage() {
                   <Ionicons
                     name={tx.type === 'buy' ? 'arrow-down' : 'arrow-up'}
                     size={18}
-                    color={tx.type === 'buy' ? '#10B981' : '#EF4444'}
+                    color={tx.type === 'buy' ? colors.successScale[400] : colors.error}
                   />
                 </View>
                 <View style={styles.txInfo}>
@@ -464,7 +465,7 @@ export default function GoldSavingsPage() {
                   </Text>
                 </View>
                 <View style={styles.txAmounts}>
-                  <Text style={[styles.txAmount, { color: tx.type === 'buy' ? '#10B981' : '#EF4444' }]}>
+                  <Text style={[styles.txAmount, { color: tx.type === 'buy' ? colors.successScale[400] : colors.error }]}>
                     {tx.type === 'buy' ? '+' : '-'}{tx.grams.toFixed(4)} gm
                   </Text>
                   <Text style={styles.txValue}>
@@ -630,17 +631,17 @@ const styles = StyleSheet.create({
   errorBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: Spacing.base,
     paddingVertical: 10,
     gap: Spacing.sm,
     borderBottomWidth: 1,
-    borderBottomColor: '#FECACA',
+    borderBottomColor: colors.errorScale[200],
   },
   errorBannerText: {
     flex: 1,
     fontSize: 13,
-    color: '#DC2626',
+    color: colors.error,
     fontWeight: '500',
     lineHeight: 18,
   },

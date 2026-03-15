@@ -21,6 +21,7 @@ import { useRouter } from 'expo-router';
 import creatorsApi from '@/services/creatorsApi';
 import { platformAlert } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const SOCIAL_PLATFORMS = ['instagram', 'youtube', 'twitter', 'tiktok', 'website'] as const;
 const CREATOR_TAGS = [
@@ -158,7 +159,7 @@ export default function CreatorEditProfilePage() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#1a3a52" />
+        <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
         <LinearGradient colors={[Colors.nileBlue, '#2d5a7b']} style={styles.header}>
           <View style={styles.headerContent}>
             <Pressable style={styles.backButton} onPress={() => router.back()}>
@@ -177,7 +178,7 @@ export default function CreatorEditProfilePage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#1a3a52" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
 
       {/* Header */}
       <LinearGradient colors={[Colors.nileBlue, '#2d5a7b']} style={styles.header}>
@@ -213,7 +214,7 @@ export default function CreatorEditProfilePage() {
               value={displayName}
               onChangeText={setDisplayName}
               placeholder="Your creator display name"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               maxLength={50}
             />
             <View style={styles.fieldFooter}>
@@ -232,7 +233,7 @@ export default function CreatorEditProfilePage() {
               value={bio}
               onChangeText={setBio}
               placeholder="Tell your followers about yourself..."
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               multiline
               numberOfLines={4}
               maxLength={500}
@@ -252,7 +253,7 @@ export default function CreatorEditProfilePage() {
               value={avatar}
               onChangeText={setAvatar}
               placeholder="https://example.com/your-avatar.jpg"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               autoCapitalize="none"
               keyboardType="url"
             />
@@ -267,7 +268,7 @@ export default function CreatorEditProfilePage() {
               value={coverImage}
               onChangeText={setCoverImage}
               placeholder="https://example.com/your-cover.jpg"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               autoCapitalize="none"
               keyboardType="url"
             />
@@ -335,7 +336,7 @@ export default function CreatorEditProfilePage() {
                   value={link.url}
                   onChangeText={(value) => updateSocialLink(index, 'url', value)}
                   placeholder={`https://${link.platform}.com/...`}
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.neutral[400]}
                   autoCapitalize="none"
                   keyboardType="url"
                 />

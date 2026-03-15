@@ -47,6 +47,7 @@ import MallLuxuryZone from './MallLuxuryZone';
 import MallDealsOfDay from './MallDealsOfDay';
 import MallTrendingNow from './MallTrendingNow';
 import MallRewardBoosters from './MallRewardBoosters';
+import { colors } from '@/constants/theme';
 
 // Skeleton shimmer component for loading state
 const SkeletonPulse: React.FC<{ width: number | string; height: number; borderRadius?: number; style?: any }> = ({ width, height, borderRadius = 8, style }) => {
@@ -65,7 +66,7 @@ const SkeletonPulse: React.FC<{ width: number | string; height: number; borderRa
 
   return (
     <Animated.View
-      style={[{ width, height, borderRadius, backgroundColor: '#E5E7EB', opacity: pulseAnim }, style]}
+      style={[{ width, height, borderRadius, backgroundColor: colors.neutral[200], opacity: pulseAnim }, style]}
     />
   );
 };
@@ -279,7 +280,7 @@ const MallSectionContainer: React.FC<MallSectionContainerProps> = ({
           onPress={refresh}
          
         >
-          <Ionicons name="refresh" size={16} color="#1a3a52" />
+          <Ionicons name="refresh" size={16} color={colors.nileBlue} />
           <Text style={styles.emptyRefreshText}>Refresh</Text>
         </Pressable>
       </View>
@@ -291,7 +292,7 @@ const MallSectionContainer: React.FC<MallSectionContainerProps> = ({
       {/* Gradient Background - Continues from HomeTabSection's blue gradient for seamless transition */}
       {/* Nile Blue gradient for Nuqta Mall theme */}
       <LinearGradient
-        colors={['#dfebf7', '#e4eef8', '#edf3fa', '#f5f8fc', '#fafcfe', '#FFFFFF']}
+        colors={[colors.lavenderMist, '#e4eef8', '#edf3fa', '#f5f8fc', '#fafcfe', colors.background.primary]}
         locations={[0, 0.08, 0.18, 0.35, 0.55, 1]}
         style={styles.gradientBackground}
       />
@@ -304,8 +305,8 @@ const MallSectionContainer: React.FC<MallSectionContainerProps> = ({
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={refresh}
-            tintColor="#1a3a52"
-            colors={['#1a3a52']}
+            tintColor={colors.nileBlue}
+            colors={[colors.nileBlue]}
           />
         }
       >
@@ -317,8 +318,8 @@ const MallSectionContainer: React.FC<MallSectionContainerProps> = ({
             onPress={handleAllianceStores}
            
           >
-            <View style={[styles.quickActionIconBg, { backgroundColor: '#dfebf7' }]}>
-              <Ionicons name="link" size={20} color="#1a3a52" />
+            <View style={[styles.quickActionIconBg, { backgroundColor: colors.lavenderMist }]}>
+              <Ionicons name="link" size={20} color={colors.nileBlue} />
             </View>
             <Text style={styles.quickActionText}>Alliance</Text>
             <Text style={styles.quickActionSubtext}>Partner stores</Text>
@@ -329,8 +330,8 @@ const MallSectionContainer: React.FC<MallSectionContainerProps> = ({
             onPress={handleLowestPrice}
            
           >
-            <View style={[styles.quickActionIconBg, { backgroundColor: '#dfebf7' }]}>
-              <Ionicons name="pricetag" size={20} color="#0284C7" />
+            <View style={[styles.quickActionIconBg, { backgroundColor: colors.lavenderMist }]}>
+              <Ionicons name="pricetag" size={20} color={colors.brand.sky} />
             </View>
             <Text style={styles.quickActionText}>Best Price</Text>
             <Text style={styles.quickActionSubtext}>Price match</Text>
@@ -341,8 +342,8 @@ const MallSectionContainer: React.FC<MallSectionContainerProps> = ({
             onPress={handleViewAllOffers}
            
           >
-            <View style={[styles.quickActionIconBg, { backgroundColor: '#dfebf7' }]}>
-              <Ionicons name="flash" size={20} color="#0284C7" />
+            <View style={[styles.quickActionIconBg, { backgroundColor: colors.lavenderMist }]}>
+              <Ionicons name="flash" size={20} color={colors.brand.sky} />
             </View>
             <Text style={styles.quickActionText}>Deals</Text>
             <Text style={styles.quickActionSubtext}>Hot offers</Text>
@@ -476,11 +477,11 @@ const styles = StyleSheet.create({
   skeletonQuickCard: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     paddingVertical: 14,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
   },
   errorContainer: {
     flex: 1,
@@ -492,13 +493,13 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
     textAlign: 'center',
   },
   errorSubtext: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   emptyContainer: {
@@ -512,13 +513,13 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
     marginTop: 12,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
   },
   emptyRefreshBtn: {
@@ -528,13 +529,13 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: colors.tint.slate,
     borderRadius: 20,
   },
   emptyRefreshText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   bottomSpacer: {
     height: 40,
@@ -552,7 +553,7 @@ const styles = StyleSheet.create({
   quickActionCard: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     paddingVertical: 14,
     paddingHorizontal: 8,
@@ -560,7 +561,7 @@ const styles = StyleSheet.create({
     borderColor: '#E8F0F8',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.06,
         shadowRadius: 8,
@@ -581,12 +582,12 @@ const styles = StyleSheet.create({
   quickActionText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textAlign: 'center',
   },
   quickActionSubtext: {
     fontSize: 10,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 2,
     textAlign: 'center',
   },

@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import exploreApi, { FeaturedComparison } from '@/services/exploreApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -298,7 +299,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
   },
   optionRowBest: {
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     borderWidth: 1.5,
     borderColor: Colors.gold,
   },
@@ -339,7 +340,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: Spacing.xs,
     paddingVertical: 2,
     borderRadius: 4,
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
   viewAllButton: {
     marginTop: Spacing.base,
     paddingVertical: 14,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderRadius: BorderRadius.md,
     alignItems: 'center',
   },

@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import { GroupBuyingGroup } from '@/types/groupBuying.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface GroupShareModalProps {
   visible: boolean;
@@ -75,7 +76,7 @@ Or click: ${shareUrl}`;
         <View style={styles.modal}>
           {/* Header */}
           <View style={styles.header}>
-            <Ionicons name="share-social" size={32} color="#8B5CF6" />
+            <Ionicons name="share-social" size={32} color={colors.brand.purpleLight} />
             <Text style={styles.headerTitle}>Invite Friends</Text>
             <Text style={styles.headerSubtitle}>
               Share this group to unlock better discounts!
@@ -88,7 +89,7 @@ Or click: ${shareUrl}`;
             <View style={styles.codeContainer}>
               <Text style={styles.codeText}>{group.code}</Text>
               <Pressable style={styles.copyButton} onPress={handleCopyCode}>
-                <Ionicons name="copy-outline" size={20} color="#8B5CF6" />
+                <Ionicons name="copy-outline" size={20} color={colors.brand.purpleLight} />
               </Pressable>
             </View>
           </View>
@@ -112,7 +113,7 @@ Or click: ${shareUrl}`;
 
           {/* Incentive */}
           <View style={styles.incentiveCard}>
-            <Ionicons name="gift" size={24} color="#10B981" />
+            <Ionicons name="gift" size={24} color={colors.successScale[400]} />
             <Text style={styles.incentiveText}>
               Get {spotsLeft > 1 ? `${spotsLeft} more members` : '1 more member'} to unlock the
               next discount tier!
@@ -151,13 +152,13 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginTop: 12,
     marginBottom: 8,
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   codeSection: {
@@ -166,25 +167,25 @@ const styles = StyleSheet.create({
   codeLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   codeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 16,
     borderWidth: 2,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
     borderStyle: 'dashed',
   },
   codeText: {
     flex: 1,
     fontSize: 24,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     letterSpacing: 2,
     textAlign: 'center',
   },
@@ -205,20 +206,20 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   shareButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   incentiveCard: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     padding: 16,
     borderRadius: 12,
     marginBottom: 20,
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   closeButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
   closeButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

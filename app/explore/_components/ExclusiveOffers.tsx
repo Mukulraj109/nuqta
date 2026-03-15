@@ -16,6 +16,7 @@ import { useRouter } from 'expo-router';
 import mallApi from '@/services/mallApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.75;
 
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#faf1e0',
+    borderColor: colors.linen,
     borderStyle: 'dashed',
   },
   viewAllIconContainer: {

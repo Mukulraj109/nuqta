@@ -21,6 +21,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallOffer } from '../../types/mall.types';
+import { colors } from '@/constants/theme';
 
 interface MallDealsOfDayProps {
   offers: MallOffer[];
@@ -97,7 +98,7 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
           {/* Discount Badge */}
           <View style={styles.discountBadge}>
             <LinearGradient
-              colors={['#EF4444', '#DC2626']}
+              colors={[colors.error, colors.error]}
               style={styles.discountGradient}
             >
               <Text style={styles.discountText}>{discountDisplay}</Text>
@@ -120,10 +121,10 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
               />
             ) : (
               <LinearGradient
-                colors={['#F97316', '#EA580C']}
+                colors={[colors.brand.orange, colors.brand.orangeDark]}
                 style={styles.dealImageFallback}
               >
-                <Ionicons name="flash" size={28} color="#FFF" />
+                <Ionicons name="flash" size={28} color={colors.background.primary} />
               </LinearGradient>
             )}
           </View>
@@ -148,7 +149,7 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
             {/* Extra Coins */}
             {(item.extraCoins ?? 0) > 0 && (
               <View style={styles.extraCoinsRow}>
-                <Ionicons name="flash" size={11} color="#0284C7" />
+                <Ionicons name="flash" size={11} color={colors.brand.sky} />
                 <Text style={styles.extraCoinsText}>+{item.extraCoins} Bonus Coins</Text>
               </View>
             )}
@@ -165,22 +166,22 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#FEF2F2', '#FEE2E2', '#FFFFFF']}
+          colors={[colors.errorScale[50], colors.errorScale[100], colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
         >
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#F97316', '#EA580C']}
+              colors={[colors.brand.orange, colors.brand.orangeDark]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="flash" size={18} color="#FFFFFF" />
+              <Ionicons name="flash" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Deals of the Day</Text>
           </View>
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#F97316" />
+            <ActivityIndicator size="small" color={colors.brand.orange} />
             <Text style={styles.loadingText}>Loading today's deals...</Text>
           </View>
         </LinearGradient>
@@ -192,7 +193,7 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#FEF2F2', '#FEE2E2', '#FFFFFF']}
+          colors={[colors.errorScale[50], colors.errorScale[100], colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
@@ -200,10 +201,10 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
           {/* Header */}
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#F97316', '#EA580C']}
+              colors={[colors.brand.orange, colors.brand.orangeDark]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="flash" size={18} color="#FFFFFF" />
+              <Ionicons name="flash" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Deals of the Day</Text>
             <View style={styles.headerSpacer} />
@@ -215,7 +216,7 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
 
           {/* Empty State Placeholder */}
           <View style={styles.emptyStateContainer}>
-            <Ionicons name="flash-outline" size={24} color="#9CA3AF" />
+            <Ionicons name="flash-outline" size={24} color={colors.neutral[400]} />
             <Text style={styles.emptyStateText}>No deals today - check back soon</Text>
           </View>
         </LinearGradient>
@@ -226,7 +227,7 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#FEF2F2', '#FEE2E2', '#FFFFFF']}
+        colors={[colors.errorScale[50], colors.errorScale[100], colors.background.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.gradientBackground}
@@ -240,10 +241,10 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
         {/* Header */}
         <View style={styles.headerRow}>
           <LinearGradient
-            colors={['#F97316', '#EA580C']}
+            colors={[colors.brand.orange, colors.brand.orangeDark]}
             style={styles.iconWrapper}
           >
-            <Ionicons name="flash" size={18} color="#FFFFFF" />
+            <Ionicons name="flash" size={18} color={colors.background.primary} />
           </LinearGradient>
           <Text style={styles.title}>Deals of the Day</Text>
           <View style={styles.headerSpacer} />
@@ -255,7 +256,7 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
             >
               <Text style={styles.viewAllText}>View All</Text>
               <View style={styles.viewAllArrow}>
-                <Ionicons name="arrow-forward" size={14} color="#F97316" />
+                <Ionicons name="arrow-forward" size={14} color={colors.brand.orange} />
               </View>
             </Pressable>
           )}
@@ -367,7 +368,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#F97316',
+        shadowColor: colors.brand.orange,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -378,12 +379,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     paddingHorizontal: 16,
     marginBottom: 12,
   },
@@ -391,7 +392,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
@@ -408,13 +409,13 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   viewAllArrow: {
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#FFF7ED',
+    backgroundColor: colors.tint.orange,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -436,7 +437,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
   },
   countdownLabel: {
     fontSize: 13,
@@ -451,7 +452,7 @@ const styles = StyleSheet.create({
   },
   digitBox: {
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -469,22 +470,22 @@ const styles = StyleSheet.create({
   digitText: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   digitLabel: {
     fontSize: 8,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     letterSpacing: 0.5,
   },
   digitSeparator: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#F97316',
+    color: colors.brand.orange,
     marginHorizontal: 2,
   },
   dealCountBadge: {
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 10,
@@ -492,7 +493,7 @@ const styles = StyleSheet.create({
   dealCountText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   listContent: {
     paddingLeft: 16,
@@ -501,16 +502,16 @@ const styles = StyleSheet.create({
   },
   dealCard: {
     width: 185,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     marginRight: 12,
     borderWidth: 1,
-    borderColor: '#FEE2E2',
+    borderColor: colors.errorScale[100],
     position: 'relative',
     ...Platform.select({
       ios: {
-        shadowColor: '#F97316',
+        shadowColor: colors.brand.orange,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -533,7 +534,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.3,
   },
   dealImageContainer: {
@@ -556,18 +557,18 @@ const styles = StyleSheet.create({
   dealTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
     lineHeight: 18,
   },
   dealBrand: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 6,
   },
   dealBadgeContainer: {
     alignSelf: 'flex-start',
-    backgroundColor: '#FFF7ED',
+    backgroundColor: colors.tint.orange,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -587,7 +588,7 @@ const styles = StyleSheet.create({
   extraCoinsText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#0369A1',
+    color: colors.brand.skyDark,
   },
   loadingContainer: {
     flexDirection: 'row',
@@ -598,7 +599,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
 });

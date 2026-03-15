@@ -33,6 +33,7 @@ import apiClient from '@/services/apiClient';
 import { useRegion } from '@/contexts/RegionContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 type TabKey = 'all' | 'store' | 'bank' | 'rez';
 
@@ -241,7 +242,7 @@ export default function OffersScreen() {
               >
                 <View style={styles.bestOfferContent}>
                   <View style={styles.bestOfferBadge}>
-                    <Ionicons name="trophy" size={14} color="#FFFFFF" />
+                    <Ionicons name="trophy" size={14} color={colors.background.primary} />
                     <Text style={styles.bestOfferBadgeText}>BEST VALUE</Text>
                   </View>
                   <Text style={styles.bestOfferTitle}>{offers.bestOffer.title}</Text>
@@ -253,9 +254,9 @@ export default function OffersScreen() {
                 </View>
                 <View style={styles.bestOfferCheck}>
                   {selectedOffers.some((o) => o.id === offers.bestOffer!.id) ? (
-                    <Ionicons name="checkmark-circle" size={28} color="#FFFFFF" />
+                    <Ionicons name="checkmark-circle" size={28} color={colors.background.primary} />
                   ) : (
-                    <Ionicons name="add-circle-outline" size={28} color="#FFFFFF" />
+                    <Ionicons name="add-circle-outline" size={28} color={colors.background.primary} />
                   )}
                 </View>
               </LinearGradient>
@@ -302,7 +303,7 @@ export default function OffersScreen() {
           <Text style={styles.continueButtonText}>
             {selectedOffers.length > 0 ? 'Apply & Continue' : 'Skip & Continue'}
           </Text>
-          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+          <Ionicons name="arrow-forward" size={20} color={colors.background.primary} />
         </Pressable>
       </View>
     </SafeAreaView>
@@ -497,7 +498,7 @@ const styles = StyleSheet.create({
     color: COLORS.text.secondary,
   },
   activeTabText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   tabBadge: {
     marginLeft: SPACING.xs,
@@ -515,7 +516,7 @@ const styles = StyleSheet.create({
     color: COLORS.text.secondary,
   },
   activeTabBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   loadingContainer: {
     flex: 1,
@@ -553,7 +554,7 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     ...TYPOGRAPHY.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   content: {
     flex: 1,
@@ -580,17 +581,17 @@ const styles = StyleSheet.create({
   },
   bestOfferBadgeText: {
     ...TYPOGRAPHY.caption,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
     marginLeft: 4,
   },
   bestOfferTitle: {
     ...TYPOGRAPHY.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   bestOfferValue: {
     ...TYPOGRAPHY.h3,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginTop: SPACING.xs,
   },
   bestOfferCheck: {
@@ -698,7 +699,7 @@ const styles = StyleSheet.create({
     ...TYPOGRAPHY.caption,
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   bottomAction: {
     flexDirection: 'row',
@@ -732,6 +733,6 @@ const styles = StyleSheet.create({
   },
   continueButtonText: {
     ...TYPOGRAPHY.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });

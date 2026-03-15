@@ -4,6 +4,7 @@
  * Navigated from category page sections (Shop by Vibe, Shop by Occasion)
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -33,7 +34,7 @@ const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
 
 const COLORS = {
   white: Colors.background.primary,
-  navy: '#0B2240',
+  navy: colors.brand.navyDark,
   gray50: Colors.background.secondary,
   gray100: Colors.background.secondary,
   gray200: Colors.border.default,

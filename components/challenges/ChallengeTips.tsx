@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface ChallengeTipsProps {
   action: string;
@@ -94,7 +95,7 @@ function ChallengeTips({ action, difficulty }: ChallengeTipsProps) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="bulb" size={20} color="#F59E0B" />
+        <Ionicons name="bulb" size={20} color={colors.warningScale[400]} />
         <Text style={styles.title}>Pro Tips</Text>
       </View>
       <View style={styles.tipsContainer}>
@@ -113,11 +114,11 @@ function ChallengeTips({ action, difficulty }: ChallengeTipsProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: colors.warningScale[200],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   tipsContainer: {
     gap: 12,
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
   },
   tipText: {
     flex: 1,

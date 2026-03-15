@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface LevelBenefit {
   id: string;
@@ -33,14 +34,14 @@ interface LevelUpCelebrationProps {
 }
 
 const COLORS = {
-  primary: '#ffcd57',
-  primaryDark: '#1a3a52',
-  gold: '#FFC857',
+  primary: colors.lightMustard,
+  primaryDark: colors.nileBlue,
+  gold: colors.brand.goldWarm,
   goldDark: '#E5A500',
-  navy: '#0B2240',
-  white: '#FFFFFF',
-  textPrimary: '#1F2937',
-  textSecondary: '#6B7280',
+  navy: colors.brand.navyDark,
+  white: colors.background.primary,
+  textPrimary: colors.neutral[800],
+  textSecondary: colors.neutral[500],
 };
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -211,7 +212,7 @@ function LevelUpCelebration({
       case 1:
         return [COLORS.primary, COLORS.primaryDark];
       case 2:
-        return ['#ffcd57', '#1a3a52'];
+        return [colors.lightMustard, colors.nileBlue];
       case 3:
         return [COLORS.gold, COLORS.goldDark];
       default:
@@ -447,7 +448,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   levelBox: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 12,
@@ -500,7 +501,7 @@ const styles = StyleSheet.create({
   },
   benefitsContainer: {
     width: '100%',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,

@@ -24,6 +24,7 @@ import { MallCategory } from '../../../types/mall.types';
 import MallEmptyState from '../../../components/mall/pages/MallEmptyState';
 import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkeleton';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
@@ -41,7 +42,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, onPress }) => {
      
     >
       <LinearGradient
-        colors={[category.color || '#D97706', `${category.color || '#D97706'}DD`]}
+        colors={[category.color || colors.warningScale[700], `${category.color || colors.warningScale[700]}DD`]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.categoryGradient}

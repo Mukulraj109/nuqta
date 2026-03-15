@@ -19,6 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from './priveTheme';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const BANNER_WIDTH = SCREEN_WIDTH - 20; // 10px padding on each side
@@ -46,8 +47,8 @@ const STATIC_BANNERS: PriveBanner[] = [
     subtitle: 'Exclusive rewards for distinguished members',
     highlight: 'Premium Access',
     badge: 'VIP',
-    accentColor: '#C9A962',
-    gradientColors: ['#1A1A2E', '#16213E', '#0F0F1A'],
+    accentColor: colors.brand.goldAccent,
+    gradientColors: [colors.deepNavy, '#16213E', '#0F0F1A'],
     ctaText: 'Explore Benefits',
     glowColor: 'rgba(201, 169, 98, 0.4)',
   },
@@ -57,7 +58,7 @@ const STATIC_BANNERS: PriveBanner[] = [
     subtitle: 'Build your reputation to unlock higher tiers',
     highlight: 'Keep Engaging',
     badge: 'TIER',
-    accentColor: '#A855F7',
+    accentColor: colors.brand.purpleMedium,
     gradientColors: ['#1E1033', '#150A24', '#0A0512'],
     ctaText: 'Check Progress',
     glowColor: 'rgba(168, 85, 247, 0.35)',
@@ -401,7 +402,7 @@ const styles = StyleSheet.create({
   bannerTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 6,
     letterSpacing: 0,
     ...Platform.select({

@@ -11,14 +11,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { DiscountBucket } from '@/types/offers.types';
 import { Spacing, BorderRadius, Typography, Colors, Shadows } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // New Color Palette
 const PALETTE = {
-  nileBlue: '#1a3a52',
-  lightMustard: '#ffcd57',
-  linen: '#faf1e0',
-  lightPeach: '#ffd7b5',
-  lavenderMist: '#dfebf7',
+  nileBlue: colors.nileBlue,
+  lightMustard: colors.lightMustard,
+  linen: colors.linen,
+  lightPeach: colors.lightPeach,
+  lavenderMist: colors.lavenderMist,
 };
 
 interface DiscountBucketsSectionProps {
@@ -53,7 +54,7 @@ export const DiscountBucketsSection: React.FC<DiscountBucketsSectionProps> = ({
       alignItems: 'center',
       borderWidth: 2,
       borderColor: 'transparent',
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       ...(isDark ? {} : Shadows.subtle),
     },
     bucketSelected: {

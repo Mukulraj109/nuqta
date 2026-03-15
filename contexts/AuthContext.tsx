@@ -129,6 +129,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const refreshPromiseRef = useRef<Promise<boolean> | null>(null);
   const pendingRefreshCallbacks = useRef<Array<(success: boolean) => void>>([]);
   const isCancelledRef = useRef(false);
+  const lastRedirectTimeRef = useRef(0);
 
   // Set up API client callbacks
   useEffect(() => {
@@ -145,6 +146,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     // Set logout callback - called when token expires/is revoked
     // This is guarded by isLoggingOut in apiClient, so only called once per cycle
+    // NOTE: No router.replace here — dispatch AUTH_LOGOUT triggers the navigation guard
     apiClient.setLogoutCallback(async () => {
       try {
         // Immediately clear API tokens to stop any further authenticated requests
@@ -154,17 +156,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // Clear all stored auth data (AsyncStorage + localStorage)
         await authStorage.clearAuthData();
 
-        // Dispatch logout
+        // Dispatch logout — navigation guard will handle redirect
         dispatch({ type: 'AUTH_LOGOUT' });
 
         // Set explicit logout flag to prevent auto-restoration
         setHasExplicitlyLoggedOut(true);
-
-        // Navigate to sign-in
-        router.replace('/sign-in');
       } catch (error) {
-        // Still try to navigate even if cleanup fails
-        router.replace('/sign-in');
+        // Even if cleanup fails, ensure auth state is cleared
+        dispatch({ type: 'AUTH_LOGOUT' });
+        setHasExplicitlyLoggedOut(true);
       }
     });
   }, []);
@@ -202,6 +202,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [state.isAuthenticated, state.token]);
 
   // Navigation guard: Redirect to sign-in when user is logged out
+  // Single source of truth for all sign-in redirects — no other code should call router.replace('/sign-in')
   useEffect(() => {
     // Don't navigate during initial loading
     if (state.isLoading) {
@@ -212,29 +213,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const isSignInRoute = currentRoute === 'sign-in';
     const isOnboardingRoute = currentRoute.startsWith('onboarding/');
 
-    // Force redirect if flag is set (from token expiration)
-    if (shouldRedirectToSignIn && !isSignInRoute) {
+    // Determine if we need to redirect
+    let needsRedirect = false;
 
-      router.replace('/sign-in');
+    if (shouldRedirectToSignIn && !isSignInRoute) {
+      needsRedirect = true;
       setShouldRedirectToSignIn(false);
-      return;
+    } else if (!state.isAuthenticated) {
+      if (isSignInRoute) return;
+      if (isOnboardingRoute && !state.error) return;
+      needsRedirect = true;
     }
 
-    // If user is not authenticated
-    if (!state.isAuthenticated) {
-      // Don't redirect if already on sign-in
-      if (isSignInRoute) {
-        return;
-      }
-
-      // Allow onboarding for users who explicitly logged out or are new users
-      // This enables the "Sign Up" flow from the sign-in page
-      if (isOnboardingRoute && !state.error) {
-        // Allow onboarding flow to continue
-        return;
-      }
-
-      // Use replace to prevent back navigation
+    if (needsRedirect) {
+      // Debounce: prevent multiple redirects within 1 second
+      const now = Date.now();
+      if (now - lastRedirectTimeRef.current < 1000) return;
+      lastRedirectTimeRef.current = now;
       router.replace('/sign-in');
     }
   }, [state.isAuthenticated, state.isLoading, state.error, segments, hasExplicitlyLoggedOut, shouldRedirectToSignIn]);
@@ -714,15 +709,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           // Dispatch logout with error so navigation guard knows to redirect
           dispatch({ type: 'AUTH_FAILURE', payload: 'Session expired. Please sign in again.' });
 
-          // Set redirect flag to trigger navigation guard
+          // Set redirect flag — navigation guard handles the actual redirect
           setShouldRedirectToSignIn(true);
-
-          // Also try immediate redirect (in case it works)
-          try {
-            router.replace('/sign-in');
-          } catch (navError) {
-            // silently handle - will use guard
-          }
 
           return false; // Failed - invalid token
         } else {

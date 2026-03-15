@@ -11,6 +11,7 @@ import React from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 /**
  * PartnerCard Props Interface
@@ -52,7 +53,7 @@ export const PartnerCard: React.FC<PartnerCardProps> = ({
       {/* Partner Info Section */}
       <View style={styles.partnerInfo}>
         <View style={styles.partnerIcon}>
-          <Ionicons name="star" size={20} color="#ffcd57" />
+          <Ionicons name="star" size={20} color={colors.lightMustard} />
         </View>
         <View>
           <ThemedText style={styles.partnerLevel}>Partner</ThemedText>
@@ -77,7 +78,7 @@ export const PartnerCard: React.FC<PartnerCardProps> = ({
 
       {/* Chevron Arrow */}
       <View style={styles.partnerArrow}>
-        <Ionicons name="chevron-forward" size={20} color="#ffcd57" />
+        <Ionicons name="chevron-forward" size={20} color={colors.lightMustard} />
       </View>
     </Pressable>
   );
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -117,11 +118,11 @@ const styles = StyleSheet.create({
   partnerLevel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   level: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
   },
   partnerStats: {
     flexDirection: 'row',
@@ -134,17 +135,17 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   statLabel: {
     fontSize: 10,
-    color: '#666',
+    color: colors.midGray,
   },
   progressDot: {
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     marginHorizontal: 6,
   },
   partnerArrow: {

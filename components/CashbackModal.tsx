@@ -13,6 +13,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface CashbackModalProps {
   visible: boolean;
@@ -145,8 +146,8 @@ function CashbackModal({
   const renderGiftBox = () => (
     <Animated.View style={{ transform: [{ scale: fadeAnim }] }}>
       <View style={styles.giftBoxContainer}>
-        <LinearGradient colors={['#EC4899', '#8B5CF6']} style={styles.giftBoxBase} />
-        <LinearGradient colors={['#F97316', '#EC4899']} style={styles.giftBoxTop} />
+        <LinearGradient colors={[colors.brand.pink, colors.brand.purpleLight]} style={styles.giftBoxBase} />
+        <LinearGradient colors={[colors.brand.orange, colors.brand.pink]} style={styles.giftBoxTop} />
         <LinearGradient colors={['#FFD93D', '#FCA311']} style={styles.ribbonVertical} />
         <LinearGradient colors={['#FFD93D', '#FCA311']} style={styles.ribbonHorizontal} />
         <View style={styles.bow}>
@@ -197,18 +198,18 @@ function CashbackModal({
             accessibilityRole="button"
             accessibilityHint="Double tap to close this dialog"
           >
-            <Ionicons name="close" size={22} color="#6B7280" />
+            <Ionicons name="close" size={22} color={colors.neutral[500]} />
           </Pressable>
 
           <View style={styles.content}>
             <View style={styles.titleContainer}>
-              <LinearGradient colors={['#8B5CF6', '#EC4899']} style={styles.titleGradient}>
+              <LinearGradient colors={[colors.brand.purpleLight, colors.brand.pink]} style={styles.titleGradient}>
                 <Text style={styles.titleText}>10%</Text>
               </LinearGradient>
-              <LinearGradient colors={['#8B5CF6', '#6D28D9']} style={styles.cashGradient}>
+              <LinearGradient colors={[colors.brand.purpleLight, colors.brand.purpleDeep]} style={styles.cashGradient}>
                 <Text style={styles.cashText}>CASH</Text>
               </LinearGradient>
-              <LinearGradient colors={['#EC4899', '#8B5CF6']} style={styles.backGradient}>
+              <LinearGradient colors={[colors.brand.pink, colors.brand.purpleLight]} style={styles.backGradient}>
                 <Text style={styles.backText}>Back</Text>
               </LinearGradient>
             </View>
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,
@@ -280,7 +281,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 34,
     fontWeight: '900',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
   },
   cashGradient: {
@@ -293,7 +294,7 @@ const styles = StyleSheet.create({
   cashText: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
   },
   backGradient: {
@@ -305,12 +306,12 @@ const styles = StyleSheet.create({
   backText: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 28,
     fontWeight: '500',
   },
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
     bottom: -20,
     width: 100,
     height: 15,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 50,
     opacity: 0.25,
     transform: [{ scaleY: 0.3 }],
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
   coinText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   coin1Position: { top: 40, left: 20 },
   coin2Position: { top: 30, right: 20 },
@@ -415,7 +416,7 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#10B981',
+    color: colors.successScale[400],
     textAlign: 'center',
   },
 });

@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState, useRef, ReactNod
 type Socket = any;
 const getIO = async () => (await import('socket.io-client')).io;
 import Constants from 'expo-constants';
-import { Platform } from 'react-native';
+import { AppState, AppStateStatus, Platform } from 'react-native';
 import { getAuthToken, getUser } from '@/utils/authStorage';
 import {
   SocketEvents,
@@ -229,9 +229,29 @@ export function SocketProvider({ children, config }: SocketProviderProps) {
       }
     }).catch(() => { /* silently handle */ });
 
+    // Pause/resume socket on app background/foreground (native only)
+    const handleAppState = (nextAppState: AppStateStatus) => {
+      if (!socketRef.current) return;
+
+      if (nextAppState === 'active') {
+        // App came to foreground — reconnect if disconnected
+        if (!socketRef.current.connected) {
+          socketRef.current.connect();
+        }
+      } else if (nextAppState === 'background' || nextAppState === 'inactive') {
+        // App went to background — disconnect to save battery (native only)
+        if (Platform.OS !== 'web' && socketRef.current.connected) {
+          socketRef.current.disconnect();
+        }
+      }
+    };
+
+    const appStateSubscription = AppState.addEventListener('change', handleAppState);
+
     // CRITICAL: Cleanup function to prevent memory leaks
     return () => {
       cancelled = true;
+      appStateSubscription.remove();
       if (socketRef.current) {
         socketRef.current.removeAllListeners();
         socketRef.current.disconnect();

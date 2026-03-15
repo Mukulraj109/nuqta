@@ -13,6 +13,7 @@ import { useRouter } from 'expo-router';
 import { useStreaksGamification } from '@/hooks/useStreaksGamification';
 import { useAuth } from '@/contexts/AuthContext';
 import { Mission } from '@/types/streaksGamification.types';
+import { colors } from '@/constants/theme';
 
 interface StreaksGamificationProps {
   onViewAllPress?: () => void;
@@ -49,7 +50,7 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
           style={styles.cardGradient}
         >
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#ffcd57" />
+            <ActivityIndicator size="small" color={colors.lightMustard} />
             <Text style={styles.loadingText}>Loading...</Text>
           </View>
         </LinearGradient>
@@ -69,7 +70,7 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
         >
           <View style={styles.loginPromptContainer}>
             <View style={styles.loginIconContainer}>
-              <Ionicons name="flame" size={32} color="#ffcd57" />
+              <Ionicons name="flame" size={32} color={colors.lightMustard} />
             </View>
             <View style={styles.loginPromptContent}>
               <Text style={styles.loginPromptTitle}>Track Your Saving Streaks</Text>
@@ -82,7 +83,7 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
                
               >
                 <Text style={styles.loginButtonText}>Login to Start</Text>
-                <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
+                <Ionicons name="arrow-forward" size={16} color={colors.background.primary} />
               </Pressable>
             </View>
           </View>
@@ -102,7 +103,7 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
           style={styles.cardGradient}
         >
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#ffcd57" />
+            <ActivityIndicator size="small" color={colors.lightMustard} />
             <Text style={styles.loadingText}>Loading your progress...</Text>
           </View>
         </LinearGradient>
@@ -127,7 +128,7 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
         <View style={styles.streakSection}>
           <View style={styles.streakIconContainer}>
             <View style={styles.streakIconBackground}>
-              <Ionicons name="flame" size={32} color="#ffcd57" />
+              <Ionicons name="flame" size={32} color={colors.lightMustard} />
             </View>
             <View style={styles.streakBadge}>
               <Text style={styles.streakBadgeText}>{streak.current}</Text>
@@ -143,7 +144,7 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
             <View style={styles.progressBarContainer}>
               <View style={styles.progressBarBackground}>
                 <LinearGradient
-                  colors={['#ffcd57', '#E8B896']}
+                  colors={[colors.lightMustard, colors.brand.sand]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={[styles.progressBarFill, { width: `${streakPercentage}%` }]}
@@ -156,7 +157,7 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
         {/* Weekly Missions Header */}
         <View style={styles.missionsHeader}>
           <View style={styles.missionsHeaderLeft}>
-            <Ionicons name="ellipse-outline" size={16} color="#1a3a52" />
+            <Ionicons name="ellipse-outline" size={16} color={colors.nileBlue} />
             <Text style={styles.missionsTitle}>Weekly Missions</Text>
           </View>
           <Pressable
@@ -165,7 +166,7 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
             style={styles.viewAllButton}
           >
             <Text style={styles.viewAllText}>View all</Text>
-            <Ionicons name="chevron-forward" size={14} color="#ffcd57" />
+            <Ionicons name="chevron-forward" size={14} color={colors.lightMustard} />
           </Pressable>
         </View>
 
@@ -189,12 +190,12 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
                     ]}
                   >
                     {mission.completed ? (
-                      <Ionicons name="checkmark" size={16} color="#1a3a52" />
+                      <Ionicons name="checkmark" size={16} color={colors.nileBlue} />
                     ) : (
                       <Ionicons
                         name={mission.icon}
                         size={16}
-                        color={mission.completed ? '#1a3a52' : '#6B7280'}
+                        color={mission.completed ? colors.nileBlue : colors.neutral[500]}
                       />
                     )}
                   </View>
@@ -209,7 +210,7 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
                         {mission.title}
                       </Text>
                       <View style={styles.rewardContainer}>
-                        <Ionicons name="gift-outline" size={12} color="#FBBF24" />
+                        <Ionicons name="gift-outline" size={12} color={colors.warningScale[400]} />
                         <Text style={styles.rewardText}>+{mission.reward}</Text>
                       </View>
                     </View>
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 205, 87, 0.2)',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
   },
   streakBadge: {
     marginTop: -8,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 12,
@@ -296,7 +297,7 @@ const styles = StyleSheet.create({
   streakBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   streakContent: {
     flex: 1,
@@ -304,13 +305,13 @@ const styles = StyleSheet.create({
   streakTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
     letterSpacing: -0.2,
   },
   streakSubtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   progressBarContainer: {
@@ -340,7 +341,7 @@ const styles = StyleSheet.create({
   missionsTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   viewAllButton: {
     flexDirection: 'row',
@@ -350,7 +351,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   missionsList: {
     gap: 8,
@@ -391,11 +392,11 @@ const styles = StyleSheet.create({
   missionTitle: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     flex: 1,
   },
   missionTitleCompleted: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textDecorationLine: 'line-through',
   },
   rewardContainer: {
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
   rewardText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FBBF24',
+    color: colors.warningScale[400],
   },
   missionProgressRow: {
     flexDirection: 'row',
@@ -424,12 +425,12 @@ const styles = StyleSheet.create({
   },
   missionProgressBarFill: {
     height: '100%',
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     borderRadius: 2,
   },
   missionProgressText: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     minWidth: 30,
   },
@@ -442,7 +443,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   loginPromptContainer: {
@@ -464,19 +465,19 @@ const styles = StyleSheet.create({
   loginPromptTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
   },
   loginPromptSubtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 12,
     lineHeight: 18,
   },
   loginButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 12,
@@ -486,7 +487,7 @@ const styles = StyleSheet.create({
   loginButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

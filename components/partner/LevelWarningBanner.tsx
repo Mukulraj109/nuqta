@@ -9,6 +9,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 interface LevelWarningBannerProps {
   daysRemaining: number;
@@ -19,14 +20,14 @@ interface LevelWarningBannerProps {
 }
 
 const COLORS = {
-  warning: '#F59E0B',
-  warningLight: '#FEF3C7',
-  warningDark: '#D97706',
-  danger: '#EF4444',
-  dangerLight: '#FEE2E2',
-  textPrimary: '#1F2937',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
+  warning: colors.warningScale[400],
+  warningLight: colors.tint.amberLight,
+  warningDark: colors.warningScale[700],
+  danger: colors.error,
+  dangerLight: colors.errorScale[100],
+  textPrimary: colors.neutral[800],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
 };
 
 function LevelWarningBanner({
@@ -176,7 +177,7 @@ function LevelWarningBanner({
       {/* Action Button */}
       <Pressable style={styles.actionButton} onPress={handleShopNow}>
         <LinearGradient
-          colors={isCritical ? [COLORS.danger, '#DC2626'] : [COLORS.warning, COLORS.warningDark]}
+          colors={isCritical ? [COLORS.danger, colors.error] : [COLORS.warning, COLORS.warningDark]}
           style={styles.actionButtonGradient}
         >
           <Text style={styles.actionButtonText}>Shop Now</Text>

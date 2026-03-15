@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ReportModalProps, REPORT_REASONS, ReportReason } from '@/types/report.types';
 import { useVideoReport } from '@/hooks/useVideoReport';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -159,7 +160,7 @@ function ReportModal({
             {showSuccess ? (
               <View style={styles.successContainer}>
                 <View style={styles.successIconContainer}>
-                  <Ionicons name="checkmark-circle" size={64} color="#ffcd57" />
+                  <Ionicons name="checkmark-circle" size={64} color={colors.lightMustard} />
                 </View>
                 <Text style={styles.successTitle}>Report Submitted</Text>
                 <Text style={styles.successMessage}>
@@ -178,7 +179,7 @@ function ReportModal({
                       style={styles.closeButton}
                       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     >
-                      <Ionicons name="close" size={24} color="#666" />
+                      <Ionicons name="close" size={24} color={colors.midGray} />
                     </Pressable>
                   </View>
                   {videoTitle && (
@@ -251,14 +252,14 @@ function ReportModal({
                   {/* Error Message */}
                   {error && (
                     <View style={styles.errorContainer}>
-                      <Ionicons name="alert-circle" size={20} color="#EF4444" />
+                      <Ionicons name="alert-circle" size={20} color={colors.error} />
                       <Text style={styles.errorText}>{error}</Text>
                     </View>
                   )}
 
                   {/* Info Message */}
                   <View style={styles.infoContainer}>
-                    <Ionicons name="information-circle-outline" size={20} color="#6366F1" />
+                    <Ionicons name="information-circle-outline" size={20} color={colors.brand.indigo} />
                     <Text style={styles.infoText}>
                       Your report is anonymous. We review all reports carefully.
                     </Text>
@@ -287,18 +288,18 @@ function ReportModal({
                     <LinearGradient
                       colors={
                         isSubmitDisabled
-                          ? ['#D1D5DB', '#9CA3AF']
-                          : ['#7C3AED', '#6366F1']
+                          ? [colors.neutral[300], colors.neutral[400]]
+                          : [colors.brand.purple, colors.brand.indigo]
                       }
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 0 }}
                       style={styles.submitButton}
                     >
                       {isSubmitting ? (
-                        <ActivityIndicator color="#FFF" size="small" />
+                        <ActivityIndicator color={colors.background.primary} size="small" />
                       ) : (
                         <>
-                          <Ionicons name="flag" size={20} color="#FFF" />
+                          <Ionicons name="flag" size={20} color={colors.background.primary} />
                           <Text style={styles.submitButtonText}>Submit Report</Text>
                         </>
                       )}
@@ -324,7 +325,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalContainer: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: screenHeight * 0.75,
@@ -344,12 +345,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   dragIndicator: {
     width: 40,
     height: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 2,
     alignSelf: 'center',
     marginBottom: 16,
@@ -362,14 +363,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   closeButton: {
     padding: 4,
   },
   videoTitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 8,
   },
   content: {
@@ -380,7 +381,7 @@ const styles = StyleSheet.create({
   },
   instructions: {
     fontSize: 15,
-    color: '#374151',
+    color: colors.neutral[700],
     marginTop: 20,
     marginBottom: 16,
     lineHeight: 22,
@@ -392,14 +393,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
   },
   reasonOptionSelected: {
-    backgroundColor: '#EEF2FF',
-    borderColor: '#6366F1',
+    backgroundColor: colors.indigoMist,
+    borderColor: colors.brand.indigo,
   },
   radioButton: {
     marginRight: 12,
@@ -410,16 +411,16 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
-    backgroundColor: '#FFF',
+    borderColor: colors.neutral[300],
+    backgroundColor: colors.background.primary,
   },
   radioButtonSelected: {
     width: 20,
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#6366F1',
-    backgroundColor: '#FFF',
+    borderColor: colors.brand.indigo,
+    backgroundColor: colors.background.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -427,7 +428,7 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#6366F1',
+    backgroundColor: colors.brand.indigo,
   },
   reasonContent: {
     flex: 1,
@@ -435,12 +436,12 @@ const styles = StyleSheet.create({
   reasonLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   reasonDescription: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
   detailsContainer: {
@@ -450,30 +451,30 @@ const styles = StyleSheet.create({
   detailsLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 12,
   },
   detailsInput: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderRadius: 12,
     padding: 12,
     fontSize: 15,
-    color: '#111827',
+    color: colors.neutral[900],
     minHeight: 100,
     maxHeight: 150,
   },
   characterCount: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'right',
     marginTop: 6,
   },
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     padding: 12,
     borderRadius: 8,
     marginTop: 16,
@@ -482,13 +483,13 @@ const styles = StyleSheet.create({
   errorText: {
     flex: 1,
     fontSize: 14,
-    color: '#EF4444',
+    color: colors.error,
     fontWeight: '500',
   },
   infoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
     padding: 12,
     borderRadius: 8,
     marginTop: 16,
@@ -498,7 +499,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 13,
-    color: '#6366F1',
+    color: colors.brand.indigo,
     lineHeight: 18,
   },
   footer: {
@@ -506,7 +507,7 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
     gap: 12,
   },
   cancelButton: {
@@ -514,15 +515,15 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   submitButtonWrapper: {
     flex: 1,
@@ -542,7 +543,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   successContainer: {
     padding: 40,
@@ -556,13 +557,13 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
     textAlign: 'center',
   },
   successMessage: {
     fontSize: 15,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 22,
     paddingHorizontal: 20,

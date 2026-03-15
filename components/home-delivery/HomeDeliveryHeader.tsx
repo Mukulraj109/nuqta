@@ -13,13 +13,14 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { ThemedText } from '@/components/ThemedText';
 import { HomeDeliveryHeaderProps } from '@/types/home-delivery.types';
+import { colors } from '@/constants/theme';
 
 // Nuqta Design System Colors
 const COLORS = {
-  primary: '#1a3a52',
-  primaryDark: '#1a3a52',
-  gold: '#ffcd57',
-  navy: '#0B2240',
+  primary: colors.nileBlue,
+  primaryDark: colors.nileBlue,
+  gold: colors.lightMustard,
+  navy: colors.brand.navyDark,
   surface: '#F7FAFC',
   glassWhite: 'rgba(255, 255, 255, 0.6)',
   glassBorder: 'rgba(255, 255, 255, 0.3)',
@@ -158,7 +159,7 @@ function _HomeDeliveryHeaderInner({
               ref={searchInputRef}
               style={styles.searchInput}
               placeholder="Search products, brands, stores..."
-              placeholderTextColor="#9AA7B2"
+              placeholderTextColor={colors.gray[400]}
               value={searchQuery}
               onChangeText={onSearchChange}
               onSubmitEditing={handleSearch}

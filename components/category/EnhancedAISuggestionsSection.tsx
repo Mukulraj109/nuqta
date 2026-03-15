@@ -10,17 +10,18 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { EnhancedAISuggestionsSectionProps, AISuggestion } from '@/types/categoryTypes';
+import { colors } from '@/constants/theme';
 
 // Rez Brand Colors
 const COLORS = {
-  primaryGreen: '#ffcd57',
-  primaryGold: '#F59E0B',
-  purple: '#8B5CF6',
+  primaryGreen: colors.lightMustard,
+  primaryGold: colors.warningScale[400],
+  purple: colors.brand.purpleLight,
   purpleLight: 'rgba(139, 92, 246, 0.2)',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#FFFFFF',
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.background.primary,
 };
 
 const EnhancedAISuggestionsSection: React.FC<EnhancedAISuggestionsSectionProps> = ({

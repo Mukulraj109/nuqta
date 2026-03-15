@@ -13,6 +13,7 @@ import Slider from '@/components/common/CrossPlatformSlider';
 import { ThemedText } from '@/components/ThemedText';
 import { CategoryFilter } from '@/types/category.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface CategoryFiltersProps {
   filters: CategoryFilter[];
@@ -58,7 +59,7 @@ function CategoryFilters({
           <Ionicons
             name={expandedFilters.has(filter.id) ? 'chevron-up' : 'chevron-down'}
             size={20}
-            color="#6B7280"
+            color={colors.neutral[500]}
           />
         </Pressable>
 
@@ -92,7 +93,7 @@ function CategoryFilters({
                       <Ionicons
                         name={option.icon as any}
                         size={16}
-                        color={isSelected ? '#FFFFFF' : '#6B7280'}
+                        color={isSelected ? colors.background.primary : colors.neutral[500]}
                         style={styles.optionIcon}
                       />
                     )}
@@ -138,7 +139,7 @@ function CategoryFilters({
           <Ionicons
             name={expandedFilters.has(filter.id) ? 'chevron-up' : 'chevron-down'}
             size={20}
-            color="#6B7280"
+            color={colors.neutral[500]}
           />
         </Pressable>
 
@@ -172,7 +173,7 @@ function CategoryFilters({
                         isSelected && styles.checkedCheckbox,
                       ]}>
                         {isSelected && (
-                          <Ionicons name="checkmark" size={12} color="#FFFFFF" />
+                          <Ionicons name="checkmark" size={12} color={colors.background.primary} />
                         )}
                       </View>
                       <ThemedText style={styles.multipleOptionText}>
@@ -212,7 +213,7 @@ function CategoryFilters({
           <Ionicons
             name={expandedFilters.has(filter.id) ? 'chevron-up' : 'chevron-down'}
             size={20}
-            color="#6B7280"
+            color={colors.neutral[500]}
           />
         </Pressable>
 
@@ -237,8 +238,8 @@ function CategoryFilters({
                     maximumValue={activeValue.max}
                     value={activeValue.min}
                     step={filter.range?.step || 1}
-                    minimumTrackTintColor="#ffcd57"
-                    maximumTrackTintColor="#E5E7EB"
+                    minimumTrackTintColor={colors.lightMustard}
+                    maximumTrackTintColor={colors.neutral[200]}
                     onValueChange={(value) => {
                       onFilterChange(filter.id, { ...activeValue, min: value });
                     }}
@@ -256,8 +257,8 @@ function CategoryFilters({
                     maximumValue={filter.range?.max || 100}
                     value={activeValue.max}
                     step={filter.range?.step || 1}
-                    minimumTrackTintColor="#ffcd57"
-                    maximumTrackTintColor="#E5E7EB"
+                    minimumTrackTintColor={colors.lightMustard}
+                    maximumTrackTintColor={colors.neutral[200]}
                     onValueChange={(value) => {
                       onFilterChange(filter.id, { ...activeValue, max: value });
                     }}
@@ -297,8 +298,8 @@ function CategoryFilters({
                   onValueChange={(value) => {
                     onFilterChange(filter.id, value ? option.value : null);
                   }}
-                  trackColor={{ false: '#E5E7EB', true: '#ffcd57' }}
-                  thumbColor={isSelected ? '#FFFFFF' : '#F3F4F6'}
+                  trackColor={{ false: colors.neutral[200], true: colors.lightMustard }}
+                  thumbColor={isSelected ? colors.background.primary : colors.neutral[100]}
                   accessibilityLabel={`${option.label} toggle`}
                   accessibilityState={{ checked: isSelected }}
                   accessibilityHint={isSelected ? 'Double tap to turn off' : 'Double tap to turn on'}
@@ -367,7 +368,7 @@ function CategoryFilters({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     marginVertical: 8,
     borderRadius: 16,
@@ -384,30 +385,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   resetButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 8,
   },
   resetButtonText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   filtersContainer: {
     maxHeight: 300,
   },
   filterSection: {
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   filterHeader: {
     flexDirection: 'row',
@@ -424,10 +425,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   activeFilterBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 10,
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -436,7 +437,7 @@ const styles = StyleSheet.create({
   activeFilterBadgeText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   filterOptions: {
     paddingBottom: 12,
@@ -450,12 +451,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 20,
     gap: 4,
   },
   selectedOptionChip: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   optionIcon: {
     marginRight: 4,
@@ -463,10 +464,10 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   selectedOptionText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   multipleOptionsContainer: {
     paddingHorizontal: 16,
@@ -484,17 +485,17 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     alignItems: 'center',
     justifyContent: 'center',
   },
   checkedCheckbox: {
-    backgroundColor: '#ffcd57',
-    borderColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
+    borderColor: colors.lightMustard,
   },
   multipleOptionText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   toggleOptions: {
     paddingHorizontal: 16,
@@ -508,7 +509,7 @@ const styles = StyleSheet.create({
   },
   toggleOptionText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   rangeContainer: {
     paddingHorizontal: 16,
@@ -516,7 +517,7 @@ const styles = StyleSheet.create({
   rangeValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     marginRight: 8,
   },
   rangeLabels: {
@@ -526,7 +527,7 @@ const styles = StyleSheet.create({
   },
   rangeLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   slidersContainer: {
     gap: 16,
@@ -537,7 +538,7 @@ const styles = StyleSheet.create({
   sliderLabel: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   slider: {
     height: 40,

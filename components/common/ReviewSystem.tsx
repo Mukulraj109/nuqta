@@ -18,6 +18,7 @@ import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformA
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import FileUploader from './FileUploader';
+import { colors } from '@/constants/theme';
 
 export interface Review {
   id: string;
@@ -217,7 +218,7 @@ function ReviewSystem({
           <Ionicons
             name={star <= rating ? 'star' : 'star-outline'}
             size={size}
-            color={star <= rating ? '#FFD700' : '#D1D5DB'}
+            color={star <= rating ? colors.brand.goldBright : colors.neutral[300]}
           />
         </Pressable>
       ))}
@@ -248,7 +249,7 @@ function ReviewSystem({
               onPress={() => setFilterBy(rating.toString() as FilterOption)}
             >
               <ThemedText style={styles.ratingLabel}>{rating}</ThemedText>
-              <Ionicons name="star" size={12} color="#FFD700" />
+              <Ionicons name="star" size={12} color={colors.brand.goldBright} />
               <View style={styles.progressBar}>
                 <View style={[styles.progressFill, { width: `${percentage}%` }]} />
               </View>
@@ -280,7 +281,7 @@ function ReviewSystem({
               <ThemedText style={styles.userName}>{review.userName}</ThemedText>
               {review.isVerifiedPurchase && (
                 <View style={styles.verifiedBadge}>
-                  <Ionicons name="checkmark-circle" size={14} color="#22C55E" />
+                  <Ionicons name="checkmark-circle" size={14} color={colors.success} />
                   <ThemedText style={styles.verifiedText}>Verified</ThemedText>
                 </View>
               )}
@@ -297,7 +298,7 @@ function ReviewSystem({
         <View style={styles.reviewActions}>
           {review.canEdit && (
             <Pressable style={styles.actionButton}>
-              <Ionicons name="create-outline" size={16} color="#666" />
+              <Ionicons name="create-outline" size={16} color={colors.midGray} />
             </Pressable>
           )}
           {review.canDelete && (
@@ -307,7 +308,7 @@ function ReviewSystem({
                 platformAlertDestructive('Delete Review', 'Are you sure you want to delete this review?', () => onDeleteReview(review.id), 'Delete');
               }}
             >
-              <Ionicons name="trash-outline" size={16} color="#EF4444" />
+              <Ionicons name="trash-outline" size={16} color={colors.error} />
             </Pressable>
           )}
         </View>
@@ -333,7 +334,7 @@ function ReviewSystem({
         {review.response && (
           <View style={styles.businessResponse}>
             <View style={styles.responseHeader}>
-              <Ionicons name="business" size={16} color="#8B5CF6" />
+              <Ionicons name="business" size={16} color={colors.brand.purpleLight} />
               <ThemedText style={styles.responseAuthor}>{review.response.author}</ThemedText>
               <ThemedText style={styles.responseDate}>
                 {formatTimeAgo(review.response.createdAt)}
@@ -351,7 +352,7 @@ function ReviewSystem({
           <Ionicons 
             name={review.isHelpful ? 'thumbs-up' : 'thumbs-up-outline'} 
             size={16} 
-            color={review.isHelpful ? '#8B5CF6' : '#666'} 
+            color={review.isHelpful ? colors.brand.purpleLight : colors.midGray} 
           />
           <ThemedText style={[
             styles.helpfulText,
@@ -369,7 +370,7 @@ function ReviewSystem({
       <View style={styles.formHeader}>
         <ThemedText style={styles.formTitle}>Write a Review</ThemedText>
         <Pressable onPress={() => setIsWritingReview(false)}>
-          <Ionicons name="close" size={24} color="#666" />
+          <Ionicons name="close" size={24} color={colors.midGray} />
         </Pressable>
       </View>
 
@@ -482,7 +483,7 @@ function ReviewSystem({
           <View style={styles.modalHeader}>
             <ThemedText style={styles.modalTitle}>Sort Reviews</ThemedText>
             <Pressable onPress={() => setShowSortModal(false)}>
-              <Ionicons name="close" size={24} color="#666" />
+              <Ionicons name="close" size={24} color={colors.midGray} />
             </Pressable>
           </View>
           
@@ -505,7 +506,7 @@ function ReviewSystem({
                 {option.label}
               </ThemedText>
               {sortBy === option.key && (
-                <Ionicons name="checkmark" size={20} color="#8B5CF6" />
+                <Ionicons name="checkmark" size={20} color={colors.brand.purpleLight} />
               )}
             </Pressable>
           ))}
@@ -528,7 +529,7 @@ function ReviewSystem({
             style={styles.writeReviewButton}
             onPress={() => setIsWritingReview(true)}
           >
-            <Ionicons name="create" size={20} color="#8B5CF6" />
+            <Ionicons name="create" size={20} color={colors.brand.purpleLight} />
             <ThemedText style={styles.writeReviewText}>Write a Review</ThemedText>
           </Pressable>
         )}
@@ -537,7 +538,7 @@ function ReviewSystem({
           style={styles.sortButton}
           onPress={() => setShowSortModal(true)}
         >
-          <Ionicons name="funnel" size={16} color="#666" />
+          <Ionicons name="funnel" size={16} color={colors.midGray} />
           <ThemedText style={styles.sortButtonText}>Sort</ThemedText>
         </Pressable>
       </View>
@@ -556,14 +557,14 @@ function ReviewSystem({
             <RefreshControl
               refreshing={isRefreshing}
               onRefresh={handleRefresh}
-              tintColor="#8B5CF6"
+              tintColor={colors.brand.purpleLight}
             />
           ) : undefined
         }
         ListEmptyComponent={
           !isLoading ? (
             <View style={styles.emptyState}>
-              <Ionicons name="star-outline" size={64} color="#D1D5DB" />
+              <Ionicons name="star-outline" size={64} color={colors.neutral[300]} />
               <ThemedText style={styles.emptyTitle}>No Reviews Yet</ThemedText>
               <ThemedText style={styles.emptyText}>
                 Be the first to share your experience!
@@ -578,7 +579,7 @@ function ReviewSystem({
       {/* Loading */}
       {isLoading && (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#8B5CF6" />
+          <ActivityIndicator size="large" color={colors.brand.purpleLight} />
         </View>
       )}
 
@@ -600,7 +601,7 @@ function ReviewSystem({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.offWhite,
   },
   
   // Rating Summary
@@ -609,7 +610,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.gray[200],
   },
   ratingBreakdown: {
     flexDirection: 'row',
@@ -622,7 +623,7 @@ const styles = StyleSheet.create({
   ratingNumber: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 4,
   },
   starsContainer: {
@@ -634,7 +635,7 @@ const styles = StyleSheet.create({
   },
   totalReviews: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
   },
   ratingBars: {
     flex: 1,
@@ -646,25 +647,25 @@ const styles = StyleSheet.create({
   },
   ratingLabel: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     width: 12,
     marginRight: 4,
   },
   progressBar: {
     flex: 1,
     height: 6,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.gray[200],
     borderRadius: 3,
     marginHorizontal: 8,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#FFD700',
+    backgroundColor: colors.brand.goldBright,
   },
   ratingCount: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     width: 20,
     textAlign: 'right',
   },
@@ -678,20 +679,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.gray[200],
   },
   writeReviewButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F8F7FF',
     borderWidth: 1,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
   writeReviewText: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
     marginLeft: 8,
   },
@@ -702,7 +703,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   sortButtonText: {
-    color: '#666',
+    color: colors.midGray,
     marginLeft: 6,
   },
   
@@ -718,13 +719,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginTop: 16,
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -761,7 +762,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -782,20 +783,20 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginRight: 8,
   },
   verifiedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 12,
   },
   verifiedText: {
     fontSize: 10,
-    color: '#22C55E',
+    color: colors.success,
     fontWeight: '600',
     marginLeft: 2,
   },
@@ -805,7 +806,7 @@ const styles = StyleSheet.create({
   },
   reviewDate: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     marginLeft: 8,
   },
   reviewActions: {
@@ -823,12 +824,12 @@ const styles = StyleSheet.create({
   reviewTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 8,
   },
   reviewText: {
     fontSize: 14,
-    color: '#333',
+    color: colors.darkGray,
     lineHeight: 20,
     marginBottom: 12,
   },
@@ -843,10 +844,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginRight: 8,
     marginBottom: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
   },
   businessResponse: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.offWhite,
     borderRadius: 8,
     padding: 12,
     marginBottom: 12,
@@ -859,17 +860,17 @@ const styles = StyleSheet.create({
   responseAuthor: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     marginLeft: 6,
     marginRight: 8,
   },
   responseDate: {
     fontSize: 11,
-    color: '#666',
+    color: colors.midGray,
   },
   responseText: {
     fontSize: 13,
-    color: '#333',
+    color: colors.darkGray,
     lineHeight: 18,
   },
   helpfulButton: {
@@ -879,16 +880,16 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 16,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.offWhite,
   },
   helpfulText: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     marginLeft: 6,
     fontWeight: '500',
   },
   helpfulTextActive: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   
   // New Review Form
@@ -905,12 +906,12 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.gray[200],
   },
   formTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
   },
   
   // Form Sections
@@ -921,13 +922,13 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 12,
     alignSelf: 'flex-start',
   },
   ratingDescription: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     marginTop: 8,
   },
   inputSection: {
@@ -935,27 +936,27 @@ const styles = StyleSheet.create({
   },
   titleInput: {
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#333',
+    color: colors.darkGray,
   },
   contentInput: {
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#333',
+    color: colors.darkGray,
     height: 120,
     textAlignVertical: 'top',
   },
   characterCount: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'right',
     marginTop: 4,
   },
@@ -976,7 +977,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
   },
   removeImageButton: {
     position: 'absolute',
@@ -985,19 +986,19 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     justifyContent: 'center',
     alignItems: 'center',
   },
   submitButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 32,
   },
   submitButtonDisabled: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   submitButtonText: {
     color: 'white',
@@ -1024,12 +1025,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.gray[200],
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   sortOption: {
     flexDirection: 'row',
@@ -1043,10 +1044,10 @@ const styles = StyleSheet.create({
   },
   sortOptionText: {
     fontSize: 16,
-    color: '#333',
+    color: colors.darkGray,
   },
   sortOptionTextSelected: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
   },
 });

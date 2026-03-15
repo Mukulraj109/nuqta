@@ -21,6 +21,7 @@ import {
 import { useAppServices } from '@/hooks/useAppServices';
 import AppProviders from './setup/AppProviders';
 import logger, { installProductionConsoleGuard } from '@/utils/logger';
+import { colors } from '@/constants/theme';
 
 const FONT_TIMEOUT_MS = 5000;
 
@@ -64,7 +65,7 @@ function RootLayout() {
   } = useAppServices(fontsReady);
 
   if (!fontsReady) {
-    return <View style={{ flex: 1, backgroundColor: systemScheme === 'dark' ? '#121212' : '#1a3a52' }} />;
+    return <View style={{ flex: 1, backgroundColor: systemScheme === 'dark' ? '#121212' : colors.nileBlue }} />;
   }
 
   return (

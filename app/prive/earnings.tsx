@@ -26,6 +26,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/priveTheme';
 import { PriveSkeletonBlock } from '@/components/prive/PriveSkeletonBlock';
 import priveApi, { EarningItem, EarningsSummary } from '@/services/priveApi';
+import { colors } from '@/constants/theme';
 
 // --- Icon maps ---
 
@@ -367,7 +368,7 @@ export default function EarningsScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#1F2937', '#111827', '#0A0A0A']}
+        colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]}
         style={StyleSheet.absoluteFill}
       />
       <SafeAreaView style={styles.safeArea}>

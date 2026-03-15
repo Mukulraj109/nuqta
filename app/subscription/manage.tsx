@@ -22,6 +22,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { ManageSubscriptionSkeleton } from '@/components/subscription/SubscriptionSkeleton';
 import PaymentFailedBanner from '@/components/subscription/PaymentFailedBanner';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 // StickyCTAContainer available for future use
 
 export default function SubscriptionManagePage() {
@@ -222,25 +223,25 @@ export default function SubscriptionManagePage() {
                 'Total Savings',
                 `${currencySymbol}${stats.usage?.totalSavings || 0}`,
                 'cash-outline',
-                '#10B981'
+                colors.successScale[400]
               )}
               {renderStatCard(
                 'Orders This Month',
                 stats.usage?.ordersThisMonth || 0,
                 'cart-outline',
-                '#8B5CF6'
+                colors.brand.purpleLight
               )}
               {renderStatCard(
                 'Cashback Earned',
                 `${currencySymbol}${stats.usage?.cashbackEarned || 0}`,
                 'wallet-outline',
-                '#F59E0B'
+                colors.warningScale[400]
               )}
               {renderStatCard(
                 'Delivery Saved',
                 `${currencySymbol}${stats.usage?.deliveryFeesSaved || 0}`,
                 'bicycle-outline',
-                '#3B82F6'
+                colors.infoScale[400]
               )}
             </View>
 

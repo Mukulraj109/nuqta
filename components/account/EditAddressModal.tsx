@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ACCOUNT_COLORS } from '@/types/account.types';
 import { Address, AddressType, AddressUpdate } from '@/services/addressApi';
+import { colors } from '@/constants/theme';
 
 interface EditAddressModalProps {
   visible: boolean;

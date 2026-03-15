@@ -18,6 +18,7 @@ import {
   Timing,
 } from '@/constants/DesignSystem';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface Section6Props {
   dynamicData?: {
@@ -222,7 +223,7 @@ export default memo(function Section6({ dynamicData, cardType }: Section6Props) 
             <Ionicons
               name={showDetails ? "chevron-up" : "chevron-down"}
               size={18}
-              color="#ffcd57"
+              color={colors.lightMustard}
             />
           </Pressable>
 
@@ -244,7 +245,7 @@ export default memo(function Section6({ dynamicData, cardType }: Section6Props) 
               accessibilityLabel={`View all outlets for ${storeName || 'store'}`}
               accessibilityHint="Double tap to see store outlet locations"
             >
-              <Ionicons name="location-outline" size={18} color="#ffcd57" />
+              <Ionicons name="location-outline" size={18} color={colors.lightMustard} />
               <ThemedText style={styles.outletsButtonText}>View outlets</ThemedText>
             </Pressable>
           )}
@@ -256,7 +257,7 @@ export default memo(function Section6({ dynamicData, cardType }: Section6Props) 
         <ScrollView style={styles.voucherDetailsCard} showsVerticalScrollIndicator={false}>
           {loading ? (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#ffcd57" />
+              <ActivityIndicator size="large" color={colors.lightMustard} />
               <ThemedText style={styles.loadingText}>Loading vouchers...</ThemedText>
             </View>
           ) : vouchers.length > 0 ? (
@@ -272,7 +273,7 @@ export default memo(function Section6({ dynamicData, cardType }: Section6Props) 
 
               {/* Icon */}
               <View style={styles.voucherIconContainer}>
-                <Ionicons name="flash" size={24} color="#ffcd57" />
+                <Ionicons name="flash" size={24} color={colors.lightMustard} />
               </View>
 
               {/* Title */}
@@ -293,7 +294,7 @@ export default memo(function Section6({ dynamicData, cardType }: Section6Props) 
                   </>
                 )}
                 <ThemedText style={styles.moreDetailsText}>More details</ThemedText>
-                <Ionicons name="information-circle-outline" size={16} color="#ffcd57" style={styles.infoIcon} />
+                <Ionicons name="information-circle-outline" size={16} color={colors.lightMustard} style={styles.infoIcon} />
               </Pressable>
 
               {/* Restrictions */}
@@ -335,7 +336,7 @@ export default memo(function Section6({ dynamicData, cardType }: Section6Props) 
                   accessibilityState={{ disabled: isAddingVoucher || !voucher.canRedeem, busy: isAddingVoucher }}
                 >
                   <LinearGradient
-                    colors={['#ffcd57', '#E6B84E']}
+                    colors={[colors.lightMustard, colors.brand.goldRich]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                     style={[styles.addButton, (isAddingVoucher || !voucher.canRedeem) && styles.addButtonDisabled]}
@@ -466,7 +467,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: Spacing.lg,
     right: Spacing.lg,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm + 2,
     borderRadius: BorderRadius.full,
@@ -481,7 +482,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: BorderRadius.full,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.base,
@@ -598,7 +599,7 @@ const styles = StyleSheet.create({
   },
 
   claimedBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingVertical: Spacing.base,
     paddingHorizontal: Spacing['2xl'] - 4,
     borderRadius: BorderRadius.md,

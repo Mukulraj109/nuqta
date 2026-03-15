@@ -18,6 +18,7 @@ import {
   MerchantMatch,
 } from '@/types/billVerification.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface ManualCorrectionFormProps {
   visible: boolean;
@@ -111,7 +112,7 @@ function ManualCorrectionForm({
             accessibilityLabel="Close form"
             accessibilityHint="Double tap to close the bill correction form"
           >
-            <Ionicons name="close" size={24} color="#333" />
+            <Ionicons name="close" size={24} color={colors.darkGray} />
           </Pressable>
           <Text
             style={styles.headerTitle}
@@ -390,7 +391,7 @@ function ManualCorrectionForm({
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Select Merchant</Text>
                 <Pressable onPress={() => setShowMerchantPicker(false)}>
-                  <Ionicons name="close" size={24} color="#666" />
+                  <Ionicons name="close" size={24} color={colors.midGray} />
                 </Pressable>
               </View>
 
@@ -406,7 +407,7 @@ function ManualCorrectionForm({
                       <View style={styles.merchantItemMeta}>
                         <Text style={styles.merchantItemMatch}>{merchant.matchScore}% match</Text>
                         <View style={styles.cashbackBadge}>
-                          <Ionicons name="gift" size={12} color="#4CAF50" />
+                          <Ionicons name="gift" size={12} color={colors.brand.emerald} />
                           <Text style={styles.cashbackText}>{merchant.cashbackPercentage}%</Text>
                         </View>
                       </View>
@@ -426,21 +427,21 @@ function ManualCorrectionForm({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.offWhite,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5E5',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   content: {
     flex: 1,
@@ -467,20 +468,20 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 8,
   },
   required: {
     color: '#F44336',
   },
   input: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
     borderColor: '#E5E5E5',
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-    color: '#333',
+    color: colors.darkGray,
   },
   inputError: {
     borderColor: '#F44336',
@@ -500,7 +501,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   merchantSelector: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
     borderColor: '#E5E5E5',
     borderRadius: 12,
@@ -511,7 +512,7 @@ const styles = StyleSheet.create({
   },
   selectedText: {
     fontSize: 16,
-    color: '#333',
+    color: colors.darkGray,
   },
   placeholderText: {
     fontSize: 16,
@@ -534,7 +535,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopWidth: 1,
     borderTopColor: '#E5E5E5',
     gap: 12,
@@ -550,7 +551,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#666',
+    color: colors.midGray,
   },
   submitButton: {
     flex: 2,
@@ -562,7 +563,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   modalContainer: {
     flex: 1,
@@ -570,7 +571,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: '70%',
@@ -586,7 +587,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   merchantList: {
     flex: 1,
@@ -605,7 +606,7 @@ const styles = StyleSheet.create({
   merchantItemName: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 4,
   },
   merchantItemMeta: {
@@ -615,12 +616,12 @@ const styles = StyleSheet.create({
   },
   merchantItemMatch: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
   },
   cashbackBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E8F5E9',
+    backgroundColor: colors.greenMist,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 12,
@@ -628,7 +629,7 @@ const styles = StyleSheet.create({
   },
   cashbackText: {
     fontSize: 11,
-    color: '#4CAF50',
+    color: colors.brand.emerald,
     fontWeight: '600',
   },
 });

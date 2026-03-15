@@ -21,6 +21,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface CashbackSummaryHeaderCardProps {
   total: number;
@@ -109,7 +110,7 @@ const CashbackSummaryHeaderCard: React.FC<CashbackSummaryHeaderCardProps> = ({
           ]}
         >
           <LinearGradient
-            colors={['#1a3a52', '#243f55', '#2d4a5f']}
+            colors={[colors.nileBlue, '#243f55', '#2d4a5f']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.card}
@@ -142,7 +143,7 @@ const CashbackSummaryHeaderCard: React.FC<CashbackSummaryHeaderCardProps> = ({
       >
         <Pressable onPress={handlePress}>
           <LinearGradient
-            colors={['#1a3a52', '#1f3d56', '#243f55']}
+            colors={[colors.nileBlue, '#1f3d56', '#243f55']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.card}
@@ -162,7 +163,7 @@ const CashbackSummaryHeaderCard: React.FC<CashbackSummaryHeaderCardProps> = ({
                 colors={['rgba(255,205,87,0.25)', 'rgba(255,205,87,0.1)']}
                 style={styles.walletIconContainer}
               >
-                <Ionicons name="wallet" size={22} color="#ffcd57" />
+                <Ionicons name="wallet" size={22} color={colors.lightMustard} />
               </LinearGradient>
             </View>
 
@@ -178,7 +179,7 @@ const CashbackSummaryHeaderCard: React.FC<CashbackSummaryHeaderCardProps> = ({
             <View style={styles.statsRow}>
               <View style={styles.statItem}>
                 <View style={styles.statIconRow}>
-                  <View style={[styles.statusDot, { backgroundColor: '#ffd7b5' }]} />
+                  <View style={[styles.statusDot, { backgroundColor: colors.lightPeach }]} />
                   <Text style={styles.statLabel}>PENDING</Text>
                 </View>
                 <Text style={styles.statValue}>{formatAmount(pending)}</Text>
@@ -198,7 +199,7 @@ const CashbackSummaryHeaderCard: React.FC<CashbackSummaryHeaderCardProps> = ({
 
               <View style={styles.statItem}>
                 <View style={styles.statIconRow}>
-                  <View style={[styles.statusDot, { backgroundColor: '#ffcd57' }]} />
+                  <View style={[styles.statusDot, { backgroundColor: colors.lightMustard }]} />
                   <Text style={styles.statLabel}>AVAILABLE</Text>
                 </View>
                 <Text style={[styles.statValue, styles.availableValue]}>{formatAmount(available)}</Text>
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.35,
         shadowRadius: 16,
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
   totalAmount: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: -1,
   },
   walletIconContainer: {
@@ -339,10 +340,10 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   availableValue: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   statDivider: {
     width: 1,

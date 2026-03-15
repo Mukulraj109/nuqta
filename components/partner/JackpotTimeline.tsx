@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { JackpotMilestone } from '@/types/partner.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface JackpotTimelineProps {
   milestones: JackpotMilestone[];
@@ -122,7 +123,7 @@ function JackpotTimeline({
       <View style={styles.header}>
         <View style={styles.trophyContainer}>
           <LinearGradient
-            colors={['#FFC857', '#FF9F1C']}
+            colors={[colors.brand.goldWarm, colors.warning]}
             style={styles.trophyGradient}
           >
             <Ionicons name="trophy" size={24} color="white" />
@@ -146,7 +147,7 @@ function JackpotTimeline({
         {/* Progress Line */}
         <View style={styles.timelineLine}>
           <LinearGradient
-            colors={['#ffcd57', '#1a3a52']}
+            colors={[colors.lightMustard, colors.nileBlue]}
             style={[styles.timelineProgress, { width: `${Math.min(progressPercentage, 100)}%` }]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -163,7 +164,7 @@ function JackpotTimeline({
 
         {/* End Point */}
         <View style={[styles.endPoint, styles.milestoneMarker]}>
-          <Ionicons name="flag" size={14} color="#9CA3AF" />
+          <Ionicons name="flag" size={14} color={colors.neutral[400]} />
         </View>
       </View>
 
@@ -216,23 +217,23 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   progressContainer: {
     marginBottom: 24,
   },
   progressText: {
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
     marginBottom: 4,
   },
   progressAmount: {
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   progressSubtext: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 16,
   },
   timelineContainer: {
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     height: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 2,
   },
   timelineProgress: {
@@ -272,7 +273,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
@@ -280,17 +281,17 @@ const styles = StyleSheet.create({
     top: 48,
   },
   activeMilestoneMarker: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   nextMilestoneMarker: {
-    backgroundColor: '#ffcd57',
-    borderColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
+    borderColor: colors.lightMustard,
   },
   milestoneInner: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#9CA3AF',
+    backgroundColor: colors.neutral[400],
   },
   milestoneInfo: {
     position: 'absolute',
@@ -305,26 +306,26 @@ const styles = StyleSheet.create({
     top: 80,
   },
   milestoneCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 12,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     width: '100%',
   },
   activeMilestoneCard: {
-    backgroundColor: '#ffcd57',
-    borderColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
+    borderColor: colors.lightMustard,
   },
   nextMilestoneCard: {
-    backgroundColor: '#ffcd57',
-    borderColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
+    borderColor: colors.lightMustard,
   },
   milestoneAmount: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
   },
   activeMilestoneAmount: {
@@ -336,7 +337,7 @@ const styles = StyleSheet.create({
   milestoneTitle: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#4B5563',
+    color: colors.neutral[600],
     textAlign: 'center',
     marginBottom: 6,
   },
@@ -354,7 +355,7 @@ const styles = StyleSheet.create({
   },
   rewardValue: {
     fontSize: 9,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   activeRewardValue: {
@@ -375,28 +376,28 @@ const styles = StyleSheet.create({
   },
   arrowDown: {
     borderTopWidth: 8,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     marginTop: 4,
   },
   arrowUp: {
     borderBottomWidth: 8,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
     marginBottom: 4,
   },
   activeArrow: {
-    borderTopColor: '#ffcd57',
-    borderBottomColor: '#ffcd57',
+    borderTopColor: colors.lightMustard,
+    borderBottomColor: colors.lightMustard,
   },
   nextArrow: {
-    borderTopColor: '#ffcd57',
-    borderBottomColor: '#ffcd57',
+    borderTopColor: colors.lightMustard,
+    borderBottomColor: colors.lightMustard,
   },
   legend: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   legendItem: {
     flexDirection: 'row',
@@ -410,7 +411,7 @@ const styles = StyleSheet.create({
   },
   legendText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

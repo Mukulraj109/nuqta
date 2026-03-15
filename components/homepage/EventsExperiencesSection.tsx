@@ -16,16 +16,17 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import eventsApiService from '@/services/eventsApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_GAP = 8;
 
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#1a3a52',
-  gray600: '#6B7280',
-  mustard: '#ffcd57',
-  green500: '#ffcd57', // Migrated to mustard
+  white: colors.background.primary,
+  navy: colors.nileBlue,
+  gray600: colors.neutral[500],
+  mustard: colors.lightMustard,
+  green500: colors.lightMustard, // Migrated to mustard
 };
 
 // Event category configurations
@@ -45,7 +46,7 @@ const FALLBACK_CATEGORIES: EventCategoryConfig[] = [
     title: 'Movies',
     subtitle: 'Latest blockbusters',
     icon: '🎬',
-    gradientColors: ['#1a3a52', '#243f55', '#2d4a5f'],
+    gradientColors: [colors.nileBlue, '#243f55', '#2d4a5f'],
     discount: 'Up to 20% off',
   },
   {
@@ -53,7 +54,7 @@ const FALLBACK_CATEGORIES: EventCategoryConfig[] = [
     title: 'Concerts',
     subtitle: 'Live music',
     icon: '🎤',
-    gradientColors: ['#ffd7b5', '#E8B896'],
+    gradientColors: [colors.lightPeach, colors.brand.sand],
     badge: '2x coins',
   },
   {
@@ -454,7 +455,7 @@ const styles = StyleSheet.create({
   },
   workshopsArrow: {
     fontSize: 18,
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 });
 

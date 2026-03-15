@@ -16,6 +16,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface OfferCardCompactProps {
   id: string;
@@ -49,10 +50,10 @@ export const OfferCardCompact: React.FC<OfferCardCompactProps> = ({
   const styles = StyleSheet.create({
     container: {
       width: 160,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 1,
-      borderColor: isDark ? theme.colors.border.light : '#E5E7EB',
+      borderColor: isDark ? theme.colors.border.light : colors.neutral[200],
       overflow: 'hidden',
       ...(isDark ? {} : Shadows.medium),
     },
@@ -83,13 +84,13 @@ export const OfferCardCompact: React.FC<OfferCardCompactProps> = ({
     newBadgeText: {
       fontSize: 9,
       fontWeight: '700',
-      color: '#FFFFFF',
+      color: colors.background.primary,
       marginLeft: 2,
     },
     trendingBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#EF4444',
+      backgroundColor: colors.error,
       paddingHorizontal: 6,
       paddingVertical: 3,
       borderRadius: 5,
@@ -97,14 +98,14 @@ export const OfferCardCompact: React.FC<OfferCardCompactProps> = ({
     trendingBadgeText: {
       fontSize: 9,
       fontWeight: '700',
-      color: '#FFFFFF',
+      color: colors.background.primary,
       marginLeft: 2,
     },
     discountBadge: {
       position: 'absolute',
       top: 8,
       right: 8,
-      backgroundColor: '#FEE2E2',
+      backgroundColor: colors.errorScale[100],
       paddingHorizontal: 6,
       paddingVertical: 3,
       borderRadius: 5,
@@ -112,7 +113,7 @@ export const OfferCardCompact: React.FC<OfferCardCompactProps> = ({
     discountText: {
       fontSize: 10,
       fontWeight: '800',
-      color: '#DC2626',
+      color: colors.error,
     },
     storeLogoContainer: {
       position: 'absolute',
@@ -121,9 +122,9 @@ export const OfferCardCompact: React.FC<OfferCardCompactProps> = ({
       width: 32,
       height: 32,
       borderRadius: 8,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.background.primary,
       borderWidth: 2,
-      borderColor: '#FFFFFF',
+      borderColor: colors.background.primary,
       overflow: 'hidden',
       ...Shadows.subtle,
       alignItems: 'center',
@@ -141,7 +142,7 @@ export const OfferCardCompact: React.FC<OfferCardCompactProps> = ({
       justifyContent: 'center',
     },
     storeLogoText: {
-      color: '#FFFFFF',
+      color: colors.background.primary,
       fontSize: 14,
       fontWeight: '700',
     },
@@ -208,13 +209,13 @@ export const OfferCardCompact: React.FC<OfferCardCompactProps> = ({
         <View style={styles.badgeContainer}>
           {isNew && (
             <View style={styles.newBadge}>
-              <Ionicons name="sparkles" size={8} color="#FFFFFF" />
+              <Ionicons name="sparkles" size={8} color={colors.background.primary} />
               <Text style={styles.newBadgeText}>NEW</Text>
             </View>
           )}
           {isTrending && !isNew && (
             <View style={styles.trendingBadge}>
-              <Ionicons name="trending-up" size={8} color="#FFFFFF" />
+              <Ionicons name="trending-up" size={8} color={colors.background.primary} />
               <Text style={styles.trendingBadgeText}>HOT</Text>
             </View>
           )}

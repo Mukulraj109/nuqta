@@ -9,6 +9,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { triggerImpact } from "@/utils/haptics";
 import { ThemedText } from "@/components/ThemedText";
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -60,7 +61,7 @@ export default function StoreLoyaltySection({
 
         {/* Next Reward */}
         <View style={styles.nextRewardRow}>
-          <Ionicons name="gift" size={18} color="#FFFFFF" />
+          <Ionicons name="gift" size={18} color={colors.background.primary} />
           <ThemedText style={styles.nextRewardText}>
             Next visit → {nextReward}
           </ThemedText>
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   progressValue: {
     fontSize: 36,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.background.primary,
   },
   iconContainer: {
     position: "absolute",
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
   nextRewardText: {
     fontSize: 15,
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: colors.background.primary,
   },
   viewDetailsButton: {
     backgroundColor: "rgba(255, 255, 255, 0.95)",

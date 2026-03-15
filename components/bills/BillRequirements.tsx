@@ -5,6 +5,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 function BillRequirements() {
   const { getCurrencySymbol } = useRegion();
@@ -21,7 +22,7 @@ function BillRequirements() {
       icon: 'resize-outline',
       title: 'Full Bill',
       description: 'Capture the entire bill including merchant name, amount, and date',
-      color: '#4CAF50',
+      color: colors.brand.emerald,
     },
     {
       icon: 'calendar-outline',
@@ -103,12 +104,12 @@ function BillRequirements() {
       {/* Photography Tips */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Ionicons name="camera" size={20} color="#4CAF50" />
+          <Ionicons name="camera" size={20} color={colors.brand.emerald} />
           <Text style={styles.sectionTitle}>Photography Tips</Text>
         </View>
         {tips.map((tip, index) => (
           <View key={index} style={styles.tipRow}>
-            <Ionicons name="checkmark-circle" size={18} color="#4CAF50" />
+            <Ionicons name="checkmark-circle" size={18} color={colors.brand.emerald} />
             <Text style={styles.tipText}>{tip}</Text>
           </View>
         ))}
@@ -120,7 +121,7 @@ function BillRequirements() {
 
         <View style={styles.dosCard}>
           <View style={styles.dosHeader}>
-            <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
+            <Ionicons name="checkmark-circle" size={20} color={colors.brand.emerald} />
             <Text style={styles.dosTitle}>Do's</Text>
           </View>
           {dosDonts.dos.map((item, index) => (
@@ -155,10 +156,10 @@ function BillRequirements() {
         <View style={styles.examplesRow}>
           <View style={styles.exampleCard}>
             <View style={[styles.exampleBadge, styles.goodBadge]}>
-              <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+              <Ionicons name="checkmark" size={16} color={colors.background.primary} />
             </View>
             <View style={styles.examplePlaceholder}>
-              <Ionicons name="document-text" size={40} color="#4CAF50" />
+              <Ionicons name="document-text" size={40} color={colors.brand.emerald} />
             </View>
             <Text style={styles.exampleLabel}>Good Example</Text>
             <Text style={styles.exampleDescription}>Clear, well-lit, all details visible</Text>
@@ -166,7 +167,7 @@ function BillRequirements() {
 
           <View style={styles.exampleCard}>
             <View style={[styles.exampleBadge, styles.badBadge]}>
-              <Ionicons name="close" size={16} color="#FFFFFF" />
+              <Ionicons name="close" size={16} color={colors.background.primary} />
             </View>
             <View style={styles.examplePlaceholder}>
               <Ionicons name="document-text" size={40} color="#F44336" />
@@ -203,10 +204,10 @@ function BillRequirements() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.offWhite,
   },
   header: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 20,
     alignItems: 'center',
     borderBottomWidth: 1,
@@ -215,13 +216,13 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     marginTop: 12,
     marginBottom: 8,
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -237,12 +238,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 12,
   },
   requirementCard: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
@@ -261,18 +262,18 @@ const styles = StyleSheet.create({
   requirementTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 4,
   },
   requirementDescription: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     lineHeight: 18,
   },
   tipRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 12,
     borderRadius: 8,
     marginBottom: 8,
@@ -281,11 +282,11 @@ const styles = StyleSheet.create({
   tipText: {
     flex: 1,
     fontSize: 13,
-    color: '#333',
+    color: colors.darkGray,
     lineHeight: 18,
   },
   dosCard: {
-    backgroundColor: '#E8F5E9',
+    backgroundColor: colors.greenMist,
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
   dosTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#4CAF50',
+    color: colors.brand.emerald,
   },
   doRow: {
     flexDirection: 'row',
@@ -311,13 +312,13 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#4CAF50',
+    backgroundColor: colors.brand.emerald,
     marginTop: 6,
   },
   doText: {
     flex: 1,
     fontSize: 13,
-    color: '#333',
+    color: colors.darkGray,
   },
   dontsCard: {
     backgroundColor: '#FFEBEE',
@@ -351,7 +352,7 @@ const styles = StyleSheet.create({
   dontText: {
     flex: 1,
     fontSize: 13,
-    color: '#333',
+    color: colors.darkGray,
   },
   examplesRow: {
     flexDirection: 'row',
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   },
   exampleCard: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 12,
     alignItems: 'center',
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   goodBadge: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: colors.brand.emerald,
   },
   badBadge: {
     backgroundColor: '#F44336',
@@ -385,7 +386,7 @@ const styles = StyleSheet.create({
   examplePlaceholder: {
     width: '100%',
     height: 100,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.tint.warmGray,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -394,12 +395,12 @@ const styles = StyleSheet.create({
   exampleLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 4,
   },
   exampleDescription: {
     fontSize: 11,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
   },
   approvalCard: {

@@ -24,6 +24,7 @@ import LevelUpCelebration from '@/components/partner/LevelUpCelebration';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 // ReZ Premium Design System Colors
 export default function PartnerProfilePage() {
   const { goBack } = useSafeNavigation();
@@ -308,7 +309,7 @@ export default function PartnerProfilePage() {
         >
           <View style={styles.loadingContent}>
             <View style={styles.loadingSpinner}>
-              <Ionicons name="trophy" size={32} color={'#FFC857'} />
+              <Ionicons name="trophy" size={32} color={colors.brand.goldWarm} />
             </View>
             <Text style={styles.loadingText}>Loading Partner Profile...</Text>
             <Text style={styles.loadingSubtext}>Fetching your rewards</Text>
@@ -416,7 +417,7 @@ export default function PartnerProfilePage() {
               {/* Avatar with gold ring */}
               <View style={styles.avatarWrapper}>
                 <LinearGradient
-                  colors={['#FFC857', '#FF9F1C']}
+                  colors={[colors.brand.goldWarm, colors.warning]}
                   style={styles.avatarRing}
                 >
                   {profile?.avatar ? (
@@ -436,7 +437,7 @@ export default function PartnerProfilePage() {
                 </LinearGradient>
                 {/* Level badge */}
                 <View style={styles.levelBadge}>
-                  <LinearGradient colors={['#FFC857', '#FF9F1C']} style={styles.levelBadgeGradient}>
+                  <LinearGradient colors={[colors.brand.goldWarm, colors.warning]} style={styles.levelBadgeGradient}>
                     <Text style={styles.levelBadgeText}>{levelName}</Text>
                   </LinearGradient>
                 </View>
@@ -480,7 +481,7 @@ export default function PartnerProfilePage() {
               }}
             >
               <View style={styles.benefitsButtonInner}>
-                <Ionicons name="gift" size={18} color={'#FFC857'} />
+                <Ionicons name="gift" size={18} color={colors.brand.goldWarm} />
                 <Text style={styles.benefitsButtonText}>View My Benefits</Text>
                 <Ionicons name="chevron-forward" size={18} color="rgba(255,255,255,0.7)" />
               </View>
@@ -591,7 +592,7 @@ export default function PartnerProfilePage() {
                 )}
 
                 {level.locked && !level.future && (
-                  <Ionicons name="lock-closed" size={14} color={'#9AA7B2'} style={styles.lockIcon} />
+                  <Ionicons name="lock-closed" size={14} color={colors.gray[400]} style={styles.lockIcon} />
                 )}
               </View>
             ))}
@@ -600,7 +601,7 @@ export default function PartnerProfilePage() {
 
         {/* Important Information */}
         <View style={styles.infoSection}>
-          <LinearGradient colors={['#faf1e0', '#faf1e0']} style={styles.infoGradient}>
+          <LinearGradient colors={[colors.linen, colors.linen]} style={styles.infoGradient}>
             <View style={styles.infoHeader}>
               <View style={styles.infoIconWrapper}>
                 <Ionicons name="information-circle" size={20} color={Colors.gold} />
@@ -692,7 +693,7 @@ export default function PartnerProfilePage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
   },
 
   // Loading State
@@ -730,7 +731,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacing.xl,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
   },
   errorIconContainer: {
     width: 80,
@@ -748,7 +749,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   errorText: {
-    color: '#9AA7B2',
+    color: colors.gray[400],
     fontSize: Typography.bodyLarge.fontSize,
     textAlign: 'center',
     marginBottom: Spacing.xl,
@@ -1059,7 +1060,7 @@ const styles = StyleSheet.create({
   },
   sectionSubtitle: {
     fontSize: Typography.bodySmall.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
   },
 
   // Action Buttons
@@ -1110,7 +1111,7 @@ const styles = StyleSheet.create({
   },
   levelCard: {
     flex: 1,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderRadius: BorderRadius.lg,
     padding: 14,
     alignItems: 'center',
@@ -1144,14 +1145,14 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14,
     borderRadius: 7,
-    backgroundColor: '#FFC857',
+    backgroundColor: colors.brand.goldWarm,
     borderWidth: 2,
     borderColor: 'white',
   },
   levelCardLabel: {
     fontSize: Typography.overline.fontSize,
     fontWeight: '600',
-    color: '#9AA7B2',
+    color: colors.gray[400],
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 2,
@@ -1178,12 +1179,12 @@ const styles = StyleSheet.create({
   },
   levelDays: {
     fontSize: Typography.caption.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
     marginTop: 2,
   },
   futureLevelText: {
     fontSize: Typography.overline.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
     textAlign: 'center',
     lineHeight: 14,
   },
@@ -1222,7 +1223,7 @@ const styles = StyleSheet.create({
   },
   infoSubtitle: {
     fontSize: Typography.bodySmall.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
   },
   infoContent: {
     gap: Spacing.md,

@@ -5,6 +5,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { BillVerificationState } from '@/types/billVerification.types';
+import { colors } from '@/constants/theme';
 
 interface BillVerificationStatusProps {
   state: BillVerificationState;
@@ -39,7 +40,7 @@ function BillVerificationStatus({ state }: BillVerificationStatusProps) {
   const getStatusColor = () => {
     switch (state.status) {
       case 'approved':
-        return '#4CAF50';
+        return colors.brand.emerald;
       case 'rejected':
       case 'failed':
         return '#F44336';
@@ -108,7 +109,7 @@ function BillVerificationStatus({ state }: BillVerificationStatusProps) {
                 size={16}
                 color={
                   item.step <= state.currentStep
-                    ? '#FFFFFF'
+                    ? colors.background.primary
                     : '#999'
                 }
               />
@@ -130,7 +131,7 @@ function BillVerificationStatus({ state }: BillVerificationStatusProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 20,
     borderRadius: 16,
     alignItems: 'center',
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
   },
   stepsContainer: {
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2196F3',
   },
   stepIconComplete: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: colors.brand.emerald,
   },
   stepLabel: {
     fontSize: 10,

@@ -14,6 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { GroupBuyingGroup } from '@/types/groupBuying.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -49,7 +50,7 @@ function GroupCard({ group, onPress, showJoinButton = false }: GroupCardProps) {
 
       {/* Discount Badge */}
       <LinearGradient
-        colors={['#10B981', '#059669']}
+        colors={[colors.successScale[400], colors.successScale[700]]}
         style={styles.discountBadge}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -68,7 +69,7 @@ function GroupCard({ group, onPress, showJoinButton = false }: GroupCardProps) {
 
         {/* Store Name */}
         <View style={styles.storeRow}>
-          <Ionicons name="storefront-outline" size={14} color="#6B7280" />
+          <Ionicons name="storefront-outline" size={14} color={colors.neutral[500]} />
           <Text style={styles.storeName}>{group.product.storeName}</Text>
         </View>
 
@@ -113,7 +114,7 @@ function GroupCard({ group, onPress, showJoinButton = false }: GroupCardProps) {
             <Ionicons
               name="people"
               size={16}
-              color={isAlmostFull ? '#EF4444' : '#8B5CF6'}
+              color={isAlmostFull ? colors.error : colors.brand.purpleLight}
             />
             <Text
               style={[
@@ -127,7 +128,7 @@ function GroupCard({ group, onPress, showJoinButton = false }: GroupCardProps) {
 
           {/* Time Left */}
           <View style={styles.statusItem}>
-            <Ionicons name="time-outline" size={16} color="#F59E0B" />
+            <Ionicons name="time-outline" size={16} color={colors.warningScale[400]} />
             <Text style={styles.statusText}>
               {hoursLeft > 0 ? `${hoursLeft}h ${minutesLeft}m` : `${minutesLeft}m`}
             </Text>
@@ -137,7 +138,7 @@ function GroupCard({ group, onPress, showJoinButton = false }: GroupCardProps) {
         {/* Minimum Status */}
         {isMinimumMet && (
           <View style={styles.minimumMetBadge}>
-            <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+            <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
             <Text style={styles.minimumMetText}>Minimum members reached!</Text>
           </View>
         )}
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   storeRow: {
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
   },
   storeName: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceRow: {
     flexDirection: 'row',
@@ -213,11 +214,11 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   originalPrice: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   savingsContainer: {
@@ -225,34 +226,34 @@ const styles = StyleSheet.create({
   },
   savingsLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   savingsAmount: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   progressSection: {
     marginBottom: 12,
   },
   progressBar: {
     height: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     overflow: 'hidden',
     marginBottom: 6,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 4,
   },
   progressFillAlmostFull: {
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
   },
   progressText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   statusRow: {
@@ -267,17 +268,17 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   statusTextUrgent: {
-    color: '#EF4444',
+    color: colors.error,
   },
   minimumMetBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
@@ -286,13 +287,13 @@ const styles = StyleSheet.create({
   minimumMetText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   joinButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingVertical: 12,
     borderRadius: 12,
     gap: 8,

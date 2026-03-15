@@ -1,6 +1,7 @@
 // CombinedSection78.tsx - Premium Glassmorphism Design
 // Instant Discount / Deals Section - Green & Gold Theme
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, memo, useRef } from 'react';
 import { View, Pressable, StyleSheet, ActivityIndicator, Modal, ScrollView, Platform, Animated } from 'react-native';
 import { CardGridSkeleton } from '@/components/skeletons';
@@ -30,14 +31,14 @@ const GLASS = {
 
 const COLORS = {
   primary: Colors.gold,
-  primaryDark: '#E6B84E',   // Brand-specific
-  gold: '#FFC857',          // Brand-specific
+  primaryDark: colors.brand.goldRich,   // Brand-specific
+  gold: colors.brand.goldWarm,          // Brand-specific
   goldDark: '#E5A500',      // Brand-specific
   navy: Colors.nileBlue,
   textPrimary: Colors.text.primary,
   textSecondary: Colors.text.tertiary,
   white: Colors.background.primary,
-  surface: '#faf1e0',       // Brand linen
+  surface: colors.linen,       // Brand linen
 };
 
 interface CombinedSection78Props {

@@ -13,6 +13,7 @@ import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { SectionHeader } from '../common';
 import { ExclusiveCategory } from '@/types/offers.types';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface ExclusiveCategoriesGridProps {
   categories: ExclusiveCategory[];
@@ -86,7 +87,7 @@ export const ExclusiveCategoriesGrid: React.FC<ExclusiveCategoriesGridProps> = (
         title="Exclusive Zones"
         subtitle="Special offers for you"
         icon="diamond"
-        iconColor="#8B5CF6"
+        iconColor={colors.brand.purpleLight}
         showViewAll={false}
       />
       <View style={styles.grid}>

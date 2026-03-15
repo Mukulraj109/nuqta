@@ -28,7 +28,7 @@ import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { useProfile } from '@/contexts/ProfileContext';
 import { useReferral } from '@/hooks/useReferral';
 import { useWalletAnalytics } from '@/hooks/useWalletAnalytics';
-import WalletErrorBoundary from '@/components/WalletErrorBoundary';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import EarningsBreakdown from '@/components/wallet/EarningsBreakdown';
 import { BalanceDisplay } from '@/components/wallet/BalanceDisplay';
@@ -42,6 +42,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { BRAND } from '@/constants/brand';
 import { Colors, Spacing, BorderRadius, Typography, Gradients } from '@/constants/DesignSystem';
 import walletApi from '@/services/walletApi';
+import { colors } from '@/constants/theme';
 
 const WalletScreen: React.FC<WalletScreenProps> = ({
   onNavigateBack,
@@ -305,7 +306,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
   }
 
   return (
-    <WalletErrorBoundary>
+    <FeatureErrorBoundary featureName="Wallet">
       <View style={styles.root}>
         <StatusBar barStyle="light-content" backgroundColor={Colors.nileBlue} />
 
@@ -372,7 +373,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
               onPress={() => router.push('/wallet/expiry-tracker' as any)}
             >
               <View style={styles.expiryIconWrap}>
-                <Ionicons name="timer-outline" size={18} color="#D97706" />
+                <Ionicons name="timer-outline" size={18} color={colors.warningScale[700]} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.expiryText}>{expiringLabel}</Text>
@@ -390,7 +391,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
                 )}
                 <Text style={styles.expirySubtext}>Use them before they expire</Text>
               </View>
-              <Ionicons name="chevron-forward" size={16} color="#D97706" />
+              <Ionicons name="chevron-forward" size={16} color={colors.warningScale[700]} />
             </Pressable>
           )}
 
@@ -472,7 +473,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
         </ScrollView>
 
       </View>
-    </WalletErrorBoundary>
+    </FeatureErrorBoundary>
   );
 };
 
@@ -545,7 +546,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
       padding: Spacing.md,
       borderRadius: BorderRadius.md,
       borderWidth: 1,
-      borderColor: '#FECACA',
+      borderColor: colors.errorScale[200],
     },
     frozenTitle: {
       fontSize: Typography.bodySmall.fontSize,
@@ -560,36 +561,36 @@ const createStyles = (screenData: { width: number; height: number }) => {
     expiryBanner: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FFFBEB',
+      backgroundColor: colors.tint.amber,
       borderRadius: BorderRadius.md + 2,
       padding: Spacing.md + 2,
       marginTop: Spacing.sm + 2,
       marginHorizontal: Spacing.base,
       borderWidth: 1,
-      borderColor: '#FDE68A',
+      borderColor: colors.warningScale[200],
       gap: Spacing.sm + 2,
     },
     expiryIconWrap: {
       width: 34,
       height: 34,
       borderRadius: BorderRadius.sm + 2,
-      backgroundColor: '#FEF3C7',
+      backgroundColor: colors.tint.amberLight,
       justifyContent: 'center',
       alignItems: 'center',
     },
     expiryText: {
       fontSize: Typography.bodySmall.fontSize,
       fontWeight: '700',
-      color: '#92400E',
+      color: colors.brand.amberDark,
     },
     expirySubtext: {
       fontSize: Typography.caption.fontSize,
-      color: '#B45309',
+      color: colors.brand.amberDeep,
       marginTop: 3,
     },
     expiryTypeRow: {
       fontSize: 11,
-      color: '#92400E',
+      color: colors.brand.amberDark,
       marginTop: 1,
     },
   });

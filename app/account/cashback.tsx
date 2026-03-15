@@ -27,6 +27,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { TransactionListSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 type TabType = 'all' | 'pending' | 'credited' | 'expired';
 
@@ -273,15 +274,15 @@ export default function CashbackPage() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor="#E8B896"
-            colors={['#E8B896']}
+            tintColor={colors.brand.sand}
+            colors={[colors.brand.sand]}
           />
         }
       >
         {/* ─── Total Earned Hero ──────────────────────────────── */}
         <Animated.View style={[styles.heroCard, { opacity: totalAnim }]}>
           <LinearGradient
-            colors={['#1a3a52', '#234b6b']}
+            colors={[colors.nileBlue, '#234b6b']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.heroGradient}
@@ -372,7 +373,7 @@ export default function CashbackPage() {
            
           >
             <LinearGradient
-              colors={['#10B981', '#059669']}
+              colors={[colors.successScale[400], colors.successScale[700]]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.redeemGradient}
@@ -435,7 +436,7 @@ export default function CashbackPage() {
             {campaigns.map((campaign) => (
               <View key={campaign.id} style={styles.campaignCard}>
                 <LinearGradient
-                  colors={['#1a3a52', '#0f2536']}
+                  colors={[colors.nileBlue, '#0f2536']}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.campaignGradient}
@@ -497,7 +498,7 @@ export default function CashbackPage() {
            
           >
             <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(139,92,246,0.1)' }]}>
-              <Ionicons name="ticket-outline" size={18} color="#8B5CF6" />
+              <Ionicons name="ticket-outline" size={18} color={colors.brand.purpleLight} />
             </View>
             <Text style={styles.quickActionLabel}>Vouchers</Text>
           </Pressable>
@@ -507,7 +508,7 @@ export default function CashbackPage() {
            
           >
             <View style={[styles.quickActionIcon, { backgroundColor: 'rgba(232,184,150,0.15)' }]}>
-              <Ionicons name="pricetag-outline" size={18} color="#E8B896" />
+              <Ionicons name="pricetag-outline" size={18} color={colors.brand.sand} />
             </View>
             <Text style={styles.quickActionLabel}>Coupons</Text>
           </Pressable>
@@ -954,10 +955,10 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.base,
     marginBottom: Spacing.md,
     padding: Spacing.md,
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: colors.warningScale[200],
     gap: 10,
   },
   expiringIcon: {
@@ -974,11 +975,11 @@ const styles = StyleSheet.create({
   expiringTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   expiringSubtext: {
     fontSize: 11,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     marginTop: 1,
   },
   expiringAction: {
@@ -1013,7 +1014,7 @@ const styles = StyleSheet.create({
   seeAllText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#E8B896',
+    color: colors.brand.sand,
   },
   campaignCard: {
     marginBottom: 10,
@@ -1058,7 +1059,7 @@ const styles = StyleSheet.create({
   campaignRateValue: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#E8B896',
+    color: colors.brand.sand,
   },
   campaignTags: {
     flexDirection: 'row',
@@ -1203,7 +1204,7 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 1.5,
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   historySource: {
     fontSize: 11,
@@ -1247,10 +1248,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: Spacing.base,
     padding: Spacing.md,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: colors.errorScale[200],
     gap: 10,
   },
   errorText: {

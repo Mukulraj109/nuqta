@@ -21,31 +21,32 @@ import { Ionicons } from '@expo/vector-icons';
 import { campaignsApi, DealCategory, CampaignDeal } from '@/services/campaignsApi';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2.3;
 
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#1a3a52',
-  gray50: '#F9FAFB',
-  gray100: '#F3F4F6',
-  gray200: '#E5E7EB',
-  gray300: '#D1D5DB',
-  gray600: '#6B7280',
-  gray800: '#1F2937',
-  nileBlue: '#1a3a52',
-  nileBlueLight: '#234b68',
-  lightMustard: '#ffcd57',
-  lightPeach: '#ffd7b5',
-  peachDark: '#E8B896',
-  linen: '#faf1e0',
-  lavenderMist: '#dfebf7',
-  green500: '#22C55E',
-  emerald500: '#10B981',
-  amber500: '#F59E0B',
-  red500: '#EF4444',
-  purple500: '#8B5CF6',
+  white: colors.background.primary,
+  navy: colors.nileBlue,
+  gray50: colors.neutral[50],
+  gray100: colors.neutral[100],
+  gray200: colors.neutral[200],
+  gray300: colors.neutral[300],
+  gray600: colors.neutral[500],
+  gray800: colors.neutral[800],
+  nileBlue: colors.nileBlue,
+  nileBlueLight: colors.brand.nileBlueLight,
+  lightMustard: colors.lightMustard,
+  lightPeach: colors.lightPeach,
+  peachDark: colors.brand.sand,
+  linen: colors.linen,
+  lavenderMist: colors.lavenderMist,
+  green500: colors.success,
+  emerald500: colors.successScale[400],
+  amber500: colors.warningScale[400],
+  red500: colors.error,
+  purple500: colors.brand.purpleLight,
 };
 
 // Default gradient colors for different campaign types
@@ -56,8 +57,8 @@ const TYPE_GRADIENTS: Record<string, string[]> = {
   bill: ['#FFE8E0', '#FFDDD0'],
   drop: ['#FFF0F0', '#FFE0E0'],
   flash: ['#FFF8DC', '#FFE4B5'],
-  'new-user': ['#E8F5E9', '#C8E6C9'],
-  general: ['#F5F5F5', '#EEEEEE'],
+  'new-user': [colors.greenMist, '#C8E6C9'],
+  general: [colors.tint.warmGray, '#EEEEEE'],
 };
 
 // Skeleton loader with shimmer animation
@@ -279,14 +280,14 @@ const ExcitingDealsSection: React.FC = () => {
           </View>
         </View>
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle-outline" size={48} color="#EF4444" />
+          <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
           <Text style={styles.errorText}>{error}</Text>
           <Pressable
             onPress={handleRetry}
            
             style={styles.retryButton}
           >
-            <Ionicons name="refresh" size={16} color="#FFFFFF" />
+            <Ionicons name="refresh" size={16} color={colors.background.primary} />
             <Text style={styles.retryText}>Retry</Text>
           </Pressable>
         </View>
@@ -559,7 +560,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,

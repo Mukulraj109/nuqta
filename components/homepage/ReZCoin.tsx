@@ -15,14 +15,15 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 // Brand colors from TASK.md
 const BRAND_COLORS = {
-  primaryGreen: '#ffcd57',
-  deepGreen: '#E6B84E',
-  sunGold: '#ffcd57',
+  primaryGreen: colors.lightMustard,
+  deepGreen: colors.brand.goldRich,
+  sunGold: colors.lightMustard,
   goldDark: '#FFB830',
-  midnightNavy: '#1a3a52',
+  midnightNavy: colors.nileBlue,
 };
 
 interface ReZCoinProps {
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   balance: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
 });

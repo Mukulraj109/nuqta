@@ -4,6 +4,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface CreatorInfoProps {
   creatorId: string;
@@ -56,7 +57,7 @@ function CreatorInfo({
             />
           ) : (
             <View style={[styles.avatar, styles.avatarPlaceholder]}>
-              <Ionicons name="person" size={20} color="#8B5CF6" />
+              <Ionicons name="person" size={20} color={colors.brand.purpleLight} />
             </View>
           )}
         </View>
@@ -68,7 +69,7 @@ function CreatorInfo({
               {creatorName}
             </ThemedText>
             {isVerified && (
-              <Ionicons name="checkmark-circle" size={16} color="#3B82F6" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.infoScale[400]} />
             )}
           </View>
         </View>
@@ -83,12 +84,12 @@ function CreatorInfo({
          
         >
           <LinearGradient
-            colors={['#8B5CF6', '#A855F7']}
+            colors={[colors.brand.purpleLight, colors.brand.purpleMedium]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.followGradient}
           >
-            <Ionicons name="person-add-outline" size={14} color="#FFFFFF" />
+            <Ionicons name="person-add-outline" size={14} color={colors.background.primary} />
             <ThemedText style={styles.followText}>Follow</ThemedText>
           </LinearGradient>
         </Pressable>
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   avatarPlaceholder: {
     backgroundColor: 'rgba(139, 92, 246, 0.2)',
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   creatorName: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '700',
     textShadowColor: 'rgba(0, 0, 0, 0.5)',
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   followText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 13,
     fontWeight: '700',
   },

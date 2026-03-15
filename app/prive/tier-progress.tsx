@@ -37,6 +37,7 @@ import { usePriveEligibility, getQuickWins } from '@/hooks/usePriveEligibility';
 import { ELIGIBILITY_THRESHOLDS } from '@/types/mode.types';
 import priveApi from '@/services/priveApi';
 import { Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // ─── Tier Definition (derived from ELIGIBILITY_THRESHOLDS, never hardcoded) ──
 interface TierDef {
@@ -70,7 +71,7 @@ const TIER_DEFS: TierDef[] = [
     name: 'Elite',
     minScore: ELIGIBILITY_THRESHOLDS.ELITE_TIER,
     icon: '✦',
-    color: '#FFD700',
+    color: colors.brand.goldBright,
     description: 'Top-tier access unlocked',
   },
 ];
@@ -257,7 +258,7 @@ const HeroSection = React.memo(({
 
   const getTierColor = () => {
     switch (tier) {
-      case 'elite': return '#FFD700';
+      case 'elite': return colors.brand.goldBright;
       case 'signature': return '#C0C0C0';
       case 'entry': return '#CD7F32';
       default: return PRIVE_COLORS.text.tertiary;
@@ -434,7 +435,7 @@ export default function TierProgressScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#1F2937', '#111827', '#0A0A0A']}
+        colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]}
         style={StyleSheet.absoluteFill}
       />
       <ScrollView

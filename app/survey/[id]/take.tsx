@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, TextInput, ActivityIndicator, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,7 +10,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 
 const COLORS = {
-  primary: '#00C06A', // Survey-specific green — keep unique
+  primary: colors.brand.green, // Survey-specific green — keep unique
   white: Colors.background.primary,
   textDark: Colors.text.primary,
   textMuted: Colors.text.tertiary,

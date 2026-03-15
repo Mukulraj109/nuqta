@@ -5,6 +5,7 @@ import { ProjectStatus } from '@/types/earnPage.types';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
 import ProjectStatusCard from './ProjectStatusCard';
 import SkeletonLoader from '@/components/common/SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 interface ProjectDashboardProps {
   projectStatus: ProjectStatus;
@@ -84,8 +85,8 @@ function ProjectDashboard({
           <ProjectStatusCard
             label="Complete now"
             count={projectStatus.completeNow}
-            color="#00C06A"
-            gradient={['#00C06A', '#00A85C', '#00796B']}
+            color={colors.brand.green}
+            gradient={[colors.brand.green, '#00A85C', colors.brand.teal]}
             onPress={() => onStatusPress('complete-now')}
             delay={0}
           />
@@ -93,8 +94,8 @@ function ProjectDashboard({
           <ProjectStatusCard
             label="In review"
             count={projectStatus.inReview}
-            color="#F59E0B"
-            gradient={['#F59E0B', '#D97706', '#B45309']}
+            color={colors.warningScale[400]}
+            gradient={[colors.warningScale[400], colors.warningScale[700], colors.brand.amberDeep]}
             onPress={() => onStatusPress('in-review')}
             delay={100}
           />
@@ -102,8 +103,8 @@ function ProjectDashboard({
           <ProjectStatusCard
             label="Completed"
             count={projectStatus.completed}
-            color="#10B981"
-            gradient={['#10B981', '#059669', '#047857']}
+            color={colors.successScale[400]}
+            gradient={[colors.successScale[400], colors.successScale[700], '#047857']}
             onPress={() => onStatusPress('completed')}
             delay={200}
           />
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 200, 87, 0.2)',
     ...Platform.select({
       ios: {
-        shadowColor: '#FFC857',
+        shadowColor: colors.brand.goldWarm,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.2,
         shadowRadius: 16,
@@ -149,14 +150,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#1F2937',
+    color: colors.neutral[800],
     letterSpacing: -0.5,
     marginBottom: 4,
   },
   titleUnderline: {
     width: 45,
     height: 4,
-    backgroundColor: '#FFC857',
+    backgroundColor: colors.brand.goldWarm,
     borderRadius: 2,
   },
   statusCards: {

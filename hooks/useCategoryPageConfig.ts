@@ -13,6 +13,7 @@ import categoriesApi, {
   CategoryHashtag,
   CategoryPageConfig,
 } from '@/services/categoriesApi';
+import { colors } from '@/constants/theme';
 
 interface UseCategoryPageConfigResult {
   // Page config (main return)
@@ -172,7 +173,7 @@ export const useCategoryPageConfig = (slug: string): UseCategoryPageConfigResult
             primaryColor,
             gradientColors: [primaryColor, lightenColor(primaryColor, 20), lightenColor(primaryColor, 50)],
             accentColor: primaryColor,
-            backgroundColor: '#F5F5F5',
+            backgroundColor: colors.tint.warmGray,
           },
           tabs: nestedConfig.tabs?.length ? nestedConfig.tabs : defaultTabs,
           sections: nestedConfig.sections?.length ? nestedConfig.sections : defaultSections,
@@ -255,7 +256,7 @@ export const useCategoryPageConfig = (slug: string): UseCategoryPageConfigResult
         primaryColor,
         gradientColors: [primaryColor, lightenColor(primaryColor, 20), lightenColor(primaryColor, 50)],
         accentColor: primaryColor,
-        backgroundColor: '#F5F5F5',
+        backgroundColor: colors.tint.warmGray,
       },
       banner: {
         title: categoryName,
@@ -280,8 +281,8 @@ export const useCategoryPageConfig = (slug: string): UseCategoryPageConfigResult
         all: [`Search in ${categoryName}...`, `Find the best ${categoryName.toLowerCase()}...`],
       },
       valuePropItems: [
-        { icon: 'cash-outline', text: 'Cashback on every order', color: '#34D399' },
-        { icon: 'wallet-outline', text: 'Earn coins to reuse', color: '#FBBF24' },
+        { icon: 'cash-outline', text: 'Cashback on every order', color: colors.successScale[400] },
+        { icon: 'wallet-outline', text: 'Earn coins to reuse', color: colors.warningScale[400] },
         { icon: 'gift-outline', text: 'Loyalty rewards', color: '#F472B6' },
       ],
     };

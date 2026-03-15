@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface OpportunityCardProps {
   title: string;
@@ -57,7 +58,7 @@ function OpportunityCard({
       
       <View style={styles.actionButton}>
         <ThemedText style={styles.actionText}>Start Earning</ThemedText>
-        <Ionicons name="arrow-forward" size={12} color="#8B5CF6" />
+        <Ionicons name="arrow-forward" size={12} color={colors.brand.purpleLight} />
       </View>
     </Pressable>
 );
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 12,
     right: 12,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     borderRadius: 8,
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -106,19 +107,19 @@ const styles = StyleSheet.create({
   opportunityTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 4,
     textAlign: 'center',
   },
   opportunityDescription: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
     marginBottom: 12,
     lineHeight: 16,
   },
   categoryBadge: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 10,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -126,11 +127,11 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 10,
-    color: '#64748B',
+    color: colors.slateGray,
     fontWeight: '500',
   },
   rewardBadge: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 12,
     paddingHorizontal: 10,
     paddingVertical: 6,
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: 12,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
   },
 });

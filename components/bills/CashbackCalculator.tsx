@@ -6,6 +6,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { CashbackCalculation } from '@/types/billVerification.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface CashbackCalculatorProps {
   calculation: CashbackCalculation;
@@ -19,7 +20,7 @@ function CashbackCalculator({ calculation }: CashbackCalculatorProps) {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Ionicons name="gift" size={24} color="#4CAF50" />
+        <Ionicons name="gift" size={24} color={colors.brand.emerald} />
         <Text style={styles.headerTitle}>Cashback Breakdown</Text>
       </View>
 
@@ -54,7 +55,7 @@ function CashbackCalculator({ calculation }: CashbackCalculatorProps) {
           <View key={index} style={styles.breakdownRow}>
             <View style={styles.breakdownLabelContainer}>
               <View style={styles.bonusLabelRow}>
-                <Ionicons name="add-circle" size={16} color="#4CAF50" />
+                <Ionicons name="add-circle" size={16} color={colors.brand.emerald} />
                 <Text style={styles.breakdownLabel}>{bonus.label}</Text>
               </View>
               <Text style={styles.breakdownSubtext}>{bonus.description}</Text>
@@ -126,7 +127,7 @@ function CashbackCalculator({ calculation }: CashbackCalculatorProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
   },
@@ -139,10 +140,10 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   totalCard: {
-    backgroundColor: '#E8F5E9',
+    backgroundColor: colors.greenMist,
     borderRadius: 12,
     padding: 20,
     alignItems: 'center',
@@ -150,18 +151,18 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     fontSize: 14,
-    color: '#4CAF50',
+    color: colors.brand.emerald,
     marginBottom: 8,
   },
   totalAmount: {
     fontSize: 36,
     fontWeight: '700',
-    color: '#4CAF50',
+    color: colors.brand.emerald,
     marginBottom: 4,
   },
   totalRate: {
     fontSize: 14,
-    color: '#4CAF50',
+    color: colors.brand.emerald,
     fontWeight: '500',
   },
   breakdownSection: {
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 12,
   },
   breakdownRow: {
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
   },
   breakdownLabel: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
   },
   breakdownSubtext: {
     fontSize: 12,
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
   breakdownValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   bonusLabelRow: {
     flexDirection: 'row',
@@ -202,10 +203,10 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   bonusValue: {
-    color: '#4CAF50',
+    color: colors.brand.emerald,
   },
   totalBonusRow: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.tint.warmGray,
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 8,
@@ -214,12 +215,12 @@ const styles = StyleSheet.create({
   totalBonusLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#4CAF50',
+    color: colors.brand.emerald,
   },
   totalBonusValue: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#4CAF50',
+    color: colors.brand.emerald,
   },
   divider: {
     height: 1,
@@ -232,12 +233,12 @@ const styles = StyleSheet.create({
   finalLabel: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
   },
   finalValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#4CAF50',
+    color: colors.brand.emerald,
   },
   capWarning: {
     flexDirection: 'row',
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
     color: '#FF9800',
   },
   capsInfo: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.tint.warmGray,
     padding: 12,
     borderRadius: 8,
     marginBottom: 12,
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
   capsTitle: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#666',
+    color: colors.midGray,
     marginBottom: 8,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -281,12 +282,12 @@ const styles = StyleSheet.create({
   },
   capLabel: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
   },
   capValue: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   infoBanner: {
     flexDirection: 'row',

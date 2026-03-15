@@ -9,6 +9,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -95,19 +96,19 @@ export default function StoreInfoCard({
         <View style={styles.tagsRow}>
           {isVerified && (
             <View style={[styles.tag, styles.tagGreen]}>
-              <Ionicons name="checkmark-circle" size={14} color="#ffcd57" />
+              <Ionicons name="checkmark-circle" size={14} color={colors.lightMustard} />
               <ThemedText style={[styles.tagText, styles.tagTextGreen]}>Verified Partner</ThemedText>
             </View>
           )}
           {hasInstantCashback && (
             <View style={[styles.tag, styles.tagOrange]}>
-              <Ionicons name="flash" size={14} color="#ffcd57" />
+              <Ionicons name="flash" size={14} color={colors.lightMustard} />
               <ThemedText style={[styles.tagText, styles.tagTextOrange]}>Instant Cashback</ThemedText>
             </View>
           )}
           {hasExtraCoins && (
             <View style={[styles.tag, styles.tagGreen]}>
-              <Ionicons name="server" size={14} color="#ffcd57" />
+              <Ionicons name="server" size={14} color={colors.lightMustard} />
               <ThemedText style={[styles.tagText, styles.tagTextGreen]}>Extra Coins</ThemedText>
             </View>
           )}
@@ -123,7 +124,7 @@ export default function StoreInfoCard({
           </View>
           {acceptsCoins && (
             <View style={[styles.statusPill, styles.statusCoins]}>
-              <Ionicons name="server" size={14} color="#ffcd57" />
+              <Ionicons name="server" size={14} color={colors.lightMustard} />
               <ThemedText style={styles.statusTextCoins}>Coins accepted</ThemedText>
             </View>
           )}
@@ -135,7 +136,7 @@ export default function StoreInfoCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     paddingBottom: Spacing.md,
   },
   imageContainer: {
@@ -221,10 +222,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   tagTextGreen: {
-    color: "#ffcd57",
+    color: colors.lightMustard,
   },
   tagTextOrange: {
-    color: "#ffcd57",
+    color: colors.lightMustard,
   },
   statusRow: {
     flexDirection: "row",
@@ -255,24 +256,24 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   dotOpen: {
-    backgroundColor: "#ffcd57",
+    backgroundColor: colors.lightMustard,
   },
   dotClosed: {
-    backgroundColor: "#1a3a52",
+    backgroundColor: colors.nileBlue,
   },
   statusText: {
     fontSize: 13,
     fontWeight: "500",
   },
   statusTextOpen: {
-    color: "#ffcd57",
+    color: colors.lightMustard,
   },
   statusTextClosed: {
-    color: "#1a3a52",
+    color: colors.nileBlue,
   },
   statusTextCoins: {
     fontSize: 13,
     fontWeight: "500",
-    color: "#ffcd57",
+    color: colors.lightMustard,
   },
 });

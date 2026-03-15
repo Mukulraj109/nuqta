@@ -5,10 +5,11 @@
  */
 
 import { StyleSheet } from 'react-native';
+import { colors } from '@/constants/theme';
 
 export const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     shadowColor: '#000',

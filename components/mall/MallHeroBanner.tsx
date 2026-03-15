@@ -26,6 +26,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBanner } from '../../types/mall.types';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const BANNER_HORIZONTAL_PADDING = 32;
@@ -45,12 +46,12 @@ const DEFAULT_BANNERS: MallBanner[] = [
     subtitle: `Shop from top stores and earn ${BRAND.COIN_NAME} on every purchase`,
     badge: `${BRAND.APP_NAME.toUpperCase()} MALL`,
     image: '',
-    backgroundColor: '#1a3a52',
-    textColor: '#FFFFFF',
+    backgroundColor: colors.nileBlue,
+    textColor: colors.background.primary,
     ctaText: 'Explore Now',
     ctaAction: 'navigate',
     ctaUrl: '/mall/brands',
-    gradientColors: ['#1a3a52', '#0284C7'],
+    gradientColors: [colors.nileBlue, colors.brand.sky],
     position: 'hero' as any,
     priority: 1,
     validFrom: new Date().toISOString(),
@@ -64,12 +65,12 @@ const DEFAULT_BANNERS: MallBanner[] = [
     subtitle: `Get up to 20% cashback in ${BRAND.COIN_NAME} on featured stores`,
     badge: 'REWARDS',
     image: '',
-    backgroundColor: '#0284C7',
-    textColor: '#FFFFFF',
+    backgroundColor: colors.brand.sky,
+    textColor: colors.background.primary,
     ctaText: 'View Stores',
     ctaAction: 'navigate',
     ctaUrl: '/mall/brands?filter=featured',
-    gradientColors: ['#0284C7', '#06B6D4'],
+    gradientColors: [colors.brand.sky, colors.brand.cyan],
     position: 'hero' as any,
     priority: 2,
     validFrom: new Date().toISOString(),
@@ -83,12 +84,12 @@ const DEFAULT_BANNERS: MallBanner[] = [
     subtitle: 'Discover luxury brands with exclusive deals and premium rewards',
     badge: 'PREMIUM',
     image: '',
-    backgroundColor: '#1a3a52',
-    textColor: '#FFFFFF',
+    backgroundColor: colors.nileBlue,
+    textColor: colors.background.primary,
     ctaText: 'Shop Premium',
     ctaAction: 'navigate',
     ctaUrl: '/mall/brands?filter=luxury',
-    gradientColors: ['#1a3a52', '#374151'],
+    gradientColors: [colors.nileBlue, colors.neutral[700]],
     position: 'hero' as any,
     priority: 3,
     validFrom: new Date().toISOString(),
@@ -183,7 +184,7 @@ const MallHeroBanner: React.FC<MallHeroBannerProps> = ({
   }, [onBannerPress]);
 
   const renderBanner = useCallback(({ item }: { item: MallBanner }) => {
-    const gradientColors = item.gradientColors || ['#1a3a52', '#0284C7'];
+    const gradientColors = item.gradientColors || [colors.nileBlue, colors.brand.sky];
     const hasValidImage = isValidImageUrl(item.image);
 
     return (
@@ -249,7 +250,7 @@ const MallHeroBanner: React.FC<MallHeroBannerProps> = ({
               >
                 <Text style={styles.ctaButtonText}>{item.ctaText}</Text>
                 <View style={styles.ctaArrow}>
-                  <Ionicons name="arrow-forward" size={14} color="#1a3a52" />
+                  <Ionicons name="arrow-forward" size={14} color={colors.nileBlue} />
                 </View>
               </Pressable>
             )}
@@ -276,10 +277,10 @@ const MallHeroBanner: React.FC<MallHeroBannerProps> = ({
       <View style={styles.container}>
         <View style={styles.loadingContainer}>
           <LinearGradient
-            colors={['#dfebf7', '#EFF6FF']}
+            colors={[colors.lavenderMist, colors.tint.blue]}
             style={styles.loadingSkeleton}
           >
-            <ActivityIndicator size="large" color="#1a3a52" />
+            <ActivityIndicator size="large" color={colors.nileBlue} />
           </LinearGradient>
         </View>
       </View>
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.2,
         shadowRadius: 16,
@@ -386,7 +387,7 @@ const styles = StyleSheet.create({
     top: 28,
     bottom: 28,
     width: 3.5,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     borderTopRightRadius: 2,
     borderBottomRightRadius: 2,
   },
@@ -416,19 +417,19 @@ const styles = StyleSheet.create({
     width: 5,
     height: 5,
     borderRadius: 2.5,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
   },
   badgeText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#D97706',
+    color: colors.warningScale[700],
     letterSpacing: 0.8,
     textTransform: 'uppercase',
   },
   bannerTitle: {
     fontSize: 17,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 5,
     lineHeight: 22,
     maxWidth: '75%',
@@ -460,7 +461,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingLeft: 14,
     paddingRight: 5,
     paddingVertical: 6,
@@ -481,13 +482,13 @@ const styles = StyleSheet.create({
   ctaButtonText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   ctaArrow: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -501,7 +502,7 @@ const styles = StyleSheet.create({
   paginationDot: {
     height: DOT_SIZE,
     borderRadius: DOT_SIZE / 2,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
   },
   loadingContainer: {
     paddingHorizontal: BANNER_HORIZONTAL_PADDING,

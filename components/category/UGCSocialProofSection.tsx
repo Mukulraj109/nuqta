@@ -20,6 +20,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import videosApi, { Video } from '@/services/videosApi';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 // Container has 16px margin on each side + 16px padding on each side = 64px total
@@ -203,7 +204,7 @@ const UGCSocialProofSection: React.FC<UGCSocialProofSectionProps> = ({
         {/* Video indicator */}
         {isVideo && (
           <View style={styles.videoOverlay}>
-            <Ionicons name="play-circle" size={32} color="#FFFFFF" />
+            <Ionicons name="play-circle" size={32} color={colors.background.primary} />
           </View>
         )}
 
@@ -236,14 +237,14 @@ const UGCSocialProofSection: React.FC<UGCSocialProofSectionProps> = ({
                 <Ionicons
                   name={item.engagement?.liked ? 'heart' : 'heart-outline'}
                   size={14}
-                  color={item.engagement?.liked ? '#EF4444' : '#FFFFFF'}
+                  color={item.engagement?.liked ? colors.error : colors.background.primary}
                 />
                 <Text style={styles.statText}>{item.metrics?.likes || 0}</Text>
               </Pressable>
 
               {item.metrics?.comments !== undefined && item.metrics.comments > 0 && (
                 <View style={styles.statItem}>
-                  <Ionicons name="chatbubble-outline" size={13} color="#FFFFFF" />
+                  <Ionicons name="chatbubble-outline" size={13} color={colors.background.primary} />
                   <Text style={styles.statText}>{item.metrics.comments}</Text>
                 </View>
               )}
@@ -267,12 +268,12 @@ const UGCSocialProofSection: React.FC<UGCSocialProofSectionProps> = ({
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.titleRow}>
-            <Ionicons name="images" size={20} color="#ffcd57" />
+            <Ionicons name="images" size={20} color={colors.lightMustard} />
             <Text style={styles.title}>Real Shoppers, Real Style</Text>
           </View>
         </View>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#ffcd57" />
+          <ActivityIndicator size="large" color={colors.lightMustard} />
         </View>
       </View>
     );
@@ -286,12 +287,12 @@ const UGCSocialProofSection: React.FC<UGCSocialProofSectionProps> = ({
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.titleRow}>
-          <Ionicons name="images" size={20} color="#ffcd57" />
+          <Ionicons name="images" size={20} color={colors.lightMustard} />
           <Text style={styles.title}>Real Shoppers, Real Style</Text>
         </View>
         <Pressable style={styles.viewAllButton} onPress={handleViewAll}>
           <Text style={styles.viewAllText}>View All</Text>
-          <Ionicons name="chevron-forward" size={14} color="#ffcd57" />
+          <Ionicons name="chevron-forward" size={14} color={colors.lightMustard} />
         </Pressable>
       </View>
 
@@ -314,10 +315,10 @@ const UGCSocialProofSection: React.FC<UGCSocialProofSectionProps> = ({
       {/* CTA Banner */}
       <Pressable style={styles.ctaBanner} onPress={handleViewAll}>
         <View style={styles.ctaContent}>
-          <Ionicons name="camera" size={18} color="#ffcd57" />
+          <Ionicons name="camera" size={18} color={colors.lightMustard} />
           <Text style={styles.ctaText}>Share your look & earn coins!</Text>
         </View>
-        <Ionicons name="arrow-forward" size={16} color="#ffcd57" />
+        <Ionicons name="arrow-forward" size={16} color={colors.lightMustard} />
       </Pressable>
     </View>
   );
@@ -326,13 +327,13 @@ const UGCSocialProofSection: React.FC<UGCSocialProofSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     padding: 16,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   viewAllButton: {
     flexDirection: 'row',
@@ -369,11 +370,11 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 14,
   },
   loadingContainer: {
@@ -392,7 +393,7 @@ const styles = StyleSheet.create({
     height: ITEM_WIDTH * 1.3,
     borderRadius: 14,
     overflow: 'hidden',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   ugcImage: {
     width: '100%',
@@ -426,22 +427,22 @@ const styles = StyleSheet.create({
     height: 22,
     borderRadius: 11,
     borderWidth: 1,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   avatarPlaceholder: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     justifyContent: 'center',
     alignItems: 'center',
   },
   avatarText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   userName: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     flex: 1,
   },
   statsRow: {
@@ -456,7 +457,7 @@ const styles = StyleSheet.create({
   },
   statText: {
     fontSize: 11,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '500',
   },
   tagBadge: {
@@ -471,19 +472,19 @@ const styles = StyleSheet.create({
   tagText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   ctaBanner: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderRadius: 12,
     marginTop: 14,
     borderWidth: 1,
-    borderColor: '#faf1e0',
+    borderColor: colors.linen,
   },
   ctaContent: {
     flexDirection: 'row',
@@ -493,7 +494,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 });
 

@@ -18,6 +18,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { RewardItem, RedemptionResponse } from '@/types/loyaltyRedemption.types';
 import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from 'react-native-reanimated';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface RedemptionModalProps {
   visible: boolean;
@@ -76,7 +77,7 @@ function RedemptionModal({
     <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
       <View style={styles.rewardPreview}>
         <View style={styles.iconLarge}>
-          <Ionicons name="gift" size={48} color="#8B5CF6" />
+          <Ionicons name="gift" size={48} color={colors.brand.purpleLight} />
         </View>
         <ThemedText style={styles.rewardTitle}>{reward.title}</ThemedText>
         <ThemedText style={styles.rewardDescription}>{reward.description}</ThemedText>
@@ -93,7 +94,7 @@ function RedemptionModal({
         <View style={styles.detailRow}>
           <ThemedText style={styles.detailLabel}>Points Required</ThemedText>
           <View style={styles.pointsRow}>
-            <Ionicons name="diamond" size={16} color="#F59E0B" />
+            <Ionicons name="diamond" size={16} color={colors.warningScale[400]} />
             <ThemedText style={styles.pointsValue}>{reward.points}</ThemedText>
           </View>
         </View>
@@ -123,7 +124,7 @@ function RedemptionModal({
             onPress={() => setQuantity(Math.max(1, quantity - 1))}
             disabled={quantity <= 1}
           >
-            <Ionicons name="remove" size={24} color={quantity <= 1 ? '#D1D5DB' : '#8B5CF6'} />
+            <Ionicons name="remove" size={24} color={quantity <= 1 ? colors.neutral[300] : colors.brand.purpleLight} />
           </Pressable>
 
           <View style={styles.quantityDisplay}>
@@ -134,7 +135,7 @@ function RedemptionModal({
             style={styles.quantityButton}
             onPress={() => setQuantity(quantity + 1)}
           >
-            <Ionicons name="add" size={24} color="#8B5CF6" />
+            <Ionicons name="add" size={24} color={colors.brand.purpleLight} />
           </Pressable>
         </View>
       </View>
@@ -145,7 +146,7 @@ function RedemptionModal({
         <View style={styles.summaryRow}>
           <ThemedText style={styles.summaryLabel}>Current Points</ThemedText>
           <View style={styles.summaryValue}>
-            <Ionicons name="diamond" size={16} color="#F59E0B" />
+            <Ionicons name="diamond" size={16} color={colors.warningScale[400]} />
             <ThemedText style={styles.summaryPoints}>{userPoints}</ThemedText>
           </View>
         </View>
@@ -153,8 +154,8 @@ function RedemptionModal({
         <View style={styles.summaryRow}>
           <ThemedText style={styles.summaryLabel}>Points to Redeem</ThemedText>
           <View style={styles.summaryValue}>
-            <Ionicons name="diamond" size={16} color="#EF4444" />
-            <ThemedText style={[styles.summaryPoints, { color: '#EF4444' }]}>
+            <Ionicons name="diamond" size={16} color={colors.error} />
+            <ThemedText style={[styles.summaryPoints, { color: colors.error }]}>
               -{totalPoints}
             </ThemedText>
           </View>
@@ -165,11 +166,11 @@ function RedemptionModal({
         <View style={styles.summaryRow}>
           <ThemedText style={styles.summaryLabelBold}>Remaining Points</ThemedText>
           <View style={styles.summaryValue}>
-            <Ionicons name="diamond" size={18} color={canRedeem ? '#ffcd57' : '#EF4444'} />
+            <Ionicons name="diamond" size={18} color={canRedeem ? colors.lightMustard : colors.error} />
             <ThemedText
               style={[
                 styles.summaryPointsBold,
-                { color: canRedeem ? '#ffcd57' : '#EF4444' },
+                { color: canRedeem ? colors.lightMustard : colors.error },
               ]}
             >
               {remainingPoints}
@@ -197,10 +198,10 @@ function RedemptionModal({
       <Animated.View entering={FadeIn.duration(500)} style={styles.successContent}>
         <View style={styles.successIconContainer}>
           <LinearGradient
-            colors={['#ffcd57', '#1a3a52']}
+            colors={[colors.lightMustard, colors.nileBlue]}
             style={styles.successIconGradient}
           >
-            <Ionicons name="checkmark-circle" size={80} color="#FFFFFF" />
+            <Ionicons name="checkmark-circle" size={80} color={colors.background.primary} />
           </LinearGradient>
         </View>
 
@@ -224,7 +225,7 @@ function RedemptionModal({
         <View style={styles.newBalanceCard}>
           <ThemedText style={styles.newBalanceLabel}>New Points Balance</ThemedText>
           <View style={styles.newBalanceValue}>
-            <Ionicons name="diamond" size={24} color="#F59E0B" />
+            <Ionicons name="diamond" size={24} color={colors.warningScale[400]} />
             <ThemedText style={styles.newBalancePoints}>
               {redemptionData?.newBalance || remainingPoints}
             </ThemedText>
@@ -256,7 +257,7 @@ function RedemptionModal({
               {step === 'confirm' ? 'Redeem Reward' : 'Success'}
             </ThemedText>
             <Pressable style={styles.closeButton} onPress={handleClose}>
-              <Ionicons name="close" size={24} color="#6B7280" />
+              <Ionicons name="close" size={24} color={colors.neutral[500]} />
             </Pressable>
           </View>
 
@@ -270,11 +271,11 @@ function RedemptionModal({
                 disabled={!canRedeem || loading}
               >
                 {loading ? (
-                  <ActivityIndicator size="small" color="#FFFFFF" />
+                  <ActivityIndicator size="small" color={colors.background.primary} />
                 ) : (
                   <>
                     <ThemedText style={styles.redeemButtonText}>Confirm Redemption</ThemedText>
-                    <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+                    <Ionicons name="arrow-forward" size={20} color={colors.background.primary} />
                   </>
                 )}
               </Pressable>
@@ -293,7 +294,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modal: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -305,12 +306,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   closeButton: {
     padding: 4,
@@ -327,7 +328,7 @@ const styles = StyleSheet.create({
     width: 96,
     height: 96,
     borderRadius: 48,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
@@ -335,18 +336,18 @@ const styles = StyleSheet.create({
   rewardTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
     marginBottom: 8,
   },
   rewardDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
   },
   detailsCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -359,12 +360,12 @@ const styles = StyleSheet.create({
   },
   detailLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   detailValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   pointsRow: {
     flexDirection: 'row',
@@ -374,7 +375,7 @@ const styles = StyleSheet.create({
   pointsValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   quantityCard: {
     marginBottom: 16,
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   quantityControls: {
@@ -395,7 +396,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -406,17 +407,17 @@ const styles = StyleSheet.create({
     minWidth: 60,
     paddingHorizontal: 20,
     paddingVertical: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     alignItems: 'center',
   },
   quantityText: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   summaryCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -429,12 +430,12 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   summaryLabelBold: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   summaryValue: {
     flexDirection: 'row',
@@ -444,7 +445,7 @@ const styles = StyleSheet.create({
   summaryPoints: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   summaryPointsBold: {
     fontSize: 18,
@@ -452,7 +453,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginVertical: 12,
   },
   termsCard: {
@@ -461,7 +462,7 @@ const styles = StyleSheet.create({
   termsTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   termRow: {
@@ -470,22 +471,22 @@ const styles = StyleSheet.create({
   },
   termBullet: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginRight: 8,
   },
   termText: {
     flex: 1,
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
   footer: {
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   redeemButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -494,12 +495,12 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   redeemButtonDisabled: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   redeemButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // Success step styles
   successContainer: {
@@ -522,34 +523,34 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
     textAlign: 'center',
   },
   successMessage: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 24,
   },
   voucherCard: {
     width: '100%',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 16,
     padding: 20,
     marginBottom: 24,
     borderWidth: 2,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
     borderStyle: 'dashed',
   },
   voucherLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 12,
   },
   voucherCodeContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 12,
@@ -558,13 +559,13 @@ const styles = StyleSheet.create({
   voucherCode: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     textAlign: 'center',
     letterSpacing: 2,
   },
   voucherExpiry: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   newBalanceCard: {
@@ -574,7 +575,7 @@ const styles = StyleSheet.create({
   },
   newBalanceLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   newBalanceValue: {
@@ -585,11 +586,11 @@ const styles = StyleSheet.create({
   newBalancePoints: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   doneButton: {
     width: '100%',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
@@ -597,7 +598,7 @@ const styles = StyleSheet.create({
   doneButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

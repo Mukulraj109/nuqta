@@ -17,6 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import gamificationApi, { ReviewableItem } from '@/services/gamificationApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const reviewTips = [
   { icon: 'star', tip: 'Rate honestly from 1-5 stars' },
@@ -124,7 +125,7 @@ export default function ReviewEarnPage() {
         {/* Hero Section */}
         {!loading && !error && (
           <LinearGradient
-            colors={['#FEF3C7', '#FDE68A']}
+            colors={[colors.tint.amberLight, colors.warningScale[200]]}
             style={styles.heroCard}
           >
             <View style={styles.heroContent}>
@@ -246,7 +247,7 @@ export default function ReviewEarnPage() {
         {!loading && !error && (
         <View style={styles.bottomSection}>
           <LinearGradient
-            colors={['#E0F2FE', '#DBEAFE']}
+            colors={['#E0F2FE', colors.tint.blueLight]}
             style={styles.bottomCard}
           >
             <Ionicons name="information-circle" size={24} color={Colors.info} />
@@ -375,12 +376,12 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     marginBottom: Spacing.xs,
   },
   heroSubtitle: {
     ...Typography.body,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
   heroStats: {
     flexDirection: 'row',
@@ -395,16 +396,16 @@ const styles = StyleSheet.create({
   heroStatValue: {
     ...Typography.h3,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   heroStatLabel: {
     ...Typography.bodySmall,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     marginTop: 2,
   },
   heroStatDivider: {
     width: 1,
-    backgroundColor: '#D97706',
+    backgroundColor: colors.warningScale[700],
     opacity: 0.3,
   },
   tipsSection: {
@@ -434,7 +435,7 @@ const styles = StyleSheet.create({
   },
   tipText: {
     ...Typography.bodySmall,
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   filterTabs: {
     flexDirection: 'row',
@@ -519,7 +520,7 @@ const styles = StyleSheet.create({
   coinText: {
     ...Typography.bodySmall,
     fontWeight: '700',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
   itemCategory: {
     ...Typography.bodySmall,

@@ -2,6 +2,7 @@
 // Handles all explore page related API calls
 
 import apiClient, { ApiResponse } from './apiClient';
+import { colors } from '@/constants/theme';
 
 // ============================================
 // TYPES
@@ -154,7 +155,7 @@ class ExploreApiService {
           isOpen: store.isOpen ?? store.operationalInfo?.isOpen ?? null,
           activity: store.activity || (store.visitCount ? `${store.visitCount} people visited` : null),
           badge: store.isFeatured ? 'Featured' : (store.isTrending ? 'Trending' : null),
-          badgeColor: store.isFeatured ? '#F59E0B' : (store.isTrending ? '#EF4444' : null),
+          badgeColor: store.isFeatured ? '#F59E0B' : (store.isTrending ? colors.error : null),
         }));
 
         return {
@@ -389,7 +390,7 @@ class ExploreApiService {
           isOpen: store.isOpen ?? store.operationalInfo?.isOpen ?? null,
           deliveryTime: store.operationalInfo?.deliveryTime || store.deliveryTime || null,
           badge: store.badge || (store.isTrending ? 'Trending' : (store.isFeatured ? 'Featured' : null)),
-          badgeColor: store.badgeColor || (store.isTrending ? '#EF4444' : (store.isFeatured ? '#F97316' : null)),
+          badgeColor: store.badgeColor || (store.isTrending ? colors.error : (store.isFeatured ? '#F97316' : null)),
         }));
 
         return {
@@ -435,7 +436,7 @@ class ExploreApiService {
           tags: store.tags || [],
           isVerified: store.isVerified || false,
           badge: store.badge || (store.isTrending ? 'Trending' : (store.isFeatured ? 'Featured' : null)),
-          badgeColor: store.badgeColor || (store.isTrending ? '#EF4444' : (store.isFeatured ? '#F97316' : null)),
+          badgeColor: store.badgeColor || (store.isTrending ? colors.error : (store.isFeatured ? '#F97316' : null)),
         }));
 
         return {
@@ -529,7 +530,7 @@ class ExploreApiService {
           distance: store.distance ? `${store.distance} km` : null,
           isOpen: store.isOpen ?? store.operationalInfo?.isOpen ?? null,
           badge: store.badge || (store.isTrending ? 'Trending' : (store.isFeatured ? 'Featured' : null)),
-          badgeColor: store.badgeColor || (store.isTrending ? '#EF4444' : (store.isFeatured ? '#F97316' : null)),
+          badgeColor: store.badgeColor || (store.isTrending ? colors.error : (store.isFeatured ? '#F97316' : null)),
           activity: store.activity || (store.visitCount ? `${store.visitCount} people visited` : null),
         }));
 

@@ -20,6 +20,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../types/mall.types';
+import { colors } from '@/constants/theme';
 
 interface MallTrendingNowProps {
   brands: MallBrand[];
@@ -50,10 +51,10 @@ const MallTrendingNow: React.FC<MallTrendingNowProps> = ({
           {/* Trending Rank Badge */}
           <View style={styles.rankBadge}>
             <LinearGradient
-              colors={['#EF4444', '#DC2626']}
+              colors={[colors.error, colors.error]}
               style={styles.rankGradient}
             >
-              <Ionicons name="flame" size={10} color="#FFF" />
+              <Ionicons name="flame" size={10} color={colors.background.primary} />
               <Text style={styles.rankText}>#{index + 1}</Text>
             </LinearGradient>
           </View>
@@ -68,7 +69,7 @@ const MallTrendingNow: React.FC<MallTrendingNowProps> = ({
               />
             ) : (
               <LinearGradient
-                colors={['#1a3a52', '#234b68']}
+                colors={[colors.nileBlue, colors.brand.nileBlueLight]}
                 style={styles.logoFallback}
               >
                 <Text style={styles.logoInitials}>{getInitials(item.name || 'Store')}</Text>
@@ -81,7 +82,7 @@ const MallTrendingNow: React.FC<MallTrendingNowProps> = ({
 
           {/* Rating */}
           <View style={styles.ratingRow}>
-            <Ionicons name="star" size={11} color="#F59E0B" />
+            <Ionicons name="star" size={11} color={colors.warningScale[400]} />
             <Text style={styles.ratingText}>
               {(item.ratings?.average || 0) > 0 ? (item.ratings?.average || 0).toFixed(1) : 'New'}
             </Text>
@@ -92,14 +93,14 @@ const MallTrendingNow: React.FC<MallTrendingNowProps> = ({
 
           {/* Views/Orders indicator */}
           <View style={styles.trendingIndicator}>
-            <Ionicons name="trending-up" size={12} color="#0284C7" />
+            <Ionicons name="trending-up" size={12} color={colors.brand.sky} />
             <Text style={styles.trendingText}>Popular</Text>
           </View>
 
           {/* Coin Reward */}
           {(item.cashback?.percentage || 0) > 0 && (
             <View style={styles.coinRow}>
-              <Ionicons name="flash" size={11} color="#0284C7" />
+              <Ionicons name="flash" size={11} color={colors.brand.sky} />
               <Text style={styles.coinText}>{item.cashback?.percentage || 0}% Coins</Text>
             </View>
           )}
@@ -115,22 +116,22 @@ const MallTrendingNow: React.FC<MallTrendingNowProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#EFF6FF', '#DBEAFE', '#FFFFFF']}
+          colors={[colors.tint.blue, colors.tint.blueLight, colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
         >
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#EF4444', '#DC2626']}
+              colors={[colors.error, colors.error]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="flame" size={18} color="#FFFFFF" />
+              <Ionicons name="flame" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Trending Now</Text>
           </View>
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#0284C7" />
+            <ActivityIndicator size="small" color={colors.brand.sky} />
             <Text style={styles.loadingText}>Loading trending stores...</Text>
           </View>
         </LinearGradient>
@@ -142,7 +143,7 @@ const MallTrendingNow: React.FC<MallTrendingNowProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#EFF6FF', '#DBEAFE', '#FFFFFF']}
+          colors={[colors.tint.blue, colors.tint.blueLight, colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
@@ -150,17 +151,17 @@ const MallTrendingNow: React.FC<MallTrendingNowProps> = ({
           {/* Header */}
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#EF4444', '#DC2626']}
+              colors={[colors.error, colors.error]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="flame" size={18} color="#FFFFFF" />
+              <Ionicons name="flame" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Trending Now</Text>
           </View>
 
           {/* Empty State Placeholder */}
           <View style={styles.emptyStateContainer}>
-            <Ionicons name="trending-up-outline" size={24} color="#6B7280" />
+            <Ionicons name="trending-up-outline" size={24} color={colors.neutral[500]} />
             <Text style={styles.emptyStateText}>Trending section loading</Text>
           </View>
         </LinearGradient>
@@ -171,7 +172,7 @@ const MallTrendingNow: React.FC<MallTrendingNowProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#EFF6FF', '#DBEAFE', '#FFFFFF']}
+        colors={[colors.tint.blue, colors.tint.blueLight, colors.background.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.gradientBackground}
@@ -185,10 +186,10 @@ const MallTrendingNow: React.FC<MallTrendingNowProps> = ({
         {/* Header */}
         <View style={styles.headerRow}>
           <LinearGradient
-            colors={['#EF4444', '#DC2626']}
+            colors={[colors.error, colors.error]}
             style={styles.iconWrapper}
           >
-            <Ionicons name="flame" size={18} color="#FFFFFF" />
+            <Ionicons name="flame" size={18} color={colors.background.primary} />
           </LinearGradient>
           <Text style={styles.title}>Trending Now</Text>
           <View style={styles.liveBadge}>
@@ -204,7 +205,7 @@ const MallTrendingNow: React.FC<MallTrendingNowProps> = ({
             >
               <Text style={styles.viewAllText}>View All</Text>
               <View style={styles.viewAllArrow}>
-                <Ionicons name="arrow-forward" size={14} color="#0284C7" />
+                <Ionicons name="arrow-forward" size={14} color={colors.brand.sky} />
               </View>
             </Pressable>
           )}
@@ -223,13 +224,13 @@ const MallTrendingNow: React.FC<MallTrendingNowProps> = ({
             style={styles.statsContainer}
           >
             <View style={styles.statItem}>
-              <Ionicons name="flame" size={14} color="#EF4444" />
+              <Ionicons name="flame" size={14} color={colors.error} />
               <Text style={styles.statValue}>{brands.length}</Text>
               <Text style={styles.statLabel}>Trending</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <Ionicons name="star" size={14} color="#F59E0B" />
+              <Ionicons name="star" size={14} color={colors.warningScale[400]} />
               <Text style={styles.statValue}>
                 {brands.length > 0
                   ? (brands.reduce((s, b) => s + (b.ratings?.average || 0), 0) / brands.length).toFixed(1)
@@ -239,7 +240,7 @@ const MallTrendingNow: React.FC<MallTrendingNowProps> = ({
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <Ionicons name="flash" size={14} color="#0284C7" />
+              <Ionicons name="flash" size={14} color={colors.brand.sky} />
               <Text style={styles.statValue}>
                 {brands.length > 0
                   ? Math.round(brands.reduce((s, b) => s + (b.cashback?.percentage || 0), 0) / brands.length)
@@ -320,7 +321,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#EF4444',
+        shadowColor: colors.error,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   liveBadge: {
@@ -347,17 +348,17 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
   },
   liveText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#EF4444',
+    color: colors.error,
     letterSpacing: 0.5,
   },
   subtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     paddingHorizontal: 16,
     marginBottom: 12,
   },
@@ -383,11 +384,11 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   statLabel: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   statDivider: {
@@ -399,7 +400,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
@@ -416,13 +417,13 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#0284C7',
+    color: colors.brand.sky,
   },
   viewAllArrow: {
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -433,17 +434,17 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 140,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 12,
     marginRight: 12,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#DBEAFE',
+    borderColor: colors.tint.blueLight,
     position: 'relative',
     ...Platform.select({
       ios: {
-        shadowColor: '#0284C7',
+        shadowColor: colors.brand.sky,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -469,7 +470,7 @@ const styles = StyleSheet.create({
   rankText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   logoContainer: {
     width: 56,
@@ -493,12 +494,12 @@ const styles = StyleSheet.create({
   logoInitials: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   storeName: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
     marginBottom: 4,
     width: '100%',
@@ -512,17 +513,17 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   ratingCount: {
     fontSize: 10,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   trendingIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -531,7 +532,7 @@ const styles = StyleSheet.create({
   trendingText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#0284C7',
+    color: colors.brand.sky,
   },
   coinRow: {
     flexDirection: 'row',
@@ -542,7 +543,7 @@ const styles = StyleSheet.create({
   coinText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#0369A1',
+    color: colors.brand.skyDark,
   },
   loadingContainer: {
     flexDirection: 'row',
@@ -553,7 +554,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   emptyStateContainer: {
@@ -566,7 +567,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
 });

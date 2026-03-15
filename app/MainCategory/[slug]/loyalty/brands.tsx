@@ -17,26 +17,27 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import userLoyaltyApi, { BrandLoyalty } from '@/services/userLoyaltyApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const TIER_CONFIG: Record<string, {
   bg: string; text: string; border: string; icon: string; next: string;
   gradientStart: string; gradientEnd: string;
 }> = {
   Bronze: {
-    bg: '#FEF3C7', text: '#92400E', border: '#D97706', icon: '\uD83E\uDD49', next: 'Silver',
-    gradientStart: '#FEFCE8', gradientEnd: '#FEF3C7',
+    bg: colors.tint.amberLight, text: colors.brand.amberDark, border: colors.warningScale[700], icon: '\uD83E\uDD49', next: 'Silver',
+    gradientStart: '#FEFCE8', gradientEnd: colors.tint.amberLight,
   },
   Silver: {
-    bg: '#F3F4F6', text: '#374151', border: '#9CA3AF', icon: '\uD83E\uDD48', next: 'Gold',
-    gradientStart: '#F9FAFB', gradientEnd: '#F3F4F6',
+    bg: colors.neutral[100], text: colors.neutral[700], border: colors.neutral[400], icon: '\uD83E\uDD48', next: 'Gold',
+    gradientStart: colors.neutral[50], gradientEnd: colors.neutral[100],
   },
   Gold: {
-    bg: '#FFFBEB', text: '#92400E', border: '#F59E0B', icon: '\uD83E\uDD47', next: 'Platinum',
-    gradientStart: '#FFFBEB', gradientEnd: '#FEF3C7',
+    bg: colors.tint.amber, text: colors.brand.amberDark, border: colors.warningScale[400], icon: '\uD83E\uDD47', next: 'Platinum',
+    gradientStart: colors.tint.amber, gradientEnd: colors.tint.amberLight,
   },
   Platinum: {
-    bg: '#EDE9FE', text: '#5B21B6', border: '#8B5CF6', icon: '\uD83D\uDC8E', next: '',
-    gradientStart: '#F5F3FF', gradientEnd: '#EDE9FE',
+    bg: colors.tint.purple, text: '#5B21B6', border: colors.brand.purpleLight, icon: '\uD83D\uDC8E', next: '',
+    gradientStart: colors.tint.purpleLight, gradientEnd: colors.tint.purple,
   },
 };
 
@@ -231,8 +232,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 6,
     paddingTop: 8, borderTopWidth: 1, borderTopColor: 'rgba(229,231,235,0.6)',
   },
-  benefitText: { flex: 1, fontSize: 12, color: '#6B7280' },
+  benefitText: { flex: 1, fontSize: 12, color: colors.neutral[500] },
   emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40, marginTop: 60 },
-  emptyTitle: { fontSize: 16, fontWeight: '600', color: '#111827', marginTop: 16 },
-  emptySubtitle: { fontSize: 13, color: '#6B7280', marginTop: 4, textAlign: 'center' },
+  emptyTitle: { fontSize: 16, fontWeight: '600', color: colors.neutral[900], marginTop: 16 },
+  emptySubtitle: { fontSize: 13, color: colors.neutral[500], marginTop: 4, textAlign: 'center' },
 });

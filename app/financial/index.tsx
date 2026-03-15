@@ -3,6 +3,7 @@
  * Connected to /api/services (financial category)
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
@@ -37,7 +38,7 @@ const FALLBACK_CATEGORIES = [
   { id: 'recharge', title: 'Recharge', icon: '📱', color: Colors.success, count: 'All networks' },
   { id: 'gold', title: 'Digital Gold', icon: '🪙', color: Colors.warning, count: 'Buy/Sell' },
   { id: 'insurance', title: 'Insurance', icon: '🛡️', color: Colors.brand.purple, count: '100+ plans' },
-  { id: 'offers', title: 'Offers', icon: '🎁', color: '#EC4899', count: 'Special deals' },
+  { id: 'offers', title: 'Offers', icon: '🎁', color: colors.brand.pink, count: 'Special deals' },
 ];
 
 // Fallback services

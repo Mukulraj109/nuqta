@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Pressable, View, Linking } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { Colors } from '@/constants/Colors';
+import { colors as themeColors, darkColors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -44,7 +44,17 @@ export const PrivacyNotice: React.FC<PrivacyNoticeProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const theme = useColorScheme() ?? 'light';
-  const colors = Colors[theme];
+  const isDark = theme === 'dark';
+  const tc = isDark ? darkColors : themeColors;
+  const colors = {
+    surface: tc.background.primary,
+    surfaceSecondary: tc.background.secondary,
+    border: tc.border.default,
+    secondary: tc.secondary[600],
+    textSecondary: tc.text.secondary,
+    textMuted: tc.text.tertiary,
+    text: tc.text.primary,
+  };
 
   const handlePrivacyPolicyPress = () => {
     // Handle navigation or external link

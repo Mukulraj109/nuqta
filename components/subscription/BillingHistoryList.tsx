@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { BillingTransaction } from '@/services/subscriptionApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface Props {
   transactions: BillingTransaction[];
@@ -32,7 +33,7 @@ function BillingHistoryList({
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#8B5CF6" />
+        <ActivityIndicator size="large" color={colors.brand.purpleLight} />
       </View>
     );
   }
@@ -40,13 +41,13 @@ function BillingHistoryList({
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'paid':
-        return '#ffcd57';
+        return colors.lightMustard;
       case 'failed':
-        return '#EF4444';
+        return colors.error;
       case 'pending':
-        return '#F59E0B';
+        return colors.warningScale[400];
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   };
 
@@ -85,7 +86,7 @@ function BillingHistoryList({
         {/* Header Row */}
         <View style={styles.transactionHeader}>
           <View style={styles.dateContainer}>
-            <Ionicons name="calendar-outline" size={16} color="#6B7280" />
+            <Ionicons name="calendar-outline" size={16} color={colors.neutral[500]} />
             <ThemedText style={styles.dateText}>
               {formatDate(transaction.date)}
             </ThemedText>
@@ -116,7 +117,7 @@ function BillingHistoryList({
           <View style={styles.detailsRight}>
             {transaction.paymentMethod && (
               <View style={styles.paymentMethod}>
-                <Ionicons name="card-outline" size={14} color="#6B7280" />
+                <Ionicons name="card-outline" size={14} color={colors.neutral[500]} />
                 <ThemedText style={styles.paymentMethodText}>
                   {transaction.paymentMethod}
                 </ThemedText>
@@ -124,7 +125,7 @@ function BillingHistoryList({
             )}
 
             <View style={styles.billingCycle}>
-              <Ionicons name="repeat-outline" size={14} color="#6B7280" />
+              <Ionicons name="repeat-outline" size={14} color={colors.neutral[500]} />
               <ThemedText style={styles.billingCycleText}>
                 {transaction.billingCycle.charAt(0).toUpperCase() + transaction.billingCycle.slice(1)}
               </ThemedText>
@@ -140,7 +141,7 @@ function BillingHistoryList({
                 style={styles.actionButton}
                 onPress={() => onViewInvoice(transaction.id)}
               >
-                <Ionicons name="eye-outline" size={18} color="#8B5CF6" />
+                <Ionicons name="eye-outline" size={18} color={colors.brand.purpleLight} />
                 <ThemedText style={styles.actionButtonText}>View Invoice</ThemedText>
               </Pressable>
             )}
@@ -149,7 +150,7 @@ function BillingHistoryList({
               style={[styles.actionButton, styles.downloadButton]}
               onPress={() => onDownloadInvoice(transaction.id)}
             >
-              <Ionicons name="download-outline" size={18} color="#FFFFFF" />
+              <Ionicons name="download-outline" size={18} color={colors.background.primary} />
               <ThemedText style={styles.downloadButtonText}>Download</ThemedText>
             </Pressable>
           </View>
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   transactionCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   statusBadge: {
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   detailsRow: {
@@ -232,20 +233,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   detailsLeft: {
     flex: 1,
   },
   amountLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   amountValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   detailsRight: {
     alignItems: 'flex-end',
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
   },
   paymentMethodText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   billingCycle: {
     flexDirection: 'row',
@@ -267,7 +268,7 @@ const styles = StyleSheet.create({
   },
   billingCycleText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   actionsRow: {
     flexDirection: 'row',
@@ -275,14 +276,14 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   actionButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 8,
     padding: 10,
     gap: 6,
@@ -290,15 +291,15 @@ const styles = StyleSheet.create({
   actionButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   downloadButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   downloadButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   transactionIdRow: {
     flexDirection: 'row',
@@ -306,16 +307,16 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     gap: 6,
   },
   transactionIdLabel: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   transactionIdValue: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontFamily: 'monospace',
   },
 });

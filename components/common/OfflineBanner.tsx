@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useNetworkStatus from '@/hooks/useNetworkStatus';
 import { useToast } from '@/hooks/useToast';
+import { colors } from '@/constants/theme';
 
 /**
  * Global offline banner that slides down from the top when network is lost,
@@ -112,7 +113,7 @@ export function OfflineBanner() {
     >
       <View style={styles.content}>
         <View style={styles.iconContainer}>
-          <Ionicons name={iconName} size={22} color="#FFFFFF" />
+          <Ionicons name={iconName} size={22} color={colors.background.primary} />
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.mainText}>{message}</Text>
@@ -165,12 +166,12 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   mainText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontSize: 15,
     fontWeight: '600',
   },
   subText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontSize: 12,
     opacity: 0.9,
   },

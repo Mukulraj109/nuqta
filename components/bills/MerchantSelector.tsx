@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 // Merchant interface
 export interface Merchant {
@@ -163,7 +164,7 @@ const MerchantSelector: React.FC<MerchantSelectorProps> = ({
           {/* Selection indicator */}
           <View style={styles.checkboxContainer}>
             {isSelected ? (
-              <Ionicons name="checkmark-circle" size={24} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={24} color={colors.successScale[400]} />
             ) : (
               <View style={styles.checkboxEmpty} />
             )}
@@ -253,7 +254,7 @@ const MerchantSelector: React.FC<MerchantSelectorProps> = ({
   // Render empty state
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
-      <Ionicons name="search-outline" size={64} color="#9CA3AF" />
+      <Ionicons name="search-outline" size={64} color={colors.neutral[400]} />
       <Text style={styles.emptyTitle}>No merchants found</Text>
       <Text style={styles.emptySubtitle}>
         {searchQuery
@@ -265,7 +266,7 @@ const MerchantSelector: React.FC<MerchantSelectorProps> = ({
           style={styles.requestButton}
           onPress={handleRequestMerchant}
         >
-          <Ionicons name="add-circle-outline" size={20} color="#8B5CF6" />
+          <Ionicons name="add-circle-outline" size={20} color={colors.brand.purpleLight} />
           <Text style={styles.requestButtonText}>
             Request "{searchQuery}"
           </Text>
@@ -322,7 +323,7 @@ const MerchantSelector: React.FC<MerchantSelectorProps> = ({
               onPress={onCancel}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <Ionicons name="arrow-back" size={24} color="#111827" />
+              <Ionicons name="arrow-back" size={24} color={colors.neutral[900]} />
             </Pressable>
           )}
           <Text style={styles.headerTitle}>Select Merchant</Text>
@@ -332,18 +333,18 @@ const MerchantSelector: React.FC<MerchantSelectorProps> = ({
               onPress={onCancel}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <Ionicons name="close" size={24} color="#111827" />
+              <Ionicons name="close" size={24} color={colors.neutral[900]} />
             </Pressable>
           )}
         </View>
 
         {/* Search bar */}
         <View style={styles.searchContainer}>
-          <Ionicons name="search" size={20} color="#9CA3AF" style={styles.searchIcon} />
+          <Ionicons name="search" size={20} color={colors.neutral[400]} style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
             placeholder={searchPlaceholder}
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={searchQuery}
             onChangeText={setSearchQuery}
             autoCorrect={false}
@@ -354,7 +355,7 @@ const MerchantSelector: React.FC<MerchantSelectorProps> = ({
               onPress={() => setSearchQuery('')}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <Ionicons name="close-circle" size={20} color="#9CA3AF" />
+              <Ionicons name="close-circle" size={20} color={colors.neutral[400]} />
             </Pressable>
           )}
         </View>
@@ -385,7 +386,7 @@ const MerchantSelector: React.FC<MerchantSelectorProps> = ({
               style={styles.requestFooterButton}
               onPress={() => onRequestMerchant('')}
             >
-              <Ionicons name="help-circle-outline" size={20} color="#8B5CF6" />
+              <Ionicons name="help-circle-outline" size={20} color={colors.brand.purpleLight} />
               <Text style={styles.requestFooterText}>
                 Can't find your store? Request it
               </Text>
@@ -400,7 +401,7 @@ const MerchantSelector: React.FC<MerchantSelectorProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   header: {
     flexDirection: 'row',
@@ -408,9 +409,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -435,20 +436,20 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     flex: 1,
     textAlign: 'center',
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     margin: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -470,7 +471,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#111827',
+    color: colors.neutral[900],
     padding: 0,
   },
   categoryScroll: {
@@ -485,34 +486,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     marginRight: 8,
   },
   categoryPillActive: {
-    backgroundColor: '#8B5CF6',
-    borderColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
+    borderColor: colors.brand.purpleLight,
   },
   categoryPillText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   categoryPillTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   listContent: {
     paddingHorizontal: 16,
     paddingBottom: 16,
   },
   merchantCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginVertical: 6,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -529,9 +530,9 @@ const styles = StyleSheet.create({
     }),
   },
   merchantCardSelected: {
-    borderColor: '#10B981',
+    borderColor: colors.successScale[400],
     borderWidth: 2,
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
   },
   merchantContent: {
     flexDirection: 'row',
@@ -546,7 +547,7 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
   },
   logoContainer: {
     marginRight: 12,
@@ -560,14 +561,14 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 8,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
   logoText: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   merchantDetails: {
     flex: 1,
@@ -580,12 +581,12 @@ const styles = StyleSheet.create({
   merchantName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     flex: 1,
     marginRight: 8,
   },
   categoryBadge: {
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
@@ -593,7 +594,7 @@ const styles = StyleSheet.create({
   categoryBadgeText: {
     fontSize: 11,
     fontWeight: '500',
-    color: '#6366F1',
+    color: colors.brand.indigo,
   },
   merchantMeta: {
     flexDirection: 'row',
@@ -603,20 +604,20 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   metaDivider: {
     fontSize: 13,
-    color: '#D1D5DB',
+    color: colors.neutral[300],
     marginHorizontal: 6,
   },
   metaText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   merchantDescription: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 2,
   },
   separator: {
@@ -629,7 +630,7 @@ const styles = StyleSheet.create({
   skeletonCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginVertical: 6,
@@ -638,14 +639,14 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginRight: 12,
   },
   skeletonLogo: {
     width: 48,
     height: 48,
     borderRadius: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginRight: 12,
   },
   skeletonContent: {
@@ -653,14 +654,14 @@ const styles = StyleSheet.create({
   },
   skeletonTitle: {
     height: 16,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 8,
     width: '60%',
   },
   skeletonSubtitle: {
     height: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 4,
     width: '40%',
   },
@@ -673,36 +674,36 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginTop: 16,
     marginBottom: 8,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 24,
   },
   requestButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
   },
   requestButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     marginLeft: 8,
   },
   footer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
@@ -715,7 +716,7 @@ const styles = StyleSheet.create({
   requestFooterText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     marginLeft: 8,
   },
 });

@@ -15,6 +15,7 @@ import productsApi from '@/services/productsApi';
 import storesApi from '@/services/storesApi';
 import { ProductItem } from '@/types/homepage.types';
 import { useRecommendationTracking } from '@/contexts/RecommendationContext';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2; // 2 columns with padding
@@ -313,7 +314,7 @@ function CategoryRecommendationsGrid({
       <View style={styles.container}>
         <Text style={styles.title}>{title}</Text>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#7C3AED" />
+          <ActivityIndicator size="large" color={colors.brand.purple} />
           <Text style={styles.loadingText}>Loading recommendations...</Text>
         </View>
       </View>
@@ -325,12 +326,12 @@ function CategoryRecommendationsGrid({
       <View style={styles.container}>
         <Text style={styles.title}>{title}</Text>
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle-outline" size={48} color="#1a3a52" />
+          <Ionicons name="alert-circle-outline" size={48} color={colors.nileBlue} />
           <Text style={styles.errorText}>
             {error || 'No recommendations available'}
           </Text>
           <Pressable style={styles.retryButton} onPress={handleRetry}>
-            <Ionicons name="reload" size={18} color="#FFFFFF" />
+            <Ionicons name="reload" size={18} color={colors.background.primary} />
             <Text style={styles.retryText}>Retry</Text>
           </Pressable>
         </View>
@@ -389,7 +390,7 @@ function RecommendationCard({ card, onPress }: RecommendationCardProps) {
       >
         {/* Cashback Badge */}
         <View style={styles.cashbackBadge}>
-          <Ionicons name="gift" size={12} color="#FFFFFF" />
+          <Ionicons name="gift" size={12} color={colors.background.primary} />
           <Text style={styles.cashbackText}>
             Upto {card.cashbackPercentage}% cash back
           </Text>
@@ -415,13 +416,13 @@ function RecommendationCard({ card, onPress }: RecommendationCardProps) {
           <Ionicons
             name={card.type === 'product' ? 'pricetag' : 'storefront'}
             size={16}
-            color="#FFFFFF"
+            color={colors.background.primary}
           />
         </View>
 
         {/* Arrow Icon */}
         <View style={styles.arrowIcon}>
-          <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+          <Ionicons name="arrow-forward" size={18} color={colors.background.primary} />
         </View>
       </LinearGradient>
     </Pressable>
@@ -430,11 +431,11 @@ function RecommendationCard({ card, onPress }: RecommendationCardProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 24,
     paddingHorizontal: 16,
     borderTopWidth: 8,
-    borderTopColor: '#F9FAFB',
+    borderTopColor: colors.neutral[50],
   },
   header: {
     marginBottom: 16,
@@ -442,13 +443,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.5,
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   loadingContainer: {
@@ -458,7 +459,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   errorContainer: {
@@ -468,14 +469,14 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     maxWidth: 250,
   },
   retryButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
@@ -485,7 +486,7 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   grid: {
     flexDirection: 'row',
@@ -497,7 +498,7 @@ const styles = StyleSheet.create({
     height: 160,
     borderRadius: 16,
     overflow: 'hidden',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
@@ -527,7 +528,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   cardInfo: {
     gap: 4,
@@ -543,13 +544,13 @@ const styles = StyleSheet.create({
   topBadgeText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textTransform: 'uppercase',
   },
   cardTitle: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textShadowColor: 'rgba(0, 0, 0, 0.5)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 4,
@@ -558,7 +559,7 @@ const styles = StyleSheet.create({
   cardSubtitle: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#F3F4F6',
+    color: colors.neutral[100],
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,

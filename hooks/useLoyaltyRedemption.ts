@@ -3,6 +3,7 @@
  * Complete hook for managing loyalty redemption state and operations
  */
 
+import { colors } from '@/constants/theme';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import loyaltyRedemptionApi from '@/services/loyaltyRedemptionApi';
 import {
@@ -461,13 +462,13 @@ export function useLoyaltyRedemption(options: UseLoyaltyRedemptionOptions = {}) 
       case 'Silver':
         return '#C0C0C0';
       case 'Gold':
-        return '#FFD700';
+        return colors.brand.goldBright;
       case 'Platinum':
         return '#E5E4E2';
       case 'Diamond':
         return '#B9F2FF';
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   }, []);
 

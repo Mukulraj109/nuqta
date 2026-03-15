@@ -22,6 +22,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useHomeDeliveryPage } from '@/hooks/useHomeDeliveryPage';
 import { HomeDeliveryProduct } from '@/types/home-delivery.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function HomeDeliveryPage() {
   const router = useRouter();

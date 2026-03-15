@@ -16,6 +16,7 @@ import { FormPageSkeleton } from '@/components/skeletons';
 import apiClient from '../../services/apiClient';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface CourierPreferences {
   preferredCourier: 'any' | 'delhivery' | 'bluedart' | 'ekart' | 'dtdc' | 'fedex';
@@ -216,7 +217,7 @@ export default function CourierPreferencesScreen() {
           accessibilityRole="button"
           accessibilityHint="Double tap to return to previous screen"
         >
-          <Ionicons name="arrow-back" size={24} color="#1F2937" />
+          <Ionicons name="arrow-back" size={24} color={colors.neutral[800]} />
         </Pressable>
         <Text style={styles.headerTitle}>Courier Preferences</Text>
         <View style={{ width: 40 }} />
@@ -291,8 +292,8 @@ export default function CourierPreferencesScreen() {
               value={preferences.deliveryTimePreference.avoidWeekends}
               onValueChange={handleAvoidWeekendsToggle}
               disabled={saving}
-              trackColor={{ false: '#D1D5DB', true: '#3B82F6' }}
-              thumbColor={preferences.deliveryTimePreference.avoidWeekends ? '#FFFFFF' : '#F3F4F6'}
+              trackColor={{ false: colors.neutral[300], true: colors.infoScale[400] }}
+              thumbColor={preferences.deliveryTimePreference.avoidWeekends ? colors.background.primary : colors.neutral[100]}
               accessibilityLabel={`Avoid weekends${preferences.deliveryTimePreference.avoidWeekends ? ', enabled' : ', disabled'}`}
               accessibilityRole="switch"
               accessibilityState={{ checked: preferences.deliveryTimePreference.avoidWeekends, disabled: saving }}
@@ -318,7 +319,7 @@ export default function CourierPreferencesScreen() {
                 })
               }
               disabled={saving}
-              trackColor={{ false: '#D1D5DB', true: '#3B82F6' }}
+              trackColor={{ false: colors.neutral[300], true: colors.infoScale[400] }}
               accessibilityLabel={`Contactless delivery${preferences.deliveryInstructions.contactlessDelivery ? ', enabled' : ', disabled'}`}
               accessibilityRole="switch"
               accessibilityState={{ checked: preferences.deliveryInstructions.contactlessDelivery, disabled: saving }}
@@ -339,7 +340,7 @@ export default function CourierPreferencesScreen() {
                 })
               }
               disabled={saving}
-              trackColor={{ false: '#D1D5DB', true: '#3B82F6' }}
+              trackColor={{ false: colors.neutral[300], true: colors.infoScale[400] }}
               accessibilityLabel={`Leave at door${preferences.deliveryInstructions.leaveAtDoor ? ', enabled' : ', disabled'}`}
               accessibilityRole="switch"
               accessibilityState={{ checked: preferences.deliveryInstructions.leaveAtDoor, disabled: saving }}
@@ -360,7 +361,7 @@ export default function CourierPreferencesScreen() {
                 })
               }
               disabled={saving}
-              trackColor={{ false: '#D1D5DB', true: '#3B82F6' }}
+              trackColor={{ false: colors.neutral[300], true: colors.infoScale[400] }}
               accessibilityLabel={`Signature required${preferences.deliveryInstructions.signatureRequired ? ', enabled' : ', disabled'}`}
               accessibilityRole="switch"
               accessibilityState={{ checked: preferences.deliveryInstructions.signatureRequired, disabled: saving }}
@@ -381,7 +382,7 @@ export default function CourierPreferencesScreen() {
                 })
               }
               disabled={saving}
-              trackColor={{ false: '#D1D5DB', true: '#3B82F6' }}
+              trackColor={{ false: colors.neutral[300], true: colors.infoScale[400] }}
               accessibilityLabel={`Call before delivery${preferences.deliveryInstructions.callBeforeDelivery ? ', enabled' : ', disabled'}`}
               accessibilityRole="switch"
               accessibilityState={{ checked: preferences.deliveryInstructions.callBeforeDelivery, disabled: saving }}
@@ -404,7 +405,7 @@ export default function CourierPreferencesScreen() {
               })
             }
             placeholder="Add any special delivery instructions..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             accessibilityLabel="Special delivery instructions"
             accessibilityHint="Enter any special instructions for delivery"
           />
@@ -427,7 +428,7 @@ export default function CourierPreferencesScreen() {
                 })
               }
               disabled={saving}
-              trackColor={{ false: '#D1D5DB', true: '#3B82F6' }}
+              trackColor={{ false: colors.neutral[300], true: colors.infoScale[400] }}
               accessibilityLabel={`SMS updates${preferences.courierNotifications.smsUpdates ? ', enabled' : ', disabled'}`}
               accessibilityRole="switch"
               accessibilityState={{ checked: preferences.courierNotifications.smsUpdates, disabled: saving }}
@@ -448,7 +449,7 @@ export default function CourierPreferencesScreen() {
                 })
               }
               disabled={saving}
-              trackColor={{ false: '#D1D5DB', true: '#3B82F6' }}
+              trackColor={{ false: colors.neutral[300], true: colors.infoScale[400] }}
               accessibilityLabel={`Email updates${preferences.courierNotifications.emailUpdates ? ', enabled' : ', disabled'}`}
               accessibilityRole="switch"
               accessibilityState={{ checked: preferences.courierNotifications.emailUpdates, disabled: saving }}
@@ -469,7 +470,7 @@ export default function CourierPreferencesScreen() {
                 })
               }
               disabled={saving}
-              trackColor={{ false: '#D1D5DB', true: '#3B82F6' }}
+              trackColor={{ false: colors.neutral[300], true: colors.infoScale[400] }}
               accessibilityLabel={`WhatsApp updates${preferences.courierNotifications.whatsappUpdates ? ', enabled' : ', disabled'}`}
               accessibilityRole="switch"
               accessibilityState={{ checked: preferences.courierNotifications.whatsappUpdates, disabled: saving }}
@@ -490,7 +491,7 @@ export default function CourierPreferencesScreen() {
                 })
               }
               disabled={saving}
-              trackColor={{ false: '#D1D5DB', true: '#3B82F6' }}
+              trackColor={{ false: colors.neutral[300], true: colors.infoScale[400] }}
               accessibilityLabel={`Call updates${preferences.courierNotifications.callUpdates ? ', enabled' : ', disabled'}`}
               accessibilityRole="switch"
               accessibilityState={{ checked: preferences.courierNotifications.callUpdates, disabled: saving }}
@@ -503,7 +504,7 @@ export default function CourierPreferencesScreen() {
       {/* Saving Indicator */}
       {saving && (
         <View style={styles.savingIndicator}>
-          <ActivityIndicator size="small" color="#FFFFFF" />
+          <ActivityIndicator size="small" color={colors.background.primary} />
           <Text style={styles.savingText}>Saving...</Text>
         </View>
       )}
@@ -511,7 +512,7 @@ export default function CourierPreferencesScreen() {
       {/* Success Message */}
       {showSuccessMessage && (
         <View style={styles.successIndicator}>
-          <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
+          <Ionicons name="checkmark-circle" size={20} color={colors.background.primary} />
           <Text style={styles.successText}>Preferences saved!</Text>
         </View>
       )}

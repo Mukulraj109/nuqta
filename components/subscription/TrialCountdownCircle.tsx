@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Svg, Circle, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface TrialCountdownCircleProps {
   endDate: Date | string;
@@ -18,7 +19,7 @@ function TrialCountdownCircle({
   strokeWidth = 8,
 }: TrialCountdownCircleProps) {
   const [daysLeft, setDaysLeft] = useState(0);
-  const [color, setColor] = useState('#10B981');
+  const [color, setColor] = useState(colors.successScale[400]);
 
   useEffect(() => {
     // Calculate days remaining
@@ -31,11 +32,11 @@ function TrialCountdownCircle({
 
     // Determine color based on days remaining
     if (daysRemaining > 5) {
-      setColor('#10B981'); // Green
+      setColor(colors.successScale[400]); // Green
     } else if (daysRemaining > 3) {
-      setColor('#F59E0B'); // Yellow/Amber
+      setColor(colors.warningScale[400]); // Yellow/Amber
     } else {
-      setColor('#EF4444'); // Red
+      setColor(colors.error); // Red
     }
   }, [endDate]);
 
@@ -66,7 +67,7 @@ function TrialCountdownCircle({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#E5E7EB"
+          stroke={colors.neutral[200]}
           strokeWidth={strokeWidth}
         />
 
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 4,
   },
   statusBadge: {

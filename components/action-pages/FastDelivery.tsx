@@ -2,6 +2,7 @@
  * Fast Delivery Router
  * Renders the correct fast delivery page based on category slug.
  */
+import { colors } from '@/constants/theme';
 import React, { Suspense, lazy } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
@@ -18,7 +19,7 @@ export default function FastDelivery() {
 
   return (
     <Suspense fallback={
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5F5F5' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.tint.warmGray }}>
         <ActivityIndicator size="large" color={theme.primaryColor} />
       </View>
     }>

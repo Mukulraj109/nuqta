@@ -21,6 +21,7 @@ import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Premium Design Tokens from TASK.md - Mustard & Gold Theme
 const GLASS = {
@@ -93,12 +94,14 @@ export default function FollowStoreSection({
 
   // Animate toggle position
   useEffect(() => {
-    Animated.spring(toggleAnim, {
+    const anim = Animated.spring(toggleAnim, {
       toValue: notificationsEnabled ? 1 : 0,
       useNativeDriver: true,
       friction: 8,
       tension: 100,
-    }).start();
+    });
+    anim.start();
+    return () => anim.stop();
   }, [notificationsEnabled]);
 
   // Pulse animation for following state
@@ -123,8 +126,12 @@ export default function FollowStoreSection({
     }
   }, [isFollowing]);
 
-  // Glow pulse animation
+  // Glow pulse animation — only run when following
   useEffect(() => {
+    if (!isFollowing) {
+      glowAnim.setValue(0.3);
+      return;
+    }
     const glow = Animated.loop(
       Animated.sequence([
         Animated.timing(glowAnim, {
@@ -141,7 +148,7 @@ export default function FollowStoreSection({
     );
     glow.start();
     return () => glow.stop();
-  }, []);
+  }, [isFollowing]);
 
   // Check follow status on mount
   useEffect(() => {
@@ -412,9 +419,9 @@ export default function FollowStoreSection({
           <ThemedText style={styles.benefitsTitle}>Why Follow?</ThemedText>
           <View style={styles.benefitsGrid}>
             {[
-              { icon: 'flash', label: 'Early Access', colors: ['#faf1e0', '#ffcd57'], iconColor: '#1a3a52' },
-              { icon: 'pricetag', label: 'Exclusive Deals', colors: ['#dfebf7', '#b8d4ed'], iconColor: '#1a3a52' },
-              { icon: 'gift', label: 'Special Rewards', colors: ['#ffd7b5', '#E8B896'], iconColor: '#1a3a52' },
+              { icon: 'flash', label: 'Early Access', colors: [colors.linen, colors.lightMustard], iconColor: colors.nileBlue },
+              { icon: 'pricetag', label: 'Exclusive Deals', colors: [colors.lavenderMist, '#b8d4ed'], iconColor: colors.nileBlue },
+              { icon: 'gift', label: 'Special Rewards', colors: [colors.lightPeach, colors.brand.sand], iconColor: colors.nileBlue },
             ].map((benefit, index) => (
               <View key={index} style={styles.benefitCard}>
                 <LinearGradient

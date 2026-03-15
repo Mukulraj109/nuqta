@@ -13,6 +13,7 @@ import homeServicesApi, { HomeServiceCategory, HomeService, HomeServicesStats } 
 import { useRegion } from '@/contexts/RegionContext';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const HomeServicesPage: React.FC = () => {
   const router = useRouter();
@@ -69,7 +70,7 @@ const HomeServicesPage: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#3B82F6', '#2563EB']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
+      <LinearGradient colors={[colors.infoScale[400], colors.brand.blue]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
         <View style={styles.headerTop}>
           <Pressable onPress={() => router.back()} style={styles.backButton}><Ionicons name="arrow-back" size={24} color={Colors.background.primary} /></Pressable>
           <View style={styles.headerTitleContainer}>
@@ -157,7 +158,7 @@ const HomeServicesPage: React.FC = () => {
         </View>
 
         <View style={styles.promoBanner}>
-          <LinearGradient colors={['#22C55E', '#16A34A']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.promoGradient}>
+          <LinearGradient colors={[colors.success, colors.brand.greenDark]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.promoGradient}>
             <Text style={styles.promoEmoji}>🏠</Text>
             <Text style={styles.promoTitle}>Verified Professionals</Text>
             <Text style={styles.promoSubtitle}>Background verified • Trained experts • Guaranteed service</Text>

@@ -3,6 +3,7 @@
  * Shows how ReZ Privé works with coin type explainer
  */
 
+import { colors } from '@/constants/theme';
 import React from 'react';
 import {
   View,
@@ -31,12 +32,12 @@ const getSteps = (currencySymbol: string): HowItWorksStep[] => [
   {
     id: 'earn',
     icon: '↑',
-    iconColor: '#4CAF50',
+    iconColor: colors.brand.emerald,
     iconBgColor: 'rgba(76, 175, 80, 0.15)',
     title: 'Earn Coins',
     description: 'Shop, share content, & complete campaigns',
     badge: '+15-50%',
-    badgeColor: '#4CAF50',
+    badgeColor: colors.brand.emerald,
     route: '/explore',
   },
   {

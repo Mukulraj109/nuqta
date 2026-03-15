@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { RewardItem, RewardCategory } from '@/types/loyaltyRedemption.types';
 import RewardCard from './RewardCard';
+import { colors } from '@/constants/theme';
 
 interface RewardCatalogProps {
   rewards: RewardItem[];
@@ -34,7 +35,7 @@ function RewardCatalog({
   onRedeemReward,
   canRedeemReward,
   userPoints,
-  tierColor = '#8B5CF6',
+  tierColor = colors.brand.purpleLight,
   onSearch,
   onFilter,
 }: RewardCatalogProps) {
@@ -79,17 +80,17 @@ function RewardCatalog({
     <View style={styles.container}>
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color="#9CA3AF" style={styles.searchIcon} />
+        <Ionicons name="search" size={20} color={colors.neutral[400]} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="Search rewards..."
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.neutral[400]}
           value={searchQuery}
           onChangeText={handleSearch}
         />
         {searchQuery.length > 0 && (
           <Pressable onPress={() => handleSearch('')}>
-            <Ionicons name="close-circle" size={20} color="#9CA3AF" />
+            <Ionicons name="close-circle" size={20} color={colors.neutral[400]} />
           </Pressable>
         )}
       </View>
@@ -158,7 +159,7 @@ function RewardCatalog({
       {featuredRewards.length > 0 && (
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="star" size={20} color="#F59E0B" />
+            <Ionicons name="star" size={20} color={colors.warningScale[400]} />
             <ThemedText style={styles.sectionTitle}>Featured Rewards</ThemedText>
           </View>
           {featuredRewards.map(reward => {
@@ -201,7 +202,7 @@ function RewardCatalog({
 
       {filteredRewards.length === 0 && (
         <View style={styles.emptyState}>
-          <Ionicons name="gift-outline" size={64} color="#D1D5DB" />
+          <Ionicons name="gift-outline" size={64} color={colors.neutral[300]} />
           <ThemedText style={styles.emptyTitle}>No rewards found</ThemedText>
           <ThemedText style={styles.emptyText}>
             {searchQuery ? 'Try a different search term' : 'Check back later for new rewards'}
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#111827',
+    color: colors.neutral[900],
   },
   categoryContainer: {
     marginBottom: 16,
@@ -243,18 +244,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   categoryButtonActive: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   categoryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   categoryTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   sortContainer: {
     flexDirection: 'row',
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
   },
   sortLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   sortButtons: {
     flexDirection: 'row',
@@ -274,18 +275,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   sortButtonActive: {
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
   },
   sortText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   sortTextActive: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   section: {
     marginBottom: 24,
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   emptyState: {
     alignItems: 'center',
@@ -309,13 +310,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 16,
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
   },
 });

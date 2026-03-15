@@ -24,6 +24,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface Deal {
   store: string;
@@ -145,8 +146,8 @@ export default function AdminCampaigns() {
       case 'coins': return Colors.warning;
       case 'bank': return Colors.info;
       case 'bill': return Colors.brand.purple;
-      case 'drop': return '#EC4899';
-      case 'new-user': return '#06B6D4';
+      case 'drop': return colors.brand.pink;
+      case 'new-user': return colors.brand.cyan;
       default: return Colors.text.tertiary;
     }
   };
@@ -171,11 +172,11 @@ export default function AdminCampaigns() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#10B981" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.successScale[400]} />
 
       {/* Header */}
       <LinearGradient
-        colors={['#10B981', '#059669']}
+        colors={[colors.successScale[400], colors.successScale[700]]}
         style={styles.header}
       >
         <Pressable
@@ -213,12 +214,12 @@ export default function AdminCampaigns() {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#10B981" />
+            <ActivityIndicator size="large" color={colors.successScale[400]} />
             <Text style={styles.loadingText}>Loading campaigns...</Text>
           </View>
         ) : campaigns.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Ionicons name="megaphone-outline" size={64} color="#D1D5DB" />
+            <Ionicons name="megaphone-outline" size={64} color={colors.neutral[300]} />
             <Text style={styles.emptyTitle}>No Campaigns</Text>
             <Text style={styles.emptyText}>No campaigns found in the database</Text>
           </View>
@@ -247,14 +248,14 @@ export default function AdminCampaigns() {
                       </Text>
                     </View>
                     <Text style={styles.regionTag}>{getRegionLabel(campaign.region)}</Text>
-                    <View style={[styles.statusDot, { backgroundColor: campaign.isActive ? '#10B981' : '#EF4444' }]} />
+                    <View style={[styles.statusDot, { backgroundColor: campaign.isActive ? colors.successScale[400] : colors.error }]} />
                     <Text style={styles.statusText}>{campaign.isActive ? 'Active' : 'Inactive'}</Text>
                   </View>
                 </View>
                 <Ionicons
                   name={expandedCampaign === campaign.campaignId ? 'chevron-up' : 'chevron-down'}
                   size={24}
-                  color="#6B7280"
+                  color={colors.neutral[500]}
                 />
               </Pressable>
 
@@ -280,19 +281,19 @@ export default function AdminCampaigns() {
                       <View style={styles.storeLinkSection}>
                         {deal.storeDetails ? (
                           <View style={styles.linkedStore}>
-                            <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                            <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
                             <Text style={styles.linkedStoreText}>
                               Linked to: {deal.storeDetails.name}
                             </Text>
                           </View>
                         ) : deal.storeId ? (
                           <View style={styles.linkedStore}>
-                            <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                            <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
                             <Text style={styles.linkedStoreText}>Store ID: {deal.storeId}</Text>
                           </View>
                         ) : (
                           <View style={styles.unlinkedStore}>
-                            <Ionicons name="warning" size={16} color="#F59E0B" />
+                            <Ionicons name="warning" size={16} color={colors.warningScale[400]} />
                             <Text style={styles.unlinkedStoreText}>No store linked</Text>
                           </View>
                         )}
@@ -329,7 +330,7 @@ export default function AdminCampaigns() {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Select Store</Text>
               <Pressable onPress={() => setStoreSelectModalVisible(false)}>
-                <Ionicons name="close" size={24} color="#6B7280" />
+                <Ionicons name="close" size={24} color={colors.neutral[500]} />
               </Pressable>
             </View>
 
@@ -344,11 +345,11 @@ export default function AdminCampaigns() {
 
             {/* Search Box */}
             <View style={styles.searchBox}>
-              <Ionicons name="search" size={20} color="#9CA3AF" />
+              <Ionicons name="search" size={20} color={colors.neutral[400]} />
               <TextInput
                 style={styles.searchInput}
                 placeholder="Search stores..."
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={storeSearchQuery}
                 onChangeText={setStoreSearchQuery}
                 autoCapitalize="none"
@@ -360,11 +361,11 @@ export default function AdminCampaigns() {
             <ScrollView style={styles.storeList} showsVerticalScrollIndicator={false}>
               {actionLoading ? (
                 <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color="#10B981" />
+                  <ActivityIndicator size="large" color={colors.successScale[400]} />
                 </View>
               ) : filteredStores.length === 0 ? (
                 <View style={styles.noStoresContainer}>
-                  <Ionicons name="storefront-outline" size={48} color="#D1D5DB" />
+                  <Ionicons name="storefront-outline" size={48} color={colors.neutral[300]} />
                   <Text style={styles.noStoresText}>No stores found</Text>
                 </View>
               ) : (
@@ -382,7 +383,7 @@ export default function AdminCampaigns() {
                         />
                       ) : (
                         <View style={styles.storeItemImagePlaceholder}>
-                          <Ionicons name="storefront" size={20} color="#9CA3AF" />
+                          <Ionicons name="storefront" size={20} color={colors.neutral[400]} />
                         </View>
                       )}
                       <View style={styles.storeItemDetails}>
@@ -393,7 +394,7 @@ export default function AdminCampaigns() {
                         )}
                       </View>
                     </View>
-                    <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+                    <Ionicons name="chevron-forward" size={20} color={colors.neutral[400]} />
                   </Pressable>
                 ))
               )}

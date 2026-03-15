@@ -2,6 +2,7 @@
 // Manages notification settings and applies them globally across the app
 
 import React, { createContext, useContext, useEffect, useState, ReactNode, useCallback, useMemo } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import { useAuth } from './AuthContext';
@@ -259,32 +260,58 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
     if (!isAuthenticated) _notificationSettingsLoaded = false;
   }, [isAuthenticated]);
 
-  // Auto-sync with backend every 5 minutes
+  // Auto-sync with backend every 5 minutes, pausing when app is backgrounded
   useEffect(() => {
     if (!isAuthenticated || !user?.isOnboarded) return;
 
     let isMounted = true;
-    const interval = setInterval(async () => {
-      if (!isMounted) return;
-      try {
-        const lastSync = await AsyncStorage.getItem(STORAGE_KEYS.LAST_SYNC);
-        if (lastSync && isMounted) {
-          const lastSyncTime = new Date(lastSync).getTime();
-          const now = new Date().getTime();
-          const fiveMinutes = 5 * 60 * 1000;
+    const appStateRef = { current: AppState.currentState };
+    let intervalId: ReturnType<typeof setInterval> | null = null;
 
-          if (now - lastSyncTime > fiveMinutes) {
-            await refreshSettings();
+    const startInterval = () => {
+      if (intervalId) return; // already running
+      intervalId = setInterval(async () => {
+        if (!isMounted || appStateRef.current !== 'active') return;
+        try {
+          const lastSync = await AsyncStorage.getItem(STORAGE_KEYS.LAST_SYNC);
+          if (lastSync && isMounted) {
+            const lastSyncTime = new Date(lastSync).getTime();
+            const now = new Date().getTime();
+            const fiveMinutes = 5 * 60 * 1000;
+
+            if (now - lastSyncTime > fiveMinutes) {
+              await refreshSettings();
+            }
           }
+        } catch (err) {
+          // Silently ignore sync errors
         }
-      } catch (err) {
-        // Silently ignore sync errors
+      }, 5 * 60 * 1000);
+    };
+
+    const stopInterval = () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
       }
-    }, 5 * 60 * 1000);
+    };
+
+    // Only poll while app is in the foreground
+    const subscription = AppState.addEventListener('change', (nextState: AppStateStatus) => {
+      appStateRef.current = nextState;
+      if (nextState === 'active') {
+        startInterval();
+      } else {
+        stopInterval();
+      }
+    });
+
+    startInterval();
 
     return () => {
       isMounted = false;
-      clearInterval(interval);
+      stopInterval();
+      subscription.remove();
     };
   }, [isAuthenticated, user, refreshSettings]);
 

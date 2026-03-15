@@ -26,6 +26,7 @@ import { ProfileMenuModalProps, ProfileMenuItem } from '@/types/profile.types';
 import { useRegion, RegionId } from '@/contexts/RegionContext';
 import { useLocation } from '@/contexts/LocationContext';
 import { UserLocation } from '@/types/location.types';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const MODAL_WIDTH = SCREEN_WIDTH * 0.88;
@@ -33,35 +34,35 @@ const MODAL_WIDTH = SCREEN_WIDTH * 0.88;
 // Nuqta Design Colors
 const COLORS = {
   // Primary - Nuqta Palette
-  primary: '#ffcd57',        // Light Mustard
-  primaryDark: '#1a3a52',    // Nile Blue
+  primary: colors.lightMustard,        // Light Mustard
+  primaryDark: colors.nileBlue,    // Nile Blue
   primaryLight: 'rgba(255, 205, 87, 0.1)',
   primaryGlow: 'rgba(255, 205, 87, 0.3)',
 
   // Gold (rewards) - matches Mustard
-  gold: '#ffcd57',
+  gold: colors.lightMustard,
   goldLight: 'rgba(255, 205, 87, 0.15)',
   goldGlow: 'rgba(255, 205, 87, 0.3)',
 
   // Dark Navy - Nile Blue
-  navy: '#1a3a52',
+  navy: colors.nileBlue,
 
   // Text
-  textPrimary: '#1a3a52',
+  textPrimary: colors.nileBlue,
   textSecondary: '#1F2D3D',
-  textMuted: '#9AA7B2',
+  textMuted: colors.gray[400],
 
   // Surface - Linen
-  surface: '#faf1e0',
-  white: '#FFFFFF',
+  surface: colors.linen,
+  white: colors.background.primary,
 
   // Glass
   glassWhite: 'rgba(255, 255, 255, 0.7)',
   glassBorder: 'rgba(255, 255, 255, 0.4)',
 
   // Status
-  success: '#ffcd57',
-  error: '#EF4444',
+  success: colors.lightMustard,
+  error: colors.error,
 };
 
 // Region data with flags - Dubai first as default
@@ -152,7 +153,7 @@ const ConfirmationModal = ({
               colors={[COLORS.primary, COLORS.primaryDark]}
               style={confirmStyles.iconGradient}
             >
-              <Ionicons name={icon as any} size={32} color="#fff" />
+              <Ionicons name={icon as any} size={32} color={colors.background.primary} />
             </LinearGradient>
           </View>
 
@@ -164,7 +165,7 @@ const ConfirmationModal = ({
 
           {/* Warning Badge */}
           <View style={confirmStyles.warningBadge}>
-            <Ionicons name="warning" size={16} color="#F59E0B" />
+            <Ionicons name="warning" size={16} color={colors.warningScale[400]} />
             <ThemedText style={confirmStyles.warningText}>
               Your cart will be cleared
             </ThemedText>
@@ -187,7 +188,7 @@ const ConfirmationModal = ({
               onPress={onConfirm}
              
             >
-              <Ionicons name="swap-horizontal" size={18} color="#fff" />
+              <Ionicons name="swap-horizontal" size={18} color={colors.background.primary} />
               <ThemedText style={confirmStyles.confirmButtonText}>
                 {confirmText}
               </ThemedText>
@@ -208,7 +209,7 @@ const confirmStyles = StyleSheet.create({
     padding: 20,
   },
   modalContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 24,
     padding: 24,
     width: '100%',
@@ -271,7 +272,7 @@ const confirmStyles = StyleSheet.create({
   warningBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
@@ -281,7 +282,7 @@ const confirmStyles = StyleSheet.create({
   warningText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -292,7 +293,7 @@ const confirmStyles = StyleSheet.create({
     flex: 1,
     paddingVertical: 14,
     borderRadius: 14,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -327,7 +328,7 @@ const confirmStyles = StyleSheet.create({
   confirmButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.background.primary,
   },
 });
 
@@ -493,7 +494,7 @@ function ProfileMenuModal({
         {/* Avatar with gradient ring */}
         <View style={styles.avatarWrapper}>
           <LinearGradient
-            colors={[COLORS.gold, '#FF9F1C']}
+            colors={[COLORS.gold, colors.warning]}
             style={styles.avatarRing}
           >
             <View style={styles.avatarInner}>
@@ -743,7 +744,7 @@ function ProfileMenuModal({
       {sectionIndex === 1 && (
         <View style={styles.sectionHeader}>
           <LinearGradient
-            colors={[COLORS.gold, '#FF9F1C']}
+            colors={[COLORS.gold, colors.warning]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.sectionHeaderAccent}

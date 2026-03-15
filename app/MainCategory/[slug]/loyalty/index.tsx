@@ -20,6 +20,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { getCategoryTheme, SHARED_COLORS, TIER_COLORS } from '@/config/categoryThemeConfig';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function LoyaltyHubPage() {
   const router = useRouter();
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
   coinLabel: { fontSize: 12, color: SHARED_COLORS.textSecondary },
   coinValue: { fontSize: 22, fontWeight: '700', color: SHARED_COLORS.textPrimary },
   coinBreakdown: { fontSize: 10, color: SHARED_COLORS.textSecondary, marginTop: 2 },
-  expiringBadge: { backgroundColor: '#FEE2E2', paddingHorizontal: Spacing.sm, paddingVertical: Spacing.xs, borderRadius: BorderRadius.sm },
+  expiringBadge: { backgroundColor: colors.errorScale[100], paddingHorizontal: Spacing.sm, paddingVertical: Spacing.xs, borderRadius: BorderRadius.sm },
   expiringText: { ...Typography.caption, fontWeight: '600', color: Colors.error },
   // Section
   section: { marginHorizontal: 16, marginBottom: 16 },

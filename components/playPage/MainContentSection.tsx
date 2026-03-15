@@ -4,6 +4,7 @@ import { UGCVideoItem, PLAY_PAGE_COLORS } from "@/types/playPage.types";
 import VideoGrid from "./VideoGrid";
 import { ThemedText } from "@/components/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
+import { colors } from '@/constants/theme';
 
 interface MainContentSectionProps {
   videos: UGCVideoItem[];

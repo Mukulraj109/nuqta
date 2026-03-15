@@ -17,6 +17,7 @@ import storeVisitApi from '@/services/storeVisitApi';
 import { useAuth } from '@/contexts/AuthContext';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface Visit {
   id: string;
@@ -146,7 +147,7 @@ export default function MyVisitsPage() {
       case 'cancelled':
         return Colors.error; // Red
       default:
-        return '#00C06A';
+        return colors.brand.green;
     }
   };
 
@@ -207,7 +208,7 @@ export default function MyVisitsPage() {
       <Stack.Screen options={{ headerShown: false }} />
       <View style={styles.container}>
       {/* Header */}
-      <LinearGradient colors={['#00C06A', '#00796B']} style={styles.header}>
+      <LinearGradient colors={[colors.brand.green, colors.brand.teal]} style={styles.header}>
         <Pressable onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="white" />
         </Pressable>
@@ -240,9 +241,9 @@ export default function MyVisitsPage() {
       {/* Error State */}
       {error && !loading && (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20, paddingTop: 40 }}>
-          <Ionicons name="cloud-offline-outline" size={64} color="#EF4444" />
-          <Text style={{ fontSize: 18, fontWeight: '700', color: '#1a1a2e', marginTop: 16, textAlign: 'center' }}>Something went wrong</Text>
-          <Text style={{ fontSize: 14, color: '#666', marginTop: 8, textAlign: 'center' }}>{error}</Text>
+          <Ionicons name="cloud-offline-outline" size={64} color={colors.error} />
+          <Text style={{ fontSize: 18, fontWeight: '700', color: colors.deepNavy, marginTop: 16, textAlign: 'center' }}>Something went wrong</Text>
+          <Text style={{ fontSize: 14, color: colors.midGray, marginTop: 8, textAlign: 'center' }}>{error}</Text>
           <Pressable
             onPress={() => { setError(null); loadVisits(); }}
             style={{ marginTop: 20, backgroundColor: '#667eea', paddingHorizontal: 24, paddingVertical: 12, borderRadius: 12 }}
@@ -261,14 +262,14 @@ export default function MyVisitsPage() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            colors={['#00C06A']}
-            tintColor="#00C06A"
+            colors={[colors.brand.green]}
+            tintColor={colors.brand.green}
           />
         }
       >
         {displayedVisits.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Ionicons name="calendar-outline" size={80} color="#E5E7EB" />
+            <Ionicons name="calendar-outline" size={80} color={colors.neutral[200]} />
             <Text style={styles.emptyTitle}>
               {activeTab === 'upcoming' ? 'No Upcoming Visits' : 'No Past Visits'}
             </Text>
@@ -278,7 +279,7 @@ export default function MyVisitsPage() {
                 : 'Your visit history will appear here'}
             </Text>
             <Pressable style={styles.browseButton} onPress={() => router.push('/(tabs)')}>
-              <Ionicons name="search" size={20} color="#FFFFFF" />
+              <Ionicons name="search" size={20} color={colors.background.primary} />
               <Text style={styles.browseButtonText}>Browse Stores</Text>
             </Pressable>
           </View>
@@ -289,7 +290,7 @@ export default function MyVisitsPage() {
                 {/* Store Info */}
                 <View style={styles.storeHeader}>
                   <View style={styles.storeIconContainer}>
-                    <Ionicons name="storefront" size={24} color="#00C06A" />
+                    <Ionicons name="storefront" size={24} color={colors.brand.green} />
                   </View>
                   <View style={styles.storeInfo}>
                     <Text style={styles.storeName}>{visit.store.name}</Text>
@@ -307,16 +308,16 @@ export default function MyVisitsPage() {
                 <View style={styles.visitTypeBadgeRow}>
                   <View style={[
                     styles.visitTypeBadge,
-                    { backgroundColor: visit.visitType === 'scheduled' ? '#EEF2FF' : '#FFF7ED' }
+                    { backgroundColor: visit.visitType === 'scheduled' ? colors.indigoMist : colors.tint.orange }
                   ]}>
                     <Ionicons
                       name={visit.visitType === 'scheduled' ? 'calendar' : 'people'}
                       size={14}
-                      color={visit.visitType === 'scheduled' ? '#667eea' : '#F59E0B'}
+                      color={visit.visitType === 'scheduled' ? '#667eea' : colors.warningScale[400]}
                     />
                     <Text style={[
                       styles.visitTypeBadgeText,
-                      { color: visit.visitType === 'scheduled' ? '#667eea' : '#F59E0B' }
+                      { color: visit.visitType === 'scheduled' ? '#667eea' : colors.warningScale[400] }
                     ]}>
                       {visit.visitType === 'scheduled' ? 'Scheduled Visit' : 'Queue Visit'}
                     </Text>
@@ -331,12 +332,12 @@ export default function MyVisitsPage() {
                 {/* Visit Details */}
                 <View style={styles.detailsContainer}>
                   <View style={styles.detailRow}>
-                    <Ionicons name="calendar-outline" size={18} color="#6B7280" />
+                    <Ionicons name="calendar-outline" size={18} color={colors.neutral[500]} />
                     <Text style={styles.detailText}>{formatDate(visit.visitDate)}</Text>
                   </View>
                   {visit.visitTime && (
                     <View style={styles.detailRow}>
-                      <Ionicons name="time-outline" size={18} color="#6B7280" />
+                      <Ionicons name="time-outline" size={18} color={colors.neutral[500]} />
                       <Text style={styles.detailText}>{visit.visitTime}</Text>
                     </View>
                   )}
@@ -359,7 +360,7 @@ export default function MyVisitsPage() {
                         style={styles.cancelButton}
                         onPress={() => handleCancelVisit(visit.id)}
                       >
-                        <Ionicons name="close-circle-outline" size={18} color="#EF4444" />
+                        <Ionicons name="close-circle-outline" size={18} color={colors.error} />
                         <Text style={styles.cancelButtonText}>Cancel Visit</Text>
                       </Pressable>
                     </View>
@@ -435,7 +436,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   activeTab: {
-    borderBottomColor: '#00C06A',
+    borderBottomColor: colors.brand.green,
   },
   tabText: {
     ...Typography.body,
@@ -443,7 +444,7 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
   activeTabText: {
-    color: '#00C06A',
+    color: colors.brand.green,
   },
   scrollView: {
     flex: 1,
@@ -489,7 +490,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: BorderRadius['2xl'],
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -575,7 +576,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: Spacing.sm,
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingVertical: 14,
     paddingHorizontal: 28,
     borderRadius: BorderRadius.md,

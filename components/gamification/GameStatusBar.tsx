@@ -3,6 +3,7 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { useGameStatus } from '@/hooks/useGameStatus';
+import { colors } from '@/constants/theme';
 
 interface GameStatusBarProps {
   gameType: string;
@@ -14,7 +15,7 @@ interface GameStatusBarProps {
  * Reusable status bar showing plays remaining, cooldown timer, and next reset.
  * Drop into any game page to show daily play limits.
  */
-function GameStatusBar({ gameType, accentColor = '#8B5CF6', onStatusChange }: GameStatusBarProps) {
+function GameStatusBar({ gameType, accentColor = colors.brand.purpleLight, onStatusChange }: GameStatusBarProps) {
   const { status, loading, countdown, playsRemaining, maxPlays, isAvailable } = useGameStatus(gameType);
 
   React.useEffect(() => {
@@ -43,7 +44,7 @@ function GameStatusBar({ gameType, accentColor = '#8B5CF6', onStatusChange }: Ga
           <Ionicons
             name={exhausted ? 'lock-closed' : 'game-controller'}
             size={16}
-            color={exhausted ? '#EF4444' : accentColor}
+            color={exhausted ? colors.error : accentColor}
           />
           <ThemedText style={[styles.statText, exhausted && styles.exhaustedText]}>
             {exhausted ? 'No plays left' : `${playsRemaining}/${maxPlays} plays`}
@@ -53,7 +54,7 @@ function GameStatusBar({ gameType, accentColor = '#8B5CF6', onStatusChange }: Ga
         {/* Countdown to reset */}
         {exhausted && countdown && (
           <View style={styles.stat}>
-            <Ionicons name="time" size={16} color="#F59E0B" />
+            <Ionicons name="time" size={16} color={colors.warningScale[400]} />
             <ThemedText style={styles.countdownText}>
               Resets in {countdown}
             </ThemedText>
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 8,
     marginBottom: 4,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 12,
     shadowColor: '#000',
@@ -89,9 +90,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   containerExhausted: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: colors.errorScale[200],
   },
   row: {
     flexDirection: 'row',
@@ -106,15 +107,15 @@ const styles = StyleSheet.create({
   statText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   exhaustedText: {
-    color: '#EF4444',
+    color: colors.error,
   },
   countdownText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   badge: {
     flexDirection: 'row',

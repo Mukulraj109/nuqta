@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, StyleSheet, ViewStyle } from 'react-native';
+import { colors } from '@/constants/theme';
 
 interface SkeletonBoxProps {
   width: number | string;
@@ -46,7 +47,7 @@ export const SkeletonBox: React.FC<SkeletonBoxProps> = ({
           width,
           height,
           borderRadius,
-          backgroundColor: '#E5E7EB',
+          backgroundColor: colors.neutral[200],
           opacity,
         },
         style,

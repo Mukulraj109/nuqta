@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
 import { ThemedText } from '@/components/ThemedText';
 import { FeaturedVideoCardProps, PLAY_PAGE_COLORS } from '@/types/playPage.types';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -114,7 +115,7 @@ function FeaturedVideoCard({
           />
         ) : (
           <View style={[StyleSheet.absoluteFill, styles.errorContainer]}>
-            <Ionicons name="videocam-off" size={48} color="#666" />
+            <Ionicons name="videocam-off" size={48} color={colors.midGray} />
             <ThemedText style={styles.errorText}>Video unavailable</ThemedText>
           </View>
         )}
@@ -123,7 +124,7 @@ function FeaturedVideoCard({
         {isLoading && !hasError && (
           <View style={[StyleSheet.absoluteFill, styles.loadingContainer]}>
             <View style={styles.loadingSpinner}>
-              <Ionicons name="reload" size={32} color="#FFFFFF" />
+              <Ionicons name="reload" size={32} color={colors.background.primary} />
             </View>
           </View>
         )}
@@ -139,7 +140,7 @@ function FeaturedVideoCard({
         {/* Top overlay with view count */}
         <View style={styles.topOverlay}>
           <View style={styles.viewCountContainer}>
-            <Ionicons name="eye" size={14} color="#FFFFFF" />
+            <Ionicons name="eye" size={14} color={colors.background.primary} />
             <ThemedText style={styles.viewCountText}>
               {item.viewCount}
             </ThemedText>
@@ -150,7 +151,7 @@ function FeaturedVideoCard({
         {item.productCount && item.productCount > 0 && (
           <View style={styles.productCountContainer}>
             <View style={styles.productCountPill}>
-              <Ionicons name="pricetag" size={14} color="#FFFFFF" />
+              <Ionicons name="pricetag" size={14} color={colors.background.primary} />
               <ThemedText style={styles.productCountText}>
                 {item.productCount} Product{item.productCount > 1 ? 's' : ''}
               </ThemedText>
@@ -195,7 +196,7 @@ function FeaturedVideoCard({
               <Ionicons 
                 name={item.isLiked ? "heart" : "heart-outline"} 
                 size={20} 
-                color={item.isLiked ? PLAY_PAGE_COLORS.like : "#FFFFFF"} 
+                color={item.isLiked ? PLAY_PAGE_COLORS.like : colors.background.primary} 
               />
             </Pressable>
 
@@ -208,7 +209,7 @@ function FeaturedVideoCard({
               accessibilityRole="button"
               accessibilityHint="Double tap to share this featured video with others"
             >
-              <Ionicons name="share-outline" size={20} color="#FFFFFF" />
+              <Ionicons name="share-outline" size={20} color={colors.background.primary} />
             </Pressable>
           </View>
         </View>
@@ -218,7 +219,7 @@ function FeaturedVideoCard({
           <View style={styles.playIndicator}>
             <View style={[
               styles.playDot, 
-              { backgroundColor: isPlaying ? '#10B981' : '#6B7280' }
+              { backgroundColor: isPlaying ? colors.successScale[400] : colors.neutral[500] }
             ]} />
           </View>
         )}
@@ -249,12 +250,12 @@ const styles = StyleSheet.create({
   errorContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   errorText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
   },
   loadingContainer: {
@@ -291,7 +292,7 @@ const styles = StyleSheet.create({
     // // backdropFilter: 'blur(10px)', // Not supported in React Native // Glass effect - not supported in React Native
   },
   viewCountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14, // Slightly larger
     fontWeight: '700',
     letterSpacing: 0.3,
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   productCountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -328,7 +329,7 @@ const styles = StyleSheet.create({
     padding: 28, // More generous padding
   },
   description: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 18, // Larger for featured card
     fontWeight: '700', // Bolder
     lineHeight: 26, // Better line spacing
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   hashtagText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 13, // Slightly larger
     fontWeight: '700', // Bolder
     letterSpacing: 0.3,
@@ -386,7 +387,7 @@ const styles = StyleSheet.create({
     width: 12, // Slightly larger
     height: 12,
     borderRadius: 6,
-    shadowColor: '#10B981',
+    shadowColor: colors.successScale[400],
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.6,
     shadowRadius: 4,

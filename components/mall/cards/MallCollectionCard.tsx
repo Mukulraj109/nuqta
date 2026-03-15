@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MallCollection } from '../../../types/mall.types';
+import { colors } from '@/constants/theme';
 
 interface MallCollectionCardProps {
   collection: MallCollection;
@@ -46,7 +47,7 @@ const MallCollectionCard: React.FC<MallCollectionCardProps> = ({
        
       >
         <LinearGradient
-          colors={['#1a3a52', '#234b68']}
+          colors={[colors.nileBlue, colors.brand.nileBlueLight]}
           style={styles.fallbackGradient}
         >
           <View style={styles.content}>
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
   collectionName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     ...Platform.select({
       ios: {
         textShadowColor: 'rgba(0, 0, 0, 0.3)',

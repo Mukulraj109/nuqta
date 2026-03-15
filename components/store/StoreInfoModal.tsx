@@ -12,6 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import StorePolicies, { StorePolicy, MOCK_POLICIES } from './StorePolicies';
 import StoreContact, { StoreContactInfo, MOCK_CONTACT_INFO } from './StoreContact';
+import { colors } from '@/constants/theme';
 
 export interface StoreInfoModalProps {
   visible: boolean;
@@ -52,7 +53,7 @@ const StoreInfoModal: React.FC<StoreInfoModalProps> = ({
         <Ionicons
           name={icon}
           size={20}
-          color={isActive ? '#7C3AED' : '#666'}
+          color={isActive ? colors.brand.purple : colors.midGray}
         />
         <Text style={[styles.tabButtonText, isActive && styles.activeTabButtonText]}>
           {label}
@@ -65,7 +66,7 @@ const StoreInfoModal: React.FC<StoreInfoModalProps> = ({
     <View style={styles.aboutContainer}>
       <View style={styles.aboutHeader}>
         <View style={styles.storeIconContainer}>
-          <Ionicons name="storefront" size={32} color="#7C3AED" />
+          <Ionicons name="storefront" size={32} color={colors.brand.purple} />
         </View>
         <View style={styles.storeHeaderInfo}>
           <Text style={styles.storeNameText}>{storeName}</Text>
@@ -92,8 +93,8 @@ const StoreInfoModal: React.FC<StoreInfoModalProps> = ({
             onPress={() => setActiveTab('contact')}
            
           >
-            <View style={[styles.quickActionIcon, { backgroundColor: '#E8F5E9' }]}>
-              <Ionicons name="call" size={24} color="#4CAF50" />
+            <View style={[styles.quickActionIcon, { backgroundColor: colors.greenMist }]}>
+              <Ionicons name="call" size={24} color={colors.brand.emerald} />
             </View>
             <Text style={styles.quickActionLabel}>Contact</Text>
           </Pressable>
@@ -135,19 +136,19 @@ const StoreInfoModal: React.FC<StoreInfoModalProps> = ({
         <Text style={styles.sectionTitle}>Store Features</Text>
         <View style={styles.featuresList}>
           <View style={styles.featureItem}>
-            <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
+            <Ionicons name="checkmark-circle" size={20} color={colors.brand.emerald} />
             <Text style={styles.featureText}>Easy Returns & Exchanges</Text>
           </View>
           <View style={styles.featureItem}>
-            <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
+            <Ionicons name="checkmark-circle" size={20} color={colors.brand.emerald} />
             <Text style={styles.featureText}>Secure Payment Options</Text>
           </View>
           <View style={styles.featureItem}>
-            <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
+            <Ionicons name="checkmark-circle" size={20} color={colors.brand.emerald} />
             <Text style={styles.featureText}>Fast Delivery Available</Text>
           </View>
           <View style={styles.featureItem}>
-            <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
+            <Ionicons name="checkmark-circle" size={20} color={colors.brand.emerald} />
             <Text style={styles.featureText}>Customer Support 24/7</Text>
           </View>
         </View>
@@ -210,7 +211,7 @@ const StoreInfoModal: React.FC<StoreInfoModalProps> = ({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
   tabButton: {
     flex: 1,
@@ -255,23 +256,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   activeTabButton: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
   },
   tabButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666',
+    color: colors.midGray,
     marginLeft: 6,
   },
   activeTabButtonText: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   content: {
     flex: 1,
   },
   aboutContainer: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
   aboutHeader: {
     flexDirection: 'row',
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   storeTypeBadge: {
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
   storeTypeText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.background.primary,
     textTransform: 'uppercase',
   },
   aboutSection: {

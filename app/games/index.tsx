@@ -14,13 +14,14 @@ import { router, Stack, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '@/contexts/AuthContext';
-import GameErrorBoundary from '@/components/common/GameErrorBoundary';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 import { platformAlert } from '@/utils/platformAlert';
 import gameApi, { AvailableGame } from '@/services/gameApi';
 import { useWalletContext } from '@/contexts/WalletContext';
 import { SkeletonBox } from '@/components/earn/SkeletonLoader';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 const NUQTA_COIN = BRAND.COIN_IMAGE;
 
 const { width } = Dimensions.get('window');
@@ -33,12 +34,12 @@ const COLORS = {
 };
 
 const GAME_COLORS: [string, string][] = [
-  [Colors.brand.purple, '#A855F7'],
-  ['#EC4899', '#F472B6'],
-  [Colors.warning, '#D97706'],
-  [Colors.success, '#34D399'],
-  [Colors.info, '#60A5FA'],
-  [Colors.error, '#F87171'],
+  [Colors.brand.purple, colors.brand.purpleMedium],
+  [colors.brand.pink, '#F472B6'],
+  [Colors.warning, colors.warningScale[700]],
+  [Colors.success, colors.successScale[400]],
+  [Colors.info, colors.infoScale[400]],
+  [Colors.error, colors.errorScale[400]],
 ];
 
 export default function GamesPage() {
@@ -91,9 +92,11 @@ export default function GamesPage() {
   const totalGamesAvailable = games.reduce((sum, g) => sum + (g.playsRemaining || 0), 0);
 
   return (
-    <GameErrorBoundary
-      gameName="Games Hub"
-      onReturnToGames={() => router.push('/' as any)}
+    <FeatureErrorBoundary
+      featureName="Games Hub"
+      onSecondaryAction={() => router.push('/' as any)}
+      secondaryActionLabel="Back to Home"
+      secondaryActionIcon="home"
       onReset={() => loadData()}
     >
       <Stack.Screen
@@ -148,7 +151,7 @@ export default function GamesPage() {
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <Text style={[styles.statValue, { color: '#34D399' }]}>+{todaysEarnings}</Text>
+              <Text style={[styles.statValue, { color: colors.successScale[400] }]}>+{todaysEarnings}</Text>
               <Text style={styles.statLabel}>Earned Today</Text>
             </View>
           </View>
@@ -243,7 +246,7 @@ export default function GamesPage() {
                         </View>
                       )}
                       {isExhausted && (
-                        <View style={[styles.gamePlayBtn, { backgroundColor: '#E2E8F0' }]}>
+                        <View style={[styles.gamePlayBtn, { backgroundColor: colors.slateLight }]}>
                           <Text style={[styles.gamePlayBtnText, { color: '#94A3B8' }]}>Come Back Tomorrow</Text>
                         </View>
                       )}
@@ -265,7 +268,7 @@ export default function GamesPage() {
 
         <View style={{ height: 100 }} />
       </ScrollView>
-    </GameErrorBoundary>
+    </FeatureErrorBoundary>
   );
 }
 
@@ -360,7 +363,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#F1F5F9',
+    borderColor: colors.tint.slate,
     ...Platform.select({
       ios: {
         shadowColor: Colors.nileBlue,
@@ -425,7 +428,7 @@ const styles = StyleSheet.create({
   gameProgressBg: {
     height: 5,
     borderRadius: 3,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: colors.tint.slate,
     overflow: 'hidden',
   },
   gameProgressFill: {
@@ -473,7 +476,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: '#64748B',
+    color: colors.slateGray,
     marginTop: Spacing.md,
     marginBottom: Spacing.xs,
   },

@@ -4,6 +4,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Notification } from '@/types/earnPage.types';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
 import NotificationCard from './NotificationCard';
+import { colors } from '@/constants/theme';
 
 interface NotificationSectionProps {
   notifications: Notification[];
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     marginBottom: 28,
     paddingVertical: 16,
     paddingHorizontal: 12,
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     ...Platform.select({
       ios: {

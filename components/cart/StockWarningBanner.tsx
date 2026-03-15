@@ -17,6 +17,7 @@ import {
   VALIDATION_ISSUE_ICONS,
   VALIDATION_ISSUE_COLORS,
 } from '@/types/validation.types';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -204,27 +205,27 @@ function getBannerStyles(type: 'error' | 'warning' | 'info') {
   switch (type) {
     case 'error':
       return {
-        bgColor: '#FEE2E2',
-        iconBg: '#DC2626',
-        color: '#DC2626',
+        bgColor: colors.errorScale[100],
+        iconBg: colors.error,
+        color: colors.error,
         textColor: '#991B1B',
-        subTextColor: '#B91C1C',
+        subTextColor: colors.errorScale[700],
       };
     case 'warning':
       return {
-        bgColor: '#FEF3C7',
-        iconBg: '#D97706',
-        color: '#D97706',
-        textColor: '#92400E',
-        subTextColor: '#B45309',
+        bgColor: colors.tint.amberLight,
+        iconBg: colors.warningScale[700],
+        color: colors.warningScale[700],
+        textColor: colors.brand.amberDark,
+        subTextColor: colors.brand.amberDeep,
       };
     case 'info':
       return {
-        bgColor: '#DBEAFE',
-        iconBg: '#2563EB',
-        color: '#2563EB',
+        bgColor: colors.tint.blueLight,
+        iconBg: colors.brand.blue,
+        color: colors.brand.blue,
         textColor: '#1E40AF',
-        subTextColor: '#2563EB',
+        subTextColor: colors.brand.blue,
       };
   }
 }

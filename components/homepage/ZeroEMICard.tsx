@@ -16,26 +16,27 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
 // Nuqta Brand Colors
 const COLORS = {
-  primary: '#ffcd57',
-  primaryDark: '#E6B84E',
-  primaryLight: '#ffcd57',
-  nileBlue: '#1a3a52',
-  nileBlueLight: '#234b68',
-  gold: '#FFC857',
+  primary: colors.lightMustard,
+  primaryDark: colors.brand.goldRich,
+  primaryLight: colors.lightMustard,
+  nileBlue: colors.nileBlue,
+  nileBlueLight: colors.brand.nileBlueLight,
+  gold: colors.brand.goldWarm,
   goldDark: '#F5A623',
   goldLight: '#FFD87A',
-  orange: '#ffcd57',
-  orangeDark: '#E6B84E',
-  amber: '#F59E0B',
-  amberDark: '#B45309',
-  white: '#FFFFFF',
-  textDark: '#1a3a52',
-  textMuted: '#6B7280',
+  orange: colors.lightMustard,
+  orangeDark: colors.brand.goldRich,
+  amber: colors.warningScale[400],
+  amberDark: colors.brand.amberDeep,
+  white: colors.background.primary,
+  textDark: colors.nileBlue,
+  textMuted: colors.neutral[500],
 };
 
 // Decorative Star Component
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.4,
         shadowRadius: 16,

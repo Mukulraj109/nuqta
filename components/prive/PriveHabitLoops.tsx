@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from './priveTheme';
+import { colors } from '@/constants/theme';
 
 interface WeeklyEarningsData {
   thisWeek: number;
@@ -277,7 +278,7 @@ export const PriveHabitLoops: React.FC<PriveHabitLoopsProps> = ({
               {weeklyEarnings.percentChange !== 0 && (
                 <Text style={[
                   styles.earningsTrend,
-                  { color: weeklyEarnings.percentChange > 0 ? '#4CAF50' : '#F44336' },
+                  { color: weeklyEarnings.percentChange > 0 ? colors.brand.emerald : '#F44336' },
                 ]}>
                   {weeklyEarnings.percentChange > 0 ? '↑' : '↓'} {Math.abs(weeklyEarnings.percentChange)}% from last week
                 </Text>
@@ -435,7 +436,7 @@ const styles = StyleSheet.create({
   },
   loopCheckmarkText: {
     fontSize: 10,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: 'bold',
   },
   loopName: {

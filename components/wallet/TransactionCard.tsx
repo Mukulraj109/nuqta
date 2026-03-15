@@ -8,11 +8,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { BRAND } from '@/constants/brand';
 import { ThemedText } from '@/components/ThemedText';
 import { Transaction } from '@/types/wallet.types';
-import { 
-  formatCurrency, 
-  getTransactionIcon, 
-  getStatusColor, 
-  formatTransactionDate 
+import { colors } from '@/constants/theme';
+import {
+  formatCurrency,
+  getTransactionIcon,
+  getStatusColor,
+  formatTransactionDate
 } from '@/data/walletData';
 
 interface TransactionCardProps {
@@ -82,7 +83,7 @@ function TransactionCard({
           <View style={styles.amountContainer}>
             <ThemedText style={[
               styles.amount,
-              { color: isDebit ? '#EF4444' : '#ffcd57' }
+              { color: isDebit ? colors.error : colors.lightMustard }
             ]}>
               {isDebit ? '-' : '+'}{formatCurrency(safeAmount, safeCurrency)}
             </ThemedText>
@@ -135,7 +136,7 @@ function TransactionCard({
           <Ionicons 
             name="chevron-forward" 
             size={16} 
-            color="#9CA3AF" 
+            color={colors.neutral[400]} 
           />
         </View>
       )}
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 24,
     borderBottomWidth: 1,
-    borderBottomColor: '#F8FAFC',
+    borderBottomColor: colors.tint.coolGray,
     marginHorizontal: 4,
     marginVertical: 2,
     borderRadius: 16,
@@ -170,9 +171,9 @@ const styles = StyleSheet.create({
     width: 54,
     height: 54,
     borderRadius: 27,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     borderWidth: 2,
-    borderColor: '#F1F5F9',
+    borderColor: colors.tint.slate,
   },
   iconFallback: {
     width: 54,
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   merchantName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     letterSpacing: 0.1,
   },
   amountContainer: {
@@ -277,16 +278,16 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F9FAFB',
+    borderTopColor: colors.neutral[50],
   },
   orderIdLabel: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
   orderId: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '600',
   },
   

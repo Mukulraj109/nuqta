@@ -17,6 +17,7 @@ import cartService, { LockWithPaymentRequest } from '@/services/cartApi';
 import { triggerImpact, triggerNotification } from '@/utils/haptics';
 import { useRegion } from '@/contexts/RegionContext';
 import { DurationChips, LockDuration, LOCK_FEE_PERCENTAGES, calculateLockFee } from './DurationChips';
+import { colors } from '@/constants/theme';
 
 interface LockPriceModalProps {
   visible: boolean;
@@ -132,14 +133,14 @@ function LockPriceModal({
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.headerIcon}>
-              <Ionicons name="lock-closed" size={22} color="#FFFFFF" />
+              <Ionicons name="lock-closed" size={22} color={colors.background.primary} />
             </View>
             <View style={styles.headerTextContainer}>
               <Text style={styles.headerTitle}>Lock this product now</Text>
               <Text style={styles.headerSubtitle}>Unique Feature</Text>
             </View>
             <Pressable onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="chevron-down" size={24} color="#6B7280" />
+              <Ionicons name="chevron-down" size={24} color={colors.neutral[500]} />
             </Pressable>
           </View>
 
@@ -168,16 +169,16 @@ function LockPriceModal({
              
             >
               <LinearGradient
-                colors={hasEnoughBalance && !isLoading ? ['#ffcd57', '#E6B84E'] : ['#9CA3AF', '#6B7280']}
+                colors={hasEnoughBalance && !isLoading ? [colors.lightMustard, colors.brand.goldRich] : [colors.neutral[400], colors.neutral[500]]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.lockButtonGradient}
               >
                 {isLoading ? (
-                  <ActivityIndicator size="small" color="#FFFFFF" />
+                  <ActivityIndicator size="small" color={colors.background.primary} />
                 ) : (
                   <>
-                    <Ionicons name="lock-closed" size={18} color="#FFFFFF" />
+                    <Ionicons name="lock-closed" size={18} color={colors.background.primary} />
                     <Text style={styles.lockButtonText}>
                       {hasEnoughBalance
                         ? `Lock Product for ${currencySymbol}${lockFee}`
@@ -191,7 +192,7 @@ function LockPriceModal({
             {/* Error Message */}
             {error && (
               <View style={styles.errorContainer}>
-                <Ionicons name="alert-circle" size={18} color="#EF4444" />
+                <Ionicons name="alert-circle" size={18} color={colors.error} />
                 <Text style={styles.errorText}>{error}</Text>
               </View>
             )}
@@ -199,7 +200,7 @@ function LockPriceModal({
             {/* Insufficient Balance Warning */}
             {!hasEnoughBalance && !error && (
               <View style={styles.warningContainer}>
-                <Ionicons name="wallet-outline" size={18} color="#F59E0B" />
+                <Ionicons name="wallet-outline" size={18} color={colors.warningScale[400]} />
                 <Text style={styles.warningText}>
                   Add {currencySymbol}{(lockFee - walletBalance).toFixed(0)} to your wallet to lock this price
                 </Text>
@@ -221,7 +222,7 @@ function LockPriceModal({
 
             {/* Wallet Info */}
             <View style={styles.walletCard}>
-              <Ionicons name="wallet-outline" size={20} color="#ffcd57" />
+              <Ionicons name="wallet-outline" size={20} color={colors.lightMustard} />
               <View style={styles.walletInfo}>
                 <Text style={styles.walletLabel}>Wallet Balance</Text>
                 <Text style={[
@@ -232,9 +233,9 @@ function LockPriceModal({
                 </Text>
               </View>
               {hasEnoughBalance ? (
-                <Ionicons name="checkmark-circle" size={20} color="#ffcd57" />
+                <Ionicons name="checkmark-circle" size={20} color={colors.lightMustard} />
               ) : (
-                <Ionicons name="alert-circle" size={20} color="#F59E0B" />
+                <Ionicons name="alert-circle" size={20} color={colors.warningScale[400]} />
               )}
             </View>
           </ScrollView>
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -273,13 +274,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerIcon: {
     width: 40,
     height: 40,
     borderRadius: 12,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -290,12 +291,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   headerSubtitle: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     marginTop: 1,
   },
   closeButton: {
@@ -308,17 +309,17 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
     lineHeight: 21,
     marginBottom: 20,
   },
   descriptionBold: {
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   descriptionBoldGreen: {
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   durationChips: {
     marginBottom: 20,
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -352,12 +353,12 @@ const styles = StyleSheet.create({
   lockButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     padding: 12,
     borderRadius: 10,
     gap: 8,
@@ -366,12 +367,12 @@ const styles = StyleSheet.create({
   errorText: {
     flex: 1,
     fontSize: 13,
-    color: '#EF4444',
+    color: colors.error,
   },
   warningContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     padding: 12,
     borderRadius: 10,
     gap: 8,
@@ -380,10 +381,10 @@ const styles = StyleSheet.create({
   warningText: {
     flex: 1,
     fontSize: 13,
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   stepsSection: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 14,
     padding: 16,
     marginBottom: 16,
@@ -391,7 +392,7 @@ const styles = StyleSheet.create({
   stepsTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 14,
   },
   stepRow: {
@@ -403,7 +404,7 @@ const styles = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -411,12 +412,12 @@ const styles = StyleSheet.create({
   stepNumberText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   stepText: {
     flex: 1,
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 20,
   },
   walletCard: {
@@ -425,8 +426,8 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     marginBottom: 16,
   },
   walletInfo: {
@@ -435,16 +436,16 @@ const styles = StyleSheet.create({
   },
   walletLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   walletBalance: {
     fontSize: 16,
     fontWeight: '700',
   },
   balanceSufficient: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   balanceInsufficient: {
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
 });

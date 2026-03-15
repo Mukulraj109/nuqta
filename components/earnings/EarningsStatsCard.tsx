@@ -6,6 +6,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { EarningsStatistics } from '@/services/earningsApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface EarningsStatsCardProps {
   stats: EarningsStatistics;
@@ -20,25 +21,25 @@ const EarningsStatsCard: React.FC<EarningsStatsCardProps> = ({ stats }) => {
       icon: 'trending-up',
       label: 'Daily Avg',
       value: `${currencySymbol}${stats.dailyAverage.toFixed(2)}`,
-      color: '#ffcd57',
+      color: colors.lightMustard,
     },
     {
       icon: 'calendar',
       label: 'Weekly Avg',
       value: `${currencySymbol}${stats.weeklyAverage.toFixed(2)}`,
-      color: '#3B82F6',
+      color: colors.infoScale[400],
     },
     {
       icon: 'calendar-outline',
       label: 'Monthly Avg',
       value: `${currencySymbol}${stats.monthlyAverage.toFixed(2)}`,
-      color: '#8B5CF6',
+      color: colors.brand.purpleLight,
     },
     {
       icon: 'receipt',
       label: 'Transactions',
       value: stats.transactionCount.toString(),
-      color: '#F59E0B',
+      color: colors.warningScale[400],
     },
   ];
 
@@ -63,7 +64,7 @@ const EarningsStatsCard: React.FC<EarningsStatsCardProps> = ({ stats }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     shadowColor: '#000',
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 16,
   },
   statsGrid: {
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     minWidth: '45%',
     alignItems: 'center',
     padding: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
   },
   iconContainer: {
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   statValue: {

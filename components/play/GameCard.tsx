@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface GameCardProps {
   title: string;
@@ -36,7 +37,7 @@ function GameCard({
         <Ionicons name={icon} size={32} color={isLocked ? '#CBD5E1' : iconColor} />
         {isLocked && (
           <View style={styles.lockOverlay}>
-            <Ionicons name="lock-closed" size={16} color="#64748B" />
+            <Ionicons name="lock-closed" size={16} color={colors.slateGray} />
           </View>
         )}
       </View>
@@ -71,14 +72,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   lockedCard: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     opacity: 0.7,
   },
   gameIcon: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -100,25 +101,25 @@ const styles = StyleSheet.create({
   gameTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 4,
     textAlign: 'center',
   },
   gameDescription: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
     marginBottom: 12,
     lineHeight: 16,
   },
   rewardBadge: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 12,
     paddingHorizontal: 10,
     paddingVertical: 6,
   },
   lockedBadge: {
-    backgroundColor: '#E2E8F0',
+    backgroundColor: colors.slateLight,
   },
   rewardText: {
     color: 'white',
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
   },
   lockedRewardText: {
-    color: '#64748B',
+    color: colors.slateGray,
   },
 });
 

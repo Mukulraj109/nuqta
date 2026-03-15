@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable, Linking, Platform } from 'react-nati
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { OrderLocationUpdate } from '@/hooks/useOrderTracking';
+import { colors } from '@/constants/theme';
 
 interface DeliveryMapProps {
   locationUpdate: OrderLocationUpdate | null;
@@ -94,7 +95,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
       <View style={styles.container}>
         <View style={styles.placeholderMap}>
           <View style={styles.placeholderIconContainer}>
-            <Ionicons name="location-outline" size={48} color="#1a3a52" />
+            <Ionicons name="location-outline" size={48} color={colors.nileBlue} />
           </View>
           <Text style={styles.placeholderText}>Waiting for delivery tracking...</Text>
           <Text style={styles.placeholderSubtext}>
@@ -105,7 +106,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
         {deliveryAddress && (
           <View style={styles.addressContainer}>
             <View style={styles.addressHeader}>
-              <Ionicons name="navigate-outline" size={16} color="#1a3a52" />
+              <Ionicons name="navigate-outline" size={16} color={colors.nileBlue} />
               <Text style={styles.addressLabel}>Delivery Address</Text>
             </View>
             <Text style={styles.addressText}>
@@ -117,7 +118,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
             </Text>
             {(deliveryAddress.latitude && deliveryAddress.longitude) && (
               <Pressable style={styles.openMapLink} onPress={openInMaps}>
-                <Ionicons name="open-outline" size={14} color="#1a3a52" />
+                <Ionicons name="open-outline" size={14} color={colors.nileBlue} />
                 <Text style={styles.openMapLinkText}>Open in Maps</Text>
               </Pressable>
             )}
@@ -143,7 +144,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
         ) : (
           <View style={styles.mapPlaceholder}>
             <View style={styles.locationPinLarge}>
-              <Ionicons name="location" size={36} color="#EF4444" />
+              <Ionicons name="location" size={36} color={colors.error} />
             </View>
             <Text style={styles.mapLocationText}>
               {locationUpdate.location.address || 'Delivery in progress'}
@@ -151,7 +152,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
 
             {locationUpdate.distanceToDestination != null && (
               <View style={styles.distanceBadge}>
-                <Ionicons name="navigate" size={14} color="#1a3a52" />
+                <Ionicons name="navigate" size={14} color={colors.nileBlue} />
                 <Text style={styles.distanceText}>
                   {(locationUpdate.distanceToDestination / 1000).toFixed(1)} km away
                 </Text>
@@ -161,7 +162,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
         )}
 
         <Pressable style={styles.openMapButton} onPress={openInMaps}>
-          <Ionicons name="map-outline" size={16} color="#fff" />
+          <Ionicons name="map-outline" size={16} color={colors.background.primary} />
           <Text style={styles.openMapButtonText}>Open in Maps</Text>
         </Pressable>
       </View>
@@ -196,7 +197,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
             )}
             {estimatedTime && (
               <View style={styles.etaBadge}>
-                <Ionicons name="time-outline" size={12} color="#10b981" />
+                <Ionicons name="time-outline" size={12} color={colors.successScale[400]} />
                 <Text style={styles.estimatedArrival}>Arriving in {estimatedTime}</Text>
               </View>
             )}
@@ -208,7 +209,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
           onPress={handleCallDriver}
          
         >
-          <Ionicons name="call" size={20} color="#fff" />
+          <Ionicons name="call" size={20} color={colors.background.primary} />
         </Pressable>
       </View>
 
@@ -216,7 +217,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
       {locationUpdate.location.address && (
         <View style={styles.currentLocationContainer}>
           <View style={styles.addressHeader}>
-            <Ionicons name="location" size={14} color="#EF4444" />
+            <Ionicons name="location" size={14} color={colors.error} />
             <Text style={styles.currentLocationLabel}>Current Location</Text>
           </View>
           <Text style={styles.currentLocationText}>
@@ -229,7 +230,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
       {deliveryAddress && (
         <View style={styles.addressContainer}>
           <View style={styles.addressHeader}>
-            <Ionicons name="navigate-outline" size={14} color="#1a3a52" />
+            <Ionicons name="navigate-outline" size={14} color={colors.nileBlue} />
             <Text style={styles.addressLabel}>Delivery Address</Text>
           </View>
           <Text style={styles.addressText}>
@@ -247,7 +248,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
   mapContainer: {
     position: 'relative',
@@ -255,11 +256,11 @@ const styles = StyleSheet.create({
   staticMapImage: {
     width: '100%',
     height: 300,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: colors.neutral[100],
   },
   mapPlaceholder: {
     height: 300,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -274,7 +275,7 @@ const styles = StyleSheet.create({
   mapLocationText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
@@ -295,13 +296,13 @@ const styles = StyleSheet.create({
   distanceText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   openMapButton: {
     position: 'absolute',
     top: 16,
     right: 16,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 8,
@@ -315,13 +316,13 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   openMapButtonText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 13,
     fontWeight: '600',
   },
   placeholderMap: {
     height: 220,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 32,
@@ -335,7 +336,7 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -343,13 +344,13 @@ const styles = StyleSheet.create({
   placeholderText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 8,
     textAlign: 'center',
   },
   placeholderSubtext: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   driverInfoContainer: {
@@ -358,7 +359,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: colors.neutral[200],
   },
   driverInfo: {
     flexDirection: 'row',
@@ -378,14 +379,14 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     justifyContent: 'center',
     alignItems: 'center',
   },
   driverAvatarText: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.background.primary,
   },
   onlineIndicator: {
     position: 'absolute',
@@ -394,9 +395,9 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14,
     borderRadius: 7,
-    backgroundColor: '#10b981',
+    backgroundColor: colors.successScale[400],
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: colors.background.primary,
   },
   driverDetails: {
     flex: 1,
@@ -404,12 +405,12 @@ const styles = StyleSheet.create({
   driverName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 2,
   },
   driverVehicle: {
     fontSize: 13,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   etaBadge: {
@@ -420,13 +421,13 @@ const styles = StyleSheet.create({
   estimatedArrival: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#10b981',
+    color: colors.successScale[400],
   },
   callButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#10b981',
+    backgroundColor: colors.successScale[400],
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
@@ -439,22 +440,22 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#eff6ff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: colors.neutral[200],
   },
   currentLocationLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textTransform: 'uppercase',
   },
   currentLocationText: {
     fontSize: 14,
-    color: '#111827',
+    color: colors.neutral[900],
     marginTop: 4,
   },
   addressContainer: {
     padding: 16,
-    backgroundColor: '#f9fafb',
+    backgroundColor: colors.neutral[50],
   },
   addressHeader: {
     flexDirection: 'row',
@@ -465,12 +466,12 @@ const styles = StyleSheet.create({
   addressLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textTransform: 'uppercase',
   },
   addressText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 20,
   },
   openMapLink: {
@@ -482,7 +483,7 @@ const styles = StyleSheet.create({
   openMapLinkText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 });
 

@@ -18,6 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../types/mall.types';
 import MallTopRatedItem from './cards/MallTopRatedItem';
+import { colors } from '@/constants/theme';
 
 interface MallTopRatedProps {
   brands: MallBrand[];
@@ -39,22 +40,22 @@ const MallTopRated: React.FC<MallTopRatedProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#dfebf7', '#EFF6FF', '#FFFFFF']}
+          colors={[colors.lavenderMist, colors.tint.blue, colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
         >
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#0284C7', '#0369A1']}
+              colors={[colors.brand.sky, colors.brand.skyDark]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="trophy" size={18} color="#FFFFFF" />
+              <Ionicons name="trophy" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Top Rated Brands</Text>
           </View>
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#0284C7" />
+            <ActivityIndicator size="small" color={colors.brand.sky} />
             <Text style={styles.loadingText}>Loading top brands...</Text>
           </View>
         </LinearGradient>
@@ -67,7 +68,7 @@ const MallTopRated: React.FC<MallTopRatedProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#dfebf7', '#EFF6FF', '#FFFFFF']}
+          colors={[colors.lavenderMist, colors.tint.blue, colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
@@ -75,17 +76,17 @@ const MallTopRated: React.FC<MallTopRatedProps> = ({
           {/* Section Header */}
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#0284C7', '#0369A1']}
+              colors={[colors.brand.sky, colors.brand.skyDark]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="trophy" size={18} color="#FFFFFF" />
+              <Ionicons name="trophy" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Top Rated Brands</Text>
           </View>
 
           {/* Empty State Placeholder */}
           <View style={styles.emptyStateContainer}>
-            <Ionicons name="ribbon-outline" size={24} color="#0369A1" />
+            <Ionicons name="ribbon-outline" size={24} color={colors.brand.skyDark} />
             <Text style={styles.emptyStateText}>Top rated stores appearing soon</Text>
           </View>
         </LinearGradient>
@@ -98,7 +99,7 @@ const MallTopRated: React.FC<MallTopRatedProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#dfebf7', '#EFF6FF', '#FFFFFF']}
+        colors={[colors.lavenderMist, colors.tint.blue, colors.background.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.gradientBackground}
@@ -112,10 +113,10 @@ const MallTopRated: React.FC<MallTopRatedProps> = ({
         {/* Section Header */}
         <View style={styles.headerRow}>
           <LinearGradient
-            colors={['#0284C7', '#0369A1']}
+            colors={[colors.brand.sky, colors.brand.skyDark]}
             style={styles.iconWrapper}
           >
-            <Ionicons name="trophy" size={18} color="#FFFFFF" />
+            <Ionicons name="trophy" size={18} color={colors.background.primary} />
           </LinearGradient>
           <Text style={styles.title}>Top Rated Brands</Text>
           <View style={styles.headerSpacer} />
@@ -126,14 +127,14 @@ const MallTopRated: React.FC<MallTopRatedProps> = ({
              
             >
               <LinearGradient
-                colors={['#0284C7', '#0369A1']}
+                colors={[colors.brand.sky, colors.brand.skyDark]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.viewAllGradient}
               >
                 <Text style={styles.viewAllText}>View All</Text>
                 <View style={styles.viewAllArrow}>
-                  <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+                  <Ionicons name="arrow-forward" size={14} color={colors.background.primary} />
                 </View>
               </LinearGradient>
             </Pressable>
@@ -155,7 +156,7 @@ const MallTopRated: React.FC<MallTopRatedProps> = ({
           >
             <View style={styles.statItem}>
               <View style={[styles.statIconWrapper, { backgroundColor: 'rgba(2, 132, 199, 0.15)' }]}>
-                <Ionicons name="star" size={14} color="#0284C7" />
+                <Ionicons name="star" size={14} color={colors.brand.sky} />
               </View>
               <View>
                 <Text style={styles.statValue}>
@@ -169,7 +170,7 @@ const MallTopRated: React.FC<MallTopRatedProps> = ({
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
               <View style={[styles.statIconWrapper, { backgroundColor: 'rgba(2, 132, 199, 0.1)' }]}>
-                <Ionicons name="checkmark-circle" size={14} color="#0284C7" />
+                <Ionicons name="checkmark-circle" size={14} color={colors.brand.sky} />
               </View>
               <View>
                 <Text style={styles.statValue}>
@@ -183,7 +184,7 @@ const MallTopRated: React.FC<MallTopRatedProps> = ({
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
               <View style={[styles.statIconWrapper, { backgroundColor: 'rgba(26, 58, 82, 0.1)' }]}>
-                <Ionicons name="storefront" size={14} color="#1a3a52" />
+                <Ionicons name="storefront" size={14} color={colors.nileBlue} />
               </View>
               <View>
                 <Text style={styles.statValue}>{brands.length}</Text>
@@ -213,7 +214,7 @@ const MallTopRated: React.FC<MallTopRatedProps> = ({
            
           >
             <LinearGradient
-              colors={['#0284C7', '#0369A1']}
+              colors={[colors.brand.sky, colors.brand.skyDark]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.viewMoreGradient}
@@ -222,7 +223,7 @@ const MallTopRated: React.FC<MallTopRatedProps> = ({
                 View All {brands.length} Brands
               </Text>
               <View style={styles.viewMoreArrow}>
-                <Ionicons name="arrow-forward" size={16} color="#0284C7" />
+                <Ionicons name="arrow-forward" size={16} color={colors.brand.sky} />
               </View>
             </LinearGradient>
           </Pressable>
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#0284C7',
+        shadowColor: colors.brand.sky,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -296,12 +297,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 13,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     paddingHorizontal: 16,
     marginBottom: 12,
   },
@@ -310,7 +311,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#0284C7',
+        shadowColor: colors.brand.sky,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   viewAllArrow: {
     width: 24,
@@ -370,11 +371,11 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   statLabel: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   statDivider: {
@@ -401,13 +402,13 @@ const styles = StyleSheet.create({
   viewMoreText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   viewMoreArrow: {
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -420,7 +421,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     fontWeight: '500',
   },
   emptyStateContainer: {
@@ -433,7 +434,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 13,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     fontWeight: '500',
   },
 });

@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -134,7 +135,7 @@ export default function MyParticipationsScreen() {
               </View>
             )}
             {item.coinsAwarded.brand > 0 && (
-              <View style={[styles.rewardChip, { backgroundColor: '#EDE9FE' }]}>
+              <View style={[styles.rewardChip, { backgroundColor: colors.tint.purple }]}>
                 <Text style={[styles.rewardText, { color: Colors.brand.purple }]}>
                   +{item.coinsAwarded.brand} Brand
                 </Text>
@@ -167,7 +168,7 @@ export default function MyParticipationsScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Pressable onPress={() => router.back()} style={styles.backBtn}>
-          <Ionicons name="arrow-back" size={24} color={'#1A1A2E'} />
+          <Ionicons name="arrow-back" size={24} color={colors.deepNavy} />
         </Pressable>
         <View>
           <Text style={styles.headerTitle}>My Participations</Text>
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: Typography.h3.fontSize,
     fontWeight: '700',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
   },
   headerSubtitle: {
     fontSize: Typography.bodySmall.fontSize,
@@ -278,7 +279,7 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
   tabTextActive: {
-    color: '#1A1A2E',
+    color: colors.deepNavy,
   },
   listContent: {
     padding: Spacing.base,
@@ -315,7 +316,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: Typography.body.fontSize,
     fontWeight: '700',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
     lineHeight: 20,
   },
   cardOrganizer: {
@@ -379,7 +380,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: Typography.h4.fontSize,
     fontWeight: '700',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
     marginTop: Spacing.base,
   },
   emptySubtitle: {
@@ -399,6 +400,6 @@ const styles = StyleSheet.create({
   browseBtnText: {
     fontSize: Typography.body.fontSize,
     fontWeight: '700',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
   },
 });

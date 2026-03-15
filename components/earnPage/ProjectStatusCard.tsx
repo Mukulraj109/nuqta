@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { ProjectStatusCardProps } from '@/types/earnPage.types';
 import { PROJECT_STATUS_COLORS } from '@/constants/EarnPageColors';
+import { colors } from '@/constants/theme';
 
 function ProjectStatusCard({ 
   label, 
@@ -15,9 +16,9 @@ function ProjectStatusCard({
 }: ProjectStatusCardProps & { gradient?: string[]; delay?: number }) {
   const statusKey = label.toLowerCase().replace(' ', '-') as keyof typeof PROJECT_STATUS_COLORS;
   const statusColors = PROJECT_STATUS_COLORS[statusKey] || {
-    background: color || '#8B5CF6',
-    text: '#FFFFFF',
-    count: '#FFFFFF',
+    background: color || colors.brand.purpleLight,
+    text: colors.background.primary,
+    count: colors.background.primary,
   };
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -60,7 +61,7 @@ function ProjectStatusCard({
     }).start();
   };
 
-  const defaultColor = statusColors.background || color || '#8B5CF6';
+  const defaultColor = statusColors.background || color || colors.brand.purpleLight;
   const gradientColors = (gradient && Array.isArray(gradient) && gradient.length > 0) 
     ? gradient 
     : [defaultColor, `${defaultColor}AA`];
@@ -92,7 +93,7 @@ function ProjectStatusCard({
           accessibilityHint={`Double tap to view ${label.toLowerCase()} projects`}
         >
           <LinearGradient
-            colors={Array.isArray(gradientColors) ? gradientColors : ['#8B5CF6', '#7C3AED']}
+            colors={Array.isArray(gradientColors) ? gradientColors : [colors.brand.purpleLight, colors.brand.purple]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.content}

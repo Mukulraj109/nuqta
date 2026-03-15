@@ -34,6 +34,7 @@ import RelatedPackagesSection from '../../components/package/RelatedPackagesSect
 import PackageInfoCard from '../../components/package/PackageInfoCard';
 import PackageAmenities from '../../components/package/PackageAmenities';
 import PackageCancellationPolicy from '../../components/package/PackageCancellationPolicy';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -443,7 +444,7 @@ export default function PackageDetailsPage() {
                 <Ionicons
                   name={isInWishlist(packageData.id) ? 'heart' : 'heart-outline'}
                   size={24}
-                  color={isInWishlist(packageData.id) ? '#EF4444' : '#FFFFFF'}
+                  color={isInWishlist(packageData.id) ? colors.error : colors.background.primary}
                 />
               </Pressable>
               <Pressable style={styles.actionButton}>
@@ -634,7 +635,7 @@ export default function PackageDetailsPage() {
            
           >
             <LinearGradient
-              colors={['#8B5CF6', '#7C3AED', '#6D28D9']}
+              colors={[colors.brand.purpleLight, colors.brand.purple, colors.brand.purpleDeep]}
               style={styles.bookButtonGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -820,7 +821,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.5)',
   },
   indicatorActive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     width: 24,
   },
   infoCardWrapper: {
@@ -964,7 +965,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: BorderRadius.xl,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -1054,7 +1055,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 12,
@@ -1069,7 +1070,7 @@ const styles = StyleSheet.create({
   bookButton: {
     borderRadius: 20,
     overflow: 'hidden',
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,

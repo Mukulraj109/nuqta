@@ -22,6 +22,7 @@ import {
   BorderRadius,
 } from "@/constants/DesignSystem";
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export interface MainStoreHeaderProps {
   storeName?: string;
@@ -99,7 +100,7 @@ export default function MainStoreHeader({
 
   return (
     <View style={[styles.container, { paddingTop: topPadding }]}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background.primary} />
       <View style={styles.inner}>
         {/* Back Button */}
         {showBack && (
@@ -118,7 +119,7 @@ export default function MainStoreHeader({
               accessibilityLabel="Go back"
               style={styles.backButton}
             >
-              <Ionicons name="chevron-back" size={22} color="#1a3a52" />
+              <Ionicons name="chevron-back" size={22} color={colors.nileBlue} />
             </Pressable>
           </Animated.View>
         )}
@@ -151,7 +152,7 @@ export default function MainStoreHeader({
               <Ionicons
                 name={isFavorited ? "heart" : "heart-outline"}
                 size={20}
-                color={isFavorited ? "#FFFFFF" : "#6B7280"}
+                color={isFavorited ? colors.background.primary : colors.neutral[500]}
               />
             </Pressable>
           </Animated.View>
@@ -167,7 +168,7 @@ export default function MainStoreHeader({
               accessibilityLabel="Share store"
               style={styles.actionButton}
             >
-              <Ionicons name="share-outline" size={20} color="#6B7280" />
+              <Ionicons name="share-outline" size={20} color={colors.neutral[500]} />
             </Pressable>
           </Animated.View>
 
@@ -191,7 +192,7 @@ export default function MainStoreHeader({
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: colors.neutral[100],
   },
   titleContainer: {
     flex: 1,
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#1a3a52",
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   titleSmall: {
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 13,
-    color: "#6B7280",
+    color: colors.neutral[500],
     marginTop: 2,
     fontWeight: "500",
   },
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: colors.neutral[100],
   },
   actionButtonActive: {
     backgroundColor: "#FF4757",
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
   coinButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#ffcd57",
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
@@ -284,6 +285,6 @@ const styles = StyleSheet.create({
   coinText: {
     fontSize: 14,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: colors.background.primary,
   },
 });

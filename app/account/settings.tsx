@@ -20,6 +20,7 @@ import { useUserSettings } from '@/hooks/useUserSettings';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 type SettingsSection = 'general' | 'notifications' | 'privacy' | 'security' | 'delivery' | 'payment' | 'preferences';
 
@@ -61,8 +62,8 @@ export default function SettingsPage() {
   if (!settings) {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#8B5CF6" />
-        <LinearGradient colors={['#8B5CF6', '#7C3AED']} style={styles.header}>
+        <StatusBar barStyle="light-content" backgroundColor={colors.brand.purpleLight} />
+        <LinearGradient colors={[colors.brand.purpleLight, colors.brand.purple]} style={styles.header}>
           <View style={styles.headerContent}>
             <Pressable
               style={styles.backButton}
@@ -92,10 +93,10 @@ export default function SettingsPage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#8B5CF6" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.brand.purpleLight} />
 
       {/* Header */}
-      <LinearGradient colors={['#8B5CF6', '#7C3AED']} style={styles.header}>
+      <LinearGradient colors={[colors.brand.purpleLight, colors.brand.purple]} style={styles.header}>
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
@@ -138,7 +139,7 @@ export default function SettingsPage() {
             accessibilityHint={`Double tap to ${expandedSection === 'general' ? 'collapse' : 'expand'} general settings section`}
           >
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="settings-outline" size={24} color="#8B5CF6" />
+              <Ionicons name="settings-outline" size={24} color={colors.brand.purpleLight} />
               <ThemedText style={styles.sectionTitle}>General</ThemedText>
             </View>
             <Ionicons
@@ -237,7 +238,7 @@ export default function SettingsPage() {
             accessibilityHint={`Double tap to ${expandedSection === 'notifications' ? 'collapse' : 'expand'} notifications section`}
           >
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="notifications-outline" size={24} color="#8B5CF6" />
+              <Ionicons name="notifications-outline" size={24} color={colors.brand.purpleLight} />
               <ThemedText style={styles.sectionTitle}>Notifications</ThemedText>
             </View>
             <Ionicons
@@ -264,7 +265,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.notifications.push.enabled }}
                   accessibilityHint={`Toggle to ${settings.notifications.push.enabled ? 'disable' : 'enable'} push notifications`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
 
@@ -283,7 +284,7 @@ export default function SettingsPage() {
                       accessibilityRole="switch"
                       accessibilityState={{ checked: settings.notifications.push.orderUpdates }}
                       accessibilityHint={`Toggle to ${settings.notifications.push.orderUpdates ? 'disable' : 'enable'} order updates notifications`}
-                      trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                      trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                     />
                   </View>
 
@@ -300,7 +301,7 @@ export default function SettingsPage() {
                       accessibilityRole="switch"
                       accessibilityState={{ checked: settings.notifications.push.promotions }}
                       accessibilityHint={`Toggle to ${settings.notifications.push.promotions ? 'disable' : 'enable'} promotions notifications`}
-                      trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                      trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                     />
                   </View>
 
@@ -317,7 +318,7 @@ export default function SettingsPage() {
                       accessibilityRole="switch"
                       accessibilityState={{ checked: settings.notifications.push.recommendations }}
                       accessibilityHint={`Toggle to ${settings.notifications.push.recommendations ? 'disable' : 'enable'} recommendations notifications`}
-                      trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                      trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                     />
                   </View>
                 </>
@@ -338,7 +339,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.notifications.email.enabled }}
                   accessibilityHint={`Toggle to ${settings.notifications.email.enabled ? 'disable' : 'enable'} email notifications`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
 
@@ -357,7 +358,7 @@ export default function SettingsPage() {
                       accessibilityRole="switch"
                       accessibilityState={{ checked: settings.notifications.email.orderReceipts }}
                       accessibilityHint={`Toggle to ${settings.notifications.email.orderReceipts ? 'disable' : 'enable'} order receipts emails`}
-                      trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                      trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                     />
                   </View>
 
@@ -374,7 +375,7 @@ export default function SettingsPage() {
                       accessibilityRole="switch"
                       accessibilityState={{ checked: settings.notifications.email.weeklyDigest }}
                       accessibilityHint={`Toggle to ${settings.notifications.email.weeklyDigest ? 'disable' : 'enable'} weekly digest emails`}
-                      trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                      trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                     />
                   </View>
                 </>
@@ -395,7 +396,7 @@ export default function SettingsPage() {
             accessibilityHint={`Double tap to ${expandedSection === 'privacy' ? 'collapse' : 'expand'} privacy settings section`}
           >
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="lock-closed-outline" size={24} color="#8B5CF6" />
+              <Ionicons name="lock-closed-outline" size={24} color={colors.brand.purpleLight} />
               <ThemedText style={styles.sectionTitle}>Privacy</ThemedText>
             </View>
             <Ionicons
@@ -421,7 +422,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.privacy.showActivity }}
                   accessibilityHint={`Toggle to ${settings.privacy.showActivity ? 'hide' : 'show'} your activity status`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
 
@@ -434,7 +435,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.privacy.allowMessaging }}
                   accessibilityHint={`Toggle to ${settings.privacy.allowMessaging ? 'disable' : 'enable'} messaging from other users`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
 
@@ -455,7 +456,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.privacy.analytics.allowUsageTracking }}
                   accessibilityHint={`Toggle to ${settings.privacy.analytics.allowUsageTracking ? 'disable' : 'enable'} usage analytics tracking`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
 
@@ -472,7 +473,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.privacy.analytics.allowCrashReporting }}
                   accessibilityHint={`Toggle to ${settings.privacy.analytics.allowCrashReporting ? 'disable' : 'enable'} crash reporting`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
             </View>
@@ -491,7 +492,7 @@ export default function SettingsPage() {
             accessibilityHint={`Double tap to ${expandedSection === 'security' ? 'collapse' : 'expand'} security settings section`}
           >
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="shield-checkmark-outline" size={24} color="#8B5CF6" />
+              <Ionicons name="shield-checkmark-outline" size={24} color={colors.brand.purpleLight} />
               <ThemedText style={styles.sectionTitle}>Security</ThemedText>
             </View>
             <Ionicons
@@ -516,7 +517,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.security.twoFactorAuth.enabled }}
                   accessibilityHint={`Toggle to ${settings.security.twoFactorAuth.enabled ? 'disable' : 'enable'} two-factor authentication`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
 
@@ -529,7 +530,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.security.loginAlerts }}
                   accessibilityHint={`Toggle to ${settings.security.loginAlerts ? 'disable' : 'enable'} login alerts`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
 
@@ -549,7 +550,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.security.sessionManagement.allowMultipleSessions }}
                   accessibilityHint={`Toggle to ${settings.security.sessionManagement.allowMultipleSessions ? 'disable' : 'enable'} multiple login sessions`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
             </View>
@@ -568,7 +569,7 @@ export default function SettingsPage() {
             accessibilityHint={`Double tap to ${expandedSection === 'preferences' ? 'collapse' : 'expand'} app preferences section`}
           >
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="apps-outline" size={24} color="#8B5CF6" />
+              <Ionicons name="apps-outline" size={24} color={colors.brand.purpleLight} />
               <ThemedText style={styles.sectionTitle}>App Preferences</ThemedText>
             </View>
             <Ionicons
@@ -589,7 +590,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.preferences.animations }}
                   accessibilityHint={`Toggle to ${settings.preferences.animations ? 'disable' : 'enable'} app animations`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
 
@@ -602,7 +603,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.preferences.sounds }}
                   accessibilityHint={`Toggle to ${settings.preferences.sounds ? 'disable' : 'enable'} app sounds`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
 
@@ -615,7 +616,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.preferences.hapticFeedback }}
                   accessibilityHint={`Toggle to ${settings.preferences.hapticFeedback ? 'disable' : 'enable'} haptic feedback`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
 
@@ -628,7 +629,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.preferences.dataSaver }}
                   accessibilityHint={`Toggle to ${settings.preferences.dataSaver ? 'disable' : 'enable'} data saver mode`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
 
@@ -641,7 +642,7 @@ export default function SettingsPage() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: settings.preferences.highQualityImages }}
                   accessibilityHint={`Toggle to ${settings.preferences.highQualityImages ? 'disable' : 'enable'} high quality images`}
-                  trackColor={{ false: '#D1D5DB', true: '#8B5CF6' }}
+                  trackColor={{ false: colors.neutral[300], true: colors.brand.purpleLight }}
                 />
               </View>
             </View>
@@ -652,7 +653,7 @@ export default function SettingsPage() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="document-text-outline" size={24} color="#8B5CF6" />
+              <Ionicons name="document-text-outline" size={24} color={colors.brand.purpleLight} />
               <ThemedText style={styles.sectionTitle}>Legal & About</ThemedText>
             </View>
           </View>
@@ -716,7 +717,7 @@ export default function SettingsPage() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
-              <Ionicons name="flask-outline" size={24} color="#F59E0B" />
+              <Ionicons name="flask-outline" size={24} color={colors.warningScale[400]} />
               <ThemedText style={styles.sectionTitle}>Developer Tools</ThemedText>
             </View>
           </View>
@@ -857,7 +858,7 @@ const styles = StyleSheet.create({
   },
   settingValue: {
     ...Typography.body,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     marginTop: 2,
     fontWeight: '600',
   },
@@ -872,7 +873,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.secondary,
   },
   toggleButtonActive: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   toggleButtonText: {
     ...Typography.body,

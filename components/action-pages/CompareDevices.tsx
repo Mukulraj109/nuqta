@@ -25,22 +25,23 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import { storesApi } from '@/services/storesApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  blue: '#3B82F6',
-  blueDark: '#2563EB',
-  blueLight: '#EFF6FF',
-  blueLighter: '#DBEAFE',
-  dark: '#1a3a52',
+  blue: colors.infoScale[400],
+  blueDark: colors.brand.blue,
+  blueLight: colors.tint.blue,
+  blueLighter: colors.tint.blueLight,
+  dark: colors.nileBlue,
   darkDeep: '#0f2638',
-  gold: '#FBBF24',
-  goldDark: '#F59E0B',
-  green: '#22C55E',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F8F9FA',
-  border: '#E5E7EB',
+  gold: colors.warningScale[400],
+  goldDark: colors.warningScale[400],
+  green: colors.success,
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.offWhite,
+  border: colors.neutral[200],
 };
 
 const DEVICE_CATEGORIES = [
@@ -530,14 +531,14 @@ const styles = StyleSheet.create({
   stepBarWrap: { paddingVertical: 12, backgroundColor: COLORS.white, borderBottomWidth: 1, borderBottomColor: COLORS.border },
   stepIndicator: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 0, paddingHorizontal: 40 },
   stepDot: {
-    width: 32, height: 32, borderRadius: 16, backgroundColor: '#E5E7EB',
+    width: 32, height: 32, borderRadius: 16, backgroundColor: colors.neutral[200],
     justifyContent: 'center', alignItems: 'center',
   },
   stepDotActive: { backgroundColor: COLORS.blue },
   stepDotDone: { backgroundColor: COLORS.green },
   stepDotText: { fontSize: 12, fontWeight: '600', color: COLORS.textSecondary },
   stepDotTextActive: { fontSize: 12, fontWeight: '600', color: COLORS.white },
-  stepLine: { flex: 1, height: 2, backgroundColor: '#E5E7EB', marginHorizontal: 8 },
+  stepLine: { flex: 1, height: 2, backgroundColor: colors.neutral[200], marginHorizontal: 8 },
   stepLineDone: { backgroundColor: COLORS.green },
   stepLabel: { fontSize: 14, fontWeight: '600', color: COLORS.textPrimary, textAlign: 'center', marginTop: 12, marginBottom: 16 },
 
@@ -579,7 +580,7 @@ const styles = StyleSheet.create({
   selectedAvatarText: { fontSize: 14, fontWeight: '600', color: COLORS.white },
   selectedRemove: {
     position: 'absolute', top: -4, right: -4,
-    width: 16, height: 16, borderRadius: 8, backgroundColor: '#EF4444',
+    width: 16, height: 16, borderRadius: 8, backgroundColor: colors.error,
     justifyContent: 'center', alignItems: 'center',
   },
 
@@ -605,7 +606,7 @@ const styles = StyleSheet.create({
   productCardSelected: { borderColor: COLORS.blue, backgroundColor: COLORS.blueLight },
   productImgWrap: { position: 'relative' },
   productImg: { width: 64, height: 64, borderRadius: 14 },
-  productImgPlaceholder: { backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center' },
+  productImgPlaceholder: { backgroundColor: colors.neutral[100], justifyContent: 'center', alignItems: 'center' },
   selectedOverlay: {
     position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
     borderRadius: 14, backgroundColor: 'rgba(59,130,246,0.15)',

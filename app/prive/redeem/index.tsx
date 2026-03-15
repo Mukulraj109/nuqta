@@ -24,6 +24,7 @@ import { usePriveSection } from '@/hooks/usePriveSection';
 import { useWalletContext } from '@/contexts/WalletContext';
 import priveApi, { RedeemConfig } from '@/services/priveApi';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 // Fallback config matching backend defaults
 const FALLBACK_CONFIG: RedeemConfig = {
@@ -191,7 +192,7 @@ export default function RedeemScreen() {
     // Full error state
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.header}>
             <Pressable onPress={() => router.back()} style={styles.backButton}>
@@ -216,7 +217,7 @@ export default function RedeemScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#1F2937', '#111827', '#0A0A0A']}
+        colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]}
         style={StyleSheet.absoluteFill}
       />
       <SafeAreaView style={styles.safeArea}>
@@ -258,7 +259,7 @@ export default function RedeemScreen() {
               <View style={styles.coinSplit}>
                 <View style={[styles.coinChip, { opacity: 0.5 }]}>
                   <Ionicons name="lock-closed" size={10} color={PRIVE_COLORS.text.disabled} />
-                  <View style={[styles.coinDot, { backgroundColor: '#4CAF50' }]} />
+                  <View style={[styles.coinDot, { backgroundColor: colors.brand.emerald }]} />
                   <Text style={styles.coinChipText}>{BRAND.APP_NAME}: {(userData?.rezCoins || 0).toLocaleString()}</Text>
                 </View>
                 <View style={styles.coinChip}>

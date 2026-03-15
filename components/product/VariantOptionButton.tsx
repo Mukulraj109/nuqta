@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, View, StyleSheet, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 /**
  * VariantOptionButton Component
@@ -84,7 +85,7 @@ export const VariantOptionButton: React.FC<VariantOptionButtonProps> = ({
               <Ionicons
                 name="checkmark"
                 size={size === 'small' ? 12 : size === 'medium' ? 16 : 20}
-                color="#FFF"
+                color={colors.background.primary}
               />
             </View>
           )}
@@ -126,13 +127,13 @@ const styles = StyleSheet.create({
   // Text variant
   container: {
     borderWidth: 1.5,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 10,
     marginRight: 8,
     marginBottom: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     position: 'relative',
   },
   smallContainer: {
@@ -151,12 +152,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   selected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F3E8FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.pink,
   },
   unavailable: {
-    borderColor: '#E5E7EB',
-    backgroundColor: '#F9FAFB',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.neutral[50],
     opacity: 0.6,
   },
 
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   smallText: {
     fontSize: 12,
@@ -176,11 +177,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   selectedText: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
   },
   unavailableText: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 
   // Strikethrough for unavailable options
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: '50%',
     height: 1,
-    backgroundColor: '#9CA3AF',
+    backgroundColor: colors.neutral[400],
   },
 
   // Color swatch variant
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 22,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -236,14 +237,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '140%',
     height: 2,
-    backgroundColor: '#9CA3AF',
+    backgroundColor: colors.neutral[400],
     transform: [{ rotate: '45deg' }],
   },
   colorLabel: {
     marginTop: 6,
     fontSize: 12,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
   },
   smallColorLabel: {

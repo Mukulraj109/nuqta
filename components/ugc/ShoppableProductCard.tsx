@@ -18,6 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDataNormalizer';
 import { formatPrice } from '@/utils/priceFormatter';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface ShoppableProductCardProps {
   product: any; // Can be ProductItem or backend product structure
@@ -149,7 +150,7 @@ function ShoppableProductCard({
 
     return (
       <View style={styles.ratingContainer}>
-        <Ionicons name="star" size={12} color="#F59E0B" style={styles.ratingStar} />
+        <Ionicons name="star" size={12} color={colors.warningScale[400]} style={styles.ratingStar} />
         <View style={styles.ratingTextWrapper}>
           <Text style={styles.ratingText}>
             {productData.rating.toFixed(1)}
@@ -253,7 +254,7 @@ function ShoppableProductCard({
 
           {productData.cashback !== null && productData.cashback !== undefined && typeof productData.cashback === 'number' && productData.cashback > 0 && (
             <View style={[styles.badge, styles.cashbackBadge]}>
-              <Ionicons name="cash-outline" size={10} color="#FFFFFF" style={styles.badgeIcon} />
+              <Ionicons name="cash-outline" size={10} color={colors.background.primary} style={styles.badgeIcon} />
               <Text style={styles.badgeText}>
                 {productData.cashback}% back
               </Text>
@@ -294,19 +295,19 @@ function ShoppableProductCard({
            
           >
             <LinearGradient
-              colors={isInStock ? ['#7C3AED', '#6366F1'] : ['#9CA3AF', '#6B7280']}
+              colors={isInStock ? [colors.brand.purple, colors.brand.indigo] : [colors.neutral[400], colors.neutral[500]]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.addButtonGradient}
             >
               {isAdding ? (
-                <ActivityIndicator size="small" color="#FFFFFF" />
+                <ActivityIndicator size="small" color={colors.background.primary} />
               ) : (
                 <>
                   <Ionicons
                     name={isInStock ? "cart-outline" : "close-circle-outline"}
                     size={16}
-                    color="#FFFFFF"
+                    color={colors.background.primary}
                     style={styles.addButtonIcon}
                   />
                   <Text style={styles.addButtonText}>
@@ -325,11 +326,11 @@ function ShoppableProductCard({
 const styles = StyleSheet.create({
   // Full Card Styles
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 14,
     overflow: 'hidden',
     elevation: 4,
-    shadowColor: '#7C3AED',
+    shadowColor: colors.brand.purple,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.15,
     shadowRadius: 6,
@@ -339,7 +340,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     position: 'relative',
     aspectRatio: 1.9,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   productImage: {
     width: '100%',
@@ -364,15 +365,15 @@ const styles = StyleSheet.create({
   discountBadgeTop: {
     top: 6,
     left: 6,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
   },
   cashbackBadge: {
     bottom: 6,
     left: 6,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   badgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 0.3,
@@ -384,7 +385,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   outOfStockText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '700',
   },
@@ -395,7 +396,7 @@ const styles = StyleSheet.create({
   },
   storeName: {
     fontSize: 9,
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '700',
     marginBottom: 2,
     textTransform: 'uppercase',
@@ -407,7 +408,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 11.5,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
     lineHeight: 20, // Increased from 14 to prevent top clipping
     minHeight: 20, // Changed from fixed height to minHeight
@@ -430,11 +431,11 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 11.5,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   ratingCount: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceContainer: {
     flexDirection: 'row',
@@ -448,26 +449,26 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: '900',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     letterSpacing: -0.3,
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   discountBadge: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 5,
     paddingVertical: 2,
     borderRadius: 4,
     borderWidth: 0.5,
-    borderColor: '#F59E0B',
+    borderColor: colors.warningScale[400],
   },
   discountText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#D97706',
+    color: colors.warningScale[700],
     letterSpacing: 0.2,
   },
   addButton: {
@@ -475,7 +476,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     borderRadius: 12,
     overflow: 'hidden',
-    shadowColor: '#7C3AED',
+    shadowColor: colors.brand.purple,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -495,7 +496,7 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   addButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 0.3,
@@ -503,7 +504,7 @@ const styles = StyleSheet.create({
 
   // Compact Card Styles
   compactCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 8,
     overflow: 'hidden',
     elevation: 2,
@@ -516,17 +517,17 @@ const styles = StyleSheet.create({
   compactImage: {
     width: '100%',
     aspectRatio: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   discountBadgeCompact: {
     top: 6,
     left: 6,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
   },
   outOfStockBadge: {
     top: 6,
     right: 6,
-    backgroundColor: '#6B7280',
+    backgroundColor: colors.neutral[500],
   },
   compactInfo: {
     padding: 8,
@@ -534,13 +535,13 @@ const styles = StyleSheet.create({
   compactName: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   compactPrice: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 });
 

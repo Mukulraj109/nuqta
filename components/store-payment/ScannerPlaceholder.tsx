@@ -16,17 +16,18 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const SCANNER_SIZE = Math.min(SCREEN_WIDTH - 100, 170);
 
 // ReZ Brand Colors
 const COLORS = {
-  primary: '#00C06A',
+  primary: colors.brand.green,
   primaryGlow: 'rgba(0, 192, 106, 0.3)',
   background: '#18181B',
   surface: '#27272A',
-  text: '#FFFFFF',
+  text: colors.background.primary,
   textSecondary: 'rgba(255, 255, 255, 0.7)',
   border: 'rgba(0, 192, 106, 0.5)',
 };

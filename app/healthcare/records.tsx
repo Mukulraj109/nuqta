@@ -28,6 +28,7 @@ import { getImagePicker } from '@/utils/lazyImports';
 import healthRecordsApi, { HealthRecord, HealthRecordsFilters } from '@/services/healthRecordsApi';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -585,7 +586,7 @@ const HealthRecordsPage: React.FC = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#8B5CF6', '#7C3AED']}
+        colors={[colors.brand.purpleLight, colors.brand.purple]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}
@@ -658,7 +659,7 @@ const HealthRecordsPage: React.FC = () => {
 
       <Pressable style={styles.fab} onPress={() => setShowUploadModal(true)}>
         <LinearGradient
-          colors={['#8B5CF6', '#7C3AED']}
+          colors={[colors.brand.purpleLight, colors.brand.purple]}
           style={styles.fabGradient}
         >
           <Ionicons name="add" size={28} color={Colors.text.inverse} />

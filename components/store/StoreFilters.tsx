@@ -12,6 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@/components/common/CrossPlatformSlider';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 export interface FilterOptions {
   deliveryTime: {
@@ -174,7 +175,7 @@ const StoreFilters: React.FC<StoreFiltersProps> = ({
       <View style={styles.container}>
         <View style={styles.header}>
           <Pressable onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close" size={24} color="#333" />
+            <Ionicons name="close" size={24} color={colors.darkGray} />
           </Pressable>
           <Text style={styles.headerTitle}>Filters</Text>
           <Pressable onPress={handleResetFilters} style={styles.resetButton}>
@@ -328,7 +329,7 @@ const StoreFilters: React.FC<StoreFiltersProps> = ({
                   value={filters.features.freeDelivery}
                   onValueChange={() => toggleFeature('freeDelivery')}
                   trackColor={{ false: '#E5E5E5', true: '#7B61FF' }}
-                  thumbColor={filters.features.freeDelivery ? '#fff' : '#f4f3f4'}
+                  thumbColor={filters.features.freeDelivery ? colors.background.primary : '#f4f3f4'}
                 />
               </View>
               <View style={styles.feature}>
@@ -337,7 +338,7 @@ const StoreFilters: React.FC<StoreFiltersProps> = ({
                   value={filters.features.walletPayment}
                   onValueChange={() => toggleFeature('walletPayment')}
                   trackColor={{ false: '#E5E5E5', true: '#7B61FF' }}
-                  thumbColor={filters.features.walletPayment ? '#fff' : '#f4f3f4'}
+                  thumbColor={filters.features.walletPayment ? colors.background.primary : '#f4f3f4'}
                 />
               </View>
               <View style={styles.feature}>
@@ -346,7 +347,7 @@ const StoreFilters: React.FC<StoreFiltersProps> = ({
                   value={filters.features.verified}
                   onValueChange={() => toggleFeature('verified')}
                   trackColor={{ false: '#E5E5E5', true: '#7B61FF' }}
-                  thumbColor={filters.features.verified ? '#fff' : '#f4f3f4'}
+                  thumbColor={filters.features.verified ? colors.background.primary : '#f4f3f4'}
                 />
               </View>
               <View style={styles.feature}>
@@ -355,7 +356,7 @@ const StoreFilters: React.FC<StoreFiltersProps> = ({
                   value={filters.features.featured}
                   onValueChange={() => toggleFeature('featured')}
                   trackColor={{ false: '#E5E5E5', true: '#7B61FF' }}
-                  thumbColor={filters.features.featured ? '#fff' : '#f4f3f4'}
+                  thumbColor={filters.features.featured ? colors.background.primary : '#f4f3f4'}
                 />
               </View>
             </View>
@@ -381,7 +382,7 @@ const StoreFilters: React.FC<StoreFiltersProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.offWhite,
   },
   header: {
     flexDirection: 'row',
@@ -389,7 +390,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
     borderBottomColor: '#e9ecef',
   },
@@ -399,7 +400,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
   },
   resetButton: {
     padding: 8,
@@ -414,7 +415,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginTop: 16,
@@ -427,7 +428,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 16,
   },
   sortOptions: {
@@ -443,7 +444,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#E5E5E5',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
   sortOptionActive: {
     backgroundColor: '#7B61FF',
@@ -455,18 +456,18 @@ const styles = StyleSheet.create({
   },
   sortOptionText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     fontWeight: '500',
   },
   sortOptionTextActive: {
-    color: '#fff',
+    color: colors.background.primary,
   },
   sliderContainer: {
     marginBottom: 16,
   },
   sliderLabel: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     marginBottom: 8,
   },
   slider: {
@@ -491,7 +492,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#E5E5E5',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
   paymentMethodActive: {
     backgroundColor: '#7B61FF',
@@ -503,11 +504,11 @@ const styles = StyleSheet.create({
   },
   paymentMethodText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     fontWeight: '500',
   },
   paymentMethodTextActive: {
-    color: '#fff',
+    color: colors.background.primary,
   },
   features: {
     gap: 16,
@@ -519,12 +520,12 @@ const styles = StyleSheet.create({
   },
   featureText: {
     fontSize: 16,
-    color: '#333',
+    color: colors.darkGray,
     fontWeight: '500',
   },
   footer: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderTopWidth: 1,
     borderTopColor: '#e9ecef',
   },
@@ -537,7 +538,7 @@ const styles = StyleSheet.create({
   applyButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.background.primary,
   },
 });
 

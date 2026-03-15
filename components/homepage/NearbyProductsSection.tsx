@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import * as Location from 'expo-location';
 import { productApi, HomepageProduct } from '@/services/productApi';
 import HomepageProductCard from './cards/HomepageProductCard';
+import { colors } from '@/constants/theme';
 
 interface NearbyProductsSectionProps {
   title?: string;
@@ -141,7 +142,7 @@ function NearbyProductsSection({
           <ThemedText style={styles.title}>{title}</ThemedText>
         </View>
         <View style={styles.permissionContainer}>
-          <Ionicons name="location-outline" size={32} color="#6B7280" />
+          <Ionicons name="location-outline" size={32} color={colors.neutral[500]} />
           <ThemedText style={styles.permissionText}>
             Enable location to see products near you
           </ThemedText>
@@ -171,7 +172,7 @@ function NearbyProductsSection({
       {/* Content */}
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#ffcd57" />
+          <ActivityIndicator size="small" color={colors.lightMustard} />
           <ThemedText style={styles.loadingText}>Finding products near you...</ThemedText>
         </View>
       ) : error ? (
@@ -213,10 +214,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   viewAllButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   listContent: {
     paddingHorizontal: 16,
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 8,
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   errorContainer: {
     height: 180,
@@ -247,12 +248,12 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#EF4444',
+    color: colors.error,
     marginBottom: 8,
     textAlign: 'center',
   },
   retryButton: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   permissionContainer: {
     height: 180,
@@ -270,13 +271,13 @@ const styles = StyleSheet.create({
   },
   permissionText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 12,
     marginBottom: 16,
     textAlign: 'center',
   },
   enableButton: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
   enableButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

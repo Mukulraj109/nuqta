@@ -19,6 +19,7 @@ import ActionBtn from '../../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -59,7 +60,7 @@ const FloatingCoin: React.FC<{ delay: number; startX: number }> = ({ delay, star
 
     return (
         <Animated.View style={[styles.floatingCoin, style]}>
-            <Ionicons name="star" size={16} color="#F59E0B" />
+            <Ionicons name="star" size={16} color={colors.warningScale[400]} />
         </Animated.View>
     );
 };
@@ -99,7 +100,7 @@ const EarnRewardsScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
             title="You earned rewards!"
             onBack={onBack}
             footer={<ActionBtn title="View Wallet" onPress={() => onNavigate('A4')} />}
-            headerAccent="#1a3a52"
+            headerAccent={colors.nileBlue}
         >
             <View style={styles.container}>
                 {/* Floating celebration coins */}
@@ -114,19 +115,19 @@ const EarnRewardsScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                     <Animated.View style={[styles.glowRing, glowStyle]} />
                     <Animated.View style={[styles.iconContainer, iconStyle]}>
                         <LinearGradient
-                            colors={['#ffcd57', '#1a3a52']}
+                            colors={[colors.lightMustard, colors.nileBlue]}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 1, y: 1 }}
                             style={styles.iconGradient}
                         >
-                            <Ionicons name="wallet" size={64} color="#FFFFFF" />
+                            <Ionicons name="wallet" size={64} color={colors.background.primary} />
                         </LinearGradient>
                         <View style={styles.coinBadge}>
                             <LinearGradient
-                                colors={['#FBBF24', '#F59E0B']}
+                                colors={[colors.warningScale[400], colors.warningScale[400]]}
                                 style={styles.badgeGradient}
                             >
-                                <Ionicons name="checkmark" size={20} color="#FFFFFF" />
+                                <Ionicons name="checkmark" size={20} color={colors.background.primary} />
                             </LinearGradient>
                         </View>
                     </Animated.View>
@@ -147,17 +148,17 @@ const EarnRewardsScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                     style={styles.rewardsCard}
                 >
                     <LinearGradient
-                        colors={['#FFFFFF', '#F9FAFB']}
+                        colors={[colors.background.primary, colors.neutral[50]]}
                         style={styles.rewardsGradient}
                     >
                         {/* Cashback row */}
                         <View style={styles.rewardRow}>
-                            <View style={[styles.rewardIcon, { backgroundColor: '#faf1e0' }]}>
-                                <Ionicons name="cash" size={24} color="#1a3a52" />
+                            <View style={[styles.rewardIcon, { backgroundColor: colors.linen }]}>
+                                <Ionicons name="cash" size={24} color={colors.nileBlue} />
                             </View>
                             <View style={styles.rewardInfo}>
                                 <Text style={styles.rewardLabel}>Cashback</Text>
-                                <Text style={[styles.rewardValue, { color: '#1a3a52' }]}>+ {currencySymbol}50</Text>
+                                <Text style={[styles.rewardValue, { color: colors.nileBlue }]}>+ {currencySymbol}50</Text>
                             </View>
                         </View>
 
@@ -165,12 +166,12 @@ const EarnRewardsScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
 
                         {/* Coins row */}
                         <View style={styles.rewardRow}>
-                            <View style={[styles.rewardIcon, { backgroundColor: '#FEF3C7' }]}>
-                                <Ionicons name="layers" size={24} color="#F59E0B" />
+                            <View style={[styles.rewardIcon, { backgroundColor: colors.tint.amberLight }]}>
+                                <Ionicons name="layers" size={24} color={colors.warningScale[400]} />
                             </View>
                             <View style={styles.rewardInfo}>
                                 <Text style={styles.rewardLabel}>{BRAND.COIN_NAME}</Text>
-                                <Text style={[styles.rewardValue, { color: '#F59E0B' }]}>+ 40</Text>
+                                <Text style={[styles.rewardValue, { color: colors.warningScale[400] }]}>+ 40</Text>
                             </View>
                         </View>
                     </LinearGradient>
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
         width: 160,
         height: 160,
         borderRadius: 80,
-        backgroundColor: '#ffcd57',
+        backgroundColor: colors.lightMustard,
     },
     iconContainer: {
         width: 130,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
         position: 'relative',
         ...Platform.select({
             ios: {
-                shadowColor: '#1a3a52',
+                shadowColor: colors.nileBlue,
                 shadowOffset: { width: 0, height: 12 },
                 shadowOpacity: 0.4,
                 shadowRadius: 24,
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
         right: -8,
         borderRadius: 20,
         borderWidth: 4,
-        borderColor: '#FFFFFF',
+        borderColor: colors.background.primary,
         overflow: 'hidden',
     },
     badgeGradient: {
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
     congratsText: {
         fontSize: 24,
         fontWeight: '800',
-        color: '#1F2937',
+        color: colors.neutral[800],
         letterSpacing: -0.5,
     },
     rewardsCard: {
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
         padding: 24,
         borderRadius: 24,
         borderWidth: 1,
-        borderColor: '#E5E7EB',
+        borderColor: colors.neutral[200],
     },
     rewardRow: {
         flexDirection: 'row',
@@ -303,7 +304,7 @@ const styles = StyleSheet.create({
     },
     rewardLabel: {
         fontSize: 14,
-        color: '#6B7280',
+        color: colors.neutral[500],
         marginBottom: 4,
     },
     rewardValue: {
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
     },
     divider: {
         height: 1,
-        backgroundColor: '#F3F4F6',
+        backgroundColor: colors.neutral[100],
         marginVertical: 16,
     },
 });

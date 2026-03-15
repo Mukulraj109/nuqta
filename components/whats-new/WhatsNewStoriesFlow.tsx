@@ -21,6 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { IWhatsNewStory } from '@/types/whatsNew.types';
 import whatsNewApi from '@/services/whatsNewApi';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const SLIDE_DURATION = 5000; // 5 seconds per slide
@@ -173,7 +174,7 @@ const WhatsNewStoriesFlow: React.FC<WhatsNewStoriesFlowProps> = ({ onClose }) =>
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FFFFFF" />
+        <ActivityIndicator size="large" color={colors.background.primary} />
       </View>
     );
   }
@@ -273,7 +274,7 @@ const WhatsNewStoriesFlow: React.FC<WhatsNewStoriesFlowProps> = ({ onClose }) =>
           </View>
         </View>
         <Pressable onPress={onClose} style={styles.closeButton}>
-          <Ionicons name="close" size={28} color="#FFFFFF" />
+          <Ionicons name="close" size={28} color={colors.background.primary} />
         </Pressable>
       </View>
 
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   },
   slideProgressFill: {
     height: '100%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   header: {
     position: 'absolute',
@@ -382,14 +383,14 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   storyIconEmoji: {
     width: 40,
     height: 40,
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
     backgroundColor: 'rgba(255,255,255,0.1)',
     justifyContent: 'center',
     alignItems: 'center',
@@ -402,7 +403,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   storyTitle: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: '700',
   },
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   overlayText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 28,
     fontWeight: '800',
     textAlign: 'center',
@@ -435,7 +436,7 @@ const styles = StyleSheet.create({
     bottom: 100,
     left: 20,
     right: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',

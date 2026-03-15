@@ -23,6 +23,7 @@ import { CachedImage } from '@/components/ui/CachedImage';
 import apiClient from '@/services/apiClient';
 import storesService from '@/services/storesApi';
 import categoriesService from '@/services/categoriesApi';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const FOOD_CATEGORY_SLUG = 'food-dining';
@@ -236,7 +237,7 @@ const FoodPage: React.FC = () => {
 
   // ---------- Helpers ----------
   const getOfferColor = (index: number): string => {
-    const palette = [Colors.error, Colors.success, Colors.info, '#7C3AED', '#F97316'];
+    const palette = [Colors.error, Colors.success, Colors.info, colors.brand.purple, colors.brand.orange];
     return palette[index % palette.length];
   };
 
@@ -284,7 +285,7 @@ const FoodPage: React.FC = () => {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#F97316', '#EA580C']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
+        <LinearGradient colors={[colors.brand.orange, colors.brand.orangeDark]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
           <View style={styles.headerTop}>
             <Pressable onPress={() => router.back()} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
@@ -298,9 +299,9 @@ const FoodPage: React.FC = () => {
         </LinearGradient>
         <View style={styles.loadingContainer}>
           <View style={styles.loadingIconWrap}>
-            <Ionicons name="restaurant-outline" size={36} color="#F97316" />
+            <Ionicons name="restaurant-outline" size={36} color={colors.brand.orange} />
           </View>
-          <ActivityIndicator size="large" color="#F97316" style={{ marginTop: Spacing.base }} />
+          <ActivityIndicator size="large" color={colors.brand.orange} style={{ marginTop: Spacing.base }} />
           <Text style={styles.loadingText}>Loading food options...</Text>
         </View>
       </View>
@@ -310,7 +311,7 @@ const FoodPage: React.FC = () => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <LinearGradient colors={['#F97316', '#EA580C']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
+      <LinearGradient colors={[colors.brand.orange, colors.brand.orangeDark]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
         <View style={styles.headerTop}>
           <Pressable onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
@@ -366,7 +367,7 @@ const FoodPage: React.FC = () => {
             )}
           </View>
           {loadingOffers ? (
-            <ActivityIndicator size="small" color="#F97316" />
+            <ActivityIndicator size="small" color={colors.brand.orange} />
           ) : offers.length === 0 ? (
             <View style={styles.emptySmall}>
               <Text style={styles.emptySmallText}>No offers available right now</Text>
@@ -398,7 +399,7 @@ const FoodPage: React.FC = () => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Browse by Category</Text>
           {loadingSubcategories ? (
-            <ActivityIndicator size="small" color="#F97316" />
+            <ActivityIndicator size="small" color={colors.brand.orange} />
           ) : subcategories.length === 0 ? (
             <View style={styles.emptySmall}>
               <Text style={styles.emptySmallText}>No categories found</Text>
@@ -441,7 +442,7 @@ const FoodPage: React.FC = () => {
             <Text style={styles.sectionTitle}>Popular Cuisines</Text>
           </View>
           {loadingCuisines ? (
-            <ActivityIndicator size="small" color="#F97316" />
+            <ActivityIndicator size="small" color={colors.brand.orange} />
           ) : cuisines.length === 0 ? (
             <View style={styles.emptySmall}>
               <Text style={styles.emptySmallText}>No cuisine data available</Text>
@@ -469,11 +470,11 @@ const FoodPage: React.FC = () => {
             <Text style={styles.sectionTitle}>Featured Restaurants</Text>
           </View>
           {loadingStores ? (
-            <ActivityIndicator size="small" color="#F97316" />
+            <ActivityIndicator size="small" color={colors.brand.orange} />
           ) : featuredStores.length === 0 ? (
             <View style={styles.emptyState}>
               <View style={styles.emptyIconWrap}>
-                <Ionicons name="restaurant-outline" size={36} color="#F97316" />
+                <Ionicons name="restaurant-outline" size={36} color={colors.brand.orange} />
               </View>
               <Text style={styles.emptyTitle}>No restaurants found</Text>
               <Text style={styles.emptySubtitle}>Check back later for new restaurants in your area</Text>
@@ -538,7 +539,7 @@ const FoodPage: React.FC = () => {
               {hasMoreStores && (
                 <Pressable style={styles.loadMoreButton} onPress={loadMoreStores} disabled={loadingMoreStores}>
                   {loadingMoreStores ? (
-                    <ActivityIndicator size="small" color="#F97316" />
+                    <ActivityIndicator size="small" color={colors.brand.orange} />
                   ) : (
                     <Text style={styles.loadMoreText}>Load More Restaurants</Text>
                   )}
@@ -586,13 +587,13 @@ const styles = StyleSheet.create({
   statDivider: { width: 1, height: 30, backgroundColor: 'rgba(255,255,255,0.3)' },
   filtersContainer: { height: 52, paddingVertical: Spacing.sm, paddingHorizontal: Spacing.base, backgroundColor: Colors.background.primary, borderBottomWidth: 1, borderBottomColor: Colors.border.default },
   filterChip: { paddingHorizontal: Spacing.base, paddingVertical: 7, borderRadius: BorderRadius.xl, backgroundColor: Colors.background.secondary, marginRight: Spacing.sm },
-  filterChipActive: { backgroundColor: '#F97316' },
+  filterChipActive: { backgroundColor: colors.brand.orange },
   filterChipText: { fontSize: Typography.body.fontSize, color: Colors.text.tertiary },
   filterChipTextActive: { color: Colors.text.inverse, fontWeight: '600' },
   section: { padding: Spacing.base },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.md },
   sectionTitle: { fontSize: Typography.h4.fontSize, fontWeight: '700', color: Colors.nileBlue, marginBottom: Spacing.md },
-  viewAllText: { fontSize: Typography.body.fontSize, fontWeight: '600', color: '#F97316' },
+  viewAllText: { fontSize: Typography.body.fontSize, fontWeight: '600', color: colors.brand.orange },
   offerCard: { width: 180, padding: Spacing.base, borderRadius: BorderRadius.lg, marginRight: Spacing.md },
   offerTitle: { fontSize: Typography.h2.fontSize, fontWeight: '700', color: Colors.text.inverse, marginBottom: Spacing.xs },
   offerSubtitle: { fontSize: Typography.bodySmall.fontSize, color: 'rgba(255,255,255,0.9)', marginBottom: Spacing.md },
@@ -636,12 +637,12 @@ const styles = StyleSheet.create({
   loadingText: { marginTop: Spacing.md, fontSize: Typography.body.fontSize, color: Colors.text.tertiary },
   emptyState: { alignItems: 'center', paddingVertical: Spacing.xl },
   emptyIconWrap: { width: 72, height: 72, borderRadius: 36, backgroundColor: '#F9731615', justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.md },
-  emptyTitle: { fontSize: Typography.h4.fontSize, fontWeight: '700', color: '#111827', marginBottom: Spacing.xs },
-  emptySubtitle: { fontSize: Typography.bodySmall.fontSize, color: '#6B7280', textAlign: 'center', paddingHorizontal: Spacing.xl },
+  emptyTitle: { fontSize: Typography.h4.fontSize, fontWeight: '700', color: colors.neutral[900], marginBottom: Spacing.xs },
+  emptySubtitle: { fontSize: Typography.bodySmall.fontSize, color: colors.neutral[500], textAlign: 'center', paddingHorizontal: Spacing.xl },
   emptySmall: { paddingVertical: Spacing.md, alignItems: 'center' },
   emptySmallText: { fontSize: Typography.bodySmall.fontSize, color: Colors.text.tertiary },
-  loadMoreButton: { alignItems: 'center', paddingVertical: Spacing.md, marginTop: Spacing.sm, borderWidth: 1, borderColor: '#F97316', borderRadius: BorderRadius.lg },
-  loadMoreText: { fontSize: Typography.body.fontSize, fontWeight: '600', color: '#F97316' },
+  loadMoreButton: { alignItems: 'center', paddingVertical: Spacing.md, marginTop: Spacing.sm, borderWidth: 1, borderColor: colors.brand.orange, borderRadius: BorderRadius.lg },
+  loadMoreText: { fontSize: Typography.body.fontSize, fontWeight: '600', color: colors.brand.orange },
 });
 
 export default FoodPage;

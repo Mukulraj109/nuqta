@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { colors } from '@/constants/theme';
 import {
   View,
   Animated,
@@ -83,12 +84,12 @@ const styles = StyleSheet.create({
   },
   card: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 22,
     paddingHorizontal: 14,
     paddingTop: 14,
     paddingBottom: 14,
-    shadowColor: '#1a3a52',
+    shadowColor: colors.nileBlue,
     shadowOpacity: 0.05,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 3 },
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     width: '65%',
     height: 14,
     borderRadius: 7,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginBottom: 6,
   },
   descriptionPlaceholder: {

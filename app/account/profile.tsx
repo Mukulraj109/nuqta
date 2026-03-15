@@ -1,6 +1,7 @@
 // Account Profile Page
 // User's account information and settings overview
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -171,7 +172,7 @@ export default function AccountProfilePage() {
 
       {/* Header */}
       <LinearGradient
-        colors={[Colors.brand.purple, '#A78BFA', '#C4B5FD']}
+        colors={[Colors.brand.purple, colors.brand.purpleSoft, '#C4B5FD']}
         style={styles.header}
       >
         <View style={styles.headerContent}>
@@ -282,7 +283,7 @@ export default function AccountProfilePage() {
                 accessibilityRole="switch"
                 accessibilityState={{ checked: notificationSettings?.push.enabled || false }}
                 accessibilityHint={`Toggle to ${notificationSettings?.push.enabled ? 'disable' : 'enable'} push notifications`}
-                trackColor={{ false: Colors.border.default, true: '#A78BFA' }}
+                trackColor={{ false: Colors.border.default, true: colors.brand.purpleSoft }}
                 thumbColor={notificationSettings?.push.enabled ? Colors.brand.purple : Colors.background.secondary}
               />
             </View>
@@ -306,7 +307,7 @@ export default function AccountProfilePage() {
                 accessibilityRole="switch"
                 accessibilityState={{ checked: notificationSettings?.email.enabled || false }}
                 accessibilityHint={`Toggle to ${notificationSettings?.email.enabled ? 'disable' : 'enable'} email notifications`}
-                trackColor={{ false: Colors.border.default, true: '#A78BFA' }}
+                trackColor={{ false: Colors.border.default, true: colors.brand.purpleSoft }}
                 thumbColor={notificationSettings?.email.enabled ? Colors.brand.purple : Colors.background.secondary}
               />
             </View>
@@ -330,7 +331,7 @@ export default function AccountProfilePage() {
                 accessibilityRole="switch"
                 accessibilityState={{ checked: notificationSettings?.sms.enabled || false }}
                 accessibilityHint={`Toggle to ${notificationSettings?.sms.enabled ? 'disable' : 'enable'} SMS notifications`}
-                trackColor={{ false: Colors.border.default, true: '#A78BFA' }}
+                trackColor={{ false: Colors.border.default, true: colors.brand.purpleSoft }}
                 thumbColor={notificationSettings?.sms.enabled ? Colors.brand.purple : Colors.background.secondary}
               />
             </View>
@@ -418,7 +419,7 @@ export default function AccountProfilePage() {
                 accessibilityRole="switch"
                 accessibilityState={{ checked: securitySettings?.biometric.fingerprintEnabled || securitySettings?.biometric.faceIdEnabled || false }}
                 accessibilityHint={`Toggle to ${securitySettings?.biometric.fingerprintEnabled ? 'disable' : 'enable'} fingerprint or face ID login`}
-                trackColor={{ false: Colors.border.default, true: '#A78BFA' }}
+                trackColor={{ false: Colors.border.default, true: colors.brand.purpleSoft }}
                 thumbColor={securitySettings?.biometric.fingerprintEnabled ? Colors.brand.purple : Colors.background.secondary}
               />
             </View>
@@ -452,7 +453,7 @@ export default function AccountProfilePage() {
                 accessibilityRole="switch"
                 accessibilityState={{ checked: appPreferences?.animations || false }}
                 accessibilityHint={`Toggle to ${appPreferences?.animations ? 'disable' : 'enable'} app animations`}
-                trackColor={{ false: Colors.border.default, true: '#A78BFA' }}
+                trackColor={{ false: Colors.border.default, true: colors.brand.purpleSoft }}
                 thumbColor={appPreferences?.animations ? Colors.brand.purple : Colors.background.secondary}
               />
             </View>
@@ -481,7 +482,7 @@ export default function AccountProfilePage() {
                 accessibilityRole="switch"
                 accessibilityState={{ checked: appPreferences?.sounds || false }}
                 accessibilityHint={`Toggle to ${appPreferences?.sounds ? 'disable' : 'enable'} app sounds`}
-                trackColor={{ false: Colors.border.default, true: '#A78BFA' }}
+                trackColor={{ false: Colors.border.default, true: colors.brand.purpleSoft }}
                 thumbColor={appPreferences?.sounds ? Colors.brand.purple : Colors.background.secondary}
               />
             </View>
@@ -510,7 +511,7 @@ export default function AccountProfilePage() {
                 accessibilityRole="switch"
                 accessibilityState={{ checked: appPreferences?.hapticFeedback || false }}
                 accessibilityHint={`Toggle to ${appPreferences?.hapticFeedback ? 'disable' : 'enable'} haptic feedback`}
-                trackColor={{ false: Colors.border.default, true: '#A78BFA' }}
+                trackColor={{ false: Colors.border.default, true: colors.brand.purpleSoft }}
                 thumbColor={appPreferences?.hapticFeedback ? Colors.brand.purple : Colors.background.secondary}
               />
             </View>
@@ -712,7 +713,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: BorderRadius.xl,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: Spacing.md,

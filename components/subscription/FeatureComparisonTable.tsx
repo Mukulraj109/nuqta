@@ -6,6 +6,7 @@ import { View, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { SubscriptionTier } from '@/types/subscription.types';
+import { colors } from '@/constants/theme';
 
 interface Feature {
   name: string;
@@ -58,7 +59,7 @@ function FeatureComparisonTable({
         <Ionicons
           name={hasFeature ? 'checkmark-circle' : 'close-circle-outline'}
           size={20}
-          color={hasFeature ? '#10B981' : '#D1D5DB'}
+          color={hasFeature ? colors.successScale[400] : colors.neutral[300]}
         />
       </View>
     );
@@ -133,7 +134,7 @@ function FeatureComparisonTable({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -145,25 +146,25 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   table: {
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderRadius: 8,
     overflow: 'hidden',
   },
   headerRow: {
     flexDirection: 'row',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderBottomWidth: 2,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   row: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   featureCell: {
     flex: 2,
@@ -200,17 +201,17 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   featureName: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   cashbackValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 });
 

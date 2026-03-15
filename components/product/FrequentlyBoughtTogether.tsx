@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { useRelatedProducts, RelatedProduct } from '@/hooks/useRelatedProducts';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 /**
  * FrequentlyBoughtTogether Component
@@ -110,7 +111,7 @@ export const FrequentlyBoughtTogether: React.FC<FrequentlyBoughtTogetherProps> =
       <View style={styles.container}>
         <ThemedText style={styles.title}>Frequently Bought Together</ThemedText>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#8B5CF6" />
+          <ActivityIndicator size="small" color={colors.brand.purpleLight} />
         </View>
       </View>
     );
@@ -158,7 +159,7 @@ export const FrequentlyBoughtTogether: React.FC<FrequentlyBoughtTogetherProps> =
             {/* Plus Icon */}
             {index > 0 && (
               <View style={styles.plusIcon}>
-                <Ionicons name="add" size={20} color="#9CA3AF" />
+                <Ionicons name="add" size={20} color={colors.neutral[400]} />
               </View>
             )}
 
@@ -182,7 +183,7 @@ export const FrequentlyBoughtTogether: React.FC<FrequentlyBoughtTogetherProps> =
                   ]}
                 >
                   {selectedProducts.has(product.id) && (
-                    <Ionicons name="checkmark" size={14} color="#FFF" />
+                    <Ionicons name="checkmark" size={14} color={colors.background.primary} />
                   )}
                 </View>
               </View>
@@ -227,7 +228,7 @@ export const FrequentlyBoughtTogether: React.FC<FrequentlyBoughtTogetherProps> =
           disabled={selectedCount === 0}
          
         >
-          <Ionicons name="cart" size={20} color="#FFF" />
+          <Ionicons name="cart" size={20} color={colors.background.primary} />
           <ThemedText style={styles.addToCartText}>
             Add {selectedCount > 1 ? 'All' : ''} to Cart
           </ThemedText>
@@ -239,11 +240,11 @@ export const FrequentlyBoughtTogether: React.FC<FrequentlyBoughtTogetherProps> =
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     marginBottom: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
 
   // Header
@@ -256,10 +257,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   savingsBadge: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 6,
@@ -267,7 +268,7 @@ const styles = StyleSheet.create({
   savingsText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#DC2626',
+    color: colors.error,
   },
 
   // Loading
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
   },
   productItem: {
     width: 140,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 12,
     borderWidth: 2,
@@ -295,11 +296,11 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   productItemSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F3E8FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.pink,
   },
   productItemCurrent: {
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
 
   // Checkbox
@@ -314,14 +315,14 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
-    backgroundColor: '#FFF',
+    borderColor: colors.neutral[300],
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkboxSelected: {
-    backgroundColor: '#8B5CF6',
-    borderColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
+    borderColor: colors.brand.purpleLight,
   },
 
   // Image
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 100,
     borderRadius: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginBottom: 8,
   },
 
@@ -340,14 +341,14 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 16,
     height: 32,
   },
   productPrice: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   // Current Badge
@@ -355,7 +356,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 8,
     left: 8,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
   currentBadgeText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
 
   // Footer
@@ -373,7 +374,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     gap: 12,
   },
   totalContainer: {
@@ -381,30 +382,30 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 2,
   },
   totalPrice: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   addToCartButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 10,
     gap: 8,
   },
   addToCartButtonDisabled: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   addToCartText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
 });
 

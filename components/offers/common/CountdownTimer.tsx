@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useCountdown, getUrgencyColor } from '@/hooks/useCountdown';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { Typography, Spacing, BorderRadius } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface CountdownTimerProps {
   endTime: string | Date;
@@ -62,9 +63,9 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
       alignItems: 'center',
       backgroundColor:
         countdown.urgencyLevel === 'critical'
-          ? '#FEE2E2'
+          ? colors.errorScale[100]
           : countdown.urgencyLevel === 'warning'
-          ? '#FEF3C7'
+          ? colors.tint.amberLight
           : theme.colors.border.light,
       paddingHorizontal: Spacing.sm,
       paddingVertical: Spacing.xs,

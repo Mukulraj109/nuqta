@@ -15,6 +15,7 @@ import { Activity, Comment } from '../../services/activityFeedApi';
 import * as activityFeedApi from '../../services/activityFeedApi';
 import FollowButton from '../social/FollowButton';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface ActivityCardProps {
   activity: Activity;
@@ -176,7 +177,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
           <Ionicons
             name={activity.hasLiked ? 'heart' : 'heart-outline'}
             size={24}
-            color={activity.hasLiked ? '#FF3B30' : '#666'}
+            color={activity.hasLiked ? '#FF3B30' : colors.midGray}
           />
           <Text style={[styles.actionText, activity.hasLiked && styles.actionTextActive]}>
             {stats.likes || 0}
@@ -184,12 +185,12 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
         </Pressable>
 
         <Pressable style={styles.actionButton} onPress={handleShowComments}>
-          <Ionicons name="chatbubble-outline" size={22} color="#666" />
+          <Ionicons name="chatbubble-outline" size={22} color={colors.midGray} />
           <Text style={styles.actionText}>{stats.comments || 0}</Text>
         </Pressable>
 
         <Pressable style={styles.actionButton}>
-          <Ionicons name="share-outline" size={22} color="#666" />
+          <Ionicons name="share-outline" size={22} color={colors.midGray} />
           <Text style={styles.actionText}>{stats.shares || 0}</Text>
         </Pressable>
       </View>
@@ -200,13 +201,13 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Comments</Text>
             <Pressable onPress={() => setShowComments(false)}>
-              <Ionicons name="close" size={28} color="#000" />
+              <Ionicons name="close" size={28} color={colors.text.primary} />
             </Pressable>
           </View>
 
           {isLoadingComments ? (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#007AFF" />
+              <ActivityIndicator size="large" color={colors.brand.ios} />
             </View>
           ) : (
             <FlatList
@@ -254,9 +255,9 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
               disabled={!commentText.trim() || isSubmittingComment}
             >
               {isSubmittingComment ? (
-                <ActivityIndicator size="small" color="#007AFF" />
+                <ActivityIndicator size="small" color={colors.brand.ios} />
               ) : (
-                <Ionicons name="send" size={24} color={commentText.trim() ? '#007AFF' : '#ccc'} />
+                <Ionicons name="send" size={24} color={commentText.trim() ? colors.brand.ios : '#ccc'} />
               )}
             </Pressable>
           </View>
@@ -268,7 +269,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     marginBottom: 12,
     borderRadius: 12,
     padding: 16,
@@ -308,7 +309,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   avatarText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 18,
     fontWeight: '600'
   },
@@ -318,7 +319,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#000',
+    color: colors.text.primary,
     marginBottom: 2
   },
   timeAgo: {
@@ -349,12 +350,12 @@ const styles = StyleSheet.create({
   activityTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#000',
+    color: colors.text.primary,
     marginBottom: 4
   },
   activityDescription: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     lineHeight: 20
   },
   amountBadge: {
@@ -366,7 +367,7 @@ const styles = StyleSheet.create({
     marginTop: 8
   },
   amountText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600'
   },
@@ -383,7 +384,7 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     marginLeft: 6,
     fontWeight: '500'
   },
@@ -392,7 +393,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: colors.background.primary
   },
   modalHeader: {
     flexDirection: 'row',
@@ -405,7 +406,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#000'
+    color: colors.text.primary
   },
   loadingContainer: {
     flex: 1,
@@ -433,12 +434,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 18,
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     alignItems: 'center',
     justifyContent: 'center'
   },
   commentAvatarText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600'
   },
@@ -448,12 +449,12 @@ const styles = StyleSheet.create({
   commentUserName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: colors.text.primary,
     marginBottom: 4
   },
   commentText: {
     fontSize: 14,
-    color: '#333',
+    color: colors.darkGray,
     lineHeight: 20,
     marginBottom: 4
   },
@@ -476,7 +477,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
-    backgroundColor: '#fff'
+    backgroundColor: colors.background.primary
   },
   commentInput: {
     flex: 1,

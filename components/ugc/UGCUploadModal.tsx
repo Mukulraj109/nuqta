@@ -24,6 +24,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
 import { Video } from 'expo-av';
 import ugcApi, { CreateUGCRequest } from '@/services/ugcApi';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -446,12 +447,12 @@ function UGCUploadModal({
       <View style={styles.header}>
         {currentStep !== 'media' && currentStep !== 'success' && currentStep !== 'uploading' && (
           <Pressable onPress={handleBack} style={styles.headerButton}>
-            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
         )}
         <Text style={styles.headerTitle}>{stepTitles[currentStep]}</Text>
         <Pressable onPress={handleClose} style={styles.headerButton}>
-          <Ionicons name="close" size={24} color="#FFFFFF" />
+          <Ionicons name="close" size={24} color={colors.background.primary} />
         </Pressable>
       </View>
     );
@@ -468,10 +469,10 @@ function UGCUploadModal({
        
       >
         <LinearGradient
-          colors={['#7C3AED', '#8B5CF6']}
+          colors={[colors.brand.purple, colors.brand.purpleLight]}
           style={styles.mediaOptionGradient}
         >
-          <Ionicons name="camera" size={48} color="#FFFFFF" />
+          <Ionicons name="camera" size={48} color={colors.background.primary} />
           <Text style={styles.mediaOptionTitle}>Take Photo/Video</Text>
           <Text style={styles.mediaOptionSubtitle}>Capture new content</Text>
         </LinearGradient>
@@ -483,10 +484,10 @@ function UGCUploadModal({
        
       >
         <LinearGradient
-          colors={['#7C3AED', '#8B5CF6']}
+          colors={[colors.brand.purple, colors.brand.purpleLight]}
           style={styles.mediaOptionGradient}
         >
-          <Ionicons name="images" size={48} color="#FFFFFF" />
+          <Ionicons name="images" size={48} color={colors.background.primary} />
           <Text style={styles.mediaOptionTitle}>Choose from Library</Text>
           <Text style={styles.mediaOptionSubtitle}>Select existing media</Text>
         </LinearGradient>
@@ -523,7 +524,7 @@ function UGCUploadModal({
         <TextInput
           style={styles.captionInput}
           placeholder="Write a caption..."
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.neutral[400]}
           value={caption}
           onChangeText={setCaption}
           multiline
@@ -545,7 +546,7 @@ function UGCUploadModal({
           <Ionicons
             name={tagProduct ? 'checkbox' : 'square-outline'}
             size={24}
-            color="#7C3AED"
+            color={colors.brand.purple}
           />
           <Text style={styles.checkboxLabel}>Tag Product</Text>
         </Pressable>
@@ -559,7 +560,7 @@ function UGCUploadModal({
         <Ionicons
           name={tagLocation ? 'checkbox' : 'square-outline'}
           size={24}
-          color="#7C3AED"
+          color={colors.brand.purple}
         />
         <Text style={styles.checkboxLabel}>Tag Location</Text>
       </Pressable>
@@ -602,11 +603,11 @@ function UGCUploadModal({
        
       >
         <LinearGradient
-          colors={['#7C3AED', '#8B5CF6']}
+          colors={[colors.brand.purple, colors.brand.purpleLight]}
           style={styles.primaryButtonGradient}
         >
           <Text style={styles.primaryButtonText}>Next</Text>
-          <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+          <Ionicons name="arrow-forward" size={20} color={colors.background.primary} />
         </LinearGradient>
       </Pressable>
     </ScrollView>
@@ -637,7 +638,7 @@ function UGCUploadModal({
               <Ionicons
                 name={option.icon as any}
                 size={24}
-                color={category === option.value ? '#FFFFFF' : '#7C3AED'}
+                color={category === option.value ? colors.background.primary : colors.brand.purple}
               />
               <Text
                 style={[
@@ -661,7 +662,7 @@ function UGCUploadModal({
           <TextInput
             style={styles.hashtagInput}
             placeholder="Add hashtag..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={hashtagInput}
             onChangeText={setHashtagInput}
             onSubmitEditing={handleAddHashtag}
@@ -672,7 +673,7 @@ function UGCUploadModal({
             onPress={handleAddHashtag}
            
           >
-            <Ionicons name="add-circle" size={28} color="#7C3AED" />
+            <Ionicons name="add-circle" size={28} color={colors.brand.purple} />
           </Pressable>
         </View>
 
@@ -686,7 +687,7 @@ function UGCUploadModal({
                   onPress={() => handleRemoveHashtag(tag)}
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
-                  <Ionicons name="close-circle" size={18} color="#7C3AED" />
+                  <Ionicons name="close-circle" size={18} color={colors.brand.purple} />
                 </Pressable>
               </View>
             ))}
@@ -702,10 +703,10 @@ function UGCUploadModal({
         disabled={isUploading}
       >
         <LinearGradient
-          colors={['#7C3AED', '#8B5CF6']}
+          colors={[colors.brand.purple, colors.brand.purpleLight]}
           style={styles.primaryButtonGradient}
         >
-          <Ionicons name="cloud-upload" size={20} color="#FFFFFF" />
+          <Ionicons name="cloud-upload" size={20} color={colors.background.primary} />
           <Text style={styles.primaryButtonText}>Upload</Text>
         </LinearGradient>
       </Pressable>
@@ -715,7 +716,7 @@ function UGCUploadModal({
   // Render uploading
   const renderUploading = () => (
     <View style={styles.uploadingContainer}>
-      <ActivityIndicator size="large" color="#7C3AED" />
+      <ActivityIndicator size="large" color={colors.brand.purple} />
       <Text style={styles.uploadingText}>Uploading your content...</Text>
       {renderProgressBar()}
 
@@ -733,7 +734,7 @@ function UGCUploadModal({
   const renderSuccess = () => (
     <View style={styles.successContainer}>
       <Animated.View style={[styles.successIcon, { transform: [{ scale: successScaleAnim }] }]}>
-        <Ionicons name="checkmark-circle" size={100} color="#ffcd57" />
+        <Ionicons name="checkmark-circle" size={100} color={colors.lightMustard} />
       </Animated.View>
       <Text style={styles.successTitle}>Uploaded successfully!</Text>
       <Text style={styles.successSubtitle}>Your content is now live</Text>
@@ -761,7 +762,7 @@ function UGCUploadModal({
          
         >
           <LinearGradient
-            colors={['#7C3AED', '#8B5CF6']}
+            colors={[colors.brand.purple, colors.brand.purpleLight]}
             style={styles.primaryButtonGradient}
           >
             <Text style={styles.primaryButtonText}>Upload Another</Text>
@@ -776,10 +777,10 @@ function UGCUploadModal({
     if (!error) return null;
     return (
       <View style={styles.errorContainer}>
-        <Ionicons name="alert-circle" size={20} color="#EF4444" />
+        <Ionicons name="alert-circle" size={20} color={colors.error} />
         <Text style={styles.errorText}>{error}</Text>
         <Pressable onPress={() => setError(null)}>
-          <Ionicons name="close" size={20} color="#EF4444" />
+          <Ionicons name="close" size={20} color={colors.error} />
         </Pressable>
       </View>
     );
@@ -796,7 +797,7 @@ function UGCUploadModal({
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <LinearGradient colors={['#7C3AED', '#8B5CF6']} style={styles.headerGradient}>
+        <LinearGradient colors={[colors.brand.purple, colors.brand.purpleLight]} style={styles.headerGradient}>
           {renderHeader()}
         </LinearGradient>
 
@@ -817,7 +818,7 @@ function UGCUploadModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   headerGradient: {
     paddingTop: Platform.OS === 'ios' ? 50 : 20,
@@ -838,7 +839,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     flex: 1,
     textAlign: 'center',
   },
@@ -851,7 +852,7 @@ const styles = StyleSheet.create({
   },
   stepDescription: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 30,
   },
@@ -874,7 +875,7 @@ const styles = StyleSheet.create({
   mediaOptionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginTop: 16,
   },
   mediaOptionSubtitle: {
@@ -889,7 +890,7 @@ const styles = StyleSheet.create({
     aspectRatio: 9 / 16,
     borderRadius: 16,
     overflow: 'hidden',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginBottom: 20,
   },
   mediaPreview: {
@@ -904,22 +905,22 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
   },
   captionInput: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     fontSize: 15,
-    color: '#1F2937',
+    color: colors.neutral[800],
     minHeight: 120,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   characterCount: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'right',
     marginTop: 4,
   },
@@ -932,7 +933,7 @@ const styles = StyleSheet.create({
   },
   checkboxLabel: {
     fontSize: 15,
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginLeft: 12,
     fontWeight: '500',
   },
@@ -947,22 +948,22 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     alignItems: 'center',
   },
   privacyOptionActive: {
-    borderColor: '#7C3AED',
-    backgroundColor: '#F3E8FF',
+    borderColor: colors.brand.purple,
+    backgroundColor: colors.tint.pink,
   },
   privacyOptionText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   privacyOptionTextActive: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
 
   // Category
@@ -975,23 +976,23 @@ const styles = StyleSheet.create({
     width: (SCREEN_WIDTH - 64) / 2,
     padding: 16,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     alignItems: 'center',
     gap: 8,
   },
   categoryOptionActive: {
-    borderColor: '#7C3AED',
-    backgroundColor: '#7C3AED',
+    borderColor: colors.brand.purple,
+    backgroundColor: colors.brand.purple,
   },
   categoryOptionText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   categoryOptionTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   // Hashtags
@@ -1002,13 +1003,13 @@ const styles = StyleSheet.create({
   },
   hashtagInput: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 12,
     fontSize: 15,
-    color: '#1F2937',
+    color: colors.neutral[800],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   addHashtagButton: {
     padding: 4,
@@ -1026,14 +1027,14 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 20,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     borderWidth: 1,
     borderColor: '#C4B5FD',
   },
   hashtagChipText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
 
   // Buttons
@@ -1058,34 +1059,34 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   secondaryButton: {
     flex: 1,
     paddingVertical: 16,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 2,
-    borderColor: '#7C3AED',
+    borderColor: colors.brand.purple,
     alignItems: 'center',
   },
   secondaryButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   cancelButton: {
     marginTop: 24,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     alignItems: 'center',
   },
   cancelButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#DC2626',
+    color: colors.error,
   },
 
   // Uploading
@@ -1098,7 +1099,7 @@ const styles = StyleSheet.create({
   uploadingText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 20,
     marginBottom: 30,
   },
@@ -1109,19 +1110,19 @@ const styles = StyleSheet.create({
   progressBarBackground: {
     width: '100%',
     height: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     borderRadius: 4,
   },
   progressText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 8,
   },
 
@@ -1138,12 +1139,12 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
   },
   successSubtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 40,
   },
   successButtons: {
@@ -1157,13 +1158,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     padding: 16,
     marginHorizontal: 20,
     marginTop: 10,
     borderRadius: 12,
     borderLeftWidth: 4,
-    borderLeftColor: '#EF4444',
+    borderLeftColor: colors.error,
   },
   errorText: {
     flex: 1,

@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { experiencesApi } from '@/services/experiencesApi';
 import { getTheme } from '@/constants/experienceThemes';
+import { colors } from '@/constants/theme';
 
 interface Props {
     experienceType?: string;
@@ -54,7 +55,7 @@ const ThinkOutsideTheBox: React.FC<Props> = ({ experienceType = 'default', searc
     if (loading) {
         return (
             <View style={[styles.container, styles.center]}>
-                <ActivityIndicator size="small" color="#3B82F6" />
+                <ActivityIndicator size="small" color={colors.infoScale[400]} />
             </View>
         );
     }
@@ -98,7 +99,7 @@ const ThinkOutsideTheBox: React.FC<Props> = ({ experienceType = 'default', searc
                                 <Text style={styles.priceText}>{item.price}</Text>
                             </View>
                             <View style={styles.ratingBadge}>
-                                <Ionicons name="star" size={10} color="#FFF" />
+                                <Ionicons name="star" size={10} color={colors.background.primary} />
                                 <Text style={styles.ratingText}>{item.rating}</Text>
                             </View>
                         </View>
@@ -136,12 +137,12 @@ const styles = StyleSheet.create({
     },
     subtitle: {
         fontSize: 13,
-        color: '#64748B',
+        color: colors.slateGray,
         marginTop: 2,
     },
     seeAll: {
         fontSize: 14,
-        color: '#3B82F6',
+        color: colors.infoScale[400],
         fontWeight: '600',
     },
     scrollContent: {
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     card: {
         width: 160,
         marginRight: 16,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.background.primary,
         borderRadius: 16,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
         elevation: 3,
         borderWidth: 1,
-        borderColor: '#F1F5F9',
+        borderColor: colors.tint.slate,
     },
     imageContainer: {
         height: 160,
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
     },
     priceText: {
-        color: '#FFF',
+        color: colors.background.primary,
         fontSize: 12,
         fontWeight: '700',
     },
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
         gap: 2,
     },
     ratingText: {
-        color: '#FFF',
+        color: colors.background.primary,
         fontSize: 10,
         fontWeight: '700',
     },

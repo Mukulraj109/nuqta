@@ -19,6 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallCollection } from '../../types/mall.types';
 import MallCollectionCard from './cards/MallCollectionCard';
+import { colors } from '@/constants/theme';
 
 interface MallCollectionsProps {
   collections: MallCollection[];
@@ -47,22 +48,22 @@ const MallCollections: React.FC<MallCollectionsProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#EFF6FF', '#E0F2FE', '#FFFFFF']}
+          colors={[colors.tint.blue, '#E0F2FE', colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
         >
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#0284C7', '#0369A1']}
+              colors={[colors.brand.sky, colors.brand.skyDark]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="grid" size={18} color="#FFFFFF" />
+              <Ionicons name="grid" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Curated Collections</Text>
           </View>
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#0284C7" />
+            <ActivityIndicator size="small" color={colors.brand.sky} />
             <Text style={styles.loadingText}>Loading collections...</Text>
           </View>
         </LinearGradient>
@@ -75,7 +76,7 @@ const MallCollections: React.FC<MallCollectionsProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#EFF6FF', '#E0F2FE', '#FFFFFF']}
+          colors={[colors.tint.blue, '#E0F2FE', colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
@@ -83,10 +84,10 @@ const MallCollections: React.FC<MallCollectionsProps> = ({
           {/* Section Header */}
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#0284C7', '#0369A1']}
+              colors={[colors.brand.sky, colors.brand.skyDark]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="grid" size={18} color="#FFFFFF" />
+              <Ionicons name="grid" size={18} color={colors.background.primary} />
             </LinearGradient>
             <View style={{ flex: 1 }}>
               <Text style={styles.title}>Curated Collections</Text>
@@ -98,7 +99,7 @@ const MallCollections: React.FC<MallCollectionsProps> = ({
 
           {/* Empty State Placeholder */}
           <View style={styles.emptyStateContainer}>
-            <Ionicons name="albums-outline" size={24} color="#9CA3AF" />
+            <Ionicons name="albums-outline" size={24} color={colors.neutral[400]} />
             <Text style={styles.emptyStateText}>Curated collections coming soon</Text>
           </View>
         </LinearGradient>
@@ -109,7 +110,7 @@ const MallCollections: React.FC<MallCollectionsProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#EFF6FF', '#E0F2FE', '#FFFFFF']}
+        colors={[colors.tint.blue, '#E0F2FE', colors.background.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.gradientBackground}
@@ -123,10 +124,10 @@ const MallCollections: React.FC<MallCollectionsProps> = ({
         {/* Section Header */}
         <View style={styles.headerRow}>
           <LinearGradient
-            colors={['#0284C7', '#0369A1']}
+            colors={[colors.brand.sky, colors.brand.skyDark]}
             style={styles.iconWrapper}
           >
-            <Ionicons name="grid" size={18} color="#FFFFFF" />
+            <Ionicons name="grid" size={18} color={colors.background.primary} />
           </LinearGradient>
           <View style={{ flex: 1 }}>
             <Text style={styles.title}>Curated Collections</Text>
@@ -141,14 +142,14 @@ const MallCollections: React.FC<MallCollectionsProps> = ({
              
             >
               <LinearGradient
-                colors={['#0284C7', '#0369A1']}
+                colors={[colors.brand.sky, colors.brand.skyDark]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.viewAllGradient}
               >
                 <Text style={styles.viewAllText}>View All</Text>
                 <View style={styles.viewAllArrow}>
-                  <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+                  <Ionicons name="arrow-forward" size={14} color={colors.background.primary} />
                 </View>
               </LinearGradient>
             </Pressable>
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#0284C7',
+        shadowColor: colors.brand.sky,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -233,12 +234,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 13,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     marginTop: 2,
   },
   viewAllButton: {
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#0284C7',
+        shadowColor: colors.brand.sky,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -267,7 +268,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   viewAllArrow: {
     width: 24,
@@ -291,7 +292,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     fontWeight: '500',
   },
   emptyStateContainer: {
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
 });

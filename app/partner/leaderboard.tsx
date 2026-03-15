@@ -16,6 +16,7 @@ import { useRouter } from 'expo-router';
 import partnerApi, { PartnerStats } from '@/services/partnerApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 interface TopPerformer {
   _id: string;
   name: string;

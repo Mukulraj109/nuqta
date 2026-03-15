@@ -22,6 +22,7 @@ import { getBrandsForCategory, Brand, getAllBrands } from '@/data/categoryDummyD
 import { CardGridSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
 
@@ -416,7 +417,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.infoScale[50],
   },
   tagPopular: {
-    backgroundColor: '#FCE7F3',
+    backgroundColor: colors.pinkMist,
   },
   tagText: {
     fontSize: Typography.overline.fontSize,
@@ -430,7 +431,7 @@ const styles = StyleSheet.create({
     color: Colors.info,
   },
   tagTextPopular: {
-    color: '#DB2777',
+    color: colors.deepPink,
   },
   ratingRow: {
     flexDirection: 'row',

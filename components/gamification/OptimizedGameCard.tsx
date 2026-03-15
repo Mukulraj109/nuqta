@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface Game {
   id: string;
@@ -53,7 +54,7 @@ const OptimizedGameCard = memo<OptimizedGameCardProps>(({ game, onPress, style }
   // Memoize gradient colors
   const gradientColors = useMemo(() => {
     if (isDisabled) {
-      return ['#E5E7EB', '#D1D5DB'];
+      return [colors.neutral[200], colors.neutral[300]];
     }
     return [game.color, adjustColor(game.color, -20)];
   }, [isDisabled, game.color]);
@@ -107,7 +108,7 @@ const OptimizedGameCard = memo<OptimizedGameCardProps>(({ game, onPress, style }
             <Text style={styles.gameDescription}>{game.description}</Text>
             {game.status === 'active' && (
               <View style={styles.rewardContainer}>
-                <Ionicons name="star" size={14} color="#FFD700" />
+                <Ionicons name="star" size={14} color={colors.brand.goldBright} />
                 <Text style={styles.rewardText}>Win up to {game.rewardCoins} coins</Text>
               </View>
             )}

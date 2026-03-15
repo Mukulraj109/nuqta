@@ -21,6 +21,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import walletApi, { TransactionResponse, TransactionFilters } from '@/services/walletApi';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface TransactionItemProps {
   transaction: TransactionResponse;
@@ -93,11 +94,11 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction, onPress 
         <View style={styles.transactionStatus}>
           <View style={[
             styles.statusBadge,
-            { backgroundColor: transaction.status.current === 'completed' ? '#D1FAE5' : '#FEF3C7' }
+            { backgroundColor: transaction.status.current === 'completed' ? colors.tint.green : colors.tint.amberLight }
           ]}>
             <Text style={[
               styles.statusText,
-              { color: transaction.status.current === 'completed' ? '#065F46' : '#92400E' }
+              { color: transaction.status.current === 'completed' ? '#065F46' : colors.brand.amberDark }
             ]}>
               {transaction.status.current.toUpperCase()}
             </Text>

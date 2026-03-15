@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import programApi from '../../services/programApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -50,7 +51,7 @@ const SocialImpact = () => {
       title: 'Blood Donation Drive',
       icon: '🩸',
       iconBg: 'rgba(239, 68, 68, 0.2)',
-      iconColor: '#EF4444',
+      iconColor: colors.error,
       organizer: 'Apollo Hospitals',
       logo: '🏥',
       date: 'Dec 28, 2024',
@@ -73,7 +74,7 @@ const SocialImpact = () => {
       title: 'Tree Plantation Drive',
       icon: '🌳',
       iconBg: 'rgba(34, 197, 94, 0.2)',
-      iconColor: '#22C55E',
+      iconColor: colors.success,
       organizer: 'Green Earth Foundation',
       logo: '🌍',
       date: 'Dec 30, 2024',
@@ -96,7 +97,7 @@ const SocialImpact = () => {
       title: 'Beach Cleanup Drive',
       icon: '🏖️',
       iconBg: 'rgba(59, 130, 246, 0.2)',
-      iconColor: '#3B82F6',
+      iconColor: colors.infoScale[400],
       organizer: 'Clean Beaches Initiative',
       logo: '🌊',
       date: 'Jan 2, 2025',
@@ -119,7 +120,7 @@ const SocialImpact = () => {
       title: 'Community Kitchen Volunteering',
       icon: '🍲',
       iconBg: 'rgba(249, 115, 22, 0.2)',
-      iconColor: '#F97316',
+      iconColor: colors.brand.orange,
       organizer: 'Feed the Need NGO',
       logo: '🤝',
       date: 'Every Sunday',
@@ -141,7 +142,7 @@ const SocialImpact = () => {
       title: 'Emergency Blood Camp',
       icon: '🩸',
       iconBg: 'rgba(239, 68, 68, 0.2)',
-      iconColor: '#EF4444',
+      iconColor: colors.error,
       organizer: 'Red Cross Society',
       logo: '❤️',
       date: 'Dec 26, 2024',
@@ -179,7 +180,7 @@ const SocialImpact = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#000' : Colors.background.primary }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? colors.text.primary : Colors.background.primary }]}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={[styles.header, { backgroundColor: isDark ? 'rgba(0,0,0,0.95)' : 'rgba(255,255,255,0.95)' }]}>
@@ -200,7 +201,7 @@ const SocialImpact = () => {
             colors={isDark ? ['rgba(255, 205, 87, 0.1)', 'rgba(59, 130, 246, 0.1)', 'rgba(168, 85, 247, 0.1)'] : ['rgba(255, 205, 87, 0.1)', 'rgba(59, 130, 246, 0.1)', 'rgba(168, 85, 247, 0.1)']}
             style={[styles.heroCard, { borderColor: isDark ? 'rgba(255, 205, 87, 0.3)' : 'rgba(255, 205, 87, 0.3)' }]}
           >
-            <LinearGradient colors={[Colors.gold, '#3B82F6']} style={styles.heroIconContainer}>
+            <LinearGradient colors={[Colors.gold, colors.infoScale[400]]} style={styles.heroIconContainer}>
               <Ionicons name="heart" size={32} color={Colors.text.inverse} />
             </LinearGradient>
             <Text style={[styles.heroTitle, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>Powerful Differentiator</Text>
@@ -217,21 +218,21 @@ const SocialImpact = () => {
             <Text style={[styles.statsTitle, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>Your Impact</Text>
           </View>
           <View style={styles.statsGrid}>
-            <View style={[styles.statCard, { backgroundColor: isDark ? 'rgba(239, 68, 68, 0.1)' : '#FEF2F2', borderColor: isDark ? 'rgba(239, 68, 68, 0.3)' : '#FECACA' }]}>
+            <View style={[styles.statCard, { backgroundColor: isDark ? 'rgba(239, 68, 68, 0.1)' : colors.errorScale[50], borderColor: isDark ? 'rgba(239, 68, 68, 0.3)' : colors.errorScale[200] }]}>
               <View style={styles.statHeader}>
                 <Ionicons name="heart" size={20} color={Colors.error} />
                 <Text style={[styles.statLabel, { color: Colors.text.tertiary }]}>Lives Impacted</Text>
               </View>
               <Text style={[styles.statValue, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>{myImpactStats.livesImpacted.toLocaleString()}</Text>
             </View>
-            <View style={[styles.statCard, { backgroundColor: isDark ? 'rgba(34, 197, 94, 0.1)' : '#F0FDF4', borderColor: isDark ? 'rgba(34, 197, 94, 0.3)' : '#BBF7D0' }]}>
+            <View style={[styles.statCard, { backgroundColor: isDark ? 'rgba(34, 197, 94, 0.1)' : colors.successScale[50], borderColor: isDark ? 'rgba(34, 197, 94, 0.3)' : colors.successScale[200] }]}>
               <View style={styles.statHeader}>
                 <Ionicons name="leaf" size={20} color={Colors.success} />
                 <Text style={[styles.statLabel, { color: Colors.text.tertiary }]}>Trees Planted</Text>
               </View>
               <Text style={[styles.statValue, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>{myImpactStats.treesPlanted}</Text>
             </View>
-            <View style={[styles.statCard, { backgroundColor: isDark ? 'rgba(255, 205, 87, 0.1)' : '#faf1e0', borderColor: isDark ? 'rgba(255, 205, 87, 0.3)' : '#A7F3D0' }]}>
+            <View style={[styles.statCard, { backgroundColor: isDark ? 'rgba(255, 205, 87, 0.1)' : colors.linen, borderColor: isDark ? 'rgba(255, 205, 87, 0.3)' : '#A7F3D0' }]}>
               <View style={styles.statHeader}>
                 <Ionicons name="cash" size={20} color={Colors.gold} />
                 <Text style={[styles.statLabel, { color: Colors.text.tertiary }]}>{BRAND.COIN_NAME}</Text>
@@ -240,7 +241,7 @@ const SocialImpact = () => {
             </View>
             <View style={[styles.statCard, { backgroundColor: isDark ? 'rgba(168, 85, 247, 0.1)' : '#FAF5FF', borderColor: isDark ? 'rgba(168, 85, 247, 0.3)' : '#E9D5FF' }]}>
               <View style={styles.statHeader}>
-                <Ionicons name="sparkles" size={20} color="#A855F7" />
+                <Ionicons name="sparkles" size={20} color={colors.brand.purpleMedium} />
                 <Text style={[styles.statLabel, { color: Colors.text.tertiary }]}>Branded Coins</Text>
               </View>
               <Text style={[styles.statValue, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>{myImpactStats.brandedCoinsEarned.toLocaleString()}</Text>
@@ -290,22 +291,22 @@ const SocialImpact = () => {
 
               <View style={styles.detailsGrid}>
                 <View style={styles.detailItem}>
-                  <Ionicons name="calendar" size={16} color={isDark ? '#9CA3AF' : '#6B7280'} />
+                  <Ionicons name="calendar" size={16} color={isDark ? colors.neutral[400] : colors.neutral[500]} />
                   <Text style={[styles.detailText, { color: Colors.text.tertiary }]}>{activity.date}</Text>
                 </View>
                 <View style={styles.detailItem}>
-                  <Ionicons name="time" size={16} color={isDark ? '#9CA3AF' : '#6B7280'} />
+                  <Ionicons name="time" size={16} color={isDark ? colors.neutral[400] : colors.neutral[500]} />
                   <Text style={[styles.detailText, { color: Colors.text.tertiary }]}>{activity.time}</Text>
                 </View>
                 <View style={[styles.detailItem, styles.detailItemFull]}>
-                  <Ionicons name="location" size={16} color={isDark ? '#9CA3AF' : '#6B7280'} />
+                  <Ionicons name="location" size={16} color={isDark ? colors.neutral[400] : colors.neutral[500]} />
                   <Text style={[styles.detailText, { color: Colors.text.tertiary }]}>
                     {activity.location} • {activity.distance} away
                   </Text>
                 </View>
               </View>
 
-              <View style={[styles.impactContainer, { backgroundColor: isDark ? 'rgba(59, 130, 246, 0.1)' : Colors.infoScale[50], borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : '#BFDBFE' }]}>
+              <View style={[styles.impactContainer, { backgroundColor: isDark ? 'rgba(59, 130, 246, 0.1)' : Colors.infoScale[50], borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : colors.infoScale[200] }]}>
                 <View style={styles.impactHeader}>
                   <Ionicons name="trending-up" size={16} color={Colors.info} />
                   <Text style={[styles.impactText, { color: isDark ? '#93C5FD' : '#1E40AF' }]}>{activity.impact}</Text>
@@ -313,7 +314,7 @@ const SocialImpact = () => {
                 <View style={styles.progressRow}>
                   <View style={[styles.progressBar, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : Colors.border.default }]}>
                     <LinearGradient
-                      colors={['#3B82F6', '#ffcd57']}
+                      colors={[colors.infoScale[400], colors.lightMustard]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 0 }}
                       style={[styles.progressFill, { width: `${(activity.enrolled / activity.goal) * 100}%` }]}
@@ -328,7 +329,7 @@ const SocialImpact = () => {
               <View style={styles.rewardsRow}>
                 <View style={styles.rewardItem}>
                   <Text style={styles.rewardEmoji}>💰</Text>
-                  <Text style={[styles.rewardValue, { color: '#ffcd57' }]}>+{activity.rewards.rezCoins}</Text>
+                  <Text style={[styles.rewardValue, { color: colors.lightMustard }]}>+{activity.rewards.rezCoins}</Text>
                 </View>
                 {activity.rewards.brandedCoins > 0 && (
                   <View style={styles.rewardItem}>
@@ -348,7 +349,7 @@ const SocialImpact = () => {
               ) : (
                 <Link href={`/playandearn/SocialImpactEventDetail?id=${activity.id}`} asChild>
                   <Pressable style={styles.ctaButton}>
-                    <LinearGradient colors={['#ffcd57', '#e6b84e']} style={styles.ctaButtonGradient}>
+                    <LinearGradient colors={[colors.lightMustard, '#e6b84e']} style={styles.ctaButtonGradient}>
                       <Text style={styles.ctaButtonText}>Register Now</Text>
                     </LinearGradient>
                   </Pressable>
@@ -361,7 +362,7 @@ const SocialImpact = () => {
         {/* CTA Section */}
         <View style={styles.footerSection}>
           <LinearGradient
-            colors={isDark ? ['rgba(255, 205, 87, 0.1)', 'rgba(59, 130, 246, 0.1)'] : ['#faf1e0', '#EFF6FF']}
+            colors={isDark ? ['rgba(255, 205, 87, 0.1)', 'rgba(59, 130, 246, 0.1)'] : [colors.linen, colors.tint.blue]}
             style={[styles.footerCard, { borderColor: isDark ? 'rgba(255, 205, 87, 0.3)' : '#A7F3D0' }]}
           >
             <Text style={[styles.footerTitle, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>Every Action Counts</Text>
@@ -370,11 +371,11 @@ const SocialImpact = () => {
             </Text>
             <View style={styles.footerStats}>
               <View style={styles.footerStat}>
-                <Ionicons name="people" size={16} color={isDark ? '#9CA3AF' : '#6B7280'} />
+                <Ionicons name="people" size={16} color={isDark ? colors.neutral[400] : colors.neutral[500]} />
                 <Text style={[styles.footerStatText, { color: Colors.text.tertiary }]}>5,234 members</Text>
               </View>
               <View style={styles.footerStat}>
-                <Ionicons name="heart" size={16} color={isDark ? '#9CA3AF' : '#6B7280'} />
+                <Ionicons name="heart" size={16} color={isDark ? colors.neutral[400] : colors.neutral[500]} />
                 <Text style={[styles.footerStatText, { color: Colors.text.tertiary }]}>234 events</Text>
               </View>
             </View>

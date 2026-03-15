@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useNearbyStores, NearbyStore } from '@/hooks/useNearbyStores';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface StoresNearYouProps {
   onMapViewPress?: () => void;
@@ -55,7 +56,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <View style={styles.headerIconContainer}>
-              <Ionicons name="location" size={20} color="#ffd7b5" />
+              <Ionicons name="location" size={20} color={colors.lightPeach} />
             </View>
             <View style={styles.headerTextContainer}>
               <Text style={styles.title}>Stores Near You</Text>
@@ -64,7 +65,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
           </View>
         </View>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#ffcd57" />
+          <ActivityIndicator size="large" color={colors.lightMustard} />
           <Text style={styles.loadingText}>Finding stores in {regionName}...</Text>
         </View>
       </View>
@@ -80,7 +81,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <View style={styles.headerIconContainer}>
-              <Ionicons name="location" size={20} color="#ffd7b5" />
+              <Ionicons name="location" size={20} color={colors.lightPeach} />
             </View>
             <View style={styles.headerTextContainer}>
               <Text style={styles.title}>Stores Near You</Text>
@@ -90,7 +91,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
         </View>
         <View style={styles.permissionContainer}>
           <View style={styles.permissionIconContainer}>
-            <Ionicons name="location-outline" size={48} color="#9CA3AF" />
+            <Ionicons name="location-outline" size={48} color={colors.neutral[400]} />
           </View>
           <Text style={styles.permissionTitle}>Enable Location</Text>
           <Text style={styles.permissionText}>
@@ -101,7 +102,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
             onPress={requestLocationPermission}
            
           >
-            <Ionicons name="navigate" size={16} color="#FFFFFF" style={{ marginRight: 6 }} />
+            <Ionicons name="navigate" size={16} color={colors.background.primary} style={{ marginRight: 6 }} />
             <Text style={styles.enableButtonText}>Enable Location</Text>
           </Pressable>
         </View>
@@ -116,7 +117,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <View style={styles.headerIconContainer}>
-              <Ionicons name="location" size={20} color="#ffd7b5" />
+              <Ionicons name="location" size={20} color={colors.lightPeach} />
             </View>
             <View style={styles.headerTextContainer}>
               <Text style={styles.title}>Stores Near You</Text>
@@ -125,7 +126,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
           </View>
         </View>
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle-outline" size={48} color="#EF4444" />
+          <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
           <Text style={styles.errorTitle}>Unable to load stores</Text>
           <Text style={styles.errorText}>{error}</Text>
           <Pressable
@@ -133,7 +134,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
             onPress={refetch}
            
           >
-            <Ionicons name="refresh" size={16} color="#FFFFFF" style={{ marginRight: 6 }} />
+            <Ionicons name="refresh" size={16} color={colors.background.primary} style={{ marginRight: 6 }} />
             <Text style={styles.retryButtonText}>Retry</Text>
           </Pressable>
         </View>
@@ -148,7 +149,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <View style={styles.headerIconContainer}>
-              <Ionicons name="location" size={20} color="#ffd7b5" />
+              <Ionicons name="location" size={20} color={colors.lightPeach} />
             </View>
             <View style={styles.headerTextContainer}>
               <Text style={styles.title}>Stores Near You</Text>
@@ -157,7 +158,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
           </View>
         </View>
         <View style={styles.emptyContainer}>
-          <Ionicons name="storefront-outline" size={48} color="#9CA3AF" />
+          <Ionicons name="storefront-outline" size={48} color={colors.neutral[400]} />
           <Text style={styles.emptyTitle}>No Stores in {regionName}</Text>
           <Text style={styles.emptyText}>
             We're expanding to {regionName} soon! Check back later for partner stores.
@@ -167,7 +168,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
             onPress={refetch}
            
           >
-            <Ionicons name="refresh" size={16} color="#ffcd57" style={{ marginRight: 6 }} />
+            <Ionicons name="refresh" size={16} color={colors.lightMustard} style={{ marginRight: 6 }} />
             <Text style={styles.refreshButtonText}>Refresh</Text>
           </Pressable>
         </View>
@@ -182,7 +183,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={styles.headerIconContainer}>
-            <Ionicons name="location" size={20} color="#ffd7b5" />
+            <Ionicons name="location" size={20} color={colors.lightPeach} />
           </View>
           <View style={styles.headerTextContainer}>
             <Text style={styles.title}>Stores Near You</Text>
@@ -195,7 +196,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
           style={styles.mapViewButton}
         >
           <Text style={styles.mapViewText}>Map View</Text>
-          <Ionicons name="chevron-forward" size={14} color="#ffcd57" />
+          <Ionicons name="chevron-forward" size={14} color={colors.lightMustard} />
         </Pressable>
       </View>
 
@@ -209,7 +210,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
             style={styles.storeCard}
           >
             <LinearGradient
-              colors={['#FFFFFF', '#faf1e0']}
+              colors={[colors.background.primary, colors.linen]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.cardGradient}
@@ -226,7 +227,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
                   )}
                 </View>
                 <View style={styles.distanceContainer}>
-                  <Ionicons name="location-outline" size={12} color="#1a3a52" />
+                  <Ionicons name="location-outline" size={12} color={colors.nileBlue} />
                   <Text style={styles.distance}>{store.distance}</Text>
                 </View>
               </View>
@@ -237,7 +238,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
                   <Ionicons
                     name={store.closingSoon ? "time-outline" : "checkmark-circle-outline"}
                     size={14}
-                    color={store.closingSoon ? "#ffcd57" : "#1a3a52"}
+                    color={store.closingSoon ? colors.lightMustard : colors.nileBlue}
                     style={styles.statusIcon}
                   />
                   <Text
@@ -250,7 +251,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
                   </Text>
                 </View>
                 <View style={styles.cashbackContainer}>
-                  <Ionicons name="cash-outline" size={12} color="#ffcd57" />
+                  <Ionicons name="cash-outline" size={12} color={colors.lightMustard} />
                   <Text style={styles.cashbackText}>{store.cashback}</Text>
                 </View>
               </View>
@@ -295,13 +296,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '400',
   },
   mapViewButton: {
@@ -318,7 +319,7 @@ const styles = StyleSheet.create({
   mapViewText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   storesContainer: {
     gap: 14,
@@ -328,7 +329,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -359,13 +360,13 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.2,
   },
   liveBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -375,12 +376,12 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   liveBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.3,
   },
   distanceContainer: {
@@ -395,7 +396,7 @@ const styles = StyleSheet.create({
   distance: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   statusRow: {
     flexDirection: 'row',
@@ -417,10 +418,10 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   closingSoonText: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   cashbackContainer: {
     flexDirection: 'row',
@@ -434,7 +435,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   // Loading state styles
   loadingContainer: {
@@ -445,7 +446,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   // Permission state styles
@@ -454,7 +455,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 32,
     paddingHorizontal: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 16,
     marginTop: 8,
   },
@@ -462,7 +463,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
@@ -470,12 +471,12 @@ const styles = StyleSheet.create({
   permissionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 8,
   },
   permissionText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 20,
     lineHeight: 20,
@@ -483,7 +484,7 @@ const styles = StyleSheet.create({
   enableButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 12,
@@ -491,7 +492,7 @@ const styles = StyleSheet.create({
   enableButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // Error state styles
   errorContainer: {
@@ -499,7 +500,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 32,
     paddingHorizontal: 20,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderRadius: 16,
     marginTop: 8,
   },
@@ -512,14 +513,14 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 13,
-    color: '#B91C1C',
+    color: colors.errorScale[700],
     textAlign: 'center',
     marginBottom: 16,
   },
   retryButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
@@ -527,7 +528,7 @@ const styles = StyleSheet.create({
   retryButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // Empty state styles
   emptyContainer: {
@@ -535,20 +536,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 32,
     paddingHorizontal: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 16,
     marginTop: 8,
   },
   emptyTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#374151',
+    color: colors.neutral[700],
     marginTop: 12,
     marginBottom: 4,
   },
   emptyText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 16,
     lineHeight: 18,
@@ -566,7 +567,7 @@ const styles = StyleSheet.create({
   refreshButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 });
 

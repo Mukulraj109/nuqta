@@ -10,6 +10,7 @@ import {
 import { ThemedText } from '@/components/ThemedText';
 import { VideoGridProps, PLAY_PAGE_COLORS } from '@/types/playPage.types';
 import VideoCard from './VideoCard';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   loadMoreText: {
-    color: '#FFF',
+    color: colors.background.primary,
     fontSize: 15,
     fontWeight: '700',
     letterSpacing: 0.3,

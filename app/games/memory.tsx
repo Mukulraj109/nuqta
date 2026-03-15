@@ -1,6 +1,7 @@
 // Memory Match Game
 // 4x4 card grid, flip animation, match checking, score tracking, timer, backend integration
 
+import { colors } from '@/constants/theme';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   View,
@@ -269,7 +270,7 @@ export default function MemoryPage() {
     <View style={styles.centerContent}>
       <View style={styles.gameIconContainer}>
         <LinearGradient
-          colors={['#6366F1', '#4F46E5']}
+          colors={[colors.brand.indigo, '#4F46E5']}
           style={styles.gameIconGradient}
         >
           <Text style={styles.gameIcon}>&#x1F0CF;</Text>
@@ -283,26 +284,26 @@ export default function MemoryPage() {
       <View style={styles.rulesCard}>
         <ThemedText style={styles.rulesTitle}>How to Play</ThemedText>
         <View style={styles.ruleItem}>
-          <Ionicons name="hand-left" size={18} color="#6366F1" />
+          <Ionicons name="hand-left" size={18} color={colors.brand.indigo} />
           <ThemedText style={styles.ruleText}>Tap a card to flip it</ThemedText>
         </View>
         <View style={styles.ruleItem}>
-          <Ionicons name="search" size={18} color="#6366F1" />
+          <Ionicons name="search" size={18} color={colors.brand.indigo} />
           <ThemedText style={styles.ruleText}>Find matching pairs of cards</ThemedText>
         </View>
         <View style={styles.ruleItem}>
-          <Ionicons name="timer" size={18} color="#6366F1" />
+          <Ionicons name="timer" size={18} color={colors.brand.indigo} />
           <ThemedText style={styles.ruleText}>Faster completion = more coins</ThemedText>
         </View>
         <View style={styles.ruleItem}>
-          <Ionicons name="trophy" size={18} color="#6366F1" />
+          <Ionicons name="trophy" size={18} color={colors.brand.indigo} />
           <ThemedText style={styles.ruleText}>Fewer attempts = higher score</ThemedText>
         </View>
       </View>
 
       <Pressable style={styles.startButton} onPress={startGame} disabled={loading}>
         <LinearGradient
-          colors={['#6366F1', '#4F46E5']}
+          colors={[colors.brand.indigo, '#4F46E5']}
           style={styles.startButtonGradient}
         >
           {loading ? (
@@ -330,7 +331,7 @@ export default function MemoryPage() {
 
       <View style={styles.statsGrid}>
         <View style={styles.statItem}>
-          <Ionicons name="timer" size={22} color="#6366F1" />
+          <Ionicons name="timer" size={22} color={colors.brand.indigo} />
           <ThemedText style={styles.statValue}>{formatTime(timer)}</ThemedText>
           <ThemedText style={styles.statLabel}>Time</ThemedText>
         </View>
@@ -358,7 +359,7 @@ export default function MemoryPage() {
       <View style={styles.actionButtons}>
         <Pressable style={styles.playAgainButton} onPress={startGame}>
           <LinearGradient
-            colors={['#6366F1', '#4F46E5']}
+            colors={[colors.brand.indigo, '#4F46E5']}
             style={styles.startButtonGradient}
           >
             <Ionicons name="refresh" size={20} color={Colors.text.inverse} />
@@ -513,7 +514,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-    shadowColor: '#6366F1',
+    shadowColor: colors.brand.indigo,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -576,7 +577,7 @@ const styles = StyleSheet.create({
     ...Shadows.medium,
   },
   cardBack: {
-    backgroundColor: '#6366F1',
+    backgroundColor: colors.brand.indigo,
   },
   cardFront: {
     backgroundColor: Colors.background.primary,
@@ -670,7 +671,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-    shadowColor: '#6366F1',
+    shadowColor: colors.brand.indigo,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,

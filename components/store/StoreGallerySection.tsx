@@ -20,7 +20,8 @@ import GalleryViewerModal from './GalleryViewerModal';
 import GalleryGridSkeleton from '@/components/skeletons/GalleryGridSkeleton';
 import analyticsService from '@/services/analyticsService';
 import GalleryImagePreloader from './GalleryImagePreloader';
-import GalleryErrorBoundary from './GalleryErrorBoundary';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const ITEM_SIZE = (SCREEN_WIDTH - 48) / 3; // 3 columns with padding
@@ -230,7 +231,7 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
       />
       {item.type === 'video' && (
         <View style={styles.videoBadge}>
-          <Ionicons name="play-circle" size={20} color="#FFF" />
+          <Ionicons name="play-circle" size={20} color={colors.background.primary} />
         </View>
       )}
       {item.isCover && (
@@ -280,7 +281,7 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
               {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
             </Text>
             <View style={styles.categoryCardMeta}>
-              <Ionicons name="images" size={14} color="#FFF" />
+              <Ionicons name="images" size={14} color={colors.background.primary} />
               <Text style={styles.categoryCardCount}>{category.count} items</Text>
             </View>
           </View>
@@ -305,13 +306,13 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
           <Text style={styles.sectionTitle}>Gallery</Text>
         </View>
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle" size={32} color="#EF4444" />
+          <Ionicons name="alert-circle" size={32} color={colors.error} />
           <Text style={styles.errorText}>{error}</Text>
           <Pressable
             style={styles.retryButton}
             onPress={() => loadGallery()}
           >
-            <Ionicons name="refresh" size={16} color="#FFF" />
+            <Ionicons name="refresh" size={16} color={colors.background.primary} />
             <Text style={styles.retryButtonText}>Retry</Text>
           </Pressable>
         </View>
@@ -326,11 +327,11 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
   const hasActiveFilters = selectedCategory !== 'all' || selectedTags.size > 0;
 
   return (
-    <GalleryErrorBoundary>
+    <FeatureErrorBoundary featureName="Gallery" compact>
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-            <Ionicons name="images" size={24} color="#1F2937" />
+            <Ionicons name="images" size={24} color={colors.neutral[800]} />
             <Text style={styles.sectionTitle}>Gallery</Text>
             {allGalleryItems.length > 0 && (
               <View style={styles.countBadge}>
@@ -344,7 +345,7 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
                 style={styles.clearButton}
                 onPress={clearFilters}
               >
-                <Ionicons name="close-circle" size={18} color="#6B7280" />
+                <Ionicons name="close-circle" size={18} color={colors.neutral[500]} />
                 <Text style={styles.clearButtonText}>Clear</Text>
               </Pressable>
             )}
@@ -356,7 +357,7 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
                 }}
               >
                 <Text style={styles.viewAllText}>View All</Text>
-                <Ionicons name="chevron-forward" size={16} color="#ffcd57" />
+                <Ionicons name="chevron-forward" size={16} color={colors.lightMustard} />
               </Pressable>
             )}
           </View>
@@ -474,7 +475,7 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
             contentContainerStyle={styles.galleryGrid}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <Ionicons name="images-outline" size={48} color="#9CA3AF" />
+                <Ionicons name="images-outline" size={48} color={colors.neutral[400]} />
                 <Text style={styles.emptyText}>No items found</Text>
                 <Text style={styles.emptySubtext}>
                   {hasActiveFilters 
@@ -498,10 +499,10 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
                   onPress={() => handleItemPress(0)}
                 >
                   <LinearGradient
-                    colors={['#ffcd57', '#00996B']}
+                    colors={[colors.lightMustard, '#00996B']}
                     style={styles.moreButtonGradient}
                   >
-                    <Ionicons name="images" size={20} color="#FFF" />
+                    <Ionicons name="images" size={20} color={colors.background.primary} />
                     <Text style={styles.moreButtonText}>View Full Gallery</Text>
                   </LinearGradient>
                 </Pressable>
@@ -524,13 +525,13 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
           onClose={() => setViewerVisible(false)}
         />
       </View>
-    </GalleryErrorBoundary>
+    </FeatureErrorBoundary>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     marginVertical: 8,
     paddingVertical: 16,
   },
@@ -554,7 +555,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   countBadge: {
     backgroundColor: 'rgba(0, 192, 106, 0.1)',
@@ -565,7 +566,7 @@ const styles = StyleSheet.create({
   countText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   viewAllButton: {
     flexDirection: 'row',
@@ -575,7 +576,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   clearButton: {
     flexDirection: 'row',
@@ -587,17 +588,17 @@ const styles = StyleSheet.create({
   clearButtonText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   clearButtonLarge: {
     marginTop: 12,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 8,
   },
   clearButtonLargeText: {
-    color: '#FFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -614,11 +615,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     gap: 6,
   },
   categoryChipActive: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   categoryChipImage: {
     width: 20,
@@ -628,10 +629,10 @@ const styles = StyleSheet.create({
   categoryChipText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   categoryChipTextActive: {
-    color: '#FFF',
+    color: colors.background.primary,
   },
   categoryCount: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
@@ -642,7 +643,7 @@ const styles = StyleSheet.create({
   categoryCountText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   tagFilter: {
     marginBottom: 12,
@@ -655,28 +656,28 @@ const styles = StyleSheet.create({
   tagFilterLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginRight: 4,
   },
   tagChip: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
   },
   tagChipActive: {
     backgroundColor: 'rgba(0, 192, 106, 0.1)',
-    borderColor: '#ffcd57',
+    borderColor: colors.lightMustard,
   },
   tagChipText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   tagChipTextActive: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
   categoriesScrollView: {
@@ -691,7 +692,7 @@ const styles = StyleSheet.create({
     height: CATEGORY_CARD_HEIGHT,
     borderRadius: 16,
     overflow: 'hidden',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     marginRight: 12,
   },
   categoryCardImage: {
@@ -711,7 +712,7 @@ const styles = StyleSheet.create({
   categoryCardTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
     textTransform: 'capitalize',
   },
   categoryCardMeta: {
@@ -722,7 +723,7 @@ const styles = StyleSheet.create({
   categoryCardCount: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   categoryCoverBadge: {
     position: 'absolute',
@@ -739,7 +740,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 8,
   },
   errorContainer: {
@@ -749,7 +750,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#EF4444',
+    color: colors.error,
     textAlign: 'center',
     marginTop: 8,
   },
@@ -759,12 +760,12 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 8,
     marginTop: 8,
   },
   retryButtonText: {
-    color: '#FFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -777,7 +778,7 @@ const styles = StyleSheet.create({
     margin: 2,
     borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
   },
   galleryImage: {
     width: '100%',
@@ -809,7 +810,7 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   emptyContainer: {
     padding: 40,
@@ -819,12 +820,12 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 8,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   moreButton: {
@@ -843,7 +844,7 @@ const styles = StyleSheet.create({
   moreButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
 });
 

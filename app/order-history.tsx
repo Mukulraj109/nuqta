@@ -25,6 +25,7 @@ import OrderFilterModal from '@/components/order/OrderFilterModal';
 import { useOrderHistory, OrderFilterParams } from '@/hooks/useOrderHistory';
 import { OrderFilter } from '@/types/order';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -171,7 +172,7 @@ export default function OrderHistoryPage() {
     if (isLoading) return null;
     return (
       <View style={styles.emptyContainer}>
-        <Ionicons name="receipt-outline" size={80} color="#E5E7EB" />
+        <Ionicons name="receipt-outline" size={80} color={colors.neutral[200]} />
         <ThemedText style={styles.emptyTitle}>No Orders Found</ThemedText>
         <ThemedText style={styles.emptyDescription}>
           {searchQuery.trim()
@@ -197,7 +198,7 @@ export default function OrderHistoryPage() {
     if (!isLoading || !hasMore) return null;
     return (
       <View style={styles.loadingFooter}>
-        <ActivityIndicator size="small" color="#00C06A" />
+        <ActivityIndicator size="small" color={colors.brand.green} />
         <ThemedText style={styles.loadingText}>Loading more orders...</ThemedText>
       </View>
     );
@@ -212,8 +213,8 @@ export default function OrderHistoryPage() {
   if (error && !orders.length) {
     return (
       <ThemedView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#00C06A" />
-        <LinearGradient colors={['#00C06A', '#00796B']} style={styles.headerBg}>
+        <StatusBar barStyle="light-content" backgroundColor={colors.brand.green} />
+        <LinearGradient colors={[colors.brand.green, colors.brand.teal]} style={styles.headerBg}>
           <View style={styles.headerContainer}>
             <Pressable style={styles.backButton} onPress={handleBackPress}
               accessibilityLabel="Go back" accessibilityRole="button">
@@ -238,10 +239,10 @@ export default function OrderHistoryPage() {
 
   return (
     <ThemedView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#00C06A" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.brand.green} />
 
       {/* Header */}
-      <LinearGradient colors={['#00C06A', '#00796B']} style={styles.headerBg}>
+      <LinearGradient colors={[colors.brand.green, colors.brand.teal]} style={styles.headerBg}>
         <View style={styles.headerContainer}>
           <Pressable style={styles.backButton} onPress={handleBackPress}
             accessibilityLabel="Go back" accessibilityRole="button">
@@ -265,7 +266,7 @@ export default function OrderHistoryPage() {
             placeholder="Search orders..."
             value={searchQuery}
             onChangeText={handleSearchChange}
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             accessibilityLabel="Search orders"
             accessibilityHint="Enter order number, product name, or store name"
           />
@@ -293,8 +294,8 @@ export default function OrderHistoryPage() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={handleRefresh}
-              tintColor="#00C06A"
-              colors={['#00C06A']}
+              tintColor={colors.brand.green}
+              colors={[colors.brand.green]}
             />
           }
           onEndReached={handleLoadMore}
@@ -400,10 +401,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: Spacing.md,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   skeletonBox: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     height: 14,
   } as any,
@@ -429,7 +430,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
   },
   shopButton: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
@@ -470,7 +471,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   retryButton: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,

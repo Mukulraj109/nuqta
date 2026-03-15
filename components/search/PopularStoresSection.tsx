@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { StoreItem } from '@/services/searchDiscoveryApi';
+import { colors } from '@/constants/theme';
 
 interface PopularStoresSectionProps {
   stores: StoreItem[];
@@ -22,13 +23,13 @@ function PopularStoresSection({
   const getBadgeColor = (type: string) => {
     switch (type) {
       case 'cashback':
-        return '#00C06A';
+        return colors.brand.green;
       case 'emi':
-        return '#6366F1';
+        return colors.brand.indigo;
       case 'new':
-        return '#EF4444';
+        return colors.error;
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   };
 
@@ -42,7 +43,7 @@ function PopularStoresSection({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="location" size={20} color="#1a3a52" />
+        <Ionicons name="location" size={20} color={colors.nileBlue} />
         <Text style={styles.headerText}>Popular near you</Text>
       </View>
 
@@ -62,7 +63,7 @@ function PopularStoresSection({
               <CachedImage source={{ uri: store.logo }} style={styles.logo} contentFit="cover" cachePolicy="memory-disk" />
             ) : (
               <View style={styles.logoPlaceholder}>
-                <Ionicons name="storefront-outline" size={32} color="#9CA3AF" />
+                <Ionicons name="storefront-outline" size={32} color={colors.neutral[400]} />
               </View>
             )}
 
@@ -82,13 +83,13 @@ function PopularStoresSection({
               )}
               {store.rating > 0 && (
                 <View style={styles.ratingRow}>
-                  <Ionicons name="star" size={12} color="#F59E0B" />
+                  <Ionicons name="star" size={12} color={colors.warningScale[400]} />
                   <Text style={styles.ratingText}>{store.rating.toFixed(1)}</Text>
                 </View>
               )}
             </View>
 
-            <Ionicons name="chevron-forward" size={16} color="#9CA3AF" style={styles.arrow} />
+            <Ionicons name="chevron-forward" size={16} color={colors.neutral[400]} style={styles.arrow} />
           </Pressable>
         ))}
       </ScrollView>
@@ -96,7 +97,7 @@ function PopularStoresSection({
       {onViewAll && (
         <Pressable style={styles.viewAllButton} onPress={onViewAll}>
           <Text style={styles.viewAllText}>View all nearby stores</Text>
-          <Ionicons name="arrow-forward" size={16} color="#1a3a52" />
+          <Ionicons name="arrow-forward" size={16} color={colors.nileBlue} />
         </Pressable>
       )}
     </View>
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
   },
   storeCard: {
     width: 160,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 12,
     marginRight: 12,
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 6,
     textAlign: 'center',
   },
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
   },
   metaText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   ratingRow: {
     flexDirection: 'row',
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 11,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
   },
   arrow: {
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 });
 

@@ -24,6 +24,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import realOffersApi from '@/services/realOffersApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 60) / 2; // 2 cards per row with padding
@@ -287,7 +288,7 @@ export default function ViewAllOffersScreen() {
           )}
           {offer.distance && (
             <View style={styles.distanceContainer}>
-              <Ionicons name="location-outline" size={12} color="#666" />
+              <Ionicons name="location-outline" size={12} color={colors.midGray} />
               <ThemedText style={styles.distance}>{offer.distance} km away</ThemedText>
             </View>
           )}
@@ -300,7 +301,7 @@ export default function ViewAllOffersScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header - Same as Offers Page */}
       <LinearGradient
-        colors={['#8B5CF6', '#A855F7']}
+        colors={[colors.brand.purpleLight, colors.brand.purpleMedium]}
         style={styles.header}
       >
         <View style={styles.headerTop}>
@@ -313,7 +314,7 @@ export default function ViewAllOffersScreen() {
               style={styles.pointsContainer}
               onPress={() => router.push('/coins')}
             >
-              <Ionicons name="star" size={16} color="#FFD700" />
+              <Ionicons name="star" size={16} color={colors.brand.goldBright} />
               <ThemedText style={styles.pointsText}>{userPoints}</ThemedText>
             </Pressable>
           </View>
@@ -326,7 +327,7 @@ export default function ViewAllOffersScreen() {
               <Ionicons 
                 name={isFavorited ? "heart" : "heart-outline"} 
                 size={20} 
-                color={isFavorited ? "#EF4444" : "white"} 
+                color={isFavorited ? colors.error : "white"} 
               />
             </Pressable>
           </View>
@@ -466,14 +467,14 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '900',
     color: Colors.text.inverse,
-    backgroundColor: '#6366F1',
+    backgroundColor: colors.brand.indigo,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.lg,
     transform: [{ rotate: '-5deg' }],
   },
   offersTextContainer: {
-    backgroundColor: '#FFD700',
+    backgroundColor: colors.brand.goldBright,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.lg,

@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../types/mall.types';
 import MallLuxuryBrandCard from './cards/MallLuxuryBrandCard';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -50,19 +51,19 @@ const MallLuxuryZone: React.FC<MallLuxuryZoneProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#1a3a52', '#234b68', '#1a3a52']}
+          colors={[colors.nileBlue, colors.brand.nileBlueLight, colors.nileBlue]}
           style={styles.gradientContainer}
         >
           <View style={styles.headerRow}>
             <View style={styles.titleContainer}>
-              <LinearGradient colors={['#F59E0B', '#D97706']} style={styles.iconWrapper}>
-                <Ionicons name="diamond" size={20} color="#1a3a52" />
+              <LinearGradient colors={[colors.warningScale[400], colors.warningScale[700]]} style={styles.iconWrapper}>
+                <Ionicons name="diamond" size={20} color={colors.nileBlue} />
               </LinearGradient>
               <Text style={styles.title}>Luxury Zone</Text>
             </View>
           </View>
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#D97706" />
+            <ActivityIndicator size="small" color={colors.warningScale[700]} />
             <Text style={styles.loadingText}>Loading luxury brands...</Text>
           </View>
         </LinearGradient>
@@ -75,7 +76,7 @@ const MallLuxuryZone: React.FC<MallLuxuryZoneProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#1a3a52', '#234b68', '#1a3a52']}
+          colors={[colors.nileBlue, colors.brand.nileBlueLight, colors.nileBlue]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.gradientContainer}
@@ -84,10 +85,10 @@ const MallLuxuryZone: React.FC<MallLuxuryZoneProps> = ({
           <View style={styles.headerRow}>
             <View style={styles.titleContainer}>
               <LinearGradient
-                colors={['#F59E0B', '#D97706']}
+                colors={[colors.warningScale[400], colors.warningScale[700]]}
                 style={styles.iconWrapper}
               >
-                <Ionicons name="diamond" size={20} color="#1a3a52" />
+                <Ionicons name="diamond" size={20} color={colors.nileBlue} />
               </LinearGradient>
               <Text style={styles.title}>Luxury Zone</Text>
             </View>
@@ -106,7 +107,7 @@ const MallLuxuryZone: React.FC<MallLuxuryZoneProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#1a3a52', '#234b68', '#1a3a52']}
+        colors={[colors.nileBlue, colors.brand.nileBlueLight, colors.nileBlue]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradientContainer}
@@ -129,15 +130,15 @@ const MallLuxuryZone: React.FC<MallLuxuryZoneProps> = ({
         <View style={styles.headerRow}>
           <View style={styles.titleContainer}>
             <LinearGradient
-              colors={['#F59E0B', '#D97706']}
+              colors={[colors.warningScale[400], colors.warningScale[700]]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="diamond" size={20} color="#1a3a52" />
+              <Ionicons name="diamond" size={20} color={colors.nileBlue} />
             </LinearGradient>
             <View>
               <Text style={styles.title}>Luxury Zone</Text>
               <View style={styles.premiumBadge}>
-                <Ionicons name="star" size={10} color="#F59E0B" />
+                <Ionicons name="star" size={10} color={colors.warningScale[400]} />
                 <Text style={styles.premiumBadgeText}>PREMIUM</Text>
               </View>
             </View>
@@ -150,10 +151,10 @@ const MallLuxuryZone: React.FC<MallLuxuryZoneProps> = ({
             >
               <Text style={styles.viewAllText}>Explore All</Text>
               <LinearGradient
-                colors={['#F59E0B', '#D97706']}
+                colors={[colors.warningScale[400], colors.warningScale[700]]}
                 style={styles.viewAllArrow}
               >
-                <Ionicons name="arrow-forward" size={14} color="#1a3a52" />
+                <Ionicons name="arrow-forward" size={14} color={colors.nileBlue} />
               </LinearGradient>
             </Pressable>
           )}
@@ -171,7 +172,7 @@ const MallLuxuryZone: React.FC<MallLuxuryZoneProps> = ({
               colors={['rgba(245, 158, 11, 0.2)', 'rgba(245, 158, 11, 0.05)']}
               style={styles.featureIconBg}
             >
-              <Ionicons name="shield-checkmark" size={16} color="#F59E0B" />
+              <Ionicons name="shield-checkmark" size={16} color={colors.warningScale[400]} />
             </LinearGradient>
             <Text style={styles.featureText}>Verified Authentic</Text>
           </View>
@@ -180,7 +181,7 @@ const MallLuxuryZone: React.FC<MallLuxuryZoneProps> = ({
               colors={['rgba(245, 158, 11, 0.2)', 'rgba(245, 158, 11, 0.05)']}
               style={styles.featureIconBg}
             >
-              <Ionicons name="gift" size={16} color="#F59E0B" />
+              <Ionicons name="gift" size={16} color={colors.warningScale[400]} />
             </LinearGradient>
             <Text style={styles.featureText}>Premium Rewards</Text>
           </View>
@@ -189,7 +190,7 @@ const MallLuxuryZone: React.FC<MallLuxuryZoneProps> = ({
               colors={['rgba(245, 158, 11, 0.2)', 'rgba(245, 158, 11, 0.05)']}
               style={styles.featureIconBg}
             >
-              <Ionicons name="ribbon" size={16} color="#F59E0B" />
+              <Ionicons name="ribbon" size={16} color={colors.warningScale[400]} />
             </LinearGradient>
             <Text style={styles.featureText}>VIP Service</Text>
           </View>
@@ -218,17 +219,17 @@ const MallLuxuryZone: React.FC<MallLuxuryZoneProps> = ({
          
         >
           <LinearGradient
-            colors={['#F59E0B', '#D97706', '#1a3a52']}
+            colors={[colors.warningScale[400], colors.warningScale[700], colors.nileBlue]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.ctaGradient}
           >
             <View style={styles.ctaIconWrapper}>
-              <Ionicons name="diamond" size={18} color="#1a3a52" />
+              <Ionicons name="diamond" size={18} color={colors.nileBlue} />
             </View>
             <Text style={styles.ctaText}>Discover All Luxury Brands</Text>
             <View style={styles.ctaArrow}>
-              <Ionicons name="arrow-forward" size={16} color="#F59E0B" />
+              <Ionicons name="arrow-forward" size={16} color={colors.warningScale[400]} />
             </View>
           </LinearGradient>
         </Pressable>
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#F59E0B',
+        shadowColor: colors.warningScale[400],
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.25,
         shadowRadius: 20,
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#F59E0B',
+        shadowColor: colors.warningScale[400],
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.4,
         shadowRadius: 8,
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
     marginBottom: 4,
   },
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
   premiumBadgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     letterSpacing: 1.5,
   },
   subtitle: {
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   viewAllArrow: {
     width: 26,
@@ -433,7 +434,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: 0.3,
   },
   ctaArrow: {

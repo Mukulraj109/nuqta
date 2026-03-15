@@ -2,6 +2,7 @@
 // Handles all social impact event-related API calls
 
 import apiClient from './apiClient';
+import { colors } from '@/constants/theme';
 
 // ============ TYPES ============
 
@@ -376,10 +377,10 @@ class SocialImpactApi {
       'upcoming': '#3B82F6', // blue
       'ongoing': '#10B981', // green
       'completed': '#6B7280', // gray
-      'cancelled': '#EF4444', // red
+      'cancelled': colors.error, // red
       'registered': '#3B82F6', // blue
       'checked_in': '#F59E0B', // amber
-      'no_show': '#EF4444' // red
+      'no_show': colors.error // red
     };
     return colorMap[status || 'upcoming'] || '#6B7280';
   }

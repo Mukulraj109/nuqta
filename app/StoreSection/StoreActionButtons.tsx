@@ -29,6 +29,7 @@ import {
   ButtonStateManager,
   createButtonHandler
 } from '@/utils/button-state-manager';
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -287,7 +288,7 @@ function StoreActionButtons({
           accessibilityHint={`${config.title} this item`}
         >
         <LinearGradient
-          colors={shouldDisable ? ['#9CA3AF', '#6B7280'] as const : config.backgroundColor as readonly [string, string, ...string[]]}
+          colors={shouldDisable ? [colors.neutral[400], colors.neutral[500]] as const : config.backgroundColor as readonly [string, string, ...string[]]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.buttonGradient}
@@ -297,7 +298,7 @@ function StoreActionButtons({
             {isCurrentlyLoading ? (
               <ActivityIndicator
                 size="small"
-                color="#FFFFFF"
+                color={colors.background.primary}
                 style={styles.buttonIcon}
               />
             ) : (
@@ -386,7 +387,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     borderRadius: 14,
     overflow: 'hidden',
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,

@@ -20,6 +20,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import logger from '@/utils/logger';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -112,7 +113,7 @@ export default function BankOfferDetailScreen() {
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Bank Logo & Info */}
         <LinearGradient
-          colors={['#1E40AF', '#3B82F6']}
+          colors={['#1E40AF', colors.infoScale[400]]}
           style={styles.bannerGradient}
         >
           {offer.bankLogo ? (
@@ -138,23 +139,23 @@ export default function BankOfferDetailScreen() {
 
         {/* Card Type & Status */}
         <View style={styles.chipRow}>
-          <View style={[styles.chip, { backgroundColor: '#EFF6FF' }]}>
+          <View style={[styles.chip, { backgroundColor: colors.tint.blue }]}>
             <Ionicons name="card-outline" size={14} color={Colors.info} />
-            <ThemedText style={[styles.chipText, { color: '#3B82F6' }]}>
+            <ThemedText style={[styles.chipText, { color: colors.infoScale[400] }]}>
               {offer.cardType === 'all' ? 'All Cards' : `${offer.cardType?.charAt(0).toUpperCase()}${offer.cardType?.slice(1)} Card`}
             </ThemedText>
           </View>
           {offer.cardNetwork && (
-            <View style={[styles.chip, { backgroundColor: '#F3E8FF' }]}>
+            <View style={[styles.chip, { backgroundColor: colors.tint.pink }]}>
               <ThemedText style={[styles.chipText, { color: Colors.brand.purple }]}>{offer.cardNetwork}</ThemedText>
             </View>
           )}
           {isExpired ? (
-            <View style={[styles.chip, { backgroundColor: '#FEE2E2' }]}>
+            <View style={[styles.chip, { backgroundColor: colors.errorScale[100] }]}>
               <ThemedText style={[styles.chipText, { color: Colors.error }]}>Expired</ThemedText>
             </View>
           ) : daysLeft !== null && daysLeft <= 7 ? (
-            <View style={[styles.chip, { backgroundColor: '#FEF3C7' }]}>
+            <View style={[styles.chip, { backgroundColor: colors.tint.amberLight }]}>
               <ThemedText style={[styles.chipText, { color: Colors.warning }]}>{daysLeft} days left</ThemedText>
             </View>
           ) : null}
@@ -243,7 +244,7 @@ export default function BankOfferDetailScreen() {
               }
             }}
           >
-            <LinearGradient colors={['#1E40AF', '#3B82F6']} style={styles.ctaGradient}>
+            <LinearGradient colors={['#1E40AF', colors.infoScale[400]]} style={styles.ctaGradient}>
               <Ionicons name="card" size={20} color={Colors.text.inverse} />
               <ThemedText style={styles.ctaText}>Apply Offer</ThemedText>
             </LinearGradient>
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
   detailValue: { ...Typography.h4, fontWeight: '700', color: Colors.text.primary },
   promoSection: { paddingHorizontal: Spacing.base, marginBottom: Spacing.base },
   promoLabel: { ...Typography.bodySmall, fontSize: 13, color: Colors.text.tertiary, marginBottom: 6 },
-  promoBox: { backgroundColor: Colors.warningScale[50], borderWidth: 1, borderColor: '#FDE68A', borderRadius: 10, padding: 14, alignItems: 'center', borderStyle: 'dashed' },
+  promoBox: { backgroundColor: Colors.warningScale[50], borderWidth: 1, borderColor: colors.warningScale[200], borderRadius: 10, padding: 14, alignItems: 'center', borderStyle: 'dashed' },
   promoCode: { ...Typography.h3, fontWeight: '700', color: Colors.warning, letterSpacing: 2 },
   sectionTitle: { ...Typography.bodyLarge, fontWeight: '600', color: Colors.text.primary, marginBottom: Spacing.sm },
   validityRow: { gap: Spacing.sm },

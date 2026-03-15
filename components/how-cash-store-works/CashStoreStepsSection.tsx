@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 const STEPS = [
   {
@@ -20,42 +21,42 @@ const STEPS = [
     icon: 'search',
     title: 'Find Your Brand',
     description: 'Browse through 1000+ partner brands or search for your favorite store',
-    color: '#3B82F6',
+    color: colors.infoScale[400],
   },
   {
     id: 2,
     icon: 'hand-right',
     title: 'Click Through',
     description: 'Tap on the brand to visit their website through our secure link',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   {
     id: 3,
     icon: 'cart',
     title: 'Shop as Usual',
     description: 'Browse products and add items to your cart on the brand\'s website',
-    color: '#EC4899',
+    color: colors.brand.pink,
   },
   {
     id: 4,
     icon: 'card',
     title: 'Complete Purchase',
     description: 'Pay using any payment method and complete your order',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   {
     id: 5,
     icon: 'time',
     title: 'Track Your Cashback',
     description: 'Cashback is tracked automatically and appears as pending within 24-48 hours',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   {
     id: 6,
     icon: 'wallet',
     title: 'Get Paid',
     description: 'Once confirmed, cashback is credited directly to your ReZ wallet',
-    color: '#00C06A',
+    color: colors.brand.green,
   },
 ];
 
@@ -89,7 +90,7 @@ const CashStoreStepsSection: React.FC = () => {
       {/* Section Header */}
       <View style={styles.header}>
         <View style={styles.headerIcon}>
-          <Ionicons name="list-circle" size={24} color="#00C06A" />
+          <Ionicons name="list-circle" size={24} color={colors.brand.green} />
         </View>
         <Text style={styles.headerTitle}>How It Works</Text>
         <Text style={styles.headerSubtitle}>Follow these simple steps to earn cashback</Text>
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 24,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginTop: 8,
   },
   header: {
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: colors.tint.greenLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -127,12 +128,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 6,
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   stepsContainer: {
     gap: 0,
@@ -163,12 +164,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   stepNumberText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   connector: {
     width: 2,
@@ -184,12 +185,12 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 6,
   },
   stepDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 22,
   },
 });

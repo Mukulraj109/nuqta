@@ -28,6 +28,7 @@ import ManualCorrectionForm from '@/components/bills/ManualCorrectionForm';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const CameraType = {
   back: 'back' as const,
@@ -269,7 +270,7 @@ export default function EnhancedBillUploadPage() {
 
         {/* Info Banner */}
         <View style={styles.infoBanner}>
-          <Ionicons name="gift" size={24} color="#4CAF50" />
+          <Ionicons name="gift" size={24} color={colors.brand.emerald} />
           <View style={styles.infoBannerContent}>
             <Text style={styles.infoBannerTitle}>Earn Cashback on Bills!</Text>
             <Text style={styles.infoBannerText}>
@@ -475,7 +476,7 @@ const styles = StyleSheet.create({
   infoBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E8F5E9',
+    backgroundColor: colors.greenMist,
     padding: Spacing.base,
     margin: Spacing.base,
     borderRadius: BorderRadius.md,
@@ -487,12 +488,12 @@ const styles = StyleSheet.create({
   infoBannerTitle: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: '#4CAF50',
+    color: colors.brand.emerald,
     marginBottom: Spacing.xs,
   },
   infoBannerText: {
     ...Typography.bodySmall,
-    color: '#4CAF50',
+    color: colors.brand.emerald,
     lineHeight: 18,
   },
   section: {

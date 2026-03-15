@@ -35,6 +35,7 @@ import {
 } from '@/types/groupBuying.types';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -749,7 +750,7 @@ const styles = StyleSheet.create({
     color: Colors.brand.purpleLight,
   },
   productDiscount: {
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     borderRadius: 6,

@@ -20,6 +20,7 @@ import ReviewItem from './ReviewItem';
 import ProductReviewForm from './ProductReviewForm';
 import type { Review } from '@/services/reviewsApi';
 import type { ReviewsResponse } from '@/services/reviewsApi';
+import { colors } from '@/constants/theme';
 
 interface ProductReviewsSectionProps {
   productId: string;
@@ -118,7 +119,7 @@ function ProductReviewsSection({
                
               >
                 <ThemedText style={styles.ratingLabel}>{rating}</ThemedText>
-                <Ionicons name="star" size={12} color="#FFD700" />
+                <Ionicons name="star" size={12} color={colors.brand.goldBright} />
                 <View style={styles.progressBar}>
                   <View style={[styles.progressFill, { width: `${percentage}%` }]} />
                 </View>
@@ -156,7 +157,7 @@ function ProductReviewsSection({
           <View style={styles.modalHeader}>
             <ThemedText style={styles.modalTitle}>Sort Reviews</ThemedText>
             <Pressable onPress={() => setShowSortModal(false)}>
-              <Ionicons name="close" size={24} color="#666" />
+              <Ionicons name="close" size={24} color={colors.midGray} />
             </Pressable>
           </View>
 
@@ -179,7 +180,7 @@ function ProductReviewsSection({
                 {option.label}
               </ThemedText>
               {sortBy === option.key && (
-                <Ionicons name="checkmark" size={20} color="#00C06A" />
+                <Ionicons name="checkmark" size={20} color={colors.brand.green} />
               )}
             </Pressable>
           ))}
@@ -202,7 +203,7 @@ function ProductReviewsSection({
           onPress={handleWriteReview}
          
         >
-          <Ionicons name="create" size={20} color="#00C06A" />
+          <Ionicons name="create" size={20} color={colors.brand.green} />
           <ThemedText style={styles.writeReviewText}>Write a Review</ThemedText>
         </Pressable>
 
@@ -211,7 +212,7 @@ function ProductReviewsSection({
           onPress={() => setShowSortModal(true)}
          
         >
-          <Ionicons name="funnel-outline" size={16} color="#666" />
+          <Ionicons name="funnel-outline" size={16} color={colors.midGray} />
           <ThemedText style={styles.sortButtonText}>
             {sortOptions.find(o => o.key === sortBy)?.label || 'Sort'}
           </ThemedText>
@@ -225,7 +226,7 @@ function ProductReviewsSection({
             Showing {filterRating} star reviews
           </ThemedText>
           <Pressable onPress={() => onFilterChange(null)}>
-            <Ionicons name="close-circle" size={20} color="#00C06A" />
+            <Ionicons name="close-circle" size={20} color={colors.brand.green} />
           </Pressable>
         </View>
       )}
@@ -234,7 +235,7 @@ function ProductReviewsSection({
 
   const renderEmpty = () => (
     <View style={styles.emptyState}>
-      <Ionicons name="star-outline" size={64} color="#D1D5DB" />
+      <Ionicons name="star-outline" size={64} color={colors.neutral[300]} />
       <ThemedText style={styles.emptyTitle}>No Reviews Yet</ThemedText>
       <ThemedText style={styles.emptyText}>
         Be the first to share your experience!
@@ -260,7 +261,7 @@ function ProductReviewsSection({
          
         >
           <ThemedText style={styles.loadMoreText}>Load More Reviews</ThemedText>
-          <Ionicons name="chevron-down" size={16} color="#00C06A" />
+          <Ionicons name="chevron-down" size={16} color={colors.brand.green} />
         </Pressable>
       </View>
     );
@@ -269,7 +270,7 @@ function ProductReviewsSection({
   if (isLoading && reviews.length === 0) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#00C06A" />
+        <ActivityIndicator size="large" color={colors.brand.green} />
         <ThemedText style={styles.loadingText}>Loading reviews...</ThemedText>
       </View>
     );
@@ -301,8 +302,8 @@ function ProductReviewsSection({
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={onRefresh}
-            colors={['#00C06A']}
-            tintColor="#00C06A"
+            colors={[colors.brand.green]}
+            tintColor={colors.brand.green}
           />
         }
         contentContainerStyle={[
@@ -335,7 +336,7 @@ function ProductReviewsSection({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.offWhite,
   },
   loadingContainer: {
     flex: 1,
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   listContent: {
     paddingBottom: 20,
@@ -355,11 +356,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   summarySection: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 16,
     paddingVertical: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   ratingBreakdown: {
     flexDirection: 'row',
@@ -373,12 +374,12 @@ const styles = StyleSheet.create({
   ratingNumber: {
     fontSize: 36,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   totalReviews: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 4,
   },
   ratingBars: {
@@ -391,25 +392,25 @@ const styles = StyleSheet.create({
   },
   ratingLabel: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     width: 12,
     marginRight: 4,
   },
   progressBar: {
     flex: 1,
     height: 6,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 3,
     marginHorizontal: 8,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#FFD700',
+    backgroundColor: colors.brand.goldBright,
   },
   ratingCount: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     width: 24,
     textAlign: 'right',
   },
@@ -417,24 +418,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   writeReviewButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 192, 106, 0.1)',
     borderWidth: 1,
-    borderColor: '#00C06A',
+    borderColor: colors.brand.green,
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
   writeReviewText: {
-    color: '#00C06A',
+    color: colors.brand.green,
     fontWeight: '600',
     marginLeft: 8,
   },
@@ -445,7 +446,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   sortButtonText: {
-    color: '#666',
+    color: colors.midGray,
     fontSize: 13,
     marginLeft: 6,
   },
@@ -459,7 +460,7 @@ const styles = StyleSheet.create({
   },
   filterText: {
     fontSize: 13,
-    color: '#00C06A',
+    color: colors.brand.green,
     fontWeight: '600',
   },
   emptyState: {
@@ -470,23 +471,23 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginTop: 16,
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 24,
   },
   emptyButton: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    shadowColor: '#00C06A',
+    shadowColor: colors.brand.green,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -494,7 +495,7 @@ const styles = StyleSheet.create({
   },
   emptyButtonText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   footerLoader: {
@@ -509,11 +510,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: 'rgba(0, 192, 106, 0.1)',
     borderWidth: 1,
-    borderColor: '#00C06A',
+    borderColor: colors.brand.green,
     borderRadius: 20,
   },
   loadMoreText: {
-    color: '#00C06A',
+    color: colors.brand.green,
     fontWeight: '600',
     fontSize: 14,
   },
@@ -538,12 +539,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   sortOption: {
     flexDirection: 'row',
@@ -557,10 +558,10 @@ const styles = StyleSheet.create({
   },
   sortOptionText: {
     fontSize: 16,
-    color: '#333',
+    color: colors.darkGray,
   },
   sortOptionTextSelected: {
-    color: '#00C06A',
+    color: colors.brand.green,
     fontWeight: '600',
   },
 });

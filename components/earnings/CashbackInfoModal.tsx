@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import EarnSocialData from '@/data/earnSocialData';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -63,13 +64,13 @@ function CashbackInfoModal({
             accessibilityLabel="Close modal"
             accessibilityRole="button"
           >
-            <Ionicons name="close" size={24} color="#6B7280" />
+            <Ionicons name="close" size={24} color={colors.neutral[500]} />
           </Pressable>
 
           {/* Order Info Header */}
           <View style={styles.orderHeader}>
             <View style={styles.orderIconContainer}>
-              <Ionicons name="receipt-outline" size={24} color="#8B5CF6" />
+              <Ionicons name="receipt-outline" size={24} color={colors.brand.purpleLight} />
             </View>
             <View style={styles.orderDetails}>
               <ThemedText style={styles.orderTitle}>
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContainer: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.offWhite,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingTop: 20,
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -204,18 +205,18 @@ const styles = StyleSheet.create({
   orderTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   orderSubtitle: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 2,
   },
   orderStore: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   cardsContainer: {
     gap: 16,
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     minHeight: 130,
   },
   cashbackBadge: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
   },
   cardDescription: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     marginTop: 16,
     lineHeight: 20,
   },
@@ -289,18 +290,18 @@ const styles = StyleSheet.create({
   shareTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 6,
     textAlign: 'center',
   },
   shareDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
   },
   earningsCard: {
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
   earningsLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 4,
@@ -324,7 +325,7 @@ const styles = StyleSheet.create({
   },
   earningsNote: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   uploadButton: {
     borderRadius: 25,
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
   getCashbackText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
   },
 });

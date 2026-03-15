@@ -21,6 +21,7 @@ import {
   Gradients,
 } from "@/constants/DesignSystem";
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 export interface VoucherCard {
   id: string;
@@ -67,7 +68,7 @@ const VoucherCardItem = memo(function VoucherCardItem({
     >
       {/* Gold Gradient Background */}
       <LinearGradient
-        colors={["#faf1e0", "#ffcd57"]}
+        colors={[colors.linen, colors.lightMustard]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.cardGradient}
@@ -75,7 +76,7 @@ const VoucherCardItem = memo(function VoucherCardItem({
         {/* Popular Badge */}
         {voucher.isPopular && (
           <View style={styles.popularBadge}>
-            <Ionicons name="flame" size={10} color="#fff" />
+            <Ionicons name="flame" size={10} color={colors.background.primary} />
             <ThemedText style={styles.popularText}>POPULAR</ThemedText>
           </View>
         )}
@@ -95,7 +96,7 @@ const VoucherCardItem = memo(function VoucherCardItem({
               colors={Gradients.gold}
               style={styles.giftIconGradient}
             >
-              <Ionicons name="gift" size={28} color="#fff" />
+              <Ionicons name="gift" size={28} color={colors.background.primary} />
             </LinearGradient>
           </View>
 
@@ -151,7 +152,7 @@ const VoucherCardItem = memo(function VoucherCardItem({
             style={styles.buyButtonGradient}
           >
             <ThemedText style={styles.buyButtonText}>Buy Now</ThemedText>
-            <Ionicons name="arrow-forward" size={16} color="#fff" />
+            <Ionicons name="arrow-forward" size={16} color={colors.background.primary} />
           </LinearGradient>
         </Pressable>
       </LinearGradient>
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#faf1e0",
+    backgroundColor: colors.linen,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    backgroundColor: "#1a3a52",
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 4,
     borderTopLeftRadius: BorderRadius.xl,
@@ -311,14 +312,14 @@ const styles = StyleSheet.create({
   popularText: {
     fontSize: 9,
     fontWeight: "800",
-    color: "#fff",
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   savingsBadge: {
     position: "absolute",
     top: Spacing.sm,
     right: Spacing.sm,
-    backgroundColor: "#1a3a52",
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 4,
     borderRadius: BorderRadius.sm,
@@ -326,7 +327,7 @@ const styles = StyleSheet.create({
   savingsText: {
     fontSize: 11,
     fontWeight: "700",
-    color: "#fff",
+    color: colors.background.primary,
   },
   voucherContent: {
     flexDirection: "row",
@@ -435,7 +436,7 @@ const styles = StyleSheet.create({
   },
   buyButtonText: {
     ...Typography.button,
-    color: "#fff",
+    color: colors.background.primary,
     fontWeight: "700",
   },
 });

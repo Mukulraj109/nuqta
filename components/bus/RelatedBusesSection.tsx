@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface Route {
   from: string;
@@ -63,7 +64,7 @@ const RelatedBusesSection: React.FC<RelatedBusesSectionProps> = ({ currentBusId,
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Related Buses</Text>
-        <ActivityIndicator size="small" color="#F97316" style={styles.loader} />
+        <ActivityIndicator size="small" color={colors.brand.orange} style={styles.loader} />
       </View>
     );
   }
@@ -75,7 +76,7 @@ const RelatedBusesSection: React.FC<RelatedBusesSectionProps> = ({ currentBusId,
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="bus" size={24} color="#F97316" />
+        <Ionicons name="bus" size={24} color={colors.brand.orange} />
         <Text style={styles.title}>Related Buses</Text>
       </View>
       
@@ -112,7 +113,7 @@ const RelatedBusesSection: React.FC<RelatedBusesSectionProps> = ({ currentBusId,
               <View style={styles.busInfo}>
                 <Text style={styles.busName} numberOfLines={1}>{bus.name}</Text>
                 <View style={styles.ratingRow}>
-                  <Ionicons name="star" size={14} color="#F59E0B" />
+                  <Ionicons name="star" size={14} color={colors.warningScale[400]} />
                   <Text style={styles.ratingText}>{rating.toFixed(1)}</Text>
                 </View>
                 <Text style={styles.priceText}>From {currencySymbol}{price.toLocaleString(locale)}</Text>
@@ -129,8 +130,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderBottomColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.3,
   },
   loader: {
@@ -152,11 +153,11 @@ const styles = StyleSheet.create({
   },
   busCard: {
     width: 280,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     marginRight: 16,
   },
   busImage: {
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 12,
     right: 12,
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 8,
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   busInfo: {
     padding: 16,
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
   busName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   ratingRow: {
@@ -195,12 +196,12 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   priceText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
 });
 

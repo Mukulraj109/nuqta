@@ -17,6 +17,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { FavoriteStore } from '@/types/favoriteStore.types';
+import { colors } from '@/constants/theme';
 
 interface FavoriteStoresSectionProps {
   stores: FavoriteStore[];
@@ -58,7 +59,7 @@ const FavoriteStoreCard = memo(({
           />
         ) : (
           <View style={styles.imagePlaceholder}>
-            <Ionicons name="storefront-outline" size={50} color="#9CA3AF" />
+            <Ionicons name="storefront-outline" size={50} color={colors.neutral[400]} />
           </View>
         )}
       </View>
@@ -95,7 +96,7 @@ const FavoriteStoreCard = memo(({
           {/* Delivery Time */}
           {store.deliveryTime && store.deliveryTime.length > 0 && (
             <View style={styles.deliveryBadge}>
-              <Ionicons name="time-outline" size={12} color="#6B7280" />
+              <Ionicons name="time-outline" size={12} color={colors.neutral[500]} />
               <Text style={styles.deliveryText}>{store.deliveryTime}</Text>
             </View>
           )}
@@ -154,7 +155,7 @@ const FavoriteStoresSection: React.FC<FavoriteStoresSectionProps> = ({
       {/* Loading State */}
       {isLoading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#ffcd57" />
+          <ActivityIndicator size="small" color={colors.lightMustard} />
           <Text style={styles.loadingText}>Loading favorites...</Text>
         </View>
       ) : (
@@ -183,13 +184,13 @@ const FavoriteStoresSection: React.FC<FavoriteStoresSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     paddingVertical: 20,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.4,
   },
   loadingContainer: {
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -230,14 +231,14 @@ const styles = StyleSheet.create({
   },
   card: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#F0F0F0',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
         shadowRadius: 12,
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: IMAGE_HEIGHT,
     position: 'relative',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   cardImage: {
     width: '100%',
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   cardContent: {
     padding: 14,
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     flex: 1,
     marginRight: 10,
     letterSpacing: -0.3,
@@ -298,18 +299,18 @@ const styles = StyleSheet.create({
   ratingValue: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   descriptionText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
     lineHeight: 20,
     marginBottom: 6,
   },
   addressText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
     marginBottom: 12,
   },
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
   deliveryBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
   },
   deliveryText: {
     fontSize: 12,
-    color: '#4B5563',
+    color: colors.neutral[600],
     fontWeight: '600',
   },
   cashbackPill: {
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 });
 

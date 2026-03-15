@@ -25,6 +25,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useWalletContext } from '@/contexts/WalletContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -47,9 +48,9 @@ interface CoinTypeInfo {
 const COIN_TYPES: CoinTypeInfo[] = [
   {
     name: 'ReZ Coins',
-    color: '#16A34A',
-    backgroundColor: '#F0FDF4',
-    gradientColors: ['#16A34A', '#15803D'],
+    color: colors.brand.greenDark,
+    backgroundColor: colors.successScale[50],
+    gradientColors: [colors.brand.greenDark, colors.successScale[700]],
     icon: 'diamond',
     description: 'Universal coins that work everywhere on the platform. The backbone of your rewards.',
     expiry: 'Never expires',
@@ -58,9 +59,9 @@ const COIN_TYPES: CoinTypeInfo[] = [
   },
   {
     name: 'Priv\u00e9 Coins',
-    color: '#B45309',
-    backgroundColor: '#FFFBEB',
-    gradientColors: ['#F59E0B', '#D97706'],
+    color: colors.brand.amberDeep,
+    backgroundColor: colors.tint.amber,
+    gradientColors: [colors.warningScale[400], colors.warningScale[700]],
     icon: 'diamond-outline',
     description: 'Premium tier coins with higher value. Earned from Priv\u00e9-eligible purchases.',
     expiry: '12 months',
@@ -69,9 +70,9 @@ const COIN_TYPES: CoinTypeInfo[] = [
   },
   {
     name: 'Branded Coins',
-    color: '#2563EB',
-    backgroundColor: '#EFF6FF',
-    gradientColors: ['#3B82F6', '#2563EB'],
+    color: colors.brand.blue,
+    backgroundColor: colors.tint.blue,
+    gradientColors: [colors.infoScale[400], colors.brand.blue],
     icon: 'storefront',
     description: 'Store-specific coins earned from participating merchants. Only usable at the issuing store.',
     expiry: '6 months',
@@ -80,9 +81,9 @@ const COIN_TYPES: CoinTypeInfo[] = [
   },
   {
     name: 'Promo Coins',
-    color: '#D97706',
-    backgroundColor: '#FEF3C7',
-    gradientColors: ['#FBBF24', '#D97706'],
+    color: colors.warningScale[700],
+    backgroundColor: colors.tint.amberLight,
+    gradientColors: [colors.warningScale[400], colors.warningScale[700]],
     icon: 'gift',
     description: 'Campaign-based coins from special promotions and events. Limited time availability.',
     expiry: 'Per campaign',
@@ -108,22 +109,22 @@ const EARNING_METHODS: EarningMethod[] = [
     icon: 'cart',
     title: 'Shopping',
     description: 'Earn ReZ coins on every order you place',
-    color: '#16A34A',
-    backgroundColor: '#F0FDF4',
+    color: colors.brand.greenDark,
+    backgroundColor: colors.successScale[50],
   },
   {
     icon: 'game-controller',
     title: 'Games',
     description: 'Play daily games for coins and prizes',
     color: Colors.nileBlue,
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
   },
   {
     icon: 'flag',
     title: 'Challenges',
     description: 'Complete challenges for bonus coin rewards',
-    color: '#EA580C',
-    backgroundColor: '#FFF7ED',
+    color: colors.brand.orangeDark,
+    backgroundColor: colors.tint.orange,
   },
   {
     icon: 'people',
@@ -143,15 +144,15 @@ const EARNING_METHODS: EarningMethod[] = [
     icon: 'calendar',
     title: 'Daily Check-in',
     description: 'Maintain streaks for increasing bonus coins',
-    color: '#F59E0B',
-    backgroundColor: '#FFFBEB',
+    color: colors.warningScale[400],
+    backgroundColor: colors.tint.amber,
   },
   {
     icon: 'star',
     title: 'Reviews',
     description: 'Write product and store reviews for coins',
     color: Colors.nileBlue,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
   },
 ];
 
@@ -196,10 +197,10 @@ const FAQ_ITEMS: FAQItem[] = [
 // ============================================
 
 const SPENDING_PRIORITY = [
-  { name: 'Promo Coins', color: '#D97706', icon: 'gift' as keyof typeof Ionicons.glyphMap, priority: 1 },
-  { name: 'Branded Coins', color: '#2563EB', icon: 'storefront' as keyof typeof Ionicons.glyphMap, priority: 2 },
-  { name: 'Priv\u00e9 Coins', color: '#B45309', icon: 'diamond-outline' as keyof typeof Ionicons.glyphMap, priority: 3 },
-  { name: 'ReZ Coins', color: '#16A34A', icon: 'diamond' as keyof typeof Ionicons.glyphMap, priority: 4 },
+  { name: 'Promo Coins', color: colors.warningScale[700], icon: 'gift' as keyof typeof Ionicons.glyphMap, priority: 1 },
+  { name: 'Branded Coins', color: colors.brand.blue, icon: 'storefront' as keyof typeof Ionicons.glyphMap, priority: 2 },
+  { name: 'Priv\u00e9 Coins', color: colors.brand.amberDeep, icon: 'diamond-outline' as keyof typeof Ionicons.glyphMap, priority: 3 },
+  { name: 'ReZ Coins', color: colors.brand.greenDark, icon: 'diamond' as keyof typeof Ionicons.glyphMap, priority: 4 },
 ];
 
 // ============================================
@@ -408,10 +409,10 @@ const CoinSystemPage = () => {
         {/* Intro Section */}
         <View style={styles.introSection}>
           <View style={styles.introIconRow}>
-            <Ionicons name="diamond" size={32} color="#16A34A" />
-            <Ionicons name="diamond-outline" size={28} color="#F59E0B" />
-            <Ionicons name="storefront" size={28} color="#3B82F6" />
-            <Ionicons name="gift" size={28} color="#D97706" />
+            <Ionicons name="diamond" size={32} color={colors.brand.greenDark} />
+            <Ionicons name="diamond-outline" size={28} color={colors.warningScale[400]} />
+            <Ionicons name="storefront" size={28} color={colors.infoScale[400]} />
+            <Ionicons name="gift" size={28} color={colors.warningScale[700]} />
           </View>
           <Text style={styles.introTitle}>Understanding Your Coins</Text>
           <Text style={styles.introSubtitle}>

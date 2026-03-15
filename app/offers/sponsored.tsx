@@ -21,6 +21,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { useAuth } from '@/contexts/AuthContext';
 import apiClient from '@/services/apiClient';
 import { CachedImage } from '@/components/ui/CachedImage';
+import { colors } from '@/constants/theme';
 
 interface BankOfferRaw {
   _id: string;
@@ -182,7 +183,7 @@ export default function SponsoredCashbackPage() {
 
       <View style={styles.offerDetails}>
         <View style={styles.cashbackBadge}>
-          <Ionicons name="wallet" size={14} color="#FFF" />
+          <Ionicons name="wallet" size={14} color={colors.background.primary} />
           <ThemedText style={styles.cashbackText}>{item.cashback} Cashback</ThemedText>
         </View>
         <View style={styles.minPurchase}>
@@ -198,7 +199,7 @@ export default function SponsoredCashbackPage() {
         </View>
         <Pressable style={styles.claimButton}>
           <ThemedText style={styles.claimButtonText}>Claim</ThemedText>
-          <Ionicons name="arrow-forward" size={16} color="#FFF" />
+          <Ionicons name="arrow-forward" size={16} color={colors.background.primary} />
         </Pressable>
       </View>
     </Pressable>
@@ -208,7 +209,7 @@ export default function SponsoredCashbackPage() {
     if (!loadingMore) return null;
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color="#6366F1" />
+        <ActivityIndicator size="small" color={colors.brand.indigo} />
       </View>
     );
   }, [loadingMore]);
@@ -230,22 +231,22 @@ export default function SponsoredCashbackPage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#6366F1" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.brand.indigo} />
 
       <LinearGradient
-        colors={['#6366F1', '#8B5CF6']}
+        colors={[colors.brand.indigo, colors.brand.purpleLight]}
         style={styles.header}
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Brand Offers</ThemedText>
           <View style={styles.placeholder} />
         </View>
 
         <View style={styles.heroSection}>
-          <Ionicons name="megaphone" size={40} color="#FFF" />
+          <Ionicons name="megaphone" size={40} color={colors.background.primary} />
           <ThemedText style={styles.heroTitle}>Sponsored Cashback</ThemedText>
           <ThemedText style={styles.heroSubtitle}>
             Exclusive offers from top brands with enhanced cashback
@@ -277,9 +278,9 @@ export default function SponsoredCashbackPage() {
       {loading ? (
         <View style={styles.loadingContainer}>
           <View style={styles.loadingIconWrap}>
-            <Ionicons name="megaphone" size={32} color="#6366F1" />
+            <Ionicons name="megaphone" size={32} color={colors.brand.indigo} />
           </View>
-          <ActivityIndicator size="large" color="#6366F1" style={{ marginTop: 16 }} />
+          <ActivityIndicator size="large" color={colors.brand.indigo} style={{ marginTop: 16 }} />
         </View>
       ) : (
         <FlatList
@@ -300,8 +301,8 @@ export default function SponsoredCashbackPage() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={handleRefresh}
-              colors={['#6366F1']}
-              tintColor="#6366F1"
+              colors={[colors.brand.indigo]}
+              tintColor={colors.brand.indigo}
             />
           }
         />
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
   },
   heroTitle: {
     ...Typography.h2,
-    color: '#FFF',
+    color: colors.background.primary,
     marginTop: Spacing.md,
     marginBottom: Spacing.xs,
   },
@@ -369,14 +370,14 @@ const styles = StyleSheet.create({
     ...Shadows.subtle,
   },
   filterButtonActive: {
-    backgroundColor: '#6366F1',
+    backgroundColor: colors.brand.indigo,
   },
   filterButtonText: {
     ...Typography.caption,
     color: Colors.text.secondary,
   },
   filterButtonTextActive: {
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   listContent: {
@@ -461,7 +462,7 @@ const styles = StyleSheet.create({
   },
   cashbackText: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   minPurchase: {
     flexDirection: 'row',
@@ -494,14 +495,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.xs,
-    backgroundColor: '#6366F1',
+    backgroundColor: colors.brand.indigo,
     borderRadius: BorderRadius.md,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
   },
   claimButtonText: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   loadingContainer: {
     flex: 1,
@@ -513,7 +514,7 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: '#6366F1' + '15',
+    backgroundColor: colors.brand.indigo + '15',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -539,12 +540,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
   },

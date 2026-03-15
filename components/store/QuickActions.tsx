@@ -15,6 +15,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
+import { colors } from '@/constants/theme';
 
 interface QuickAction {
   id: string;
@@ -302,7 +303,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({
              
             >
               <View style={styles.compactIconCircle}>
-                <Ionicons name={action.icon} size={14} color="#00C06A" />
+                <Ionicons name={action.icon} size={14} color={colors.brand.green} />
               </View>
               <Text style={styles.compactLabel} numberOfLines={1}>
                 {action.label}
@@ -327,7 +328,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({
            
           >
             <View style={styles.iconContainer}>
-              <Ionicons name={action.icon} size={18} color="#00C06A" />
+              <Ionicons name={action.icon} size={18} color={colors.brand.green} />
             </View>
             <Text style={styles.actionLabel} numberOfLines={1}>
               {action.label}
@@ -342,18 +343,18 @@ const QuickActions: React.FC<QuickActionsProps> = ({
 const styles = StyleSheet.create({
   // Default variant styles
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 12,
     marginHorizontal: 16,
     marginVertical: 6,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
   },
   title: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 10,
   },
   grid: {
@@ -364,12 +365,12 @@ const styles = StyleSheet.create({
   actionButton: {
     width: '31.5%',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     paddingVertical: 10,
     paddingHorizontal: 4,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.gray[100],
   },
   iconContainer: {
     width: 32,
@@ -383,7 +384,7 @@ const styles = StyleSheet.create({
   actionLabel: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
   },
 
@@ -398,12 +399,12 @@ const styles = StyleSheet.create({
   compactButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     paddingVertical: 6,
     paddingHorizontal: 10,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#D1FAE5',
+    borderColor: colors.tint.green,
     gap: 5,
   },
   compactIconCircle: {

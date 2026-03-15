@@ -11,6 +11,7 @@ import { SectionHeader, HorizontalScrollSection } from '../common';
 import { OfferCardCashback } from '../cards';
 import { CashbackStore } from '@/types/offers.types';
 import { Spacing } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface SuperCashbackSectionProps {
   stores: CashbackStore[];
@@ -36,7 +37,7 @@ export const SuperCashbackSection: React.FC<SuperCashbackSectionProps> = ({
         title="Super Cashback"
         subtitle="Earn big on these stores"
         icon="cash"
-        iconColor="#ffcd57"
+        iconColor={colors.lightMustard}
         showViewAll={stores.length > 3}
         onViewAll={onViewAll}
       />

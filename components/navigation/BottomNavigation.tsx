@@ -18,6 +18,7 @@ import Svg, { Path } from 'react-native-svg';
 import logger from '@/utils/logger';
 import { useHomeTab } from '@/contexts/HomeTabContext';
 import { useTheme } from '@/hooks/useTheme';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -93,7 +94,7 @@ const curvedBgStyles = StyleSheet.create({
   priveContainer: {
     ...Platform.select({
       ios: {
-        shadowColor: '#C9A962',
+        shadowColor: colors.brand.goldAccent,
         shadowOffset: { width: 0, height: -2 },
         shadowOpacity: 0.15,
         shadowRadius: 8,
@@ -295,8 +296,8 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
   // Render a regular tab item
   const renderTab = (tab: { name: string; route: string; icon: string; isActive: boolean }, index?: number) => {
     // Theme-aware tab colors
-    const activeColor = isPriveActive ? '#C9A962' : isDark ? '#ffcd57' : '#1a3a52';
-    const inactiveColor = isPriveActive ? '#A0A0A0' : isDark ? '#6B7280' : '#6B7280';
+    const activeColor = isPriveActive ? colors.brand.goldAccent : isDark ? colors.lightMustard : colors.nileBlue;
+    const inactiveColor = isPriveActive ? '#A0A0A0' : isDark ? colors.neutral[500] : colors.neutral[500];
 
     return (
       <Pressable
@@ -550,7 +551,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 4,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
     // Shadow for depth
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -587,20 +588,20 @@ const styles = StyleSheet.create({
   floatingButtonLabel: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#666666',
+    color: colors.midGray,
     marginTop: 6,
     textAlign: 'center',
   },
 
   // Privé theme - gold border for floating button
   floatingButtonCirclePrive: {
-    borderColor: '#C9A962',
-    backgroundColor: '#1F2937',
+    borderColor: colors.brand.goldAccent,
+    backgroundColor: colors.neutral[800],
   },
 
   // Privé theme - gold label
   floatingButtonLabelPrive: {
-    color: '#C9A962',
+    color: colors.brand.goldAccent,
   },
 
   // Tab bar container

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface ChallengeCardProps {
   title: string;
@@ -41,7 +42,7 @@ function ChallengeCard({
           <Ionicons 
             name={isCompleted ? "checkmark-circle" : icon} 
             size={24} 
-            color={isCompleted ? "#10B981" : iconColor} 
+            color={isCompleted ? colors.successScale[400] : iconColor} 
           />
         </View>
         <View style={styles.challengeDetails}>
@@ -67,7 +68,7 @@ function ChallengeCard({
         </View>
         {isCompleted && (
           <View style={styles.completedBadge}>
-            <Ionicons name="trophy" size={12} color="#FFD700" />
+            <Ionicons name="trophy" size={12} color={colors.brand.goldBright} />
           </View>
         )}
       </View>
@@ -91,8 +92,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   completedCard: {
-    backgroundColor: '#F0FDF4',
-    borderColor: '#10B981',
+    backgroundColor: colors.successScale[50],
+    borderColor: colors.successScale[400],
     borderWidth: 1,
   },
   challengeInfo: {
@@ -112,19 +113,19 @@ const styles = StyleSheet.create({
   challengeTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 2,
   },
   challengeDescription: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     lineHeight: 16,
   },
   completedText: {
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   completedDescription: {
-    color: '#059669',
+    color: colors.successScale[700],
   },
   challengeProgress: {
     alignItems: 'flex-end',
@@ -133,34 +134,34 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontSize: 12,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
     marginBottom: 4,
   },
   completedProgressText: {
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   progressBar: {
     width: 60,
     height: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 2,
     overflow: 'hidden',
   },
   progressFill: {
     height: 4,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 2,
     minWidth: 2,
   },
   completedFill: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
   },
   completedBadge: {
     position: 'absolute',
     top: -8,
     right: -8,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 8,
     padding: 2,
     shadowColor: '#000',

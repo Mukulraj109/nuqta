@@ -7,6 +7,7 @@ import { Project } from '@/types/earnPage.types';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
 import ProjectCard from './ProjectCard';
 import { SkeletonProjectCard } from '@/components/common/SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 interface RecentProjectsSectionProps {
   projects: Project[];
@@ -69,12 +70,12 @@ function RecentProjectsSection({
       ) : projects.length === 0 ? (
         <View style={styles.emptyContainer}>
           <LinearGradient
-            colors={['#EEF2FF', '#F5F3FF']}
+            colors={[colors.indigoMist, colors.tint.purpleLight]}
             style={styles.emptyIconCircle}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
           >
-            <Ionicons name="briefcase-outline" size={28} color="#7C3AED" />
+            <Ionicons name="briefcase-outline" size={28} color={colors.brand.purple} />
           </LinearGradient>
           <ThemedText style={styles.emptyTitle}>No projects available</ThemedText>
           <ThemedText style={styles.emptyDescription}>
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 24,
     marginHorizontal: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     paddingVertical: 20,
     paddingHorizontal: 16,
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
   titleUnderline: {
     width: 46,
     height: 3,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 2,
   },
   seeAllButton: {

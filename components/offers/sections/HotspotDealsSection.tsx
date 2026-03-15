@@ -11,6 +11,7 @@ import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { SectionHeader, HorizontalScrollSection } from '../common';
 import { HotspotDeal } from '@/types/offers.types';
 import { Spacing, BorderRadius, Typography, Shadows } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface HotspotDealsSectionProps {
   hotspots: HotspotDeal[];
@@ -36,13 +37,13 @@ export const HotspotDealsSection: React.FC<HotspotDealsSectionProps> = ({
       backgroundColor: theme.colors.background.card,
       borderRadius: BorderRadius.lg,
       borderWidth: 1,
-      borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : '#DBEAFE',
+      borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : colors.tint.blueLight,
       padding: Spacing.md,
       ...(isDark ? {} : Shadows.subtle),
     },
     cardSelected: {
-      backgroundColor: isDark ? 'rgba(59, 130, 246, 0.15)' : '#EFF6FF',
-      borderColor: '#3B82F6',
+      backgroundColor: isDark ? 'rgba(59, 130, 246, 0.15)' : colors.tint.blue,
+      borderColor: colors.infoScale[400],
       borderWidth: 2,
     },
     header: {
@@ -54,7 +55,7 @@ export const HotspotDealsSection: React.FC<HotspotDealsSectionProps> = ({
       width: 32,
       height: 32,
       borderRadius: 16,
-      backgroundColor: isDark ? 'rgba(59, 130, 246, 0.2)' : '#DBEAFE',
+      backgroundColor: isDark ? 'rgba(59, 130, 246, 0.2)' : colors.tint.blueLight,
       alignItems: 'center',
       justifyContent: 'center',
       marginRight: Spacing.sm,
@@ -70,7 +71,7 @@ export const HotspotDealsSection: React.FC<HotspotDealsSectionProps> = ({
     },
     viewText: {
       ...Typography.labelSmall,
-      color: isDark ? '#60A5FA' : '#2563EB',
+      color: isDark ? colors.infoScale[400] : colors.brand.blue,
       marginTop: Spacing.xs,
     },
   });
@@ -81,7 +82,7 @@ export const HotspotDealsSection: React.FC<HotspotDealsSectionProps> = ({
         title="Hotspot Deals"
         subtitle="Top deals by area"
         icon="map"
-        iconColor="#3B82F6"
+        iconColor={colors.infoScale[400]}
         showViewAll={false}
       />
       <HorizontalScrollSection>
@@ -99,7 +100,7 @@ export const HotspotDealsSection: React.FC<HotspotDealsSectionProps> = ({
                   <Ionicons
                     name="location"
                     size={18}
-                    color={isDark ? '#60A5FA' : '#3B82F6'}
+                    color={isDark ? colors.infoScale[400] : colors.infoScale[400]}
                   />
                 </View>
                 <Text style={styles.areaName} numberOfLines={1}>

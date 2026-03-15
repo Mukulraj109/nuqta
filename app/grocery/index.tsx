@@ -25,35 +25,36 @@ import { categoriesApi } from '@/services/categoriesApi';
 import { storesApi } from '@/services/storesApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const COLORS = {
   white: Colors.background.primary,
-  navy: '#0B2240',
+  navy: colors.brand.navyDark,
   gray50: Colors.background.secondary,
   gray100: Colors.background.secondary,
   gray200: Colors.border.default,
   gray400: Colors.text.tertiary,
   gray600: Colors.text.tertiary,
   green500: Colors.success,
-  green600: '#16A34A',
+  green600: colors.brand.greenDark,
   amber500: Colors.warning,
 };
 
 // Static category configuration with icons
 const categoryConfig: Record<string, { icon: string; color: string }> = {
   fruits: { icon: '🍎', color: '#FF6B6B' },
-  veggies: { icon: '🥕', color: '#4CAF50' },
+  veggies: { icon: '🥕', color: colors.brand.emerald },
   dairy: { icon: '🥛', color: '#2196F3' },
   snacks: { icon: '🍪', color: '#FF9800' },
   beverages: { icon: '🥤', color: '#00BCD4' },
   staples: { icon: '🌾', color: '#795548' },
-  essentials: { icon: '🧴', color: '#22C55E' },
-  daily: { icon: '🥛', color: '#3B82F6' },
-  supermarket: { icon: '🛒', color: '#F97316' },
-  organic: { icon: '🌿', color: '#10B981' },
-  deals: { icon: '🏷️', color: '#EF4444' },
+  essentials: { icon: '🧴', color: colors.success },
+  daily: { icon: '🥛', color: colors.infoScale[400] },
+  supermarket: { icon: '🛒', color: colors.brand.orange },
+  organic: { icon: '🌿', color: colors.successScale[400] },
+  deals: { icon: '🏷️', color: colors.error },
   fresh: { icon: '🥬', color: '#84CC16' },
   'personal-care': { icon: '🧴', color: '#E91E63' },
   household: { icon: '🧹', color: '#9C27B0' },
@@ -62,7 +63,7 @@ const categoryConfig: Record<string, { icon: string; color: string }> = {
 // Default categories for display
 const defaultCategories = [
   { id: 'fruits', title: 'Fruits', icon: '🍎', color: '#FF6B6B', count: 0 },
-  { id: 'veggies', title: 'Vegetables', icon: '🥕', color: '#4CAF50', count: 0 },
+  { id: 'veggies', title: 'Vegetables', icon: '🥕', color: colors.brand.emerald, count: 0 },
   { id: 'dairy', title: 'Dairy & Eggs', icon: '🥛', color: '#2196F3', count: 0 },
   { id: 'snacks', title: 'Snacks', icon: '🍪', color: '#FF9800', count: 0 },
   { id: 'staples', title: 'Staples', icon: '🌾', color: '#795548', count: 0 },
@@ -127,7 +128,7 @@ const GroceryPage: React.FC = () => {
 
         if (groceryCategory && groceryCategory.subcategories?.length > 0) {
           const mappedCategories = groceryCategory.subcategories.map((sub: any) => {
-            const config = categoryConfig[sub.slug] || { icon: '🛒', color: '#22C55E' };
+            const config = categoryConfig[sub.slug] || { icon: '🛒', color: colors.success };
             return {
               id: sub.slug,
               title: sub.name,
@@ -227,7 +228,7 @@ const GroceryPage: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <LinearGradient
-        colors={[Colors.success, '#16A34A']}
+        colors={[Colors.success, colors.brand.greenDark]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}
@@ -291,7 +292,7 @@ const GroceryPage: React.FC = () => {
             refreshing={refreshing}
             onRefresh={onRefresh}
             colors={[Colors.success]}
-            tintColor="#22C55E"
+            tintColor={colors.success}
           />
         }
       >
@@ -321,7 +322,7 @@ const GroceryPage: React.FC = () => {
         {/* Quick Actions */}
         <View style={styles.quickActionsContainer}>
           <Pressable
-            style={[styles.quickAction, { backgroundColor: '#FEF3C7' }]}
+            style={[styles.quickAction, { backgroundColor: colors.tint.amberLight }]}
             onPress={() => router.push('/grocery/deals' as any)}
           >
             <Text style={styles.quickActionIcon}>🔥</Text>
@@ -337,7 +338,7 @@ const GroceryPage: React.FC = () => {
             <Text style={styles.quickActionSubtitle}>Best price</Text>
           </Pressable>
           <Pressable
-            style={[styles.quickAction, { backgroundColor: '#D1FAE5' }]}
+            style={[styles.quickAction, { backgroundColor: colors.tint.green }]}
             onPress={() => router.push('/grocery/stores' as any)}
           >
             <Text style={styles.quickActionIcon}>🏪</Text>
@@ -418,7 +419,7 @@ const GroceryPage: React.FC = () => {
         {/* Promo Banner */}
         <View style={styles.promoBanner}>
           <LinearGradient
-            colors={['#F97316', '#EA580C']}
+            colors={[colors.brand.orange, colors.brand.orangeDark]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.promoGradient}
@@ -777,7 +778,7 @@ const styles = StyleSheet.create({
   promoButtonText: {
     ...Typography.body,
     fontWeight: '700',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
 });
 

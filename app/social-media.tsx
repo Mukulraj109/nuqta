@@ -28,6 +28,7 @@ import apiClient from '@/services/apiClient';
 import ordersApi, { Order } from '@/services/ordersApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface SocialPost {
   id: string;
@@ -222,7 +223,7 @@ export default function SocialMediaPage() {
       case 'approved': return Colors.success;
       case 'pending': return Colors.warning;
       case 'rejected': return Colors.error;
-      case 'credited': return '#00C06A';
+      case 'credited': return colors.brand.green;
       default: return Colors.text.tertiary;
     }
   };
@@ -249,10 +250,10 @@ export default function SocialMediaPage() {
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#00C06A" />
+        <StatusBar barStyle="light-content" backgroundColor={colors.brand.green} />
 
         {/* Header */}
-        <LinearGradient colors={['#00C06A', '#00796B']} style={styles.header}>
+        <LinearGradient colors={[colors.brand.green, colors.brand.teal]} style={styles.header}>
           <Pressable
             style={styles.backButton}
             onPress={() => router.back()}
@@ -307,7 +308,7 @@ export default function SocialMediaPage() {
               {/* Earnings Summary */}
               <View style={styles.summaryCard}>
                 <LinearGradient
-                  colors={['#00C06A', '#00796B']}
+                  colors={[colors.brand.green, colors.brand.teal]}
                   style={styles.summaryGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
@@ -401,7 +402,7 @@ export default function SocialMediaPage() {
 
                 {loadingOrders ? (
                   <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color="#00C06A" />
+                    <ActivityIndicator size="small" color={colors.brand.green} />
                     <Text style={styles.loadingText}>Loading orders...</Text>
                   </View>
                 ) : completedOrders.length > 0 ? (
@@ -414,7 +415,7 @@ export default function SocialMediaPage() {
                         <Ionicons
                           name={selectedOrderId ? "radio-button-off" : "radio-button-on"}
                           size={20}
-                          color={selectedOrderId ? "#9CA3AF" : "#00C06A"}
+                          color={selectedOrderId ? colors.neutral[400] : colors.brand.green}
                         />
                         <Text style={[styles.orderText, !selectedOrderId && styles.orderTextActive]}>
                           No order ({currencySymbol}0 cashback)
@@ -432,7 +433,7 @@ export default function SocialMediaPage() {
                           <Ionicons
                             name={selectedOrderId === order._id ? "radio-button-on" : "radio-button-off"}
                             size={20}
-                            color={selectedOrderId === order._id ? "#00C06A" : "#9CA3AF"}
+                            color={selectedOrderId === order._id ? colors.brand.green : colors.neutral[400]}
                           />
                           <View style={styles.orderInfo}>
                             <Text style={[styles.orderText, selectedOrderId === order._id && styles.orderTextActive]}>
@@ -475,7 +476,7 @@ export default function SocialMediaPage() {
                       <Ionicons
                         name={platform.icon as any}
                         size={24}
-                        color={selectedPlatform === platform.id ? platform.color : '#6B7280'}
+                        color={selectedPlatform === platform.id ? platform.color : colors.neutral[500]}
                       />
                       <Text
                         style={[
@@ -498,7 +499,7 @@ export default function SocialMediaPage() {
                   <TextInput
                     style={styles.input}
                     placeholder={`Paste your ${selectedPlatform} post URL here`}
-                    placeholderTextColor="#9CA3AF"
+                    placeholderTextColor={colors.neutral[400]}
                     value={postUrl}
                     onChangeText={setPostUrl}
                     autoCapitalize="none"
@@ -536,7 +537,7 @@ export default function SocialMediaPage() {
                 </Pressable>
 
                 <View style={styles.infoBox}>
-                  <Ionicons name="information-circle" size={16} color="#00C06A" />
+                  <Ionicons name="information-circle" size={16} color={colors.brand.green} />
                   <Text style={styles.infoText}>
                     Your post will be reviewed within 48 hours. Cashback will be credited upon approval.
                   </Text>
@@ -633,7 +634,7 @@ export default function SocialMediaPage() {
                             accessibilityHint="Opens your social media post in browser"
                           >
                             <Text style={styles.postLinkText}>View Post</Text>
-                            <Ionicons name="open-outline" size={14} color="#00C06A" />
+                            <Ionicons name="open-outline" size={14} color={colors.brand.green} />
                           </Pressable>
                         </View>
                       </View>
@@ -698,7 +699,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   activeTab: {
-    borderBottomColor: '#00C06A',
+    borderBottomColor: colors.brand.green,
   },
   tabText: {
     fontSize: 15,
@@ -706,7 +707,7 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
   activeTabText: {
-    color: '#00C06A',
+    color: colors.brand.green,
   },
   content: {
     flex: 1,
@@ -837,11 +838,11 @@ const styles = StyleSheet.create({
   orderText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: Spacing.xs,
   },
   orderTextActive: {
-    color: '#00C06A',
+    color: colors.brand.green,
   },
   orderAmount: {
     fontSize: 13,
@@ -857,7 +858,7 @@ const styles = StyleSheet.create({
   noOrdersText: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginTop: Spacing.md,
   },
   noOrdersSubtext: {
@@ -879,7 +880,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: BorderRadius.lg,
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: Spacing.md,
@@ -920,7 +921,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.border.default,
   },
   platformButtonActive: {
-    borderColor: '#00C06A',
+    borderColor: colors.brand.green,
     backgroundColor: '#E6F7F1',
   },
   platformName: {
@@ -949,7 +950,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     flexDirection: 'row',
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     borderRadius: BorderRadius.md,
     paddingVertical: Spacing.base,
     alignItems: 'center',
@@ -995,7 +996,7 @@ const styles = StyleSheet.create({
   statCardValue: {
     ...Typography.h2,
     fontWeight: '700',
-    color: '#00C06A',
+    color: colors.brand.green,
     marginBottom: Spacing.xs,
   },
   statCardLabel: {
@@ -1026,7 +1027,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
   },
   emptyButton: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.sm,
@@ -1105,6 +1106,6 @@ const styles = StyleSheet.create({
   postLinkText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#00C06A',
+    color: colors.brand.green,
   },
 });

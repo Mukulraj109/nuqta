@@ -17,9 +17,10 @@ import {
   TransactionCategory, 
   WalletTab 
 } from '@/types/wallet.types';
-import { 
-  fetchTransactions, 
-  walletTabs as defaultTabs 
+import { colors } from '@/constants/theme';
+import {
+  fetchTransactions,
+  walletTabs as defaultTabs
 } from '@/data/walletData';
 
 interface TransactionHistoryProps {
@@ -148,7 +149,7 @@ function TransactionHistory({
     
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color="#8B5CF6" />
+        <ActivityIndicator size="small" color={colors.brand.purpleLight} />
         <ThemedText style={styles.loadingText}>Loading more transactions...</ThemedText>
       </View>
     );
@@ -174,7 +175,7 @@ function TransactionHistory({
           onTabPress={handleTabPress}
         />
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#8B5CF6" />
+          <ActivityIndicator size="large" color={colors.brand.purpleLight} />
           <ThemedText style={styles.loadingText}>Loading transactions...</ThemedText>
         </View>
       </View>
@@ -220,9 +221,9 @@ function TransactionHistory({
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor="#8B5CF6"
-            colors={['#8B5CF6']}
-            progressBackgroundColor="#FFFFFF"
+            tintColor={colors.brand.purpleLight}
+            colors={[colors.brand.purpleLight]}
+            progressBackgroundColor={colors.background.primary}
           />
         }
         style={styles.list}
@@ -250,7 +251,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
     borderWidth: 0.5,
-    borderColor: '#F1F5F9',
+    borderColor: colors.tint.slate,
   },
   
   // Header
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 12,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: colors.tint.slate,
     backgroundColor: '#FAFBFC',
   },
   headerTitle: {
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
   },
   headerSubtitle: {
     fontSize: 13,
-    color: '#64748B',
+    color: colors.slateGray,
     fontWeight: '500',
   },
   
@@ -296,7 +297,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 12,
     fontWeight: '500',
   },
@@ -316,13 +317,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.gray[900],
     marginBottom: 8,
     textAlign: 'center',
   },
   emptyDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
   },

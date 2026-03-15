@@ -22,6 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/priveTheme';
 import priveApi, { PriveOffer } from '@/services/priveApi';
 import { DetailPageSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const IMAGE_HEIGHT = 220;
@@ -29,8 +30,8 @@ const IMAGE_HEIGHT = 220;
 /** Tier display colors */
 const TIER_COLORS: Record<string, { bg: string; text: string }> = {
   entry: { bg: 'rgba(201, 169, 98, 0.15)', text: PRIVE_COLORS.gold.primary },
-  signature: { bg: 'rgba(168, 85, 247, 0.15)', text: '#A855F7' },
-  elite: { bg: 'rgba(239, 68, 68, 0.15)', text: '#EF4444' },
+  signature: { bg: 'rgba(168, 85, 247, 0.15)', text: colors.brand.purpleMedium },
+  elite: { bg: 'rgba(239, 68, 68, 0.15)', text: colors.error },
 };
 
 /** Reward type labels */

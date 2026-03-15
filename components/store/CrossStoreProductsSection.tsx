@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import ProductCard from '@/components/homepage/cards/ProductCard';
 import { usePersonalizedRecommendations } from '@/hooks/useRecommendations';
 import { ProductItem } from '@/types/homepage.types';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -174,7 +175,7 @@ const CrossStoreProductsSection: React.FC<CrossStoreProductsSectionProps> = ({
   const renderSkeleton = () => {
     return (
       <View style={styles.skeletonContainer}>
-        <ActivityIndicator size="large" color="#ffcd57" />
+        <ActivityIndicator size="large" color={colors.lightMustard} />
         <ThemedText style={styles.skeletonText}>Loading recommendations...</ThemedText>
       </View>
     );
@@ -184,7 +185,7 @@ const CrossStoreProductsSection: React.FC<CrossStoreProductsSectionProps> = ({
   const renderError = () => {
     return (
       <View style={styles.errorContainer}>
-        <Ionicons name="alert-circle-outline" size={48} color="#EF4444" />
+        <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
         <ThemedText style={styles.errorTitle}>Failed to load recommendations</ThemedText>
         <ThemedText style={styles.errorMessage}>{error || 'Something went wrong'}</ThemedText>
         <Pressable
@@ -194,7 +195,7 @@ const CrossStoreProductsSection: React.FC<CrossStoreProductsSectionProps> = ({
           accessibilityLabel="Retry loading recommendations"
           accessibilityRole="button"
         >
-          <Ionicons name="refresh" size={20} color="#FFFFFF" />
+          <Ionicons name="refresh" size={20} color={colors.background.primary} />
           <ThemedText style={styles.retryButtonText}>Retry</ThemedText>
         </Pressable>
       </View>
@@ -205,7 +206,7 @@ const CrossStoreProductsSection: React.FC<CrossStoreProductsSectionProps> = ({
   const renderEmpty = () => {
     return (
       <View style={styles.emptyContainer}>
-        <Ionicons name="basket-outline" size={64} color="#9CA3AF" />
+        <Ionicons name="basket-outline" size={64} color={colors.neutral[400]} />
         <ThemedText style={styles.emptyTitle}>No recommendations available</ThemedText>
         <ThemedText style={styles.emptyMessage}>
           Check back later for personalized product recommendations
@@ -249,7 +250,7 @@ const CrossStoreProductsSection: React.FC<CrossStoreProductsSectionProps> = ({
       {/* Section Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Ionicons name="sparkles" size={24} color="#ffcd57" />
+          <Ionicons name="sparkles" size={24} color={colors.lightMustard} />
           <ThemedText style={styles.title}>Recommended for You</ThemedText>
         </View>
         {!loading && !error && products.length > 0 && (
@@ -262,7 +263,7 @@ const CrossStoreProductsSection: React.FC<CrossStoreProductsSectionProps> = ({
             accessibilityHint="Double tap to see all recommended products"
           >
             <ThemedText style={styles.viewAllText}>View All</ThemedText>
-            <Ionicons name="chevron-forward" size={16} color="#ffcd57" />
+            <Ionicons name="chevron-forward" size={16} color={colors.lightMustard} />
           </Pressable>
         )}
       </View>
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.gray[900],
   },
   viewAllButton: {
     flexDirection: 'row',
@@ -339,7 +340,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   content: {
     minHeight: 180,
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
   storeBadgeText: {
     fontSize: 9,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     flexShrink: 1,
   },
   // Skeleton Loader
@@ -394,7 +395,7 @@ const styles = StyleSheet.create({
   },
   skeletonText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 12,
   },
   // Error State
@@ -407,13 +408,13 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.gray[900],
     marginTop: 12,
     textAlign: 'center',
   },
   errorMessage: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 4,
     textAlign: 'center',
   },
@@ -421,7 +422,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -430,7 +431,7 @@ const styles = StyleSheet.create({
   retryButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
   // Empty State
   emptyContainer: {
@@ -442,13 +443,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.gray[900],
     marginTop: 16,
     textAlign: 'center',
   },
   emptyMessage: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 4,
     textAlign: 'center',
   },

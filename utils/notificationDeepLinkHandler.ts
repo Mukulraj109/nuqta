@@ -4,6 +4,7 @@
  */
 
 import { router } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 export interface NotificationData {
   type?: string;
@@ -236,53 +237,53 @@ export function getNotificationIcon(type: string): string {
  * Get notification color based on type
  */
 export function getNotificationColor(type: string): string {
-  const colors: { [key: string]: string } = {
+  const notifColors: { [key: string]: string } = {
     order_update: '#3B82F6',
     order_confirmed: '#10B981',
     order_preparing: '#F59E0B',
     order_ready: '#10B981',
     order_dispatched: '#3B82F6',
     order_delivered: '#10B981',
-    order_cancelled: '#EF4444',
+    order_cancelled: colors.error,
     payment_success: '#10B981',
-    payment_failed: '#EF4444',
+    payment_failed: colors.error,
     payment_pending: '#F59E0B',
     delivery_update: '#3B82F6',
-    delivery_partner_assigned: '#8B5CF6',
+    delivery_partner_assigned: colors.brand.purpleLight,
     delivery_partner_arrived: '#10B981',
     out_for_delivery: '#3B82F6',
     promotional: '#F59E0B',
     offer: '#EC4899',
     discount: '#F59E0B',
-    product_recommendation: '#8B5CF6',
+    product_recommendation: colors.brand.purpleLight,
     product_price_drop: '#10B981',
     product_back_in_stock: '#3B82F6',
     store_update: '#3B82F6',
     store_offer: '#F59E0B',
-    event_reminder: '#8B5CF6',
+    event_reminder: colors.brand.purpleLight,
     event_update: '#3B82F6',
     wallet_update: '#10B981',
     cashback_received: '#10B981',
     coins_earned: '#F59E0B',
     referral_reward: '#EC4899',
-    referral_joined: '#8B5CF6',
-    social_mention: '#8B5CF6',
+    referral_joined: colors.brand.purpleLight,
+    social_mention: colors.brand.purpleLight,
     social_like: '#EC4899',
     social_comment: '#3B82F6',
     review_request: '#F59E0B',
-    review_response: '#8B5CF6',
+    review_response: colors.brand.purpleLight,
     cart_reminder: '#F59E0B',
     cart_price_drop: '#10B981',
     wishlist_update: '#EC4899',
     wishlist_price_drop: '#10B981',
-    security_alert: '#EF4444',
+    security_alert: colors.error,
     login_alert: '#F59E0B',
     account_update: '#3B82F6',
     subscription_reminder: '#F59E0B',
     subscription_renewal: '#3B82F6',
   };
 
-  return colors[type] || '#6B7280';
+  return notifColors[type] || '#6B7280';
 }
 
 export default {

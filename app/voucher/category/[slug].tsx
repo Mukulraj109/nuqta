@@ -20,6 +20,7 @@ import { Brand } from '@/types/voucher.types';
 import realVouchersApi from '@/services/realVouchersApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -32,7 +33,7 @@ const COLORS = {
   primaryGlow: 'rgba(255, 205, 87, 0.3)',
 
   // Gold (rewards)
-  gold: '#FFC857',
+  gold: colors.brand.goldWarm,
   goldDark: Colors.warning,
   goldLight: 'rgba(255, 200, 87, 0.15)',
   goldGlow: 'rgba(255, 200, 87, 0.3)',
@@ -58,16 +59,16 @@ const COLORS = {
 
 // Category icon and color mapping - Updated with ReZ colors
 const CATEGORY_INFO: { [key: string]: { icon: string; gradient: string[]; bgColor: string } } = {
-  beauty: { icon: '💄', gradient: ['#EC4899', '#DB2777'], bgColor: 'rgba(236, 72, 153, 0.1)' },
-  electronics: { icon: '📱', gradient: ['#3B82F6', '#2563EB'], bgColor: 'rgba(59, 130, 246, 0.1)' },
-  entertainment: { icon: '🎬', gradient: ['#8B5CF6', '#7C3AED'], bgColor: 'rgba(139, 92, 246, 0.1)' },
-  fashion: { icon: '👗', gradient: ['#F472B6', '#EC4899'], bgColor: 'rgba(244, 114, 182, 0.1)' },
+  beauty: { icon: '💄', gradient: [colors.brand.pink, colors.deepPink], bgColor: 'rgba(236, 72, 153, 0.1)' },
+  electronics: { icon: '📱', gradient: [colors.infoScale[400], colors.brand.blue], bgColor: 'rgba(59, 130, 246, 0.1)' },
+  entertainment: { icon: '🎬', gradient: [colors.brand.purpleLight, colors.brand.purple], bgColor: 'rgba(139, 92, 246, 0.1)' },
+  fashion: { icon: '👗', gradient: ['#F472B6', colors.brand.pink], bgColor: 'rgba(244, 114, 182, 0.1)' },
   food: { icon: '🍔', gradient: [COLORS.primary, COLORS.primaryDark], bgColor: COLORS.primaryLight },
-  grocery: { icon: '🛒', gradient: ['#F59E0B', '#D97706'], bgColor: 'rgba(245, 158, 11, 0.1)' },
-  groceries: { icon: '🛒', gradient: ['#F59E0B', '#D97706'], bgColor: 'rgba(245, 158, 11, 0.1)' },
-  shopping: { icon: '🛍️', gradient: ['#EF4444', '#DC2626'], bgColor: 'rgba(239, 68, 68, 0.1)' },
-  travel: { icon: '✈️', gradient: ['#06B6D4', '#0891B2'], bgColor: 'rgba(6, 182, 212, 0.1)' },
-  sports: { icon: '⚽', gradient: ['#14B8A6', '#0D9488'], bgColor: 'rgba(20, 184, 166, 0.1)' },
+  grocery: { icon: '🛒', gradient: [colors.warningScale[400], colors.warningScale[700]], bgColor: 'rgba(245, 158, 11, 0.1)' },
+  groceries: { icon: '🛒', gradient: [colors.warningScale[400], colors.warningScale[700]], bgColor: 'rgba(245, 158, 11, 0.1)' },
+  shopping: { icon: '🛍️', gradient: [colors.error, colors.error], bgColor: 'rgba(239, 68, 68, 0.1)' },
+  travel: { icon: '✈️', gradient: [colors.brand.cyan, colors.cyanDark], bgColor: 'rgba(6, 182, 212, 0.1)' },
+  sports: { icon: '⚽', gradient: [colors.tealGreen, '#0D9488'], bgColor: 'rgba(20, 184, 166, 0.1)' },
 };
 
 export default function VoucherCategoryPage() {
@@ -138,7 +139,7 @@ export default function VoucherCategoryPage() {
         id: brand._id,
         name: brand.name,
         logo: brand.logo,
-        backgroundColor: brand.backgroundColor || '#F3F4F6',
+        backgroundColor: brand.backgroundColor || colors.neutral[100],
         logoColor: brand.logoColor,
         cashbackRate: brand.cashbackRate || 0,
         rating: brand.rating || 0,
@@ -258,7 +259,7 @@ export default function VoucherCategoryPage() {
           {/* Premium Logo Container */}
           <View style={styles.logoWrapper}>
             <LinearGradient
-              colors={[brand.backgroundColor || '#F3F4F6', (brand.backgroundColor || '#F3F4F6') + 'CC']}
+              colors={[brand.backgroundColor || colors.neutral[100], (brand.backgroundColor || colors.neutral[100]) + 'CC']}
               style={styles.brandLogo}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
@@ -377,7 +378,7 @@ export default function VoucherCategoryPage() {
 
       {/* Premium Gradient Background */}
       <LinearGradient
-        colors={['#E8F5E9', '#E0F2F1', '#F5F5F5', '#E8F5E9']}
+        colors={[colors.greenMist, '#E0F2F1', colors.tint.warmGray, colors.greenMist]}
         style={styles.backgroundGradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}

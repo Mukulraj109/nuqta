@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, Dimensions } from 'react-native';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -20,7 +21,7 @@ function ShimmerBar({ width: w, height, borderRadius = 8, style }: { width: numb
   return (
     <Animated.View
       style={[
-        { width: w as any, height, borderRadius, backgroundColor: '#E5E7EB', opacity },
+        { width: w as any, height, borderRadius, backgroundColor: colors.neutral[200], opacity },
         style,
       ]}
     />
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   cardSkeleton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,

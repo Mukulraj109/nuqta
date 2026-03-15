@@ -18,6 +18,7 @@ import { usePlayPageData } from '@/hooks/usePlayPageData';
 import { UGCVideoItem, PLAY_PAGE_COLORS } from '@/types/playPage.types';
 import ThumbnailVideoCard from '@/components/playPage/ThumbnailVideoCard';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
@@ -64,7 +65,7 @@ export default function ProductsVideosPage() {
     <View style={styles.container}>
       {/* Animated Header with Glassmorphism */}
       <LinearGradient
-        colors={['#8B5CF6', '#A855F7', '#C084FC']}
+        colors={[colors.brand.purpleLight, colors.brand.purpleMedium, '#C084FC']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.headerGradient}
@@ -169,7 +170,7 @@ export default function ProductsVideosPage() {
             <Ionicons
               name={category.icon as any}
               size={18}
-              color={selectedCategory === category.id ? '#FFF' : '#8B5CF6'}
+              color={selectedCategory === category.id ? colors.background.primary : colors.brand.purpleLight}
             />
             <ThemedText
               style={[
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
   headerGradient: {
     paddingTop: Platform.OS === 'ios' ? 60 : 40,
     paddingBottom: Spacing.lg,
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.lg,
     paddingHorizontal: Spacing.base,
     height: 50,
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
     gap: 6,
     borderWidth: 1.5,
     borderColor: 'rgba(139, 92, 246, 0.2)',
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
   },
   categoryPillActive: {
     backgroundColor: Colors.brand.purple,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 4,

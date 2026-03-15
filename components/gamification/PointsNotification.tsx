@@ -13,6 +13,7 @@ import {
   Pressable,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -89,9 +90,9 @@ function PointsNotification({ data, onDismiss }: PointsNotificationProps) {
 
   const isEarned = type === 'earned';
   const iconName = icon || (isEarned ? 'add-circle' : 'remove-circle');
-  const color = isEarned ? '#10B981' : '#EF4444';
-  const backgroundColor = isEarned ? '#ECFDF5' : '#FEF2F2';
-  const borderColor = isEarned ? '#10B981' : '#EF4444';
+  const color = isEarned ? colors.successScale[400] : colors.error;
+  const backgroundColor = isEarned ? colors.tint.greenLight : colors.errorScale[50];
+  const borderColor = isEarned ? colors.successScale[400] : colors.error;
   const prefix = isEarned ? '+' : '-';
 
   return (
@@ -112,7 +113,7 @@ function PointsNotification({ data, onDismiss }: PointsNotificationProps) {
        
       >
         <View style={[styles.iconContainer, { backgroundColor: color }]}>
-          <Ionicons name={iconName as any} size={24} color="#FFFFFF" />
+          <Ionicons name={iconName as any} size={24} color={colors.background.primary} />
         </View>
 
         <View style={styles.textContainer}>
@@ -128,7 +129,7 @@ function PointsNotification({ data, onDismiss }: PointsNotificationProps) {
         </View>
 
         <Pressable onPress={handleDismiss} style={styles.closeButton}>
-          <Ionicons name="close" size={20} color="#6B7280" />
+          <Ionicons name="close" size={20} color={colors.neutral[500]} />
         </Pressable>
       </Pressable>
 
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
   },
   reasonText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   closeButton: {

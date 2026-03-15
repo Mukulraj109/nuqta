@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface SuccessModalProps {
   visible: boolean;
@@ -50,7 +51,7 @@ function SuccessModal({
               {/* Success Icon */}
               <View style={styles.iconContainer}>
                 <View style={styles.iconCircle}>
-                  <Ionicons name="checkmark-circle" size={48} color="#10B981" />
+                  <Ionicons name="checkmark-circle" size={48} color={colors.successScale[400]} />
                 </View>
               </View>
 
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 24,
     width: '100%',
@@ -109,26 +110,26 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.gray[900],
     marginBottom: 8,
     textAlign: 'center',
   },
   message: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 24,
     lineHeight: 20,
   },
   button: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.success,
     paddingHorizontal: 32,
     paddingVertical: 12,
     borderRadius: 8,
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontSize: 16,
     fontWeight: '600',
   },

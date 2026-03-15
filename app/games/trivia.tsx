@@ -23,6 +23,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const nuqtaCoinImage = BRAND.COIN_IMAGE;
 
@@ -313,7 +314,7 @@ export default function TriviaPage() {
     <View style={styles.centerContent}>
       <View style={styles.gameIconContainer}>
         <LinearGradient
-          colors={['#FF6B6B', '#EF4444']}
+          colors={['#FF6B6B', colors.error]}
           style={styles.gameIconGradient}
         >
           <Text style={styles.gameIconText}>?</Text>
@@ -346,7 +347,7 @@ export default function TriviaPage() {
 
       <Pressable style={styles.startButton} onPress={startGame} disabled={loading}>
         <LinearGradient
-          colors={['#FF6B6B', '#EF4444']}
+          colors={['#FF6B6B', colors.error]}
           style={styles.startButtonGradient}
         >
           {loading ? (
@@ -488,7 +489,7 @@ export default function TriviaPage() {
         <View style={styles.actionButtons}>
           <Pressable style={styles.playAgainButton} onPress={startGame}>
             <LinearGradient
-              colors={['#FF6B6B', '#EF4444']}
+              colors={['#FF6B6B', colors.error]}
               style={styles.startButtonGradient}
             >
               <Ionicons name="refresh" size={20} color={Colors.text.inverse} />
@@ -643,7 +644,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-    shadowColor: '#EF4444',
+    shadowColor: colors.error,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -872,7 +873,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-    shadowColor: '#EF4444',
+    shadowColor: colors.error,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,

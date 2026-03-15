@@ -14,6 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -257,7 +258,7 @@ const BrandTasks = () => {
       case 'Easy':
         return { color: Colors.gold, bg: 'rgba(255, 205, 87, 0.1)', border: 'rgba(255, 205, 87, 0.3)' };
       case 'Medium':
-        return { color: '#F97316', bg: 'rgba(249, 115, 22, 0.1)', border: 'rgba(249, 115, 22, 0.3)' };
+        return { color: colors.brand.orange, bg: 'rgba(249, 115, 22, 0.1)', border: 'rgba(249, 115, 22, 0.3)' };
       case 'Hard':
         return { color: Colors.error, bg: 'rgba(239, 68, 68, 0.1)', border: 'rgba(239, 68, 68, 0.3)' };
       default:
@@ -266,7 +267,7 @@ const BrandTasks = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#000' : Colors.background.primary }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? colors.text.primary : Colors.background.primary }]}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={[styles.header, { backgroundColor: isDark ? 'rgba(0,0,0,0.95)' : 'rgba(255,255,255,0.95)' }]}>
@@ -307,14 +308,14 @@ const BrandTasks = () => {
           >
             <View style={styles.statsRow}>
               <View style={styles.statItem}>
-                <LinearGradient colors={[Colors.info, '#A855F7']} style={styles.statIconContainer}>
+                <LinearGradient colors={[Colors.info, colors.brand.purpleMedium]} style={styles.statIconContainer}>
                   <Ionicons name="checkmark-circle" size={24} color={Colors.text.inverse} />
                 </LinearGradient>
                 <Text style={[styles.statValue, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>{myStats.tasksCompleted}</Text>
                 <Text style={[styles.statLabel, { color: isDark ? Colors.text.tertiary : Colors.text.tertiary }]}>Completed</Text>
               </View>
               <View style={styles.statItem}>
-                <LinearGradient colors={['#A855F7', '#EC4899']} style={styles.statIconContainer}>
+                <LinearGradient colors={[colors.brand.purpleMedium, colors.brand.pink]} style={styles.statIconContainer}>
                   <Ionicons name="bag" size={24} color={Colors.text.inverse} />
                 </LinearGradient>
                 <Text style={[styles.statValue, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>{myStats.brandsPartnered}</Text>
@@ -397,8 +398,8 @@ const BrandTasks = () => {
                           )}
                           {task.premium && (
                             <View style={[styles.badge, { backgroundColor: 'rgba(168, 85, 247, 0.2)' }]}>
-                              <Ionicons name="ribbon" size={12} color={'#A855F7'} />
-                              <Text style={[styles.badgeText, { color: '#A855F7' }]}>Premium</Text>
+                              <Ionicons name="ribbon" size={12} color={colors.brand.purpleMedium} />
+                              <Text style={[styles.badgeText, { color: colors.brand.purpleMedium }]}>Premium</Text>
                             </View>
                           )}
                           {task.status === 'completed' && (
@@ -423,16 +424,16 @@ const BrandTasks = () => {
 
                     {/* Slots Info */}
                     {task.slots && (
-                      <View style={[styles.slotsContainer, { backgroundColor: isDark ? 'rgba(249, 115, 22, 0.1)' : '#FFF7ED', borderColor: isDark ? 'rgba(249, 115, 22, 0.3)' : '#FED7AA' }]}>
+                      <View style={[styles.slotsContainer, { backgroundColor: isDark ? 'rgba(249, 115, 22, 0.1)' : colors.tint.orange, borderColor: isDark ? 'rgba(249, 115, 22, 0.3)' : '#FED7AA' }]}>
                         <View style={styles.slotsHeader}>
                           <Text style={[styles.slotsLabel, { color: isDark ? '#FED7AA' : '#9A3412' }]}>Limited Slots</Text>
-                          <Text style={[styles.slotsValue, { color: isDark ? '#FB923C' : '#EA580C' }]}>
+                          <Text style={[styles.slotsValue, { color: isDark ? '#FB923C' : colors.brand.orangeDark }]}>
                             {task.slots.available}/{task.slots.total} left
                           </Text>
                         </View>
                         <View style={[styles.progressBar, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : Colors.border.default }]}>
                           <LinearGradient
-                            colors={['#F97316', '#EF4444']}
+                            colors={[colors.brand.orange, colors.error]}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 1, y: 0 }}
                             style={[styles.progressFill, { width: `${(task.slots.available / task.slots.total) * 100}%` }]}
@@ -453,9 +454,9 @@ const BrandTasks = () => {
                         </View>
                         {task.brandedReward > 0 && (
                           <View style={styles.rewardItem}>
-                            <Ionicons name="bag" size={20} color={'#A855F7'} />
+                            <Ionicons name="bag" size={20} color={colors.brand.purpleMedium} />
                             <View>
-                              <Text style={[styles.rewardValue, { color: '#A855F7' }]}>+{task.brandedReward}</Text>
+                              <Text style={[styles.rewardValue, { color: colors.brand.purpleMedium }]}>+{task.brandedReward}</Text>
                               <Text style={styles.rewardLabel}>{brand.brand} Coins</Text>
                             </View>
                           </View>
@@ -470,11 +471,11 @@ const BrandTasks = () => {
                             <Text style={[styles.actionButtonText, { color: isDark ? Colors.text.tertiary : Colors.text.tertiary }]}>✓ Done</Text>
                           </View>
                         ) : task.status === 'apply' ? (
-                          <LinearGradient colors={['#F97316', '#EF4444']} style={styles.actionButtonGradient}>
+                          <LinearGradient colors={[colors.brand.orange, colors.error]} style={styles.actionButtonGradient}>
                             <Text style={styles.actionButtonText}>Apply Now</Text>
                           </LinearGradient>
                         ) : (
-                          <LinearGradient colors={[Colors.info, '#A855F7']} style={styles.actionButtonGradient}>
+                          <LinearGradient colors={[Colors.info, colors.brand.purpleMedium]} style={styles.actionButtonGradient}>
                             <Text style={styles.actionButtonText}>Start Task</Text>
                           </LinearGradient>
                         )}
@@ -503,8 +504,8 @@ const BrandTasks = () => {
         {/* CTA Section */}
         <View style={styles.ctaSection}>
           <LinearGradient
-            colors={isDark ? ['rgba(59, 130, 246, 0.1)', 'rgba(168, 85, 247, 0.1)'] : [Colors.infoScale[50], '#F3E8FF']}
-            style={[styles.ctaCard, { borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : '#BFDBFE' }]}
+            colors={isDark ? ['rgba(59, 130, 246, 0.1)', 'rgba(168, 85, 247, 0.1)'] : [Colors.infoScale[50], colors.tint.pink]}
+            style={[styles.ctaCard, { borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : colors.infoScale[200] }]}
           >
             <Text style={[styles.ctaTitle, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>Earn from Your Favorite Brands</Text>
             <Text style={[styles.ctaText, { color: isDark ? Colors.text.tertiary : Colors.text.tertiary }]}>

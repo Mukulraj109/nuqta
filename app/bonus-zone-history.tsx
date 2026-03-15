@@ -13,17 +13,18 @@ import { Stack, useRouter } from 'expo-router';
 import bonusZoneApi, { BonusClaim } from '@/services/bonusZoneApi';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // ============================================
 // STATUS HELPERS
 // ============================================
 
 const STATUS_CONFIG: Record<BonusClaim['status'], { label: string; color: string; bg: string; icon: string }> = {
-  pending: { label: 'Pending', color: '#92400E', bg: '#FEF3C7', icon: 'time-outline' },
-  verified: { label: 'Verified', color: '#065F46', bg: '#D1FAE5', icon: 'checkmark-circle-outline' },
-  credited: { label: 'Credited', color: '#065F46', bg: '#D1FAE5', icon: 'checkmark-done-outline' },
-  rejected: { label: 'Rejected', color: '#991B1B', bg: '#FEE2E2', icon: 'close-circle-outline' },
-  expired: { label: 'Expired', color: '#4B5563', bg: '#F3F4F6', icon: 'hourglass-outline' },
+  pending: { label: 'Pending', color: colors.brand.amberDark, bg: colors.tint.amberLight, icon: 'time-outline' },
+  verified: { label: 'Verified', color: '#065F46', bg: colors.tint.green, icon: 'checkmark-circle-outline' },
+  credited: { label: 'Credited', color: '#065F46', bg: colors.tint.green, icon: 'checkmark-done-outline' },
+  rejected: { label: 'Rejected', color: '#991B1B', bg: colors.errorScale[100], icon: 'close-circle-outline' },
+  expired: { label: 'Expired', color: colors.neutral[600], bg: colors.neutral[100], icon: 'hourglass-outline' },
 };
 
 const FILTER_TABS: Array<{ key: string; label: string }> = [
@@ -210,12 +211,12 @@ export default function BonusZoneHistoryPage() {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.brand.orange} />
         }
       >
         {/* Header */}
         <View style={styles.header}>
-          <Ionicons name="receipt-outline" size={28} color="#F97316" />
+          <Ionicons name="receipt-outline" size={28} color={colors.brand.orange} />
           <Text style={styles.headerTitle}>Claim History</Text>
           <Text style={styles.headerSubtitle}>
             Track the status of your bonus zone claims
@@ -292,7 +293,7 @@ export default function BonusZoneHistoryPage() {
                 disabled={loadingMore}
               >
                 {loadingMore ? (
-                  <ActivityIndicator size="small" color="#F97316" />
+                  <ActivityIndicator size="small" color={colors.brand.orange} />
                 ) : (
                   <Text style={styles.loadMoreText}>Load More</Text>
                 )}
@@ -356,8 +357,8 @@ const styles = StyleSheet.create({
     marginRight: Spacing.sm,
   },
   filterTabActive: {
-    backgroundColor: '#FFF7ED',
-    borderColor: '#F97316',
+    backgroundColor: colors.tint.orange,
+    borderColor: colors.brand.orange,
   },
   filterTabText: {
     ...Typography.bodySmall,
@@ -366,7 +367,7 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
   filterTabTextActive: {
-    color: '#F97316',
+    color: colors.brand.orange,
   },
 
   // ---- Loading / Empty / Error ----
@@ -401,7 +402,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.base,
     paddingHorizontal: Spacing.lg,
     paddingVertical: 10,
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
     borderRadius: BorderRadius.sm,
   },
   retryButtonText: {
@@ -451,7 +452,7 @@ const styles = StyleSheet.create({
     ...Typography.body,
     fontSize: 15,
     fontWeight: '700',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   rewardAmountRejected: {
     color: Colors.text.tertiary,
@@ -516,6 +517,6 @@ const styles = StyleSheet.create({
   loadMoreText: {
     ...Typography.body,
     fontWeight: '600',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
 });

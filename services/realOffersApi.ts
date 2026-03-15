@@ -1,4 +1,5 @@
 import apiClient, { ApiResponse } from './apiClient';
+import { colors } from '@/constants/theme';
 
 const devLog = {
   log: __DEV__ ? console.log.bind(console) : () => {},
@@ -773,7 +774,7 @@ class RealOffersApi {
         priority: 2,
         usageLimit: 50,
         usedCount: 31,
-        badge: { text: '50% OFF', backgroundColor: '#FEE2E2', textColor: '#991B1B' }
+        badge: { text: '50% OFF', backgroundColor: colors.errorScale[100], textColor: '#991B1B' }
       },
       {
         id: 'deal-003',
@@ -860,7 +861,7 @@ class RealOffersApi {
         priority: 6,
         usageLimit: 300,
         usedCount: 156,
-        badge: { text: 'VIP 20%', backgroundColor: '#F3E8FF', textColor: '#7C3AED' }
+        badge: { text: 'VIP 20%', backgroundColor: '#F3E8FF', textColor: colors.brand.purple }
       },
       {
         id: 'deal-007',
@@ -882,7 +883,7 @@ class RealOffersApi {
         priority: 7,
         usageLimit: 100,
         usedCount: 67,
-        badge: { text: '60% OFF', backgroundColor: '#FEE2E2', textColor: '#991B1B' }
+        badge: { text: '60% OFF', backgroundColor: colors.errorScale[100], textColor: '#991B1B' }
       },
       {
         id: 'deal-008',
@@ -1145,7 +1146,7 @@ class RealOffersApi {
         priority: 19,
         usageLimit: 90,
         usedCount: 62,
-        badge: { text: 'Weekend 45%', backgroundColor: '#FEE2E2', textColor: '#7F1D1D' }
+        badge: { text: 'Weekend 45%', backgroundColor: colors.errorScale[100], textColor: '#7F1D1D' }
       },
       {
         id: 'deal-020',
@@ -1535,7 +1536,7 @@ class RealOffersApi {
       case '50':
         return { bg: '#FEF3C7', text: '#D97706', icon: '#F59E0B' };
       case '80':
-        return { bg: '#FEE2E2', text: '#DC2626', icon: '#EF4444' };
+        return { bg: colors.errorScale[100], text: '#DC2626', icon: colors.error };
       case 'free_delivery':
         return { bg: '#DBEAFE', text: '#2563EB', icon: '#3B82F6' };
       default:

@@ -19,6 +19,7 @@ import apiClient from '@/services/apiClient';
 import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const TABS = [
   { id: 'all', label: 'All Deals', icon: 'grid-outline' },
@@ -29,7 +30,7 @@ const TABS = [
 const BANK_GRADIENTS: Record<string, string[]> = {
   HDFC: ['#004C8F', '#002E5D'], SBI: ['#22336B', '#141D3B'],
   ICICI: ['#F58220', '#C15A00'], AXIS: ['#800020', '#5A0016'],
-  KOTAK: ['#ED232A', '#B01B20'], DEFAULT: ['#3B82F6', '#1D4ED8'],
+  KOTAK: ['#ED232A', '#B01B20'], DEFAULT: [colors.infoScale[400], '#1D4ED8'],
 };
 
 function getBankGradient(bankName: string): string[] {
@@ -291,26 +292,26 @@ export default function OffersIndexPage() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F5F5' },
+  container: { flex: 1, backgroundColor: colors.tint.warmGray },
   header: {
     flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12,
-    backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: '#E5E7EB', gap: 12,
+    backgroundColor: colors.background.primary, borderBottomWidth: 1, borderBottomColor: colors.neutral[200], gap: 12,
   },
   backBtn: { padding: 4 },
-  headerTitle: { fontSize: 18, fontWeight: '700', color: '#111827' },
-  headerSubtitle: { fontSize: 12, color: '#6B7280' },
-  tabsContainer: { backgroundColor: '#FFFFFF', paddingBottom: 8 },
+  headerTitle: { fontSize: 18, fontWeight: '700', color: colors.neutral[900] },
+  headerSubtitle: { fontSize: 12, color: colors.neutral[500] },
+  tabsContainer: { backgroundColor: colors.background.primary, paddingBottom: 8 },
   tabs: { paddingHorizontal: 16, gap: 8 },
   tab: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
     paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
-  tabActive: { backgroundColor: '#3B82F6' },
-  tabLabel: { fontSize: 13, fontWeight: '500', color: '#6B7280' },
-  tabLabelActive: { color: '#FFFFFF' },
+  tabActive: { backgroundColor: colors.infoScale[400] },
+  tabLabel: { fontSize: 13, fontWeight: '500', color: colors.neutral[500] },
+  tabLabelActive: { color: colors.background.primary },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { marginTop: 12, fontSize: 14, color: '#6B7280' },
+  loadingText: { marginTop: 12, fontSize: 14, color: colors.neutral[500] },
   listContent: { padding: 16, paddingBottom: 120 },
   dealsRow: { gap: 12 },
   // Bank offer styles
@@ -318,42 +319,42 @@ const styles = StyleSheet.create({
   bankGradient: { padding: 16 },
   bankContent: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   bankIcon: { fontSize: 32 },
-  bankName: { fontSize: 16, fontWeight: '700', color: '#FFFFFF', marginBottom: 4 },
-  bankDiscount: { fontSize: 14, fontWeight: '600', color: '#FFFFFF' },
+  bankName: { fontSize: 16, fontWeight: '700', color: colors.background.primary, marginBottom: 4 },
+  bankDiscount: { fontSize: 14, fontWeight: '600', color: colors.background.primary },
   bankMax: { fontSize: 11, color: 'rgba(255,255,255,0.7)', marginTop: 2 },
   bankMin: { fontSize: 11, color: 'rgba(255,255,255,0.7)', marginTop: 1 },
   bankPromoRow: { marginTop: 12, paddingTop: 10, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.2)' },
   bankPromoCode: { fontSize: 12, color: 'rgba(255,255,255,0.8)', fontWeight: '600' },
   // Deal styles
   dealCard: {
-    flex: 1, padding: 16, borderRadius: 16, backgroundColor: '#FFFFFF',
+    flex: 1, padding: 16, borderRadius: 16, backgroundColor: colors.background.primary,
     alignItems: 'center', marginBottom: 12,
   },
   dealIcon: { fontSize: 32, marginBottom: 8 },
-  dealTitle: { fontSize: 15, fontWeight: '600', color: '#111827', marginBottom: 4, textAlign: 'center' },
-  dealSubtitle: { fontSize: 12, color: '#6B7280', textAlign: 'center', marginBottom: 4 },
-  dealStore: { fontSize: 11, color: '#3B82F6', fontWeight: '500' },
-  dealValidity: { fontSize: 10, color: '#6B7280', marginTop: 4 },
+  dealTitle: { fontSize: 15, fontWeight: '600', color: colors.neutral[900], marginBottom: 4, textAlign: 'center' },
+  dealSubtitle: { fontSize: 12, color: colors.neutral[500], textAlign: 'center', marginBottom: 4 },
+  dealStore: { fontSize: 11, color: colors.infoScale[400], fontWeight: '500' },
+  dealValidity: { fontSize: 10, color: colors.neutral[500], marginTop: 4 },
   // Coupon styles
   couponCard: {
-    flexDirection: 'row', backgroundColor: '#FFFFFF', borderRadius: 12,
-    padding: 16, borderLeftWidth: 4, borderLeftColor: '#2563EB', marginBottom: 12,
+    flexDirection: 'row', backgroundColor: colors.background.primary, borderRadius: 12,
+    padding: 16, borderLeftWidth: 4, borderLeftColor: colors.brand.blue, marginBottom: 12,
   },
   couponLeft: { flex: 1 },
-  couponDiscount: { fontSize: 18, fontWeight: '700', color: '#2563EB', marginBottom: 4 },
-  couponTitle: { fontSize: 14, fontWeight: '600', color: '#111827', marginBottom: 2 },
-  couponDesc: { fontSize: 12, color: '#6B7280', marginBottom: 2 },
-  couponMin: { fontSize: 11, color: '#6B7280', marginBottom: 2 },
-  couponExpiry: { fontSize: 11, color: '#6B7280' },
+  couponDiscount: { fontSize: 18, fontWeight: '700', color: colors.brand.blue, marginBottom: 4 },
+  couponTitle: { fontSize: 14, fontWeight: '600', color: colors.neutral[900], marginBottom: 2 },
+  couponDesc: { fontSize: 12, color: colors.neutral[500], marginBottom: 2 },
+  couponMin: { fontSize: 11, color: colors.neutral[500], marginBottom: 2 },
+  couponExpiry: { fontSize: 11, color: colors.neutral[500] },
   couponRight: { alignItems: 'flex-end', justifyContent: 'center' },
   couponCodeBox: {
-    borderWidth: 1, borderColor: '#E5E7EB', borderStyle: 'dashed',
+    borderWidth: 1, borderColor: colors.neutral[200], borderStyle: 'dashed',
     borderRadius: 6, paddingHorizontal: 12, paddingVertical: 6, marginBottom: 8,
   },
-  couponCode: { fontSize: 12, fontWeight: '600', color: '#111827', letterSpacing: 1 },
-  copyBtn: { paddingHorizontal: 16, paddingVertical: 6, backgroundColor: '#2563EB', borderRadius: 6 },
-  copyBtnText: { fontSize: 11, fontWeight: '600', color: '#FFFFFF' },
+  couponCode: { fontSize: 12, fontWeight: '600', color: colors.neutral[900], letterSpacing: 1 },
+  copyBtn: { paddingHorizontal: 16, paddingVertical: 6, backgroundColor: colors.brand.blue, borderRadius: 6 },
+  copyBtnText: { fontSize: 11, fontWeight: '600', color: colors.background.primary },
   emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40, marginTop: 60 },
-  emptyTitle: { fontSize: 16, fontWeight: '600', color: '#111827', marginTop: 16 },
-  emptySubtitle: { fontSize: 13, color: '#6B7280', marginTop: 4 },
+  emptyTitle: { fontSize: 16, fontWeight: '600', color: colors.neutral[900], marginTop: 16 },
+  emptySubtitle: { fontSize: 13, color: colors.neutral[500], marginTop: 4 },
 });

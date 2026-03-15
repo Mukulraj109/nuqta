@@ -14,6 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { formatPrice } from '@/utils/priceFormatter';
 import { useRegion } from '@/contexts/RegionContext';
 import { triggerImpact } from '@/utils/haptics';
+import { colors } from '@/constants/theme';
 
 interface AddedToCartModalProps {
   visible: boolean;
@@ -96,10 +97,10 @@ function AddedToCartModal({
           <View style={styles.header}>
             <View style={styles.successIconContainer}>
               <LinearGradient
-                colors={['#10B981', '#059669']}
+                colors={[colors.successScale[400], colors.successScale[700]]}
                 style={styles.successIconGradient}
               >
-                <Ionicons name="checkmark-circle" size={28} color="#FFFFFF" />
+                <Ionicons name="checkmark-circle" size={28} color={colors.background.primary} />
               </LinearGradient>
             </View>
             <View style={styles.headerTextContainer}>
@@ -116,7 +117,7 @@ function AddedToCartModal({
               accessibilityRole="button"
               accessibilityHint="Double tap to close this dialog"
             >
-              <Ionicons name="close" size={24} color="#6B7280" />
+              <Ionicons name="close" size={24} color={colors.neutral[500]} />
             </Pressable>
           </View>
 
@@ -151,7 +152,7 @@ function AddedToCartModal({
               </Text>
             </View>
             <View style={styles.deliveryInfo}>
-              <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
               <Text style={styles.deliveryText}>
                 Eligible for FREE delivery
               </Text>
@@ -172,12 +173,12 @@ function AddedToCartModal({
               accessibilityHint="Double tap to view your shopping cart"
             >
               <LinearGradient
-                colors={['#8B5CF6', '#7C3AED']}
+                colors={[colors.brand.purpleLight, colors.brand.purple]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.viewCartGradient}
               >
-                <Ionicons name="cart" size={20} color="#FFFFFF" />
+                <Ionicons name="cart" size={20} color={colors.background.primary} />
                 <Text style={styles.viewCartText}>View Cart</Text>
               </LinearGradient>
             </Pressable>
@@ -196,7 +197,7 @@ function AddedToCartModal({
 
           {/* Related Products Suggestion */}
           <View style={styles.suggestionContainer}>
-            <Ionicons name="gift-outline" size={18} color="#8B5CF6" />
+            <Ionicons name="gift-outline" size={18} color={colors.brand.purpleLight} />
             <Text style={styles.suggestionText}>
               Frequently bought together items available
             </Text>
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingBottom: 34,
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   successIconContainer: {
     marginRight: 12,
@@ -255,19 +256,19 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 2,
   },
   headerSubtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   closeButton: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -276,13 +277,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   productImageContainer: {
     width: 80,
     height: 80,
     borderRadius: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     overflow: 'hidden',
     marginRight: 16,
   },
@@ -297,25 +298,25 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 6,
     lineHeight: 20,
   },
   productPrice: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     marginBottom: 4,
   },
   productQuantity: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   summaryContainer: {
     paddingHorizontal: 20,
     paddingVertical: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     marginHorizontal: 20,
     marginTop: 16,
     borderRadius: 12,
@@ -329,12 +330,12 @@ const styles = StyleSheet.create({
   summaryLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#4B5563',
+    color: colors.neutral[600],
   },
   summaryValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   deliveryInfo: {
     flexDirection: 'row',
@@ -343,7 +344,7 @@ const styles = StyleSheet.create({
   },
   deliveryText: {
     fontSize: 13,
-    color: '#10B981',
+    color: colors.successScale[400],
     fontWeight: '600',
   },
   actionsContainer: {
@@ -354,7 +355,7 @@ const styles = StyleSheet.create({
   viewCartButton: {
     borderRadius: 14,
     overflow: 'hidden',
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -373,11 +374,11 @@ const styles = StyleSheet.create({
   viewCartText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.3,
   },
   continueButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
@@ -385,7 +386,7 @@ const styles = StyleSheet.create({
   continueText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#4B5563',
+    color: colors.neutral[600],
     letterSpacing: 0.2,
   },
   suggestionContainer: {
@@ -398,7 +399,7 @@ const styles = StyleSheet.create({
   },
   suggestionText: {
     fontSize: 13,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '500',
   },
 });

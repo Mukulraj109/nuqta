@@ -7,6 +7,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 function NotificationRow() {
   return (
@@ -37,7 +38,7 @@ export default function NotificationListSkeleton({ count = 10 }: { count?: numbe
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 16,
     paddingTop: 16,
   },
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   textContainer: {
     flex: 1,

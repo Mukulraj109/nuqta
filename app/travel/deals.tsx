@@ -2,6 +2,7 @@
  * Hot Deals Page - All featured travel deals
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -30,7 +31,7 @@ const COLORS = {
   gray200: Colors.border.default,
   gray600: Colors.text.tertiary,
   green500: Colors.success,
-  cyan500: '#06B6D4',
+  cyan500: colors.brand.cyan,
   amber500: Colors.warning,
 };
 
@@ -97,7 +98,7 @@ const HotDealsPage: React.FC = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#06B6D4', '#0891B2']}
+        colors={[colors.brand.cyan, colors.cyanDark]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}

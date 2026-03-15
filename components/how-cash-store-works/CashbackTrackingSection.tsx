@@ -12,6 +12,7 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 const TRACKING_STAGES = [
   {
@@ -59,15 +60,15 @@ const TRACKING_STAGES = [
 const getStatusColor = (status: string) => {
   switch (status) {
     case 'active':
-      return '#3B82F6';
+      return colors.infoScale[400];
     case 'pending':
-      return '#F59E0B';
+      return colors.warningScale[400];
     case 'confirmed':
-      return '#10B981';
+      return colors.successScale[400];
     case 'completed':
-      return '#00C06A';
+      return colors.brand.green;
     default:
-      return '#6B7280';
+      return colors.neutral[500];
   }
 };
 
@@ -82,7 +83,7 @@ const TrackingStage: React.FC<{
       {/* Timeline */}
       <View style={styles.timeline}>
         <View style={[styles.dot, { backgroundColor: color }]}>
-          <Ionicons name={stage.icon as any} size={16} color="#FFFFFF" />
+          <Ionicons name={stage.icon as any} size={16} color={colors.background.primary} />
         </View>
         {!isLast && <View style={[styles.line, { backgroundColor: `${color}30` }]} />}
       </View>
@@ -107,7 +108,7 @@ const CashbackTrackingSection: React.FC = () => {
       {/* Section Header */}
       <View style={styles.header}>
         <View style={styles.headerIcon}>
-          <Ionicons name="analytics" size={24} color="#3B82F6" />
+          <Ionicons name="analytics" size={24} color={colors.infoScale[400]} />
         </View>
         <Text style={styles.headerTitle}>Cashback Tracking</Text>
         <Text style={styles.headerSubtitle}>
@@ -129,7 +130,7 @@ const CashbackTrackingSection: React.FC = () => {
       {/* Info Box */}
       <View style={styles.infoBox}>
         <View style={styles.infoIconContainer}>
-          <Ionicons name="information-circle" size={20} color="#3B82F6" />
+          <Ionicons name="information-circle" size={20} color={colors.infoScale[400]} />
         </View>
         <View style={styles.infoContent}>
           <Text style={styles.infoTitle}>Important Note</Text>
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 24,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginTop: 8,
   },
   header: {
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -165,12 +166,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 6,
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   timelineContainer: {
     marginBottom: 20,
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
   stageTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   timeBadge: {
     paddingHorizontal: 8,
@@ -222,16 +223,16 @@ const styles = StyleSheet.create({
   },
   stageDescription: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 20,
   },
   infoBox: {
     flexDirection: 'row',
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: colors.infoScale[200],
   },
   infoIconContainer: {
     marginRight: 12,
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 13,
-    color: '#3B82F6',
+    color: colors.infoScale[400],
     lineHeight: 20,
   },
 });

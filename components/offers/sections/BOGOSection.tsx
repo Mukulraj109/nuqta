@@ -15,14 +15,15 @@ import { useRegion } from '@/contexts/RegionContext';
 import { SectionHeader, HorizontalScrollSection } from '../common';
 import { BOGOOffer } from '@/types/offers.types';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // New Color Palette
 const PALETTE = {
-  nileBlue: '#1a3a52',
-  lightMustard: '#ffcd57',
-  linen: '#faf1e0',
-  lightPeach: '#ffd7b5',
-  lavenderMist: '#dfebf7',
+  nileBlue: colors.nileBlue,
+  lightMustard: colors.lightMustard,
+  linen: colors.linen,
+  lightPeach: colors.lightPeach,
+  lavenderMist: colors.lavenderMist,
 };
 
 interface BOGOSectionProps {
@@ -64,7 +65,7 @@ export const BOGOSection: React.FC<BOGOSectionProps> = ({
     },
     card: {
       width: 170,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 1.5,
       borderColor: isDark ? 'rgba(26, 58, 82, 0.3)' : PALETTE.lavenderMist,
@@ -79,7 +80,7 @@ export const BOGOSection: React.FC<BOGOSectionProps> = ({
     bogoText: {
       fontSize: 11,
       fontWeight: '800',
-      color: '#FFFFFF',
+      color: colors.background.primary,
       letterSpacing: 0.5,
     },
     imageContainer: {
@@ -98,9 +99,9 @@ export const BOGOSection: React.FC<BOGOSectionProps> = ({
       width: 28,
       height: 28,
       borderRadius: 7,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.background.primary,
       borderWidth: 2,
-      borderColor: '#FFFFFF',
+      borderColor: colors.background.primary,
       overflow: 'hidden',
       ...Shadows.subtle,
       alignItems: 'center',
@@ -118,7 +119,7 @@ export const BOGOSection: React.FC<BOGOSectionProps> = ({
       justifyContent: 'center',
     },
     storeLogoText: {
-      color: '#FFFFFF',
+      color: colors.background.primary,
       fontSize: 12,
       fontWeight: '700',
     },

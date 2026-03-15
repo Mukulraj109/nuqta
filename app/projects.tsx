@@ -22,6 +22,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface Project {
   _id: string;
@@ -107,13 +108,13 @@ export default function AllProjectsPage() {
   const cardAnims = useRef<{ [key: string]: Animated.Value }>({}).current;
 
   const categories = [
-    { label: 'All', value: null, icon: 'grid', gradient: ['#8B5CF6', '#A855F7'] },
-    { label: 'Review', value: 'review', icon: 'star', gradient: ['#F59E0B', '#F97316'] },
-    { label: 'Social Share', value: 'social_share', icon: 'share-social', gradient: ['#3B82F6', '#6366F1'] },
-    { label: 'UGC Content', value: 'ugc_content', icon: 'videocam', gradient: ['#EC4899', '#F472B6'] },
+    { label: 'All', value: null, icon: 'grid', gradient: [colors.brand.purpleLight, colors.brand.purpleMedium] },
+    { label: 'Review', value: 'review', icon: 'star', gradient: [colors.warningScale[400], colors.brand.orange] },
+    { label: 'Social Share', value: 'social_share', icon: 'share-social', gradient: [colors.infoScale[400], colors.brand.indigo] },
+    { label: 'UGC Content', value: 'ugc_content', icon: 'videocam', gradient: [colors.brand.pink, '#F472B6'] },
     { label: 'Store Visit', value: 'store_visit', icon: 'storefront', gradient: [Colors.gold, Colors.nileBlue] },
     { label: 'Survey', value: 'survey', icon: 'clipboard', gradient: [Colors.nileBlue, Colors.nileBlue] },
-    { label: 'Photo', value: 'photo', icon: 'camera', gradient: [Colors.warning, '#EA580C'] },
+    { label: 'Photo', value: 'photo', icon: 'camera', gradient: [Colors.warning, colors.brand.orangeDark] },
     { label: 'Video', value: 'video', icon: 'film', gradient: [Colors.error, Colors.error] },
   ];
 
@@ -333,7 +334,7 @@ export default function AllProjectsPage() {
 
   const getCategoryGradient = (category: string) => {
     const cat = categories.find(c => c.value === category);
-    return cat?.gradient || ['#8B5CF6', '#A855F7'];
+    return cat?.gradient || [colors.brand.purpleLight, colors.brand.purpleMedium];
   };
 
   // Project Card Component
@@ -391,7 +392,7 @@ export default function AllProjectsPage() {
          
         >
           <LinearGradient
-            colors={['#FFFFFF', '#FAFBFC']}
+            colors={[colors.background.primary, '#FAFBFC']}
             style={styles.cardGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -404,7 +405,7 @@ export default function AllProjectsPage() {
             {project.isFeatured && (
               <View style={styles.featuredBadgeContainer}>
                 <LinearGradient
-                  colors={['#F59E0B', '#D97706']}
+                  colors={[colors.warningScale[400], colors.warningScale[700]]}
                   style={styles.featuredBadge}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
@@ -458,7 +459,7 @@ export default function AllProjectsPage() {
             {/* Card Footer */}
             <View style={styles.cardFooter}>
               <LinearGradient
-                colors={['#ffcd57', '#1a3a52']}
+                colors={[colors.lightMustard, colors.nileBlue]}
                 style={styles.rewardContainer}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
@@ -490,7 +491,7 @@ export default function AllProjectsPage() {
                 {project.tags.slice(0, 3).map((tag, tagIndex) => (
                   <LinearGradient
                     key={tagIndex}
-                    colors={['#EEF2FF', '#E0E7FF']}
+                    colors={[colors.indigoMist, '#E0E7FF']}
                     style={styles.tag}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
@@ -524,7 +525,7 @@ export default function AllProjectsPage() {
       >
         {/* Modern Header with Gradient */}
         <LinearGradient
-          colors={['#8B5CF6', '#7C3AED', '#6D28D9']}
+          colors={[colors.brand.purpleLight, colors.brand.purple, colors.brand.purpleDeep]}
           style={styles.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -556,7 +557,7 @@ export default function AllProjectsPage() {
             ]}
           >
             <LinearGradient
-              colors={['#FFFFFF', '#F9FAFB']}
+              colors={[colors.background.primary, colors.neutral[50]]}
               style={styles.searchBar}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
@@ -567,7 +568,7 @@ export default function AllProjectsPage() {
               <TextInput
                 style={styles.searchInput}
                 placeholder="Search projects..."
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 onSubmitEditing={handleSearch}
@@ -685,7 +686,7 @@ export default function AllProjectsPage() {
              
             >
               <LinearGradient
-                colors={['#F3F4F6', '#E5E7EB']}
+                colors={[colors.neutral[100], colors.neutral[200]]}
                 style={styles.sortButtonGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -705,7 +706,7 @@ export default function AllProjectsPage() {
         ) : error ? (
           <View style={styles.centerContainer}>
             <LinearGradient
-              colors={['#FEE2E2', '#FECACA']}
+              colors={[colors.errorScale[100], colors.errorScale[200]]}
               style={styles.errorIconContainer}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
@@ -718,7 +719,7 @@ export default function AllProjectsPage() {
               onPress={() => loadProjects(1, true)}
             >
               <LinearGradient
-                colors={['#7C3AED', '#6D28D9']}
+                colors={[colors.brand.purple, colors.brand.purpleDeep]}
                 style={styles.retryButtonGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -730,7 +731,7 @@ export default function AllProjectsPage() {
         ) : projects.length === 0 ? (
           <View style={styles.centerContainer}>
             <LinearGradient
-              colors={['#EEF2FF', '#E0E7FF']}
+              colors={[colors.indigoMist, '#E0E7FF']}
               style={styles.emptyIconContainer}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
@@ -747,7 +748,7 @@ export default function AllProjectsPage() {
             style={styles.projectsList}
             showsVerticalScrollIndicator={false}
             refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor="#7C3AED" />
+              <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={colors.brand.purple} />
             }
             onScroll={({ nativeEvent }) => {
               const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;

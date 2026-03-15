@@ -24,6 +24,7 @@ import eventsApiService from '@/services/eventsApi';
 import { EventItem } from '@/types/homepage.types';
 import { EVENT_COLORS } from '@/constants/EventColors';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -556,7 +557,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: COLORS.errorLight || '#FEE2E2',
+    backgroundColor: COLORS.errorLight || colors.errorScale[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,

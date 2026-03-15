@@ -36,6 +36,7 @@ import stripeApi from "@/services/stripeApi";
 import eventAnalytics from "@/services/eventAnalytics";
 import { getCategoryTheme, CategoryTheme, DEFAULT_THEME } from "@/constants/categoryThemes";
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 // Conditional import for native Stripe service
 let stripeReactNativeService: any = null;
 if (Platform.OS !== 'web') {
@@ -624,12 +625,12 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
         <SafeAreaView style={{ backgroundColor: "#000000" }} />
         <View style={styles.notFoundContainer}>
           <LinearGradient
-            colors={['#1F2937', '#111827']}
+            colors={[colors.neutral[800], colors.neutral[900]]}
             style={styles.notFoundGradient}
           >
             <View style={styles.notFoundContent}>
               <View style={styles.notFoundIconContainer}>
-                <Ionicons name="calendar-outline" size={80} color="#6B7280" />
+                <Ionicons name="calendar-outline" size={80} color={colors.neutral[500]} />
                 <View style={styles.notFoundIconBadge}>
                   <Ionicons name="close" size={24} color={Colors.error} />
                 </View>
@@ -644,7 +645,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
                   onPress={() => router.back()}
                  
                 >
-                  <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
+                  <Ionicons name="arrow-back" size={20} color={colors.background.primary} />
                   <Text style={styles.notFoundBackText}>Go Back</Text>
                 </Pressable>
                 <Pressable
@@ -711,7 +712,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
             }}
            
           >
-            <Ionicons name="refresh" size={18} color="#FFFFFF" style={{ marginRight: 8 }} />
+            <Ionicons name="refresh" size={18} color={colors.background.primary} style={{ marginRight: 8 }} />
             <Text style={styles.retryButtonText}>
               {retryCount > 0 ? `Retry (${retryCount}/${MAX_RETRIES})` : 'Retry'}
             </Text>
@@ -757,12 +758,12 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
             {/* Header */}
             <View style={styles.header}>
               <Pressable style={styles.backButton} onPress={handleBackPress}>
-                <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
+                <Ionicons name="chevron-back" size={24} color={colors.background.primary} />
               </Pressable>
 
               <View style={styles.headerActions}>
                 <Pressable style={styles.actionButton} onPress={handleSharePress}>
-                  <Ionicons name="share-outline" size={20} color="#FFFFFF" />
+                  <Ionicons name="share-outline" size={20} color={colors.background.primary} />
                 </Pressable>
                 <Pressable
                   style={styles.actionButton}
@@ -770,7 +771,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
                   disabled={isLoadingFavorite}
                 >
                   {isLoadingFavorite ? (
-                    <ActivityIndicator size="small" color="#FFFFFF" />
+                    <ActivityIndicator size="small" color={colors.background.primary} />
                   ) : (
                     <Ionicons
                       name={isFavorited ? "heart" : "heart-outline"}
@@ -785,7 +786,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
             {/* Event Info */}
             <View style={styles.heroContent}>
               <View style={[styles.categoryBadge, { backgroundColor: categoryTheme.badgeBackground }]}>
-                <Ionicons name={categoryTheme.icon as any} size={14} color="#FFFFFF" style={{ marginRight: 6 }} />
+                <Ionicons name={categoryTheme.icon as any} size={14} color={colors.background.primary} style={{ marginRight: 6 }} />
                 <Text style={styles.categoryText}>{eventDetails.category}</Text>
               </View>
 
@@ -794,18 +795,18 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
 
               <View style={styles.heroMeta}>
                 <View style={styles.heroMetaItem}>
-                  <Ionicons name="calendar-outline" size={16} color="#FFFFFF" />
+                  <Ionicons name="calendar-outline" size={16} color={colors.background.primary} />
                   <Text style={styles.heroMetaText}>{eventDetails.date}</Text>
                 </View>
                 <View style={styles.heroMetaItem}>
-                  <Ionicons name="time-outline" size={16} color="#FFFFFF" />
+                  <Ionicons name="time-outline" size={16} color={colors.background.primary} />
                   <Text style={styles.heroMetaText}>{eventDetails.time}</Text>
                 </View>
                 <View style={styles.heroMetaItem}>
                   <Ionicons
                     name={eventDetails.isOnline ? "globe-outline" : "location-outline"}
                     size={16}
-                    color="#FFFFFF"
+                    color={colors.background.primary}
                   />
                   <Text style={styles.heroMetaText}>{eventDetails.location}</Text>
                 </View>
@@ -828,7 +829,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
             >
               <View style={styles.heroContent}>
                 <View style={[styles.categoryBadge, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
-                  <Ionicons name={categoryTheme.icon as any} size={14} color="#FFFFFF" style={{ marginRight: 6 }} />
+                  <Ionicons name={categoryTheme.icon as any} size={14} color={colors.background.primary} style={{ marginRight: 6 }} />
                   <Text style={styles.categoryText}>{eventDetails.category}</Text>
                 </View>
                 <Text style={styles.heroTitle}>{eventDetails.title}</Text>
@@ -909,7 +910,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Earn Coins</Text>
             <View style={{
-              backgroundColor: '#F5F3FF',
+              backgroundColor: colors.tint.purpleLight,
               borderRadius: BorderRadius.lg,
               padding: Spacing.base,
               borderWidth: 1,
@@ -949,7 +950,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
                     size={18}
                     color={Colors.brand.purpleLight}
                   />
-                  <Text style={{ flex: 1, marginLeft: 10, ...Typography.body, color: '#374151' }}>
+                  <Text style={{ flex: 1, marginLeft: 10, ...Typography.body, color: colors.neutral[700] }}>
                     {reward.description || reward.action.replace(/_/g, ' ')}
                   </Text>
                   <View style={{
@@ -1027,10 +1028,10 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
                       backgroundColor: Colors.border.default, justifyContent: 'center', alignItems: 'center',
                       marginBottom: Spacing.sm,
                     }}>
-                      <Ionicons name="business-outline" size={20} color="#9CA3AF" />
+                      <Ionicons name="business-outline" size={20} color={colors.neutral[400]} />
                     </View>
                   )}
-                  <Text style={{ ...Typography.bodySmall, fontWeight: '600', color: '#374151', textAlign: 'center' }}>
+                  <Text style={{ ...Typography.bodySmall, fontWeight: '600', color: colors.neutral[700], textAlign: 'center' }}>
                     {sponsor.name}
                   </Text>
                 </View>
@@ -1096,7 +1097,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
               </View>
             ) : (
               <View style={styles.emptySlotsContainer}>
-                <Ionicons name="time-outline" size={48} color="#9CA3AF" />
+                <Ionicons name="time-outline" size={48} color={colors.neutral[400]} />
                 <Text style={styles.emptySlotsText}>No time slots available</Text>
                 <Text style={styles.emptySlotsSubtext}>Please check back later or contact the organizer</Text>
               </View>
@@ -1126,7 +1127,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
           <View style={styles.detailsList}>
             <View style={styles.detailItem}>
               <View style={styles.detailIcon}>
-                <Ionicons name="person-outline" size={20} color="#6B7280" />
+                <Ionicons name="person-outline" size={20} color={colors.neutral[500]} />
               </View>
               <View style={styles.detailContent}>
                 <Text style={styles.detailLabel}>Organizer</Text>
@@ -1136,7 +1137,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
 
             <View style={styles.detailItem}>
               <View style={styles.detailIcon}>
-                <Ionicons name="calendar-outline" size={20} color="#6B7280" />
+                <Ionicons name="calendar-outline" size={20} color={colors.neutral[500]} />
               </View>
               <View style={styles.detailContent}>
                 <Text style={styles.detailLabel}>Date & Time</Text>
@@ -1151,7 +1152,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
                 <Ionicons
                   name={eventDetails.isOnline ? "globe-outline" : "location-outline"}
                   size={20}
-                  color="#6B7280"
+                  color={colors.neutral[500]}
                 />
               </View>
               <View style={styles.detailContent}>
@@ -1162,7 +1163,7 @@ export default function EventPage({ eventId, initialEvent }: EventPageProps = {}
 
             <View style={styles.detailItem}>
               <View style={styles.detailIcon}>
-                <Ionicons name="pricetag-outline" size={20} color="#6B7280" />
+                <Ionicons name="pricetag-outline" size={20} color={colors.neutral[500]} />
               </View>
               <View style={styles.detailContent}>
                 <Text style={styles.detailLabel}>Category</Text>
@@ -1295,9 +1296,9 @@ function EventActionButton({
         end={{ x: 1, y: 0 }}
       >
         {loading ? (
-          <ActivityIndicator size="small" color="#FFFFFF" style={{ marginRight: 8 }} />
+          <ActivityIndicator size="small" color={colors.background.primary} style={{ marginRight: 8 }} />
         ) : (
-          <Ionicons name={getButtonIcon() as any} size={20} color="#FFFFFF" style={{ marginRight: 8 }} />
+          <Ionicons name={getButtonIcon() as any} size={20} color={colors.background.primary} style={{ marginRight: 8 }} />
         )}
         <Text style={actionStyles.buttonText}>{getButtonText()}</Text>
       </LinearGradient>
@@ -1320,7 +1321,7 @@ const createStyles = (
       height: Math.min(Math.max(screenData.height * 0.4, 320), 460),
       position: "relative",
       width: "100%",
-      backgroundColor: "#000",
+      backgroundColor: colors.text.primary,
     },
     heroBackground: {
       flex: 1,
@@ -1465,7 +1466,7 @@ const createStyles = (
     ratingText: {
       fontSize: 13,
       fontWeight: "600",
-      color: "#92400E",
+      color: colors.brand.amberDark,
     },
     eventTypeBadge: {
       flexDirection: "row",
@@ -1499,7 +1500,7 @@ const createStyles = (
     },
     description: {
       ...Typography.bodyLarge,
-      color: "#374151",
+      color: colors.neutral[700],
       lineHeight: 24,
       fontWeight: "400",
     },
@@ -1517,7 +1518,7 @@ const createStyles = (
     },
     slotCardSelected: {
       borderColor: Colors.brand.purpleLight,
-      backgroundColor: "#F8FAFC",
+      backgroundColor: colors.tint.coolGray,
     },
     slotCardDisabled: {
       backgroundColor: Colors.background.secondary,
@@ -1765,7 +1766,7 @@ const createStyles = (
     notFoundBackButton: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#374151',
+      backgroundColor: colors.neutral[700],
       paddingHorizontal: Spacing.lg,
       paddingVertical: 14,
       borderRadius: BorderRadius.md,

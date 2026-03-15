@@ -19,6 +19,7 @@ import { CreateReviewData, Review } from '@/types/review.types';
 import reviewService from '@/services/reviewApi';
 import SuccessModal from '@/components/common/SuccessModal';
 import ErrorModal from '@/components/common/ErrorModal';
+import { colors } from '@/constants/theme';
 
 interface ReviewFormProps {
   storeId: string;
@@ -222,7 +223,7 @@ function ReviewForm({
           <TextInput
             style={styles.titleInput}
             placeholder="Summarize your experience"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={title}
             onChangeText={setTitle}
             maxLength={100}
@@ -243,7 +244,7 @@ function ReviewForm({
           <TextInput
             style={styles.commentInput}
             placeholder="Tell us about your experience (minimum 10 characters)"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={comment}
             onChangeText={setComment}
             multiline
@@ -278,7 +279,7 @@ function ReviewForm({
                   onPress={() => handleImageRemove(index)}
                  
                 >
-                  <Ionicons name="close-circle" size={24} color="#EF4444" />
+                  <Ionicons name="close-circle" size={24} color={colors.error} />
                 </Pressable>
               </View>
             ))}
@@ -292,10 +293,10 @@ function ReviewForm({
                
               >
                 {isUploadingImage ? (
-                  <ActivityIndicator size="small" color="#8B5CF6" />
+                  <ActivityIndicator size="small" color={colors.brand.purpleLight} />
                 ) : (
                   <>
-                    <Ionicons name="camera-outline" size={32} color="#8B5CF6" />
+                    <Ionicons name="camera-outline" size={32} color={colors.brand.purpleLight} />
                     <ThemedText style={styles.addImageText}>Add Photo</ThemedText>
                   </>
                 )}
@@ -345,7 +346,7 @@ function ReviewForm({
          
         >
           {isSubmitting ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={colors.background.primary} />
           ) : (
             <ThemedText style={styles.submitButtonText}>
               {isEdit ? 'Update Review' : 'Submit Review'}
@@ -377,7 +378,7 @@ function ReviewForm({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   scrollContent: {
     padding: 16,
@@ -389,12 +390,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   section: {
     marginBottom: 24,
@@ -402,14 +403,14 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   required: {
-    color: '#EF4444',
+    color: colors.error,
   },
   ratingSelector: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     borderRadius: 12,
     alignItems: 'center',
@@ -417,37 +418,37 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   titleInput: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     borderRadius: 12,
     fontSize: 14,
-    color: '#111827',
+    color: colors.neutral[900],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   commentInput: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     borderRadius: 12,
     fontSize: 14,
-    color: '#111827',
+    color: colors.neutral[900],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     minHeight: 150,
   },
   charCount: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'right',
     marginTop: 4,
   },
   errorText: {
     fontSize: 12,
-    color: '#EF4444',
+    color: colors.error,
     marginTop: 4,
   },
   imagesContainer: {
@@ -466,7 +467,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -8,
     right: -8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
   },
   addImageButton: {
@@ -475,8 +476,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 2,
     borderStyle: 'dashed',
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F5F3FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.purpleLight,
     justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
@@ -486,16 +487,16 @@ const styles = StyleSheet.create({
   },
   addImageText: {
     fontSize: 12,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
   },
   helperText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 8,
   },
   guidelinesContainer: {
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
     padding: 16,
     borderRadius: 12,
     gap: 8,
@@ -508,7 +509,7 @@ const styles = StyleSheet.create({
   },
   guidelineText: {
     fontSize: 12,
-    color: '#6366F1',
+    color: colors.brand.indigo,
     lineHeight: 18,
   },
   actionsContainer: {
@@ -519,9 +520,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.05,
@@ -533,20 +534,20 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     alignItems: 'center',
     justifyContent: 'center',
   },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   submitButton: {
     flex: 2,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -556,7 +557,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

@@ -13,6 +13,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface DealInsight {
   icon: string;
@@ -43,12 +44,12 @@ export const WhyGoodDealSection: React.FC<WhyGoodDealSectionProps> = ({
   const defaultInsights: DealInsight[] = [
     {
       icon: 'bulb',
-      iconColor: '#F59E0B',
+      iconColor: colors.warningScale[400],
       text: `This product is usually bought on weekends — locking now saves ${currencySymbol}${savingsAmount}`,
     },
     {
       icon: 'flame',
-      iconColor: '#EF4444',
+      iconColor: colors.error,
       text: 'High demand item — price may change later',
     },
   ];
@@ -60,7 +61,7 @@ export const WhyGoodDealSection: React.FC<WhyGoodDealSectionProps> = ({
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerIcon}>
-          <Ionicons name="thumbs-up" size={22} color="#7C3AED" />
+          <Ionicons name="thumbs-up" size={22} color={colors.brand.purple} />
         </View>
         <Text style={styles.headerTitle}>Why this is a good deal</Text>
       </View>
@@ -86,13 +87,13 @@ export const WhyGoodDealSection: React.FC<WhyGoodDealSectionProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 16,
     marginVertical: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   // Insights List
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   insightText: {
     flex: 1,
     fontSize: 13,
-    color: '#4B5563',
+    color: colors.neutral[600],
     lineHeight: 20,
     fontWeight: '500',
   },

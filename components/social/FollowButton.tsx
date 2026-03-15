@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Pressable, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { checkFollowStatus, toggleFollow } from '../../services/activityFeedApi';
+import { colors } from '@/constants/theme';
 
 interface FollowButtonProps {
   userId: string;
@@ -53,7 +54,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({ userId, onFollowChange, sty
         style={[styles.button, styles.buttonLoading, style]}
         disabled
       >
-        <ActivityIndicator size="small" color="#666" />
+        <ActivityIndicator size="small" color={colors.midGray} />
       </Pressable>
     );
   }
@@ -69,7 +70,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({ userId, onFollowChange, sty
       disabled={isLoading}
     >
       {isLoading ? (
-        <ActivityIndicator size="small" color={isFollowing ? '#666' : '#fff'} />
+        <ActivityIndicator size="small" color={isFollowing ? colors.midGray : colors.background.primary} />
       ) : (
         <Text
           style={[
@@ -99,11 +100,11 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0'
   },
   buttonNotFollowing: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     borderWidth: 0
   },
   buttonFollowing: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
     borderColor: '#ccc'
   },
@@ -112,10 +113,10 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   buttonTextNotFollowing: {
-    color: '#fff'
+    color: colors.background.primary
   },
   buttonTextFollowing: {
-    color: '#666'
+    color: colors.midGray
   }
 });
 

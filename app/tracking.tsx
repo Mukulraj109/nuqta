@@ -22,6 +22,7 @@ import { getOrderProgress, formatETA } from '@/utils/orderProgress';
 import { useOrderListSocket } from '@/hooks/useOrderListSocket';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -74,10 +75,10 @@ const mapOrderToTracking = (order: Order): TrackingOrder => {
 
   // Map status to color - using Nuqta palette
   const colorMap = {
-    'PREPARING': '#ffcd57',    // Light Mustard
-    'ON_THE_WAY': '#1a3a52',   // Nile Blue
-    'DELIVERED': '#1a3a52',    // Nile Blue
-    'CANCELLED': '#EF4444',
+    'PREPARING': colors.lightMustard,    // Light Mustard
+    'ON_THE_WAY': colors.nileBlue,   // Nile Blue
+    'DELIVERED': colors.nileBlue,    // Nile Blue
+    'CANCELLED': colors.error,
   };
 
   // Calculate progress dynamically based on actual status index
@@ -449,7 +450,7 @@ export default function OrderTrackingScreen() {
               size={14}
               color={Colors.nileBlue}
             />
-            <ThemedText style={{ fontSize: 12, fontWeight: '600', color: '#1a3a52' }}>
+            <ThemedText style={{ fontSize: 12, fontWeight: '600', color: colors.nileBlue }}>
               {order.fulfillmentType === 'pickup' ? 'Pickup' : order.fulfillmentType === 'drive_thru' ? 'Drive-Thru' : order.fulfillmentType === 'dine_in' ? 'Dine-In' : 'Delivery'}
             </ThemedText>
           </View>
@@ -621,7 +622,7 @@ export default function OrderTrackingScreen() {
           ListEmptyComponent={
             <View style={styles.modernEmptyState}>
               <LinearGradient
-                colors={['#dfebf7', '#faf1e0']}
+                colors={[colors.lavenderMist, colors.linen]}
                 style={styles.emptyIconContainer}
               >
                 <Ionicons

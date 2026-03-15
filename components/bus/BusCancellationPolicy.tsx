@@ -5,6 +5,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface CancellationPolicy {
   freeCancellation: boolean;
@@ -20,7 +21,7 @@ const BusCancellationPolicy: React.FC<BusCancellationPolicyProps> = ({ policy })
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="shield-checkmark" size={24} color="#F97316" />
+        <Ionicons name="shield-checkmark" size={24} color={colors.brand.orange} />
         <Text style={styles.title}>Cancellation Policy</Text>
       </View>
       
@@ -29,7 +30,7 @@ const BusCancellationPolicy: React.FC<BusCancellationPolicyProps> = ({ policy })
           <Ionicons 
             name={policy.freeCancellation ? 'checkmark-circle' : 'close-circle'} 
             size={24} 
-            color={policy.freeCancellation ? '#F97316' : '#EF4444'} 
+            color={policy.freeCancellation ? colors.brand.orange : colors.error} 
           />
           <Text style={styles.policyTitle}>
             {policy.freeCancellation ? 'Free Cancellation' : 'Cancellation Policy'}
@@ -42,7 +43,7 @@ const BusCancellationPolicy: React.FC<BusCancellationPolicyProps> = ({ policy })
         
         {policy.freeCancellation && (
           <View style={styles.badge}>
-            <Ionicons name="gift" size={16} color="#F97316" />
+            <Ionicons name="gift" size={16} color={colors.brand.orange} />
             <Text style={styles.badgeText}>No cancellation fees</Text>
           </View>
         )}
@@ -55,8 +56,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderBottomColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
@@ -67,15 +68,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.3,
   },
   policyCard: {
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   policyHeader: {
     flexDirection: 'row',
@@ -86,12 +87,12 @@ const styles = StyleSheet.create({
   policyTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   policyText: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#4B5563',
+    color: colors.neutral[600],
     marginBottom: 12,
   },
   badge: {
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     alignSelf: 'flex-start',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
 });
 

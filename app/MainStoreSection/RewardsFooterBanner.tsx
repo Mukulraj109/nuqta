@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { Spacing } from "@/constants/DesignSystem";
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export interface RewardsFooterBannerProps {
   message?: string;
@@ -21,7 +22,7 @@ export default function RewardsFooterBanner({
 }: RewardsFooterBannerProps) {
   return (
     <LinearGradient
-      colors={['#ffcd57', '#E6B84E', '#D4A83D']}
+      colors={[colors.lightMustard, colors.brand.goldRich, '#D4A83D']}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.container}
@@ -40,7 +41,7 @@ export default function RewardsFooterBanner({
         <View style={styles.iconContainer}>
           <View style={styles.iconGlow} />
           <View style={styles.iconCircle}>
-            <Ionicons name="trophy" size={22} color="#FFC857" />
+            <Ionicons name="trophy" size={22} color={colors.brand.goldWarm} />
           </View>
         </View>
 
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
     lineHeight: 20,
     letterSpacing: 0.2,

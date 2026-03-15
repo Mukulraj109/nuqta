@@ -19,6 +19,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { LinearGradient } from 'expo-linear-gradient';
 import serviceBookingApi from '@/services/serviceBookingApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface PackageDetails {
   id: string;
@@ -275,7 +276,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
           style={styles.dateButton}
           onPress={() => setShowTravelDatePicker(true)}
         >
-          <Ionicons name="calendar" size={20} color="#8B5CF6" />
+          <Ionicons name="calendar" size={20} color={colors.brand.purpleLight} />
           <Text style={styles.dateText}>
             {travelDate.toLocaleDateString(locale, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
           </Text>
@@ -301,7 +302,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
           style={styles.dateButton}
           onPress={() => setShowReturnDatePicker(true)}
         >
-          <Ionicons name="calendar" size={20} color="#8B5CF6" />
+          <Ionicons name="calendar" size={20} color={colors.brand.purpleLight} />
           <Text style={styles.dateText}>
             {returnDate.toLocaleDateString(locale, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
           </Text>
@@ -322,7 +323,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
 
       {/* Nights Display */}
       <View style={styles.nightsDisplay}>
-        <Ionicons name="moon" size={20} color="#8B5CF6" />
+        <Ionicons name="moon" size={20} color={colors.brand.purpleLight} />
         <Text style={styles.nightsText}>
           {calculateNights()} Night{calculateNights() !== 1 ? 's' : ''} / {calculateNights() + 1} Day{calculateNights() !== 0 ? 's' : ''}
         </Text>
@@ -336,14 +337,14 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
             style={styles.counterButton}
             onPress={() => setAdults(Math.max(1, adults - 1))}
           >
-            <Ionicons name="remove" size={20} color="#8B5CF6" />
+            <Ionicons name="remove" size={20} color={colors.brand.purpleLight} />
           </Pressable>
           <Text style={styles.counterValue}>{adults}</Text>
           <Pressable
             style={styles.counterButton}
             onPress={() => setAdults(adults + 1)}
           >
-            <Ionicons name="add" size={20} color="#8B5CF6" />
+            <Ionicons name="add" size={20} color={colors.brand.purpleLight} />
           </Pressable>
         </View>
       </View>
@@ -355,14 +356,14 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
             style={styles.counterButton}
             onPress={() => setChildren(Math.max(0, children - 1))}
           >
-            <Ionicons name="remove" size={20} color="#8B5CF6" />
+            <Ionicons name="remove" size={20} color={colors.brand.purpleLight} />
           </Pressable>
           <Text style={styles.counterValue}>{children}</Text>
           <Pressable
             style={styles.counterButton}
             onPress={() => setChildren(children + 1)}
           >
-            <Ionicons name="add" size={20} color="#8B5CF6" />
+            <Ionicons name="add" size={20} color={colors.brand.purpleLight} />
           </Pressable>
         </View>
       </View>
@@ -392,7 +393,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
           >
             <View style={styles.accommodationCardHeader}>
               <View style={styles.accommodationIcon}>
-                <Ionicons name="bed" size={28} color={isSelected ? '#FFFFFF' : '#8B5CF6'} />
+                <Ionicons name="bed" size={28} color={isSelected ? colors.background.primary : colors.brand.purpleLight} />
               </View>
               <View style={styles.accommodationInfo}>
                 <Text style={[styles.accommodationTypeName, isSelected && styles.accommodationTypeNameSelected]}>
@@ -405,7 +406,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
                 )}
               </View>
               {isSelected && (
-                <Ionicons name="checkmark-circle" size={24} color="#FFFFFF" />
+                <Ionicons name="checkmark-circle" size={24} color={colors.background.primary} />
               )}
             </View>
             <View style={styles.accommodationPrice}>
@@ -456,7 +457,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
                   )}
                 </View>
                 <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
-                  {isSelected && <Ionicons name="checkmark" size={16} color="#FFFFFF" />}
+                  {isSelected && <Ionicons name="checkmark" size={16} color={colors.background.primary} />}
                 </View>
               </Pressable>
             );
@@ -475,7 +476,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
               <Text style={styles.addonDescription}>Included in package</Text>
             </View>
             <View style={[styles.checkbox, sightseeing && styles.checkboxSelected]}>
-              {sightseeing && <Ionicons name="checkmark" size={16} color="#FFFFFF" />}
+              {sightseeing && <Ionicons name="checkmark" size={16} color={colors.background.primary} />}
             </View>
           </Pressable>
 
@@ -488,7 +489,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
               <Text style={styles.addonPrice}>+ {currencySymbol}2,000</Text>
             </View>
             <View style={[styles.checkbox, transfers && styles.checkboxSelected]}>
-              {transfers && <Ionicons name="checkmark" size={16} color="#FFFFFF" />}
+              {transfers && <Ionicons name="checkmark" size={16} color={colors.background.primary} />}
             </View>
           </Pressable>
 
@@ -501,7 +502,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
               <Text style={styles.addonPrice}>+ {currencySymbol}1,000/person</Text>
             </View>
             <View style={[styles.checkbox, travelInsurance && styles.checkboxSelected]}>
-              {travelInsurance && <Ionicons name="checkmark" size={16} color="#FFFFFF" />}
+              {travelInsurance && <Ionicons name="checkmark" size={16} color={colors.background.primary} />}
             </View>
           </Pressable>
 
@@ -514,7 +515,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
               <Text style={styles.addonPrice}>+ {currencySymbol}3,000/day</Text>
             </View>
             <View style={[styles.checkbox, guide && styles.checkboxSelected]}>
-              {guide && <Ionicons name="checkmark" size={16} color="#FFFFFF" />}
+              {guide && <Ionicons name="checkmark" size={16} color={colors.background.primary} />}
             </View>
           </Pressable>
         </View>
@@ -671,11 +672,11 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
       {/* Header */}
       <View style={styles.header}>
         <Pressable onPress={handleBack} style={styles.headerButton}>
-          <Ionicons name="arrow-back" size={24} color="#111827" />
+          <Ionicons name="arrow-back" size={24} color={colors.neutral[900]} />
         </Pressable>
         <Text style={styles.headerTitle}>Book Package</Text>
         <Pressable onPress={onClose} style={styles.headerButton}>
-          <Ionicons name="close" size={24} color="#111827" />
+          <Ionicons name="close" size={24} color={colors.neutral[900]} />
         </Pressable>
       </View>
 
@@ -715,10 +716,10 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
           disabled={isSubmitting}
         >
           {isSubmitting ? (
-            <ActivityIndicator color="#FFFFFF" />
+            <ActivityIndicator color={colors.background.primary} />
           ) : (
             <LinearGradient
-              colors={['#8B5CF6', '#7C3AED']}
+              colors={[colors.brand.purpleLight, colors.brand.purple]}
               style={styles.nextButtonGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -726,7 +727,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
               <Text style={styles.nextButtonText}>
                 {currentStep === 4 ? 'Complete Booking' : 'Next'}
               </Text>
-              <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={20} color={colors.background.primary} />
             </LinearGradient>
           )}
         </Pressable>
@@ -738,7 +739,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
@@ -746,7 +747,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   headerButton: {
     width: 40,
@@ -757,7 +758,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   progressContainer: {
     flexDirection: 'row',
@@ -770,28 +771,28 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
   progressStepActive: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   progressStepText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   progressStepTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   progressLine: {
     width: 40,
     height: 2,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   progressLineActive: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   content: {
     flex: 1,
@@ -802,7 +803,7 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 24,
   },
   dateSection: {
@@ -811,7 +812,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
   },
   dateButton: {
@@ -819,14 +820,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   dateText: {
     fontSize: 16,
-    color: '#111827',
+    color: colors.neutral[900],
     fontWeight: '500',
   },
   nightsDisplay: {
@@ -834,14 +835,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     padding: 16,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     borderRadius: 12,
     marginBottom: 20,
   },
   nightsText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   counterSection: {
     marginBottom: 20,
@@ -856,14 +857,14 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   counterValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     minWidth: 40,
     textAlign: 'center',
   },
@@ -871,13 +872,13 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     marginBottom: 16,
   },
   accommodationCardSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.brand.purpleLight,
   },
   accommodationCardHeader: {
     flexDirection: 'row',
@@ -889,7 +890,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 16,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -899,15 +900,15 @@ const styles = StyleSheet.create({
   accommodationTypeName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   accommodationTypeNameSelected: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   accommodationDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   accommodationDescriptionSelected: {
     color: 'rgba(255, 255, 255, 0.9)',
@@ -918,11 +919,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   accommodationPriceLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   accommodationPriceLabelSelected: {
     color: 'rgba(255, 255, 255, 0.8)',
@@ -930,10 +931,10 @@ const styles = StyleSheet.create({
   accommodationPriceValue: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   accommodationPriceValueSelected: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   section: {
     marginBottom: 24,
@@ -941,7 +942,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   mealPlanCard: {
@@ -951,13 +952,13 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     marginBottom: 12,
   },
   mealPlanCardSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F3E8FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.pink,
   },
   mealPlanInfo: {
     flex: 1,
@@ -965,18 +966,18 @@ const styles = StyleSheet.create({
   mealPlanLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   mealPlanLabelSelected: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   mealPlanPrice: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   mealPlanPriceSelected: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   addonCard: {
     flexDirection: 'row',
@@ -985,13 +986,13 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     marginBottom: 12,
   },
   addonCardSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F3E8FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.pink,
   },
   addonInfo: {
     flex: 1,
@@ -999,17 +1000,17 @@ const styles = StyleSheet.create({
   addonLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   addonDescription: {
     fontSize: 14,
-    color: '#22C55E',
+    color: colors.success,
     fontWeight: '500',
   },
   addonPrice: {
     fontSize: 14,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
   },
   checkbox: {
@@ -1017,18 +1018,18 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 6,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkboxSelected: {
-    backgroundColor: '#8B5CF6',
-    borderColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
+    borderColor: colors.brand.purpleLight,
   },
   priceSummary: {
     marginTop: 24,
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
   },
   priceRow: {
@@ -1039,37 +1040,37 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   priceTotal: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 2,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   totalLabel: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   totalValue: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   input: {
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     fontSize: 16,
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   rowInputs: {
@@ -1092,52 +1093,52 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     alignItems: 'center',
   },
   genderButtonActive: {
-    backgroundColor: '#8B5CF6',
-    borderColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
+    borderColor: colors.brand.purpleLight,
   },
   genderText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   genderTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   travelerCard: {
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     marginBottom: 12,
   },
   travelerNumber: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     marginBottom: 12,
   },
   footer: {
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
   },
   footerPrice: {
     marginBottom: 16,
   },
   footerPriceLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   footerPriceValue: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   nextButton: {
     borderRadius: 16,
@@ -1154,7 +1155,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   nextButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 18,
     fontWeight: '700',
   },

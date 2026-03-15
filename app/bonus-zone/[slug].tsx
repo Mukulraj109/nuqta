@@ -20,6 +20,7 @@ import bonusZoneApi, {
 } from '@/services/bonusZoneApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 // ============================================================================
 // TIMER HELPER (same pattern as BonusZoneCard)
@@ -59,12 +60,12 @@ const STATE_BADGE_CONFIG: Record<
   UserCampaignState,
   { label: string; bg: string; color: string; icon: string } | null
 > = {
-  eligible: { label: 'You\'re Eligible', bg: '#D1FAE5', color: '#059669', icon: 'checkmark-circle' },
-  claimed: { label: 'You\'ve Claimed This', bg: '#DBEAFE', color: '#1D4ED8', icon: 'checkmark-done-circle' },
-  limit_reached: { label: 'Limit Reached', bg: '#DBEAFE', color: '#1D4ED8', icon: 'alert-circle' },
-  not_eligible: { label: 'Not Eligible', bg: '#F3F4F6', color: '#6B7280', icon: 'close-circle' },
-  budget_exhausted: { label: 'Sold Out', bg: '#FEE2E2', color: '#DC2626', icon: 'ban' },
-  expired: { label: 'Expired', bg: '#F3F4F6', color: '#6B7280', icon: 'time' },
+  eligible: { label: 'You\'re Eligible', bg: colors.tint.green, color: colors.successScale[700], icon: 'checkmark-circle' },
+  claimed: { label: 'You\'ve Claimed This', bg: colors.tint.blueLight, color: '#1D4ED8', icon: 'checkmark-done-circle' },
+  limit_reached: { label: 'Limit Reached', bg: colors.tint.blueLight, color: '#1D4ED8', icon: 'alert-circle' },
+  not_eligible: { label: 'Not Eligible', bg: colors.neutral[100], color: colors.neutral[500], icon: 'close-circle' },
+  budget_exhausted: { label: 'Sold Out', bg: colors.errorScale[100], color: colors.error, icon: 'ban' },
+  expired: { label: 'Expired', bg: colors.neutral[100], color: colors.neutral[500], icon: 'time' },
 };
 
 // ============================================================================
@@ -72,12 +73,12 @@ const STATE_BADGE_CONFIG: Record<
 // ============================================================================
 
 const CAMPAIGN_TYPE_LABELS: Record<string, { label: string; color: string; bg: string }> = {
-  cashback_boost: { label: 'Cashback Boost', color: '#059669', bg: '#D1FAE5' },
-  bank_offer: { label: 'Bank Offer', color: '#1D4ED8', bg: '#DBEAFE' },
-  bill_upload_bonus: { label: 'Bill Upload Bonus', color: '#DC2626', bg: '#FEE2E2' },
-  category_multiplier: { label: 'Category Multiplier', color: '#7C3AED', bg: '#EDE9FE' },
-  first_transaction_bonus: { label: 'First Transaction Bonus', color: '#059669', bg: '#D1FAE5' },
-  festival_offer: { label: 'Festival Offer', color: '#D97706', bg: '#FEF3C7' },
+  cashback_boost: { label: 'Cashback Boost', color: colors.successScale[700], bg: colors.tint.green },
+  bank_offer: { label: 'Bank Offer', color: '#1D4ED8', bg: colors.tint.blueLight },
+  bill_upload_bonus: { label: 'Bill Upload Bonus', color: colors.error, bg: colors.errorScale[100] },
+  category_multiplier: { label: 'Category Multiplier', color: colors.brand.purple, bg: colors.tint.purple },
+  first_transaction_bonus: { label: 'First Transaction Bonus', color: colors.successScale[700], bg: colors.tint.green },
+  festival_offer: { label: 'Festival Offer', color: colors.warningScale[700], bg: colors.tint.amberLight },
 };
 
 // ============================================================================
@@ -323,7 +324,7 @@ export default function CampaignDetailPage() {
   // ==== RENDER ====
 
   const typeConfig = campaign
-    ? CAMPAIGN_TYPE_LABELS[campaign.campaignType] || { label: 'Bonus', color: '#D97706', bg: '#FEF3C7' }
+    ? CAMPAIGN_TYPE_LABELS[campaign.campaignType] || { label: 'Bonus', color: colors.warningScale[700], bg: colors.tint.amberLight }
     : null;
 
   const stateBadge = campaign ? STATE_BADGE_CONFIG[campaign.userState] : null;
@@ -358,7 +359,7 @@ export default function CampaignDetailPage() {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.brand.orange} />
           }
         >
           {/* ===== BANNER IMAGE ===== */}
@@ -380,7 +381,7 @@ export default function CampaignDetailPage() {
               accessibilityLabel="Share campaign"
               accessibilityRole="button"
             >
-              <Ionicons name="share-outline" size={20} color="#6B7280" />
+              <Ionicons name="share-outline" size={20} color={colors.neutral[500]} />
             </Pressable>
 
             {/* Icon / Partner Logo */}
@@ -432,7 +433,7 @@ export default function CampaignDetailPage() {
               <Ionicons
                 name="time-outline"
                 size={20}
-                color={timeRemaining.urgent ? '#DC2626' : '#F97316'}
+                color={timeRemaining.urgent ? colors.error : colors.brand.orange}
               />
               <View style={styles.timerContent}>
                 <Text style={styles.timerLabel}>Ends in</Text>
@@ -461,13 +462,13 @@ export default function CampaignDetailPage() {
           {/* ===== CLAIM SUCCESS BANNER ===== */}
           {showClaimSuccess && (
             <View style={styles.successBanner}>
-              <Ionicons name="checkmark-circle" size={22} color="#059669" />
+              <Ionicons name="checkmark-circle" size={22} color={colors.successScale[700]} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.successBannerTitle}>Reward Claimed!</Text>
                 <Text style={styles.successBannerText}>Coins have been credited to your wallet.</Text>
               </View>
               <Pressable onPress={() => setShowClaimSuccess(false)}>
-                <Ionicons name="close" size={18} color="#059669" />
+                <Ionicons name="close" size={18} color={colors.successScale[700]} />
               </Pressable>
             </View>
           )}
@@ -476,12 +477,12 @@ export default function CampaignDetailPage() {
           {campaign.userState === 'not_eligible' && userState?.reasons && userState.reasons.length > 0 && (
             <View style={styles.card}>
               <View style={styles.cardHeader}>
-                <Ionicons name="information-circle-outline" size={20} color="#6B7280" />
+                <Ionicons name="information-circle-outline" size={20} color={colors.neutral[500]} />
                 <Text style={styles.cardTitle}>Why You're Not Eligible</Text>
               </View>
               {userState.reasons.map((reason, index) => (
                 <View key={index} style={styles.reasonRow}>
-                  <Ionicons name="close-circle" size={16} color="#EF4444" />
+                  <Ionicons name="close-circle" size={16} color={colors.error} />
                   <Text style={styles.reasonText}>{reason}</Text>
                 </View>
               ))}
@@ -491,7 +492,7 @@ export default function CampaignDetailPage() {
           {/* ===== REWARD SECTION ===== */}
           <View style={styles.card}>
             <View style={styles.cardHeader}>
-              <Ionicons name="gift-outline" size={20} color="#F97316" />
+              <Ionicons name="gift-outline" size={20} color={colors.brand.orange} />
               <Text style={styles.cardTitle}>What You Earn</Text>
             </View>
 
@@ -515,7 +516,7 @@ export default function CampaignDetailPage() {
               </View>
               {campaign.reward.coinType === 'branded' && (
                 <View style={styles.brandedCoinNote}>
-                  <Ionicons name="information-circle-outline" size={14} color="#7C3AED" />
+                  <Ionicons name="information-circle-outline" size={14} color={colors.brand.purple} />
                   <Text style={styles.brandedCoinNoteText}>
                     Branded coins are partner-sponsored rewards that can only be redeemed at{' '}
                     {campaign.fundingSource?.partnerName || 'the sponsoring brand'}. They are separate from your regular {BRAND.APP_NAME} coin balance.
@@ -578,7 +579,7 @@ export default function CampaignDetailPage() {
           {userState?.maxClaimsPerUserPerDay != null && userState.maxClaimsPerUserPerDay > 0 && (
             <View style={styles.card}>
               <View style={styles.cardHeader}>
-                <Ionicons name="today-outline" size={20} color="#D97706" />
+                <Ionicons name="today-outline" size={20} color={colors.warningScale[700]} />
                 <Text style={styles.cardTitle}>Daily Limit</Text>
               </View>
               <View style={styles.dailyLimitRow}>
@@ -594,7 +595,7 @@ export default function CampaignDetailPage() {
                           ((userState.dailyClaimCount || 0) / userState.maxClaimsPerUserPerDay) * 100,
                           100
                         )}%`,
-                        backgroundColor: (userState.dailyClaimCount || 0) >= userState.maxClaimsPerUserPerDay ? '#DC2626' : '#F97316',
+                        backgroundColor: (userState.dailyClaimCount || 0) >= userState.maxClaimsPerUserPerDay ? colors.error : colors.brand.orange,
                       },
                     ]}
                   />
@@ -608,13 +609,13 @@ export default function CampaignDetailPage() {
 
           {/* ===== SCARCITY INDICATOR ===== */}
           {campaign.globalClaimsRemaining != null && campaign.globalClaimsRemaining > 0 && (
-            <View style={[styles.stateBadgeCard, { backgroundColor: campaign.globalClaimsRemaining <= 50 ? '#FEF2F2' : '#FFF7ED' }]}>
+            <View style={[styles.stateBadgeCard, { backgroundColor: campaign.globalClaimsRemaining <= 50 ? colors.errorScale[50] : colors.tint.orange }]}>
               <Ionicons
                 name="flame"
                 size={20}
-                color={campaign.globalClaimsRemaining <= 50 ? '#DC2626' : '#F97316'}
+                color={campaign.globalClaimsRemaining <= 50 ? colors.error : colors.brand.orange}
               />
-              <Text style={[styles.stateBadgeLabel, { color: campaign.globalClaimsRemaining <= 50 ? '#DC2626' : '#F97316' }]}>
+              <Text style={[styles.stateBadgeLabel, { color: campaign.globalClaimsRemaining <= 50 ? colors.error : colors.brand.orange }]}>
                 Only {campaign.globalClaimsRemaining} claims remaining!
               </Text>
             </View>
@@ -641,7 +642,7 @@ export default function CampaignDetailPage() {
           {howItWorks && (
             <View style={styles.card}>
               <View style={styles.cardHeader}>
-                <Ionicons name="bulb-outline" size={20} color="#D97706" />
+                <Ionicons name="bulb-outline" size={20} color={colors.warningScale[700]} />
                 <Text style={styles.cardTitle}>{howItWorks.title}</Text>
               </View>
               {howItWorks.steps.map((step, index) => (
@@ -659,13 +660,13 @@ export default function CampaignDetailPage() {
           {campaign.eligibility && (
             <View style={styles.card}>
               <View style={styles.cardHeader}>
-                <Ionicons name="shield-checkmark-outline" size={20} color="#059669" />
+                <Ionicons name="shield-checkmark-outline" size={20} color={colors.successScale[700]} />
                 <Text style={styles.cardTitle}>Eligibility Requirements</Text>
               </View>
 
               {campaign.eligibility.minSpend != null && campaign.eligibility.minSpend > 0 && (
                 <View style={styles.eligibilityRow}>
-                  <Ionicons name="wallet-outline" size={16} color="#6B7280" />
+                  <Ionicons name="wallet-outline" size={16} color={colors.neutral[500]} />
                   <Text style={styles.eligibilityText}>
                     Minimum spend: {campaign.eligibility.minSpend} per transaction
                   </Text>
@@ -674,7 +675,7 @@ export default function CampaignDetailPage() {
 
               {campaign.eligibility.firstTransactionOnly && (
                 <View style={styles.eligibilityRow}>
-                  <Ionicons name="star-outline" size={16} color="#6B7280" />
+                  <Ionicons name="star-outline" size={16} color={colors.neutral[500]} />
                   <Text style={styles.eligibilityText}>
                     First transaction only
                   </Text>
@@ -683,7 +684,7 @@ export default function CampaignDetailPage() {
 
               {campaign.eligibility.paymentMethods && campaign.eligibility.paymentMethods.length > 0 && (
                 <View style={styles.eligibilityRow}>
-                  <Ionicons name="card-outline" size={16} color="#6B7280" />
+                  <Ionicons name="card-outline" size={16} color={colors.neutral[500]} />
                   <Text style={styles.eligibilityText}>
                     Payment methods: {campaign.eligibility.paymentMethods.join(', ')}
                   </Text>
@@ -692,7 +693,7 @@ export default function CampaignDetailPage() {
 
               {campaign.eligibility.bankCodes && campaign.eligibility.bankCodes.length > 0 && (
                 <View style={styles.eligibilityRow}>
-                  <Ionicons name="business-outline" size={16} color="#6B7280" />
+                  <Ionicons name="business-outline" size={16} color={colors.neutral[500]} />
                   <Text style={styles.eligibilityText}>
                     Participating banks: {campaign.eligibility.bankCodes.join(', ')}
                   </Text>
@@ -701,7 +702,7 @@ export default function CampaignDetailPage() {
 
               {campaign.eligibility.merchantCategories && campaign.eligibility.merchantCategories.length > 0 && (
                 <View style={styles.eligibilityRow}>
-                  <Ionicons name="pricetag-outline" size={16} color="#6B7280" />
+                  <Ionicons name="pricetag-outline" size={16} color={colors.neutral[500]} />
                   <Text style={styles.eligibilityText}>
                     Categories: {campaign.eligibility.merchantCategories.join(', ')}
                   </Text>
@@ -714,7 +715,7 @@ export default function CampaignDetailPage() {
           {campaign.description && (
             <View style={styles.card}>
               <View style={styles.cardHeader}>
-                <Ionicons name="document-text-outline" size={20} color="#1a3a52" />
+                <Ionicons name="document-text-outline" size={20} color={colors.nileBlue} />
                 <Text style={styles.cardTitle}>About This Campaign</Text>
               </View>
               <Text style={styles.descriptionText}>{campaign.description}</Text>
@@ -725,7 +726,7 @@ export default function CampaignDetailPage() {
           {campaign.terms && campaign.terms.length > 0 && (
             <View style={styles.card}>
               <View style={styles.cardHeader}>
-                <Ionicons name="reader-outline" size={20} color="#6B7280" />
+                <Ionicons name="reader-outline" size={20} color={colors.neutral[500]} />
                 <Text style={styles.cardTitle}>Terms & Conditions</Text>
               </View>
               {campaign.terms.map((term, index) => (
@@ -749,7 +750,7 @@ export default function CampaignDetailPage() {
                 {ctaConfig.text}
               </Text>
               {!ctaConfig.disabled && (
-                <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+                <Ionicons name="arrow-forward" size={18} color={colors.background.primary} />
               )}
             </Pressable>
           </View>
@@ -766,7 +767,7 @@ export default function CampaignDetailPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   contentContainer: {
     paddingBottom: 120,
@@ -775,25 +776,25 @@ const styles = StyleSheet.create({
   // ---- Center / Loading / Error ----
   centerContainer: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 32,
   },
   loadingText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 12,
   },
   errorTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginTop: 16,
   },
   errorSubtitle: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 6,
     textAlign: 'center',
   },
@@ -801,11 +802,11 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
     borderRadius: 8,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
     fontSize: 14,
   },
@@ -814,18 +815,18 @@ const styles = StyleSheet.create({
   bannerImage: {
     width: '100%',
     height: 180,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
 
   // ---- Header Section ----
   headerSection: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 20,
     paddingTop: 24,
     paddingBottom: 24,
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
     position: 'relative',
   },
   shareButton: {
@@ -835,7 +836,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1,
@@ -860,12 +861,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textAlign: 'center',
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 6,
     textAlign: 'center',
     lineHeight: 20,
@@ -894,7 +895,7 @@ const styles = StyleSheet.create({
   },
   partnerText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 
   // ---- Timer Card ----
@@ -905,7 +906,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#FED7AA',
@@ -916,17 +917,17 @@ const styles = StyleSheet.create({
   },
   timerLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   timerValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#F97316',
+    color: colors.brand.orange,
     marginTop: 2,
   },
   timerUrgent: {
-    color: '#DC2626',
+    color: colors.error,
   },
 
   // ---- State Badge Card ----
@@ -953,7 +954,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     borderRadius: 12,
     gap: 10,
     borderWidth: 1,
@@ -962,11 +963,11 @@ const styles = StyleSheet.create({
   successBannerTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   successBannerText: {
     fontSize: 12,
-    color: '#059669',
+    color: colors.successScale[700],
     marginTop: 1,
   },
 
@@ -974,10 +975,10 @@ const styles = StyleSheet.create({
   card: {
     marginHorizontal: 16,
     marginTop: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     padding: 16,
   },
   cardHeader: {
@@ -989,7 +990,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 
   // ---- Eligibility Reasons ----
@@ -1002,7 +1003,7 @@ const styles = StyleSheet.create({
   reasonText: {
     flex: 1,
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
 
@@ -1017,11 +1018,11 @@ const styles = StyleSheet.create({
   rewardValue: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   rewardDescription: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 4,
     textAlign: 'center',
   },
@@ -1032,7 +1033,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 6,
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
     padding: 10,
     borderRadius: 8,
     marginTop: 8,
@@ -1040,7 +1041,7 @@ const styles = StyleSheet.create({
   brandedCoinNoteText: {
     flex: 1,
     fontSize: 11,
-    color: '#6D28D9',
+    color: colors.brand.purpleDeep,
     lineHeight: 16,
   },
   rewardDetailRow: {
@@ -1049,16 +1050,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   rewardDetailLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   rewardDetailValue: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 
   // ---- Claim Progress ----
@@ -1067,23 +1068,23 @@ const styles = StyleSheet.create({
   },
   progressBarBg: {
     height: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 4,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: 8,
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
     borderRadius: 4,
   },
   progressText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   progressSubtext: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // ---- Daily Limit ----
@@ -1093,11 +1094,11 @@ const styles = StyleSheet.create({
   dailyLimitText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   dailyLimitWarning: {
     fontSize: 12,
-    color: '#DC2626',
+    color: colors.error,
     fontWeight: '500',
   },
 
@@ -1117,7 +1118,7 @@ const styles = StyleSheet.create({
   },
   claimedBadgeSubtext: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
 
@@ -1132,19 +1133,19 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#FFF7ED',
+    backgroundColor: colors.tint.orange,
     justifyContent: 'center',
     alignItems: 'center',
   },
   stepNumberText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   stepText: {
     flex: 1,
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 18,
   },
 
@@ -1158,14 +1159,14 @@ const styles = StyleSheet.create({
   eligibilityText: {
     flex: 1,
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 18,
   },
 
   // ---- Description ----
   descriptionText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 22,
   },
 
@@ -1178,13 +1179,13 @@ const styles = StyleSheet.create({
   },
   termBullet: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     lineHeight: 18,
   },
   termText: {
     flex: 1,
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
 
@@ -1198,20 +1199,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
     paddingVertical: 16,
     borderRadius: 12,
     gap: 8,
   },
   ctaButtonDisabled: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   ctaButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   ctaButtonTextDisabled: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 });

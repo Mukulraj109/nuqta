@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface ReviewActionButtonProps {
   onPress ? : () => void;
@@ -25,7 +26,7 @@ const ReviewActionButton: React.FC<ReviewActionButtonProps> = ({
      
     >
       <LinearGradient
-        colors={disabled ? ['#D1D5DB', '#9CA3AF'] : ['#00C06A', '#00796B']}
+        colors={disabled ? [colors.neutral[300], colors.neutral[400]] : [colors.brand.green, colors.brand.teal]}
         style={styles.gradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -34,7 +35,7 @@ const ReviewActionButton: React.FC<ReviewActionButtonProps> = ({
           <Ionicons
             name="star"
             size={20}
-            color={disabled ? '#6B7280' : '#FFFFFF'}
+            color={disabled ? colors.neutral[500] : colors.background.primary}
             style={styles.icon}
           />
           <ThemedText style={[styles.text, disabled && styles.disabledText]}>
@@ -43,7 +44,7 @@ const ReviewActionButton: React.FC<ReviewActionButtonProps> = ({
           <Ionicons
             name="gift-outline"
             size={18}
-            color={disabled ? '#6B7280' : '#FFFFFF'}
+            color={disabled ? colors.neutral[500] : colors.background.primary}
             style={styles.giftIcon}
           />
         </View>
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 20,
     overflow: 'hidden',
-    shadowColor: '#00C06A',
+    shadowColor: colors.brand.green,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.25,
     shadowRadius: 12,
@@ -83,13 +84,13 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 17,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
     flex: 1,
     letterSpacing: 0.3,
   },
   disabledText: {
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   giftIcon: {
     marginLeft: 4,

@@ -11,6 +11,7 @@ import { SectionHeader, HorizontalScrollSection } from '../common';
 import { OfferCardDefault } from '../cards';
 import { TrendingOffer } from '@/types/offers.types';
 import { Spacing } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface TrendingNowSectionProps {
   offers: TrendingOffer[];
@@ -35,7 +36,7 @@ export const TrendingNowSection: React.FC<TrendingNowSectionProps> = ({
         title="Trending Now"
         subtitle="Most redeemed this week"
         icon="trending-up"
-        iconColor="#EF4444"
+        iconColor={colors.error}
         showViewAll={offers.length > 3}
         onViewAll={onViewAll}
       />

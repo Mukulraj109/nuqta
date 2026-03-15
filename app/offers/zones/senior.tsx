@@ -23,6 +23,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
 import realOffersApi from '@/services/realOffersApi';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const ZONE_SLUG = 'senior';
@@ -220,11 +221,11 @@ export default function SeniorCitizenZonePage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#7C3AED" translucent />
+      <StatusBar barStyle="light-content" backgroundColor={colors.brand.purple} translucent />
 
       {/* Header */}
       <LinearGradient
-        colors={['#7C3AED', '#6D28D9', '#5B21B6']}
+        colors={[colors.brand.purple, colors.brand.purpleDeep, '#5B21B6']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.header}
@@ -232,7 +233,7 @@ export default function SeniorCitizenZonePage() {
         <SafeAreaView edges={['top']} style={styles.safeHeader}>
           <View style={styles.headerContent}>
             <Pressable style={styles.backButton} onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
 
             <View style={styles.headerTitleContainer}>
@@ -264,7 +265,7 @@ export default function SeniorCitizenZonePage() {
           >
             <View style={styles.heroContent}>
               <View style={styles.heroIconContainer}>
-                <Ionicons name="heart" size={32} color="#7C3AED" />
+                <Ionicons name="heart" size={32} color={colors.brand.purple} />
               </View>
               <View style={styles.heroTextContainer}>
                 <ThemedText style={styles.heroTitle}>Respect & Rewards</ThemedText>
@@ -289,7 +290,7 @@ export default function SeniorCitizenZonePage() {
               ) : (
                 <View style={styles.unverifiedStatus}>
                   <View style={styles.unverifiedLeft}>
-                    <Ionicons name="alert-circle" size={20} color="#FBBF24" />
+                    <Ionicons name="alert-circle" size={20} color={colors.warningScale[400]} />
                     <ThemedText style={styles.unverifiedText}>Verify age (60+) to unlock deals</ThemedText>
                   </View>
                   <Pressable style={styles.verifyButton} onPress={handleVerify}>
@@ -345,8 +346,8 @@ export default function SeniorCitizenZonePage() {
       {!isEligible && (
         <View style={styles.fixedCTA}>
           <Pressable style={styles.ctaButton} onPress={handleVerify}>
-            <LinearGradient colors={['#7C3AED', '#6D28D9']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.ctaGradient}>
-              <Ionicons name="shield-checkmark" size={20} color="#FFF" />
+            <LinearGradient colors={[colors.brand.purple, colors.brand.purpleDeep]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.ctaGradient}>
+              <Ionicons name="shield-checkmark" size={20} color={colors.background.primary} />
               <ThemedText style={styles.ctaButtonText}>Verify Age to Unlock Benefits</ThemedText>
             </LinearGradient>
           </Pressable>
@@ -360,14 +361,14 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background.secondary },
   centerContent: { justifyContent: 'center', alignItems: 'center', padding: Spacing.xl },
   errorText: { ...Typography.body, color: Colors.text.secondary, textAlign: 'center', marginTop: Spacing.md, marginBottom: Spacing.lg },
-  retryButton: { backgroundColor: '#7C3AED', paddingHorizontal: Spacing.lg, paddingVertical: Spacing.md, borderRadius: BorderRadius.md },
-  retryButtonText: { ...Typography.button, color: '#FFFFFF' },
+  retryButton: { backgroundColor: colors.brand.purple, paddingHorizontal: Spacing.lg, paddingVertical: Spacing.md, borderRadius: BorderRadius.md },
+  retryButtonText: { ...Typography.button, color: colors.background.primary },
   header: { paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight || 0 },
   safeHeader: { paddingBottom: Spacing.base },
   headerContent: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: Spacing.base, paddingVertical: Spacing.md },
   backButton: { padding: Spacing.sm, marginRight: Spacing.sm },
   headerTitleContainer: { flex: 1, alignItems: 'center' },
-  headerTitle: { ...Typography.h3, color: '#FFFFFF', fontWeight: '700' },
+  headerTitle: { ...Typography.h3, color: colors.background.primary, fontWeight: '700' },
   headerSubtitle: { ...Typography.bodySmall, color: 'rgba(255, 255, 255, 0.8)', marginTop: 2 },
   headerIcon: { width: 40, alignItems: 'center' },
   emoji: { fontSize: 32 },
@@ -385,12 +386,12 @@ const styles = StyleSheet.create({
   verifiedLeft: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm },
   verifiedText: { ...Typography.label, color: Colors.success },
   activeBadge: { backgroundColor: Colors.success, paddingHorizontal: Spacing.sm, paddingVertical: 4, borderRadius: BorderRadius.sm },
-  activeBadgeText: { ...Typography.caption, color: '#FFFFFF', fontWeight: '600' },
+  activeBadgeText: { ...Typography.caption, color: colors.background.primary, fontWeight: '600' },
   unverifiedStatus: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   unverifiedLeft: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, flex: 1 },
-  unverifiedText: { ...Typography.body, color: '#FBBF24', flex: 1 },
-  verifyButton: { backgroundColor: '#7C3AED', paddingHorizontal: Spacing.base, paddingVertical: Spacing.sm, borderRadius: BorderRadius.md },
-  verifyButtonText: { ...Typography.labelSmall, color: '#FFFFFF', fontWeight: '600' },
+  unverifiedText: { ...Typography.body, color: colors.warningScale[400], flex: 1 },
+  verifyButton: { backgroundColor: colors.brand.purple, paddingHorizontal: Spacing.base, paddingVertical: Spacing.sm, borderRadius: BorderRadius.md },
+  verifyButtonText: { ...Typography.labelSmall, color: colors.background.primary, fontWeight: '600' },
   perksSection: { paddingHorizontal: Spacing.base, marginBottom: Spacing.lg },
   sectionTitle: { ...Typography.h4, color: Colors.text.primary, fontWeight: '600', marginBottom: Spacing.md },
   perksGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm },
@@ -407,11 +408,11 @@ const styles = StyleSheet.create({
   dealStore: { ...Typography.bodySmall, color: Colors.text.tertiary, marginBottom: 2 },
   dealTitle: { ...Typography.label, color: Colors.text.primary, fontWeight: '600' },
   discountBadge: { backgroundColor: 'rgba(124, 58, 237, 0.15)', paddingHorizontal: Spacing.sm, paddingVertical: 4, borderRadius: BorderRadius.sm },
-  discountText: { ...Typography.labelSmall, color: '#6D28D9', fontWeight: '700' },
+  discountText: { ...Typography.labelSmall, color: colors.brand.purpleDeep, fontWeight: '700' },
   dealDescription: { ...Typography.bodySmall, color: Colors.text.secondary, marginBottom: Spacing.sm },
   dealTags: { flexDirection: 'row', gap: Spacing.xs, flexWrap: 'wrap' },
-  tag: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#EDE9FE', paddingHorizontal: Spacing.sm, paddingVertical: 2, borderRadius: BorderRadius.sm, gap: 4 },
-  tagText: { ...Typography.caption, color: '#6D28D9' },
+  tag: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.tint.purple, paddingHorizontal: Spacing.sm, paddingVertical: 2, borderRadius: BorderRadius.sm, gap: 4 },
+  tagText: { ...Typography.caption, color: colors.brand.purpleDeep },
   skeletonImage: { width: 96, height: 96, backgroundColor: Colors.gray[200] },
   skeletonText: { height: 12, borderRadius: 6, backgroundColor: Colors.gray[200] },
   emptyState: { alignItems: 'center', padding: Spacing.xl },
@@ -421,5 +422,5 @@ const styles = StyleSheet.create({
   fixedCTA: { position: 'absolute', bottom: 70, left: 0, right: 0, padding: Spacing.base, backgroundColor: Colors.background.primary, borderTopWidth: 1, borderTopColor: Colors.border.light, ...Shadows.medium },
   ctaButton: { borderRadius: BorderRadius.lg, overflow: 'hidden' },
   ctaGradient: { flexDirection: 'row', paddingVertical: Spacing.base, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
-  ctaButtonText: { ...Typography.button, color: '#FFFFFF', fontWeight: '600' },
+  ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' },
 });

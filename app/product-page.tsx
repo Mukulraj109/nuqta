@@ -42,6 +42,7 @@ import asyncStorageService from '@/services/asyncStorageService';
 import reviewsService from '@/services/reviewsApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface Store {
   _id?: string;
@@ -1148,7 +1149,7 @@ const styles = StyleSheet.create({
   errorContainer: {
     padding: Spacing['2xl'],
     alignItems: 'center',
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     margin: Spacing.base,
     borderRadius: BorderRadius.md,
     gap: Spacing.md,
@@ -1189,7 +1190,7 @@ const styles = StyleSheet.create({
     padding: Spacing['2xl'],
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderRadius: BorderRadius.md,
     margin: Spacing.base,
   },
@@ -1204,7 +1205,7 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.base,
     marginVertical: Spacing.md,
     padding: Spacing.lg,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
     borderColor: Colors.gold,

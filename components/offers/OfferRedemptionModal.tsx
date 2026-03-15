@@ -24,6 +24,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { LightningDeal } from '@/types/offers.types';
 import realOffersApi from '@/services/realOffersApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -226,7 +227,7 @@ export const OfferRedemptionModal: React.FC<OfferRedemptionModalProps> = ({
         >
           {/* Header */}
           <LinearGradient
-            colors={['#F59E0B', '#D97706']}
+            colors={[colors.warningScale[400], colors.warningScale[700]]}
             style={styles.header}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -312,7 +313,7 @@ export const OfferRedemptionModal: React.FC<OfferRedemptionModalProps> = ({
                  
                 >
                   <LinearGradient
-                    colors={copySuccess ? ['#ffcd57', '#1a3a52'] : ['#3B82F6', '#2563EB']}
+                    colors={copySuccess ? [colors.lightMustard, colors.nileBlue] : [colors.infoScale[400], colors.brand.blue]}
                     style={styles.copyButtonGradient}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
@@ -381,7 +382,7 @@ export const OfferRedemptionModal: React.FC<OfferRedemptionModalProps> = ({
                
               >
                 <LinearGradient
-                  colors={['#F59E0B', '#D97706']}
+                  colors={[colors.warningScale[400], colors.warningScale[700]]}
                   style={styles.redeemButtonGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
@@ -399,7 +400,7 @@ export const OfferRedemptionModal: React.FC<OfferRedemptionModalProps> = ({
                
               >
                 <LinearGradient
-                  colors={['#ffcd57', '#1a3a52']}
+                  colors={[colors.lightMustard, colors.nileBlue]}
                   style={styles.doneButtonGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
@@ -483,28 +484,28 @@ const styles = StyleSheet.create({
   offerImage: {
     width: '100%',
     height: 150,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   offerSection: {
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   storeName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   offerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   offerDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 20,
     marginBottom: 16,
   },
@@ -517,15 +518,15 @@ const styles = StyleSheet.create({
   discountedPrice: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   originalPrice: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   discountBadge: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -533,20 +534,20 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#DC2626',
+    color: colors.error,
   },
   stockSection: {
     gap: 8,
   },
   progressBarContainer: {
     height: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     overflow: 'hidden',
   },
   progressBar: {
     height: '100%',
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     borderRadius: 4,
   },
   stockInfo: {
@@ -555,12 +556,12 @@ const styles = StyleSheet.create({
   },
   stockText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   timeRemaining: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   codeSection: {
     padding: 20,
@@ -568,23 +569,23 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 12,
   },
   codeCard: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
     marginBottom: 12,
     borderWidth: 2,
-    borderColor: '#F59E0B',
+    borderColor: colors.warningScale[400],
     borderStyle: 'dashed',
   },
   codeText: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     letterSpacing: 2,
   },
   copyButton: {
@@ -619,7 +620,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -631,12 +632,12 @@ const styles = StyleSheet.create({
   stepText: {
     flex: 1,
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 20,
     paddingTop: 2,
   },
   termsSection: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     margin: 20,
     marginTop: 0,
     padding: 16,
@@ -646,18 +647,18 @@ const styles = StyleSheet.create({
   termsTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   termsText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 16,
   },
   footer: {
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   redeemButton: {
     borderRadius: 12,

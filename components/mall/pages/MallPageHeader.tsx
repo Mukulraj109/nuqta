@@ -12,6 +12,7 @@ import {
   Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface MallPageHeaderProps {
   title: string;
@@ -28,7 +29,7 @@ const MallPageHeader: React.FC<MallPageHeaderProps> = ({
   brandCount,
   maxCashback,
   icon,
-  color = '#1a3a52',
+  color = colors.nileBlue,
 }) => {
   return (
     <LinearGradient
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginBottom: 4,
     textShadowColor: 'rgba(0, 0, 0, 0.2)',
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   statLabel: {
     fontSize: 11,

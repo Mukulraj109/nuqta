@@ -7,6 +7,7 @@ import {
   Text,
 } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface WhatsNewBadgeProps {
   onPress?: () => void;
@@ -16,18 +17,18 @@ interface WhatsNewBadgeProps {
 
 const WhatsNewBadge: React.FC<WhatsNewBadgeProps> = ({ onPress, style, variant = 'green' }) => {
   const badgeColors = {
-    green: { bg: '#064E3B', border: '#059669' },
-    blue: { bg: '#0C4A6E', border: '#0284C7' },
-    gold: { bg: '#78350F', border: '#F59E0B' },
+    green: { bg: '#064E3B', border: colors.successScale[700] },
+    blue: { bg: '#0C4A6E', border: colors.brand.sky },
+    gold: { bg: '#78350F', border: colors.warning },
   };
 
-  const colors = badgeColors[variant];
+  const variantColors = badgeColors[variant];
 
   return (
     <Pressable
       onPress={onPress}
-     
-      style={[styles.badge, { backgroundColor: colors.bg, borderColor: colors.border }, style]}
+
+      style={[styles.badge, { backgroundColor: variantColors.bg, borderColor: variantColors.border }, style]}
       accessibilityRole="button"
       accessibilityLabel="What's New"
     >
@@ -54,10 +55,10 @@ const styles = StyleSheet.create({
     top: 7,
     right: 0,
     fontSize: 4,
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
   text: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontSize: 6,
     fontWeight: '600',
   },

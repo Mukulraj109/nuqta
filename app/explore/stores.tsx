@@ -22,17 +22,18 @@ import { useRegion } from '@/contexts/RegionContext';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { MapViewSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
 
 const categories = [
-  { id: 'all', label: 'All', icon: 'grid', gradient: ['#6366F1', '#8B5CF6'] },
-  { id: 'food', label: 'Food', icon: 'restaurant', gradient: ['#F97316', '#FB923C'] },
-  { id: 'fashion', label: 'Fashion', icon: 'shirt', gradient: ['#EC4899', '#F472B6'] },
-  { id: 'beauty', label: 'Beauty', icon: 'sparkles', gradient: ['#8B5CF6', '#A78BFA'] },
-  { id: 'electronics', label: 'Tech', icon: 'phone-portrait', gradient: ['#3B82F6', '#60A5FA'] },
-  { id: 'grocery', label: 'Grocery', icon: 'cart', gradient: ['#ffcd57', '#ffd977'] },
+  { id: 'all', label: 'All', icon: 'grid', gradient: [colors.brand.indigo, colors.brand.purpleLight] },
+  { id: 'food', label: 'Food', icon: 'restaurant', gradient: [colors.brand.orange, '#FB923C'] },
+  { id: 'fashion', label: 'Fashion', icon: 'shirt', gradient: [colors.brand.pink, '#F472B6'] },
+  { id: 'beauty', label: 'Beauty', icon: 'sparkles', gradient: [colors.brand.purpleLight, colors.brand.purpleSoft] },
+  { id: 'electronics', label: 'Tech', icon: 'phone-portrait', gradient: [colors.infoScale[400], colors.infoScale[400]] },
+  { id: 'grocery', label: 'Grocery', icon: 'cart', gradient: [colors.lightMustard, '#ffd977'] },
 ];
 
 // Generate gradient colors based on store name
@@ -215,7 +216,7 @@ const ExploreStoresPage = () => {
             </LinearGradient>
           )}
           {/* Status Indicator */}
-          <View style={[styles.statusDot, { backgroundColor: isOpen ? '#ffcd57' : '#EF4444' }]} />
+          <View style={[styles.statusDot, { backgroundColor: isOpen ? colors.lightMustard : colors.error }]} />
         </View>
 
         {/* Store Info */}
@@ -224,7 +225,7 @@ const ExploreStoresPage = () => {
             <Text style={styles.listCardName} numberOfLines={1}>{store.name}</Text>
             {rating && (
               <View style={styles.ratingBadge}>
-                <Ionicons name="star" size={12} color="#F59E0B" />
+                <Ionicons name="star" size={12} color={colors.warningScale[400]} />
                 <Text style={styles.ratingText}>{rating}</Text>
               </View>
             )}
@@ -236,8 +237,8 @@ const ExploreStoresPage = () => {
 
           <View style={styles.listCardMeta}>
             {/* Status */}
-            <View style={[styles.statusBadge, { backgroundColor: isOpen ? '#faf1e0' : '#FEF2F2' }]}>
-              <Text style={[styles.statusText, { color: isOpen ? '#1a3a52' : '#DC2626' }]}>
+            <View style={[styles.statusBadge, { backgroundColor: isOpen ? colors.linen : colors.errorScale[50] }]}>
+              <Text style={[styles.statusText, { color: isOpen ? colors.nileBlue : colors.error }]}>
                 {isOpen ? 'Open' : 'Closed'}
               </Text>
             </View>
@@ -245,7 +246,7 @@ const ExploreStoresPage = () => {
             {/* Cashback */}
             {cashback && (
               <View style={styles.cashbackBadge}>
-                <Ionicons name="gift" size={10} color="#FFFFFF" />
+                <Ionicons name="gift" size={10} color={colors.background.primary} />
                 <Text style={styles.cashbackText}>{cashback}</Text>
               </View>
             )}
@@ -253,7 +254,7 @@ const ExploreStoresPage = () => {
             {/* Distance */}
             {store.distance && (
               <View style={styles.distanceBadge}>
-                <Ionicons name="navigate" size={10} color="#3B82F6" />
+                <Ionicons name="navigate" size={10} color={colors.infoScale[400]} />
                 <Text style={styles.distanceText}>{store.distance}</Text>
               </View>
             )}
@@ -262,7 +263,7 @@ const ExploreStoresPage = () => {
 
         {/* Arrow */}
         <View style={styles.listCardArrow}>
-          <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+          <Ionicons name="chevron-forward" size={20} color={colors.neutral[400]} />
         </View>
       </Pressable>
     );
@@ -298,7 +299,7 @@ const ExploreStoresPage = () => {
           )}
 
           {/* Status Badge */}
-          <View style={[styles.gridStatusBadge, { backgroundColor: isOpen ? '#ffcd57' : '#EF4444' }]}>
+          <View style={[styles.gridStatusBadge, { backgroundColor: isOpen ? colors.lightMustard : colors.error }]}>
             <Text style={styles.gridStatusText}>{isOpen ? 'Open' : 'Closed'}</Text>
           </View>
 
@@ -317,7 +318,7 @@ const ExploreStoresPage = () => {
           <View style={styles.gridMeta}>
             {rating && (
               <View style={styles.gridRating}>
-                <Ionicons name="star" size={12} color="#F59E0B" />
+                <Ionicons name="star" size={12} color={colors.warningScale[400]} />
                 <Text style={styles.gridRatingText}>{rating}</Text>
               </View>
             )}
@@ -334,7 +335,7 @@ const ExploreStoresPage = () => {
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <SafeAreaView style={styles.container} edges={['top']}>
-        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+        <StatusBar barStyle="dark-content" backgroundColor={colors.background.primary} />
 
         {/* Header */}
         <View style={styles.header}>
@@ -342,12 +343,12 @@ const ExploreStoresPage = () => {
             style={styles.backButton}
             onPress={() => router.back()}
           >
-            <Ionicons name="arrow-back" size={24} color="#1a3a52" />
+            <Ionicons name="arrow-back" size={24} color={colors.nileBlue} />
           </Pressable>
           <View style={styles.headerCenter}>
             <Text style={styles.headerTitle}>Explore Stores</Text>
             <View style={styles.headerLocation}>
-              <Ionicons name="location" size={12} color="#ffcd57" />
+              <Ionicons name="location" size={12} color={colors.lightMustard} />
               <Text style={styles.headerLocationText}>{regionName}</Text>
             </View>
           </View>
@@ -355,29 +356,29 @@ const ExploreStoresPage = () => {
             style={styles.mapIconButton}
             onPress={() => navigateTo('/explore/map')}
           >
-            <Ionicons name="map" size={22} color="#1a3a52" />
+            <Ionicons name="map" size={22} color={colors.nileBlue} />
           </Pressable>
         </View>
 
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
-            <Ionicons name="search" size={20} color="#9CA3AF" />
+            <Ionicons name="search" size={20} color={colors.neutral[400]} />
             <TextInput
               style={styles.searchInput}
               placeholder="Search stores, brands..."
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
             {searchQuery.length > 0 && (
               <Pressable onPress={() => setSearchQuery('')}>
-                <Ionicons name="close-circle" size={20} color="#9CA3AF" />
+                <Ionicons name="close-circle" size={20} color={colors.neutral[400]} />
               </Pressable>
             )}
           </View>
           <Pressable style={styles.filterButton} onPress={() => navigateTo('/explore/map')}>
-            <Ionicons name="map-outline" size={20} color="#1a3a52" />
+            <Ionicons name="map-outline" size={20} color={colors.nileBlue} />
           </Pressable>
         </View>
 
@@ -404,12 +405,12 @@ const ExploreStoresPage = () => {
                   end={{ x: 1, y: 0 }}
                   style={styles.categoryGradient}
                 >
-                  <Ionicons name={cat.icon as any} size={14} color="#FFFFFF" />
+                  <Ionicons name={cat.icon as any} size={14} color={colors.background.primary} />
                   <Text style={styles.categoryLabelActive}>{cat.label}</Text>
                 </LinearGradient>
               ) : (
                 <>
-                  <Ionicons name={cat.icon as any} size={14} color="#6B7280" />
+                  <Ionicons name={cat.icon as any} size={14} color={colors.neutral[500]} />
                   <Text style={styles.categoryLabel}>{cat.label}</Text>
                 </>
               )}
@@ -429,18 +430,18 @@ const ExploreStoresPage = () => {
                 style={[styles.viewToggleBtn, viewMode === 'list' && styles.viewToggleBtnActive]}
                 onPress={() => setViewMode('list')}
               >
-                <Ionicons name="list" size={16} color={viewMode === 'list' ? '#ffcd57' : '#9CA3AF'} />
+                <Ionicons name="list" size={16} color={viewMode === 'list' ? colors.lightMustard : colors.neutral[400]} />
               </Pressable>
               <Pressable
                 style={[styles.viewToggleBtn, viewMode === 'grid' && styles.viewToggleBtnActive]}
                 onPress={() => setViewMode('grid')}
               >
-                <Ionicons name="grid" size={16} color={viewMode === 'grid' ? '#ffcd57' : '#9CA3AF'} />
+                <Ionicons name="grid" size={16} color={viewMode === 'grid' ? colors.lightMustard : colors.neutral[400]} />
               </Pressable>
             </View>
             {/* Sort */}
             <Pressable style={styles.sortButton} onPress={handleSort}>
-              <Ionicons name="swap-vertical" size={14} color="#6B7280" />
+              <Ionicons name="swap-vertical" size={14} color={colors.neutral[500]} />
               <Text style={styles.sortText}>{sortBy === 'default' ? 'Sort' : sortBy === 'rating' ? 'Top Rated' : 'A-Z'}</Text>
             </Pressable>
           </View>
@@ -455,7 +456,7 @@ const ExploreStoresPage = () => {
             viewMode === 'grid' && styles.storesContainerGrid,
           ]}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#ffcd57']} />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.lightMustard]} />
           }
         >
           {/* Loading State */}
@@ -467,7 +468,7 @@ const ExploreStoresPage = () => {
           {error && !loading && (
             <View style={styles.errorContainer}>
               <View style={styles.errorIconContainer}>
-                <Ionicons name="alert-circle" size={48} color="#EF4444" />
+                <Ionicons name="alert-circle" size={48} color={colors.error} />
               </View>
               <Text style={styles.errorTitle}>Oops! Something went wrong</Text>
               <Text style={styles.errorText}>{error}</Text>
@@ -481,7 +482,7 @@ const ExploreStoresPage = () => {
           {!loading && !error && filteredStores.length === 0 && (
             <View style={styles.emptyContainer}>
               <View style={styles.emptyIconContainer}>
-                <Ionicons name="storefront-outline" size={48} color="#9CA3AF" />
+                <Ionicons name="storefront-outline" size={48} color={colors.neutral[400]} />
               </View>
               <Text style={styles.emptyTitle}>No stores found</Text>
               <Text style={styles.emptySubtext}>
@@ -516,12 +517,12 @@ const ExploreStoresPage = () => {
          
         >
           <LinearGradient
-            colors={['#ffcd57', '#1a3a52']}
+            colors={[colors.lightMustard, colors.nileBlue]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.floatingMapGradient}
           >
-            <Ionicons name="map" size={18} color="#FFFFFF" />
+            <Ionicons name="map" size={18} color={colors.background.primary} />
             <Text style={styles.floatingMapText}>Map View</Text>
           </LinearGradient>
         </Pressable>
@@ -744,7 +745,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.base,
@@ -879,7 +880,7 @@ const styles = StyleSheet.create({
   ratingText: {
     ...Typography.bodySmall,
     fontWeight: '700',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
   listCardCategory: {
     fontSize: 13,
@@ -918,7 +919,7 @@ const styles = StyleSheet.create({
   distanceBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     borderRadius: 6,
@@ -927,7 +928,7 @@ const styles = StyleSheet.create({
   distanceText: {
     ...Typography.caption,
     fontWeight: '600',
-    color: '#3B82F6',
+    color: colors.infoScale[400],
   },
   listCardArrow: {
     width: 32,

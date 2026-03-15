@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import FastImage from '@/components/common/FastImage';
+import { colors } from '@/constants/theme';
 
 export interface TopStoreCardProps {
   store: {
@@ -113,7 +114,7 @@ function TopStoreCard({ store, onPress, width = 180 }: TopStoreCardProps) {
             />
           ) : (
             <View style={[styles.image, styles.placeholderImage]}>
-              <Ionicons name="storefront-outline" size={40} color="#9CA3AF" />
+              <Ionicons name="storefront-outline" size={40} color={colors.neutral[400]} />
             </View>
           )}
         </View>
@@ -127,7 +128,7 @@ function TopStoreCard({ store, onPress, width = 180 }: TopStoreCardProps) {
 
           {/* Rating and Distance Row */}
           <View style={styles.infoRow}>
-            <Ionicons name="star" size={14} color="#FFC857" />
+            <Ionicons name="star" size={14} color={colors.brand.goldWarm} />
             <ThemedText style={styles.ratingText}>
               {formattedRating}
             </ThemedText>
@@ -145,7 +146,7 @@ function TopStoreCard({ store, onPress, width = 180 }: TopStoreCardProps) {
           <View style={styles.cashbackEarnRow}>
             {/* Cashback Percentage - Left */}
             <View style={styles.cashbackRow}>
-              <Ionicons name="refresh-circle" size={14} color="#ffcd57" />
+              <Ionicons name="refresh-circle" size={14} color={colors.lightMustard} />
               <ThemedText style={styles.cashbackText}>
                 {cashbackPercentage}%
               </ThemedText>
@@ -172,14 +173,14 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(255, 205, 87, 0.08)',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
         shadowRadius: 12,
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     height: 140,
     width: '100%',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     overflow: 'hidden',
   },
   image: {
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
   placeholderImage: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   content: {
     padding: 12,
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 6,
   },
   infoRow: {
@@ -225,19 +226,19 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginLeft: 4,
   },
   dot: {
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#9CA3AF',
+    backgroundColor: colors.neutral[400],
     marginHorizontal: 6,
   },
   distanceText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   cashbackEarnRow: {
     flexDirection: 'row',
@@ -254,10 +255,10 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   earnBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 8,
     paddingVertical: 5,
     borderRadius: 8,
@@ -267,6 +268,6 @@ const styles = StyleSheet.create({
   earnText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });

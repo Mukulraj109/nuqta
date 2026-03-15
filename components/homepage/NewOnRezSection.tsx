@@ -34,6 +34,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { storesApi } from '@/services/storesApi';
 import CoinIcon from '@/components/ui/CoinIcon';
+import { colors } from '@/constants/theme';
 
 // Video Component - uses native video for web, expo-av for mobile
 const AutoPlayVideo: React.FC<{ uri: string; poster?: string; style?: any }> = ({ uri, poster, style }) => {
@@ -99,7 +100,7 @@ const AutoPlayVideo: React.FC<{ uri: string; poster?: string; style?: any }> = (
     return (
       <View
         ref={webContainerRef}
-        style={[{ width: '100%', height: '100%', overflow: 'hidden', backgroundColor: '#f3f4f6' }, style]}
+        style={[{ width: '100%', height: '100%', overflow: 'hidden', backgroundColor: colors.neutral[100] }, style]}
         // @ts-ignore - web specific props
         dataSet={{ videoContainer: 'true', videoUri: uri }}
       />
@@ -127,19 +128,19 @@ const CARD_GAP = 12;
 
 // Colors
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#1a3a52',
-  gray50: '#F9FAFB',
-  gray100: '#F3F4F6',
-  gray200: '#E5E7EB',
-  gray400: '#9CA3AF',
-  gray600: '#6B7280',
-  nileBlue: '#1a3a52',
-  nileBlueLight: '#234b68',
-  amber400: '#ffcd57',
-  amber500: '#E6B84E',
-  orange500: '#ffd7b5',
-  red500: '#1a3a52',
+  white: colors.background.primary,
+  navy: colors.nileBlue,
+  gray50: colors.neutral[50],
+  gray100: colors.neutral[100],
+  gray200: colors.neutral[200],
+  gray400: colors.neutral[400],
+  gray600: colors.neutral[500],
+  nileBlue: colors.nileBlue,
+  nileBlueLight: colors.brand.nileBlueLight,
+  amber400: colors.lightMustard,
+  amber500: colors.brand.goldRich,
+  orange500: colors.lightPeach,
+  red500: colors.nileBlue,
 };
 
 interface NewStore {

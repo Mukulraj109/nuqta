@@ -26,22 +26,23 @@ import apiClient from '@/services/apiClient';
 import { storesApi } from '@/services/storesApi';
 import { useAuth } from '@/contexts/AuthContext';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  teal: '#14B8A6',
+  teal: colors.tealGreen,
   tealDark: '#0D9488',
   tealLight: '#F0FDFA',
-  dark: '#1a3a52',
+  dark: colors.nileBlue,
   darkDeep: '#0f2638',
-  gold: '#FBBF24',
-  goldDark: '#F59E0B',
-  green: '#22C55E',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F8F9FA',
-  border: '#E5E7EB',
-  unavailable: '#E5E7EB',
+  gold: colors.warningScale[400],
+  goldDark: colors.warningScale[400],
+  green: colors.success,
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.offWhite,
+  border: colors.neutral[200],
+  unavailable: colors.neutral[200],
 };
 
 const PRODUCT_TYPES = [
@@ -266,7 +267,7 @@ function ApplyServicePage() {
             </View>
             <View style={styles.confirmDivider} />
             <View style={styles.confirmRow}>
-              <View style={[styles.confirmRowIcon, { backgroundColor: 'rgba(139,92,246,0.1)' }]}><Ionicons name="document-text" size={16} color="#8B5CF6" /></View>
+              <View style={[styles.confirmRowIcon, { backgroundColor: 'rgba(139,92,246,0.1)' }]}><Ionicons name="document-text" size={16} color={colors.brand.purpleLight} /></View>
               <View><Text style={styles.confirmRowLabel}>Product</Text><Text style={styles.confirmRowValue}>{productName}</Text></View>
             </View>
           </View>
@@ -410,7 +411,7 @@ const styles = StyleSheet.create({
   storeCard: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, backgroundColor: COLORS.white, borderRadius: 16, marginBottom: 10, ...Platform.select({ ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.04, shadowRadius: 8 }, android: { elevation: 2 }, web: { boxShadow: '0 1px 4px rgba(0,0,0,0.06)' } }) },
   storeImgWrap: { position: 'relative' },
   storeImg: { width: 64, height: 64, borderRadius: 14 },
-  storeImgPlaceholder: { backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center' },
+  storeImgPlaceholder: { backgroundColor: colors.neutral[100], justifyContent: 'center', alignItems: 'center' },
   storeCashbackBadge: { position: 'absolute', bottom: -4, right: -4, backgroundColor: COLORS.teal, borderRadius: 8, paddingHorizontal: 5, paddingVertical: 2 },
   storeCashbackText: { fontSize: 9, fontWeight: '700', color: COLORS.white },
   storeInfo: { flex: 1 },
@@ -466,7 +467,7 @@ const styles = StyleSheet.create({
   confirmRowIcon: { width: 36, height: 36, borderRadius: 10, justifyContent: 'center', alignItems: 'center' },
   confirmRowLabel: { fontSize: 11, color: COLORS.textSecondary },
   confirmRowValue: { fontSize: 15, fontWeight: '600', color: COLORS.textPrimary, marginTop: 1 },
-  confirmDivider: { height: 1, backgroundColor: '#F3F4F6', marginVertical: 10, marginLeft: 50 },
+  confirmDivider: { height: 1, backgroundColor: colors.neutral[100], marginVertical: 10, marginLeft: 50 },
   confirmNote: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, padding: 16, backgroundColor: COLORS.tealLight, borderRadius: 14, marginBottom: 24, width: '100%' },
   confirmNoteText: { flex: 1, fontSize: 13, color: COLORS.tealDark, lineHeight: 18 },
   doneBtn: { width: '100%', paddingVertical: 16, backgroundColor: COLORS.teal, borderRadius: 16, alignItems: 'center' },

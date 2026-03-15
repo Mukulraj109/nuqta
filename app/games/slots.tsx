@@ -23,6 +23,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const nuqtaCoinImage = BRAND.COIN_IMAGE;
 
@@ -210,7 +211,7 @@ export default function SlotsPage() {
       {/* Slot Machine */}
       <View style={styles.machineContainer}>
         <LinearGradient
-          colors={['#374151', '#1F2937', '#111827']}
+          colors={[colors.neutral[700], colors.neutral[800], colors.neutral[900]]}
           style={styles.machineBody}
         >
           {/* Machine Header */}
@@ -222,7 +223,7 @@ export default function SlotsPage() {
                   key={i}
                   style={[
                     styles.light,
-                    { backgroundColor: spinning ? (i % 2 === 0 ? '#FFD700' : '#EF4444') : '#4B5563' },
+                    { backgroundColor: spinning ? (i % 2 === 0 ? colors.brand.goldBright : colors.error) : colors.neutral[600] },
                   ]}
                 />
               ))}
@@ -266,7 +267,7 @@ export default function SlotsPage() {
               <Ionicons
                 name={lastResult.winType === 'jackpot' ? 'star' : 'happy'}
                 size={28}
-                color={lastResult.winType === 'jackpot' ? '#FFD700' : '#10B981'}
+                color={lastResult.winType === 'jackpot' ? colors.brand.goldBright : colors.successScale[400]}
               />
               <View>
                 <Text style={styles.resultTitle}>
@@ -292,7 +293,7 @@ export default function SlotsPage() {
        
       >
         <LinearGradient
-          colors={spinning ? ['#9CA3AF', '#6B7280'] : ['#EF4444', '#DC2626']}
+          colors={spinning ? [colors.neutral[400], colors.neutral[500]] : [colors.error, colors.error]}
           style={styles.spinButtonGradient}
         >
           {spinning ? (
@@ -361,7 +362,7 @@ export default function SlotsPage() {
         options={{
           title: 'Slot Machine',
           headerStyle: { backgroundColor: '#FF8B94' },
-          headerTintColor: '#111827',
+          headerTintColor: colors.neutral[900],
           headerTitleStyle: { fontWeight: 'bold' },
           headerLeft: () => (
             <Pressable
@@ -462,7 +463,7 @@ const styles = StyleSheet.create({
   machineHeaderText: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#FFD700',
+    color: colors.brand.goldBright,
     letterSpacing: 3,
     marginBottom: Spacing.sm,
   },
@@ -505,7 +506,7 @@ const styles = StyleSheet.create({
   reelDivider: {
     width: 2,
     height: 70,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   payline: {
     flexDirection: 'row',
@@ -516,7 +517,7 @@ const styles = StyleSheet.create({
   paylineLeft: {
     flex: 1,
     height: 2,
-    backgroundColor: '#FFD700',
+    backgroundColor: colors.brand.goldBright,
   },
   paylineCenter: {
     paddingHorizontal: 12,
@@ -527,12 +528,12 @@ const styles = StyleSheet.create({
   paylineRight: {
     flex: 1,
     height: 2,
-    backgroundColor: '#FFD700',
+    backgroundColor: colors.brand.goldBright,
   },
   winBadgeText: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#FFD700',
+    color: colors.brand.goldBright,
     letterSpacing: 2,
   },
   // Result Card

@@ -21,6 +21,7 @@ import apiClient from '@/services/apiClient';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 export default function ChangePasswordPage() {
   const router = useRouter();
   const { actions } = useAuth();
@@ -132,7 +133,7 @@ export default function ChangePasswordPage() {
           value={formData[field]}
           onChangeText={(value) => handleInputChange(field, value)}
           placeholder={placeholder}
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.neutral[400]}
           secureTextEntry={!showPasswords[showField]}
           autoCapitalize="none"
           autoCorrect={false}
@@ -149,7 +150,7 @@ export default function ChangePasswordPage() {
           <Ionicons
             name={showPasswords[showField] ? 'eye-off' : 'eye'}
             size={20}
-            color="#6B7280"
+            color={colors.neutral[500]}
           />
         </Pressable>
       </View>
@@ -159,10 +160,10 @@ export default function ChangePasswordPage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#8B5CF6" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.brand.purpleLight} />
 
       {/* Header */}
-      <LinearGradient colors={['#8B5CF6', '#7C3AED']} style={styles.header}>
+      <LinearGradient colors={[colors.brand.purpleLight, colors.brand.purple]} style={styles.header}>
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
@@ -184,7 +185,7 @@ export default function ChangePasswordPage() {
         {/* Security Info */}
         <View style={styles.infoCard}>
           <View style={styles.infoHeader}>
-            <Ionicons name="shield-checkmark" size={24} color="#8B5CF6" />
+            <Ionicons name="shield-checkmark" size={24} color={colors.brand.purpleLight} />
             <ThemedText style={styles.infoTitle}>Password Security</ThemedText>
           </View>
           <ThemedText style={styles.infoText}>
@@ -242,19 +243,19 @@ export default function ChangePasswordPage() {
           <ThemedText style={styles.tipsTitle}>Password Tips</ThemedText>
           <View style={styles.tipsList}>
             <View style={styles.tipItem}>
-              <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
               <ThemedText style={styles.tipText}>Use at least 6 characters</ThemedText>
             </View>
             <View style={styles.tipItem}>
-              <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
               <ThemedText style={styles.tipText}>Include numbers and symbols</ThemedText>
             </View>
             <View style={styles.tipItem}>
-              <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
               <ThemedText style={styles.tipText}>Avoid common words</ThemedText>
             </View>
             <View style={styles.tipItem}>
-              <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
               <ThemedText style={styles.tipText}>Don't reuse old passwords</ThemedText>
             </View>
           </View>
@@ -385,7 +386,7 @@ const styles = StyleSheet.create({
     padding: Spacing.sm,
   },
   changeButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -409,7 +410,7 @@ const styles = StyleSheet.create({
     }),
   },
   changeButtonDisabled: {
-    backgroundColor: '#A78BFA',
+    backgroundColor: colors.brand.purpleSoft,
   },
   changeButtonText: {
     color: 'white',

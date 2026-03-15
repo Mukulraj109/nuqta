@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { DealCategory } from '@/types/deals';
 import { SortOption, FilterOption } from '@/components/DealList';
+import { colors } from '@/constants/theme';
 
 interface DealFilterModalProps {
   visible: boolean;
@@ -140,14 +141,14 @@ function DealFilterModal({
 
   const getCategoryInfo = (category: DealCategory | 'all') => {
     const categoryMap: Record<DealCategory | 'all', { label: string; icon: string; color: string }> = {
-      'all': { label: 'All Deals', icon: 'apps-outline', color: '#6B7280' },
-      'instant-discount': { label: 'Instant Discount', icon: 'flash-outline', color: '#8B5CF6' },
-      'cashback': { label: 'Cashback', icon: 'wallet-outline', color: '#10B981' },
-      'buy-one-get-one': { label: 'Buy One Get One', icon: 'gift-outline', color: '#F59E0B' },
-      'seasonal': { label: 'Seasonal', icon: 'sunny-outline', color: '#EF4444' },
-      'first-time': { label: 'First Time User', icon: 'star-outline', color: '#3B82F6' },
-      'loyalty': { label: 'Loyalty Program', icon: 'diamond-outline', color: '#7C3AED' },
-      'clearance': { label: 'Clearance Sale', icon: 'pricetag-outline', color: '#DC2626' },
+      'all': { label: 'All Deals', icon: 'apps-outline', color: colors.neutral[500] },
+      'instant-discount': { label: 'Instant Discount', icon: 'flash-outline', color: colors.brand.purpleLight },
+      'cashback': { label: 'Cashback', icon: 'wallet-outline', color: colors.successScale[400] },
+      'buy-one-get-one': { label: 'Buy One Get One', icon: 'gift-outline', color: colors.warningScale[400] },
+      'seasonal': { label: 'Seasonal', icon: 'sunny-outline', color: colors.error },
+      'first-time': { label: 'First Time User', icon: 'star-outline', color: colors.infoScale[400] },
+      'loyalty': { label: 'Loyalty Program', icon: 'diamond-outline', color: colors.brand.purple },
+      'clearance': { label: 'Clearance Sale', icon: 'pricetag-outline', color: colors.error },
     };
     return categoryMap[category] || categoryMap['all'];
   };
@@ -199,11 +200,11 @@ function DealFilterModal({
                   <View style={styles.section}>
                     <ThemedText style={styles.sectionTitle}>Search Deals</ThemedText>
                     <View style={styles.searchContainer}>
-                      <Ionicons name="search-outline" size={20} color="#9CA3AF" style={styles.searchIcon} />
+                      <Ionicons name="search-outline" size={20} color={colors.neutral[400]} style={styles.searchIcon} />
                       <TextInput
                         style={styles.searchInput}
                         placeholder="Search by deal title or description"
-                        placeholderTextColor="#9CA3AF"
+                        placeholderTextColor={colors.neutral[400]}
                         value={searchTerm}
                         onChangeText={setSearchTerm}
                       />
@@ -215,7 +216,7 @@ function DealFilterModal({
                           accessibilityRole="button"
                           accessibilityHint="Double tap to clear search text"
                         >
-                          <Ionicons name="close-circle" size={20} color="#9CA3AF" />
+                          <Ionicons name="close-circle" size={20} color={colors.neutral[400]} />
                         </Pressable>
                       )}
                     </View>
@@ -236,7 +237,7 @@ function DealFilterModal({
                         <Ionicons 
                           name={option.icon as any} 
                           size={20} 
-                          color={selectedSort === option.key ? '#8B5CF6' : '#6B7280'} 
+                          color={selectedSort === option.key ? colors.brand.purpleLight : colors.neutral[500]} 
                         />
                         <View style={styles.optionContent}>
                           <ThemedText style={[
@@ -250,7 +251,7 @@ function DealFilterModal({
                           </ThemedText>
                         </View>
                         {selectedSort === option.key && (
-                          <Ionicons name="checkmark-circle" size={20} color="#8B5CF6" />
+                          <Ionicons name="checkmark-circle" size={20} color={colors.brand.purpleLight} />
                         )}
                       </Pressable>
                     ))}
@@ -270,12 +271,12 @@ function DealFilterModal({
                     >
                       <View style={[
                         styles.categoryIcon,
-                        { backgroundColor: selectedFilter === 'all' ? '#8B5CF6' : '#F3F4F6' }
+                        { backgroundColor: selectedFilter === 'all' ? colors.brand.purpleLight : colors.neutral[100] }
                       ]}>
                         <Ionicons 
                           name="apps-outline" 
                           size={16} 
-                          color={selectedFilter === 'all' ? '#fff' : '#6B7280'} 
+                          color={selectedFilter === 'all' ? colors.background.primary : colors.neutral[500]} 
                         />
                       </View>
                       <ThemedText style={[
@@ -285,7 +286,7 @@ function DealFilterModal({
                         All Deals
                       </ThemedText>
                       {selectedFilter === 'all' && (
-                        <Ionicons name="checkmark-circle" size={18} color="#8B5CF6" />
+                        <Ionicons name="checkmark-circle" size={18} color={colors.brand.purpleLight} />
                       )}
                     </Pressable>
 
@@ -305,12 +306,12 @@ function DealFilterModal({
                         >
                           <View style={[
                             styles.categoryIcon,
-                            { backgroundColor: isSelected ? categoryInfo.color : '#F3F4F6' }
+                            { backgroundColor: isSelected ? categoryInfo.color : colors.neutral[100] }
                           ]}>
                             <Ionicons 
                               name={categoryInfo.icon as any} 
                               size={16} 
-                              color={isSelected ? '#fff' : '#6B7280'} 
+                              color={isSelected ? colors.background.primary : colors.neutral[500]} 
                             />
                           </View>
                           <ThemedText style={[
@@ -337,7 +338,7 @@ function DealFilterModal({
                     accessibilityRole="button"
                     accessibilityHint="Double tap to reset all filters to default"
                   >
-                    <Ionicons name="refresh-outline" size={16} color="#6B7280" />
+                    <Ionicons name="refresh-outline" size={16} color={colors.neutral[500]} />
                     <ThemedText style={styles.resetButtonText}>Reset</ThemedText>
                   </Pressable>
 
@@ -385,7 +386,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
       paddingBottom: 16,
     },
     modal: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.background.primary,
       borderRadius: 20,
       width: '100%',
       maxHeight: '90%',
@@ -399,7 +400,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
       alignItems: 'center',
       padding: 20,
       borderBottomWidth: 1,
-      borderBottomColor: '#F1F5F9',
+      borderBottomColor: colors.tint.slate,
       position: 'relative',
     },
     closeButton: {
@@ -417,12 +418,12 @@ const createStyles = (screenData: { width: number; height: number }) => {
     title: {
       fontSize: 20,
       fontWeight: '700',
-      color: '#111827',
+      color: colors.neutral[900],
       marginBottom: 4,
     },
     subtitle: {
       fontSize: 14,
-      color: '#6B7280',
+      color: colors.neutral[500],
     },
     content: {
       flex: 1,
@@ -434,16 +435,16 @@ const createStyles = (screenData: { width: number; height: number }) => {
     sectionTitle: {
       fontSize: 16,
       fontWeight: '600',
-      color: '#374151',
+      color: colors.neutral[700],
       marginBottom: 16,
     },
     searchContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#F9FAFB',
+      backgroundColor: colors.neutral[50],
       borderRadius: 12,
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.neutral[200],
       paddingHorizontal: 16,
       paddingVertical: 12,
     },
@@ -453,7 +454,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
     searchInput: {
       flex: 1,
       fontSize: 16,
-      color: '#374151',
+      color: colors.neutral[700],
     },
     clearSearchButton: {
       padding: 4,
@@ -462,15 +463,15 @@ const createStyles = (screenData: { width: number; height: number }) => {
       flexDirection: 'row',
       alignItems: 'center',
       padding: 16,
-      backgroundColor: '#F9FAFB',
+      backgroundColor: colors.neutral[50],
       borderRadius: 12,
       marginBottom: 8,
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.neutral[200],
     },
     optionItemSelected: {
-      backgroundColor: '#F3F4F6',
-      borderColor: '#8B5CF6',
+      backgroundColor: colors.neutral[100],
+      borderColor: colors.brand.purpleLight,
     },
     optionContent: {
       flex: 1,
@@ -479,29 +480,29 @@ const createStyles = (screenData: { width: number; height: number }) => {
     optionLabel: {
       fontSize: 14,
       fontWeight: '600',
-      color: '#374151',
+      color: colors.neutral[700],
       marginBottom: 2,
     },
     optionLabelSelected: {
-      color: '#8B5CF6',
+      color: colors.brand.purpleLight,
     },
     optionDescription: {
       fontSize: 12,
-      color: '#6B7280',
+      color: colors.neutral[500],
     },
     categoryItem: {
       flexDirection: 'row',
       alignItems: 'center',
       padding: 12,
-      backgroundColor: '#F9FAFB',
+      backgroundColor: colors.neutral[50],
       borderRadius: 8,
       marginBottom: 6,
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.neutral[200],
     },
     categoryItemSelected: {
-      backgroundColor: '#F3F4F6',
-      borderColor: '#8B5CF6',
+      backgroundColor: colors.neutral[100],
+      borderColor: colors.brand.purpleLight,
     },
     categoryIcon: {
       width: 32,
@@ -515,17 +516,17 @@ const createStyles = (screenData: { width: number; height: number }) => {
       flex: 1,
       fontSize: 14,
       fontWeight: '500',
-      color: '#374151',
+      color: colors.neutral[700],
     },
     categoryLabelSelected: {
-      color: '#374151',
+      color: colors.neutral[700],
       fontWeight: '600',
     },
     footer: {
       flexDirection: 'row',
       padding: 20,
       borderTopWidth: 1,
-      borderTopColor: '#F1F5F9',
+      borderTopColor: colors.tint.slate,
       gap: 12,
     },
     resetButton: {
@@ -534,21 +535,21 @@ const createStyles = (screenData: { width: number; height: number }) => {
       justifyContent: 'center',
       flex: 1,
       paddingVertical: 14,
-      backgroundColor: '#F9FAFB',
+      backgroundColor: colors.neutral[50],
       borderRadius: 12,
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.neutral[200],
     },
     resetButtonText: {
       fontSize: 14,
       fontWeight: '600',
-      color: '#6B7280',
+      color: colors.neutral[500],
       marginLeft: 6,
     },
     applyButton: {
       flex: 2,
       paddingVertical: 14,
-      backgroundColor: '#8B5CF6',
+      backgroundColor: colors.brand.purpleLight,
       borderRadius: 12,
       alignItems: 'center',
       justifyContent: 'center',
@@ -556,7 +557,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
     applyButtonText: {
       fontSize: 16,
       fontWeight: '700',
-      color: '#fff',
+      color: colors.background.primary,
     },
   });
 };

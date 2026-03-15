@@ -18,6 +18,7 @@ import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import exploreApi, { ExploreStore, Category } from '@/services/exploreApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -319,7 +320,7 @@ const CategoryDetailPage = () => {
               {(store.offer || store.cashback) && (
                 <View style={styles.offerRow}>
                   <View style={styles.offerBadge}>
-                    <Ionicons name="pricetag" size={11} color="#92400E" />
+                    <Ionicons name="pricetag" size={11} color={colors.brand.amberDark} />
                     <Text style={styles.offerText}>{store.offer || `${store.cashback} Cashback`}</Text>
                   </View>
                 </View>
@@ -370,7 +371,7 @@ const CategoryDetailPage = () => {
           colors={[Colors.gold, Colors.nileBlue]}
           style={styles.mapButtonGradient}
         >
-          <Ionicons name="map" size={20} color="#FFFFFF" />
+          <Ionicons name="map" size={20} color={colors.background.primary} />
           <Text style={styles.mapButtonText}>Map View</Text>
         </LinearGradient>
       </Pressable>
@@ -644,7 +645,7 @@ const styles = StyleSheet.create({
   offerText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   storeFooter: {
     flexDirection: 'row',

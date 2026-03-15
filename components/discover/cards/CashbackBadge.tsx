@@ -1,6 +1,7 @@
 // CashbackBadge.tsx - Cashback percentage badge component
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { colors } from '@/constants/theme';
 
 interface CashbackBadgeProps {
   percent: number | string;
@@ -73,13 +74,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   text_default: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   text_light: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   text_dark: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 });
 

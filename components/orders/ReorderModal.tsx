@@ -18,6 +18,7 @@ import { router } from 'expo-router';
 import { useCart } from '@/contexts/CartContext';
 import { showToast } from '@/components/common/ToastManager';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface ReorderModalProps {
   visible: boolean;
@@ -332,7 +333,7 @@ function ReorderModal({
                   {validation.totalDifference !== 0 && (
                     <Text style={[
                       styles.totalDiff,
-                      { color: validation.totalDifference > 0 ? '#dc2626' : '#16a34a' }
+                      { color: validation.totalDifference > 0 ? colors.error : '#16a34a' }
                     ]}>
                       {validation.totalDifference > 0 ? '+' : ''}{currencySymbol}{validation.totalDifference.toFixed(2)} from original
                     </Text>
@@ -348,7 +349,7 @@ function ReorderModal({
                   disabled={reordering || selectedItems.size === 0}
                 >
                   {reordering ? (
-                    <ActivityIndicator color="#fff" />
+                    <ActivityIndicator color={colors.background.primary} />
                   ) : (
                     <Text style={styles.reorderButtonText}>Add to Cart</Text>
                   )}
@@ -369,7 +370,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: '90%',
@@ -382,29 +383,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6'
+    borderBottomColor: colors.neutral[100]
   },
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4
   },
   subtitle: {
     fontSize: 14,
-    color: '#6b7280'
+    color: colors.neutral[500]
   },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center'
   },
   closeButtonText: {
     fontSize: 20,
-    color: '#6b7280',
+    color: colors.neutral[500],
     fontWeight: '600'
   },
   loadingContainer: {
@@ -414,7 +415,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6b7280'
+    color: colors.neutral[500]
   },
   errorContainer: {
     padding: 20,
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#dc2626',
+    color: colors.error,
     textAlign: 'center',
     marginBottom: 16
   },
@@ -433,7 +434,7 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   retryButtonText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600'
   },
@@ -462,9 +463,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 12,
-    backgroundColor: '#f9fafb',
+    backgroundColor: colors.neutral[50],
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb'
+    borderBottomColor: colors.neutral[200]
   },
   selectAllCheckbox: {
     marginRight: 12
@@ -472,7 +473,7 @@ const styles = StyleSheet.create({
   selectAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827'
+    color: colors.neutral[900]
   },
   itemsList: {
     maxHeight: 400
@@ -481,12 +482,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6',
-    backgroundColor: '#fff'
+    borderBottomColor: colors.neutral[100],
+    backgroundColor: colors.background.primary
   },
   itemCardDisabled: {
     opacity: 0.5,
-    backgroundColor: '#f9fafb'
+    backgroundColor: colors.neutral[50]
   },
   checkbox: {
     marginRight: 12,
@@ -497,7 +498,7 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#d1d5db',
+    borderColor: colors.neutral[300],
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -506,7 +507,7 @@ const styles = StyleSheet.create({
     borderColor: '#6366f1'
   },
   checkmark: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: '700'
   },
@@ -519,7 +520,7 @@ const styles = StyleSheet.create({
   },
   itemQuantity: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 8
   },
   priceRow: {
@@ -530,7 +531,7 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginRight: 8
   },
   priceBadge: {
@@ -544,33 +545,33 @@ const styles = StyleSheet.create({
   },
   stockWarning: {
     fontSize: 12,
-    color: '#f59e0b',
+    color: colors.warningScale[400],
     marginTop: 4
   },
   unavailableText: {
     fontSize: 12,
-    color: '#dc2626',
+    color: colors.error,
     fontWeight: '500',
     marginTop: 4
   },
   footer: {
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
-    backgroundColor: '#fff'
+    borderTopColor: colors.neutral[200],
+    backgroundColor: colors.background.primary
   },
   totalSection: {
     marginBottom: 16
   },
   totalLabel: {
     fontSize: 12,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 4
   },
   totalAmount: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827'
+    color: colors.neutral[900]
   },
   totalDiff: {
     fontSize: 12,
@@ -583,11 +584,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   reorderButtonDisabled: {
-    backgroundColor: '#d1d5db',
+    backgroundColor: colors.neutral[300],
     opacity: 0.6
   },
   reorderButtonText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: '600'
   }

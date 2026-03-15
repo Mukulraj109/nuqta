@@ -11,6 +11,7 @@ import { SectionHeader } from '../common';
 import { OfferCardCompact } from '../cards';
 import { TodaysOffer } from '@/types/offers.types';
 import { Spacing } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface TodaysOffersSectionProps {
   offers: TodaysOffer[];
@@ -35,7 +36,7 @@ export const TodaysOffersSection: React.FC<TodaysOffersSectionProps> = ({
         title="Today's Offers"
         subtitle="Fresh deals for you"
         icon="today"
-        iconColor="#10B981"
+        iconColor={colors.successScale[400]}
         showViewAll={offers.length > 4}
         onViewAll={onViewAll}
       />

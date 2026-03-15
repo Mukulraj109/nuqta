@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import gamificationAPI from '@/services/gamificationApi';
 import type { QuizGame as QuizGameType, QuizQuestion } from '@/types/gamification.types';
+import { colors } from '@/constants/theme';
 
 interface QuizGameProps {
   difficulty?: 'easy' | 'medium' | 'hard';
@@ -164,7 +165,7 @@ function QuizGame({ difficulty, category, onGameComplete }: QuizGameProps) {
         disabled={isSubmitting}
       >
         <View style={[styles.optionLabel, isSelected && styles.optionLabelSelected]}>
-          <ThemedText style={[styles.optionLabelText, isSelected && { color: '#FFFFFF' }]}>
+          <ThemedText style={[styles.optionLabelText, isSelected && { color: colors.background.primary }]}>
             {optionLabels[index]}
           </ThemedText>
         </View>
@@ -189,17 +190,17 @@ function QuizGame({ difficulty, category, onGameComplete }: QuizGameProps) {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <LinearGradient colors={['#8B5CF6', '#7C3AED']} style={styles.header}>
+      <LinearGradient colors={[colors.brand.purpleLight, colors.brand.purple]} style={styles.header}>
         <View style={styles.headerRow}>
           <View style={styles.scoreBox}>
-            <Ionicons name="star" size={16} color="#FFFFFF" />
+            <Ionicons name="star" size={16} color={colors.background.primary} />
             <ThemedText style={styles.scoreText}>{score}</ThemedText>
           </View>
           <ThemedText style={styles.questionCounter}>
             {questionNumber}/{totalQuestions}
           </ThemedText>
           <View style={styles.coinsBox}>
-            <Ionicons name="diamond" size={16} color="#FFFFFF" />
+            <Ionicons name="diamond" size={16} color={colors.background.primary} />
             <ThemedText style={styles.coinsText}>{totalCoins}</ThemedText>
           </View>
         </View>
@@ -212,7 +213,7 @@ function QuizGame({ difficulty, category, onGameComplete }: QuizGameProps) {
                 styles.timerProgress,
                 {
                   width: `${(timer / (currentQuestion?.timeLimit || 30)) * 100}%`,
-                  backgroundColor: timer <= 5 ? '#EF4444' : '#10B981',
+                  backgroundColor: timer <= 5 ? colors.error : colors.successScale[400],
                 },
               ]}
             />
@@ -247,13 +248,13 @@ function QuizGame({ difficulty, category, onGameComplete }: QuizGameProps) {
           disabled={selectedAnswer === null || isSubmitting}
         >
           <LinearGradient
-            colors={selectedAnswer !== null ? ['#10B981', '#059669'] : ['#9CA3AF', '#6B7280']}
+            colors={selectedAnswer !== null ? [colors.successScale[400], colors.successScale[700]] : [colors.neutral[400], colors.neutral[500]]}
             style={styles.submitButtonGradient}
           >
             <ThemedText style={styles.submitButtonText}>
               {isSubmitting ? 'Submitting...' : 'Submit Answer'}
             </ThemedText>
-            <Ionicons name="checkmark-circle" size={24} color="#FFFFFF" />
+            <Ionicons name="checkmark-circle" size={24} color={colors.background.primary} />
           </LinearGradient>
         </Pressable>
       </ScrollView>
@@ -290,12 +291,12 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   scoreText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: 'bold',
   },
   questionCounter: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   coinsText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: 'bold',
   },
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   timerText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
     minWidth: 40,
@@ -340,7 +341,7 @@ const styles = StyleSheet.create({
   },
   questionContainer: {
     margin: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 20,
     shadowColor: '#000',
@@ -351,7 +352,7 @@ const styles = StyleSheet.create({
   },
   difficultyBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 8,
@@ -360,12 +361,12 @@ const styles = StyleSheet.create({
   difficultyText: {
     fontSize: 10,
     fontWeight: 'bold',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   questionText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     lineHeight: 26,
   },
   optionsContainer: {
@@ -375,11 +376,11 @@ const styles = StyleSheet.create({
   optionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -387,33 +388,33 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   optionButtonSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F5F3FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.purpleLight,
   },
   optionLabel: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
   },
   optionLabelSelected: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   optionLabelText: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   optionText: {
     flex: 1,
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   optionTextSelected: {
-    color: '#111827',
+    color: colors.neutral[900],
     fontWeight: '600',
   },
   submitButton: {
@@ -437,7 +438,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   submitButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
   },

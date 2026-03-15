@@ -22,14 +22,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { experiencesApi, StoreExperience } from '@/services/experiencesApi';
 import { useRegion } from '@/contexts/RegionContext';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  primaryGold: '#F59E0B',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  border: '#E5E7EB',
+  primaryGold: colors.warningScale[400],
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  border: colors.neutral[200],
 };
 
 function StoreCard({ store, currencySymbol }: { store: any; currencySymbol: string }) {
@@ -165,7 +166,7 @@ function ExperienceDetailPage() {
         <View style={styles.benefitsSection}>
           {experience.benefits.map((b, i) => (
             <View key={i} style={styles.benefitRow}>
-              <Ionicons name="checkmark-circle" size={16} color="#22C55E" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.success} />
               <Text style={styles.benefitText}>{b}</Text>
             </View>
           ))}
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
   },
   storeImgContainer: { height: 140, position: 'relative' },
   storeImg: { width: '100%', height: '100%' },
-  storeImgPlaceholder: { backgroundColor: '#E5E7EB', justifyContent: 'center', alignItems: 'center' },
+  storeImgPlaceholder: { backgroundColor: colors.neutral[200], justifyContent: 'center', alignItems: 'center' },
   storeRating: {
     position: 'absolute', bottom: 8, left: 8, flexDirection: 'row', alignItems: 'center',
     paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.9)', gap: 4,
@@ -246,14 +247,14 @@ const styles = StyleSheet.create({
   storeContent: { padding: 12 },
   storeName: { fontSize: 15, fontWeight: '600', color: COLORS.textPrimary, marginBottom: 2 },
   storeLocation: { fontSize: 12, color: COLORS.textSecondary, marginBottom: 6 },
-  cashbackTag: { backgroundColor: '#F3E8FF', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8, alignSelf: 'flex-start' },
-  cashbackText: { fontSize: 11, fontWeight: '600', color: '#8B5CF6' },
+  cashbackTag: { backgroundColor: colors.tint.pink, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8, alignSelf: 'flex-start' },
+  cashbackText: { fontSize: 11, fontWeight: '600', color: colors.brand.purpleLight },
   emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40, marginTop: 60 },
   emptyTitle: { fontSize: 16, fontWeight: '600', color: COLORS.textPrimary, marginTop: 16 },
   emptySubtitle: { fontSize: 13, color: COLORS.textSecondary, marginTop: 4 },
   bookingCTA: {
     padding: 16, paddingBottom: 32, backgroundColor: COLORS.white,
-    borderTopWidth: 1, borderTopColor: '#E5E7EB',
+    borderTopWidth: 1, borderTopColor: colors.neutral[200],
   },
   bookBtn: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,

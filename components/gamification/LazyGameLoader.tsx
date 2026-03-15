@@ -4,6 +4,7 @@
 import React, { Suspense, lazy, ComponentType } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface LazyGameLoaderProps {
   gamePath: string;
@@ -28,7 +29,7 @@ type GameType = keyof typeof GAME_PATHS;
  */
 const DefaultLoader = () => (
   <View style={styles.loaderContainer}>
-    <ActivityIndicator size="large" color="#8B5CF6" />
+    <ActivityIndicator size="large" color={colors.brand.purpleLight} />
     <ThemedText style={styles.loaderText}>Loading game...</ThemedText>
   </View>
 );
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
   loaderText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   errorContainer: {
     flex: 1,
@@ -164,12 +165,12 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#EF4444',
+    color: colors.error,
     marginBottom: 8,
   },
   errorText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
 });

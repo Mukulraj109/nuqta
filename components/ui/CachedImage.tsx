@@ -4,6 +4,7 @@ import { Image as ExpoImage, ImageStyle } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { ShimmerSkeleton } from './ShimmerSkeleton';
 import { optimizeCloudinaryUrl } from '@/utils/cloudinaryHelper';
+import { colors } from '@/constants/theme';
 
 const MAX_RETRIES = 2;
 
@@ -125,11 +126,11 @@ const CachedImage = memo(({
         {fallbackInitials ? (
           <View style={[styles.initialsContainer, { borderRadius }]}>
             <View style={styles.initialsCircle}>
-              <Ionicons name="person" size={iconSize} color="#9CA3AF" />
+              <Ionicons name="person" size={iconSize} color={colors.neutral[400]} />
             </View>
           </View>
         ) : (
-          <Ionicons name={fallbackIcon} size={iconSize} color="#9CA3AF" />
+          <Ionicons name={fallbackIcon} size={iconSize} color={colors.neutral[400]} />
         )}
       </View>
     );
@@ -198,7 +199,7 @@ export function prefetchImages(urls: string[]): void {
 const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   localAssetContainer: {
     backgroundColor: 'transparent',
@@ -206,13 +207,13 @@ const styles = StyleSheet.create({
   errorContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   initialsContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   initialsCircle: {
     justifyContent: 'center',

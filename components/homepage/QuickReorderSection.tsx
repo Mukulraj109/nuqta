@@ -28,6 +28,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useFrequentlyOrdered } from '@/hooks/useReorder';
 import { useRegion } from '@/contexts/RegionContext';
 import type { FrequentlyOrderedItem } from '@/services/reorderApi';
+import { colors } from '@/constants/theme';
 
 interface QuickReorderSectionProps {
   /** Max number of items to fetch (default 5) */
@@ -60,11 +61,11 @@ const QuickReorderSection: React.FC<QuickReorderSectionProps> = ({ limit = 5 }) 
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Ionicons name="bag-handle-outline" size={18} color="#7C3AED" />
+          <Ionicons name="bag-handle-outline" size={18} color={colors.brand.purple} />
           <ThemedText style={styles.title}>Order Again</ThemedText>
         </View>
         <View style={styles.loadingWrap}>
-          <ActivityIndicator size="small" color="#7C3AED" />
+          <ActivityIndicator size="small" color={colors.brand.purple} />
         </View>
       </View>
     );
@@ -76,7 +77,7 @@ const QuickReorderSection: React.FC<QuickReorderSectionProps> = ({ limit = 5 }) 
     <View style={styles.container}>
       {/* Section header */}
       <View style={styles.header}>
-        <Ionicons name="bag-handle-outline" size={18} color="#7C3AED" />
+        <Ionicons name="bag-handle-outline" size={18} color={colors.brand.purple} />
         <ThemedText style={styles.title}>Order Again</ThemedText>
       </View>
 
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   loadingWrap: {
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
 
   card: {
     width: 110,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 8,
     marginRight: 10,
@@ -197,13 +198,13 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 10,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
 
   productName: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#111827',
+    color: colors.neutral[900],
     marginTop: 6,
     textAlign: 'center',
     width: '100%',
@@ -212,13 +213,13 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginTop: 2,
   },
 
   addButton: {
     marginTop: 4,
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 4,
@@ -227,12 +228,12 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   outOfStockBadge: {
     marginTop: 4,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 4,
@@ -241,6 +242,6 @@ const styles = StyleSheet.create({
   outOfStockText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#EF4444',
+    color: colors.error,
   },
 });

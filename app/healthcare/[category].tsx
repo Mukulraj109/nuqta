@@ -23,10 +23,11 @@ import { Ionicons } from '@expo/vector-icons';
 import apiClient from '@/services/apiClient';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
   white: Colors.background.primary,
-  navy: '#0B2240',
+  navy: colors.brand.navyDark,
   gray50: Colors.background.secondary,
   gray100: Colors.background.secondary,
   gray200: Colors.border.default,
@@ -34,7 +35,7 @@ const COLORS = {
   green500: Colors.success,
   red500: Colors.error,
   amber500: Colors.warning,
-  cyan500: '#06B6D4',
+  cyan500: colors.brand.cyan,
 };
 
 // Category configuration
@@ -48,13 +49,13 @@ const categoryConfig: Record<string, {
   doctors: {
     title: 'Doctors',
     icon: 'medical',
-    gradientColors: [Colors.info, '#2563EB'],
+    gradientColors: [Colors.info, colors.brand.blue],
     apiType: 'doctor',
   },
   pharmacy: {
     title: 'Pharmacy',
     icon: 'medkit',
-    gradientColors: [Colors.success, '#059669'],
+    gradientColors: [Colors.success, colors.successScale[700]],
     apiType: 'pharmacy',
     dedicatedPage: '/healthcare/pharmacy',
   },
@@ -75,40 +76,40 @@ const categoryConfig: Record<string, {
   dental: {
     title: 'Dental Care',
     icon: 'happy',
-    gradientColors: ['#EC4899', '#DB2777'],
+    gradientColors: [colors.brand.pink, colors.deepPink],
     apiType: 'doctor',
     dedicatedPage: '/healthcare/dental',
   },
   emergency: {
     title: 'Emergency 24x7',
     icon: 'warning',
-    gradientColors: [Colors.error, '#DC2626'],
+    gradientColors: [Colors.error, colors.error],
     apiType: 'emergency',
     dedicatedPage: '/healthcare/emergency',
   },
   records: {
     title: 'Health Records',
     icon: 'document-text',
-    gradientColors: ['#06B6D4', '#0891B2'],
+    gradientColors: [colors.brand.cyan, colors.cyanDark],
     apiType: 'records',
     dedicatedPage: '/healthcare/records',
   },
   teleconsult: {
     title: 'Teleconsult',
     icon: 'videocam',
-    gradientColors: [Colors.success, '#059669'],
+    gradientColors: [Colors.success, colors.successScale[700]],
     apiType: 'doctor',
   },
   insurance: {
     title: 'Health Insurance',
     icon: 'shield-checkmark',
-    gradientColors: ['#F97316', '#EA580C'],
+    gradientColors: [colors.brand.orange, colors.brand.orangeDark],
     apiType: 'insurance',
   },
   offers: {
     title: 'Health Offers',
     icon: 'pricetag',
-    gradientColors: [Colors.error, '#DC2626'],
+    gradientColors: [Colors.error, colors.error],
     apiType: 'offers',
   },
 };

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Pressable, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface SocialActionsProps {
   videoId: string;
@@ -112,7 +113,7 @@ function SocialActions({
           <Ionicons
             name={isLiked ? 'heart' : 'heart-outline'}
             size={32}
-            color={isLiked ? '#EF4444' : '#FFFFFF'}
+            color={isLiked ? colors.error : colors.background.primary}
           />
         </Animated.View>
         <ThemedText style={styles.actionText}>{formatCount(likes)}</ThemedText>
@@ -124,7 +125,7 @@ function SocialActions({
         onPress={onComment}
        
       >
-        <Ionicons name="chatbubble-outline" size={30} color="#FFFFFF" />
+        <Ionicons name="chatbubble-outline" size={30} color={colors.background.primary} />
         <ThemedText style={styles.actionText}>{formatCount(comments)}</ThemedText>
       </Pressable>
 
@@ -139,7 +140,7 @@ function SocialActions({
           <Ionicons
             name={isBookmarked ? 'bookmark' : 'bookmark-outline'}
             size={30}
-            color={isBookmarked ? '#F59E0B' : '#FFFFFF'}
+            color={isBookmarked ? colors.warningScale[400] : colors.background.primary}
           />
         </Animated.View>
       </Pressable>
@@ -150,7 +151,7 @@ function SocialActions({
         onPress={onShare}
        
       >
-        <Ionicons name="share-social-outline" size={30} color="#FFFFFF" />
+        <Ionicons name="share-social-outline" size={30} color={colors.background.primary} />
         <ThemedText style={styles.actionText}>{formatCount(shares)}</ThemedText>
       </Pressable>
     </View>
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   actionText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '600',
     textShadowColor: 'rgba(0, 0, 0, 0.5)',

@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -27,7 +28,7 @@ const UGCCreator = () => {
       title: 'Create Reels',
       icon: 'videocam',
       iconBg: 'rgba(239, 68, 68, 0.2)',
-      iconColor: '#EF4444',
+      iconColor: colors.error,
       baseReward: 100,
       bonusReward: 500,
       description: '15-30 sec shopping/experience videos',
@@ -44,7 +45,7 @@ const UGCCreator = () => {
       title: 'Upload Photos',
       icon: 'camera',
       iconBg: 'rgba(59, 130, 246, 0.2)',
-      iconColor: '#3B82F6',
+      iconColor: colors.infoScale[400],
       baseReward: 30,
       bonusReward: 150,
       description: 'Store fronts, products, ambiance shots',
@@ -61,7 +62,7 @@ const UGCCreator = () => {
       title: 'Write Reviews',
       icon: 'chatbubble',
       iconBg: 'rgba(168, 85, 247, 0.2)',
-      iconColor: '#A855F7',
+      iconColor: colors.brand.purpleMedium,
       baseReward: 50,
       bonusReward: 200,
       description: 'Detailed product/store experiences',
@@ -78,7 +79,7 @@ const UGCCreator = () => {
       title: 'Share Stories',
       icon: 'image',
       iconBg: 'rgba(249, 115, 22, 0.2)',
-      iconColor: '#F97316',
+      iconColor: colors.brand.orange,
       baseReward: 20,
       bonusReward: 100,
       description: 'Quick shopping moments & finds',
@@ -181,18 +182,18 @@ const UGCCreator = () => {
   const getPerformanceStyle = (performance: string) => {
     switch (performance) {
       case 'viral':
-        return { color: '#EF4444', bg: 'rgba(239, 68, 68, 0.1)', border: 'rgba(239, 68, 68, 0.3)' };
+        return { color: colors.error, bg: 'rgba(239, 68, 68, 0.1)', border: 'rgba(239, 68, 68, 0.3)' };
       case 'trending':
-        return { color: '#F97316', bg: 'rgba(249, 115, 22, 0.1)', border: 'rgba(249, 115, 22, 0.3)' };
+        return { color: colors.brand.orange, bg: 'rgba(249, 115, 22, 0.1)', border: 'rgba(249, 115, 22, 0.3)' };
       case 'good':
-        return { color: '#10B981', bg: 'rgba(16, 185, 129, 0.1)', border: 'rgba(16, 185, 129, 0.3)' };
+        return { color: colors.successScale[400], bg: 'rgba(16, 185, 129, 0.1)', border: 'rgba(16, 185, 129, 0.3)' };
       default:
-        return { color: '#3B82F6', bg: 'rgba(59, 130, 246, 0.1)', border: 'rgba(59, 130, 246, 0.3)' };
+        return { color: colors.infoScale[400], bg: 'rgba(59, 130, 246, 0.1)', border: 'rgba(59, 130, 246, 0.3)' };
     }
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#000' : Colors.background.primary }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? colors.text.primary : Colors.background.primary }]}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={[styles.header, { backgroundColor: isDark ? 'rgba(0,0,0,0.95)' : 'rgba(255,255,255,0.95)' }]}>
@@ -220,14 +221,14 @@ const UGCCreator = () => {
             <View style={styles.statsGrid}>
               <View style={[styles.statCard, { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : Colors.background.primary }]}>
                 <View style={styles.statHeader}>
-                  <Ionicons name="videocam" size={16} color="#A855F7" />
+                  <Ionicons name="videocam" size={16} color={colors.brand.purpleMedium} />
                   <Text style={[styles.statLabel, { color: isDark ? Colors.text.tertiary : Colors.text.tertiary }]}>Content</Text>
                 </View>
                 <Text style={[styles.statValue, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>{myStats.totalContent}</Text>
               </View>
               <View style={[styles.statCard, { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : Colors.background.primary }]}>
                 <View style={styles.statHeader}>
-                  <Ionicons name="eye" size={16} color="#3B82F6" />
+                  <Ionicons name="eye" size={16} color={colors.infoScale[400]} />
                   <Text style={[styles.statLabel, { color: isDark ? Colors.text.tertiary : Colors.text.tertiary }]}>Total Views</Text>
                 </View>
                 <Text style={[styles.statValue, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>{(myStats.totalViews / 1000).toFixed(1)}K</Text>
@@ -262,7 +263,7 @@ const UGCCreator = () => {
               onPress={() => setActiveTab(tab.id)}
               style={[
                 styles.tab,
-                { backgroundColor: activeTab === tab.id ? '#A855F7' : isDark ? 'rgba(255,255,255,0.1)' : Colors.background.secondary }
+                { backgroundColor: activeTab === tab.id ? colors.brand.purpleMedium : isDark ? 'rgba(255,255,255,0.1)' : Colors.background.secondary }
               ]}
             >
               {tab.icon && <Ionicons name={tab.icon as any} size={16} color={activeTab === tab.id ? Colors.text.inverse : (isDark ? Colors.text.tertiary : Colors.text.tertiary)} />}
@@ -298,23 +299,23 @@ const UGCCreator = () => {
                   ))}
                 </View>
 
-                <View style={[styles.performanceContainer, { backgroundColor: isDark ? 'rgba(59, 130, 246, 0.1)' : '#EFF6FF', borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : '#BFDBFE' }]}>
+                <View style={[styles.performanceContainer, { backgroundColor: isDark ? 'rgba(59, 130, 246, 0.1)' : colors.tint.blue, borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : colors.infoScale[200] }]}>
                   <View style={styles.performanceHeader}>
-                    <Ionicons name="trending-up" size={14} color="#3B82F6" />
+                    <Ionicons name="trending-up" size={14} color={colors.infoScale[400]} />
                     <Text style={[styles.performanceTitle, { color: isDark ? '#93C5FD' : '#1E40AF' }]}>Average Performance</Text>
                   </View>
                   <View style={styles.performanceStats}>
                     <View style={styles.performanceStat}>
-                      <Text style={[styles.performanceValue, { color: '#3B82F6' }]}>{content.performance.avgViews.toLocaleString()}</Text>
-                      <Text style={[styles.performanceLabel, { color: '#3B82F6' }]}>Views</Text>
+                      <Text style={[styles.performanceValue, { color: colors.infoScale[400] }]}>{content.performance.avgViews.toLocaleString()}</Text>
+                      <Text style={[styles.performanceLabel, { color: colors.infoScale[400] }]}>Views</Text>
                     </View>
                     <View style={styles.performanceStat}>
-                      <Text style={[styles.performanceValue, { color: '#3B82F6' }]}>{content.performance.avgLikes}</Text>
-                      <Text style={[styles.performanceLabel, { color: '#3B82F6' }]}>Likes</Text>
+                      <Text style={[styles.performanceValue, { color: colors.infoScale[400] }]}>{content.performance.avgLikes}</Text>
+                      <Text style={[styles.performanceLabel, { color: colors.infoScale[400] }]}>Likes</Text>
                     </View>
                     <View style={styles.performanceStat}>
-                      <Text style={[styles.performanceValue, { color: '#3B82F6' }]}>{content.performance.avgCoins}</Text>
-                      <Text style={[styles.performanceLabel, { color: '#3B82F6' }]}>Coins</Text>
+                      <Text style={[styles.performanceValue, { color: colors.infoScale[400] }]}>{content.performance.avgCoins}</Text>
+                      <Text style={[styles.performanceLabel, { color: colors.infoScale[400] }]}>Coins</Text>
                     </View>
                   </View>
                 </View>
@@ -331,7 +332,7 @@ const UGCCreator = () => {
                     </View>
                   </View>
                   <Pressable style={styles.createButton}>
-                    <LinearGradient colors={['#A855F7', '#EC4899']} style={styles.createButtonGradient}>
+                    <LinearGradient colors={[colors.brand.purpleMedium, colors.brand.pink]} style={styles.createButtonGradient}>
                       <Ionicons name="cloud-upload" size={16} color={Colors.text.inverse} />
                       <Text style={styles.createButtonText}>Create</Text>
                     </LinearGradient>
@@ -340,7 +341,7 @@ const UGCCreator = () => {
               </View>
             ))}
 
-            <View style={[styles.tipsCard, { backgroundColor: isDark ? 'rgba(245, 158, 11, 0.1)' : '#FFF7ED', borderColor: isDark ? 'rgba(245, 158, 11, 0.3)' : '#FED7AA' }]}>
+            <View style={[styles.tipsCard, { backgroundColor: isDark ? 'rgba(245, 158, 11, 0.1)' : colors.tint.orange, borderColor: isDark ? 'rgba(245, 158, 11, 0.3)' : '#FED7AA' }]}>
               <View style={styles.tipsHeader}>
                 <Ionicons name="sparkles" size={20} color={Colors.warning} />
                 <Text style={[styles.tipsTitle, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>Tips to Maximize Earnings</Text>
@@ -366,7 +367,7 @@ const UGCCreator = () => {
             {myContent.map((item) => {
               const perfStyle = getPerformanceStyle(item.performance);
               return (
-                <View key={item.id} style={[styles.contentCard, { backgroundColor: isDark ? '#1F2937' : '#FFF', borderColor: isDark ? 'rgba(255,255,255,0.1)' : '#E5E7EB' }]}>
+                <View key={item.id} style={[styles.contentCard, { backgroundColor: isDark ? colors.neutral[800] : colors.background.primary, borderColor: isDark ? 'rgba(255,255,255,0.1)' : colors.neutral[200] }]}>
                   <View style={styles.contentHeader}>
                     <LinearGradient colors={['rgba(168, 85, 247, 0.2)', 'rgba(236, 72, 153, 0.2)']} style={styles.thumbnailContainer}>
                       <Text style={styles.thumbnail}>{item.thumbnail}</Text>
@@ -375,8 +376,8 @@ const UGCCreator = () => {
                       <View style={styles.contentBadges}>
                         {item.badge && (
                           <View style={[styles.badge, { backgroundColor: 'rgba(245, 158, 11, 0.2)' }]}>
-                            <Ionicons name="ribbon" size={12} color="#F59E0B" />
-                            <Text style={[styles.badgeText, { color: '#F59E0B' }]}>{item.badge}</Text>
+                            <Ionicons name="ribbon" size={12} color={colors.warningScale[400]} />
+                            <Text style={[styles.badgeText, { color: colors.warningScale[400] }]}>{item.badge}</Text>
                           </View>
                         )}
                         {item.performance && (
@@ -387,40 +388,40 @@ const UGCCreator = () => {
                           </View>
                         )}
                       </View>
-                      <Text style={[styles.contentTitle, { color: isDark ? '#FFF' : '#111827' }]}>{item.title}</Text>
-                      <Text style={[styles.contentDate, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>{item.publishedDate}</Text>
+                      <Text style={[styles.contentTitle, { color: isDark ? colors.background.primary : colors.neutral[900] }]}>{item.title}</Text>
+                      <Text style={[styles.contentDate, { color: isDark ? colors.neutral[400] : colors.neutral[500] }]}>{item.publishedDate}</Text>
                     </View>
                   </View>
 
                   <View style={styles.statsGrid}>
-                    <View style={[styles.statMiniCard, { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : '#F9FAFB' }]}>
-                      <Ionicons name="eye" size={16} color="#3B82F6" />
-                      <Text style={[styles.statMiniValue, { color: isDark ? '#FFF' : '#111827' }]}>{item.views.toLocaleString()}</Text>
-                      <Text style={[styles.statMiniLabel, { color: isDark ? '#6B7280' : '#6B7280' }]}>Views</Text>
+                    <View style={[styles.statMiniCard, { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : colors.neutral[50] }]}>
+                      <Ionicons name="eye" size={16} color={colors.infoScale[400]} />
+                      <Text style={[styles.statMiniValue, { color: isDark ? colors.background.primary : colors.neutral[900] }]}>{item.views.toLocaleString()}</Text>
+                      <Text style={[styles.statMiniLabel, { color: isDark ? colors.neutral[500] : colors.neutral[500] }]}>Views</Text>
                     </View>
-                    <View style={[styles.statMiniCard, { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : '#F9FAFB' }]}>
-                      <Ionicons name="heart" size={16} color="#EF4444" />
-                      <Text style={[styles.statMiniValue, { color: isDark ? '#FFF' : '#111827' }]}>{item.likes}</Text>
-                      <Text style={[styles.statMiniLabel, { color: isDark ? '#6B7280' : '#6B7280' }]}>Likes</Text>
+                    <View style={[styles.statMiniCard, { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : colors.neutral[50] }]}>
+                      <Ionicons name="heart" size={16} color={colors.error} />
+                      <Text style={[styles.statMiniValue, { color: isDark ? colors.background.primary : colors.neutral[900] }]}>{item.likes}</Text>
+                      <Text style={[styles.statMiniLabel, { color: isDark ? colors.neutral[500] : colors.neutral[500] }]}>Likes</Text>
                     </View>
-                    <View style={[styles.statMiniCard, { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : '#F9FAFB' }]}>
-                      <Ionicons name="share-social" size={16} color="#10B981" />
-                      <Text style={[styles.statMiniValue, { color: isDark ? '#FFF' : '#111827' }]}>{item.shares}</Text>
-                      <Text style={[styles.statMiniLabel, { color: isDark ? '#6B7280' : '#6B7280' }]}>Shares</Text>
+                    <View style={[styles.statMiniCard, { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : colors.neutral[50] }]}>
+                      <Ionicons name="share-social" size={16} color={colors.successScale[400]} />
+                      <Text style={[styles.statMiniValue, { color: isDark ? colors.background.primary : colors.neutral[900] }]}>{item.shares}</Text>
+                      <Text style={[styles.statMiniLabel, { color: isDark ? colors.neutral[500] : colors.neutral[500] }]}>Shares</Text>
                     </View>
-                    <View style={[styles.statMiniCard, { backgroundColor: isDark ? 'rgba(16, 185, 129, 0.1)' : '#ECFDF5' }]}>
-                      <Ionicons name="cash" size={16} color="#10B981" />
-                      <Text style={[styles.statMiniValue, { color: '#10B981' }]}>+{item.earned}</Text>
-                      <Text style={[styles.statMiniLabel, { color: '#10B981' }]}>Earned</Text>
+                    <View style={[styles.statMiniCard, { backgroundColor: isDark ? 'rgba(16, 185, 129, 0.1)' : colors.tint.greenLight }]}>
+                      <Ionicons name="cash" size={16} color={colors.successScale[400]} />
+                      <Text style={[styles.statMiniValue, { color: colors.successScale[400] }]}>+{item.earned}</Text>
+                      <Text style={[styles.statMiniLabel, { color: colors.successScale[400] }]}>Earned</Text>
                     </View>
                   </View>
 
                   <View style={styles.contentActions}>
-                    <Pressable style={[styles.actionButton, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : '#F3F4F6' }]}>
-                      <Text style={[styles.actionButtonText, { color: isDark ? '#FFF' : '#111827' }]}>View Analytics</Text>
+                    <Pressable style={[styles.actionButton, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : colors.neutral[100] }]}>
+                      <Text style={[styles.actionButtonText, { color: isDark ? colors.background.primary : colors.neutral[900] }]}>View Analytics</Text>
                     </Pressable>
                     <Pressable style={styles.boostButton}>
-                      <LinearGradient colors={['#A855F7', '#EC4899']} style={styles.boostButtonGradient}>
+                      <LinearGradient colors={[colors.brand.purpleMedium, colors.brand.pink]} style={styles.boostButtonGradient}>
                         <Text style={styles.boostButtonText}>Boost Post</Text>
                       </LinearGradient>
                     </Pressable>
@@ -434,20 +435,20 @@ const UGCCreator = () => {
         {/* Leaderboard Tab */}
         {activeTab === 'leaderboard' && (
           <View style={styles.content}>
-            <View style={[styles.podiumCard, { backgroundColor: isDark ? 'rgba(245, 158, 11, 0.1)' : '#FFF7ED', borderColor: isDark ? 'rgba(245, 158, 11, 0.3)' : '#FED7AA' }]}>
+            <View style={[styles.podiumCard, { backgroundColor: isDark ? 'rgba(245, 158, 11, 0.1)' : colors.tint.orange, borderColor: isDark ? 'rgba(245, 158, 11, 0.3)' : '#FED7AA' }]}>
               <View style={styles.podiumHeader}>
-                <Ionicons name="trophy" size={20} color="#F59E0B" />
-                <Text style={[styles.podiumTitle, { color: isDark ? '#FFF' : '#111827' }]}>Top Creators This Month</Text>
+                <Ionicons name="trophy" size={20} color={colors.warningScale[400]} />
+                <Text style={[styles.podiumTitle, { color: isDark ? colors.background.primary : colors.neutral[900] }]}>Top Creators This Month</Text>
               </View>
               <View style={styles.podium}>
                 {leaderboard.slice(0, 3).map((creator) => (
                   <View key={creator.rank} style={styles.podiumItem}>
                     <Text style={styles.podiumBadge}>{creator.badge}</Text>
-                    <LinearGradient colors={['#A855F7', '#EC4899']} style={styles.podiumAvatar}>
+                    <LinearGradient colors={[colors.brand.purpleMedium, colors.brand.pink]} style={styles.podiumAvatar}>
                       <Text style={styles.podiumAvatarText}>{creator.avatar}</Text>
                     </LinearGradient>
-                    <Text style={[styles.podiumName, { color: isDark ? '#FFF' : '#111827' }]}>{creator.name}</Text>
-                    <Text style={[styles.podiumContent, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>{creator.content} posts</Text>
+                    <Text style={[styles.podiumName, { color: isDark ? colors.background.primary : colors.neutral[900] }]}>{creator.name}</Text>
+                    <Text style={[styles.podiumContent, { color: isDark ? colors.neutral[400] : colors.neutral[500] }]}>{creator.content} posts</Text>
                     <Text style={styles.podiumCoins}>{creator.coins.toLocaleString()}</Text>
                   </View>
                 ))}
@@ -460,36 +461,36 @@ const UGCCreator = () => {
                   key={creator.rank}
                   style={[
                     styles.leaderboardCard,
-                    creator.highlight && { backgroundColor: isDark ? 'rgba(16, 185, 129, 0.1)' : '#ECFDF5', borderColor: '#10B981', borderWidth: 2 },
-                    !creator.highlight && { backgroundColor: isDark ? '#1F2937' : '#FFF', borderColor: isDark ? 'rgba(255,255,255,0.1)' : '#E5E7EB' }
+                    creator.highlight && { backgroundColor: isDark ? 'rgba(16, 185, 129, 0.1)' : colors.tint.greenLight, borderColor: colors.successScale[400], borderWidth: 2 },
+                    !creator.highlight && { backgroundColor: isDark ? colors.neutral[800] : colors.background.primary, borderColor: isDark ? 'rgba(255,255,255,0.1)' : colors.neutral[200] }
                   ]}
                 >
-                  <Text style={[styles.leaderboardRank, { color: isDark ? '#9CA3AF' : '#9CA3AF' }]}>#{creator.rank}</Text>
-                  <LinearGradient colors={['#A855F7', '#EC4899']} style={styles.leaderboardAvatar}>
+                  <Text style={[styles.leaderboardRank, { color: isDark ? colors.neutral[400] : colors.neutral[400] }]}>#{creator.rank}</Text>
+                  <LinearGradient colors={[colors.brand.purpleMedium, colors.brand.pink]} style={styles.leaderboardAvatar}>
                     <Text style={styles.leaderboardAvatarText}>{creator.avatar}</Text>
                   </LinearGradient>
                   <View style={styles.leaderboardInfo}>
                     <View style={styles.leaderboardNameRow}>
-                      <Text style={[styles.leaderboardName, { color: isDark ? '#FFF' : '#111827' }]}>{creator.name}</Text>
+                      <Text style={[styles.leaderboardName, { color: isDark ? colors.background.primary : colors.neutral[900] }]}>{creator.name}</Text>
                       {creator.badge && <Text style={styles.leaderboardBadge}>{creator.badge}</Text>}
                     </View>
-                    <Text style={[styles.leaderboardContent, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>{creator.content} posts</Text>
+                    <Text style={[styles.leaderboardContent, { color: isDark ? colors.neutral[400] : colors.neutral[500] }]}>{creator.content} posts</Text>
                   </View>
                   <View style={styles.leaderboardCoins}>
-                    <Ionicons name="cash" size={16} color="#10B981" />
+                    <Ionicons name="cash" size={16} color={colors.successScale[400]} />
                     <Text style={styles.leaderboardCoinsText}>{creator.coins.toLocaleString()}</Text>
                   </View>
                 </View>
               ))}
             </View>
 
-            <View style={[styles.ctaCard, { backgroundColor: isDark ? 'rgba(168, 85, 247, 0.1)' : '#F3E8FF', borderColor: isDark ? 'rgba(168, 85, 247, 0.3)' : '#C084FC' }]}>
-              <Text style={[styles.ctaTitle, { color: isDark ? '#FFF' : '#111827' }]}>Climb the Ranks!</Text>
-              <Text style={[styles.ctaText, { color: isDark ? '#9CA3AF' : '#6B7280' }]}>
+            <View style={[styles.ctaCard, { backgroundColor: isDark ? 'rgba(168, 85, 247, 0.1)' : colors.tint.pink, borderColor: isDark ? 'rgba(168, 85, 247, 0.3)' : '#C084FC' }]}>
+              <Text style={[styles.ctaTitle, { color: isDark ? colors.background.primary : colors.neutral[900] }]}>Climb the Ranks!</Text>
+              <Text style={[styles.ctaText, { color: isDark ? colors.neutral[400] : colors.neutral[500] }]}>
                 Top 3 creators win exclusive rewards every month
               </Text>
               <Pressable style={styles.ctaButton}>
-                <LinearGradient colors={['#A855F7', '#EC4899']} style={styles.ctaButtonGradient}>
+                <LinearGradient colors={[colors.brand.purpleMedium, colors.brand.pink]} style={styles.ctaButtonGradient}>
                   <Text style={styles.ctaButtonText}>Create More Content</Text>
                 </LinearGradient>
               </Pressable>

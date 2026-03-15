@@ -51,14 +51,15 @@ import { Spacing, Typography } from '@/constants/DesignSystem';
 import SkeletonLoader from '@/components/skeletons/SkeletonLoader';
 import HorizontalSkeletonList from '@/components/skeletons/HorizontalSkeletonList';
 import DealCardSkeleton from '@/components/skeletons/DealCardSkeleton';
+import { colors } from '@/constants/theme';
 
 // New Color Palette
 const PALETTE = {
-  nileBlue: '#1a3a52',
-  lightMustard: '#ffcd57',
-  linen: '#faf1e0',
-  lightPeach: '#ffd7b5',
-  lavenderMist: '#dfebf7',
+  nileBlue: colors.nileBlue,
+  lightMustard: colors.lightMustard,
+  linen: colors.linen,
+  lightPeach: colors.lightPeach,
+  lavenderMist: colors.lavenderMist,
 };
 
 interface OffersPageContentProps {
@@ -255,7 +256,7 @@ export const OffersPageContent: React.FC<OffersPageContentProps> = ({
       gap: 6,
     },
     tabEmptyRefreshText: {
-      color: '#fff',
+      color: colors.background.primary,
       fontSize: 14,
       fontWeight: '600',
     },
@@ -291,7 +292,7 @@ export const OffersPageContent: React.FC<OffersPageContentProps> = ({
         Pull down to refresh or check back later for new offers!
       </Text>
       <Pressable style={styles.tabEmptyRefreshBtn} onPress={handleRefresh}>
-        <Ionicons name="refresh" size={16} color="#fff" />
+        <Ionicons name="refresh" size={16} color={colors.background.primary} />
         <Text style={styles.tabEmptyRefreshText}>Refresh</Text>
       </Pressable>
     </View>

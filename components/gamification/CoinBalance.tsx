@@ -17,6 +17,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { useGamification } from '@/contexts/GamificationContext';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 interface CoinBalanceProps {
   size?: 'small' | 'medium' | 'large';
@@ -34,7 +35,7 @@ function CoinBalance({
   onPress,
   showIcon = true,
   showLabel = false,
-  color = '#F59E0B',
+  color = colors.warningScale[400],
   containerStyle,
   textStyle,
   animateChanges = true,
@@ -152,7 +153,7 @@ function CoinBalance({
 const styles = StyleSheet.create({
   container: {
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     marginBottom: 2,
   },
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   pendingBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 10,
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
   },
   pendingText: {
     fontSize: 10,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
 });

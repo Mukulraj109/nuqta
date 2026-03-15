@@ -19,6 +19,7 @@ import { BlurView } from 'expo-blur';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CategoryTabBar from './CategoryTabBar';
+import { colors } from '@/constants/theme';
 
 interface StickySearchHeaderProps {
   /** Current scroll position for animation */
@@ -50,7 +51,7 @@ const HeaderContentComponent = memo<{
         accessibilityLabel="Search bar"
         accessibilityRole="search"
       >
-        <Ionicons name="search" size={18} color="#666" style={styles.searchIcon} />
+        <Ionicons name="search" size={18} color={colors.midGray} style={styles.searchIcon} />
         <TextInput
           style={[styles.searchInput, { pointerEvents: 'none' }]}
           placeholder="Search for stores, products..."
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 15,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontFamily: Platform.select({
       ios: 'Inter-Regular',
       android: 'Inter-Regular',

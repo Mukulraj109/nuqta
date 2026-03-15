@@ -27,6 +27,7 @@ import { useVideoUpload } from '@/hooks/useVideoUpload';
 import { PRODUCT_TAGGING_RULES } from '@/types/ugc-upload.types';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -203,7 +204,7 @@ export default function UGCUploadScreen() {
                   <View style={styles.videoInfo}>
                     {state.video.duration > 0 && (
                       <View style={styles.infoItem}>
-                        <Ionicons name="time-outline" size={16} color="#666" />
+                        <Ionicons name="time-outline" size={16} color={colors.midGray} />
                         <Text style={styles.infoText}>
                           {formatDuration(state.video.duration)}
                         </Text>
@@ -211,7 +212,7 @@ export default function UGCUploadScreen() {
                     )}
                     {state.video.fileSize > 0 && (
                       <View style={styles.infoItem}>
-                        <Ionicons name="document-outline" size={16} color="#666" />
+                        <Ionicons name="document-outline" size={16} color={colors.midGray} />
                         <Text style={styles.infoText}>
                           {formatFileSize(state.video.fileSize)}
                         </Text>
@@ -299,7 +300,7 @@ export default function UGCUploadScreen() {
                         state.validationErrors.some(e => e.field === 'title') && styles.inputError,
                       ]}
                       placeholder="Give your video a catchy title"
-                      placeholderTextColor="#9CA3AF"
+                      placeholderTextColor={colors.neutral[400]}
                       value={state.title}
                       onChangeText={updateTitle}
                       maxLength={100}
@@ -319,7 +320,7 @@ export default function UGCUploadScreen() {
                           styles.inputError,
                       ]}
                       placeholder="Tell us more about your video..."
-                      placeholderTextColor="#9CA3AF"
+                      placeholderTextColor={colors.neutral[400]}
                       value={state.description}
                       onChangeText={updateDescription}
                       maxLength={500}
@@ -344,7 +345,7 @@ export default function UGCUploadScreen() {
                           styles.inputError,
                       ]}
                       placeholder="fashion, style, trending"
-                      placeholderTextColor="#9CA3AF"
+                      placeholderTextColor={colors.neutral[400]}
                       value={hashtagInput}
                       onChangeText={handleHashtagChange}
                       editable={!isUploading}
@@ -481,7 +482,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-    backgroundColor: '#000',
+    backgroundColor: colors.text.primary,
   },
   videoPreview: {
     width: '100%',

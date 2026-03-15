@@ -11,6 +11,7 @@ import {
 import { ThemedText } from '@/components/ThemedText';
 import CategoryCard from './CategoryCard';
 import { CategoryItem, CategoryLayoutConfig } from '@/types/category.types';
+import { colors } from '@/constants/theme';
 
 interface CategoryGridProps {
   items: CategoryItem[];
@@ -109,7 +110,7 @@ function CategoryGrid({
     
     return (
       <View style={styles.loadingFooter}>
-        <ActivityIndicator size="small" color="#ffcd57" />
+        <ActivityIndicator size="small" color={colors.lightMustard} />
         <ThemedText style={styles.loadingText}>Loading more...</ThemedText>
       </View>
     );
@@ -172,8 +173,8 @@ function CategoryGrid({
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              tintColor="#ffcd57"
-              colors={['#ffcd57']}
+              tintColor={colors.lightMustard}
+              colors={[colors.lightMustard]}
             />
           ) : undefined
         }
@@ -199,7 +200,7 @@ function CategoryGrid({
       {/* Loading overlay for initial load */}
       {loading && items.length === 0 && (
         <View style={styles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#ffcd57" />
+          <ActivityIndicator size="large" color={colors.lightMustard} />
           <ThemedText style={styles.loadingOverlayText}>Loading items...</ThemedText>
         </View>
       )}
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '500',
   },
   loadingOverlay: {
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
   },
   loadingOverlayText: {
     fontSize: 16,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
 });

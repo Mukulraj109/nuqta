@@ -28,6 +28,7 @@ import MallEmptyState from '../../../components/mall/pages/MallEmptyState';
 import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkeleton';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -217,7 +218,7 @@ export default function AllOffersPage() {
   const ListHeader = useCallback(() => (
     <View style={styles.listHeader}>
       <LinearGradient
-        colors={[Colors.warning, '#D97706']}
+        colors={[Colors.warning, colors.warningScale[700]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.headerGradient}
@@ -467,7 +468,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: Spacing.md,
     gap: Spacing.xs,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     alignSelf: 'flex-start',
     paddingHorizontal: 10,
     paddingVertical: Spacing.xs,

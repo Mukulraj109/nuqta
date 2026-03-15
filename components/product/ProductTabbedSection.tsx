@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { triggerImpact } from '@/utils/haptics';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 type TabId = 'description' | 'specs' | 'reviews' | 'lockinfo';
 
@@ -177,7 +178,7 @@ export const ProductTabbedSection: React.FC<ProductTabbedSectionProps> = ({
           key={i}
           name={i <= rating ? 'star' : i - 0.5 <= rating ? 'star-half' : 'star-outline'}
           size={size}
-          color="#FBBF24"
+          color={colors.warningScale[400]}
         />
       );
     }
@@ -202,7 +203,7 @@ export const ProductTabbedSection: React.FC<ProductTabbedSectionProps> = ({
               {displayFeatures.map((feature, index) => (
                 <View key={index} style={styles.featureItem}>
                   <View style={styles.featureIcon}>
-                    <Ionicons name="checkmark" size={14} color="#fff" />
+                    <Ionicons name="checkmark" size={14} color={colors.background.primary} />
                   </View>
                   <Text style={styles.featureText}>{feature}</Text>
                 </View>
@@ -214,29 +215,29 @@ export const ProductTabbedSection: React.FC<ProductTabbedSectionProps> = ({
               <Text style={styles.sectionTitle}>{`Why Buy From ${BRAND.APP_NAME}?`}</Text>
               <View style={styles.whyBuyGrid}>
                 <View style={styles.whyBuyItem}>
-                  <View style={[styles.whyBuyIcon, { backgroundColor: '#faf1e0' }]}>
-                    <Ionicons name="shield-checkmark" size={20} color="#ffcd57" />
+                  <View style={[styles.whyBuyIcon, { backgroundColor: colors.linen }]}>
+                    <Ionicons name="shield-checkmark" size={20} color={colors.lightMustard} />
                   </View>
                   <Text style={styles.whyBuyLabel}>100% Genuine</Text>
                   <Text style={styles.whyBuyDesc}>Quality assured products</Text>
                 </View>
                 <View style={styles.whyBuyItem}>
-                  <View style={[styles.whyBuyIcon, { backgroundColor: '#FEF3C7' }]}>
-                    <Ionicons name="cash-outline" size={20} color="#F59E0B" />
+                  <View style={[styles.whyBuyIcon, { backgroundColor: colors.tint.amberLight }]}>
+                    <Ionicons name="cash-outline" size={20} color={colors.warningScale[400]} />
                   </View>
                   <Text style={styles.whyBuyLabel}>Cashback</Text>
                   <Text style={styles.whyBuyDesc}>Up to 5% on every order</Text>
                 </View>
                 <View style={styles.whyBuyItem}>
-                  <View style={[styles.whyBuyIcon, { backgroundColor: '#EDE9FE' }]}>
-                    <Ionicons name="wallet-outline" size={20} color="#8B5CF6" />
+                  <View style={[styles.whyBuyIcon, { backgroundColor: colors.tint.purple }]}>
+                    <Ionicons name="wallet-outline" size={20} color={colors.brand.purpleLight} />
                   </View>
                   <Text style={styles.whyBuyLabel}>{BRAND.COIN_NAME}</Text>
                   <Text style={styles.whyBuyDesc}>Earn 10% as coins</Text>
                 </View>
                 <View style={styles.whyBuyItem}>
-                  <View style={[styles.whyBuyIcon, { backgroundColor: '#DBEAFE' }]}>
-                    <Ionicons name="lock-closed-outline" size={20} color="#3B82F6" />
+                  <View style={[styles.whyBuyIcon, { backgroundColor: colors.tint.blueLight }]}>
+                    <Ionicons name="lock-closed-outline" size={20} color={colors.infoScale[400]} />
                   </View>
                   <Text style={styles.whyBuyLabel}>Price Lock</Text>
                   <Text style={styles.whyBuyDesc}>Freeze price for 48hrs</Text>
@@ -247,17 +248,17 @@ export const ProductTabbedSection: React.FC<ProductTabbedSectionProps> = ({
             {/* Quick Info */}
             <View style={styles.quickInfo}>
               <View style={styles.quickInfoItem}>
-                <Ionicons name="time-outline" size={22} color="#ffcd57" />
+                <Ionicons name="time-outline" size={22} color={colors.lightMustard} />
                 <Text style={styles.quickInfoText}>Fast Delivery</Text>
               </View>
               <View style={styles.quickInfoDivider} />
               <View style={styles.quickInfoItem}>
-                <Ionicons name="refresh-outline" size={22} color="#ffcd57" />
+                <Ionicons name="refresh-outline" size={22} color={colors.lightMustard} />
                 <Text style={styles.quickInfoText}>Easy Returns</Text>
               </View>
               <View style={styles.quickInfoDivider} />
               <View style={styles.quickInfoItem}>
-                <Ionicons name="card-outline" size={22} color="#ffcd57" />
+                <Ionicons name="card-outline" size={22} color={colors.lightMustard} />
                 <Text style={styles.quickInfoText}>Secure Pay</Text>
               </View>
             </View>
@@ -349,7 +350,7 @@ export const ProductTabbedSection: React.FC<ProductTabbedSectionProps> = ({
               <View style={styles.lockInfoCard}>
                 <View style={styles.lockInfoHeader}>
                   <View style={styles.lockIconBg}>
-                    <Ionicons name="lock-closed" size={24} color="#fff" />
+                    <Ionicons name="lock-closed" size={24} color={colors.background.primary} />
                   </View>
                   <View>
                     <Text style={styles.lockInfoTitle}>Price Locked!</Text>
@@ -379,15 +380,15 @@ export const ProductTabbedSection: React.FC<ProductTabbedSectionProps> = ({
 
                 <View style={styles.lockBenefits}>
                   <View style={styles.lockBenefit}>
-                    <Ionicons name="shield-checkmark" size={18} color="#ffcd57" />
+                    <Ionicons name="shield-checkmark" size={18} color={colors.lightMustard} />
                     <Text style={styles.lockBenefitText}>Price won't increase</Text>
                   </View>
                   <View style={styles.lockBenefit}>
-                    <Ionicons name="time" size={18} color="#ffcd57" />
+                    <Ionicons name="time" size={18} color={colors.lightMustard} />
                     <Text style={styles.lockBenefitText}>Reserved for you</Text>
                   </View>
                   <View style={styles.lockBenefit}>
-                    <Ionicons name="cash" size={18} color="#ffcd57" />
+                    <Ionicons name="cash" size={18} color={colors.lightMustard} />
                     <Text style={styles.lockBenefitText}>Fee adjusted at checkout</Text>
                   </View>
                 </View>
@@ -395,7 +396,7 @@ export const ProductTabbedSection: React.FC<ProductTabbedSectionProps> = ({
             ) : (
               <View style={styles.noLockCard}>
                 <View style={styles.noLockIcon}>
-                  <Ionicons name="lock-open-outline" size={40} color="#9CA3AF" />
+                  <Ionicons name="lock-open-outline" size={40} color={colors.neutral[400]} />
                 </View>
                 <Text style={styles.noLockTitle}>No Active Lock</Text>
                 <Text style={styles.noLockText}>
@@ -405,15 +406,15 @@ export const ProductTabbedSection: React.FC<ProductTabbedSectionProps> = ({
                 <View style={styles.lockBenefitsPreview}>
                   <Text style={styles.benefitsTitle}>Benefits of Locking:</Text>
                   <View style={styles.benefitRow}>
-                    <Ionicons name="checkmark-circle" size={16} color="#ffcd57" />
+                    <Ionicons name="checkmark-circle" size={16} color={colors.lightMustard} />
                     <Text style={styles.benefitText}>Freeze the price for up to 48 hours</Text>
                   </View>
                   <View style={styles.benefitRow}>
-                    <Ionicons name="checkmark-circle" size={16} color="#ffcd57" />
+                    <Ionicons name="checkmark-circle" size={16} color={colors.lightMustard} />
                     <Text style={styles.benefitText}>Reserve product availability</Text>
                   </View>
                   <View style={styles.benefitRow}>
-                    <Ionicons name="checkmark-circle" size={16} color="#ffcd57" />
+                    <Ionicons name="checkmark-circle" size={16} color={colors.lightMustard} />
                     <Text style={styles.benefitText}>Lock fee adjusted at checkout</Text>
                   </View>
                 </View>
@@ -449,7 +450,7 @@ export const ProductTabbedSection: React.FC<ProductTabbedSectionProps> = ({
             <Ionicons
               name={tab.icon}
               size={16}
-              color={activeTab === tab.id ? '#ffcd57' : '#6B7280'}
+              color={activeTab === tab.id ? colors.lightMustard : colors.neutral[500]}
             />
             <Text
               style={[
@@ -471,20 +472,20 @@ export const ProductTabbedSection: React.FC<ProductTabbedSectionProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     marginHorizontal: 16,
     marginVertical: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     overflow: 'hidden',
   },
 
   // Tabs
   tabsContainer: {
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-    backgroundColor: '#F9FAFB',
+    borderBottomColor: colors.neutral[200],
+    backgroundColor: colors.neutral[50],
   },
 
   tabsContent: {
@@ -502,18 +503,18 @@ const styles = StyleSheet.create({
   },
 
   tabActive: {
-    borderBottomColor: '#ffcd57',
-    backgroundColor: '#fff',
+    borderBottomColor: colors.lightMustard,
+    backgroundColor: colors.background.primary,
   },
 
   tabLabel: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   tabLabelActive: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
 
@@ -525,7 +526,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
   },
 
@@ -536,13 +537,13 @@ const styles = StyleSheet.create({
 
   descriptionText: {
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
     lineHeight: 22,
   },
 
   featuresList: {
     marginBottom: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
   },
@@ -558,7 +559,7 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -566,7 +567,7 @@ const styles = StyleSheet.create({
   featureText: {
     flex: 1,
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 20,
   },
 
@@ -582,11 +583,11 @@ const styles = StyleSheet.create({
 
   whyBuyItem: {
     width: '47%',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
 
   whyBuyIcon: {
@@ -601,24 +602,24 @@ const styles = StyleSheet.create({
   whyBuyLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
   },
 
   whyBuyDesc: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   quickInfo: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderRadius: 12,
     paddingVertical: 16,
     borderWidth: 1,
-    borderColor: '#faf1e0',
+    borderColor: colors.linen,
   },
 
   quickInfoItem: {
@@ -630,12 +631,12 @@ const styles = StyleSheet.create({
   quickInfoDivider: {
     width: 1,
     height: 30,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
   },
 
   quickInfoText: {
     fontSize: 11,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
   },
 
@@ -644,7 +645,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
 
   specRow: {
@@ -654,20 +655,20 @@ const styles = StyleSheet.create({
   },
 
   specRowAlt: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
 
   specKey: {
     flex: 1,
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
 
   specValue: {
     flex: 1,
     fontSize: 13,
-    color: '#111827',
+    color: colors.neutral[900],
     fontWeight: '600',
     textAlign: 'right',
   },
@@ -677,7 +678,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
     marginBottom: 16,
   },
 
@@ -688,7 +689,7 @@ const styles = StyleSheet.create({
   ratingNumber: {
     fontSize: 48,
     fontWeight: '800',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
 
   ratingStars: {
@@ -699,7 +700,7 @@ const styles = StyleSheet.create({
 
   ratingCount: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   reviewsHeader: {
@@ -712,7 +713,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 
   reviewsList: {
@@ -720,11 +721,11 @@ const styles = StyleSheet.create({
   },
 
   reviewCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
 
   reviewHeader: {
@@ -750,7 +751,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -758,13 +759,13 @@ const styles = StyleSheet.create({
   userAvatarText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.background.primary,
   },
 
   userName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
   },
 
@@ -775,39 +776,39 @@ const styles = StyleSheet.create({
 
   reviewDate: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 
   reviewText: {
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
     lineHeight: 20,
     marginBottom: 10,
   },
 
   cashbackBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#faf1e0',
+    borderColor: colors.linen,
   },
 
   cashbackText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 
   // Lock Info Tab
   lockInfoCard: {
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#faf1e0',
+    borderColor: colors.linen,
   },
 
   lockInfoHeader: {
@@ -821,7 +822,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -829,16 +830,16 @@ const styles = StyleSheet.create({
   lockInfoTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 
   lockInfoSubtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   lockInfoDetails: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 10,
     padding: 14,
     gap: 12,
@@ -852,13 +853,13 @@ const styles = StyleSheet.create({
 
   lockInfoLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   lockInfoValue: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   lockBenefits: {
@@ -873,7 +874,7 @@ const styles = StyleSheet.create({
 
   lockBenefitText: {
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
   },
 
   // No Lock State
@@ -886,7 +887,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
@@ -895,13 +896,13 @@ const styles = StyleSheet.create({
   noLockTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 6,
   },
 
   noLockText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 20,
@@ -909,7 +910,7 @@ const styles = StyleSheet.create({
 
   lockBenefitsPreview: {
     width: '100%',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
   },
@@ -917,7 +918,7 @@ const styles = StyleSheet.create({
   benefitsTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 12,
   },
 
@@ -930,13 +931,13 @@ const styles = StyleSheet.create({
 
   benefitText: {
     fontSize: 13,
-    color: '#4B5563',
+    color: colors.neutral[600],
   },
 
   // Empty State
   emptyText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     padding: 20,
   },

@@ -10,6 +10,7 @@ import React, { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import RatingStars from '@/components/reviews/RatingStars';
+import { colors } from '@/constants/theme';
 
 export interface ProductInfoProps {
   product: any;
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
   },
   brand: {
     fontSize: 10,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
     marginBottom: 4,
     textTransform: 'uppercase',
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 6,
     lineHeight: 18,
     minHeight: 36,
@@ -155,22 +156,22 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   savings: {
     fontSize: 11,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '500',
     marginBottom: 2,
   },
   cashbackContainer: {
     alignSelf: 'flex-start',
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   lowStockContainer: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -191,11 +192,11 @@ const styles = StyleSheet.create({
   },
   lowStockText: {
     fontSize: 11,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontWeight: '600',
   },
   outOfStockContainer: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
   },
   outOfStockText: {
     fontSize: 11,
-    color: '#DC2626',
+    color: colors.error,
     fontWeight: '600',
   },
 });

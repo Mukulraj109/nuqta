@@ -19,6 +19,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { errorReporter } from '@/utils/errorReporter';
 import { APP_CONFIG } from '@/config/env';
+import { colors } from '@/constants/theme';
 
 interface Props {
   children: ReactNode;
@@ -120,7 +121,7 @@ class GlobalErrorBoundary extends Component<Props, State> {
               <Ionicons
                 name="alert-circle"
                 size={80}
-                color={isDevelopment ? '#F59E0B' : '#EF4444'}
+                color={isDevelopment ? colors.warning : colors.error}
               />
             </View>
 
@@ -191,7 +192,7 @@ class GlobalErrorBoundary extends Component<Props, State> {
                   accessibilityLabel="Report issue"
                   accessibilityRole="button"
                 >
-                  <Ionicons name="bug" size={20} color="#8B5CF6" />
+                  <Ionicons name="bug" size={20} color={colors.brand.purpleLight} />
                   <Text style={styles.secondaryButtonText}>Report Issue</Text>
                 </Pressable>
               )}
@@ -208,7 +209,7 @@ class GlobalErrorBoundary extends Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   scrollView: {
     flex: 1,
@@ -225,13 +226,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.gray[900],
     marginBottom: 12,
     textAlign: 'center',
   },
   message: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 32,
     lineHeight: 24,
@@ -241,14 +242,14 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 600,
     marginBottom: 24,
-    backgroundColor: '#1F2937',
+    backgroundColor: colors.neutral[800],
     borderRadius: 12,
     padding: 16,
   },
   stackTraceTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warning,
     marginBottom: 8,
   },
   stackTraceScroll: {
@@ -256,21 +257,21 @@ const styles = StyleSheet.create({
   },
   stackTrace: {
     fontSize: 12,
-    color: '#E5E7EB',
+    color: colors.gray[200],
     fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
     lineHeight: 18,
   },
   infoContainer: {
     marginBottom: 32,
     padding: 16,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.gray[200],
     borderRadius: 8,
     width: '100%',
     maxWidth: 400,
   },
   infoText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
     textAlign: 'center',
   },
@@ -283,12 +284,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
     gap: 8,
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -309,12 +310,12 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     gap: 8,
     borderWidth: 2,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
   },
   secondaryButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 });
 

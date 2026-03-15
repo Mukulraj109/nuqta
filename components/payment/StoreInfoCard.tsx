@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { StoreMembership, MembershipTier } from '@/types/storePayment.types';
+import { colors } from '@/constants/theme';
 
 interface StoreInfoCardProps {
   storeName: string;
@@ -21,9 +22,9 @@ interface StoreInfoCardProps {
 
 const TIER_COLORS: Record<MembershipTier, { bg: string; text: string; icon: string }> = {
   new: { bg: COLORS.neutral[100], text: COLORS.neutral[700], icon: 'person-outline' },
-  bronze: { bg: '#FDF2E9', text: '#B45309', icon: 'medal-outline' },
-  silver: { bg: '#F3F4F6', text: '#4B5563', icon: 'medal' },
-  gold: { bg: '#FEF3C7', text: '#B45309', icon: 'trophy' },
+  bronze: { bg: '#FDF2E9', text: colors.brand.amberDeep, icon: 'medal-outline' },
+  silver: { bg: colors.neutral[100], text: colors.neutral[600], icon: 'medal' },
+  gold: { bg: colors.tint.amberLight, text: colors.brand.amberDeep, icon: 'trophy' },
 };
 
 export const StoreInfoCard: React.FC<StoreInfoCardProps> = ({
@@ -71,7 +72,7 @@ export const StoreInfoCard: React.FC<StoreInfoCardProps> = ({
         end={{ x: 1, y: 0 }}
         style={styles.rewardsBanner}
       >
-        <Ionicons name="gift" size={16} color="#FFFFFF" />
+        <Ionicons name="gift" size={16} color={colors.background.primary} />
         <Text style={styles.rewardsText}>
           You're earning rewards on this purchase!
         </Text>
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
   },
   rewardsText: {
     ...TYPOGRAPHY.bodySmall,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     flex: 1,
   },
   bonusBadge: {
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
   },
   bonusText: {
     ...TYPOGRAPHY.caption,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   progressRow: {

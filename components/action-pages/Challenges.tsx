@@ -15,19 +15,20 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  orange: '#F97316',
-  orangeDark: '#EA580C',
-  orangeLight: '#FFF7ED',
-  primaryGold: '#F59E0B',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  border: '#E5E7EB',
-  green: '#16A34A',
-  red: '#EF4444',
+  orange: colors.brand.orange,
+  orangeDark: colors.brand.orangeDark,
+  orangeLight: colors.tint.orange,
+  primaryGold: colors.warningScale[400],
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  border: colors.neutral[200],
+  green: colors.brand.greenDark,
+  red: colors.error,
 };
 
 interface Challenge {
@@ -53,7 +54,7 @@ const CHALLENGES: Challenge[] = [
     reward: 500,
     difficulty: 'Hard',
     participants: 1247,
-    gradient: ['#EF4444', '#DC2626'],
+    gradient: [colors.error, colors.error],
     tasks: ['Visit gym daily', 'Log each workout', 'Complete 30 check-ins'],
   },
   {
@@ -65,7 +66,7 @@ const CHALLENGES: Challenge[] = [
     reward: 150,
     difficulty: 'Easy',
     participants: 3456,
-    gradient: ['#8B5CF6', '#7C3AED'],
+    gradient: [colors.brand.purpleLight, colors.brand.purple],
     tasks: ['Attend a yoga class', 'Practice at least 30 min', 'Complete 7 sessions'],
   },
   {
@@ -77,7 +78,7 @@ const CHALLENGES: Challenge[] = [
     reward: 250,
     difficulty: 'Medium',
     participants: 2189,
-    gradient: ['#F97316', '#EA580C'],
+    gradient: [colors.brand.orange, colors.brand.orangeDark],
     tasks: ['Try 5 different workout types', 'Rate each experience', 'Share your journey'],
   },
   {
@@ -89,7 +90,7 @@ const CHALLENGES: Challenge[] = [
     reward: 300,
     difficulty: 'Medium',
     participants: 892,
-    gradient: ['#3B82F6', '#2563EB'],
+    gradient: [colors.infoScale[400], colors.brand.blue],
     tasks: ['Swim at least 30 min per session', 'Complete 10 sessions', 'Track your progress'],
   },
   {
@@ -101,7 +102,7 @@ const CHALLENGES: Challenge[] = [
     reward: 350,
     difficulty: 'Hard',
     participants: 1567,
-    gradient: ['#F59E0B', '#D97706'],
+    gradient: [colors.warningScale[400], colors.warningScale[700]],
     tasks: ['Check in before 8:00 AM', 'Complete a workout', '14 consecutive mornings'],
   },
 ];
@@ -307,7 +308,7 @@ function ChallengesPage() {
                   <LinearGradient
                     colors={
                       joinedChallenges.has(challenge.id)
-                        ? ['#9CA3AF', '#6B7280']
+                        ? [colors.neutral[400], colors.neutral[500]]
                         : [COLORS.orange, COLORS.orangeDark]
                     }
                     start={{ x: 0, y: 0 }}

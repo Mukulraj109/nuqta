@@ -7,19 +7,20 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 const BillUploadCard: React.FC = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#FEF3C7', '#FDE68A']}
+        colors={[colors.tint.amberLight, colors.warningScale[200]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.card}
       >
         <View style={styles.headerRow}>
           <View style={styles.iconContainer}>
-            <Ionicons name="document-text" size={20} color="#D97706" />
+            <Ionicons name="document-text" size={20} color={colors.warningScale[700]} />
           </View>
           <Text style={styles.title}>Special Case: Bill Upload</Text>
         </View>
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   card: {
     borderRadius: 16,
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
     borderColor: '#FCD34D',
     ...Platform.select({
       ios: {
-        shadowColor: '#F59E0B',
+        shadowColor: colors.warningScale[400],
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
         shadowRadius: 8,
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     flex: 1,
   },
   subtitle: {
@@ -100,12 +101,12 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#D97706',
+    backgroundColor: colors.warningScale[700],
     marginRight: 10,
   },
   itemText: {
     fontSize: 14,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontWeight: '500',
   },
 });

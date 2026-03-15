@@ -21,19 +21,20 @@ import ReorderSuggestions from '@/components/orders/ReorderSuggestions';
 import SkeletonLoader from '@/components/common/SkeletonLoader';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, Gradients, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // ============================================================================
 // STATUS HELPERS
 // ============================================================================
 
 const STATUS_COLORS: Record<string, string> = {
-  placed: '#f59e0b',
-  confirmed: '#3b82f6',
+  placed: colors.warningScale[400],
+  confirmed: colors.infoScale[400],
   preparing: '#e67e22',
   ready: '#0ea5e9',
   dispatched: '#6366f1',
   shipped: '#6366f1',
-  delivered: '#2ECC71',
+  delivered: colors.success,
   cancelled: '#E74C3C',
   returned: '#ef6868',
   refunded: Colors.secondary[500],
@@ -53,7 +54,7 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 const PAYMENT_COLORS: Record<string, string> = {
-  paid: '#2ECC71',
+  paid: colors.success,
   failed: '#E74C3C',
   refunded: Colors.secondary[500],
   partially_refunded: '#e67e22',
@@ -61,7 +62,7 @@ const PAYMENT_COLORS: Record<string, string> = {
 
 const getStatusColor = (status: string) => STATUS_COLORS[status] || Colors.gray[500];
 const getStatusLabel = (status: string) => STATUS_LABELS[status] || status;
-const getPaymentColor = (status: string) => PAYMENT_COLORS[status] || '#f59e0b';
+const getPaymentColor = (status: string) => PAYMENT_COLORS[status] || colors.warningScale[400];
 
 // ============================================================================
 // FILTER CONFIG

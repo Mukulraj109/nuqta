@@ -6,6 +6,7 @@ import { View, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface ProratedPriceDisplayProps {
   originalPrice: number;
@@ -31,7 +32,7 @@ function ProratedPriceDisplay({
       <ThemedText style={styles.title}>Pricing Breakdown</ThemedText>
 
       <View style={styles.infoCard}>
-        <Ionicons name="information-circle-outline" size={20} color="#3B82F6" />
+        <Ionicons name="information-circle-outline" size={20} color={colors.infoScale[400]} />
         <ThemedText style={styles.infoText}>
           You have {daysRemaining} days remaining on your {currentTier} plan
         </ThemedText>
@@ -83,7 +84,7 @@ function ProratedPriceDisplay({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -95,13 +96,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   infoCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
@@ -110,10 +111,10 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 13,
-    color: '#3B82F6',
+    color: colors.infoScale[400],
   },
   breakdownContainer: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
     padding: 16,
   },
@@ -129,24 +130,24 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   sublabel: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 2,
   },
   value: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   creditValue: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   divider: {
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginVertical: 12,
   },
   totalRow: {
@@ -155,22 +156,22 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   totalValue: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   noteContainer: {
     marginTop: 12,
     padding: 12,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 8,
   },
   noteText: {
     fontSize: 12,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     textAlign: 'center',
   },
 });

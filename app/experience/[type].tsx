@@ -26,6 +26,7 @@ import { getTheme } from '@/constants/experienceThemes';
 import { useLocation } from '@/contexts/LocationContext';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const ExperienceDetailPage: React.FC = () => {
   const router = useRouter();
   const { type } = useLocalSearchParams<{ type: string }>();
@@ -428,7 +429,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xl,
     flexDirection: 'row',
     paddingVertical: Spacing.base,
-    shadowColor: '#64748B',
+    shadowColor: colors.slateGray,
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.1,
     shadowRadius: 20,

@@ -25,6 +25,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import type { LeaderboardData, LeaderboardEntry } from '@/types/gamification.types';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type Period = 'daily' | 'weekly' | 'monthly' | 'all-time';
 
@@ -154,7 +155,7 @@ export default function LeaderboardPage() {
   // Render medal for top 3
   const renderMedal = (rank: number) => {
     const medals = {
-      1: { icon: 'medal', color: '#FFD700' }, // Gold
+      1: { icon: 'medal', color: colors.brand.goldBright }, // Gold
       2: { icon: 'medal', color: '#C0C0C0' }, // Silver
       3: { icon: 'medal', color: '#CD7F32' }, // Bronze
     };
@@ -375,7 +376,7 @@ export default function LeaderboardPage() {
           ]}
         >
           <LinearGradient
-            colors={['#FFD700', '#FFA500']}
+            colors={[colors.brand.goldBright, '#FFA500']}
             style={styles.celebrationCard}
           >
             <Ionicons name="trophy" size={48} color={Colors.text.inverse} />
@@ -506,10 +507,10 @@ const styles = StyleSheet.create({
   currentUserCard: {
     borderWidth: 2,
     borderColor: Colors.brand.purpleLight,
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
   },
   topThreeCard: {
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     borderWidth: 1,
     borderColor: '#FCD34D',
   },
@@ -538,7 +539,7 @@ const styles = StyleSheet.create({
   },
   topThreeAvatar: {
     borderWidth: 2,
-    borderColor: '#FFD700',
+    borderColor: colors.brand.goldBright,
   },
   avatarPlaceholder: {
     flex: 1,
@@ -596,7 +597,7 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     flexDirection: 'row',
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
     margin: Spacing.lg,

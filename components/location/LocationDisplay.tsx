@@ -12,6 +12,7 @@ import { UserLocation } from '@/types/location.types';
 import { webLocationService } from '@/services/webLocationService';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface LocationDisplayProps {
   showCoordinates?: boolean;
@@ -411,7 +412,7 @@ function LocationDisplay({
   if (isLocationLoading) {
     return (
       <View style={[styles.container, compact && styles.compactContainer, style]}>
-        <ActivityIndicator size="small" color="#007AFF" />
+        <ActivityIndicator size="small" color={colors.brand.ios} />
         <Text style={[styles.loadingText, textStyle]}>Getting location...</Text>
       </View>
     );
@@ -593,14 +594,14 @@ const styles = StyleSheet.create({
   locationText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#333333',
+    color: colors.darkGray,
     lineHeight: 18,
     flexWrap: 'wrap',
     flexShrink: 1,
   },
   coordinatesText: {
     fontSize: 12,
-    color: '#666666',
+    color: colors.midGray,
     marginBottom: 2,
   },
   lastUpdatedText: {
@@ -620,7 +621,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 11,
-    color: '#666666',
+    color: colors.midGray,
   },
   refreshButton: {
     padding: 8,
@@ -628,11 +629,11 @@ const styles = StyleSheet.create({
   },
   refreshButtonText: {
     fontSize: 16,
-    color: '#007AFF',
+    color: colors.brand.ios,
   },
   loadingText: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     marginLeft: 8,
   },
   errorText: {

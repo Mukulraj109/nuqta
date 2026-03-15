@@ -11,6 +11,7 @@ import React from 'react';
 import { View, ScrollView, Pressable, Platform, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 /**
  * Category Item Interface
@@ -98,7 +99,7 @@ export const CategorySections: React.FC<CategorySectionsProps> = ({ sections, st
                     accessibilityHint={`Double tap to browse ${category.label.toLowerCase()} stores and products`}
                   >
                     <View style={styles.categoryIcon}>
-                      <Ionicons name={category.icon} size={24} color="#ffcd57" />
+                      <Ionicons name={category.icon} size={24} color={colors.lightMustard} />
                     </View>
                     <ThemedText style={styles.categoryLabel}>{category.label}</ThemedText>
                   </Pressable>
@@ -123,7 +124,7 @@ export const CategorySections: React.FC<CategorySectionsProps> = ({ sections, st
                   accessibilityHint={`Double tap to browse ${category.label.toLowerCase()} stores and products`}
                 >
                   <View style={styles.categoryIcon}>
-                    <Ionicons name={category.icon} size={24} color="#ffcd57" />
+                    <Ionicons name={category.icon} size={24} color={colors.lightMustard} />
                   </View>
                   <ThemedText style={styles.categoryLabel}>{category.label}</ThemedText>
                 </Pressable>
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontFamily: 'Poppins',
   },
   viewAllButton: {
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
   },
   viewAllText: {
     fontSize: 13,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
     fontFamily: 'Inter',
   },
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 205, 87, 0.15)',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 6,
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
   },
   categoryLabel: {
     fontSize: 11,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textAlign: 'center',
     fontWeight: '500',
     marginTop: 8,

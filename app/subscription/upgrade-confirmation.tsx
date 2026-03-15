@@ -17,6 +17,7 @@ import StripePaymentModal from '@/components/subscription/StripePaymentModal';
 import { SubscriptionTier, TIER_NAMES, TIER_COLORS } from '@/types/subscription.types';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type UpgradeTiming = 'immediate' | 'cycle_end';
 
@@ -147,7 +148,7 @@ export default function UpgradeConfirmationPage() {
         { icon: 'bicycle', text: 'Free delivery on ALL orders', color: Colors.info },
         { icon: 'person', text: 'Personal shopper assistance', color: Colors.brand.purpleLight },
         { icon: 'calendar', text: 'Access to premium events', color: Colors.warning },
-        { icon: 'shield-checkmark', text: 'Dedicated concierge service', color: '#EC4899' }
+        { icon: 'shield-checkmark', text: 'Dedicated concierge service', color: colors.brand.pink }
       );
     } else if (newTier === 'premium') {
       benefits.push(

@@ -12,6 +12,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -37,9 +38,9 @@ interface AchievementUnlockModalProps {
 
 const PARTICLE_COUNT = 18;
 const PARTICLE_COLORS = [
-  '#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1',
+  colors.brand.goldBright, '#FF6B6B', '#4ECDC4', '#45B7D1',
   '#F7DC6F', '#BB8FCE', '#85C1E9', '#82E0AA',
-  '#F8C471', '#E74C3C', '#3498DB', '#2ECC71',
+  '#F8C471', '#E74C3C', '#3498DB', colors.success,
 ];
 
 interface ParticleConfig {
@@ -365,7 +366,7 @@ const AchievementUnlockModal: React.FC<AchievementUnlockModalProps> = ({
                   <Ionicons
                     name={getIconName(achievement.icon)}
                     size={48}
-                    color="#FFD700"
+                    color={colors.brand.goldBright}
                   />
                 </Animated.View>
               </View>
@@ -389,7 +390,7 @@ const AchievementUnlockModal: React.FC<AchievementUnlockModalProps> = ({
                 ]}
               >
                 <View style={styles.rewardBadge}>
-                  <Ionicons name="diamond" size={20} color="#16A34A" />
+                  <Ionicons name="diamond" size={20} color={colors.brand.greenDark} />
                   <Text style={styles.rewardAmount}>
                     +{achievement.coinReward}
                   </Text>
@@ -436,13 +437,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 24,
     padding: 32,
     width: '100%',
     maxWidth: 340,
     alignItems: 'center',
-    shadowColor: '#FFD700',
+    shadowColor: colors.brand.goldBright,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 16,
@@ -461,18 +462,18 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: '#FFD700',
+    backgroundColor: colors.brand.goldBright,
   },
   iconCircle: {
     width: 96,
     height: 96,
     borderRadius: 48,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3,
-    borderColor: '#FFD700',
-    shadowColor: '#FFD700',
+    borderColor: colors.brand.goldBright,
+    shadowColor: colors.brand.goldBright,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 8,
@@ -483,7 +484,7 @@ const styles = StyleSheet.create({
   unlockLabel: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
     textAlign: 'center',
@@ -492,14 +493,14 @@ const styles = StyleSheet.create({
   achievementTitle: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
     marginBottom: 8,
     lineHeight: 28,
   },
   achievementDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 4,
@@ -513,33 +514,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#BBF7D0',
+    borderColor: colors.successScale[200],
   },
   rewardAmount: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#16A34A',
+    color: colors.brand.greenDark,
   },
   rewardLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#16A34A',
+    color: colors.brand.greenDark,
   },
 
   // Button
   claimButton: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: 40,
     paddingVertical: 14,
     borderRadius: 14,
     width: '100%',
     alignItems: 'center',
-    shadowColor: '#1a3a52',
+    shadowColor: colors.nileBlue,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -548,7 +549,7 @@ const styles = StyleSheet.create({
   claimButtonText: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

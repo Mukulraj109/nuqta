@@ -11,16 +11,17 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { EnhancedUGCSocialProofSectionProps, UGCPost } from '@/types/categoryTypes';
+import { colors } from '@/constants/theme';
 
 // Rez Brand Colors
 const COLORS = {
-  primaryGreen: '#ffcd57',
-  primaryGold: '#F59E0B',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#FFFFFF',
-  cardBg: '#F9FAFB',
+  primaryGreen: colors.lightMustard,
+  primaryGold: colors.warningScale[400],
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.background.primary,
+  cardBg: colors.neutral[50],
 };
 
 interface UGCPostCardProps {
@@ -72,7 +73,7 @@ const UGCPostCard: React.FC<UGCPostCardProps> = ({ post, onPress, isLarge = fals
         </View>
         <View style={styles.postStats}>
           <View style={styles.statItem}>
-            <Ionicons name="heart" size={14} color="#EF4444" />
+            <Ionicons name="heart" size={14} color={colors.error} />
             <Text style={styles.statText}>{post.likes}</Text>
           </View>
           <View style={styles.statItem}>

@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import DealCountdownTimer from './DealCountdownTimer';
 import { PromotionBanner, PromotionBannerProps, PromotionBannerItemProps } from '@/types/promotions.types';
+import { colors } from '@/constants/theme';
 
 /**
  * PromotionsBanner Component
@@ -225,8 +226,8 @@ function PromotionBannerItem({
     }
   }, [banner.expiryDate, isActive, pulseAnim]);
 
-  const gradientColors = banner.backgroundColor || ['#7C3AED', '#EC4899'];
-  const textColor = banner.textColor || '#FFFFFF';
+  const gradientColors = banner.backgroundColor || [colors.brand.purple, colors.brand.pink];
+  const textColor = banner.textColor || colors.text.white;
 
   return (
     <Animated.View
@@ -365,7 +366,7 @@ function BannerContent({
             <Text style={styles.ctaText} numberOfLines={1}>
               {banner.ctaText || 'Shop Now'}
             </Text>
-            <Ionicons name="arrow-forward" size={16} color="#7C3AED" />
+            <Ionicons name="arrow-forward" size={16} color={colors.brand.purple} />
           </Pressable>
         </View>
       </View>
@@ -482,7 +483,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     letterSpacing: 0.5,
   },
   rightSection: {
@@ -500,7 +501,7 @@ const styles = StyleSheet.create({
   ctaButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 10,
@@ -514,7 +515,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     letterSpacing: 0.3,
   },
   paginationContainer: {
@@ -535,7 +536,7 @@ const styles = StyleSheet.create({
   },
   paginationDotActive: {
     width: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
 });
 

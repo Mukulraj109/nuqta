@@ -13,6 +13,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
 import VideoPlayer from './VideoPlayer';
 import ImageZoomModal from './ImageZoomModal';
+import { colors } from '@/constants/theme';
 
 /**
  * ProductImageGallery Component
@@ -112,7 +113,7 @@ export const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
   if (!mediaItems || mediaItems.length === 0) {
     return (
       <View style={styles.emptyContainer}>
-        <Ionicons name="image-outline" size={64} color="#D1D5DB" />
+        <Ionicons name="image-outline" size={64} color={colors.neutral[300]} />
         <ThemedText style={styles.emptyText}>No media available</ThemedText>
       </View>
     );
@@ -150,7 +151,7 @@ export const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
                   style={styles.zoomHintOverlay}
                 >
                   <View style={styles.zoomHint}>
-                    <Ionicons name="expand-outline" size={16} color="#FFF" />
+                    <Ionicons name="expand-outline" size={16} color={colors.background.primary} />
                     <ThemedText style={styles.zoomHintText}>Tap to zoom</ThemedText>
                   </View>
                 </LinearGradient>
@@ -219,7 +220,7 @@ export const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
                 {/* Type Badge */}
                 {item.type === 'video' && (
                   <View style={styles.thumbnailVideoBadge}>
-                    <Ionicons name="play" size={12} color="#FFF" />
+                    <Ionicons name="play" size={12} color={colors.background.primary} />
                   </View>
                 )}
 
@@ -248,7 +249,7 @@ export const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     position: 'relative',
   },
 
@@ -258,12 +259,12 @@ const styles = StyleSheet.create({
     height: 400,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     gap: 12,
   },
   emptyText: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
 
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
   mediaContainer: {
     width: SCREEN_WIDTH,
     height: 400,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   imageTouchable: {
     width: '100%',
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
+    backgroundColor: colors.text.primary,
   },
 
   // Zoom Hint
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
   },
   zoomHintText: {
     fontSize: 12,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '500',
   },
 
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
   activeIndicator: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     width: 24,
   },
 
@@ -350,15 +351,15 @@ const styles = StyleSheet.create({
   counterText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
 
   // Thumbnails
   thumbnailStrip: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   thumbnailContainer: {
     paddingHorizontal: 16,
@@ -374,7 +375,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   thumbnailActive: {
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
   },
   thumbnailImage: {
     width: '100%',
@@ -394,7 +395,7 @@ const styles = StyleSheet.create({
   thumbnailActiveBorder: {
     ...StyleSheet.absoluteFillObject,
     borderWidth: 2,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
     borderRadius: 6,
   },
 });

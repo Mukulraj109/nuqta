@@ -19,6 +19,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { CashStoreHeroBanner as HeroBannerType } from '../../../types/cash-store.types';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const BANNER_WIDTH = SCREEN_WIDTH - 32;
@@ -181,7 +182,7 @@ const CashStoreHeroBanner: React.FC<CashStoreHeroBannerProps> = ({
           ]}
         >
           <LinearGradient
-            colors={item.gradientColors || ['#faf1e0', '#FFFFFF', '#FFFFFF']}
+            colors={item.gradientColors || [colors.linen, colors.background.primary, colors.background.primary]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.bannerCard}
@@ -222,7 +223,7 @@ const CashStoreHeroBanner: React.FC<CashStoreHeroBannerProps> = ({
                   colors={['rgba(255,255,255,0.35)', 'rgba(255,255,255,0.2)']}
                   style={styles.badgeGradient}
                 >
-                  <Ionicons name="flame" size={12} color="#FFFFFF" />
+                  <Ionicons name="flame" size={12} color={colors.background.primary} />
                   <Text style={styles.badgeText}>{item.badge}</Text>
                 </LinearGradient>
               </Animated.View>
@@ -231,11 +232,11 @@ const CashStoreHeroBanner: React.FC<CashStoreHeroBannerProps> = ({
             {/* Content */}
             <View style={styles.bannerContent}>
               <View style={styles.textContainer}>
-                <Text style={[styles.title, { color: item.textColor || '#1a3a52' }]}>
+                <Text style={[styles.title, { color: item.textColor || colors.nileBlue }]}>
                   {item.title}
                 </Text>
                 {item.subtitle && (
-                  <Text style={[styles.subtitle, { color: item.textColor || '#1a3a52' }]}>
+                  <Text style={[styles.subtitle, { color: item.textColor || colors.nileBlue }]}>
                     {item.subtitle}
                   </Text>
                 )}
@@ -243,12 +244,12 @@ const CashStoreHeroBanner: React.FC<CashStoreHeroBannerProps> = ({
                 {/* CTA Button */}
                 <Pressable style={styles.ctaButton}>
                   <LinearGradient
-                    colors={['#FFFFFF', '#F9FAFB']}
+                    colors={[colors.background.primary, colors.neutral[50]]}
                     style={styles.ctaGradient}
                   >
                     <Text style={styles.ctaText}>{item.ctaText}</Text>
                     <View style={styles.ctaArrowContainer}>
-                      <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
+                      <Ionicons name="arrow-forward" size={16} color={colors.background.primary} />
                     </View>
                   </LinearGradient>
                 </Pressable>
@@ -257,7 +258,7 @@ const CashStoreHeroBanner: React.FC<CashStoreHeroBannerProps> = ({
               {/* Icon/Image */}
               <View style={styles.iconContainer}>
                 <View style={styles.iconBackground}>
-                  <Ionicons name="cart" size={44} color="#E8B896" />
+                  <Ionicons name="cart" size={44} color={colors.brand.sand} />
                 </View>
               </View>
             </View>
@@ -288,7 +289,7 @@ const CashStoreHeroBanner: React.FC<CashStoreHeroBannerProps> = ({
             ]}
           />
           <LinearGradient
-            colors={['#E5E7EB', '#F3F4F6', '#E5E7EB']}
+            colors={[colors.neutral[200], colors.neutral[100], colors.neutral[200]]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.bannerCard}
@@ -368,10 +369,10 @@ const styles = StyleSheet.create({
     position: 'relative',
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#E8B896',
+    borderColor: colors.brand.sand,
     ...Platform.select({
       ios: {
-        shadowColor: '#E8B896',
+        shadowColor: colors.brand.sand,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 12,
@@ -434,7 +435,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -490,13 +491,13 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#E8B896',
+    color: colors.brand.sand,
   },
   ctaArrowContainer: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#E8B896',
+    backgroundColor: colors.brand.sand,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -514,10 +515,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E8B896',
+    borderColor: colors.brand.sand,
     ...Platform.select({
       ios: {
-        shadowColor: '#E8B896',
+        shadowColor: colors.brand.sand,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 4,
@@ -541,11 +542,11 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   paginationDotActive: {
     width: 24,
-    backgroundColor: '#E8B896',
+    backgroundColor: colors.brand.sand,
   },
   skeletonBanner: {
     marginHorizontal: 16,

@@ -8,6 +8,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface Category {
   id: string;
@@ -58,14 +59,14 @@ const getCategoryColor = (name: string): string => {
   if (normalized.includes('food') || normalized.includes('restaurant')) return '#FFEBEE';
   if (normalized.includes('electronic')) return '#E8EAF6';
   if (normalized.includes('beauty')) return '#FFF3E0';
-  if (normalized.includes('home')) return '#E8F5E9';
+  if (normalized.includes('home')) return colors.greenMist;
   if (normalized.includes('travel')) return '#E1F5FE';
   if (normalized.includes('health')) return '#E3F2FD';
   if (normalized.includes('sports')) return '#E0F7FA';
   if (normalized.includes('auto')) return '#ECEFF1';
   if (normalized.includes('grocery')) return '#F1F8E9';
   if (normalized.includes('kids')) return '#FFF8E1';
-  return '#E8F5E9';
+  return colors.greenMist;
 };
 
 const CategoryImageCard: React.FC<CategoryImageCardProps> = memo(({
@@ -130,7 +131,7 @@ const CategoryImageCard: React.FC<CategoryImageCardProps> = memo(({
             <Ionicons
               name={fallbackIcon}
               size={config.imageSize * 0.4}
-              color="#00C06A"
+              color={colors.brand.green}
             />
           </View>
         )}
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   imageWrapper: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     overflow: 'hidden',
     ...Platform.select({
       ios: {
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     textAlign: 'center',
-    color: '#1F2937',
+    color: colors.neutral[800],
     fontWeight: '500',
     marginTop: 8,
     lineHeight: 16,

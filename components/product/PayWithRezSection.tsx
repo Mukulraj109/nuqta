@@ -14,6 +14,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface PayWithRezSectionProps {
   /** Custom style */
@@ -63,7 +64,7 @@ export const PayWithRezSection: React.FC<PayWithRezSectionProps> = ({
             <Ionicons
               name="checkmark-circle"
               size={22}
-              color="#ffcd57"
+              color={colors.lightMustard}
             />
             <Text style={styles.optionLabel}>{option.label}</Text>
           </View>
@@ -72,7 +73,7 @@ export const PayWithRezSection: React.FC<PayWithRezSectionProps> = ({
 
       {/* Tip */}
       <View style={styles.tipContainer}>
-        <Ionicons name="bulb-outline" size={16} color="#F59E0B" />
+        <Ionicons name="bulb-outline" size={16} color={colors.warningScale[400]} />
         <Text style={styles.tipText}>
           Coins auto-apply for maximum savings
         </Text>
@@ -83,13 +84,13 @@ export const PayWithRezSection: React.FC<PayWithRezSectionProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 16,
     marginVertical: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 12,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -122,12 +123,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   // Options List
   optionsList: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 14,
     gap: 14,
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
 
   optionLabel: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
   },
 
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
   tipContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     borderRadius: 10,
     padding: 12,
     gap: 10,
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
 
   tipText: {
     fontSize: 13,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontWeight: '500',
   },
 });

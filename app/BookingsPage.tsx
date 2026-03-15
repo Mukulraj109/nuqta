@@ -26,11 +26,12 @@ import serviceBookingService from '@/services/serviceBookingApi';
 import { confirmAlert, alertOk } from '@/utils/alert';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // ─── Brand Colors ─────────────────────────────────────────────
 const C = {
-  primary: '#00C06A',
-  primaryDark: '#00796B',
+  primary: colors.brand.green,
+  primaryDark: colors.brand.teal,
   gold: Colors.warning,
   navy: Colors.nileBlue,
   text: Colors.text.primary,
@@ -44,25 +45,25 @@ const C = {
   success: Colors.success,
   purple: Colors.brand.purple,
   blue: Colors.info,
-  orange: '#F97316',
-  teal: '#14B8A6',
+  orange: colors.brand.orange,
+  teal: colors.tealGreen,
 };
 
 // ─── Booking type config ─────────────────────────────────────
 const BOOKING_TYPE_CONFIG = {
-  table: { label: 'Table', icon: 'restaurant-outline' as const, color: C.orange, bgColor: '#FFF7ED' },
-  event: { label: 'Event', icon: 'ticket-outline' as const, color: C.purple, bgColor: '#F5F3FF' },
-  service: { label: 'Service', icon: 'construct-outline' as const, color: C.blue, bgColor: '#EFF6FF' },
+  table: { label: 'Table', icon: 'restaurant-outline' as const, color: C.orange, bgColor: colors.tint.orange },
+  event: { label: 'Event', icon: 'ticket-outline' as const, color: C.purple, bgColor: colors.tint.purpleLight },
+  service: { label: 'Service', icon: 'construct-outline' as const, color: C.blue, bgColor: colors.tint.blue },
 };
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string; icon: string }> = {
-  pending: { color: '#F59E0B', bg: '#FFFBEB', icon: 'time-outline' },
-  confirmed: { color: '#10B981', bg: '#ECFDF5', icon: 'checkmark-circle-outline' },
-  completed: { color: '#3B82F6', bg: '#EFF6FF', icon: 'checkmark-done-outline' },
-  cancelled: { color: '#EF4444', bg: '#FEF2F2', icon: 'close-circle-outline' },
-  assigned: { color: '#8B5CF6', bg: '#F5F3FF', icon: 'person-outline' },
-  in_progress: { color: '#F97316', bg: '#FFF7ED', icon: 'play-circle-outline' },
-  no_show: { color: '#6B7280', bg: '#F9FAFB', icon: 'eye-off-outline' },
+  pending: { color: colors.warningScale[400], bg: colors.tint.amber, icon: 'time-outline' },
+  confirmed: { color: colors.successScale[400], bg: colors.tint.greenLight, icon: 'checkmark-circle-outline' },
+  completed: { color: colors.infoScale[400], bg: colors.tint.blue, icon: 'checkmark-done-outline' },
+  cancelled: { color: colors.error, bg: colors.errorScale[50], icon: 'close-circle-outline' },
+  assigned: { color: colors.brand.purpleLight, bg: colors.tint.purpleLight, icon: 'person-outline' },
+  in_progress: { color: colors.brand.orange, bg: colors.tint.orange, icon: 'play-circle-outline' },
+  no_show: { color: colors.neutral[500], bg: colors.neutral[50], icon: 'eye-off-outline' },
 };
 
 // ─── Types ────────────────────────────────────────────────────
@@ -466,7 +467,7 @@ export default function BookingsPage() {
           <View style={{ width: 40 }} />
         </LinearGradient>
         <View style={styles.centeredContainer}>
-          <View style={[styles.emptyIconCircle, { backgroundColor: '#F3F4F6' }]}>
+          <View style={[styles.emptyIconCircle, { backgroundColor: colors.neutral[100] }]}>
             <Ionicons name="lock-closed-outline" size={40} color={C.textSecondary} />
           </View>
           <Text style={styles.emptyTitle}>Login Required</Text>

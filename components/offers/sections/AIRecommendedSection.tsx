@@ -14,6 +14,7 @@ import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { SectionHeader, HorizontalScrollSection } from '../common';
 import { AIRecommendedOffer } from '@/types/offers.types';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface AIRecommendedSectionProps {
   offers: AIRecommendedOffer[];
@@ -39,7 +40,7 @@ export const AIRecommendedSection: React.FC<AIRecommendedSectionProps> = ({
     },
     card: {
       width: 240,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 1.5,
       borderColor: isDark ? 'rgba(139, 92, 246, 0.3)' : '#DDD6FE',
@@ -61,7 +62,7 @@ export const AIRecommendedSection: React.FC<AIRecommendedSectionProps> = ({
       left: 10,
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#8B5CF6',
+      backgroundColor: colors.brand.purpleLight,
       paddingHorizontal: 10,
       paddingVertical: 5,
       borderRadius: 8,
@@ -69,7 +70,7 @@ export const AIRecommendedSection: React.FC<AIRecommendedSectionProps> = ({
     aiBadgeText: {
       fontSize: 10,
       fontWeight: '800',
-      color: '#FFFFFF',
+      color: colors.background.primary,
       marginLeft: 4,
       letterSpacing: 0.5,
     },
@@ -77,7 +78,7 @@ export const AIRecommendedSection: React.FC<AIRecommendedSectionProps> = ({
       position: 'absolute',
       top: 10,
       right: 10,
-      backgroundColor: isDark ? 'rgba(16, 185, 129, 0.3)' : '#D1FAE5',
+      backgroundColor: isDark ? 'rgba(16, 185, 129, 0.3)' : colors.tint.green,
       paddingHorizontal: 8,
       paddingVertical: 5,
       borderRadius: 8,
@@ -85,7 +86,7 @@ export const AIRecommendedSection: React.FC<AIRecommendedSectionProps> = ({
     matchText: {
       fontSize: 11,
       fontWeight: '800',
-      color: isDark ? '#34D399' : '#059669',
+      color: isDark ? colors.successScale[400] : colors.successScale[700],
     },
     content: {
       padding: Spacing.md,
@@ -108,12 +109,12 @@ export const AIRecommendedSection: React.FC<AIRecommendedSectionProps> = ({
     reasonContainer: {
       flexDirection: 'row',
       alignItems: 'flex-start',
-      backgroundColor: isDark ? 'rgba(139, 92, 246, 0.1)' : '#F5F3FF',
+      backgroundColor: isDark ? 'rgba(139, 92, 246, 0.1)' : colors.tint.purpleLight,
       padding: Spacing.sm,
       borderRadius: BorderRadius.md,
       marginTop: Spacing.xs,
       borderWidth: 1,
-      borderColor: isDark ? 'rgba(139, 92, 246, 0.2)' : '#EDE9FE',
+      borderColor: isDark ? 'rgba(139, 92, 246, 0.2)' : colors.tint.purple,
     },
     reasonIcon: {
       marginRight: 6,
@@ -122,7 +123,7 @@ export const AIRecommendedSection: React.FC<AIRecommendedSectionProps> = ({
     reasonText: {
       fontSize: 11,
       fontWeight: '500',
-      color: isDark ? '#A78BFA' : '#7C3AED',
+      color: isDark ? colors.brand.purpleSoft : colors.brand.purple,
       flex: 1,
       lineHeight: 16,
     },
@@ -153,7 +154,7 @@ export const AIRecommendedSection: React.FC<AIRecommendedSectionProps> = ({
         title="Recommended For You"
         subtitle="Based on your activity"
         icon="sparkles"
-        iconColor="#8B5CF6"
+        iconColor={colors.brand.purpleLight}
         showViewAll={offers.length > 2}
         onViewAll={onViewAll}
       />
@@ -176,7 +177,7 @@ export const AIRecommendedSection: React.FC<AIRecommendedSectionProps> = ({
                 <Ionicons
                   name="sparkles"
                   size={12}
-                  color={isDark ? '#A78BFA' : '#7C3AED'}
+                  color={isDark ? colors.brand.purpleSoft : colors.brand.purple}
                 />
                 <Text style={styles.aiBadgeText}>AI PICK</Text>
               </View>
@@ -197,7 +198,7 @@ export const AIRecommendedSection: React.FC<AIRecommendedSectionProps> = ({
                 <Ionicons
                   name="bulb-outline"
                   size={12}
-                  color={isDark ? '#A78BFA' : '#7C3AED'}
+                  color={isDark ? colors.brand.purpleSoft : colors.brand.purple}
                   style={styles.reasonIcon}
                 />
                 <Text style={styles.reasonText} numberOfLines={2}>

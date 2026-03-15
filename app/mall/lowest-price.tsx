@@ -23,6 +23,7 @@ import { Colors, Shadows } from '@/constants/DesignSystem';
 import { useRegion } from '@/contexts/RegionContext';
 import searchService from '@/services/searchApi';
 import { CardGridSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 interface SellerOption {
   storeId: string;
@@ -143,7 +144,7 @@ export default function LowestPricePage() {
       >
         {maxSaving > 0 && (
           <View style={styles.guaranteeBadge}>
-            <Ionicons name="shield-checkmark" size={12} color="#FFF" />
+            <Ionicons name="shield-checkmark" size={12} color={colors.background.primary} />
             <ThemedText style={styles.guaranteeText}>Best Price</ThemedText>
           </View>
         )}
@@ -158,7 +159,7 @@ export default function LowestPricePage() {
               />
             ) : (
               <View style={styles.productImageFallback}>
-                <Ionicons name="cube-outline" size={28} color="#9CA3AF" />
+                <Ionicons name="cube-outline" size={28} color={colors.neutral[400]} />
               </View>
             )}
           </View>
@@ -168,10 +169,10 @@ export default function LowestPricePage() {
               <ThemedText style={styles.categoryLabel}>{item.category}</ThemedText>
             ) : null}
             <View style={styles.storeBadge}>
-              <Ionicons name="storefront" size={10} color="#059669" />
+              <Ionicons name="storefront" size={10} color={colors.successScale[700]} />
               <ThemedText style={styles.lowestStore}>{bestSeller.storeName}</ThemedText>
               {bestSeller.isVerified && (
-                <Ionicons name="checkmark-circle" size={12} color="#0284C7" />
+                <Ionicons name="checkmark-circle" size={12} color={colors.brand.sky} />
               )}
             </View>
           </View>
@@ -205,10 +206,10 @@ export default function LowestPricePage() {
           {maxSaving > 0 && (
             <View style={styles.savingsBadge}>
               <LinearGradient
-                colors={['#059669', '#047857']}
+                colors={[colors.successScale[700], '#047857']}
                 style={styles.savingsBadgeGradient}
               >
-                <Ionicons name="trending-down" size={14} color="#FFF" />
+                <Ionicons name="trending-down" size={14} color={colors.background.primary} />
                 <ThemedText style={styles.savingsText}>Save {formatPrice(maxSaving)}</ThemedText>
               </LinearGradient>
             </View>
@@ -219,11 +220,11 @@ export default function LowestPricePage() {
            
           >
             <LinearGradient
-              colors={['#0284C7', '#0369A1']}
+              colors={[colors.brand.sky, colors.brand.skyDark]}
               style={styles.shopButtonGradient}
             >
               <ThemedText style={styles.shopButtonText}>Shop Now</ThemedText>
-              <Ionicons name="arrow-forward" size={14} color="#FFF" />
+              <Ionicons name="arrow-forward" size={14} color={colors.background.primary} />
             </LinearGradient>
           </Pressable>
         </View>
@@ -233,12 +234,12 @@ export default function LowestPricePage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#0284C7" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.brand.sky} />
 
       <SafeAreaView edges={['top']} style={styles.safeArea}>
         {/* Header */}
         <LinearGradient
-          colors={['#0284C7', '#0369A1', '#075985']}
+          colors={[colors.brand.sky, colors.brand.skyDark, '#075985']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.header}
@@ -250,7 +251,7 @@ export default function LowestPricePage() {
              
             >
               <View style={styles.backButtonInner}>
-                <Ionicons name="chevron-back" size={22} color="#0284C7" />
+                <Ionicons name="chevron-back" size={22} color={colors.brand.sky} />
               </View>
             </Pressable>
 
@@ -263,7 +264,7 @@ export default function LowestPricePage() {
 
           <View style={styles.heroSection}>
             <View style={styles.heroIconContainer}>
-              <Ionicons name="pricetag" size={32} color="#FFF" />
+              <Ionicons name="pricetag" size={32} color={colors.background.primary} />
             </View>
             <ThemedText style={styles.heroTitle}>Compare & Save</ThemedText>
             <ThemedText style={styles.heroSubtitle}>
@@ -274,11 +275,11 @@ export default function LowestPricePage() {
           {/* Search Bar */}
           <View style={styles.searchContainer}>
             <View style={styles.searchInputContainer}>
-              <Ionicons name="search" size={18} color="#9CA3AF" />
+              <Ionicons name="search" size={18} color={colors.neutral[400]} />
               <TextInput
                 style={styles.searchInput}
                 placeholder="Search products to compare prices..."
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={searchQuery}
                 onChangeText={handleSearch}
                 returnKeyType="search"
@@ -286,7 +287,7 @@ export default function LowestPricePage() {
               />
               {searchQuery.length > 0 && (
                 <Pressable onPress={() => { setSearchQuery(''); setProducts([]); setHasSearched(false); }}>
-                  <Ionicons name="close-circle" size={18} color="#9CA3AF" />
+                  <Ionicons name="close-circle" size={18} color={colors.neutral[400]} />
                 </Pressable>
               )}
             </View>
@@ -328,7 +329,7 @@ export default function LowestPricePage() {
                     onPress={() => handleQuickSearch(query)}
                    
                   >
-                    <Ionicons name="search-outline" size={14} color="#0284C7" />
+                    <Ionicons name="search-outline" size={14} color={colors.brand.sky} />
                     <ThemedText style={styles.chipText}>{query}</ThemedText>
                   </Pressable>
                 ))}
@@ -344,7 +345,7 @@ export default function LowestPricePage() {
               ].map((step, i) => (
                 <View key={i} style={styles.howStep}>
                   <View style={styles.howStepIcon}>
-                    <Ionicons name={step.icon} size={18} color="#0284C7" />
+                    <Ionicons name={step.icon} size={18} color={colors.brand.sky} />
                   </View>
                   <ThemedText style={styles.howStepText}>{step.text}</ThemedText>
                 </View>
@@ -355,7 +356,7 @@ export default function LowestPricePage() {
           <CardGridSkeleton />
         ) : error ? (
           <View style={styles.errorContainer}>
-            <Ionicons name="alert-circle-outline" size={48} color="#9CA3AF" />
+            <Ionicons name="alert-circle-outline" size={48} color={colors.neutral[400]} />
             <ThemedText style={styles.errorText}>{error}</ThemedText>
             <Pressable
               style={styles.retryButton}
@@ -379,13 +380,13 @@ export default function LowestPricePage() {
               <RefreshControl
                 refreshing={isRefreshing}
                 onRefresh={() => fetchPriceComparison(searchQuery, true)}
-                tintColor="#0284C7"
-                colors={['#0284C7']}
+                tintColor={colors.brand.sky}
+                colors={[colors.brand.sky]}
               />
             }
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <Ionicons name="search-outline" size={64} color="#9CA3AF" />
+                <Ionicons name="search-outline" size={64} color={colors.neutral[400]} />
                 <ThemedText style={styles.emptyText}>No price comparisons found</ThemedText>
                 <ThemedText style={styles.emptySubtext}>
                   Try a different search term or check back later
@@ -402,7 +403,7 @@ export default function LowestPricePage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   safeArea: {
     flex: 1,
@@ -430,7 +431,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     ...Shadows.subtle,
@@ -442,7 +443,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
     letterSpacing: -0.5,
   },
   placeholder: {
@@ -466,7 +467,7 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#FFF',
+    color: colors.background.primary,
     marginBottom: 4,
     letterSpacing: -0.5,
   },
@@ -483,7 +484,7 @@ const styles = StyleSheet.create({
   searchInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: Platform.OS === 'ios' ? 12 : 8,
@@ -492,7 +493,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 15,
-    color: '#111827',
+    color: colors.neutral[900],
     fontWeight: '500',
   },
   savingsCard: {
@@ -513,7 +514,7 @@ const styles = StyleSheet.create({
   savingsCardValue: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#FFF',
+    color: colors.background.primary,
     letterSpacing: -1,
   },
   savingsCardCount: {
@@ -527,7 +528,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   productCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
@@ -543,7 +544,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#059669',
+    backgroundColor: colors.successScale[700],
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     paddingHorizontal: 10,
@@ -552,7 +553,7 @@ const styles = StyleSheet.create({
   },
   guaranteeText: {
     fontSize: 10,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '700',
     letterSpacing: 0.5,
   },
@@ -569,17 +570,17 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   productImageFallback: {
     width: 64,
     height: 64,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   productInfo: {
     flex: 1,
@@ -587,13 +588,13 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
     lineHeight: 20,
   },
   categoryLabel: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 6,
   },
   storeBadge: {
@@ -601,14 +602,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     alignSelf: 'flex-start',
-    backgroundColor: '#ECFDF5',
+    backgroundColor: colors.tint.greenLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
   },
   lowestStore: {
     fontSize: 11,
-    color: '#059669',
+    color: colors.successScale[700],
     fontWeight: '600',
   },
   priceComparison: {
@@ -616,20 +617,20 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     paddingBottom: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
     gap: 12,
   },
   lowestPriceContainer: {
     flex: 1,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     borderRadius: 12,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: colors.infoScale[200],
   },
   lowestPriceLabel: {
     fontSize: 11,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     marginBottom: 4,
     fontWeight: '600',
   },
@@ -641,7 +642,7 @@ const styles = StyleSheet.create({
   },
   cashbackText: {
     fontSize: 10,
-    color: '#059669',
+    color: colors.successScale[700],
     fontWeight: '600',
     marginTop: 4,
   },
@@ -655,24 +656,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 5,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   otherStore: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     flex: 1,
     marginRight: 8,
   },
   otherPrice: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
     fontWeight: '500',
   },
   moreStoresText: {
     fontSize: 11,
-    color: '#0284C7',
+    color: colors.brand.sky,
     fontWeight: '600',
     marginTop: 4,
     textAlign: 'center',
@@ -696,7 +697,7 @@ const styles = StyleSheet.create({
   },
   savingsText: {
     fontSize: 13,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   shopButton: {
@@ -713,7 +714,7 @@ const styles = StyleSheet.create({
   },
   shopButtonText: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   // Initial state
@@ -731,12 +732,12 @@ const styles = StyleSheet.create({
   popularTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   popularSubtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 16,
   },
   chipContainer: {
@@ -748,20 +749,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: colors.infoScale[200],
   },
   chipText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#0369A1',
+    color: colors.brand.skyDark,
   },
   howItWorks: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 20,
     ...Shadows.subtle,
@@ -771,7 +772,7 @@ const styles = StyleSheet.create({
   howTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   howStep: {
@@ -784,13 +785,13 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     justifyContent: 'center',
     alignItems: 'center',
   },
   howStepText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
     flex: 1,
   },
@@ -803,7 +804,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   errorContainer: {
@@ -815,11 +816,11 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   retryButton: {
-    backgroundColor: '#0284C7',
+    backgroundColor: colors.brand.sky,
     paddingHorizontal: 24,
     paddingVertical: 10,
     borderRadius: 20,
@@ -828,7 +829,7 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   emptyContainer: {
     flex: 1,
@@ -839,13 +840,13 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginTop: 16,
     marginBottom: 8,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     paddingHorizontal: 20,
   },

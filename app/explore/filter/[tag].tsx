@@ -18,16 +18,17 @@ import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import exploreApi, { ExploreStore } from '@/services/exploreApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
 // Tag metadata for display
 const tagMeta: Record<string, { label: string; emoji: string; description: string; color: string; gradient: [string, string] }> = {
-  halal: { label: 'Halal', emoji: '☪️', description: 'Halal certified stores & services', color: '#059669', gradient: ['#059669', '#047857'] },
-  vegan: { label: 'Vegan', emoji: '🌱', description: 'Vegan-friendly stores & products', color: '#16A34A', gradient: ['#16A34A', '#15803D'] },
+  halal: { label: 'Halal', emoji: '☪️', description: 'Halal certified stores & services', color: colors.successScale[700], gradient: [colors.successScale[700], '#047857'] },
+  vegan: { label: 'Vegan', emoji: '🌱', description: 'Vegan-friendly stores & products', color: colors.brand.greenDark, gradient: [colors.brand.greenDark, colors.successScale[700]] },
   veg: { label: 'Vegetarian', emoji: '🥗', description: 'Vegetarian-friendly stores', color: '#65A30D', gradient: ['#65A30D', '#4D7C0F'] },
-  adult: { label: 'Adult', emoji: '🔞', description: '18+ stores & services', color: '#DC2626', gradient: ['#DC2626', '#B91C1C'] },
-  occasion: { label: 'Occasion', emoji: '🎉', description: 'Gifts, events & celebrations', color: '#D97706', gradient: ['#D97706', '#B45309'] },
+  adult: { label: 'Adult', emoji: '🔞', description: '18+ stores & services', color: colors.error, gradient: [colors.error, colors.errorScale[700]] },
+  occasion: { label: 'Occasion', emoji: '🎉', description: 'Gifts, events & celebrations', color: colors.warningScale[700], gradient: [colors.warningScale[700], colors.brand.amberDeep] },
 };
 
 const filterChips = [
@@ -265,7 +266,7 @@ const TagFilterPage = () => {
 
                 {(store.offer || store.cashback) && (
                   <View style={styles.offerBadge}>
-                    <Ionicons name="pricetag" size={12} color="#92400E" />
+                    <Ionicons name="pricetag" size={12} color={colors.brand.amberDark} />
                     <Text style={styles.offerText}>{store.offer || `${store.cashback} Cashback`}</Text>
                   </View>
                 )}
@@ -588,7 +589,7 @@ const styles = StyleSheet.create({
   offerText: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   storeFooter: {
     flexDirection: 'row',

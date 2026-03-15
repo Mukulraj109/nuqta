@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface SkeletonLoaderProps {
   width?: number | string;
@@ -57,7 +58,7 @@ function SkeletonLoader({
           width: finalWidth,
           height,
           borderRadius: finalBorderRadius,
-          backgroundColor: '#E5E7EB',
+          backgroundColor: colors.gray[200],
           overflow: 'hidden',
         },
         style,
@@ -72,7 +73,7 @@ function SkeletonLoader({
         }}
       >
         <LinearGradient
-          colors={['#E5E7EB', '#F3F4F6', '#E5E7EB']}
+          colors={[colors.neutral[200], colors.neutral[100], colors.neutral[200]]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={{
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     marginBottom: 12,
     ...Platform.select({
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {},
   projectCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     marginBottom: 16,
     overflow: 'hidden',
@@ -272,7 +273,7 @@ const styles = StyleSheet.create({
   productCard: {
     padding: 12,
     marginBottom: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     ...Platform.select({
       ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 4 },
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 12,
     marginBottom: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     ...Platform.select({
       ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 4 },
@@ -296,7 +297,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginBottom: 8,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     ...Platform.select({
       ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 4 },
       android: { elevation: 2 },
@@ -310,7 +311,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 14,
     marginBottom: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     ...Platform.select({
       ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 6 },
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 12,
     marginBottom: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     ...Platform.select({
       ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 4 },

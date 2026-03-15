@@ -4,6 +4,7 @@ import { View, Text, Pressable, StyleSheet, ActivityIndicator } from 'react-nati
 import { Ionicons } from '@expo/vector-icons';
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface StripeCardFormProps {
   clientSecret: string;
@@ -17,15 +18,15 @@ const CARD_ELEMENT_OPTIONS = {
   style: {
     base: {
       fontSize: '16px',
-      color: '#111827',
+      color: colors.neutral[900],
       '::placeholder': {
-        color: '#9CA3AF',
+        color: colors.neutral[400],
       },
       fontFamily: 'system-ui, -apple-system, sans-serif',
     },
     invalid: {
-      color: '#EF4444',
-      iconColor: '#EF4444',
+      color: colors.error,
+      iconColor: colors.error,
     },
   },
 };
@@ -129,7 +130,7 @@ function StripeCardForm({
           <Text style={styles.subtitle}>Amount: {currencySymbol}{amount}</Text>
         </View>
         <Pressable onPress={onCancel} style={styles.closeButton}>
-          <Ionicons name="close" size={24} color="#6B7280" />
+          <Ionicons name="close" size={24} color={colors.neutral[500]} />
         </Pressable>
       </View>
 
@@ -190,13 +191,13 @@ function StripeCardForm({
 
       {cardError && (
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle" size={16} color="#EF4444" />
+          <Ionicons name="alert-circle" size={16} color={colors.error} />
           <Text style={styles.errorText}>{cardError}</Text>
         </View>
       )}
 
       <View style={styles.infoBox}>
-        <Ionicons name="shield-checkmark" size={20} color="#10B981" />
+        <Ionicons name="shield-checkmark" size={20} color={colors.successScale[400]} />
         <Text style={styles.infoText}>
           Your payment is secured by Stripe. We never see your card details
         </Text>
@@ -227,7 +228,7 @@ function StripeCardForm({
           disabled={!cardComplete || isProcessing || !stripe}
         >
           {isProcessing ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={colors.background.primary} />
           ) : (
             <Text style={styles.payButtonText}>Pay {currencySymbol}{amount}</Text>
           )}
@@ -239,7 +240,7 @@ function StripeCardForm({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     padding: 24,
     width: '100%',
@@ -254,18 +255,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -278,15 +279,15 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
   },
   stripeInputContainer: {
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     borderRadius: 12,
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   row: {
     flexDirection: 'row',
@@ -294,34 +295,34 @@ const styles = StyleSheet.create({
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
   },
   errorText: {
     fontSize: 13,
-    color: '#EF4444',
+    color: colors.error,
     marginLeft: 8,
     flex: 1,
   },
   infoBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
   },
   infoText: {
     fontSize: 12,
-    color: '#059669',
+    color: colors.successScale[700],
     marginLeft: 8,
     flex: 1,
     lineHeight: 18,
   },
   testCardInfo: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     padding: 12,
     borderRadius: 8,
     marginBottom: 20,
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
   testCardTitle: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     marginBottom: 6,
   },
   testCardText: {
@@ -345,28 +346,28 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
   },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   payButton: {
     flex: 1,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     alignItems: 'center',
   },
   payButtonDisabled: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   payButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

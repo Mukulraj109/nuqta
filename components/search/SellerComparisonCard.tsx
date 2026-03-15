@@ -12,6 +12,7 @@ import { SellerOption } from '@/types/search.types';
 import { router } from 'expo-router';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface SellerComparisonCardProps {
   seller: SellerOption;
@@ -56,13 +57,13 @@ function SellerComparisonCard({
   const getAvailabilityColor = () => {
     switch (seller.availability) {
       case 'in_stock':
-        return '#ffcd57'; // Nuqta yellow
+        return colors.lightMustard; // Nuqta yellow
       case 'low_stock':
-        return '#F59E0B'; // Orange
+        return colors.warningScale[400]; // Orange
       case 'out_of_stock':
-        return '#EF4444'; // Red
+        return colors.error; // Red
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   };
 
@@ -115,7 +116,7 @@ function SellerComparisonCard({
           />
         ) : (
           <View style={styles.storeLogoPlaceholder}>
-            <Ionicons name="storefront" size={24} color="#1a3a52" />
+            <Ionicons name="storefront" size={24} color={colors.nileBlue} />
           </View>
         )}
       </View>
@@ -129,14 +130,14 @@ function SellerComparisonCard({
           </Text>
           {seller.isVerified && (
             <View style={styles.verifiedBadge}>
-              <Ionicons name="checkmark-circle" size={16} color="#ffcd57" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.lightMustard} />
             </View>
           )}
         </View>
 
         {/* Location and Distance */}
         <View style={styles.locationRow}>
-          <Ionicons name="location-outline" size={12} color="#6B7280" />
+          <Ionicons name="location-outline" size={12} color={colors.neutral[500]} />
           <Text style={styles.locationText} numberOfLines={1}>
             {seller.distance 
               ? `${seller.location} • ${formatDistance(seller.distance)}`
@@ -147,7 +148,7 @@ function SellerComparisonCard({
 
         {/* Rating */}
         <View style={styles.ratingRow}>
-          <Ionicons name="star" size={14} color="#F59E0B" />
+          <Ionicons name="star" size={14} color={colors.warningScale[400]} />
           <Text style={styles.ratingText}>
             {seller.rating.toFixed(1)} ({formatReviewCount(seller.reviewCount)})
           </Text>
@@ -174,7 +175,7 @@ function SellerComparisonCard({
           </View>
           {seller.savings > 0 && (
             <View style={styles.savingsContainer}>
-              <Ionicons name="information-circle-outline" size={14} color="#B45309" />
+              <Ionicons name="information-circle-outline" size={14} color={colors.brand.amberDeep} />
               <Text style={styles.savingsText}>You Save {formatPrice(seller.savings)}</Text>
             </View>
           )}
@@ -189,7 +190,7 @@ function SellerComparisonCard({
 
         {/* Delivery Information */}
         <View style={styles.deliveryRow}>
-          <Ionicons name={getDeliveryIcon()} size={14} color="#6B7280" />
+          <Ionicons name={getDeliveryIcon()} size={14} color={colors.neutral[500]} />
           <Text style={styles.deliveryText}>{seller.delivery.time}</Text>
         </View>
 
@@ -198,9 +199,9 @@ function SellerComparisonCard({
           <View style={styles.badgesRow}>
             {seller.badges.map((badge, index) => (
               <View key={index} style={styles.badge}>
-                {badge === 'Hot Deal' && <Ionicons name="flame" size={10} color="#EF4444" />}
-                {badge === 'Limited Stock' && <Ionicons name="time-outline" size={10} color="#F59E0B" />}
-                {badge === 'Lock Available' && <Ionicons name="lock-closed" size={10} color="#1a3a52" />}
+                {badge === 'Hot Deal' && <Ionicons name="flame" size={10} color={colors.error} />}
+                {badge === 'Limited Stock' && <Ionicons name="time-outline" size={10} color={colors.warningScale[400]} />}
+                {badge === 'Lock Available' && <Ionicons name="lock-closed" size={10} color={colors.nileBlue} />}
                 <Text style={styles.badgeText}>{badge}</Text>
               </View>
             ))}
@@ -224,7 +225,7 @@ function SellerComparisonCard({
               onPress={handleCompare}
              
             >
-              <Ionicons name="git-compare-outline" size={20} color="#ffcd57" />
+              <Ionicons name="git-compare-outline" size={20} color={colors.lightMustard} />
             </Pressable>
           )}
           {onFavorite && (
@@ -233,7 +234,7 @@ function SellerComparisonCard({
               onPress={() => onFavorite(seller)}
              
             >
-              <Ionicons name="heart-outline" size={20} color="#6B7280" />
+              <Ionicons name="heart-outline" size={20} color={colors.neutral[500]} />
             </Pressable>
           )}
           {onShare && (
@@ -242,7 +243,7 @@ function SellerComparisonCard({
               onPress={() => onShare(seller)}
              
             >
-              <Ionicons name="share-outline" size={20} color="#6B7280" />
+              <Ionicons name="share-outline" size={20} color={colors.neutral[500]} />
             </Pressable>
           )}
         </View>
@@ -254,13 +255,13 @@ function SellerComparisonCard({
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
     marginHorizontal: 16,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -283,13 +284,13 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   storeLogoPlaceholder: {
     width: 60,
     height: 60,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -305,7 +306,7 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginRight: 6,
   },
   verifiedBadge: {
@@ -318,7 +319,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 4,
     flex: 1,
   },
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 12,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '600',
     marginLeft: 4,
   },
@@ -364,17 +365,17 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   currentPrice: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   originalPrice: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
     fontWeight: '500',
   },
@@ -385,7 +386,7 @@ const styles = StyleSheet.create({
   },
   savingsText: {
     fontSize: 12,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     fontWeight: '600',
   },
   rewardsRow: {
@@ -393,7 +394,7 @@ const styles = StyleSheet.create({
   },
   rewardsText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   deliveryRow: {
@@ -404,7 +405,7 @@ const styles = StyleSheet.create({
   },
   deliveryText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   badgesRow: {
     flexDirection: 'row',
@@ -414,7 +415,7 @@ const styles = StyleSheet.create({
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     fontSize: 10,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontWeight: '600',
   },
   actionsContainer: {
@@ -430,14 +431,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   viewDealButton: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 12,
     marginBottom: 8,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -448,7 +449,7 @@ const styles = StyleSheet.create({
     }),
   },
   viewDealText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '700',
   },
@@ -460,7 +461,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },

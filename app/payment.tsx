@@ -1,6 +1,7 @@
 // Modern Payment Page
 // Production-ready payment interface with Stripe integration
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
@@ -1012,7 +1013,7 @@ const styles = StyleSheet.create({
     color: Colors.success,
   },
   feeTextWarning: {
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
   methodTime: {
     ...Typography.bodySmall,

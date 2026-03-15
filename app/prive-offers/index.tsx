@@ -22,14 +22,15 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useWalletContext } from '@/contexts/WalletContext';
 import { NuqtaCoin as ReZCoin } from '@/components/homepage/ReZCoin';
 import { Spacing, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Dark theme colors
 const DarkColors = {
   background: '#000000',
   backgroundSecondary: '#1C1C1E',
-  text: '#FFFFFF',
+  text: colors.background.primary,
   textSecondary: '#A1A1A6',
-  accent: '#ffcd57',
+  accent: colors.lightMustard,
   border: '#2C2C2E',
 };
 
@@ -72,7 +73,7 @@ export default function PriveOffersScreen() {
 
           <View style={styles.headerCenter}>
             <View style={styles.priveBadge}>
-              <Ionicons name="diamond" size={12} color="#A78BFA" />
+              <Ionicons name="diamond" size={12} color={colors.brand.purpleSoft} />
             </View>
             <ThemedText style={styles.headerTitle}>Prive Offers</ThemedText>
             <ReZCoin
@@ -103,7 +104,7 @@ export default function PriveOffersScreen() {
               <Ionicons
                 name={isFavorited ? 'heart' : 'heart-outline'}
                 size={22}
-                color={isFavorited ? '#EF4444' : DarkColors.text}
+                color={isFavorited ? colors.error : DarkColors.text}
               />
             </Pressable>
           </View>

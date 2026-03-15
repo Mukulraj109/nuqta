@@ -29,6 +29,7 @@ import {
 import { usePriveEligibility } from '@/hooks/usePriveEligibility';
 import priveApi from '@/services/priveApi';
 import { ELIGIBILITY_THRESHOLDS } from '@/types/mode.types';
+import { colors } from '@/constants/theme';
 
 // ─── Shimmer Skeleton ─────────────────────────────────────────────────────────
 const ShimmerCard = ({ index }: { index: number }) => {
@@ -264,7 +265,7 @@ export default function PillarsScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#1F2937', '#111827', '#0A0A0A']}
+        colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]}
         style={StyleSheet.absoluteFill}
       />
       <ScrollView

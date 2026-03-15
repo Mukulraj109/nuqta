@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface VideoControlsProps {
   isPlaying: boolean;
@@ -44,7 +45,7 @@ function VideoControls({
             <Ionicons
               name={isPlaying ? 'pause' : 'play'}
               size={32}
-              color="#FFFFFF"
+              color={colors.background.primary}
             />
           </LinearGradient>
         </Pressable>
@@ -59,7 +60,7 @@ function VideoControls({
             <Ionicons
               name={isMuted ? 'volume-mute' : 'volume-high'}
               size={20}
-              color="#FFFFFF"
+              color={colors.background.primary}
             />
           </View>
         </Pressable>
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 2,
   },
   controls: {

@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 /**
  * AddToCartModal Component
@@ -84,10 +85,10 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
           {/* Success Icon */}
           <View style={styles.successIconContainer}>
             <LinearGradient
-              colors={['#10B981', '#059669']}
+              colors={[colors.successScale[400], colors.successScale[700]]}
               style={styles.successIconGradient}
             >
-              <Ionicons name="checkmark-circle" size={48} color="#FFF" />
+              <Ionicons name="checkmark-circle" size={48} color={colors.background.primary} />
             </LinearGradient>
           </View>
 
@@ -130,7 +131,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
               onPress={onClose}
              
             >
-              <Ionicons name="arrow-back" size={20} color="#8B5CF6" />
+              <Ionicons name="arrow-back" size={20} color={colors.brand.purpleLight} />
               <ThemedText style={styles.continueButtonText}>
                 Continue Shopping
               </ThemedText>
@@ -141,7 +142,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
               onPress={onViewCart}
              
             >
-              <Ionicons name="cart" size={20} color="#FFF" />
+              <Ionicons name="cart" size={20} color={colors.background.primary} />
               <ThemedText style={styles.viewCartButtonText}>View Cart</ThemedText>
             </Pressable>
           </View>
@@ -152,7 +153,7 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
             onPress={onClose}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons name="close" size={24} color="#9CA3AF" />
+            <Ionicons name="close" size={24} color={colors.neutral[400]} />
           </Pressable>
         </Animated.View>
       </View>
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: modalWidth,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     padding: 24,
     alignItems: 'center',
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 20,
   },
 
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   productInfo: {
     flexDirection: 'row',
     width: '100%',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 12,
     marginBottom: 16,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginRight: 12,
   },
   productDetails: {
@@ -227,13 +228,13 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 6,
     lineHeight: 20,
   },
   variantDetails: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   priceRow: {
@@ -244,19 +245,19 @@ const styles = StyleSheet.create({
   quantityText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   // Divider
   divider: {
     width: '100%',
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginBottom: 20,
   },
 
@@ -269,9 +270,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
     borderRadius: 12,
     paddingVertical: 14,
     gap: 8,
@@ -279,13 +280,13 @@ const styles = StyleSheet.create({
   continueButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   viewCartButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 12,
     paddingVertical: 14,
     gap: 8,
@@ -293,7 +294,7 @@ const styles = StyleSheet.create({
   viewCartButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   // Close Button
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },

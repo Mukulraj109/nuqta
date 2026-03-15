@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface SearchBarProps {
   placeholder?: string;
@@ -58,7 +59,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     <View style={styles.wrapper}>
       {isFocused && (
         <LinearGradient
-          colors={['#1a3a52', '#1a3a52']}
+          colors={[colors.nileBlue, colors.nileBlue]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.focusBorder}
@@ -69,13 +70,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
           <Ionicons
             name="search"
             size={18}
-            color={isFocused ? '#FFFFFF' : '#9CA3AF'}
+            color={isFocused ? colors.background.primary : colors.neutral[400]}
           />
         </View>
         <TextInput
           style={styles.input}
           placeholder={placeholder}
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.neutral[400]}
           value={query}
           onChangeText={setQuery}
           onFocus={() => setIsFocused(true)}
@@ -88,7 +89,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         {query.length > 0 && (
           <Pressable onPress={handleClear} style={styles.clearButton}>
             <View style={styles.clearButtonInner}>
-              <Ionicons name="close" size={14} color="#6B7280" />
+              <Ionicons name="close" size={14} color={colors.neutral[500]} />
             </View>
           </Pressable>
         )}
@@ -115,12 +116,12 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     paddingHorizontal: 14,
     height: 52,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -140,18 +141,18 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
   },
   iconWrapperFocused: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
   },
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#111827',
+    color: colors.neutral[900],
     paddingVertical: 0,
     fontWeight: '500',
   },
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
   },

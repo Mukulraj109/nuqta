@@ -22,6 +22,7 @@ import SkeletonLoader from '@/components/common/SkeletonLoader';
 import supportService, { SupportTicket } from '@/services/supportApi';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function TicketDetailPage() {
   const router = useRouter();
@@ -204,7 +205,7 @@ export default function TicketDetailPage() {
           <LinearGradient colors={Gradients.nileBlue} style={styles.header}>
             <View style={styles.headerContent}>
               <Pressable style={styles.backButton} onPress={() => router.back()}>
-                <Ionicons name="arrow-back" size={24} color="#FFF" />
+                <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
               </Pressable>
               <View style={styles.headerTitleContainer}>
                 <ThemedText style={styles.headerTitle}>Loading...</ThemedText>
@@ -237,7 +238,7 @@ export default function TicketDetailPage() {
           <LinearGradient colors={Gradients.nileBlue} style={styles.header}>
             <View style={styles.headerContent}>
               <Pressable style={styles.backButton} onPress={() => router.back()}>
-                <Ionicons name="arrow-back" size={24} color="#FFF" />
+                <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
               </Pressable>
               <View style={styles.headerTitleContainer}>
                 <ThemedText style={styles.headerTitle}>Ticket Not Found</ThemedText>
@@ -271,7 +272,7 @@ export default function TicketDetailPage() {
         <LinearGradient colors={Gradients.nileBlue} style={styles.header}>
           <View style={styles.headerContent}>
             <Pressable style={styles.backButton} onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={24} color="#FFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
             <View style={styles.headerTitleContainer}>
               <ThemedText style={styles.headerTitle}>#{ticket.ticketNumber}</ThemedText>
@@ -387,12 +388,12 @@ export default function TicketDetailPage() {
                 disabled={!newMessage.trim() || sending}
               >
                 {sending ? (
-                  <ActivityIndicator size="small" color="#FFF" />
+                  <ActivityIndicator size="small" color={colors.background.primary} />
                 ) : (
                   <Ionicons
                     name="send"
                     size={20}
-                    color={newMessage.trim() ? '#FFF' : Colors.gray[400]}
+                    color={newMessage.trim() ? colors.background.primary : Colors.gray[400]}
                   />
                 )}
               </Pressable>
@@ -414,7 +415,7 @@ export default function TicketDetailPage() {
                     }
                   }}
                 >
-                  <Ionicons name="thumbs-up" size={20} color="#FFF" />
+                  <Ionicons name="thumbs-up" size={20} color={colors.background.primary} />
                   <ThemedText style={styles.resolutionButtonText}>
                     {canRate ? 'Yes, Rate' : 'Yes, Close'}
                   </ThemedText>
@@ -425,10 +426,10 @@ export default function TicketDetailPage() {
                   disabled={reopening}
                 >
                   {reopening ? (
-                    <ActivityIndicator size="small" color={Colors.text?.primary || '#1a1a2e'} />
+                    <ActivityIndicator size="small" color={Colors.text?.primary || colors.deepNavy} />
                   ) : (
                     <>
-                      <Ionicons name="thumbs-down" size={20} color={Colors.text?.primary || '#1a1a2e'} />
+                      <Ionicons name="thumbs-down" size={20} color={Colors.text?.primary || colors.deepNavy} />
                       <ThemedText style={styles.resolutionButtonNoText}>No, reopen</ThemedText>
                     </>
                   )}
@@ -466,7 +467,7 @@ export default function TicketDetailPage() {
                 disabled={ratingScore === 0 || submittingRating}
               >
                 {submittingRating ? (
-                  <ActivityIndicator color="#FFF" />
+                  <ActivityIndicator color={colors.background.primary} />
                 ) : (
                   <ThemedText style={styles.ratingSubmitText}>Submit Rating</ThemedText>
                 )}
@@ -496,10 +497,10 @@ export default function TicketDetailPage() {
             <View style={styles.closedActions}>
               <Pressable style={styles.reopenButton} onPress={handleReopenTicket} disabled={reopening}>
                 {reopening ? (
-                  <ActivityIndicator color="#FFF" />
+                  <ActivityIndicator color={colors.background.primary} />
                 ) : (
                   <>
-                    <Ionicons name="refresh" size={18} color="#FFF" />
+                    <Ionicons name="refresh" size={18} color={colors.background.primary} />
                     <ThemedText style={styles.reopenButtonText}>Reopen Ticket</ThemedText>
                   </>
                 )}
@@ -552,7 +553,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
     marginBottom: 4,
   },
   statusBadge: {
@@ -568,7 +569,7 @@ const styles = StyleSheet.create({
     width: 40,
   },
   ticketInfo: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
     borderBottomWidth: 1,
@@ -577,7 +578,7 @@ const styles = StyleSheet.create({
   ticketSubject: {
     fontSize: 17,
     fontWeight: '600',
-    color: Colors.text?.primary || '#1a1a2e',
+    color: Colors.text?.primary || colors.deepNavy,
     marginBottom: Spacing.sm,
   },
   ticketMeta: {
@@ -616,7 +617,7 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
   },
   messageBubbleSupport: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 0,
     ...Shadows.subtle,
   },
@@ -642,11 +643,11 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 14,
-    color: Colors.text?.primary || '#1a1a2e',
+    color: Colors.text?.primary || colors.deepNavy,
     lineHeight: 20,
   },
   messageTextUser: {
-    color: '#FFF',
+    color: colors.background.primary,
   },
   messageTextSystem: {
     color: Colors.gray[600],
@@ -665,7 +666,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     borderTopWidth: 1,
@@ -675,7 +676,7 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     fontSize: 15,
-    color: Colors.text?.primary || '#1a1a2e',
+    color: Colors.text?.primary || colors.deepNavy,
     maxHeight: 100,
     paddingVertical: Spacing.sm,
   },
@@ -699,7 +700,7 @@ const styles = StyleSheet.create({
   },
   resolutionText: {
     fontSize: 15,
-    color: Colors.text?.primary || '#1a1a2e',
+    color: Colors.text?.primary || colors.deepNavy,
     marginBottom: Spacing.md,
   },
   resolutionButtons: {
@@ -718,12 +719,12 @@ const styles = StyleSheet.create({
   resolutionButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   resolutionButtonNo: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 10,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
@@ -734,10 +735,10 @@ const styles = StyleSheet.create({
   resolutionButtonNoText: {
     fontSize: 14,
     fontWeight: '600',
-    color: Colors.text?.primary || '#1a1a2e',
+    color: Colors.text?.primary || colors.deepNavy,
   },
   ratingContainer: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     padding: Spacing.lg,
     alignItems: 'center',
     borderTopWidth: 1,
@@ -759,7 +760,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     fontSize: 14,
-    color: Colors.text?.primary || '#1a1a2e',
+    color: Colors.text?.primary || colors.deepNavy,
     marginBottom: 12,
   },
   ratingSubmit: {
@@ -769,7 +770,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   ratingSubmitText: {
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '600',
     fontSize: 14,
   },
@@ -795,7 +796,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderTopWidth: 1,
     borderTopColor: Colors.gray[200],
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
   },
   reopenButton: {
     flexDirection: 'row',
@@ -807,7 +808,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   reopenButtonText: {
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '600',
     fontSize: 14,
   },

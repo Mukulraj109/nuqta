@@ -5,6 +5,7 @@
  * Data source: couponService.getAvailableCoupons() and couponService.searchCoupons()
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
@@ -193,7 +194,7 @@ export default function CouponsPage() {
             {item.brandLogo ? (
               <CachedImage source={item.brandLogo} style={styles.brandLogo} contentFit="contain" />
             ) : (
-              <LinearGradient colors={[Colors.lightPeach, '#D4A07A']} style={styles.logoPlaceholder}>
+              <LinearGradient colors={[Colors.lightPeach, colors.brand.caramel]} style={styles.logoPlaceholder}>
                 <Text style={styles.logoInitial}>{item.brandName.charAt(0)}</Text>
               </LinearGradient>
             )}
@@ -229,7 +230,7 @@ export default function CouponsPage() {
            
           >
             <LinearGradient
-              colors={isCopied ? [Colors.nileBlue, '#234b68'] : ['#D4A07A', '#D4A07A']}
+              colors={isCopied ? [Colors.nileBlue, colors.brand.nileBlueLight] : [colors.brand.caramel, colors.brand.caramel]}
               style={styles.copyButtonGradient}
             >
               <Ionicons name={isCopied ? 'checkmark' : 'copy'} size={14} color={Colors.background.primary} />
@@ -320,7 +321,7 @@ export default function CouponsPage() {
         <CardGridSkeleton />
       ) : error && coupons.length === 0 ? (
         <View style={styles.errorContainer}>
-          <Ionicons name="cloud-offline-outline" size={48} color={'#D4A07A'} />
+          <Ionicons name="cloud-offline-outline" size={48} color={colors.brand.caramel} />
           <Text style={styles.errorTitle}>Something went wrong</Text>
           <Text style={styles.errorSubtitle}>{error}</Text>
           <Pressable
@@ -343,7 +344,7 @@ export default function CouponsPage() {
           windowSize={5}
           initialNumToRender={8}
           refreshControl={
-            <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} colors={['#D4A07A']} />
+            <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} colors={[colors.brand.caramel]} />
           }
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
@@ -398,7 +399,7 @@ const styles = StyleSheet.create({
     color: Colors.nileBlue,
   },
   countBadge: {
-    backgroundColor: '#D4A07A',
+    backgroundColor: colors.brand.caramel,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
     borderRadius: 10,
@@ -556,7 +557,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.xs,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
     borderRadius: BorderRadius.sm,
@@ -607,7 +608,7 @@ const styles = StyleSheet.create({
   discount: {
     fontSize: 20,
     fontWeight: '900',
-    color: '#D4A07A',
+    color: colors.brand.caramel,
     letterSpacing: -0.3,
     marginBottom: Spacing.xs,
   },
@@ -637,13 +638,13 @@ const styles = StyleSheet.create({
   },
   successBarFill: {
     height: '100%',
-    backgroundColor: '#D4A07A',
+    backgroundColor: colors.brand.caramel,
     borderRadius: 2,
   },
   successRateText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#D4A07A',
+    color: colors.brand.caramel,
   },
 
   // Code Section

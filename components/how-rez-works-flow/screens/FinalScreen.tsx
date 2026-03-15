@@ -18,6 +18,7 @@ import FlowScreenLayout from '../shared/FlowScreenLayout';
 import ActionBtn from '../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../types';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -25,10 +26,10 @@ interface Props {
 }
 
 const benefits = [
-    { icon: 'heart', text: 'Automatic loyalty', desc: 'No cards, no check-ins', color: '#EC4899' },
-    { icon: 'trending-up', text: 'Tier benefits', desc: 'Level up, save more', color: '#8B5CF6' },
-    { icon: 'gift', text: 'Birthday rewards', desc: 'Special treats on your day', color: '#F59E0B' },
-    { icon: 'people', text: 'Referral bonuses', desc: 'Share & earn together', color: '#10B981' },
+    { icon: 'heart', text: 'Automatic loyalty', desc: 'No cards, no check-ins', color: colors.brand.pink },
+    { icon: 'trending-up', text: 'Tier benefits', desc: 'Level up, save more', color: colors.brand.purpleLight },
+    { icon: 'gift', text: 'Birthday rewards', desc: 'Special treats on your day', color: colors.warningScale[400] },
+    { icon: 'people', text: 'Referral bonuses', desc: 'Share & earn together', color: colors.successScale[400] },
 ];
 
 // Loop indicator component
@@ -64,13 +65,13 @@ const LoopIndicator: React.FC = () => {
                             ]}>{step}</Text>
                         </View>
                         {i < steps.length - 1 && (
-                            <Ionicons name="chevron-forward" size={14} color="#9CA3AF" style={styles.loopArrow} />
+                            <Ionicons name="chevron-forward" size={14} color={colors.neutral[400]} style={styles.loopArrow} />
                         )}
                     </View>
                 ))}
             </View>
             <View style={styles.loopRepeat}>
-                <Ionicons name="repeat" size={16} color="#059669" />
+                <Ionicons name="repeat" size={16} color={colors.successScale[700]} />
                 <Text style={styles.loopRepeatText}>Repeat & Save More</Text>
             </View>
         </View>
@@ -116,7 +117,7 @@ const FinalScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
             subtitle="The more you use ReZ, the more you save"
             onBack={onBack}
             footer={<ActionBtn title="Start Using ReZ" onPress={handleFinish} icon="rocket" />}
-            headerAccent="#3B82F6"
+            headerAccent={colors.infoScale[400]}
         >
             <View style={styles.container}>
                 {/* Hero icon */}
@@ -124,12 +125,12 @@ const FinalScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                     <Animated.View style={[styles.heroGlow, glowStyle]} />
                     <Animated.View style={[styles.heroIcon, heroStyle]}>
                         <LinearGradient
-                            colors={['#3B82F6', '#2563EB', '#1D4ED8']}
+                            colors={[colors.infoScale[400], colors.brand.blue, '#1D4ED8']}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 1, y: 1 }}
                             style={styles.heroGradient}
                         >
-                            <Ionicons name="rocket" size={52} color="#FFFFFF" />
+                            <Ionicons name="rocket" size={52} color={colors.background.primary} />
                         </LinearGradient>
                     </Animated.View>
                 </View>
@@ -148,7 +149,7 @@ const FinalScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                             style={styles.benefitCard}
                         >
                             <LinearGradient
-                                colors={['#FFFFFF', '#FAFAFA']}
+                                colors={[colors.background.primary, '#FAFAFA']}
                                 style={styles.benefitGradient}
                             >
                                 <View style={[styles.benefitIcon, { backgroundColor: `${benefit.color}15` }]}>
@@ -159,7 +160,7 @@ const FinalScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                                     <Text style={styles.benefitDesc}>{benefit.desc}</Text>
                                 </View>
                                 <View style={styles.checkCircle}>
-                                    <Ionicons name="checkmark" size={14} color="#FFFFFF" />
+                                    <Ionicons name="checkmark" size={14} color={colors.background.primary} />
                                 </View>
                             </LinearGradient>
                         </Animated.View>
@@ -184,12 +185,12 @@ const styles = StyleSheet.create({
         width: 140,
         height: 140,
         borderRadius: 70,
-        backgroundColor: '#3B82F6',
+        backgroundColor: colors.infoScale[400],
     },
     heroIcon: {
         ...Platform.select({
             ios: {
-                shadowColor: '#3B82F6',
+                shadowColor: colors.infoScale[400],
                 shadowOffset: { width: 0, height: 12 },
                 shadowOpacity: 0.4,
                 shadowRadius: 24,
@@ -207,12 +208,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     loopContainer: {
-        backgroundColor: '#F9FAFB',
+        backgroundColor: colors.neutral[50],
         borderRadius: 16,
         padding: 16,
         marginBottom: 24,
         borderWidth: 1,
-        borderColor: '#E5E7EB',
+        borderColor: colors.neutral[200],
     },
     loopSteps: {
         flexDirection: 'row',
@@ -226,21 +227,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     loopStep: {
-        backgroundColor: '#E5E7EB',
+        backgroundColor: colors.neutral[200],
         paddingHorizontal: 10,
         paddingVertical: 6,
         borderRadius: 8,
     },
     loopStepActive: {
-        backgroundColor: '#059669',
+        backgroundColor: colors.successScale[700],
     },
     loopStepText: {
         fontSize: 12,
         fontWeight: '600',
-        color: '#6B7280',
+        color: colors.neutral[500],
     },
     loopStepTextActive: {
-        color: '#FFFFFF',
+        color: colors.background.primary,
     },
     loopArrow: {
         marginHorizontal: 4,
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
     loopRepeatText: {
         fontSize: 13,
         fontWeight: '600',
-        color: '#059669',
+        color: colors.successScale[700],
     },
     benefitsList: {
         width: '100%',
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 18,
         borderWidth: 1,
-        borderColor: '#F3F4F6',
+        borderColor: colors.neutral[100],
     },
     benefitIcon: {
         width: 44,
@@ -297,18 +298,18 @@ const styles = StyleSheet.create({
     benefitText: {
         fontSize: 16,
         fontWeight: '700',
-        color: '#1F2937',
+        color: colors.neutral[800],
         marginBottom: 2,
     },
     benefitDesc: {
         fontSize: 13,
-        color: '#6B7280',
+        color: colors.neutral[500],
     },
     checkCircle: {
         width: 26,
         height: 26,
         borderRadius: 13,
-        backgroundColor: '#10B981',
+        backgroundColor: colors.successScale[400],
         justifyContent: 'center',
         alignItems: 'center',
     },

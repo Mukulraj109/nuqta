@@ -14,6 +14,7 @@ import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { SectionHeader, HorizontalScrollSection } from '../common';
 import { FreeDeliveryOffer } from '@/types/offers.types';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface FreeDeliverySectionProps {
   offers: FreeDeliveryOffer[];
@@ -39,7 +40,7 @@ export const FreeDeliverySection: React.FC<FreeDeliverySectionProps> = ({
     },
     card: {
       width: 200,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 1.5,
       borderColor: isDark ? 'rgba(16, 185, 129, 0.3)' : '#A7F3D0',
@@ -50,14 +51,14 @@ export const FreeDeliverySection: React.FC<FreeDeliverySectionProps> = ({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#ffcd57',
+      backgroundColor: colors.lightMustard,
       paddingVertical: 6,
       gap: 6,
     },
     bannerText: {
       fontSize: 11,
       fontWeight: '800',
-      color: '#1a3a52',
+      color: colors.nileBlue,
       letterSpacing: 0.5,
     },
     imageContainer: {
@@ -76,9 +77,9 @@ export const FreeDeliverySection: React.FC<FreeDeliverySectionProps> = ({
       width: 32,
       height: 32,
       borderRadius: 8,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.background.primary,
       borderWidth: 2,
-      borderColor: '#FFFFFF',
+      borderColor: colors.background.primary,
       overflow: 'hidden',
       ...Shadows.subtle,
       alignItems: 'center',
@@ -91,12 +92,12 @@ export const FreeDeliverySection: React.FC<FreeDeliverySectionProps> = ({
     storeLogoPlaceholder: {
       width: '100%',
       height: '100%',
-      backgroundColor: '#ffcd57',
+      backgroundColor: colors.lightMustard,
       alignItems: 'center',
       justifyContent: 'center',
     },
     storeLogoText: {
-      color: '#FFFFFF',
+      color: colors.background.primary,
       fontSize: 14,
       fontWeight: '700',
     },
@@ -133,7 +134,7 @@ export const FreeDeliverySection: React.FC<FreeDeliverySectionProps> = ({
     ratingBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FEF3C7',
+      backgroundColor: colors.tint.amberLight,
       paddingHorizontal: 6,
       paddingVertical: 3,
       borderRadius: 4,
@@ -141,7 +142,7 @@ export const FreeDeliverySection: React.FC<FreeDeliverySectionProps> = ({
     ratingText: {
       fontSize: 11,
       fontWeight: '700',
-      color: '#D97706',
+      color: colors.warningScale[700],
       marginLeft: 2,
     },
     cashbackBadge: {
@@ -166,7 +167,7 @@ export const FreeDeliverySection: React.FC<FreeDeliverySectionProps> = ({
         title="Free Delivery"
         subtitle="No delivery charges"
         icon="bicycle"
-        iconColor="#ffcd57"
+        iconColor={colors.lightMustard}
         showViewAll={offers.length > 3}
         onViewAll={onViewAll}
       />
@@ -179,7 +180,7 @@ export const FreeDeliverySection: React.FC<FreeDeliverySectionProps> = ({
            
           >
             <View style={styles.freeDeliveryBanner}>
-              <Ionicons name="bicycle" size={14} color="#FFFFFF" />
+              <Ionicons name="bicycle" size={14} color={colors.background.primary} />
               <Text style={styles.bannerText}>FREE DELIVERY</Text>
             </View>
 
@@ -220,7 +221,7 @@ export const FreeDeliverySection: React.FC<FreeDeliverySectionProps> = ({
               </Text>
               <View style={styles.footer}>
                 <View style={styles.ratingBadge}>
-                  <Ionicons name="star" size={10} color="#D97706" />
+                  <Ionicons name="star" size={10} color={colors.warningScale[700]} />
                   <Text style={styles.ratingText}>{(offer.rating ?? 0).toFixed(1)}</Text>
                 </View>
                 {offer.cashbackPercentage > 0 && (

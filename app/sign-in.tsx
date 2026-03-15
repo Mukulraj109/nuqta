@@ -20,6 +20,7 @@ import FormInput from '@/components/onboarding/FormInput';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import CountryCodePicker, { COUNTRY_CODES, CountryCode } from '@/components/common/CountryCodePicker';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -224,7 +225,7 @@ export default function SignInScreen() {
           {/* Gold Underline */}
           <View style={styles.underlineContainer}>
             <LinearGradient
-              colors={[Colors.gold, '#FF9F1C']}
+              colors={[Colors.gold, colors.warning]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.underline}
@@ -269,7 +270,7 @@ export default function SignInScreen() {
             accessibilityRole="button"
           >
             <LinearGradient
-              colors={state.isLoading ? ['#D1D5DB', '#D1D5DB'] : [Colors.gold, Colors.nileBlue]}
+              colors={state.isLoading ? [colors.neutral[300], colors.neutral[300]] : [Colors.gold, Colors.nileBlue]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.primaryButton}
@@ -333,7 +334,7 @@ export default function SignInScreen() {
           {/* Gold Underline */}
           <View style={styles.underlineContainer}>
             <LinearGradient
-              colors={[Colors.gold, '#FF9F1C']}
+              colors={[Colors.gold, colors.warning]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.underline}
@@ -388,7 +389,7 @@ export default function SignInScreen() {
             accessibilityRole="button"
           >
             <LinearGradient
-              colors={state.isLoading ? ['#D1D5DB', '#D1D5DB'] : [Colors.gold, Colors.nileBlue]}
+              colors={state.isLoading ? [colors.neutral[300], colors.neutral[300]] : [Colors.gold, Colors.nileBlue]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.primaryButton}
@@ -682,7 +683,7 @@ const styles = StyleSheet.create({
   phoneDivider: {
     width: 1,
     height: 28,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   phoneNumberInput: {
     flex: 1,
@@ -735,7 +736,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   resendTextDisabled: {
-    color: '#D1D5DB',
+    color: colors.neutral[300],
   },
 
   // Primary Button

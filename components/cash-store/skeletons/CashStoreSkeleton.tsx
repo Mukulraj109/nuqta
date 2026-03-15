@@ -12,6 +12,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -55,7 +56,7 @@ const ShimmerBlock: React.FC<{
           width: blockWidth,
           height,
           borderRadius,
-          backgroundColor: '#E5E7EB',
+          backgroundColor: colors.neutral[200],
           opacity,
         },
         style,
@@ -158,7 +159,7 @@ const CashStoreSkeleton: React.FC = () => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     paddingTop: 16,
   },
   summaryContainer: {
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   summaryGradient: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 20,
     padding: 20,
     alignItems: 'center',
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
   },
   brandCard: {
     width: (width - 48) / 3,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 12,
     alignItems: 'center',
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 12,
   },

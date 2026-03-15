@@ -28,6 +28,7 @@ import { homeServicesCategoryData } from '@/data/category/homeServicesCategoryDa
 import { travelCategoryData } from '@/data/category/travelCategoryData';
 import { entertainmentCategoryData } from '@/data/category/entertainmentCategoryData';
 import { financialCategoryData } from '@/data/category/financialCategoryData';
+import { colors } from '@/constants/theme';
 
 // Subcategory interface for grid display
 export interface SubcategoryItem {
@@ -240,25 +241,25 @@ export const useCategoryPageData = (slug: string, options?: { storesPerPage?: nu
 
           // Map cuisine names to icons and colors for fallback
           const cuisineIconMap: Record<string, { icon: string; color: string }> = {
-            'pizza': { icon: '🍕', color: '#EF4444' },
+            'pizza': { icon: '🍕', color: colors.error },
             'biryani': { icon: '🍗', color: '#D946EF' },
-            'burgers': { icon: '🍔', color: '#F97316' },
+            'burgers': { icon: '🍔', color: colors.brand.orange },
             'chinese': { icon: '🥡', color: '#3B82F6' },
             'desserts': { icon: '🍦', color: '#10B981' },
             'healthy': { icon: '🥗', color: '#22C55E' },
             'indian': { icon: '🍛', color: '#F59E0B' },
-            'italian': { icon: '🍝', color: '#EF4444' },
-            'thai': { icon: '🍜', color: '#EC4899' },
-            'mexican': { icon: '🌮', color: '#F97316' },
-            'south indian': { icon: '🥘', color: '#8B5CF6' },
+            'italian': { icon: '🍝', color: colors.error },
+            'thai': { icon: '🍜', color: colors.brand.pink },
+            'mexican': { icon: '🌮', color: colors.brand.orange },
+            'south indian': { icon: '🥘', color: colors.brand.purpleLight },
             'north indian': { icon: '🍛', color: '#F59E0B' },
-            'continental': { icon: '🥩', color: '#6366F1' },
+            'continental': { icon: '🥩', color: colors.brand.indigo },
             'japanese': { icon: '🍣', color: '#3B82F6' },
             'street': { icon: '🌮', color: '#F59E0B' },
             'chaat': { icon: '🥘', color: '#F59E0B' },
             'cafe': { icon: '☕', color: '#78350F' },
             'thali': { icon: '🍱', color: '#F59E0B' },
-            'ice-cream': { icon: '🍦', color: '#EC4899' },
+            'ice-cream': { icon: '🍦', color: colors.brand.pink },
             'healthy-food': { icon: '🥗', color: '#22C55E' },
           };
 
@@ -268,7 +269,7 @@ export const useCategoryPageData = (slug: string, options?: { storesPerPage?: nu
 
             // Find matching cuisine icon/color
             let fallbackIcon = '🍽️';
-            let fallbackColor = '#6B7280';
+            let fallbackColor = colors.neutral[500];
             let matchedCount = 0;
 
             for (const [key, value] of Object.entries(cuisineIconMap)) {

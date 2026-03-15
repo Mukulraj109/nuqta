@@ -12,6 +12,7 @@ import {
 import { ThemedText } from '@/components/ThemedText';
 import { GoingOutProductCard } from './GoingOutProductCard';
 import { ProductGridProps } from '@/types/going-out.types';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 const PADDING = 16;
@@ -60,7 +61,7 @@ export const ProductGrid = memo(function ProductGrid({
         accessibilityLabel="Loading more products"
         accessibilityValue={{ text: "Loading" }}
       >
-        <ActivityIndicator size="small" color="#8B5CF6" />
+        <ActivityIndicator size="small" color={colors.brand.purpleLight} />
         <ThemedText style={styles.loadingText}>Loading more products...</ThemedText>
       </View>
     );
@@ -143,7 +144,7 @@ export const ProductGrid = memo(function ProductGrid({
           accessibilityLabel="Loading products"
           accessibilityValue={{ text: "Loading" }}
         >
-          <ActivityIndicator size="large" color="#8B5CF6" />
+          <ActivityIndicator size="large" color={colors.brand.purpleLight} />
           <ThemedText style={styles.initialLoadingText}>
             Loading products...
           </ThemedText>
@@ -156,7 +157,7 @@ export const ProductGrid = memo(function ProductGrid({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   listContainer: {
     paddingTop: 16,
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 8,
   },
   emptyContainer: {
@@ -190,13 +191,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
     textAlign: 'center',
   },
   emptyDescription: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
   },
   initialLoadingText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 16,
   },
   headerContainer: {
@@ -223,6 +224,6 @@ const styles = StyleSheet.create({
   resultCount: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
 });

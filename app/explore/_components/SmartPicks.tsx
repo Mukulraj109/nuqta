@@ -16,6 +16,7 @@ import exploreApi from '../../../services/exploreApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.sm,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     borderRadius: BorderRadius.lg,
   },
   retryText: {
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
   aiTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#A855F7',
+    backgroundColor: colors.brand.purpleMedium,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
     borderRadius: 10,
@@ -321,7 +322,7 @@ const styles = StyleSheet.create({
   },
   itemBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   itemInfo: {
     flex: 1,
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 1.5,
-    backgroundColor: '#9CA3AF',
+    backgroundColor: colors.neutral[400],
   },
   itemDistance: {
     ...Typography.caption,
@@ -360,7 +361,7 @@ const styles = StyleSheet.create({
     color: Colors.nileBlue,
   },
   cashbackBadge: {
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
     borderRadius: BorderRadius.sm,
@@ -399,7 +400,7 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.md,
     marginTop: Spacing.xs,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
     gap: 6,
   },
   viewMoreText: {

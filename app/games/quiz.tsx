@@ -16,6 +16,7 @@ import { useGamification } from '@/contexts/GamificationContext';
 import { platformAlert } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 export default function QuizPage() {
   const [gameComplete, setGameComplete] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
@@ -76,9 +77,9 @@ export default function QuizPage() {
           options={{
             title: 'Quiz Complete',
             headerStyle: {
-              backgroundColor: '#8B5CF6',
+              backgroundColor: colors.brand.purpleLight,
             },
-            headerTintColor: '#fff',
+            headerTintColor: colors.background.primary,
             headerTitleStyle: {
               fontWeight: 'bold',
             },
@@ -95,10 +96,10 @@ export default function QuizPage() {
         />
         <ThemedView style={styles.completeContainer}>
           <LinearGradient
-            colors={['#8B5CF6', '#7C3AED', '#6366F1']}
+            colors={[colors.brand.purpleLight, colors.brand.purple, colors.brand.indigo]}
             style={styles.completeCard}
           >
-            <Ionicons name="trophy" size={80} color="#FFD700" />
+            <Ionicons name="trophy" size={80} color={colors.brand.goldBright} />
             <ThemedText style={styles.completeTitle}>Quiz Complete!</ThemedText>
             <ThemedText style={styles.completeSubtitle}>Congratulations!</ThemedText>
 
@@ -119,7 +120,7 @@ export default function QuizPage() {
             {tournamentUpdate && (
               <View style={styles.tournamentBanner}>
                 <View style={styles.tournamentBannerRow}>
-                  <Ionicons name="trophy" size={18} color="#F59E0B" />
+                  <Ionicons name="trophy" size={18} color={colors.warningScale[400]} />
                   <ThemedText style={styles.tournamentBannerTitle}>{tournamentUpdate.tournamentName}</ThemedText>
                 </View>
                 <View style={styles.tournamentBannerStats}>
@@ -142,7 +143,7 @@ export default function QuizPage() {
                
               >
                 <View style={styles.actionButtonInner}>
-                  <Ionicons name="refresh" size={20} color="#8B5CF6" />
+                  <Ionicons name="refresh" size={20} color={colors.brand.purpleLight} />
                   <ThemedText style={styles.actionButtonText}>Play Again</ThemedText>
                 </View>
               </Pressable>
@@ -172,9 +173,9 @@ export default function QuizPage() {
         options={{
           title: 'Daily Quiz',
           headerStyle: {
-            backgroundColor: '#8B5CF6',
+            backgroundColor: colors.brand.purpleLight,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.background.primary,
           headerTitleStyle: {
             fontWeight: 'bold',
           },
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius['2xl'],
     padding: Spacing['2xl'],
     alignItems: 'center',
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,
     shadowRadius: 16,
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
   tournamentBannerTitle: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FDE68A',
+    color: colors.warningScale[200],
     flex: 1,
   },
   tournamentBannerStats: {
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
   },
   tournamentBannerLabel: {
     fontSize: 10,
-    color: '#FDE68A',
+    color: colors.warningScale[200],
     fontWeight: '500',
     marginTop: 2,
   },
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
   actionButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   actionButtonTextSecondary: {
     fontSize: 16,

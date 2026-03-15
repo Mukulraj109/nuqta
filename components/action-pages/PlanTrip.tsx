@@ -17,20 +17,21 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { platformAlertConfirm } from '@/utils/platformAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  cyan: '#06B6D4',
-  cyanDark: '#0891B2',
+  cyan: colors.brand.cyan,
+  cyanDark: colors.cyanDark,
   cyanLight: '#ECFEFF',
-  dark: '#1a3a52',
-  gold: '#FBBF24',
-  goldDark: '#F59E0B',
-  green: '#22C55E',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F8F9FA',
-  border: '#E5E7EB',
+  dark: colors.nileBlue,
+  gold: colors.warningScale[400],
+  goldDark: colors.warningScale[400],
+  green: colors.success,
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.offWhite,
+  border: colors.neutral[200],
 };
 
 type Step = 'destination' | 'dates' | 'travelers' | 'accommodation' | 'activities' | 'confirm';
@@ -369,7 +370,7 @@ const styles = StyleSheet.create({
   headerSubtitle: { fontSize: 12, color: COLORS.textSecondary },
   progressBar: { flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 12, paddingHorizontal: 8, backgroundColor: COLORS.white, borderBottomWidth: 1, borderBottomColor: COLORS.border },
   progressStep: { alignItems: 'center', gap: 4 },
-  progressDot: { width: 28, height: 28, borderRadius: 14, backgroundColor: '#E5E7EB', justifyContent: 'center', alignItems: 'center' },
+  progressDot: { width: 28, height: 28, borderRadius: 14, backgroundColor: colors.neutral[200], justifyContent: 'center', alignItems: 'center' },
   progressDotActive: { backgroundColor: COLORS.cyan },
   progressDotCompleted: { backgroundColor: COLORS.green },
   progressDotText: { fontSize: 12, color: COLORS.textSecondary },
@@ -436,7 +437,7 @@ const styles = StyleSheet.create({
   summaryRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', paddingVertical: 8 },
   summaryLabel: { fontSize: 13, color: COLORS.textSecondary, width: '35%' },
   summaryValue: { fontSize: 14, fontWeight: '600', color: COLORS.textPrimary, flex: 1, textAlign: 'right' },
-  summaryDivider: { height: 1, backgroundColor: '#F3F4F6', marginVertical: 4 },
+  summaryDivider: { height: 1, backgroundColor: colors.neutral[100], marginVertical: 4 },
   bonusNote: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 14, padding: 14, backgroundColor: COLORS.cyanLight, borderRadius: 14 },
   bonusIconWrap: { width: 28, height: 28, borderRadius: 8, backgroundColor: 'rgba(6,182,212,0.15)', justifyContent: 'center', alignItems: 'center' },
   bonusText: { flex: 1, fontSize: 12, color: COLORS.cyanDark, lineHeight: 17 },

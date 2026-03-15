@@ -16,6 +16,7 @@ import surveysApiService, { SurveyDetail } from '@/services/surveysApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 const categoryEmojis: Record<string, string> = {
   'Shopping': '📦', 'Food': '🍔', 'Fashion': '👗', 'Finance': '🏦',
   'Health': '💊', 'Technology': '📱', 'Travel': '✈️', 'Entertainment': '🎬',
@@ -24,7 +25,7 @@ const categoryEmojis: Record<string, string> = {
 
 const difficultyColors = {
   easy: { bg: 'rgba(255, 205, 87, 0.1)', text: Colors.nileBlue, border: 'rgba(255, 205, 87, 0.3)' },
-  medium: { bg: 'rgba(249, 115, 22, 0.1)', text: '#EA580C', border: 'rgba(249, 115, 22, 0.3)' },
+  medium: { bg: 'rgba(249, 115, 22, 0.1)', text: colors.brand.orangeDark, border: 'rgba(249, 115, 22, 0.3)' },
   hard: { bg: 'rgba(239, 68, 68, 0.1)', text: Colors.error, border: 'rgba(239, 68, 68, 0.3)' },
 };
 
@@ -93,7 +94,7 @@ export default function SurveyDetailPage() {
         <SafeAreaView style={styles.container} edges={['top']}>
           <View style={styles.header}>
             <Pressable onPress={() => router.back()} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={24} color={'#1A1A2E'} />
+              <Ionicons name="arrow-back" size={24} color={colors.deepNavy} />
             </Pressable>
           </View>
           <View style={styles.errorContainer}>
@@ -119,7 +120,7 @@ export default function SurveyDetailPage() {
         {/* Header */}
         <View style={styles.header}>
           <Pressable onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color={'#1A1A2E'} />
+            <Ionicons name="arrow-back" size={24} color={colors.deepNavy} />
           </Pressable>
           <Text style={styles.headerTitle}>Survey Details</Text>
           <View style={{ width: 40 }} />
@@ -275,13 +276,13 @@ const styles = StyleSheet.create({
   retryText: { color: Colors.text.inverse, fontSize: Typography.body.fontSize, fontWeight: '600' },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: Spacing.base, paddingVertical: Spacing.md, backgroundColor: Colors.background.primary, borderBottomWidth: 1, borderBottomColor: 'rgba(0, 0, 0, 0.08)' },
   backButton: { padding: Spacing.sm },
-  headerTitle: { fontSize: Typography.h4.fontSize, fontWeight: '700', color: '#1A1A2E' },
+  headerTitle: { fontSize: Typography.h4.fontSize, fontWeight: '700', color: colors.deepNavy },
   content: { flex: 1 },
   heroSection: { padding: Spacing.base },
   heroGradient: { borderRadius: BorderRadius.xl, padding: Spacing.xl, alignItems: 'center', borderWidth: 1, borderColor: 'rgba(59, 130, 246, 0.2)' },
   emojiContainer: { width: 80, height: 80, borderRadius: 40, backgroundColor: 'rgba(255,255,255,0.8)', justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.base },
   emoji: { fontSize: 40 },
-  title: { fontSize: Typography.h3.fontSize, fontWeight: '700', color: '#1A1A2E', textAlign: 'center', marginBottom: Spacing.md },
+  title: { fontSize: Typography.h3.fontSize, fontWeight: '700', color: colors.deepNavy, textAlign: 'center', marginBottom: Spacing.md },
   badgeRow: { flexDirection: 'row', gap: Spacing.sm },
   badge: { paddingHorizontal: Spacing.md, paddingVertical: 6, borderRadius: BorderRadius.md, borderWidth: 1 },
   badgeText: { fontSize: Typography.bodySmall.fontSize, fontWeight: '600' },
@@ -289,10 +290,10 @@ const styles = StyleSheet.create({
   categoryText: { fontSize: Typography.bodySmall.fontSize, color: Colors.text.tertiary },
   statsGrid: { flexDirection: 'row', paddingHorizontal: Spacing.base, gap: Spacing.md, marginBottom: Spacing.base },
   statCard: { flex: 1, backgroundColor: Colors.background.primary, borderRadius: BorderRadius.lg, padding: Spacing.base, alignItems: 'center', borderWidth: 1, borderColor: 'rgba(0, 0, 0, 0.08)', ...Platform.select({ ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.04, shadowRadius: 8 }, android: { elevation: 2 } }) },
-  statValue: { fontSize: Typography.h4.fontSize, fontWeight: '700', color: '#1A1A2E', marginTop: Spacing.sm },
+  statValue: { fontSize: Typography.h4.fontSize, fontWeight: '700', color: colors.deepNavy, marginTop: Spacing.sm },
   statLabel: { fontSize: Typography.caption.fontSize, color: Colors.text.tertiary, marginTop: Spacing.xs },
   section: { paddingHorizontal: Spacing.base, marginBottom: Spacing.lg },
-  sectionTitle: { fontSize: Typography.bodyLarge.fontSize, fontWeight: '700', color: '#1A1A2E', marginBottom: Spacing.md },
+  sectionTitle: { fontSize: Typography.bodyLarge.fontSize, fontWeight: '700', color: colors.deepNavy, marginBottom: Spacing.md },
   description: { fontSize: Typography.body.fontSize, color: Colors.text.tertiary, lineHeight: 22 },
   instructionItem: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: Spacing.md },
   instructionBullet: { width: 24, height: 24, borderRadius: BorderRadius.md, backgroundColor: 'rgba(59, 130, 246, 0.1)', justifyContent: 'center', alignItems: 'center', marginRight: Spacing.md },
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
   progressCard: { backgroundColor: Colors.background.primary, borderRadius: BorderRadius.lg, padding: Spacing.base, borderWidth: 1, borderColor: 'rgba(0, 0, 0, 0.08)' },
   progressRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: Spacing.md },
   progressLabel: { fontSize: Typography.body.fontSize, color: Colors.text.tertiary },
-  progressValue: { fontSize: Typography.body.fontSize, fontWeight: '600', color: '#1A1A2E' },
+  progressValue: { fontSize: Typography.body.fontSize, fontWeight: '600', color: colors.deepNavy },
   progressBar: { height: 8, backgroundColor: 'rgba(0,0,0,0.06)', borderRadius: 4, overflow: 'hidden' },
   progressFill: { height: '100%', backgroundColor: Colors.gold, borderRadius: 4 },
   completedBanner: { flexDirection: 'row', alignItems: 'center', gap: Spacing.md, marginHorizontal: Spacing.base, padding: Spacing.base, backgroundColor: 'rgba(255, 205, 87, 0.1)', borderRadius: BorderRadius.md, borderWidth: 1, borderColor: 'rgba(255, 205, 87, 0.3)' },

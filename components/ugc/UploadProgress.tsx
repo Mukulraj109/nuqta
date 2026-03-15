@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { UploadProgress as UploadProgressType, UploadStatus } from '@/types/ugc-upload.types';
+import { colors } from '@/constants/theme';
 
 interface UploadProgressProps {
   status: UploadStatus;
@@ -100,15 +101,15 @@ function UploadProgress({
   const getStatusColor = () => {
     switch (status) {
       case 'uploading':
-        return '#3B82F6';
+        return colors.infoScale[400];
       case 'processing':
-        return '#F59E0B';
+        return colors.warningScale[400];
       case 'complete':
-        return '#ffcd57';
+        return colors.lightMustard;
       case 'error':
-        return '#EF4444';
+        return colors.error;
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   };
 
@@ -145,7 +146,7 @@ function UploadProgress({
           <Ionicons
             name={getStatusIcon() as any}
             size={32}
-            color="#FFFFFF"
+            color={colors.background.primary}
           />
         </View>
       </Animated.View>
@@ -178,7 +179,7 @@ function UploadProgress({
       {progress && status === 'uploading' && (
         <View style={styles.statsContainer}>
           <View style={styles.statItem}>
-            <Ionicons name="arrow-up" size={16} color="#666" />
+            <Ionicons name="arrow-up" size={16} color={colors.midGray} />
             <Text style={styles.statLabel}>
               {formatBytes(progress.bytesUploaded)} / {formatBytes(progress.totalBytes)}
             </Text>
@@ -186,7 +187,7 @@ function UploadProgress({
 
           {progress.uploadSpeed && (
             <View style={styles.statItem}>
-              <Ionicons name="speedometer-outline" size={16} color="#666" />
+              <Ionicons name="speedometer-outline" size={16} color={colors.midGray} />
               <Text style={styles.statLabel}>
                 {formatBytes(progress.uploadSpeed)}/s
               </Text>
@@ -195,7 +196,7 @@ function UploadProgress({
 
           {progress.estimatedTimeRemaining && (
             <View style={styles.statItem}>
-              <Ionicons name="time-outline" size={16} color="#666" />
+              <Ionicons name="time-outline" size={16} color={colors.midGray} />
               <Text style={styles.statLabel}>
                 {formatTime(progress.estimatedTimeRemaining)} remaining
               </Text>
@@ -229,7 +230,7 @@ function UploadProgress({
           onPress={onCancel}
          
         >
-          <Ionicons name="close-circle-outline" size={20} color="#EF4444" />
+          <Ionicons name="close-circle-outline" size={20} color={colors.error} />
           <Text style={styles.cancelButtonText}>Cancel Upload</Text>
         </Pressable>
       )}
@@ -239,7 +240,7 @@ function UploadProgress({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 24,
     alignItems: 'center',
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
   progressBarBackground: {
     width: '100%',
     height: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     overflow: 'hidden',
     marginBottom: 8,
@@ -288,7 +289,7 @@ const styles = StyleSheet.create({
   percentageText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
   },
   statsContainer: {
@@ -304,13 +305,13 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 13,
-    color: '#666',
+    color: colors.midGray,
   },
   successContainer: {
     width: '100%',
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     borderRadius: 8,
     marginTop: 8,
   },
@@ -324,7 +325,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     borderRadius: 8,
     marginTop: 8,
   },
@@ -342,14 +343,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#FEE2E2',
-    backgroundColor: '#FEF2F2',
+    borderColor: colors.errorScale[100],
+    backgroundColor: colors.errorScale[50],
     marginTop: 16,
   },
   cancelButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#EF4444',
+    color: colors.error,
   },
 });
 

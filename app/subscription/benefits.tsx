@@ -18,6 +18,7 @@ import { useSubscription } from '@/contexts/SubscriptionContext';
 import { useRegion } from '@/contexts/RegionContext';
 import { TIER_COLORS, TIER_GRADIENTS, TIER_NAMES } from '@/types/subscription.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function BenefitsPage() {
   const router = useRouter();
@@ -66,14 +67,14 @@ export default function BenefitsPage() {
         title: 'Personal Shopper',
         description: 'Dedicated assistant for your shopping needs',
         tip: 'Book appointments via the profile section',
-        color: '#EC4899',
+        color: colors.brand.pink,
       },
       {
         icon: 'calendar',
         title: 'Premium Events',
         description: 'Exclusive access to VIP shopping events',
         tip: 'Get early access to sales and product launches',
-        color: '#6366F1',
+        color: colors.brand.indigo,
       }
     );
   }
@@ -180,7 +181,7 @@ export default function BenefitsPage() {
               style={styles.upgradeButton}
               onPress={() => router.push('/subscription/plans')}
             >
-              <LinearGradient colors={[Colors.warning, '#D97706']} style={styles.upgradeButtonGradient}>
+              <LinearGradient colors={[Colors.warning, colors.warningScale[700]]} style={styles.upgradeButtonGradient}>
                 <ThemedText style={styles.upgradeButtonText}>
                   {currentTier === 'free' ? 'Upgrade to Premium' : 'Upgrade to VIP'}
                 </ThemedText>
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
   benefitTip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     borderRadius: 6,
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
   },
   benefitTipText: {
     ...Typography.bodySmall,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontWeight: '500',
   },
   tipCard: {

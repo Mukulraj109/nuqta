@@ -19,6 +19,7 @@ import { useSecurity } from '@/contexts/SecurityContext';
 import { platformAlertSimple } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 type VisibilityOption = 'PUBLIC' | 'FRIENDS' | 'PRIVATE';
 
 interface VisibilityOptionData {

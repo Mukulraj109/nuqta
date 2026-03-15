@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Href } from 'expo-router';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { BackButtonConfig } from '@/types/navigation.types';
+import { colors } from '@/constants/theme';
 
 interface SafeBackButtonProps extends Partial<BackButtonConfig> {
   style?: StyleProp<ViewStyle>;
@@ -31,7 +32,7 @@ export const SafeBackButton: React.FC<SafeBackButtonProps> = ({
   showConfirmation = false,
   confirmationMessage = 'Are you sure you want to go back?',
   style,
-  iconColor = '#333',
+  iconColor = colors.darkGray,
   iconSize = 24,
   iconName = 'arrow-back',
   testID = 'safe-back-button',
@@ -106,20 +107,20 @@ export const ThemedSafeBackButton: React.FC<SafeBackButtonProps & {
 }) => {
   const variantStyles = {
     default: {
-      backgroundColor: '#FFFFFF',
-      iconColor: '#333',
+      backgroundColor: colors.background.primary,
+      iconColor: colors.darkGray,
     },
     light: {
       backgroundColor: 'rgba(255, 255, 255, 0.2)',
-      iconColor: '#FFFFFF',
+      iconColor: colors.background.primary,
     },
     dark: {
       backgroundColor: 'rgba(0, 0, 0, 0.2)',
-      iconColor: '#FFFFFF',
+      iconColor: colors.background.primary,
     },
     transparent: {
       backgroundColor: 'transparent',
-      iconColor: '#333',
+      iconColor: colors.darkGray,
     },
   };
 
@@ -180,7 +181,7 @@ export const HeaderBackButton: React.FC<SafeBackButtonProps & {
         light && styles.headerButtonLight,
         props.style,
       ]}
-      iconColor={props.iconColor || (light ? '#FFFFFF' : '#333')}
+      iconColor={props.iconColor || (light ? colors.background.primary : colors.darkGray)}
     />
   );
 };
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

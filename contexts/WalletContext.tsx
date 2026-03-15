@@ -81,42 +81,48 @@ function transformWalletResponse(backendData: any, userId: string): WalletData {
 // ---------------------------------------------------------------------------
 // Context types
 // ---------------------------------------------------------------------------
-interface WalletContextType {
-  /** Full transformed wallet data (null until first fetch completes) */
+// Data context — changes only when actual wallet data changes (not loading state)
+interface WalletDataContextType {
   walletData: WalletData | null;
-  /** Rez Coins (rez type) balance — 0 if not yet loaded */
   rezBalance: number;
-  /** Total balance across all coin types */
   totalBalance: number;
-  /** Available (spendable) balance */
   availableBalance: number;
-  /** Branded coins array from backend */
   brandedCoins: any[];
-  /** Savings insights */
   savingsInsights: { totalSaved: number; thisMonth: number; avgPerVisit: number };
-  /** Whether the initial fetch is in progress */
-  isLoading: boolean;
-  /** Whether a background refresh is in progress */
-  isRefreshing: boolean;
-  /** Re-fetch wallet data from API (call after earning/spending coins) */
   refreshWallet: () => Promise<void>;
-  /** Raw backend response data (for pages that need fields not in WalletData) */
   rawBackendData: any | null;
 }
 
-const WALLET_DEFAULTS: WalletContextType = {
+// Loading context — changes on loading transitions only
+interface WalletLoadingContextType {
+  isLoading: boolean;
+  isRefreshing: boolean;
+}
+
+// Combined type for backwards compatibility
+interface WalletContextType extends WalletDataContextType, WalletLoadingContextType {}
+
+const WALLET_DATA_DEFAULTS: WalletDataContextType = {
   walletData: null,
   rezBalance: 0,
   totalBalance: 0,
   availableBalance: 0,
   brandedCoins: [],
   savingsInsights: { totalSaved: 0, thisMonth: 0, avgPerVisit: 0 },
-  isLoading: false,
-  isRefreshing: false,
   refreshWallet: async () => {},
   rawBackendData: null,
 };
 
+const WALLET_LOADING_DEFAULTS: WalletLoadingContextType = {
+  isLoading: false,
+  isRefreshing: false,
+};
+
+const WALLET_DEFAULTS: WalletContextType = { ...WALLET_DATA_DEFAULTS, ...WALLET_LOADING_DEFAULTS };
+
+const WalletDataContext = createContext<WalletDataContextType | undefined>(undefined);
+const WalletLoadingContext = createContext<WalletLoadingContextType | undefined>(undefined);
+// Keep legacy context for backwards compat with any direct consumers
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 // ── Module-level dedup: survives component remounts caused by DeferredProviders ──
@@ -235,8 +241,8 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // All derived values computed INSIDE useMemo to prevent reference instability
-  const value = useMemo<WalletContextType>(() => {
+  // Split into two memo'd values so loading state changes don't re-render data consumers
+  const dataValue = useMemo<WalletDataContextType>(() => {
     const rezBalance = walletData?.coins?.find(c => c.type === 'rez')?.amount ?? 0;
     const totalBalance = walletData?.totalBalance ?? 0;
     const availableBalance = walletData?.availableBalance ?? 0;
@@ -244,36 +250,57 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     const savingsInsights = walletData?.savingsInsights ?? { totalSaved: 0, thisMonth: 0, avgPerVisit: 0 };
 
     return {
-      walletData,
-      rezBalance,
-      totalBalance,
-      availableBalance,
-      brandedCoins,
-      savingsInsights,
-      isLoading,
-      isRefreshing,
-      refreshWallet,
-      rawBackendData,
+      walletData, rezBalance, totalBalance, availableBalance,
+      brandedCoins, savingsInsights, refreshWallet, rawBackendData,
     };
-  }, [walletData, isLoading, isRefreshing, refreshWallet, rawBackendData]);
+  }, [walletData, refreshWallet, rawBackendData]);
+
+  const loadingValue = useMemo<WalletLoadingContextType>(() => ({
+    isLoading, isRefreshing,
+  }), [isLoading, isRefreshing]);
+
+  // Combined value for legacy WalletContext consumers
+  const combinedValue = useMemo<WalletContextType>(() => ({
+    ...dataValue, ...loadingValue,
+  }), [dataValue, loadingValue]);
 
   return (
-    <WalletContext.Provider value={value}>
-      {children}
-    </WalletContext.Provider>
+    <WalletDataContext.Provider value={dataValue}>
+      <WalletLoadingContext.Provider value={loadingValue}>
+        <WalletContext.Provider value={combinedValue}>
+          {children}
+        </WalletContext.Provider>
+      </WalletLoadingContext.Provider>
+    </WalletDataContext.Provider>
   );
 }
 
 // ---------------------------------------------------------------------------
 // Hook
 // ---------------------------------------------------------------------------
+/**
+ * Primary hook — reads from data context only (not affected by loading state transitions).
+ * Most consumers should use this.
+ */
 export function useWalletContext(): WalletContextType {
-  const context = useContext(WalletContext);
-  if (context === undefined) {
+  const dataCtx = useContext(WalletDataContext);
+  const loadingCtx = useContext(WalletLoadingContext);
+
+  if (!dataCtx || !loadingCtx) {
     // Return safe defaults if provider hasn't loaded yet (deferred loading)
     return WALLET_DEFAULTS;
   }
-  return context;
+
+  return { ...dataCtx, ...loadingCtx };
 }
 
-export { WalletContext };
+/**
+ * Loading-only hook — for consumers that need to show loading spinners.
+ * Only re-renders when isLoading/isRefreshing change.
+ */
+export function useWalletLoading(): WalletLoadingContextType {
+  const context = useContext(WalletLoadingContext);
+  return context ?? WALLET_LOADING_DEFAULTS;
+}
+
+export { WalletContext, WalletDataContext, WalletLoadingContext };

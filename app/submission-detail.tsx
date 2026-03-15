@@ -21,6 +21,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { showAlert } from '@/utils/alert';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -130,14 +131,14 @@ export default function SubmissionDetailPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'approved':
-        return '#10B981';
+        return colors.successScale[400];
       case 'rejected':
-        return '#EF4444';
+        return colors.error;
       case 'under_review':
-        return '#F59E0B';
+        return colors.warningScale[400];
       case 'pending':
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   };
 
@@ -236,7 +237,7 @@ export default function SubmissionDetailPage() {
                   }
                 }}
               >
-                <Ionicons name="play-circle" size={60} color="#FFFFFF" />
+                <Ionicons name="play-circle" size={60} color={colors.background.primary} />
               </Pressable>
             </View>
             {content.metadata?.uploadedVideo?.duration && (
@@ -258,7 +259,7 @@ export default function SubmissionDetailPage() {
                   key={star}
                   name={star <= rating ? 'star' : 'star-outline'}
                   size={40}
-                  color={star <= rating ? '#F59E0B' : '#D1D5DB'}
+                  color={star <= rating ? colors.warningScale[400] : colors.neutral[300]}
                 />
               ))}
             </View>
@@ -277,7 +278,7 @@ export default function SubmissionDetailPage() {
             <ThemedText style={styles.contentLabel}>Check-In Details</ThemedText>
             {content.metadata?.location && (
               <View style={styles.locationContainer}>
-                <Ionicons name="location" size={20} color="#10B981" />
+                <Ionicons name="location" size={20} color={colors.successScale[400]} />
                 <ThemedText style={styles.locationText}>
                   {content.metadata.locationName || 
                    `${content.metadata.location[1].toFixed(4)}, ${content.metadata.location[0].toFixed(4)}`}
@@ -324,7 +325,7 @@ export default function SubmissionDetailPage() {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
         <View style={styles.centerContainer}>
-          <Ionicons name="alert-circle-outline" size={48} color="#EF4444" />
+          <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
           <ThemedText style={styles.errorText}>Submission not found</ThemedText>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
             <ThemedText style={styles.backButtonText}>Go Back</ThemedText>
@@ -343,10 +344,10 @@ export default function SubmissionDetailPage() {
           onPress={() => router.back()}
         >
           <LinearGradient
-            colors={['#8B5CF6', '#7C3AED']}
+            colors={[colors.brand.purpleLight, colors.brand.purple]}
             style={styles.backButtonGradient}
           >
-            <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
+            <Ionicons name="arrow-back" size={20} color={colors.background.primary} />
           </LinearGradient>
         </Pressable>
         <ThemedText style={styles.headerTitle}>Submission Details</ThemedText>
@@ -378,7 +379,7 @@ export default function SubmissionDetailPage() {
                   'hourglass'
                 }
                 size={20}
-                color="#FFFFFF"
+                color={colors.background.primary}
               />
               <ThemedText style={styles.statusBadgeText}>
                 {getStatusLabel(submission.status)}
@@ -394,7 +395,7 @@ export default function SubmissionDetailPage() {
             <ThemedText style={styles.projectInfoLabel}>Project</ThemedText>
             <ThemedText style={styles.projectTitle}>{project.title}</ThemedText>
             <View style={styles.rewardContainer}>
-              <Ionicons name="cash" size={16} color="#10B981" />
+              <Ionicons name="cash" size={16} color={colors.successScale[400]} />
               <ThemedText style={styles.rewardText}>
                 Reward: {currencySymbol}{project.reward?.amount || 0}
               </ThemedText>
@@ -441,7 +442,7 @@ export default function SubmissionDetailPage() {
             <View style={styles.paymentSection}>
               <ThemedText style={styles.sectionTitle}>Payment</ThemedText>
               <View style={styles.paymentContainer}>
-                <Ionicons name="cash" size={24} color="#10B981" />
+                <Ionicons name="cash" size={24} color={colors.successScale[400]} />
                 <View style={styles.paymentInfo}>
                   <ThemedText style={styles.paymentAmount}>
                     {currencySymbol}{submission.paidAmount}
@@ -461,7 +462,7 @@ export default function SubmissionDetailPage() {
             <View style={styles.rejectionSection}>
               <ThemedText style={styles.sectionTitle}>Rejection Reason</ThemedText>
               <View style={styles.rejectionContainer}>
-                <Ionicons name="alert-circle" size={20} color="#EF4444" />
+                <Ionicons name="alert-circle" size={20} color={colors.error} />
                 <ThemedText style={styles.rejectionText}>
                   {submission.rejectionReason}
                 </ThemedText>
@@ -678,7 +679,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     ...Typography.body,
-    color: '#059669',
+    color: colors.successScale[700],
     flex: 1,
   },
   checkinImagesContainer: {
@@ -755,7 +756,7 @@ const styles = StyleSheet.create({
   paymentAmount: {
     ...Typography.h2,
     fontWeight: '800',
-    color: '#059669',
+    color: colors.successScale[700],
     marginBottom: Spacing.xs,
   },
   paymentDate: {

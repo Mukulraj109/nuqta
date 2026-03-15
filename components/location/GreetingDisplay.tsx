@@ -10,6 +10,7 @@ import {
 import { useGreetingDisplay, useGreetingTime, useGreetingAnimation } from '@/hooks/useGreeting';
 import { useLocationBasedGreeting } from '@/hooks/useGreeting';
 import { GreetingData } from '@/types/greeting.types';
+import { colors } from '@/constants/theme';
 
 interface GreetingDisplayProps {
   showEmoji?: boolean;
@@ -107,20 +108,20 @@ function GreetingDisplay({
       case 'morning':
         return '#FFA500'; // Orange
       case 'afternoon':
-        return '#FFD700'; // Gold
+        return colors.brand.goldBright; // Gold
       case 'evening':
         return '#FF6347'; // Tomato
       case 'night':
         return '#4169E1'; // Royal Blue
       default:
-        return '#333333';
+        return colors.darkGray;
     }
   };
 
   if (isLoading) {
     return (
       <View style={[styles.container, style]}>
-        <ActivityIndicator size="small" color="#007AFF" />
+        <ActivityIndicator size="small" color={colors.brand.ios} />
         <Text style={[styles.loadingText, textStyle]}>Loading greeting...</Text>
       </View>
     );
@@ -218,7 +219,7 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     marginTop: 2,
   },
   locationText: {
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#666666',
+    color: colors.midGray,
     marginLeft: 8,
   },
   errorText: {
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
   defaultText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333333',
+    color: colors.darkGray,
   },
 });
 

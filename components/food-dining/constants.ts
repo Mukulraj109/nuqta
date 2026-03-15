@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 /**
  * Food & Dining Module - Shared Constants
  */
@@ -5,15 +6,15 @@
 // Rez Brand Colors used across all food-dining components
 export const COLORS = {
   accentOrange: '#FF6B35',
-  primaryGold: '#F59E0B',
-  accentGold: '#ffcd57',
-  primaryGreen: '#22C55E',
-  purple: '#8B5CF6',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  border: '#E5E7EB',
+  primaryGold: colors.warningScale[400],
+  accentGold: colors.lightMustard,
+  primaryGreen: colors.success,
+  purple: colors.brand.purpleLight,
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  border: colors.neutral[200],
 };
 
 // Default tabs (used as fallback when pageConfig.tabs is not available)
@@ -27,10 +28,10 @@ export const FOOD_TABS = [
 
 // Default dietary options (used as fallback when pageConfig.dietaryOptions is not available)
 export const DIETARY_OPTIONS = [
-  { id: 'veg', label: 'Veg', icon: '🟢', color: '#22C55E', tags: ['veg', 'pure-veg', 'vegetarian'] },
-  { id: 'non-veg', label: 'Non-Veg', icon: '🔴', color: '#EF4444', tags: ['non-veg'] },
+  { id: 'veg', label: 'Veg', icon: '🟢', color: colors.success, tags: ['veg', 'pure-veg', 'vegetarian'] },
+  { id: 'non-veg', label: 'Non-Veg', icon: '🔴', color: colors.error, tags: ['non-veg'] },
   { id: 'halal', label: 'Halal', icon: '☪️', color: '#0D9488', tags: ['halal'] },
-  { id: 'jain', label: 'Jain', icon: '🙏', color: '#8B5CF6', tags: ['jain'] },
+  { id: 'jain', label: 'Jain', icon: '🙏', color: colors.brand.purpleLight, tags: ['jain'] },
 ];
 
 // Default sort options (used as fallback when pageConfig.sortOptions is not available)
@@ -43,9 +44,9 @@ export const SORT_OPTIONS = [
 
 // Default curated collections (used as fallback when pageConfig.curatedCollections is not available)
 export const CURATED_COLLECTIONS = [
-  { id: 'budget-eats', title: 'Budget Eats', subtitle: 'Affordable picks', icon: '💰', gradient: ['#F59E0B', '#D97706'] as const, tags: 'budget' },
-  { id: 'best-for-dates', title: 'Date Night', subtitle: 'Romantic spots', icon: '❤️', gradient: ['#EC4899', '#BE185D'] as const, tags: 'fine-dining,romantic' },
-  { id: 'hidden-gems', title: 'Hidden Gems', subtitle: 'Top rated new', icon: '💎', gradient: ['#8B5CF6', '#6D28D9'] as const, tags: 'hidden-gem' },
+  { id: 'budget-eats', title: 'Budget Eats', subtitle: 'Affordable picks', icon: '💰', gradient: [colors.warningScale[400], colors.warningScale[700]] as const, tags: 'budget' },
+  { id: 'best-for-dates', title: 'Date Night', subtitle: 'Romantic spots', icon: '❤️', gradient: [colors.brand.pink, '#BE185D'] as const, tags: 'fine-dining,romantic' },
+  { id: 'hidden-gems', title: 'Hidden Gems', subtitle: 'Top rated new', icon: '💎', gradient: [colors.brand.purpleLight, colors.brand.purpleDeep] as const, tags: 'hidden-gem' },
   { id: 'late-night', title: 'Late Night', subtitle: 'Open late', icon: '🌙', gradient: ['#1E3A5F', '#0F172A'] as const, tags: 'late-night' },
 ];
 

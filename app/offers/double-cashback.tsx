@@ -20,6 +20,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import cashStoreApi from '../../services/cashStoreApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -143,7 +144,7 @@ export default function DoubleCashbackPage() {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <StatusBar barStyle="light-content" />
-        <LinearGradient colors={['#1a3a52', '#0f2536']} style={styles.loadingContainer}>
+        <LinearGradient colors={[colors.nileBlue, '#0f2536']} style={styles.loadingContainer}>
           <Pressable style={styles.backBtn} onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
           </Pressable>
@@ -158,7 +159,7 @@ export default function DoubleCashbackPage() {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <StatusBar barStyle="light-content" />
-        <LinearGradient colors={['#1a3a52', '#0f2536']} style={styles.loadingContainer}>
+        <LinearGradient colors={[colors.nileBlue, '#0f2536']} style={styles.loadingContainer}>
           <Pressable style={styles.backBtn} onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
           </Pressable>
@@ -188,7 +189,7 @@ export default function DoubleCashbackPage() {
       <StatusBar barStyle="light-content" />
       <ScrollView
         style={{ flex: 1 }}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor="#FFF" />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={colors.background.primary} />}
         showsVerticalScrollIndicator={false}
       >
         {/* Hero Campaign */}
@@ -396,7 +397,7 @@ export default function DoubleCashbackPage() {
           {campaigns.length > 1 && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Ionicons name="flash" size={18} color="#F97316" />
+                <Ionicons name="flash" size={18} color={colors.brand.orange} />
                 <Text style={styles.sectionTitle}>More Double Cashback</Text>
               </View>
               {campaigns.slice(1).map((c) => {

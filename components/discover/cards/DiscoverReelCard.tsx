@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Video, ResizeMode } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import { DiscoverReel } from '@/types/discover.types';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2; // 2 columns with padding
@@ -146,27 +147,27 @@ function DiscoverReelCard({
           {/* Play indicator (when not playing) */}
           {!isPlaying && (
             <View style={styles.playIndicator}>
-              <Ionicons name="play" size={24} color="#FFFFFF" />
+              <Ionicons name="play" size={24} color={colors.background.primary} />
             </View>
           )}
 
           {/* Product count badge */}
           {productCount > 0 && (
             <View style={styles.productBadge}>
-              <Ionicons name="bag-handle" size={12} color="#FFFFFF" />
+              <Ionicons name="bag-handle" size={12} color={colors.background.primary} />
               <Text style={styles.productBadgeText}>{productCount}</Text>
             </View>
           )}
 
           {/* View count */}
           <View style={styles.viewCount}>
-            <Ionicons name="eye" size={12} color="#FFFFFF" />
+            <Ionicons name="eye" size={12} color={colors.background.primary} />
             <Text style={styles.viewCountText}>{formatCount(viewCount)}</Text>
           </View>
 
           {/* Like count */}
           <View style={styles.likeCount}>
-            <Ionicons name="heart" size={12} color="#EF4444" />
+            <Ionicons name="heart" size={12} color={colors.error} />
             <Text style={styles.likeCountText}>{formatCount(likeCount)}</Text>
           </View>
 
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   touchable: {
     borderRadius: 12,
     overflow: 'hidden',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
   mediaContainer: {
     width: '100%',
     height: CARD_HEIGHT,
-    backgroundColor: '#1F2937',
+    backgroundColor: colors.neutral[800],
     position: 'relative',
   },
   thumbnail: {
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   productBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '700',
   },
@@ -279,7 +280,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   viewCountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '600',
   },
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   likeCountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '600',
   },
@@ -306,7 +307,7 @@ const styles = StyleSheet.create({
     height: 28,
     borderRadius: 14,
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   contentInfo: {
     padding: 10,
@@ -314,13 +315,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     lineHeight: 18,
     marginBottom: 4,
   },
   hashtags: {
     fontSize: 11,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '500',
   },
 });

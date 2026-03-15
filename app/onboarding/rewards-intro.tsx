@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { navigationDebugger } from '@/utils/navigationDebug';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 // Nuqta Design System Colors
 
@@ -91,13 +92,13 @@ export default function RewardsIntroScreen() {
                       <Ionicons name="cafe" size={18} color={Colors.gold} />
                     </View>
                     <View style={[styles.foodItem, styles.foodItem3]}>
-                      <Ionicons name="ice-cream" size={16} color="#EC4899" />
+                      <Ionicons name="ice-cream" size={16} color={colors.brand.pink} />
                     </View>
                   </View>
 
                   <View style={styles.postActions}>
                     <Pressable style={styles.actionButton}>
-                      <Ionicons name="heart" size={18} color="#EC4899" />
+                      <Ionicons name="heart" size={18} color={colors.brand.pink} />
                       <Text style={styles.actionCount}>24</Text>
                     </Pressable>
                     <Pressable style={styles.actionButton}>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useAuth } from '@/contexts/AuthContext';
 import { getAuthToken, getRefreshToken, getUser } from '@/utils/authStorage';
+import { colors } from '@/constants/theme';
 
 function AuthDebugger() {
   const { state, actions } = useAuth();
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   sectionTitle: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: 'bold',
     marginBottom: 5,
   },
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   refreshButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     padding: 8,
     borderRadius: 5,
     alignItems: 'center',
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   checkAuthButton: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.success,
     padding: 8,
     borderRadius: 5,
     alignItems: 'center',

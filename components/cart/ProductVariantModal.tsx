@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ProductItem } from '@/types/homepage.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 export interface VariantSelection {
   variantId?: string;
@@ -141,7 +142,7 @@ function ProductVariantModal({
       id: '5',
       size: 'M',
       color: 'White',
-      colorHex: '#FFFFFF',
+      colorHex: colors.background.primary,
       sku: `${product.id}-M-WHT`,
       price: productPrice,
       stock: 20,
@@ -151,7 +152,7 @@ function ProductVariantModal({
       id: '6',
       size: 'L',
       color: 'Blue',
-      colorHex: '#3B82F6',
+      colorHex: colors.infoScale[400],
       sku: `${product.id}-L-BLU`,
       price: productPrice + 100,
       stock: 8,
@@ -335,7 +336,7 @@ function ProductVariantModal({
               accessibilityLabel="Close dialog"
               accessibilityRole="button"
             >
-              <Ionicons name="close" size={24} color="#6B7280" />
+              <Ionicons name="close" size={24} color={colors.neutral[500]} />
             </Pressable>
           </View>
 
@@ -434,7 +435,7 @@ function ProductVariantModal({
                             <Ionicons
                               name="checkmark"
                               size={18}
-                              color={colorHex === '#FFFFFF' || colorHex === '#F9FAFB' ? '#7C3AED' : '#FFFFFF'}
+                              color={colorHex === colors.background.primary || colorHex === colors.neutral[50] ? colors.brand.purple : colors.background.primary}
                             />
                           )}
                           {!available && (
@@ -465,7 +466,7 @@ function ProductVariantModal({
                   <Ionicons
                     name={selectedVariant.stock > 10 ? 'checkmark-circle' : 'alert-circle'}
                     size={20}
-                    color={selectedVariant.stock > 10 ? '#10B981' : '#F59E0B'}
+                    color={selectedVariant.stock > 10 ? colors.successScale[400] : colors.warningScale[400]}
                   />
                   <Text style={styles.stockInfoText}>
                     {selectedVariant.stock > 10
@@ -484,7 +485,7 @@ function ProductVariantModal({
             {/* Selection Prompt */}
             {!selectedSize && !selectedColor && (
               <View style={styles.promptContainer}>
-                <Ionicons name="information-circle-outline" size={20} color="#8B5CF6" />
+                <Ionicons name="information-circle-outline" size={20} color={colors.brand.purpleLight} />
                 <Text style={styles.promptText}>
                   Please select {displaySizes.length > 0 ? 'size' : ''}
                   {displaySizes.length > 0 && displayColors.length > 0 ? ' and ' : ''}
@@ -527,19 +528,19 @@ function ProductVariantModal({
                 </View>
               ) : (
                 <LinearGradient
-                  colors={loading ? ['#9CA3AF', '#6B7280'] : ['#8B5CF6', '#7C3AED']}
+                  colors={loading ? [colors.neutral[400], colors.neutral[500]] : [colors.brand.purpleLight, colors.brand.purple]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.confirmGradient}
                 >
                   {loading ? (
                     <>
-                      <ActivityIndicator size="small" color="#FFFFFF" />
+                      <ActivityIndicator size="small" color={colors.background.primary} />
                       <Text style={styles.confirmText}>Adding...</Text>
                     </>
                   ) : (
                     <>
-                      <Ionicons name="cart" size={20} color="#FFFFFF" />
+                      <Ionicons name="cart" size={20} color={colors.background.primary} />
                       <Text style={styles.confirmText}>Add to Cart</Text>
                     </>
                   )}
@@ -562,7 +563,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: height * 0.85,
@@ -580,12 +581,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerDragIndicator: {
     width: 40,
     height: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 2,
     alignSelf: 'center',
     marginBottom: 16,
@@ -598,7 +599,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     overflow: 'hidden',
     marginRight: 12,
     position: 'relative',
@@ -619,7 +620,7 @@ const styles = StyleSheet.create({
   lowStockText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -630,13 +631,13 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
     lineHeight: 20,
   },
   productBrand: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     marginBottom: 6,
   },
@@ -648,16 +649,16 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   originalPrice: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
     fontWeight: '500',
   },
   discountBadge: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -665,7 +666,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   closeButton: {
     position: 'absolute',
@@ -674,7 +675,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -695,12 +696,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   selectedLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   optionsGrid: {
     flexDirection: 'row',
@@ -713,37 +714,37 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
   },
   sizeOptionSelected: {
-    borderColor: '#7C3AED',
-    backgroundColor: '#F5F3FF',
+    borderColor: colors.brand.purple,
+    backgroundColor: colors.tint.purpleLight,
   },
   sizeOptionDisabled: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     opacity: 0.6,
   },
   sizeText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#4B5563',
+    color: colors.neutral[600],
   },
   sizeTextSelected: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '700',
   },
   sizeTextDisabled: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   unavailableLine: {
     position: 'absolute',
     width: '120%',
     height: 2,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     transform: [{ rotate: '-45deg' }],
   },
   colorOption: {
@@ -752,17 +753,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     alignItems: 'center',
     gap: 6,
   },
   colorOptionSelected: {
-    borderColor: '#7C3AED',
-    backgroundColor: '#F5F3FF',
+    borderColor: colors.brand.purple,
+    backgroundColor: colors.tint.purpleLight,
   },
   colorOptionDisabled: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     opacity: 0.6,
   },
   colorSwatch: {
@@ -770,7 +771,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
@@ -782,24 +783,24 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '140%',
     height: 2,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     transform: [{ rotate: '-45deg' }],
   },
   colorText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#4B5563',
+    color: colors.neutral[600],
     textAlign: 'center',
   },
   colorTextSelected: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '700',
   },
   colorTextDisabled: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   stockInfoContainer: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     marginTop: 8,
@@ -814,12 +815,12 @@ const styles = StyleSheet.create({
   stockInfoText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     flex: 1,
   },
   skuText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   promptContainer: {
@@ -829,13 +830,13 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 16,
     paddingHorizontal: 20,
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
     borderRadius: 12,
     marginBottom: 16,
   },
   promptText: {
     fontSize: 13,
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '600',
     flex: 1,
   },
@@ -845,12 +846,12 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 32,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
     gap: 12,
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
@@ -859,14 +860,14 @@ const styles = StyleSheet.create({
   cancelText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#4B5563',
+    color: colors.neutral[600],
     letterSpacing: 0.2,
   },
   confirmButton: {
     flex: 2,
     borderRadius: 14,
     overflow: 'hidden',
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -886,16 +887,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 16,
     gap: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   confirmText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.3,
   },
   confirmTextDisabled: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 });
 

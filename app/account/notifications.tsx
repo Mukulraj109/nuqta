@@ -14,6 +14,7 @@ import notificationService from '../../services/notificationService';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { NotificationListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface PushNotifications {
   enabled: boolean;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, Platform } from 'react-native';
 import SkeletonCard from '@/components/common/SkeletonCard';
+import { colors } from '@/constants/theme';
 
 /**
  * Homepage Skeleton
@@ -154,7 +155,7 @@ export default function HomepageSkeleton() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingTop: Platform.OS === 'ios' ? 56 : 50,
   },
 });

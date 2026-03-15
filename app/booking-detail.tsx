@@ -23,6 +23,7 @@ import CashbackStatusBadge from '@/components/travel/CashbackStatusBadge';
 import { useRegion } from '@/contexts/RegionContext';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const TRAVEL_SLUGS = ['flights', 'hotels', 'trains', 'bus', 'cab', 'packages'];
 

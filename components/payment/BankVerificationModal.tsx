@@ -16,6 +16,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import paymentVerificationService from '@/services/paymentVerificationService';
 import type { BankVerificationResponse, MicroDepositVerification } from '@/types/paymentVerification.types';
+import { colors } from '@/constants/theme';
 
 interface BankVerificationModalProps {
   visible: boolean;
@@ -126,7 +127,7 @@ function BankVerificationModal({
     if (step === 'initiating' && isLoading) {
       return (
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#8B5CF6" />
+          <ActivityIndicator size="large" color={colors.brand.purpleLight} />
           <ThemedText style={styles.loadingText}>Initiating bank verification...</ThemedText>
         </View>
       );
@@ -137,7 +138,7 @@ function BankVerificationModal({
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           {/* Info Card */}
           <View style={styles.infoCard}>
-            <Ionicons name="information-circle" size={32} color="#3B82F6" />
+            <Ionicons name="information-circle" size={32} color={colors.infoScale[400]} />
             <ThemedText style={styles.infoTitle}>Micro-Deposit Verification</ThemedText>
             <ThemedText style={styles.infoText}>{verificationData.instructionsText}</ThemedText>
           </View>
@@ -180,7 +181,7 @@ function BankVerificationModal({
           {/* Expected Date */}
           {verificationData.depositsExpectedBy && (
             <View style={styles.dateCard}>
-              <Ionicons name="calendar" size={20} color="#8B5CF6" />
+              <Ionicons name="calendar" size={20} color={colors.brand.purpleLight} />
               <View style={styles.dateContent}>
                 <ThemedText style={styles.dateLabel}>Expected by:</ThemedText>
                 <ThemedText style={styles.dateText}>
@@ -202,11 +203,11 @@ function BankVerificationModal({
             </ThemedText>
 
             <View style={styles.inputContainer}>
-              <Ionicons name="cash" size={20} color="#8B5CF6" style={styles.inputIcon} />
+              <Ionicons name="cash" size={20} color={colors.brand.purpleLight} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
                 placeholder="First deposit amount (e.g., 2.45)"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={amount1}
                 onChangeText={setAmount1}
                 keyboardType="decimal-pad"
@@ -215,11 +216,11 @@ function BankVerificationModal({
             </View>
 
             <View style={styles.inputContainer}>
-              <Ionicons name="cash" size={20} color="#8B5CF6" style={styles.inputIcon} />
+              <Ionicons name="cash" size={20} color={colors.brand.purpleLight} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
                 placeholder="Second deposit amount (e.g., 5.78)"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={amount2}
                 onChangeText={setAmount2}
                 keyboardType="decimal-pad"
@@ -229,7 +230,7 @@ function BankVerificationModal({
 
             {error && (
               <View style={styles.errorBanner}>
-                <Ionicons name="alert-circle" size={20} color="#EF4444" />
+                <Ionicons name="alert-circle" size={20} color={colors.error} />
                 <ThemedText style={styles.errorText}>{error}</ThemedText>
               </View>
             )}
@@ -250,7 +251,7 @@ function BankVerificationModal({
 
           {/* Help Text */}
           <View style={styles.helpCard}>
-            <Ionicons name="help-circle" size={20} color="#6B7280" />
+            <Ionicons name="help-circle" size={20} color={colors.neutral[500]} />
             <ThemedText style={styles.helpText}>
               Can't find the deposits? They may take up to {verificationData.estimatedTime}. Check your bank statement or contact support.
             </ThemedText>
@@ -262,7 +263,7 @@ function BankVerificationModal({
     if (step === 'verifying' && isLoading) {
       return (
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#8B5CF6" />
+          <ActivityIndicator size="large" color={colors.brand.purpleLight} />
           <ThemedText style={styles.loadingText}>Verifying amounts...</ThemedText>
         </View>
       );
@@ -277,7 +278,7 @@ function BankVerificationModal({
         {/* Header */}
         <View style={styles.header}>
           <Pressable onPress={onClose} style={styles.closeButton}>
-            <Ionicons name="close" size={24} color="#1F2937" />
+            <Ionicons name="close" size={24} color={colors.neutral[800]} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Bank Verification</ThemedText>
           <View style={styles.closeButton} />
@@ -287,7 +288,7 @@ function BankVerificationModal({
 
         {/* Security Info */}
         <View style={styles.securityInfo}>
-          <Ionicons name="lock-closed" size={16} color="#6B7280" />
+          <Ionicons name="lock-closed" size={16} color={colors.neutral[500]} />
           <ThemedText style={styles.securityText}>
             Your bank details are encrypted and secure
           </ThemedText>
@@ -300,7 +301,7 @@ function BankVerificationModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   header: {
     flexDirection: 'row',
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     backgroundColor: 'white',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   closeButton: {
     width: 40,
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   content: {
     flex: 1,
@@ -337,13 +338,13 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 16,
     textAlign: 'center',
   },
 
   infoCard: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     borderRadius: 12,
     padding: 20,
     alignItems: 'center',
@@ -352,13 +353,13 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 12,
     textAlign: 'center',
   },
   infoText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 8,
     textAlign: 'center',
     lineHeight: 20,
@@ -373,12 +374,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 16,
   },
   sectionSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 16,
   },
   timelineItem: {
@@ -389,7 +390,7 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     marginTop: 4,
     marginRight: 12,
   },
@@ -399,12 +400,12 @@ const styles = StyleSheet.create({
   timelineTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   timelineText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
 
@@ -421,13 +422,13 @@ const styles = StyleSheet.create({
   },
   dateLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 2,
   },
   dateText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
 
   inputSection: {
@@ -439,10 +440,10 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     paddingHorizontal: 12,
     marginBottom: 12,
   },
@@ -453,13 +454,13 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 48,
     fontSize: 16,
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
 
   errorBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     borderRadius: 8,
     padding: 12,
     marginTop: 8,
@@ -467,12 +468,12 @@ const styles = StyleSheet.create({
   errorText: {
     flex: 1,
     fontSize: 13,
-    color: '#EF4444',
+    color: colors.error,
     marginLeft: 8,
   },
 
   verifyButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
@@ -489,7 +490,7 @@ const styles = StyleSheet.create({
 
   helpCard: {
     flexDirection: 'row',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
@@ -497,7 +498,7 @@ const styles = StyleSheet.create({
   helpText: {
     flex: 1,
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 12,
     lineHeight: 18,
   },
@@ -510,11 +511,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: 'white',
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   securityText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 8,
   },
 });

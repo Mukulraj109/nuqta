@@ -19,6 +19,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import authService from '@/services/authApi';
+import { colors } from '@/constants/theme';
 
 type RecoveryMethod = 'phone' | 'email';
 type Step = 'method' | 'input' | 'otp' | 'success';
@@ -188,7 +189,7 @@ export default function AccountRecoveryPage() {
         disabled={!input || loading}
       >
         {loading ? (
-          <ActivityIndicator color="#FFF" />
+          <ActivityIndicator color={colors.background.primary} />
         ) : (
           <ThemedText style={styles.buttonText}>Send Verification Code</ThemedText>
         )}
@@ -229,7 +230,7 @@ export default function AccountRecoveryPage() {
         disabled={otp.length < 6 || loading}
       >
         {loading ? (
-          <ActivityIndicator color="#FFF" />
+          <ActivityIndicator color={colors.background.primary} />
         ) : (
           <ThemedText style={styles.buttonText}>Verify</ThemedText>
         )}
@@ -273,7 +274,7 @@ export default function AccountRecoveryPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.closeButton} onPress={() => router.back()}>
-            <Ionicons name="close" size={24} color="#FFF" />
+            <Ionicons name="close" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Account Recovery</ThemedText>
           <View style={styles.placeholder} />
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -461,7 +462,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   resendContainer: {
     flexDirection: 'row',

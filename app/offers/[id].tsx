@@ -18,6 +18,7 @@ import logger from '@/utils/logger';
 import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Zone types that require verification
 const ZONE_VERIFICATION_MAP: Record<string, string> = {
@@ -607,7 +608,7 @@ export default function OfferDetailPage() {
               <ThemedText style={styles.storeName}>{offer.store.name}</ThemedText>
               {offer.store.rating && (
                 <View style={styles.storeRating}>
-                  <Ionicons name="star" size={14} color="#FFD700" />
+                  <Ionicons name="star" size={14} color={colors.brand.goldBright} />
                   <ThemedText style={styles.ratingText}>{offer.store.rating.toFixed(1)}</ThemedText>
                 </View>
               )}
@@ -1025,7 +1026,7 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   categoryBadge: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.md,
@@ -1036,7 +1037,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   exclusiveBadge: {
-    backgroundColor: '#EDE9FE',
+    backgroundColor: colors.tint.purple,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
@@ -1105,7 +1106,7 @@ const styles = StyleSheet.create({
     height: 48,
   },
   storeLogoPlaceholder: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -1132,7 +1133,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: Spacing.md,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     borderRadius: BorderRadius.md,
     gap: Spacing.sm,
   },
@@ -1418,7 +1419,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   voucherCodeBox: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     padding: Spacing.base,
     borderRadius: BorderRadius.md,
     borderWidth: 2,
@@ -1452,12 +1453,12 @@ const styles = StyleSheet.create({
   verificationBannerRequired: {
     backgroundColor: Colors.errorScale[100],
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: colors.errorScale[200],
   },
   verificationBannerPending: {
     backgroundColor: Colors.warningScale[50],
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: colors.warningScale[200],
   },
   verificationBannerVerified: {
     backgroundColor: Colors.successScale[100],

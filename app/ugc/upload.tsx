@@ -21,6 +21,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useAuth } from '@/contexts/AuthContext';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface UploadForm {
   mediaUri: string | null;
@@ -179,7 +180,7 @@ export default function UGCUploadScreen() {
           accessibilityRole="button"
           accessibilityHint="Closes create post screen"
         >
-          <Ionicons name="close" size={28} color="#333" />
+          <Ionicons name="close" size={28} color={colors.darkGray} />
         </Pressable>
 
         <ThemedText style={styles.headerTitle}>Create Post</ThemedText>
@@ -227,7 +228,7 @@ export default function UGCUploadScreen() {
                 accessibilityHint="Opens gallery to select photo or video"
               >
                 <LinearGradient
-                  colors={['#8B5CF6', '#A855F7']}
+                  colors={[colors.brand.purpleLight, colors.brand.purpleMedium]}
                   style={styles.mediaButtonGradient}
                 >
                   <Ionicons name="images" size={32} color={Colors.text.inverse} />
@@ -243,7 +244,7 @@ export default function UGCUploadScreen() {
                 accessibilityHint="Opens camera to take a photo"
               >
                 <LinearGradient
-                  colors={['#8B5CF6', '#A855F7']}
+                  colors={[colors.brand.purpleLight, colors.brand.purpleMedium]}
                   style={styles.mediaButtonGradient}
                 >
                   <Ionicons name="camera" size={32} color={Colors.text.inverse} />
@@ -260,7 +261,7 @@ export default function UGCUploadScreen() {
           <TextInput
             style={styles.captionInput}
             placeholder="Write a caption..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={form.caption}
             onChangeText={(text) => setForm({ ...form, caption: text })}
             multiline
@@ -279,7 +280,7 @@ export default function UGCUploadScreen() {
             <TextInput
               style={styles.tagInput}
               placeholder="Add tags (e.g., fashion, tech)"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               value={tagInput}
               onChangeText={setTagInput}
               onSubmitEditing={handleAddTag}
@@ -320,7 +321,7 @@ export default function UGCUploadScreen() {
           <TextInput
             style={styles.locationInput}
             placeholder="Add location"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={form.location}
             onChangeText={(text) => setForm({ ...form, location: text })}
           />
@@ -376,7 +377,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.brand.purple,
   },
   postButtonDisabled: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   postButtonText: {
     color: Colors.text.inverse,
@@ -481,7 +482,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
   },
   tagText: {
     ...Typography.body,

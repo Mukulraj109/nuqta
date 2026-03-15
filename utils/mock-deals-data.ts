@@ -1,4 +1,5 @@
 import { Deal, DealCategory, StoreDealConfig } from '@/types/deals';
+import { colors } from '@/constants/theme';
 
 // Mock deals data matching the design screenshot and additional variety
 export const mockDeals: Deal[] = [
@@ -157,7 +158,7 @@ export const mockDeals: Deal[] = [
     applicableProducts: ['Fashion', 'Home'],
     badge: {
       text: 'Save 50%',
-      backgroundColor: '#FEE2E2',
+      backgroundColor: colors.errorScale[100],
       textColor: '#991B1B'
     }
   },
@@ -185,7 +186,7 @@ export const mockDeals: Deal[] = [
     badge: {
       text: 'VIP 25%',
       backgroundColor: '#F3E8FF',
-      textColor: '#7C3AED'
+      textColor: colors.brand.purple
     }
   }
 ];
@@ -249,7 +250,7 @@ export const dealCategoryInfo: Record<DealCategory, { name: string; icon: string
   'instant-discount': {
     name: 'Instant Discount',
     icon: 'flash-outline',
-    color: '#7C3AED'
+    color: colors.brand.purple
   },
   'cashback': {
     name: 'Cashback',
@@ -274,7 +275,7 @@ export const dealCategoryInfo: Record<DealCategory, { name: string; icon: string
   'loyalty': {
     name: 'Loyalty',
     icon: 'diamond-outline',
-    color: '#7C3AED'
+    color: colors.brand.purple
   },
   'clearance': {
     name: 'Clearance',

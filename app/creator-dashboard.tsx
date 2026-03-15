@@ -21,6 +21,7 @@ import { platformAlert } from '@/utils/platformAlert';
 import { ProfileSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const NUQTA_COIN = BRAND.COIN_IMAGE;
 
@@ -31,11 +32,11 @@ const formatCount = (count: number): string => {
 };
 
 const tierColors: Record<string, { bg: string; text: string; border: string }> = {
-  starter: { bg: '#ECFDF5', text: '#065F46', border: Colors.success },
-  bronze: { bg: Colors.warningScale[50], text: '#92400E', border: Colors.warning },
-  silver: { bg: Colors.background.secondary, text: '#374151', border: Colors.text.tertiary },
-  gold: { bg: '#FFF7ED', text: '#9A3412', border: '#F97316' },
-  platinum: { bg: '#EDE9FE', text: '#5B21B6', border: '#8B5CF6' },
+  starter: { bg: colors.tint.greenLight, text: '#065F46', border: Colors.success },
+  bronze: { bg: Colors.warningScale[50], text: colors.brand.amberDark, border: Colors.warning },
+  silver: { bg: Colors.background.secondary, text: colors.neutral[700], border: Colors.text.tertiary },
+  gold: { bg: colors.tint.orange, text: '#9A3412', border: colors.brand.orange },
+  platinum: { bg: colors.tint.purple, text: '#5B21B6', border: colors.brand.purpleLight },
 };
 
 export default function CreatorDashboard() {
@@ -375,14 +376,14 @@ export default function CreatorDashboard() {
                       styles.pickStatusBadge,
                       pick.status === 'approved' && { backgroundColor: Colors.successScale[100] },
                       pick.status === 'pending_review' && { backgroundColor: Colors.warningScale[50] },
-                      pick.status === 'pending_merchant' && { backgroundColor: '#FFF7ED' },
+                      pick.status === 'pending_merchant' && { backgroundColor: colors.tint.orange },
                       pick.status === 'rejected' && { backgroundColor: Colors.errorScale[100] },
                     ]}>
                       <Text style={[
                         styles.pickStatusText,
                         pick.status === 'approved' && { color: Colors.success },
                         pick.status === 'pending_review' && { color: Colors.gold },
-                        pick.status === 'pending_merchant' && { color: '#EA580C' },
+                        pick.status === 'pending_merchant' && { color: colors.brand.orangeDark },
                         pick.status === 'rejected' && { color: Colors.error },
                       ]}>
                         {pick.status === 'pending_merchant' ? 'Awaiting Store' :

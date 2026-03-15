@@ -2,6 +2,7 @@
 // Server-driven scratch card game with fraud-proof prize generation.
 // Flow: eligibility check → create session → scratch animation → play (server prize) → wallet credit → confirmation
 
+import { colors } from '@/constants/theme';
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View,
@@ -23,7 +24,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useGamification } from '@/contexts/GamificationContext';
 import { platformAlert, platformAlertSimple } from '@/utils/platformAlert';
 import { useScratchCard } from '@/hooks/useScratchCard';
-import GameErrorBoundary from '@/components/common/GameErrorBoundary';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 import { GamePageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
@@ -235,7 +236,7 @@ export default function ScratchCardPage() {
   /** Unavailable — cooldown, daily limit, or disabled */
   if (cardState === 'unavailable') {
     return (
-      <GameErrorBoundary gameName="Scratch Card" onReturnToGames={() => router.push('/games' as any)}>
+      <FeatureErrorBoundary featureName="Scratch Card" onSecondaryAction={() => router.push('/games' as any)} secondaryActionLabel="Back to Games" secondaryActionIcon="game-controller">
         <ThemedView style={styles.container}>
           <StatusBar barStyle="light-content" backgroundColor={Colors.brand.purple} />
           {renderHeader()}
@@ -274,14 +275,14 @@ export default function ScratchCardPage() {
             </Pressable>
           </View>
         </ThemedView>
-      </GameErrorBoundary>
+      </FeatureErrorBoundary>
     );
   }
 
   /** Claim failed — retry option */
   if (cardState === 'claimFailed') {
     return (
-      <GameErrorBoundary gameName="Scratch Card" onReturnToGames={() => router.push('/games' as any)}>
+      <FeatureErrorBoundary featureName="Scratch Card" onSecondaryAction={() => router.push('/games' as any)} secondaryActionLabel="Back to Games" secondaryActionIcon="game-controller">
         <ThemedView style={styles.container}>
           <StatusBar barStyle="light-content" backgroundColor={Colors.brand.purple} />
           {renderHeader()}
@@ -299,14 +300,16 @@ export default function ScratchCardPage() {
             </Pressable>
           </View>
         </ThemedView>
-      </GameErrorBoundary>
+      </FeatureErrorBoundary>
     );
   }
 
   return (
-    <GameErrorBoundary
-      gameName="Scratch Card"
-      onReturnToGames={() => router.push('/games' as any)}
+    <FeatureErrorBoundary
+      featureName="Scratch Card"
+      onSecondaryAction={() => router.push('/games' as any)}
+      secondaryActionLabel="Back to Games"
+      secondaryActionIcon="game-controller"
       onReset={() => checkEligibility()}
     >
       <ThemedView style={styles.container}>
@@ -443,7 +446,7 @@ export default function ScratchCardPage() {
           )}
         </View>
       </ThemedView>
-    </GameErrorBoundary>
+    </FeatureErrorBoundary>
   );
 }
 
@@ -498,7 +501,7 @@ const styles = StyleSheet.create({
   remainingBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EDE9FE',
+    backgroundColor: colors.tint.purple,
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.xl,
@@ -598,7 +601,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   disabledButton: {
-    backgroundColor: '#A78BFA',
+    backgroundColor: colors.brand.purpleSoft,
     shadowOpacity: 0.1,
   },
   actionButtonText: {

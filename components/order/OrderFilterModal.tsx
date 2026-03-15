@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { OrderFilter, OrderStatus } from '@/types/order';
+import { colors } from '@/constants/theme';
 
 interface OrderFilterModalProps {
   visible: boolean;
@@ -112,7 +113,7 @@ const OrderFilterModal: React.FC<OrderFilterModalProps> = ({
                 {option.label}
               </Text>
               {isSelected && (
-                <Ionicons name="checkmark" size={16} color="#7C3AED" />
+                <Ionicons name="checkmark" size={16} color={colors.brand.purple} />
               )}
             </Pressable>
           );
@@ -129,7 +130,7 @@ const OrderFilterModal: React.FC<OrderFilterModalProps> = ({
       onRequestClose={onClose}
       accessibilityViewIsModal={true}
     >
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background.primary} />
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
@@ -140,7 +141,7 @@ const OrderFilterModal: React.FC<OrderFilterModalProps> = ({
             accessibilityRole="button"
             accessibilityHint="Double tap to close filter options"
           >
-            <Ionicons name="close" size={24} color="#374151" />
+            <Ionicons name="close" size={24} color={colors.neutral[700]} />
           </Pressable>
           <Text style={styles.headerTitle}>Filter Orders</Text>
           <Pressable
@@ -207,7 +208,7 @@ const OrderFilterModal: React.FC<OrderFilterModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   closeButton: {
     padding: 4,
@@ -224,14 +225,14 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   resetButton: {
     padding: 4,
   },
   resetButtonText: {
     fontSize: 16,
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '500',
   },
   content: {
@@ -244,11 +245,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 12,
   },
   optionsContainer: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     overflow: 'hidden',
   },
@@ -259,17 +260,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   optionSelected: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
   },
   optionText: {
     fontSize: 16,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   optionTextSelected: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '500',
   },
   footer: {
@@ -277,32 +278,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     gap: 12,
   },
   cancelButton: {
     flex: 1,
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
   },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   applyButton: {
     flex: 1,
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     alignItems: 'center',
   },
   applyButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

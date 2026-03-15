@@ -1,4 +1,5 @@
 // components/ScratchCardOffer.tsx
+import { colors } from '@/constants/theme';
 import React from "react";
 import { View, StyleSheet, Pressable, Text } from "react-native";
 import CachedImage from '@/components/ui/CachedImage';
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   title: {
-    color: '#333',
+    color: colors.darkGray,
     fontSize: 14,
     fontWeight: '600',
     marginBottom: 2,
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   inactiveText: {
-    color: '#666',
+    color: colors.midGray,
     fontSize: 16,
     fontWeight: '600',
   },

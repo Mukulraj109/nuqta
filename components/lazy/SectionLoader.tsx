@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface SectionLoaderProps {
   text?: string;
@@ -17,7 +18,7 @@ interface SectionLoaderProps {
 export default function SectionLoader({
   text = 'Loading...',
   size = 'large',
-  color = '#6366F1'
+  color = colors.brand.indigo
 }: SectionLoaderProps) {
   return (
     <View style={styles.container}>
@@ -37,6 +38,6 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });

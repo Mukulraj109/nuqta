@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Slider from '@/components/common/CrossPlatformSlider';
 import { ThemedText } from '@/components/ThemedText';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface PointsSliderProps {
   availablePoints: number;
@@ -53,7 +54,7 @@ function PointsSlider({
           accessible={true}
           accessibilityLabel={`${availablePoints} points available`}
         >
-          <Ionicons name="diamond" size={14} color="#F59E0B" />
+          <Ionicons name="diamond" size={14} color={colors.warningScale[400]} />
           <ThemedText style={styles.availableText}>{availablePoints} available</ThemedText>
         </View>
       </View>
@@ -65,13 +66,13 @@ function PointsSlider({
         accessibilityRole="text"
       >
         <View style={styles.selectedPoints}>
-          <Ionicons name="diamond" size={24} color="#8B5CF6" />
+          <Ionicons name="diamond" size={24} color={colors.brand.purpleLight} />
           <ThemedText style={styles.selectedValue}>{selectedPoints}</ThemedText>
           <ThemedText style={styles.selectedLabel}>points</ThemedText>
         </View>
 
         <View style={styles.equals}>
-          <Ionicons name="arrow-forward" size={20} color="#6B7280" />
+          <Ionicons name="arrow-forward" size={20} color={colors.neutral[500]} />
         </View>
 
         <View style={styles.selectedDiscount}>
@@ -88,9 +89,9 @@ function PointsSlider({
           step={10}
           value={selectedPoints}
           onValueChange={handleValueChange}
-          minimumTrackTintColor="#8B5CF6"
-          maximumTrackTintColor="#E5E7EB"
-          thumbTintColor="#8B5CF6"
+          minimumTrackTintColor={colors.brand.purpleLight}
+          maximumTrackTintColor={colors.neutral[200]}
+          thumbTintColor={colors.brand.purpleLight}
           accessible={true}
           accessibilityLabel="Points slider"
           accessibilityHint={`Adjust to use between 0 and ${maxUsablePoints} points. Currently using ${selectedPoints} points for ${discount.toFixed(2)} rupees discount.`}
@@ -116,7 +117,7 @@ function PointsSlider({
           accessibilityRole="text"
           accessibilityLabel="Information: Points will be deducted after order confirmation"
         >
-          <Ionicons name="information-circle" size={16} color="#6B7280" />
+          <Ionicons name="information-circle" size={16} color={colors.neutral[500]} />
           <ThemedText style={styles.infoText}>
             Points will be deducted after order confirmation
           </ThemedText>
@@ -128,7 +129,7 @@ function PointsSlider({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
   },
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   availablePoints: {
     flexDirection: 'row',
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
   },
   availableText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   selectedContainer: {
     flexDirection: 'row',
@@ -166,12 +167,12 @@ const styles = StyleSheet.create({
   selectedValue: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     marginTop: 4,
   },
   selectedLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   equals: {
@@ -185,11 +186,11 @@ const styles = StyleSheet.create({
   discountValue: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   discountLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   sliderContainer: {
@@ -206,20 +207,20 @@ const styles = StyleSheet.create({
   },
   markText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   info: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
     padding: 10,
     borderRadius: 8,
   },
   infoText: {
     flex: 1,
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

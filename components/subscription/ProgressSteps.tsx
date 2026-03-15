@@ -5,6 +5,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 export interface Step {
   id: string;
@@ -45,7 +46,7 @@ function ProgressSteps({ steps, currentStep }: ProgressStepsProps) {
             ]}
           >
             {isCompleted ? (
-              <Ionicons name="checkmark" size={20} color="#FFFFFF" />
+              <Ionicons name="checkmark" size={20} color={colors.background.primary} />
             ) : (
               <ThemedText
                 style={[
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
     paddingHorizontal: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   stepContainer: {
     marginBottom: 24,
@@ -113,23 +114,23 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   stepCircleCompleted: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
   },
   stepCircleCurrent: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   stepCircleUpcoming: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   stepNumber: {
     fontSize: 16,
     fontWeight: 'bold',
   },
   stepNumberCurrent: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   stepNumberUpcoming: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   connector: {
     position: 'absolute',
@@ -137,11 +138,11 @@ const styles = StyleSheet.create({
     top: 40,
     width: 2,
     height: 40,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     zIndex: 1,
   },
   connectorCompleted: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
   },
   stepTitle: {
     fontSize: 14,
@@ -149,10 +150,10 @@ const styles = StyleSheet.create({
   },
   stepTitleCurrent: {
     fontWeight: 'bold',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   stepTitleUpcoming: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 });
 

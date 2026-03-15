@@ -22,13 +22,14 @@ import { campaignsApi, Campaign, CampaignDeal } from '@/services/campaignsApi';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const DEAL_CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
 
 const COLORS = {
   white: Colors.background.primary,
-  navy: '#0B2240',
+  navy: colors.brand.navyDark,
   navyLight: '#1A365D',
   gray50: Colors.background.secondary,
   gray100: Colors.background.secondary,
@@ -50,13 +51,13 @@ const COLORS = {
   blue100: Colors.infoScale[50],
   blue500: Colors.info,
   purple50: '#FAF5FF',
-  purple100: '#F3E8FF',
+  purple100: colors.tint.pink,
   purple500: Colors.brand.purple,
-  pink500: '#EC4899',
+  pink500: colors.brand.pink,
   red50: Colors.errorScale[50],
   red100: Colors.errorScale[50],
   red500: Colors.error,
-  cyan500: '#06B6D4',
+  cyan500: colors.brand.cyan,
   gold: Colors.gold,
 };
 
@@ -227,7 +228,7 @@ const CampaignDetailPage: React.FC = () => {
             <CachedImage source={campaign.bannerImage} style={styles.bannerImage} />
           ) : (
             <LinearGradient
-              colors={campaign.gradientColors || ['#22C55E', '#14B8A6']}
+              colors={campaign.gradientColors || [colors.success, colors.tealGreen]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.bannerGradient}

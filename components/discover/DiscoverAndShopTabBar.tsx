@@ -12,16 +12,17 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { DiscoverTabType } from '@/types/discover.types';
+import { colors } from '@/constants/theme';
 
 // Nuqta Brand Colors
 const NUQTA_COLORS = {
-  nileBlue: '#1a3a52',
+  nileBlue: colors.nileBlue,
   nileBlueLight: '#2a4a62',
-  mustard: '#ffcd57',
-  primaryGold: '#FFC857',
-  navy: '#0B2240',
-  gray: '#9CA3AF',
-  lightGray: '#F3F4F6',
+  mustard: colors.lightMustard,
+  primaryGold: colors.brand.goldWarm,
+  navy: colors.brand.navyDark,
+  gray: colors.neutral[400],
+  lightGray: colors.neutral[100],
 };
 
 interface Tab {
@@ -93,7 +94,7 @@ function DiscoverAndShopTabBar({
                   <Ionicons
                     name={tab.activeIcon as any}
                     size={16}
-                    color="#FFFFFF"
+                    color={colors.background.primary}
                   />
                   <Text style={styles.activeTabLabel}>{tab.label}</Text>
                 </LinearGradient>
@@ -117,7 +118,7 @@ function DiscoverAndShopTabBar({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 6,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
   activeTabLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

@@ -38,6 +38,7 @@ import {
   Gradients,
 } from '@/constants/DesignSystem';
 import { CardGridSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -247,7 +248,7 @@ export default function CardOffersPage() {
           accessibilityRole="button"
         >
           <LinearGradient
-            colors={['#FFFFFF', '#F8F5FF']}
+            colors={[colors.background.primary, '#F8F5FF']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.offerCardGradient}
@@ -265,7 +266,7 @@ export default function CardOffersPage() {
                   colors={Gradients.purplePrimary as unknown as string[]}
                   style={styles.cardIconGradient}
                 >
-                  <MaterialCommunityIcons name="credit-card-chip-outline" size={24} color="#FFF" />
+                  <MaterialCommunityIcons name="credit-card-chip-outline" size={24} color={colors.background.primary} />
                 </LinearGradient>
               </View>
 
@@ -352,11 +353,11 @@ export default function CardOffersPage() {
                     style={styles.applyBtnGradient}
                   >
                     {applyingOffer ? (
-                      <ActivityIndicator size="small" color="#FFF" />
+                      <ActivityIndicator size="small" color={colors.background.primary} />
                     ) : (
                       <>
                         <ThemedText style={styles.applyBtnText}>Apply Offer</ThemedText>
-                        <Ionicons name="arrow-forward" size={16} color="#FFF" />
+                        <Ionicons name="arrow-forward" size={16} color={colors.background.primary} />
                       </>
                     )}
                   </LinearGradient>
@@ -394,7 +395,7 @@ export default function CardOffersPage() {
               onPress={() => router.back()}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <Ionicons name="arrow-back" size={24} color="#FFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
 
             <View style={styles.headerTitleContainer}>
@@ -405,7 +406,7 @@ export default function CardOffersPage() {
             </View>
 
             <View style={styles.headerRight}>
-              <MaterialCommunityIcons name="credit-card-multiple" size={28} color="#FFF" />
+              <MaterialCommunityIcons name="credit-card-multiple" size={28} color={colors.background.primary} />
             </View>
           </View>
 
@@ -440,7 +441,7 @@ export default function CardOffersPage() {
             <ThemedText style={styles.errorTitle}>Oops! Something went wrong</ThemedText>
             <ThemedText style={styles.errorText}>{error}</ThemedText>
             <Pressable style={styles.retryBtn} onPress={fetchCardOffers}>
-              <Ionicons name="refresh" size={18} color="#FFF" />
+              <Ionicons name="refresh" size={18} color={colors.background.primary} />
               <ThemedText style={styles.retryBtnText}>Try Again</ThemedText>
             </Pressable>
           </View>
@@ -513,7 +514,7 @@ export default function CardOffersPage() {
                       style={styles.modalCloseBtn}
                       onPress={() => setShowOfferDetails(false)}
                     >
-                      <Ionicons name="close" size={24} color="#FFF" />
+                      <Ionicons name="close" size={24} color={colors.background.primary} />
                     </Pressable>
 
                     <View style={styles.modalHeaderContent}>
@@ -644,11 +645,11 @@ export default function CardOffersPage() {
                           style={styles.modalApplyBtnGradient}
                         >
                           {applyingOffer ? (
-                            <ActivityIndicator size="small" color="#FFF" />
+                            <ActivityIndicator size="small" color={colors.background.primary} />
                           ) : (
                             <>
                               <ThemedText style={styles.modalApplyBtnText}>Apply This Offer</ThemedText>
-                              <Ionicons name="checkmark-circle" size={20} color="#FFF" />
+                              <Ionicons name="checkmark-circle" size={20} color={colors.background.primary} />
                             </>
                           )}
                         </LinearGradient>
@@ -707,7 +708,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...Typography.h2,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   headerSubtitle: {
@@ -739,7 +740,7 @@ const styles = StyleSheet.create({
   },
   orderAmount: {
     ...Typography.h2,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '800',
     marginTop: 2,
   },
@@ -755,7 +756,7 @@ const styles = StyleSheet.create({
   },
   offersCount: {
     ...Typography.h1,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '800',
   },
   offersLabel: {
@@ -771,7 +772,7 @@ const styles = StyleSheet.create({
     padding: Spacing.xl,
   },
   loadingCard: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: BorderRadius.lg,
     padding: Spacing['2xl'],
     alignItems: 'center',
@@ -822,7 +823,7 @@ const styles = StyleSheet.create({
   },
   retryBtnText: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
   },
 
   // Empty
@@ -1036,7 +1037,7 @@ const styles = StyleSheet.create({
   },
   applyBtnText: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   lockedContainer: {
@@ -1072,7 +1073,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContent: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: BorderRadius['2xl'],
     borderTopRightRadius: BorderRadius['2xl'],
     maxHeight: '85%',
@@ -1106,7 +1107,7 @@ const styles = StyleSheet.create({
   modalDiscountText: {
     fontSize: 40,
     fontWeight: '800',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   modalDiscountLabel: {
     ...Typography.h4,
@@ -1115,7 +1116,7 @@ const styles = StyleSheet.create({
   },
   modalOfferName: {
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '600',
     textAlign: 'center',
     marginTop: Spacing.sm,
@@ -1197,7 +1198,7 @@ const styles = StyleSheet.create({
   },
   modalApplyBtnText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   modalLockedFooter: {
     alignItems: 'center',

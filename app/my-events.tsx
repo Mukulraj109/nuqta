@@ -26,6 +26,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import eventsApiService from '@/services/eventsApi';
 import { alertOk } from '@/utils/alert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const C = Colors;
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -55,10 +56,10 @@ interface FavoriteEvent {
 }
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string; icon: string }> = {
-  pending: { color: Colors.warning, bg: '#FFFBEB', icon: 'time-outline' },
-  confirmed: { color: Colors.success, bg: '#ECFDF5', icon: 'checkmark-circle-outline' },
-  completed: { color: Colors.info, bg: '#EFF6FF', icon: 'checkmark-done-outline' },
-  cancelled: { color: Colors.error, bg: '#FEF2F2', icon: 'close-circle-outline' },
+  pending: { color: Colors.warning, bg: colors.tint.amber, icon: 'time-outline' },
+  confirmed: { color: Colors.success, bg: colors.tint.greenLight, icon: 'checkmark-circle-outline' },
+  completed: { color: Colors.info, bg: colors.tint.blue, icon: 'checkmark-done-outline' },
+  cancelled: { color: Colors.error, bg: colors.errorScale[50], icon: 'close-circle-outline' },
 };
 
 export default function MyEventsPage() {
@@ -302,7 +303,7 @@ export default function MyEventsPage() {
 
       {/* Header */}
       <LinearGradient
-        colors={['#8B5CF6', '#7C3AED']}
+        colors={[colors.brand.purpleLight, colors.brand.purple]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}
@@ -420,7 +421,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   tabActive: {
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
   },
   tabText: {
     ...Typography.body,
@@ -486,7 +487,7 @@ const styles = StyleSheet.create({
   rewardBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
     borderRadius: BorderRadius.sm,

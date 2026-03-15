@@ -12,6 +12,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface PayYourBillCardProps {
   storeId: string;
@@ -71,7 +72,7 @@ const PayYourBillCard: React.FC<PayYourBillCardProps> = ({
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={styles.iconContainer}>
-            <Ionicons name="receipt" size={24} color="#7C3AED" />
+            <Ionicons name="receipt" size={24} color={colors.brand.purple} />
           </View>
           <View>
             <Text style={styles.title}>Pay Your Bill</Text>
@@ -95,10 +96,10 @@ const PayYourBillCard: React.FC<PayYourBillCardProps> = ({
           disabled={loading !== null}
         >
           {loading === 'quick' ? (
-            <ActivityIndicator color="#FFFFFF" size="small" />
+            <ActivityIndicator color={colors.background.primary} size="small" />
           ) : (
             <>
-              <Ionicons name="flash" size={20} color="#FFFFFF" />
+              <Ionicons name="flash" size={20} color={colors.background.primary} />
               <Text style={styles.quickPayText}>Quick Pay</Text>
             </>
           )}
@@ -111,10 +112,10 @@ const PayYourBillCard: React.FC<PayYourBillCardProps> = ({
           disabled={loading !== null}
         >
           {loading === 'upload' ? (
-            <ActivityIndicator color="#7C3AED" size="small" />
+            <ActivityIndicator color={colors.brand.purple} size="small" />
           ) : (
             <>
-              <Ionicons name="cloud-upload" size={20} color="#7C3AED" />
+              <Ionicons name="cloud-upload" size={20} color={colors.brand.purple} />
               <Text style={styles.uploadText}>Upload Bill</Text>
             </>
           )}
@@ -123,7 +124,7 @@ const PayYourBillCard: React.FC<PayYourBillCardProps> = ({
 
       {/* Info Text */}
       <View style={styles.infoContainer}>
-        <Ionicons name="information-circle" size={16} color="#6B7280" />
+        <Ionicons name="information-circle" size={16} color={colors.neutral[500]} />
         <Text style={styles.infoText}>
           Upload your bill to get instant cashback and rewards
         </Text>
@@ -134,7 +135,7 @@ const PayYourBillCard: React.FC<PayYourBillCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 16,
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
   },
   header: {
     flexDirection: 'row',
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -170,15 +171,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   amountBadge: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
@@ -186,14 +187,14 @@ const styles = StyleSheet.create({
   },
   amountLabel: {
     fontSize: 11,
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '500',
     marginBottom: 2,
   },
   amountValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -210,35 +211,35 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   quickPayButton: {
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
   },
   uploadButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1.5,
-    borderColor: '#7C3AED',
+    borderColor: colors.brand.purple,
   },
   quickPayText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
   uploadText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   infoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     padding: 10,
     borderRadius: 8,
   },
   infoText: {
     flex: 1,
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 16,
   },
 });

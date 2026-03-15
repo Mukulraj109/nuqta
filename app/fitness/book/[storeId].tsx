@@ -28,6 +28,7 @@ import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { useRegion } from '@/contexts/RegionContext';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Booking types
@@ -400,7 +401,7 @@ const FitnessBookingPage: React.FC = () => {
           </View>
           {selectedPlan?.id === plan.id && (
             <View style={styles.selectedIndicator}>
-              <Ionicons name="checkmark-circle" size={24} color={'#F97316'} />
+              <Ionicons name="checkmark-circle" size={24} color={colors.brand.orange} />
             </View>
           )}
         </Pressable>
@@ -469,7 +470,7 @@ const FitnessBookingPage: React.FC = () => {
             </View>
             <View style={styles.classPrice}>
               <Text style={styles.classPriceText}>{currencySymbol}{cls.price}</Text>
-              {isSelected && <Ionicons name="checkmark-circle" size={20} color={'#F97316'} />}
+              {isSelected && <Ionicons name="checkmark-circle" size={20} color={colors.brand.orange} />}
             </View>
           </Pressable>
         );
@@ -647,7 +648,7 @@ const FitnessBookingPage: React.FC = () => {
         >
           {/* Header */}
           <LinearGradient
-            colors={['#F97316', '#EA580C']}
+            colors={[colors.brand.orange, colors.brand.orangeDark]}
             style={[styles.header, { paddingTop: Platform.OS === 'ios' ? insets.top : 16 }]}
           >
             <View style={styles.headerTop}>
@@ -709,7 +710,7 @@ const FitnessBookingPage: React.FC = () => {
              
             >
               <LinearGradient
-                colors={['#F97316', '#EA580C']}
+                colors={[colors.brand.orange, colors.brand.orangeDark]}
                 style={styles.bookButtonGradient}
               >
                 {submitting ? (
@@ -761,7 +762,7 @@ const FitnessBookingPage: React.FC = () => {
               </View>
               <Pressable style={styles.doneButton} onPress={handleSuccessClose}>
                 <LinearGradient
-                  colors={['#F97316', '#EA580C']}
+                  colors={[colors.brand.orange, colors.brand.orangeDark]}
                   style={styles.doneButtonGradient}
                 >
                   <Text style={styles.doneButtonText}>Done</Text>
@@ -790,7 +791,7 @@ const styles = StyleSheet.create({
 
   tabsContainer: { backgroundColor: Colors.background.primary, paddingVertical: Spacing.md, paddingHorizontal: Spacing.base, borderBottomWidth: 1, borderBottomColor: Colors.border.default },
   tab: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: Spacing.base, paddingVertical: 10, borderRadius: BorderRadius.xl, backgroundColor: Colors.background.secondary, marginRight: Spacing.sm },
-  tabActive: { backgroundColor: '#F97316' },
+  tabActive: { backgroundColor: colors.brand.orange },
   tabText: { fontSize: Typography.body.fontSize, fontWeight: '600', color: Colors.text.tertiary },
   tabTextActive: { color: Colors.text.inverse },
 
@@ -800,7 +801,7 @@ const styles = StyleSheet.create({
 
   // Membership Plans
   planCard: { backgroundColor: Colors.background.primary, borderRadius: BorderRadius.lg, padding: Spacing.base, marginBottom: Spacing.md, borderWidth: 2, borderColor: Colors.border.default, position: 'relative' },
-  planCardSelected: { borderColor: '#F97316' },
+  planCardSelected: { borderColor: colors.brand.orange },
   planCardPopular: { borderColor: Colors.brand.purple },
   popularBadge: { position: 'absolute', top: -1, right: 16, backgroundColor: Colors.brand.purple, paddingHorizontal: Spacing.md, paddingVertical: Spacing.xs, borderBottomLeftRadius: 8, borderBottomRightRadius: 8 },
   popularBadgeText: { fontSize: Typography.overline.fontSize, fontWeight: '700', color: Colors.text.inverse },
@@ -809,7 +810,7 @@ const styles = StyleSheet.create({
   planDuration: { fontSize: Typography.bodySmall.fontSize, color: Colors.text.tertiary, marginTop: 2 },
   planPriceContainer: { alignItems: 'flex-end' },
   planOriginalPrice: { fontSize: Typography.bodySmall.fontSize, color: Colors.text.tertiary, textDecorationLine: 'line-through' },
-  planPrice: { fontSize: 22, fontWeight: '700', color: '#F97316' },
+  planPrice: { fontSize: 22, fontWeight: '700', color: colors.brand.orange },
   planFeatures: { borderTopWidth: 1, borderTopColor: Colors.border.default, paddingTop: Spacing.md },
   featureRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginBottom: 6 },
   featureText: { fontSize: Typography.bodySmall.fontSize, color: Colors.text.tertiary, flex: 1 },
@@ -818,16 +819,16 @@ const styles = StyleSheet.create({
   // Date Selector
   dateScroll: { marginBottom: Spacing.sm },
   dateCard: { width: 60, height: 72, borderRadius: BorderRadius.md, backgroundColor: Colors.background.primary, alignItems: 'center', justifyContent: 'center', marginRight: Spacing.sm, borderWidth: 1.5, borderColor: Colors.border.default },
-  dateCardSelected: { borderColor: '#F97316', backgroundColor: '#F97316' },
+  dateCardSelected: { borderColor: colors.brand.orange, backgroundColor: colors.brand.orange },
   dateDay: { fontSize: Typography.caption.fontSize, fontWeight: '500', color: Colors.text.tertiary, textTransform: 'uppercase' },
   dateNumber: { fontSize: Typography.h3.fontSize, fontWeight: '700', color: Colors.nileBlue, marginVertical: 2 },
   dateTextSelected: { color: Colors.text.inverse },
-  todayDot: { width: 4, height: 4, borderRadius: 2, backgroundColor: '#F97316' },
+  todayDot: { width: 4, height: 4, borderRadius: 2, backgroundColor: colors.brand.orange },
   todayDotSelected: { backgroundColor: Colors.background.primary },
 
   // Class Booking
   classCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.background.primary, borderRadius: BorderRadius.md, padding: Spacing.md, marginBottom: 10, borderWidth: 1.5, borderColor: Colors.border.default },
-  classCardSelected: { borderColor: '#F97316', backgroundColor: '#FFF7ED' },
+  classCardSelected: { borderColor: colors.brand.orange, backgroundColor: colors.tint.orange },
   classCardFull: { opacity: 0.6 },
   classTime: { width: 70, alignItems: 'center', paddingRight: Spacing.md, borderRightWidth: 1, borderRightColor: Colors.border.default },
   classTimeText: { fontSize: Typography.bodySmall.fontSize, fontWeight: '700', color: Colors.nileBlue },
@@ -839,25 +840,25 @@ const styles = StyleSheet.create({
   spotsText: { fontSize: Typography.caption.fontSize, color: Colors.text.tertiary },
   spotsTextFull: { color: Colors.error },
   classPrice: { alignItems: 'center', gap: Spacing.xs },
-  classPriceText: { fontSize: Typography.bodyLarge.fontSize, fontWeight: '700', color: '#F97316' },
+  classPriceText: { fontSize: Typography.bodyLarge.fontSize, fontWeight: '700', color: colors.brand.orange },
 
   // Trainer Booking
   sessionTypeContainer: { flexDirection: 'row', gap: Spacing.sm },
   sessionOption: { flex: 1, backgroundColor: Colors.background.primary, borderRadius: BorderRadius.md, padding: Spacing.md, alignItems: 'center', borderWidth: 1.5, borderColor: Colors.border.default, position: 'relative' },
-  sessionOptionSelected: { borderColor: '#F97316', backgroundColor: '#FFF7ED' },
+  sessionOptionSelected: { borderColor: colors.brand.orange, backgroundColor: colors.tint.orange },
   saveBadge: { position: 'absolute', top: -8, right: 8, backgroundColor: Colors.success, paddingHorizontal: 6, paddingVertical: 2, borderRadius: BorderRadius.sm },
   saveBadgeText: { fontSize: 9, fontWeight: '700', color: Colors.text.inverse },
   sessionLabel: { fontSize: Typography.bodySmall.fontSize, fontWeight: '600', color: Colors.text.tertiary, textAlign: 'center', marginBottom: Spacing.xs },
   sessionLabelSelected: { color: Colors.nileBlue },
   sessionPrice: { fontSize: Typography.bodyLarge.fontSize, fontWeight: '700', color: Colors.nileBlue },
-  sessionPriceSelected: { color: '#F97316' },
+  sessionPriceSelected: { color: colors.brand.orange },
 
   timeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm },
   timeSlot: { width: (SCREEN_WIDTH - 48) / 4, paddingVertical: 10, borderRadius: 10, backgroundColor: Colors.background.primary, alignItems: 'center', borderWidth: 1.5, borderColor: Colors.border.default },
-  timeSlotSelected: { borderColor: '#F97316', backgroundColor: '#FFF7ED' },
+  timeSlotSelected: { borderColor: colors.brand.orange, backgroundColor: colors.tint.orange },
   timeSlotDisabled: { backgroundColor: Colors.background.secondary, opacity: 0.5 },
   timeSlotText: { fontSize: Typography.bodySmall.fontSize, fontWeight: '500', color: Colors.text.tertiary },
-  timeSlotTextSelected: { color: '#F97316', fontWeight: '600' },
+  timeSlotTextSelected: { color: colors.brand.orange, fontWeight: '600' },
   timeSlotTextDisabled: { color: Colors.text.tertiary },
 
   // Day Pass
@@ -865,7 +866,7 @@ const styles = StyleSheet.create({
   dayPassHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: Spacing.base },
   dayPassTitle: { fontSize: Typography.h4.fontSize, fontWeight: '700', color: Colors.nileBlue },
   dayPassSubtitle: { fontSize: Typography.bodySmall.fontSize, color: Colors.text.tertiary, marginTop: 2 },
-  dayPassPrice: { fontSize: Typography.h4.fontSize, fontWeight: '700', color: '#F97316' },
+  dayPassPrice: { fontSize: Typography.h4.fontSize, fontWeight: '700', color: colors.brand.orange },
   dayPassFeatures: { borderBottomWidth: 1, borderBottomColor: Colors.border.default, paddingBottom: Spacing.md, marginBottom: Spacing.base },
   quantitySelector: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   quantityLabel: { fontSize: Typography.body.fontSize, fontWeight: '600', color: Colors.nileBlue },

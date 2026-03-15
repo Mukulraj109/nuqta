@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { StockStatus } from '@/types/product-variants.types';
+import { colors } from '@/constants/theme';
 
 /**
  * StockBadge Component
@@ -33,41 +34,41 @@ export const StockBadge: React.FC<StockBadgeProps> = ({
       case 'in_stock':
         return {
           icon: 'checkmark-circle',
-          iconColor: '#10B981',
-          backgroundColor: '#D1FAE5',
+          iconColor: colors.successScale[400],
+          backgroundColor: colors.tint.green,
           textColor: '#065F46',
           label: 'In Stock',
         };
       case 'low_stock':
         return {
           icon: 'warning',
-          iconColor: '#F59E0B',
-          backgroundColor: '#FEF3C7',
-          textColor: '#92400E',
+          iconColor: colors.warningScale[400],
+          backgroundColor: colors.tint.amberLight,
+          textColor: colors.brand.amberDark,
           label: quantity ? `Only ${quantity} left` : 'Low Stock',
         };
       case 'out_of_stock':
         return {
           icon: 'close-circle',
-          iconColor: '#EF4444',
-          backgroundColor: '#FEE2E2',
+          iconColor: colors.error,
+          backgroundColor: colors.errorScale[100],
           textColor: '#991B1B',
           label: 'Out of Stock',
         };
       case 'preorder':
         return {
           icon: 'time',
-          iconColor: '#8B5CF6',
-          backgroundColor: '#EDE9FE',
+          iconColor: colors.brand.purpleLight,
+          backgroundColor: colors.tint.purple,
           textColor: '#5B21B6',
           label: 'Pre-order',
         };
       default:
         return {
           icon: 'help-circle',
-          iconColor: '#6B7280',
-          backgroundColor: '#F3F4F6',
-          textColor: '#374151',
+          iconColor: colors.neutral[500],
+          backgroundColor: colors.neutral[100],
+          textColor: colors.neutral[700],
           label: 'Unknown',
         };
     }

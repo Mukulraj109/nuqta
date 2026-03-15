@@ -3,6 +3,7 @@ import React from 'react';
 import { View, StyleSheet, Dimensions, Text, Pressable, Platform } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { CoinInfoCardProps } from '@/types/profile';
+import { colors } from '@/constants/theme';
 
 const _CoinInfoCardInner: React.FC<CoinInfoCardProps> = ({
   image, 
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     ...Platform.select({
       ios: {
-        shadowColor: '#7C3AED',
+        shadowColor: colors.brand.purple,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.1,
         shadowRadius: 6,
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   title: {
-    color: '#333',
+    color: colors.darkGray,
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 2,

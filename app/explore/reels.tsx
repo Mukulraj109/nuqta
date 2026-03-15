@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
@@ -217,7 +218,7 @@ const ExploreReelsPage = () => {
       {/* Create Reel CTA */}
       <Pressable style={styles.createCTA} onPress={() => navigateTo('/create-reel')}>
         <LinearGradient
-          colors={['#FEF9C3', '#FEF3C7']}
+          colors={['#FEF9C3', colors.tint.amberLight]}
           style={styles.createCTAGradient}
         >
           <View style={styles.createCTAIcon}>
@@ -367,7 +368,7 @@ const styles = StyleSheet.create({
   },
   createCTASubtitle: {
     ...Typography.bodySmall,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     marginTop: 2,
   },
   listContent: {

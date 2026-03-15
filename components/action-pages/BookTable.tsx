@@ -29,19 +29,20 @@ import { useRegion } from '@/contexts/RegionContext';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  dark: '#1a3a52',
+  dark: colors.nileBlue,
   darkDeep: '#0f2638',
-  gold: '#FBBF24',
-  goldDark: '#F59E0B',
-  green: '#22C55E',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F8F9FA',
-  border: '#E5E7EB',
-  unavailable: '#E5E7EB',
+  gold: colors.warningScale[400],
+  goldDark: colors.warningScale[400],
+  green: colors.success,
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.offWhite,
+  border: colors.neutral[200],
+  unavailable: colors.neutral[200],
 };
 
 const PARTY_SIZES = [1, 2, 3, 4, 5, 6, 7, 8, 10, 12];
@@ -460,7 +461,7 @@ function BookTablePage() {
               <View style={styles.confirmDivider} />
               <View style={styles.confirmRow}>
                 <View style={[styles.confirmRowIcon, { backgroundColor: 'rgba(59,130,246,0.12)' }]}>
-                  <Ionicons name="calendar" size={18} color="#3B82F6" />
+                  <Ionicons name="calendar" size={18} color={colors.infoScale[400]} />
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.confirmRowLabel}>Date & Time</Text>
@@ -470,7 +471,7 @@ function BookTablePage() {
               <View style={styles.confirmDivider} />
               <View style={styles.confirmRow}>
                 <View style={[styles.confirmRowIcon, { backgroundColor: 'rgba(139,92,246,0.12)' }]}>
-                  <Ionicons name="people" size={18} color="#8B5CF6" />
+                  <Ionicons name="people" size={18} color={colors.brand.purpleLight} />
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.confirmRowLabel}>Party Size</Text>
@@ -484,7 +485,7 @@ function BookTablePage() {
                   <View style={styles.confirmDivider} />
                   <View style={styles.confirmRow}>
                     <View style={[styles.confirmRowIcon, { backgroundColor: 'rgba(16,185,129,0.12)' }]}>
-                      <Ionicons name="person" size={18} color="#10B981" />
+                      <Ionicons name="person" size={18} color={colors.successScale[400]} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={styles.confirmRowLabel}>Reserved For</Text>
@@ -498,7 +499,7 @@ function BookTablePage() {
             {/* Coins note */}
             <View style={styles.confirmNote}>
               <LinearGradient
-                colors={['#FEF3C7', '#FFFBEB']}
+                colors={[colors.tint.amberLight, colors.tint.amber]}
                 style={styles.confirmNoteGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -882,7 +883,7 @@ const styles = StyleSheet.create({
   },
   storeImgWrap: { position: 'relative' },
   storeImg: { width: 64, height: 64, borderRadius: 14 },
-  storeImgPlaceholder: { backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center' },
+  storeImgPlaceholder: { backgroundColor: colors.neutral[100], justifyContent: 'center', alignItems: 'center' },
   storeCashbackBadge: {
     position: 'absolute', bottom: -4, right: -4,
     backgroundColor: COLORS.gold, borderRadius: 8, paddingHorizontal: 5, paddingVertical: 2,
@@ -952,11 +953,11 @@ const styles = StyleSheet.create({
     borderWidth: 1, borderColor: 'transparent',
   },
   timeChipActive: { backgroundColor: COLORS.dark, borderColor: COLORS.dark },
-  timeChipUnavailable: { backgroundColor: '#F3F4F6', borderColor: '#E5E7EB' },
+  timeChipUnavailable: { backgroundColor: colors.neutral[100], borderColor: colors.neutral[200] },
   timeText: { fontSize: 13, fontWeight: '500', color: COLORS.textPrimary },
   timeTextActive: { color: COLORS.white },
-  timeTextUnavailable: { color: '#D1D5DB' },
-  timeFullText: { fontSize: 9, color: '#D1D5DB', marginTop: 1, fontWeight: '500' },
+  timeTextUnavailable: { color: colors.neutral[300] },
+  timeFullText: { fontSize: 9, color: colors.neutral[300], marginTop: 1, fontWeight: '500' },
 
   // Party size
   partyScroll: { marginBottom: 4 },
@@ -1022,14 +1023,14 @@ const styles = StyleSheet.create({
 
   bonusNote: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
-    marginTop: 14, padding: 14, backgroundColor: '#FFFBEB', borderRadius: 14,
+    marginTop: 14, padding: 14, backgroundColor: colors.tint.amber, borderRadius: 14,
   },
   bonusIconWrap: {
     width: 28, height: 28, borderRadius: 8,
     backgroundColor: 'rgba(251,191,36,0.15)',
     justifyContent: 'center', alignItems: 'center',
   },
-  bonusText: { flex: 1, fontSize: 12, color: '#92400E', lineHeight: 17 },
+  bonusText: { flex: 1, fontSize: 12, color: colors.brand.amberDark, lineHeight: 17 },
 
   // Confirm
   confirmContent: { flexGrow: 1 },
@@ -1084,7 +1085,7 @@ const styles = StyleSheet.create({
   },
   confirmRowLabel: { fontSize: 11, color: COLORS.textSecondary, fontWeight: '500' },
   confirmRowValue: { fontSize: 15, fontWeight: '600', color: COLORS.textPrimary, marginTop: 2 },
-  confirmDivider: { height: 1, backgroundColor: '#F3F4F6', marginVertical: 8, marginLeft: 54 },
+  confirmDivider: { height: 1, backgroundColor: colors.neutral[100], marginVertical: 8, marginLeft: 54 },
   confirmNote: { marginTop: 16 },
   confirmNoteGradient: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
@@ -1095,7 +1096,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(251,191,36,0.2)',
     justifyContent: 'center', alignItems: 'center',
   },
-  confirmNoteText: { flex: 1, fontSize: 13, color: '#92400E', lineHeight: 18, fontWeight: '500' },
+  confirmNoteText: { flex: 1, fontSize: 13, color: colors.brand.amberDark, lineHeight: 18, fontWeight: '500' },
   doneBtn: {
     marginTop: 24, borderRadius: 16, overflow: 'hidden',
   },
@@ -1113,7 +1114,7 @@ const styles = StyleSheet.create({
   menuOrderBtn: {
     marginTop: 14, paddingVertical: 14, alignItems: 'center', justifyContent: 'center',
     flexDirection: 'row', gap: 6,
-    borderRadius: 16, backgroundColor: '#7C3AED',
+    borderRadius: 16, backgroundColor: colors.brand.purple,
   },
   menuOrderBtnText: { fontSize: 15, fontWeight: '600', color: COLORS.white },
   viewBookingsBtn: {

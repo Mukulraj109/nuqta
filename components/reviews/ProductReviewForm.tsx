@@ -18,6 +18,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import RatingStars from './RatingStars';
+import { colors } from '@/constants/theme';
 
 interface ProductReviewFormProps {
   productId: string;
@@ -201,7 +202,7 @@ function ProductReviewForm({
           <TextInput
             style={styles.titleInput}
             placeholder="Summarize your experience"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={title}
             onChangeText={setTitle}
             maxLength={100}
@@ -222,7 +223,7 @@ function ProductReviewForm({
           <TextInput
             style={styles.contentInput}
             placeholder="Tell us about your experience (minimum 20 characters)"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={content}
             onChangeText={setContent}
             multiline
@@ -257,7 +258,7 @@ function ProductReviewForm({
                   onPress={() => removeImage(index)}
                  
                 >
-                  <Ionicons name="close-circle" size={24} color="#EF4444" />
+                  <Ionicons name="close-circle" size={24} color={colors.error} />
                 </Pressable>
               </View>
             ))}
@@ -269,7 +270,7 @@ function ProductReviewForm({
                 onPress={pickImage}
                
               >
-                <Ionicons name="camera-outline" size={32} color="#8B5CF6" />
+                <Ionicons name="camera-outline" size={32} color={colors.brand.purpleLight} />
                 <ThemedText style={styles.addImageText}>Add Photo</ThemedText>
               </Pressable>
             )}
@@ -293,7 +294,7 @@ function ProductReviewForm({
               <Ionicons
                 name={recommended ? 'thumbs-up' : 'thumbs-up-outline'}
                 size={20}
-                color={recommended ? '#FFFFFF' : '#8B5CF6'}
+                color={recommended ? colors.background.primary : colors.brand.purpleLight}
               />
               <ThemedText style={[styles.optionText, recommended && styles.optionTextActive]}>
                 Yes
@@ -307,7 +308,7 @@ function ProductReviewForm({
               <Ionicons
                 name={!recommended ? 'thumbs-down' : 'thumbs-down-outline'}
                 size={20}
-                color={!recommended ? '#FFFFFF' : '#8B5CF6'}
+                color={!recommended ? colors.background.primary : colors.brand.purpleLight}
               />
               <ThemedText style={[styles.optionText, !recommended && styles.optionTextActive]}>
                 No
@@ -330,7 +331,7 @@ function ProductReviewForm({
               <Ionicons
                 name={wouldBuyAgain ? 'checkmark-circle' : 'checkmark-circle-outline'}
                 size={20}
-                color={wouldBuyAgain ? '#FFFFFF' : '#8B5CF6'}
+                color={wouldBuyAgain ? colors.background.primary : colors.brand.purpleLight}
               />
               <ThemedText style={[styles.optionText, wouldBuyAgain && styles.optionTextActive]}>
                 Yes
@@ -344,7 +345,7 @@ function ProductReviewForm({
               <Ionicons
                 name={!wouldBuyAgain ? 'close-circle' : 'close-circle-outline'}
                 size={20}
-                color={!wouldBuyAgain ? '#FFFFFF' : '#8B5CF6'}
+                color={!wouldBuyAgain ? colors.background.primary : colors.brand.purpleLight}
               />
               <ThemedText style={[styles.optionText, !wouldBuyAgain && styles.optionTextActive]}>
                 No
@@ -418,7 +419,7 @@ function ProductReviewForm({
          
         >
           {isSubmitting ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={colors.background.primary} />
           ) : (
             <ThemedText style={styles.submitButtonText}>
               Submit Review
@@ -433,7 +434,7 @@ function ProductReviewForm({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   scrollContent: {
     padding: 16,
@@ -445,12 +446,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   section: {
     marginBottom: 24,
@@ -458,54 +459,54 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   required: {
-    color: '#EF4444',
+    color: colors.error,
   },
   ratingSelector: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 20,
     borderRadius: 12,
     alignItems: 'center',
     gap: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   ratingDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   titleInput: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     borderRadius: 12,
     fontSize: 14,
-    color: '#111827',
+    color: colors.neutral[900],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   contentInput: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     borderRadius: 12,
     fontSize: 14,
-    color: '#111827',
+    color: colors.neutral[900],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     minHeight: 150,
   },
   charCount: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'right',
     marginTop: 4,
   },
   errorText: {
     fontSize: 12,
-    color: '#EF4444',
+    color: colors.error,
     marginTop: 4,
   },
   imagesContainer: {
@@ -524,7 +525,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -8,
     right: -8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
   },
   addImageButton: {
@@ -533,20 +534,20 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 2,
     borderStyle: 'dashed',
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F5F3FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.purpleLight,
     justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
   },
   addImageText: {
     fontSize: 12,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
   },
   helperText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 8,
   },
   optionRow: {
@@ -563,19 +564,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.background.primary,
   },
   optionButtonActive: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   optionText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   optionTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   usageTimeRow: {
     flexDirection: 'row',
@@ -587,23 +588,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
   },
   usageTimeButtonActive: {
-    backgroundColor: '#8B5CF6',
-    borderColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
+    borderColor: colors.brand.purpleLight,
   },
   usageTimeText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   usageTimeTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   guidelinesContainer: {
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
     padding: 16,
     borderRadius: 12,
     gap: 8,
@@ -616,7 +617,7 @@ const styles = StyleSheet.create({
   },
   guidelineText: {
     fontSize: 12,
-    color: '#6366F1',
+    color: colors.brand.indigo,
     lineHeight: 18,
   },
   actionsContainer: {
@@ -627,9 +628,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.05,
@@ -641,20 +642,20 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     alignItems: 'center',
     justifyContent: 'center',
   },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   submitButton: {
     flex: 2,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -664,7 +665,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

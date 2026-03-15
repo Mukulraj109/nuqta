@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { colors } from '@/constants/theme';
 
 interface Specification {
   label: string;
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
     borderColor: '#e0e0e0',
     borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.background.primary,
   },
   row: {
     flexDirection: 'row',
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     flex: 1,
     fontWeight: '600',
   },

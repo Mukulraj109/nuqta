@@ -17,6 +17,7 @@ import {
 } from '@/constants/search-constants';
 import { formatDistance, getStoreStatusText, getStoreStatusColor } from '@/utils/mock-store-search-data';
 import { storeSearchService } from '@/services/storeSearchService';
+import { colors } from '@/constants/theme';
 
 const StoreInfo: React.FC<StoreInfoProps> = ({
   store,
@@ -58,7 +59,7 @@ const StoreInfo: React.FC<StoreInfoProps> = ({
             key={i}
             name="star-outline"
             size={12}
-            color="#E5E7EB"
+            color={colors.neutral[200]}
             style={styles.starIcon}
           />
         );

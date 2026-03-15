@@ -33,6 +33,7 @@ import {
   Plan,
 } from '@/services/rechargeApi';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 // ============================================
 // CONSTANTS
@@ -220,8 +221,8 @@ export default function RechargePage() {
             contentFit="contain"
           />
         ) : (
-          <View style={[styles.operatorIcon, { backgroundColor: (item.color || '#000') + '20' }]}>
-            <Text style={[styles.operatorInitial, { color: item.color || '#000' }]}>
+          <View style={[styles.operatorIcon, { backgroundColor: (item.color || colors.text.primary) + '20' }]}>
+            <Text style={[styles.operatorInitial, { color: item.color || colors.text.primary }]}>
               {item.name[0]}
             </Text>
           </View>
@@ -314,10 +315,10 @@ export default function RechargePage() {
       {/* Error Banner */}
       {error && (
         <View style={styles.errorBanner}>
-          <Ionicons name="warning-outline" size={18} color="#EF4444" />
+          <Ionicons name="warning-outline" size={18} color={colors.error} />
           <Text style={styles.errorText}>{error}</Text>
           <Pressable onPress={() => setError(null)}>
-            <Ionicons name="close-circle" size={18} color="#EF4444" />
+            <Ionicons name="close-circle" size={18} color={colors.error} />
           </Pressable>
         </View>
       )}
@@ -581,14 +582,14 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.base,
     marginBottom: Spacing.md,
     padding: Spacing.md,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderRadius: BorderRadius.md,
     gap: Spacing.sm,
   },
   errorText: {
     flex: 1,
     ...Typography.bodySmall,
-    color: '#EF4444',
+    color: colors.error,
   },
   section: {
     marginBottom: Spacing.xl,
@@ -790,7 +791,7 @@ const styles = StyleSheet.create({
     ...Typography.bodySmall,
     fontSize: 11,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   planCashback: {
     backgroundColor: Colors.gold + '1A',

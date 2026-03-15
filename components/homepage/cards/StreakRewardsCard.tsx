@@ -8,10 +8,11 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  white: '#FFFFFF',
-  textDark: '#1a3a52',
+  white: colors.background.primary,
+  textDark: colors.nileBlue,
 };
 
 interface StreakRewardsCardProps {
@@ -27,7 +28,7 @@ const StreakRewardsCard: React.FC<StreakRewardsCardProps> = ({
   todayCheckedIn,
   onPress,
 }) => {
-  const gradientColors: readonly [string, string, string] = ['#1a3a52', '#243f55', '#2d4a5f'];
+  const gradientColors: readonly [string, string, string] = [colors.nileBlue, '#243f55', '#2d4a5f'];
   const daysToMilestone = nextMilestone.day - currentStreak;
 
   return (
@@ -59,7 +60,7 @@ const StreakRewardsCard: React.FC<StreakRewardsCardProps> = ({
           {/* Streak Count Badge */}
           <View style={styles.badgeContainer}>
             <View style={styles.streakBadge}>
-              <Ionicons name="flame" size={14} color="#ffcd57" />
+              <Ionicons name="flame" size={14} color={colors.lightMustard} />
               <Text style={styles.streakCount}>{currentStreak}</Text>
             </View>
           </View>
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,

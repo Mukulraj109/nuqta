@@ -20,6 +20,7 @@ import {
   IconSize,
   Timing,
 } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 
 interface StoreHeaderProps {
@@ -262,7 +263,7 @@ function StoreHeader({
             accessibilityLabel="Go back"
             accessibilityRole="button"
           >
-            <Ionicons name="chevron-back" size={20} color="#374151" />
+            <Ionicons name="chevron-back" size={20} color={colors.neutral[700]} />
           </Pressable>
         </Animated.View>
 
@@ -275,7 +276,7 @@ function StoreHeader({
           />
         ) : (
           <View style={styles.coinBadgeLoading}>
-            <ActivityIndicator size="small" color="#ffcd57" />
+            <ActivityIndicator size="small" color={colors.lightMustard} />
           </View>
         )}
 
@@ -291,7 +292,7 @@ function StoreHeader({
               accessibilityLabel="Share"
               accessibilityRole="button"
             >
-              <Ionicons name="share-outline" size={18} color="#374151" />
+              <Ionicons name="share-outline" size={18} color={colors.neutral[700]} />
             </Pressable>
           </Animated.View>
 
@@ -305,7 +306,7 @@ function StoreHeader({
               accessibilityLabel="Cart"
               accessibilityRole="button"
             >
-              <Ionicons name="bag-outline" size={18} color="#374151" />
+              <Ionicons name="bag-outline" size={18} color={colors.neutral[700]} />
             </Pressable>
           </Animated.View>
 
@@ -324,12 +325,12 @@ function StoreHeader({
               accessibilityRole="button"
             >
               {isWishlistLoading ? (
-                <ActivityIndicator size="small" color="#ffd7b5" />
+                <ActivityIndicator size="small" color={colors.lightPeach} />
               ) : (
                 <Ionicons
                   name={isSaved ? "heart" : "heart-outline"}
                   size={18}
-                  color={isSaved ? "#ffd7b5" : "#374151"}
+                  color={isSaved ? colors.lightPeach : colors.neutral[700]}
                 />
               )}
             </Pressable>
@@ -405,7 +406,7 @@ function StoreHeader({
                 colors={['rgba(255, 205, 87, 0.1)', 'rgba(255, 205, 87, 0.05)']}
                 style={StyleSheet.absoluteFill}
               />
-              <Ionicons name="image-outline" size={56} color="#ffcd57" />
+              <Ionicons name="image-outline" size={56} color={colors.lightMustard} />
               <ThemedText style={styles.placeholderText}>No Image</ThemedText>
             </View>
           )}
@@ -428,7 +429,7 @@ function StoreHeader({
 
           {/* Store Badge - Bottom left */}
           <View style={styles.storeBadge}>
-            <Ionicons name="storefront" size={18} color="#ffcd57" />
+            <Ionicons name="storefront" size={18} color={colors.lightMustard} />
           </View>
 
           {/* Zoom hint - Bottom right */}
@@ -442,7 +443,7 @@ function StoreHeader({
               accessibilityLabel="Tap to zoom"
               accessibilityRole="button"
             >
-              <Ionicons name="expand-outline" size={16} color="#FFFFFF" />
+              <Ionicons name="expand-outline" size={16} color={colors.background.primary} />
             </Pressable>
           )}
         </View>
@@ -463,7 +464,7 @@ function StoreHeader({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
 
   // Header bar - separate from image
@@ -474,9 +475,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === 'ios' ? 48 : 12,
     paddingBottom: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
 
   // Icon button style
@@ -484,16 +485,16 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
 
   heartBtnActive: {
-    backgroundColor: '#FEF2F2',
-    borderColor: '#FECACA',
+    backgroundColor: colors.errorScale[50],
+    borderColor: colors.errorScale[200],
   },
 
   // Coin badge loading state
@@ -520,7 +521,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     borderRadius: 20,
     overflow: 'hidden',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
@@ -550,7 +551,7 @@ const styles = StyleSheet.create({
 
   placeholderText: {
     fontSize: 14,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     marginTop: 8,
     fontWeight: '500',
   },
@@ -614,7 +615,7 @@ const styles = StyleSheet.create({
 
   paginationDotActive: {
     width: 24,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 4,
   },
 
@@ -630,7 +631,7 @@ const styles = StyleSheet.create({
   },
 
   imageCounterText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '600',
   },

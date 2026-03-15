@@ -10,6 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { triggerImpact } from "@/utils/haptics";
 import { ThemedText } from "@/components/ThemedText";
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -84,7 +85,7 @@ export default function StoreActionButtons({
           accessibilityRole="button"
           accessibilityLabel="Scan and Pay"
         >
-          <Ionicons name="qr-code-outline" size={20} color="#FFFFFF" />
+          <Ionicons name="qr-code-outline" size={20} color={colors.background.primary} />
           <ThemedText style={styles.primaryButtonText}>Scan & Pay</ThemedText>
         </Pressable>
       </Animated.View>
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#ffcd57",
+    backgroundColor: colors.lightMustard,
     paddingVertical: 14,
     borderRadius: BorderRadius.md,
     gap: 8,
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: colors.background.primary,
   },
   secondaryRow: {
     flexDirection: "row",
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     paddingVertical: 12,
     borderRadius: BorderRadius.md,
     borderWidth: 1,

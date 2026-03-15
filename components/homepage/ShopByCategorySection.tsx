@@ -15,17 +15,18 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { categoriesApi, Category } from '@/services/categoriesApi';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_GAP = 12;
 
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#1a3a52',
-  gray300: '#D1D5DB',
-  gray600: '#6B7280',
-  nileBlue: '#1a3a52',
-  mustard: '#ffcd57',
+  white: colors.background.primary,
+  navy: colors.nileBlue,
+  gray300: colors.neutral[300],
+  gray600: colors.neutral[500],
+  nileBlue: colors.nileBlue,
+  mustard: colors.lightMustard,
 };
 
 // Category style configurations - Nuqta palette
@@ -37,45 +38,45 @@ const CATEGORY_STYLES: Record<string, {
   badgeType?: 'trending' | 'popular';
 }> = {
   electronics: {
-    gradientColors: ['#1a3a52', '#243f55', '#2d4a5f'],
+    gradientColors: [colors.nileBlue, '#243f55', '#2d4a5f'],
     icon: '📱',
     cashback: '10-15%',
   },
   fashion: {
-    gradientColors: ['#ffd7b5', '#E8B896'],
+    gradientColors: [colors.lightPeach, colors.brand.sand],
     icon: '👗',
     cashback: '15-25%',
     badge: 'Trending',
     badgeType: 'trending',
   },
   'food-dining': {
-    gradientColors: ['#ffcd57', '#e5b84d'],
+    gradientColors: [colors.lightMustard, '#e5b84d'],
     icon: '🍽️',
     cashback: '10-20%',
     badge: 'Popular',
     badgeType: 'popular',
   },
   food: {
-    gradientColors: ['#ffcd57', '#e5b84d'],
+    gradientColors: [colors.lightMustard, '#e5b84d'],
     icon: '🍽️',
     cashback: '10-20%',
     badge: 'Popular',
     badgeType: 'popular',
   },
   grocery: {
-    gradientColors: ['#1a3a52', '#243f55'],
+    gradientColors: [colors.nileBlue, '#243f55'],
     icon: '🥬',
     cashback: '5-10%',
   },
   beauty: {
-    gradientColors: ['#ffd7b5', '#E8B896'],
+    gradientColors: [colors.lightPeach, colors.brand.sand],
     icon: '💄',
     cashback: '15-20%',
     badge: 'Trending',
     badgeType: 'trending',
   },
   health: {
-    gradientColors: ['#dfebf7', '#b8d4ed'],
+    gradientColors: [colors.lavenderMist, '#b8d4ed'],
     icon: '💊',
     cashback: '10-15%',
   },
@@ -102,7 +103,7 @@ const FALLBACK_CATEGORIES: CategoryData[] = [
     icon: '📱',
     subtitle: 'Phones, laptops, gadgets',
     cashback: '10-15%',
-    gradientColors: ['#1a3a52', '#243f55', '#2d4a5f'],
+    gradientColors: [colors.nileBlue, '#243f55', '#2d4a5f'],
   },
   {
     id: '2',
@@ -111,7 +112,7 @@ const FALLBACK_CATEGORIES: CategoryData[] = [
     icon: '👗',
     subtitle: 'Clothing & accessories',
     cashback: '15-25%',
-    gradientColors: ['#ffd7b5', '#E8B896'],
+    gradientColors: [colors.lightPeach, colors.brand.sand],
     badge: 'Trending',
     badgeType: 'trending',
   },
@@ -122,7 +123,7 @@ const FALLBACK_CATEGORIES: CategoryData[] = [
     icon: '🍽️',
     subtitle: 'Restaurants & cafes',
     cashback: '10-20%',
-    gradientColors: ['#ffcd57', '#e5b84d'],
+    gradientColors: [colors.lightMustard, '#e5b84d'],
     badge: 'Popular',
     badgeType: 'popular',
   },

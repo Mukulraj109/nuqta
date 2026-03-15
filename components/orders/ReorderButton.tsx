@@ -11,6 +11,7 @@ import {
   TextStyle
 } from 'react-native';
 import ReorderModal from './ReorderModal';
+import { colors } from '@/constants/theme';
 
 interface ReorderButtonProps {
   orderId: string;
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#6366f1'
   },
   secondaryButton: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
     borderColor: '#6366f1'
   },
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   primaryText: {
-    color: '#fff'
+    color: colors.background.primary
   },
   secondaryText: {
     color: '#6366f1'

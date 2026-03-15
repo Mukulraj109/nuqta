@@ -16,6 +16,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import ShoppableProductCard from './ShoppableProductCard';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_SPACING = 16;
@@ -110,7 +111,7 @@ function ProductCarousel({
    */
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
-      <Ionicons name="bag-outline" size={48} color="#9CA3AF" />
+      <Ionicons name="bag-outline" size={48} color={colors.neutral[400]} />
       <Text style={styles.emptyText}>{emptyMessage}</Text>
     </View>
   );
@@ -362,7 +363,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   countBadge: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -371,7 +372,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   countText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '700',
   },
@@ -387,7 +388,7 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   viewAllText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -405,7 +406,7 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 3,
   },
 

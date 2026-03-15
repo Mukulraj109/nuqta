@@ -12,6 +12,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 function StoreHeaderSkeleton() {
   return (
@@ -97,7 +98,7 @@ function StoreHeaderSkeleton() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 20,
     alignItems: 'center',
     borderRadius: 20,

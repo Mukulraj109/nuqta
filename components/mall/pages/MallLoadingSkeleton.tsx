@@ -5,6 +5,7 @@
  */
 
 import React, { memo, useEffect, useRef } from 'react';
+import { colors } from '@/constants/theme';
 import {
   View,
   StyleSheet,
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
   // List styles
   listItem: {
     flexDirection: 'row',
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 16,
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 12,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     marginRight: 14,
     overflow: 'hidden',
   },
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
   listTitle: {
     height: 18,
     width: '70%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 6,
     marginBottom: 8,
     overflow: 'hidden',
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
   listSubtitle: {
     height: 14,
     width: '50%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 8,
     overflow: 'hidden',
@@ -204,14 +205,14 @@ const styles = StyleSheet.create({
   listBadges: {
     height: 24,
     width: '80%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 6,
     overflow: 'hidden',
   },
   // Grid styles
   gridItem: {
     width: (SCREEN_WIDTH - 56) / 2,
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     borderRadius: 16,
     padding: 12,
     overflow: 'hidden',
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
   gridImage: {
     width: '100%',
     height: 80,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderRadius: 12,
     marginBottom: 10,
     overflow: 'hidden',
@@ -227,14 +228,14 @@ const styles = StyleSheet.create({
   gridTitle: {
     height: 16,
     width: '70%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     overflow: 'hidden',
   },
   // Card styles
   cardItem: {
     width: 150,
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     borderRadius: 16,
     padding: 12,
     marginRight: 12,
@@ -243,7 +244,7 @@ const styles = StyleSheet.create({
   cardImage: {
     width: '100%',
     height: 60,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderRadius: 12,
     marginBottom: 10,
     overflow: 'hidden',
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     height: 14,
     width: '80%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 6,
     overflow: 'hidden',
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
   cardSubtitle: {
     height: 12,
     width: '60%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     overflow: 'hidden',
   },

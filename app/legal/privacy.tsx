@@ -18,6 +18,7 @@ import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const PRIVACY_CONTENT = {
   lastUpdated: '2024-12-01',
@@ -159,7 +160,7 @@ export default function PrivacyPage() {
         <LinearGradient colors={[Colors.primary[600], Colors.secondary[700]]} style={styles.header}>
           <View style={styles.headerContent}>
             <Pressable style={styles.backButton} onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={24} color="#FFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Privacy Policy</ThemedText>
             <View style={styles.placeholder} />
@@ -189,7 +190,7 @@ export default function PrivacyPage() {
             accessibilityLabel="Go back"
             accessibilityRole="button"
           >
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Privacy Policy</ThemedText>
           <View style={styles.placeholder} />
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },

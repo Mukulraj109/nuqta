@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface Route {
   from: string;
@@ -74,7 +75,7 @@ const RelatedFlightsSection: React.FC<RelatedFlightsSectionProps> = ({
     return (
       <View style={styles.container}>
         <Text style={styles.title}>You Might Also Like</Text>
-        <ActivityIndicator size="small" color="#3B82F6" style={styles.loader} />
+        <ActivityIndicator size="small" color={colors.infoScale[400]} style={styles.loader} />
       </View>
     );
   }
@@ -109,7 +110,7 @@ const RelatedFlightsSection: React.FC<RelatedFlightsSectionProps> = ({
                 {flight.name}
               </Text>
               <View style={styles.flightInfo}>
-                <Ionicons name="star" size={14} color="#F59E0B" />
+                <Ionicons name="star" size={14} color={colors.warningScale[400]} />
                 <Text style={styles.rating}>
                   {flight.ratings?.average?.toFixed(1) || '4.5'}
                 </Text>
@@ -139,12 +140,12 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   loader: {
@@ -156,11 +157,11 @@ const styles = StyleSheet.create({
   flightCard: {
     width: 200,
     marginRight: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
   flightImage: {
     width: '100%',
     height: 120,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   flightContent: {
     padding: 12,
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
   flightName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
     minHeight: 36,
   },
@@ -191,11 +192,11 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   reviews: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceRow: {
     flexDirection: 'row',
@@ -205,11 +206,11 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#3B82F6',
+    color: colors.infoScale[400],
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
 });

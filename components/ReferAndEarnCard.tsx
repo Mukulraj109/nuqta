@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Pressable, Dimensions, ActivityIndicator, Linking } from "react-native";
 import { platformAlertSimple } from '@/utils/platformAlert';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get("window");
 
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   inviteText: {
-    color: "#fff",
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: "600",
   },

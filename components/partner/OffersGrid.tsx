@@ -14,6 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ClaimableOffer } from '@/types/partner.types';
 import toast from '@/utils/toast';
+import { colors } from '@/constants/theme';
 
 interface OffersGridProps {
   offers: ClaimableOffer[];
@@ -86,7 +87,7 @@ function OffersGrid({
             />
           ) : (
             <View style={[styles.offerImage, styles.placeholderImage]}>
-              <Ionicons name="gift-outline" size={40} color="#9CA3AF" />
+              <Ionicons name="gift-outline" size={40} color={colors.neutral[400]} />
             </View>
           )}
           {/* Discount Badge */}
@@ -96,7 +97,7 @@ function OffersGrid({
           {/* Claimed Overlay */}
           {offer.isClaimed && (
             <View style={styles.claimedOverlay}>
-              <Ionicons name="checkmark-circle" size={32} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={32} color={colors.successScale[400]} />
               <Text style={styles.claimedOverlayText}>Claimed</Text>
             </View>
           )}
@@ -123,7 +124,7 @@ function OffersGrid({
           
           {/* Validity */}
           <View style={styles.validityContainer}>
-            <Ionicons name="calendar-outline" size={12} color="#6B7280" />
+            <Ionicons name="calendar-outline" size={12} color={colors.neutral[500]} />
             <Text style={styles.validityText}>
               Valid until {new Date(offer.validUntil).toLocaleDateString()}
             </Text>
@@ -134,7 +135,7 @@ function OffersGrid({
             style={styles.termsButton}
             onPress={() => handleTermsPress(offer)}
           >
-            <Ionicons name="document-text-outline" size={12} color="#00C06A" />
+            <Ionicons name="document-text-outline" size={12} color={colors.brand.green} />
             <Text style={styles.termsButtonText}>Terms & Conditions</Text>
           </Pressable>
         </View>
@@ -143,7 +144,7 @@ function OffersGrid({
         <View style={styles.actionContainer}>
           {offer.isClaimed ? (
             <View style={styles.claimedButton}>
-              <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
               <Text style={styles.claimedButtonText}>Claimed</Text>
             </View>
           ) : (
@@ -152,7 +153,7 @@ function OffersGrid({
               onPress={() => handleClaimPress(offer)}
             >
               <LinearGradient
-                colors={['#00C06A', '#00796B']}
+                colors={[colors.brand.green, colors.brand.teal]}
                 style={styles.claimButtonGradient}
               >
                 <Ionicons name="gift" size={16} color="white" />
@@ -174,7 +175,7 @@ function OffersGrid({
         </View>
       ) : (
         <View style={styles.emptySection}>
-          <Ionicons name="gift-outline" size={32} color="#D1D5DB" />
+          <Ionicons name="gift-outline" size={32} color={colors.neutral[300]} />
           <Text style={styles.emptySectionText}>{emptyMessage}</Text>
         </View>
       )}
@@ -187,7 +188,7 @@ function OffersGrid({
       <View style={styles.header}>
         <View style={styles.headerIcon}>
           <LinearGradient
-            colors={['#00C06A', '#00796B']}
+            colors={[colors.brand.green, colors.brand.teal]}
             style={styles.headerIconGradient}
           >
             <Ionicons name="gift" size={20} color="white" />
@@ -205,7 +206,7 @@ function OffersGrid({
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
           <LinearGradient
-            colors={['#10B981', '#34D399']}
+            colors={[colors.successScale[400], colors.successScale[400]]}
             style={styles.statCardGradient}
           >
             <Ionicons name="gift" size={20} color="white" />
@@ -216,7 +217,7 @@ function OffersGrid({
         
         <View style={styles.statCard}>
           <LinearGradient
-            colors={['#F59E0B', '#FBBF24']}
+            colors={[colors.warningScale[400], colors.warningScale[400]]}
             style={styles.statCardGradient}
           >
             <Ionicons name="checkmark-circle" size={20} color="white" />
@@ -227,7 +228,7 @@ function OffersGrid({
 
         <View style={styles.statCard}>
           <LinearGradient
-            colors={['#00C06A', '#00796B']}
+            colors={[colors.brand.green, colors.brand.teal]}
             style={styles.statCardGradient}
           >
             <Ionicons name="star" size={20} color="white" />
@@ -297,11 +298,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   headerSubtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   statsContainer: {
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
   },
   offersGrid: {
@@ -354,7 +355,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     overflow: 'hidden',
     elevation: 2,
     shadowColor: '#000',
@@ -364,7 +365,7 @@ const styles = StyleSheet.create({
   },
   claimedOfferCard: {
     opacity: 0.7,
-    borderColor: '#10B981',
+    borderColor: colors.successScale[400],
   },
   imageContainer: {
     position: 'relative',
@@ -373,18 +374,18 @@ const styles = StyleSheet.create({
   offerImage: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   placeholderImage: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   discountBadge: {
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -414,7 +415,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     left: 8,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -434,15 +435,15 @@ const styles = StyleSheet.create({
   offerTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   claimedOfferTitle: {
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   offerDescription: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
     lineHeight: 16,
   },
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
   },
   validityText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 4,
   },
   termsButton: {
@@ -462,7 +463,7 @@ const styles = StyleSheet.create({
   },
   termsButtonText: {
     fontSize: 11,
-    color: '#00C06A',
+    color: colors.brand.green,
     fontWeight: '500',
     marginLeft: 4,
   },
@@ -474,13 +475,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     borderRadius: 8,
     paddingVertical: 8,
   },
   claimedButtonText: {
     fontSize: 12,
-    color: '#10B981',
+    color: colors.successScale[400],
     fontWeight: '600',
     marginLeft: 4,
   },
@@ -503,15 +504,15 @@ const styles = StyleSheet.create({
   emptySection: {
     alignItems: 'center',
     paddingVertical: 40,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderStyle: 'dashed',
   },
   emptySectionText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 12,
     textAlign: 'center',
   },

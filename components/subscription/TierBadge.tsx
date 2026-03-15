@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { TIER_COLORS, TIER_GRADIENTS, TIER_ICONS } from '@/types/subscription.types';
 import type { SubscriptionTier } from '@/types/subscription.types';
+import { colors } from '@/constants/theme';
 
 interface TierBadgeProps {
   tier: SubscriptionTier;
@@ -73,7 +74,7 @@ function TierBadge({
         accessibilityLabel={`${tierName} tier badge`}
         accessibilityRole="text"
       >
-        <Ionicons name={tierIcon as any} size={config.iconSize} color="#FFFFFF" />
+        <Ionicons name={tierIcon as any} size={config.iconSize} color={colors.background.primary} />
         <ThemedText
           style={[
             styles.badgeText,
@@ -106,7 +107,7 @@ function TierBadge({
         accessibilityLabel={`${tierName} tier`}
         accessibilityRole="text"
       >
-        <Ionicons name={tierIcon as any} size={config.iconSize} color="#FFFFFF" />
+        <Ionicons name={tierIcon as any} size={config.iconSize} color={colors.background.primary} />
       </View>
     );
   }
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   badgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: 'bold',
   },
   iconOnlyBadge: {

@@ -16,20 +16,21 @@ import { ThemedText } from '@/components/ThemedText';
 import gamificationAPI from '@/services/gamificationApi';
 import type { SpinWheelSegment, SpinWheelResult } from '@/types/gamification.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const WHEEL_SIZE = width * 0.85;
 
 // Default wheel segments (8 segments) - Note: labels with currency will be dynamic
 const DEFAULT_SEGMENTS: SpinWheelSegment[] = [
-  { id: '1', label: '10 Coins', value: 10, color: '#EF4444', type: 'coins' },
-  { id: '2', label: '5% Off', value: 5, color: '#F59E0B', type: 'discount' },
-  { id: '3', label: '50 Coins', value: 50, color: '#ffcd57', type: 'coins' },
-  { id: '4', label: '10 Cashback', value: 10, color: '#3B82F6', type: 'cashback' },
-  { id: '5', label: '100 Coins', value: 100, color: '#8B5CF6', type: 'coins' },
-  { id: '6', label: '25 Voucher', value: 25, color: '#EC4899', type: 'voucher' },
-  { id: '7', label: '25 Coins', value: 25, color: '#14B8A6', type: 'coins' },
-  { id: '8', label: 'Better Luck', value: 0, color: '#6B7280', type: 'nothing' },
+  { id: '1', label: '10 Coins', value: 10, color: colors.error, type: 'coins' },
+  { id: '2', label: '5% Off', value: 5, color: colors.warningScale[400], type: 'discount' },
+  { id: '3', label: '50 Coins', value: 50, color: colors.lightMustard, type: 'coins' },
+  { id: '4', label: '10 Cashback', value: 10, color: colors.infoScale[400], type: 'cashback' },
+  { id: '5', label: '100 Coins', value: 100, color: colors.brand.purpleLight, type: 'coins' },
+  { id: '6', label: '25 Voucher', value: 25, color: colors.brand.pink, type: 'voucher' },
+  { id: '7', label: '25 Coins', value: 25, color: colors.tealGreen, type: 'coins' },
+  { id: '8', label: 'Better Luck', value: 0, color: colors.neutral[500], type: 'nothing' },
 ];
 
 interface SpinWheelProps {
@@ -180,10 +181,10 @@ function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelPro
           {/* Center Circle */}
           <View style={styles.centerCircle}>
             <LinearGradient
-              colors={['#8B5CF6', '#7C3AED']}
+              colors={[colors.brand.purpleLight, colors.brand.purple]}
               style={styles.centerGradient}
             >
-              <Ionicons name="diamond" size={32} color="#FFFFFF" />
+              <Ionicons name="diamond" size={32} color={colors.background.primary} />
             </LinearGradient>
           </View>
         </Animated.View>
@@ -199,14 +200,14 @@ function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelPro
         disabled={!canSpin || isSpinning}
       >
         <LinearGradient
-          colors={canSpin && !isSpinning ? ['#8B5CF6', '#7C3AED'] : ['#9CA3AF', '#6B7280']}
+          colors={canSpin && !isSpinning ? [colors.brand.purpleLight, colors.brand.purple] : [colors.neutral[400], colors.neutral[500]]}
           style={styles.spinButtonGradient}
         >
           <ThemedText style={styles.spinButtonText}>
             {isSpinning ? 'Spinning...' : canSpin ? 'SPIN' : 'Come Back Later'}
           </ThemedText>
           {!isSpinning && canSpin && (
-            <Ionicons name="arrow-forward-circle" size={24} color="#FFFFFF" />
+            <Ionicons name="arrow-forward-circle" size={24} color={colors.background.primary} />
           )}
         </LinearGradient>
       </Pressable>
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 30,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderBottomColor: '#EF4444',
+    borderBottomColor: colors.error,
   },
   wheel: {
     width: WHEEL_SIZE,
@@ -286,7 +287,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   segmentText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -303,7 +304,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     overflow: 'hidden',
     borderWidth: 4,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
     zIndex: 5,
   },
   centerGradient: {
@@ -333,13 +334,13 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   spinButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 18,
     fontWeight: 'bold',
   },
   timerText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 12,
   },
 });

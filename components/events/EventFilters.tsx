@@ -14,6 +14,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { EventFilters as EventFiltersType } from '@/services/eventsApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -73,9 +74,9 @@ function EventFilters({
 
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
-  const borderColor = useThemeColor({ light: '#E5E7EB', dark: '#374151' }, 'border');
+  const borderColor = useThemeColor({ light: colors.neutral[200], dark: colors.neutral[700] }, 'border');
   const tintColor = useThemeColor({}, 'tint');
-  const cardBackground = useThemeColor({ light: '#FFFFFF', dark: '#1F2937' }, 'background');
+  const cardBackground = useThemeColor({ light: colors.background.primary, dark: colors.neutral[800] }, 'background');
 
   const handleCategorySelect = (category: string) => {
     const newFilters = {
@@ -192,7 +193,7 @@ function EventFilters({
                     style={[
                       styles.chipText,
                       { color: textColor },
-                      isFilterActive('category', category) && { color: '#FFFFFF' }
+                      isFilterActive('category', category) && { color: colors.background.primary }
                     ]}
                   >
                     {category}
@@ -222,7 +223,7 @@ function EventFilters({
                     style={[
                       styles.chipText,
                       { color: textColor },
-                      isFilterActive('location', location) && { color: '#FFFFFF' }
+                      isFilterActive('location', location) && { color: colors.background.primary }
                     ]}
                   >
                     {location}
@@ -252,7 +253,7 @@ function EventFilters({
                     style={[
                       styles.priceChipText,
                       { color: textColor },
-                      isFilterActive('price', range) && { color: '#FFFFFF' }
+                      isFilterActive('price', range) && { color: colors.background.primary }
                     ]}
                   >
                     {range.label}
@@ -280,7 +281,7 @@ function EventFilters({
                   style={[
                     styles.eventTypeChipText,
                     { color: textColor },
-                    isFilterActive('eventType', undefined) && { color: '#FFFFFF' }
+                    isFilterActive('eventType', undefined) && { color: colors.background.primary }
                   ]}
                 >
                   All Events
@@ -298,14 +299,14 @@ function EventFilters({
                 <Ionicons
                   name="globe"
                   size={16}
-                  color={isFilterActive('eventType', true) ? '#FFFFFF' : textColor}
+                  color={isFilterActive('eventType', true) ? colors.background.primary : textColor}
                   style={styles.eventTypeIcon}
                 />
                 <ThemedText
                   style={[
                     styles.eventTypeChipText,
                     { color: textColor },
-                    isFilterActive('eventType', true) && { color: '#FFFFFF' }
+                    isFilterActive('eventType', true) && { color: colors.background.primary }
                   ]}
                 >
                   Online
@@ -323,14 +324,14 @@ function EventFilters({
                 <Ionicons
                   name="location"
                   size={16}
-                  color={isFilterActive('eventType', false) ? '#FFFFFF' : textColor}
+                  color={isFilterActive('eventType', false) ? colors.background.primary : textColor}
                   style={styles.eventTypeIcon}
                 />
                 <ThemedText
                   style={[
                     styles.eventTypeChipText,
                     { color: textColor },
-                    isFilterActive('eventType', false) && { color: '#FFFFFF' }
+                    isFilterActive('eventType', false) && { color: colors.background.primary }
                   ]}
                 >
                   Venue
@@ -367,7 +368,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   closeButton: {
     padding: 8,
@@ -469,7 +470,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   applyButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: '600',
   },

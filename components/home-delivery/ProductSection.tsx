@@ -9,6 +9,7 @@ import {
 import { ThemedText } from '@/components/ThemedText';
 import { HomeDeliveryProductCard } from './HomeDeliveryProductCard';
 import { ProductSectionProps } from '@/types/home-delivery.types';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -92,7 +93,7 @@ function _ProductSectionInner({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 20,
     marginBottom: 12,
   },
@@ -110,25 +111,25 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   sectionSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   viewAllButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 20,
     alignSelf: 'flex-start',
   },
   viewAllText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   productsGrid: {
     paddingHorizontal: 16,

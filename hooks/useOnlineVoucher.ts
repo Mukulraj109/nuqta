@@ -16,6 +16,7 @@ import {
 import VoucherData from '@/data/voucherData';
 import realVouchersApi from '@/services/realVouchersApi';
 import logger from '@/utils/logger';
+import { colors } from '@/constants/theme';
 
 // PRODUCTION: Always use real API - no mock fallback
 const USE_REAL_API = true; // Force production mode - always use backend API
@@ -36,16 +37,16 @@ const CATEGORY_ICONS: { [key: string]: string } = {
 
 // Category color mapping
 const CATEGORY_COLORS: { [key: string]: { color: string; backgroundColor: string } } = {
-  beauty: { color: '#EC4899', backgroundColor: '#FCE7F3' },
-  electronics: { color: '#3B82F6', backgroundColor: '#DBEAFE' },
-  entertainment: { color: '#8B5CF6', backgroundColor: '#EDE9FE' },
-  fashion: { color: '#EC4899', backgroundColor: '#FCE7F3' },
-  food: { color: '#ffcd57', backgroundColor: '#faf1e0' },
-  grocery: { color: '#F59E0B', backgroundColor: '#FEF3C7' },
-  groceries: { color: '#F59E0B', backgroundColor: '#FEF3C7' },
-  shopping: { color: '#EF4444', backgroundColor: '#FEE2E2' },
-  travel: { color: '#06B6D4', backgroundColor: '#CFFAFE' },
-  sports: { color: '#14B8A6', backgroundColor: '#CCFBF1' },
+  beauty: { color: colors.brand.pink, backgroundColor: colors.pinkMist },
+  electronics: { color: '#3B82F6', backgroundColor: colors.tint.blueLight },
+  entertainment: { color: colors.brand.purpleLight, backgroundColor: colors.tint.purple },
+  fashion: { color: colors.brand.pink, backgroundColor: colors.pinkMist },
+  food: { color: colors.lightMustard, backgroundColor: colors.linen },
+  grocery: { color: '#F59E0B', backgroundColor: colors.tint.amberLight },
+  groceries: { color: '#F59E0B', backgroundColor: colors.tint.amberLight },
+  shopping: { color: colors.error, backgroundColor: colors.errorScale[100] },
+  travel: { color: colors.brand.cyan, backgroundColor: '#CFFAFE' },
+  sports: { color: colors.tealGreen, backgroundColor: '#CCFBF1' },
 };
 
 export const useOnlineVoucher = (): UseVoucherReturn => {
@@ -117,7 +118,7 @@ export const useOnlineVoucher = (): UseVoucherReturn => {
         
         categoriesRes.data.forEach((cat: string) => {
           const normalizedCat = cat.toLowerCase();
-          const categoryColors = CATEGORY_COLORS[normalizedCat] || { color: '#6B7280', backgroundColor: '#FFFFFF' };
+          const categoryColors = CATEGORY_COLORS[normalizedCat] || { color: colors.neutral[500], backgroundColor: '#FFFFFF' };
           
           categoriesMap[normalizedCat] = {
             id: cat,

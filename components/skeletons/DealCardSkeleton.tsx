@@ -14,6 +14,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 function DealCardSkeleton() {
   return (
@@ -143,7 +144,7 @@ function DealCardSkeleton() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     marginBottom: 18,
     marginHorizontal: 12,
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 6,
     borderWidth: 1,
-    borderColor: '#F1F5F9',
+    borderColor: colors.tint.slate,
     position: 'relative',
   },
   badgeContainer: {

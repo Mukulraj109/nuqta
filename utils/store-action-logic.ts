@@ -10,6 +10,7 @@ import {
   StoreDataForButtons,
   ActionButtonId,
 } from '@/types/store-actions';
+import { colors } from '@/constants/theme';
 
 /**
  * Determines which buttons should be visible based on store type
@@ -78,7 +79,7 @@ export function createButtonConfigs(props: StoreActionButtonsProps): ActionButto
       isVisible: true,
       isEnabled: !props.isLockDisabled && props.lockButtonState !== 'disabled',
       isLoading: props.isLockLoading || props.lockButtonState === 'loading',
-      backgroundColor: ['#FFC857', '#FF9F1C'] as const, // ReZ Gold gradient for lock (premium action)
+      backgroundColor: ['#FFC857', colors.warning] as const, // ReZ Gold gradient for lock (premium action)
       textColor: '#0B2240', // Midnight Navy for contrast on gold
     });
   }

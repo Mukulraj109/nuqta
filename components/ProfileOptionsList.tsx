@@ -4,6 +4,7 @@ import { View, Text, Pressable, StyleSheet, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ProfileOption, ProfileOptionsListProps } from "@/types/profile";
 import { useRegion } from "@/contexts/RegionContext";
+import { colors } from '@/constants/theme';
 
 // Dummy data (Replace with backend data later)
 const getDefaultOptionsData = (currencySymbol: string): ProfileOption[] => [
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 14,
     marginBottom: 12,
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   badgeText: {
-    color: "#fff",
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: "600",
   },

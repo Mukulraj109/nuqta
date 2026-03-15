@@ -5,6 +5,7 @@
  * The mall content is rendered on the homepage when the "mall" tab is selected.
  */
 
+import { colors } from '@/constants/theme';
 import { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
@@ -23,7 +24,7 @@ export default function MallIndex() {
   // Show loading while redirecting
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="#0284C7" />
+      <ActivityIndicator size="large" color={colors.brand.sky} />
     </View>
   );
 }

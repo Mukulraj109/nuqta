@@ -12,15 +12,16 @@ import { Ionicons } from '@expo/vector-icons';
 import homeServicesApi, { HomeService, HomeServicesByCategoryResponse } from '@/services/homeServicesApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Fallback gradient colors for categories
 const categoryGradients: Record<string, string[]> = {
-  repair: ['#3B82F6', '#2563EB'],
-  cleaning: ['#22C55E', '#16A34A'],
-  painting: ['#F97316', '#EA580C'],
-  carpentry: ['#8B5CF6', '#7C3AED'],
-  plumbing: ['#06B6D4', '#0891B2'],
-  electrical: ['#EAB308', '#CA8A04'],
+  repair: [colors.infoScale[400], colors.brand.blue],
+  cleaning: [colors.success, colors.brand.greenDark],
+  painting: [colors.brand.orange, colors.brand.orangeDark],
+  carpentry: [colors.brand.purpleLight, colors.brand.purple],
+  plumbing: [colors.brand.cyan, colors.cyanDark],
+  electrical: [colors.brand.amber, '#CA8A04'],
 };
 
 const HomeServicesCategoryPage: React.FC = () => {

@@ -18,6 +18,7 @@ import ProductVariantModal, { VariantSelection } from '@/components/cart/Product
 import { hasVariants, createCartItemFromVariant } from '@/utils/variantHelper';
 import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDataNormalizer';
 import { formatPrice } from '@/utils/priceFormatter';
+import { colors } from '@/constants/theme';
 
 interface StoreProductCardProps {
   product: ProductItem;
@@ -268,7 +269,7 @@ function StoreProductCard({
               <Ionicons
                 name={inWishlist ? 'heart' : 'heart-outline'}
                 size={22}
-                color={inWishlist ? '#EF4444' : '#FFFFFF'}
+                color={inWishlist ? colors.error : colors.text.white}
               />
             </Animated.View>
           </Pressable>
@@ -331,12 +332,12 @@ function StoreProductCard({
           >
             {isAddingToCart ? (
               <>
-                <ActivityIndicator size="small" color="#FFFFFF" />
+                <ActivityIndicator size="small" color={colors.background.primary} />
                 <Text style={styles.addToCartText} numberOfLines={1}>Adding...</Text>
               </>
             ) : (
               <>
-                <Ionicons name="cart-outline" size={16} color="#FFFFFF" style={{ marginRight: 4 }} />
+                <Ionicons name="cart-outline" size={16} color={colors.background.primary} style={{ marginRight: 4 }} />
                 <Text style={styles.addToCartText} numberOfLines={1}>Add to Cart</Text>
               </>
             )}
@@ -369,12 +370,12 @@ function StoreProductCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.gray[100],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -395,7 +396,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     height: 160,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     position: 'relative',
   },
   image: {
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
     }),
   },
   discountText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 0.5,
@@ -434,7 +435,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 13.5,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.gray[900],
     marginBottom: 6,
     lineHeight: 18,
     minHeight: 36,
@@ -450,12 +451,12 @@ const styles = StyleSheet.create({
   },
   star: {
     fontSize: 12,
-    color: '#F59E0B',
+    color: colors.warning,
     marginRight: 1,
   },
   ratingCount: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   priceContainer: {
@@ -467,25 +468,25 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     marginRight: 6,
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
     fontWeight: '500',
   },
   storeName: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 0,
     marginBottom: 6,
     fontWeight: '500',
   },
   variantHint: {
     fontSize: 10,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
     marginBottom: 6,
   },
@@ -515,14 +516,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 10,
     marginTop: 8,
     ...Platform.select({
       ios: {
-        shadowColor: '#7C3AED',
+        shadowColor: colors.brand.purple,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.3,
         shadowRadius: 6,
@@ -540,7 +541,7 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   addToCartText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 0.2,

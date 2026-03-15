@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { FAQItem } from '@/types/partner.types';
+import { colors } from '@/constants/theme';
 
 interface FAQAccordionProps {
   faqs: FAQItem[];
@@ -28,15 +29,15 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ faq, isExpanded, onToggle
   const getCategoryColor = (category: FAQItem['category']) => {
     switch (category) {
       case 'general':
-        return '#00C06A';
+        return colors.brand.green;
       case 'transactions':
-        return '#10B981';
+        return colors.successScale[400];
       case 'rewards':
-        return '#F59E0B';
+        return colors.warningScale[400];
       case 'levels':
-        return '#EF4444';
+        return colors.error;
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   };
 
@@ -87,7 +88,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ faq, isExpanded, onToggle
           styles.expandIcon,
           { transform: [{ rotate: isExpanded ? '180deg' : '0deg' }] }
         ]}>
-          <Ionicons name="chevron-down" size={20} color="#6B7280" />
+          <Ionicons name="chevron-down" size={20} color={colors.neutral[500]} />
         </Animated.View>
       </Pressable>
 
@@ -110,11 +111,11 @@ function FAQAccordion({ faqs, onContactPress }: FAQAccordionProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   const categories = [
-    { key: 'all', name: 'All', icon: 'apps-outline', color: '#6B7280' },
-    { key: 'general', name: 'General', icon: 'information-circle-outline', color: '#00C06A' },
-    { key: 'transactions', name: 'Transactions', icon: 'card-outline', color: '#10B981' },
-    { key: 'rewards', name: 'Rewards', icon: 'gift-outline', color: '#F59E0B' },
-    { key: 'levels', name: 'Levels', icon: 'trophy-outline', color: '#EF4444' },
+    { key: 'all', name: 'All', icon: 'apps-outline', color: colors.neutral[500] },
+    { key: 'general', name: 'General', icon: 'information-circle-outline', color: colors.brand.green },
+    { key: 'transactions', name: 'Transactions', icon: 'card-outline', color: colors.successScale[400] },
+    { key: 'rewards', name: 'Rewards', icon: 'gift-outline', color: colors.warningScale[400] },
+    { key: 'levels', name: 'Levels', icon: 'trophy-outline', color: colors.error },
   ];
 
   const filteredFAQs = selectedCategory === 'all' 
@@ -145,7 +146,7 @@ function FAQAccordion({ faqs, onContactPress }: FAQAccordionProps) {
       <View style={styles.header}>
         <View style={styles.headerIcon}>
           <LinearGradient
-            colors={['#00C06A', '#00796B']}
+            colors={[colors.brand.green, colors.brand.teal]}
             style={styles.headerIconGradient}
           >
             <Ionicons name="help-circle" size={20} color="white" />
@@ -207,7 +208,7 @@ function FAQAccordion({ faqs, onContactPress }: FAQAccordionProps) {
             accessibilityRole="button"
             accessibilityHint="Double tap to expand all FAQ items"
           >
-            <Ionicons name="chevron-down-circle-outline" size={16} color="#00C06A" />
+            <Ionicons name="chevron-down-circle-outline" size={16} color={colors.brand.green} />
             <Text style={styles.controlButtonText}>Expand All</Text>
           </Pressable>
           <Pressable
@@ -217,7 +218,7 @@ function FAQAccordion({ faqs, onContactPress }: FAQAccordionProps) {
             accessibilityRole="button"
             accessibilityHint="Double tap to collapse all FAQ items"
           >
-            <Ionicons name="chevron-up-circle-outline" size={16} color="#00C06A" />
+            <Ionicons name="chevron-up-circle-outline" size={16} color={colors.brand.green} />
             <Text style={styles.controlButtonText}>Collapse All</Text>
           </Pressable>
         </View>
@@ -240,7 +241,7 @@ function FAQAccordion({ faqs, onContactPress }: FAQAccordionProps) {
           ))
         ) : (
           <View style={styles.emptyState}>
-            <Ionicons name="document-text-outline" size={48} color="#D1D5DB" />
+            <Ionicons name="document-text-outline" size={48} color={colors.neutral[300]} />
             <Text style={styles.emptyStateTitle}>No FAQs Found</Text>
             <Text style={styles.emptyStateText}>
               No questions found for the selected category.
@@ -259,7 +260,7 @@ function FAQAccordion({ faqs, onContactPress }: FAQAccordionProps) {
         accessibilityHint="Double tap to chat with support"
       >
         <LinearGradient
-          colors={['#00C06A', '#00796B']}
+          colors={[colors.brand.green, colors.brand.teal]}
           style={styles.contactButtonGradient}
         >
           <View style={styles.contactButtonContent}>
@@ -308,11 +309,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   headerSubtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   categoryFilter: {
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   selectedCategoryButton: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
   },
   categoryButtonText: {
     fontSize: 12,
@@ -349,11 +350,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   controlsInfo: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   controlButtons: {
     flexDirection: 'row',
@@ -365,7 +366,7 @@ const styles = StyleSheet.create({
   },
   controlButtonText: {
     fontSize: 12,
-    color: '#00C06A',
+    color: colors.brand.green,
     fontWeight: '500',
     marginLeft: 4,
   },
@@ -378,14 +379,14 @@ const styles = StyleSheet.create({
   },
   accordionItem: {
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderRadius: 12,
     marginBottom: 8,
     backgroundColor: 'white',
   },
   expandedAccordionItem: {
-    borderColor: '#00C06A',
-    backgroundColor: '#F8FAFC',
+    borderColor: colors.brand.green,
+    backgroundColor: colors.tint.coolGray,
   },
   accordionHeader: {
     flexDirection: 'row',
@@ -408,7 +409,7 @@ const styles = StyleSheet.create({
   questionText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     flex: 1,
     lineHeight: 20,
   },
@@ -419,11 +420,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 16,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   answerText: {
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
     lineHeight: 22,
     marginBottom: 12,
   },
@@ -441,13 +442,13 @@ const styles = StyleSheet.create({
   emptyStateTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 16,
     marginBottom: 8,
   },
   emptyStateText: {
     fontSize: 14,
-    color: '#D1D5DB',
+    color: colors.neutral[300],
     textAlign: 'center',
     lineHeight: 20,
   },

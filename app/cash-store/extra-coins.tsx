@@ -24,6 +24,7 @@ import bonusZoneApi, { BonusZoneCampaign } from '../../services/bonusZoneApi';
 import BonusZoneCard from '../../components/earn/BonusZoneCard';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = SCREEN_WIDTH - 64;
@@ -97,12 +98,12 @@ function getCategoryIcon(category?: string): keyof typeof Ionicons.glyphMap {
 
 
 const EARN_METHODS = [
-  { id: 'spin', icon: 'color-wand' as const, title: 'Spin & Win', desc: 'Try your luck daily', coins: '10-500', gradient: ['#7C3AED', '#A855F7'] as [string, string], route: '/play-and-earn' },
-  { id: 'quiz', icon: 'bulb' as const, title: 'Daily Quiz', desc: 'Answer & earn', coins: '5-50', gradient: ['#DB2777', '#EC4899'] as [string, string], route: '/play-and-earn' },
-  { id: 'review', icon: 'star' as const, title: 'Write Reviews', desc: 'Share your experience', coins: '20-100', gradient: ['#D97706', '#F59E0B'] as [string, string], route: '/explore' },
-  { id: 'refer', icon: 'people' as const, title: 'Refer Friends', desc: 'Invite & both earn', coins: '100+', gradient: ['#059669', '#10B981'] as [string, string], route: '/account/referral' },
-  { id: 'share', icon: 'share-social' as const, title: 'Share & Earn', desc: 'Post on social media', coins: '50+', gradient: ['#2563EB', '#3B82F6'] as [string, string], route: '/play-and-earn' },
-  { id: 'shop', icon: 'bag-handle' as const, title: 'Shop & Earn', desc: 'Auto 5% on purchases', coins: '5%', gradient: ['#C2410C', '#EA580C'] as [string, string], route: '/cash-store' },
+  { id: 'spin', icon: 'color-wand' as const, title: 'Spin & Win', desc: 'Try your luck daily', coins: '10-500', gradient: [colors.brand.purple, colors.brand.purpleMedium] as [string, string], route: '/play-and-earn' },
+  { id: 'quiz', icon: 'bulb' as const, title: 'Daily Quiz', desc: 'Answer & earn', coins: '5-50', gradient: [colors.deepPink, colors.brand.pink] as [string, string], route: '/play-and-earn' },
+  { id: 'review', icon: 'star' as const, title: 'Write Reviews', desc: 'Share your experience', coins: '20-100', gradient: [colors.warningScale[700], colors.warningScale[400]] as [string, string], route: '/explore' },
+  { id: 'refer', icon: 'people' as const, title: 'Refer Friends', desc: 'Invite & both earn', coins: '100+', gradient: [colors.successScale[700], colors.successScale[400]] as [string, string], route: '/account/referral' },
+  { id: 'share', icon: 'share-social' as const, title: 'Share & Earn', desc: 'Post on social media', coins: '50+', gradient: [colors.brand.blue, colors.infoScale[400]] as [string, string], route: '/play-and-earn' },
+  { id: 'shop', icon: 'bag-handle' as const, title: 'Shop & Earn', desc: 'Auto 5% on purchases', coins: '5%', gradient: ['#C2410C', colors.brand.orangeDark] as [string, string], route: '/cash-store' },
 ];
 
 // ─── Animated Glow Component ────────────────────────────────
@@ -319,7 +320,7 @@ export default function ExtraCoinsPage() {
             HERO SECTION — Full-bleed dark gradient
         ═══════════════════════════════════════════════════ */}
         <LinearGradient
-          colors={['#0F172A', Colors.nileBlue, '#234b68']}
+          colors={['#0F172A', Colors.nileBlue, colors.brand.nileBlueLight]}
           start={{ x: 0.2, y: 0 }}
           end={{ x: 0.8, y: 1 }}
           style={[styles.heroSection, { paddingTop: headerTop + 8 }]}
@@ -343,7 +344,7 @@ export default function ExtraCoinsPage() {
             <View style={styles.coinIconOuter}>
               <GlowRing />
               <LinearGradient
-                colors={[Colors.gold, '#F59E0B']}
+                colors={[Colors.gold, colors.warningScale[400]]}
                 style={styles.coinIconInner}
               >
                 <Ionicons name="wallet" size={26} color="#0F172A" />
@@ -388,7 +389,7 @@ export default function ExtraCoinsPage() {
                
               >
                 <LinearGradient
-                  colors={streak.hasCheckedInToday ? ['#059669', '#10B981'] : [Colors.gold, '#F59E0B']}
+                  colors={streak.hasCheckedInToday ? [colors.successScale[700], colors.successScale[400]] : [Colors.gold, colors.warningScale[400]]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.checkInBtnGradient}
@@ -410,7 +411,7 @@ export default function ExtraCoinsPage() {
         {/* Error banners */}
         {error && hasContent && (
           <View style={styles.errorBanner}>
-            <Ionicons name="warning-outline" size={14} color="#B45309" />
+            <Ionicons name="warning-outline" size={14} color={colors.brand.amberDeep} />
             <Text style={styles.errorBannerText}>Some data may be outdated</Text>
             <Pressable onPress={handleRefresh} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
               <Text style={styles.errorBannerRetry}>Refresh</Text>
@@ -437,8 +438,8 @@ export default function ExtraCoinsPage() {
           {campaigns.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <LinearGradient colors={['#FEF3C7', '#FDE68A']} style={styles.sectionIconBg}>
-                  <Ionicons name="flash" size={16} color="#D97706" />
+                <LinearGradient colors={[colors.tint.amberLight, colors.warningScale[200]]} style={styles.sectionIconBg}>
+                  <Ionicons name="flash" size={16} color={colors.warningScale[700]} />
                 </LinearGradient>
                 <Text style={styles.sectionTitle}>Active Boosts</Text>
                 <Pressable onPress={handleCampaignPress} style={styles.seeAllBtn}>
@@ -502,8 +503,8 @@ export default function ExtraCoinsPage() {
           {coinDrops.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <LinearGradient colors={['#EDE9FE', '#DDD6FE']} style={styles.sectionIconBg}>
-                  <Ionicons name="diamond" size={16} color={"#7C3AED"} />
+                <LinearGradient colors={[colors.tint.purple, '#DDD6FE']} style={styles.sectionIconBg}>
+                  <Ionicons name="diamond" size={16} color={colors.brand.purple} />
                 </LinearGradient>
                 <Text style={styles.sectionTitle}>Coin Drops</Text>
               </View>
@@ -519,7 +520,7 @@ export default function ExtraCoinsPage() {
                      
                     >
                       <View style={styles.dropHeader}>
-                        <LinearGradient colors={['#7C3AED', '#A855F7']} style={styles.dropIcon}>
+                        <LinearGradient colors={[colors.brand.purple, colors.brand.purpleMedium]} style={styles.dropIcon}>
                           <Ionicons name={icon} size={16} color={Colors.text.inverse} />
                         </LinearGradient>
                         <View style={styles.dropMultiBadge}>
@@ -530,7 +531,7 @@ export default function ExtraCoinsPage() {
                       <Text style={styles.dropBoosted}>{drop.boostedCashback}% cashback</Text>
                       <Text style={styles.dropNormal}>was {drop.normalCashback}%</Text>
                       <View style={styles.dropTimePill}>
-                        <Ionicons name="time-outline" size={10} color={"#7C3AED"} />
+                        <Ionicons name="time-outline" size={10} color={colors.brand.purple} />
                         <Text style={styles.dropTimeText}>{timeLeft}</Text>
                       </View>
                     </Pressable>
@@ -544,8 +545,8 @@ export default function ExtraCoinsPage() {
           {bonusCampaigns.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <LinearGradient colors={['#FCE7F3', '#FBCFE8']} style={styles.sectionIconBg}>
-                  <Ionicons name="gift" size={16} color="#DB2777" />
+                <LinearGradient colors={[colors.pinkMist, '#FBCFE8']} style={styles.sectionIconBg}>
+                  <Ionicons name="gift" size={16} color={colors.deepPink} />
                 </LinearGradient>
                 <Text style={styles.sectionTitle}>Bonus Zone</Text>
                 <Pressable
@@ -568,7 +569,7 @@ export default function ExtraCoinsPage() {
           {/* ─── Ways to Earn — 2-Column Grid ─────────────── */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <LinearGradient colors={['#D1FAE5', '#A7F3D0']} style={styles.sectionIconBg}>
+              <LinearGradient colors={[colors.tint.green, '#A7F3D0']} style={styles.sectionIconBg}>
                 <Ionicons name="sparkles" size={16} color={Colors.success} />
               </LinearGradient>
               <Text style={styles.sectionTitle}>Ways to Earn</Text>
@@ -605,7 +606,7 @@ export default function ExtraCoinsPage() {
           {/* ─── How It Works — Timeline ──────────────────── */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <LinearGradient colors={['#DBEAFE', '#BFDBFE']} style={styles.sectionIconBg}>
+              <LinearGradient colors={[colors.tint.blueLight, colors.infoScale[200]]} style={styles.sectionIconBg}>
                 <Ionicons name="information-circle" size={16} color={Colors.info} />
               </LinearGradient>
               <Text style={styles.sectionTitle}>How It Works</Text>
@@ -619,7 +620,7 @@ export default function ExtraCoinsPage() {
                 <View key={i} style={styles.timelineStep}>
                   {/* Connecting line */}
                   {i < 2 && <View style={styles.timelineLine} />}
-                  <LinearGradient colors={[Colors.nileBlue, '#234b68']} style={styles.timelineNumber}>
+                  <LinearGradient colors={[Colors.nileBlue, colors.brand.nileBlueLight]} style={styles.timelineNumber}>
                     <Text style={styles.timelineNumberText}>{item.step}</Text>
                   </LinearGradient>
                   <View style={styles.timelineContent}>
@@ -1218,12 +1219,12 @@ const styles = StyleSheet.create({
     marginTop: Spacing.md,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: colors.warningScale[200],
   },
   errorBannerText: {
     flex: 1,
     ...Typography.bodySmall,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
   errorBannerRetry: {
     ...Typography.bodySmall,

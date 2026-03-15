@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface FeatureHighlight {
   title: string;
@@ -27,40 +28,40 @@ const featureHighlights: FeatureHighlight[] = [
     title: 'Go Premium',
     description: '2x Cashback + Free Delivery on every order',
     icon: 'star',
-    gradient: ['#1a3a52', '#0f2a3d'],
+    gradient: [colors.nileBlue, '#0f2a3d'],
     route: '/subscription/plans',
     cta: 'Upgrade',
     badge: 'POPULAR',
-    badgeColor: '#F59E0B',
+    badgeColor: colors.warningScale[400],
     iconBg: 'rgba(255, 205, 87, 0.15)',
-    ctaBg: '#ffcd57',
-    ctaTextColor: '#1a3a52',
+    ctaBg: colors.lightMustard,
+    ctaTextColor: colors.nileBlue,
   },
   {
     title: 'Upload Bills',
     description: 'Earn 5% cashback on your offline shopping',
     icon: 'receipt-outline',
-    gradient: ['#F8FAFC', '#EFF6FF'],
+    gradient: [colors.tint.coolGray, colors.tint.blue],
     route: '/bill-upload',
     cta: 'Upload',
     badge: 'NEW',
-    badgeColor: '#22C55E',
+    badgeColor: colors.success,
     iconBg: 'rgba(26, 58, 82, 0.08)',
-    ctaBg: '#1a3a52',
-    ctaTextColor: '#FFFFFF',
+    ctaBg: colors.nileBlue,
+    ctaTextColor: colors.background.primary,
   },
   {
     title: 'Refer & Earn',
     description: 'Get 100 coins for every friend who joins',
     icon: 'gift-outline',
-    gradient: ['#FEF3C7', '#FDE68A'],
+    gradient: [colors.tint.amberLight, colors.warningScale[200]],
     route: '/referral',
     cta: 'Share',
     badge: 'HOT',
-    badgeColor: '#EF4444',
+    badgeColor: colors.error,
     iconBg: 'rgba(26, 58, 82, 0.08)',
-    ctaBg: '#1a3a52',
-    ctaTextColor: '#FFFFFF',
+    ctaBg: colors.nileBlue,
+    ctaTextColor: colors.background.primary,
   },
 ];
 
@@ -76,7 +77,7 @@ function FeatureHighlights() {
       <View style={styles.header}>
         <View style={styles.headerRow}>
           <View style={styles.headerIconWrap}>
-            <Ionicons name="gift" size={14} color="#FFFFFF" />
+            <Ionicons name="gift" size={14} color={colors.background.primary} />
           </View>
           <ThemedText style={styles.sectionTitle}>Featured</ThemedText>
         </View>
@@ -92,9 +93,9 @@ function FeatureHighlights() {
         decelerationRate="fast"
       >
         {featureHighlights.map((feature, index) => {
-          const isDark = feature.gradient[0] === '#1a3a52';
-          const textColor = isDark ? '#FFFFFF' : '#1a3a52';
-          const subtextColor = isDark ? 'rgba(255,255,255,0.75)' : '#64748B';
+          const isDark = feature.gradient[0] === colors.nileBlue;
+          const textColor = isDark ? colors.background.primary : colors.nileBlue;
+          const subtextColor = isDark ? 'rgba(255,255,255,0.75)' : colors.slateGray;
 
           return (
             <Pressable
@@ -115,7 +116,7 @@ function FeatureHighlights() {
                     <Ionicons
                       name={feature.icon as any}
                       size={22}
-                      color={isDark ? '#ffcd57' : '#1a3a52'}
+                      color={isDark ? colors.lightMustard : colors.nileBlue}
                     />
                   </View>
                   {feature.badge && (
@@ -169,14 +170,14 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 8,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     alignItems: 'center',
     justifyContent: 'center',
   },
   sectionTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   sectionSubtitle: {
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
         shadowRadius: 12,
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   textContainer: {

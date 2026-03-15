@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface InfoModalProps {
   visible: boolean;
@@ -29,9 +30,9 @@ function InfoModal({
   onClose,
   autoCloseDelay = 0,
   icon = 'information-circle',
-  iconColor = '#3B82F6',
+  iconColor = colors.info,
   buttonText = 'OK',
-  buttonColor = '#3B82F6',
+  buttonColor = colors.info,
 }: InfoModalProps) {
   useEffect(() => {
     if (visible && autoCloseDelay > 0) {
@@ -47,11 +48,11 @@ function InfoModal({
   // Get background color for icon circle based on icon color
   const getIconBgColor = () => {
     switch (iconColor) {
-      case '#3B82F6': return '#DBEAFE'; // Blue
-      case '#F59E0B': return '#FEF3C7'; // Amber
-      case '#EF4444': return '#FEE2E2'; // Red
-      case '#10B981': return '#D1FAE5'; // Green
-      default: return '#DBEAFE';
+      case colors.info: return colors.tint.blueLight; // Blue
+      case colors.warning: return colors.tint.amberLight; // Amber
+      case colors.error: return colors.errorScale[100]; // Red
+      case colors.success: return colors.tint.green; // Green
+      default: return colors.tint.blueLight;
     }
   };
 
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 24,
     width: '100%',
@@ -134,13 +135,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.gray[900],
     marginBottom: 8,
     textAlign: 'center',
   },
   message: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 24,
     lineHeight: 20,
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontSize: 16,
     fontWeight: '600',
   },

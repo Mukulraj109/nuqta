@@ -16,6 +16,7 @@ import { useRouter } from 'expo-router';
 import storeVouchersApi, { StoreVoucher } from '@/services/storeVouchersApi';
 import VoucherCardSkeleton from '@/components/skeletons/VoucherCardSkeleton';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface VouchersSectionProps {
   storeId: string;
@@ -139,7 +140,7 @@ const VouchersSection: React.FC<VouchersSectionProps> = ({ storeId, storeName })
           <View key={voucher._id} style={styles.voucherCard}>
             {/* Discount Badge */}
             <View style={styles.discountBadge}>
-              <Ionicons name="pricetag" size={16} color="#FFFFFF" />
+              <Ionicons name="pricetag" size={16} color={colors.background.primary} />
               <Text style={styles.discountText}>
                 {formatDiscountBadge(voucher)}
               </Text>
@@ -159,7 +160,7 @@ const VouchersSection: React.FC<VouchersSectionProps> = ({ storeId, storeName })
 
             {/* Terms */}
             <View style={styles.termsContainer}>
-              <Ionicons name="information-circle-outline" size={14} color="#6B7280" />
+              <Ionicons name="information-circle-outline" size={14} color={colors.neutral[500]} />
               <Text style={styles.termsText} numberOfLines={2}>
                 Min. bill {currencySymbol}{voucher.minBillAmount}
                 {voucher.maxDiscountAmount && ` • Max ${currencySymbol}${voucher.maxDiscountAmount}`}
@@ -168,7 +169,7 @@ const VouchersSection: React.FC<VouchersSectionProps> = ({ storeId, storeName })
 
             {/* Validity */}
             <View style={styles.validityContainer}>
-              <Ionicons name="time-outline" size={14} color="#059669" />
+              <Ionicons name="time-outline" size={14} color={colors.successScale[700]} />
               <Text style={styles.validityText}>
                 {formatValidity(voucher.validUntil)}
               </Text>
@@ -180,7 +181,7 @@ const VouchersSection: React.FC<VouchersSectionProps> = ({ storeId, storeName })
                 style={styles.copiedButton}
                 disabled
               >
-                <Ionicons name="checkmark-circle" size={16} color="#059669" />
+                <Ionicons name="checkmark-circle" size={16} color={colors.successScale[700]} />
                 <Text style={styles.copiedButtonText}>Claimed</Text>
               </Pressable>
             ) : (
@@ -189,7 +190,7 @@ const VouchersSection: React.FC<VouchersSectionProps> = ({ storeId, storeName })
                 onPress={() => handleClaimVoucher(voucher._id, voucher.name)}
                
               >
-                <Ionicons name="add-circle-outline" size={16} color="#7C3AED" />
+                <Ionicons name="add-circle-outline" size={16} color={colors.brand.purple} />
                 <Text style={styles.copyButtonText}>Claim Voucher</Text>
               </Pressable>
             )}
@@ -289,12 +290,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   viewAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -302,11 +303,11 @@ const styles = StyleSheet.create({
   },
   voucherCard: {
     width: 280,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
     borderStyle: 'dashed',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
   discountBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     alignSelf: 'flex-start',
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -328,15 +329,15 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
   codeContainer: {
     marginBottom: 12,
   },
   codeDashed: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 1,
-    borderColor: '#7C3AED',
+    borderColor: colors.brand.purple,
     borderStyle: 'dashed',
     borderRadius: 8,
     paddingVertical: 10,
@@ -346,13 +347,13 @@ const styles = StyleSheet.create({
   codeText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     letterSpacing: 2,
   },
   voucherName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
     lineHeight: 20,
   },
@@ -365,7 +366,7 @@ const styles = StyleSheet.create({
   termsText: {
     flex: 1,
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 16,
   },
   validityContainer: {
@@ -377,13 +378,13 @@ const styles = StyleSheet.create({
   validityText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   copyButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 10,
@@ -392,13 +393,13 @@ const styles = StyleSheet.create({
   copyButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   copiedButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 10,
@@ -407,7 +408,7 @@ const styles = StyleSheet.create({
   copiedButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   loadingContainer: {
     paddingVertical: 32,
@@ -415,7 +416,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

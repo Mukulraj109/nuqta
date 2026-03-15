@@ -10,6 +10,7 @@ import { PriveEmptyState } from '@/components/prive/PriveEmptyState';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import usePriveEligibility from '@/hooks/usePriveEligibility';
 import priveApi from '@/services/priveApi';
+import { colors } from '@/constants/theme';
 
 export default function AnalyticsScreen() {
   const { tier } = usePriveEligibility();
@@ -36,7 +37,7 @@ export default function AnalyticsScreen() {
   if (tierRank[tier] < 2) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <PriveEmptyState
           icon="📊"
           title="Analytics is available for Signature and Elite members"
@@ -49,7 +50,7 @@ export default function AnalyticsScreen() {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <TransactionListSkeleton />
       </View>
     );
@@ -58,7 +59,7 @@ export default function AnalyticsScreen() {
   if (!data) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <PriveEmptyState icon="📊" title="Analytics unavailable" subtitle="Start earning coins to see your analytics" />
       </View>
     );
@@ -78,7 +79,7 @@ export default function AnalyticsScreen() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+      <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
       <ScrollView
         style={styles.scroll}
         showsVerticalScrollIndicator={false}

@@ -14,6 +14,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { StoreExperienceCard, StoreExperienceCardProps } from './cards/StoreExperienceCard';
 import { experiencesApi } from '@/services/experiencesApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Fallback store experience configurations generator - Nuqta palette
 const getFallbackStoreExperiences = (currencySymbol: string): StoreExperienceCardProps[] => [
@@ -22,47 +23,47 @@ const getFallbackStoreExperiences = (currencySymbol: string): StoreExperienceCar
     subtitle: 'Fashion, beauty, grocery & essentials',
     icon: '⚡',
     buttonText: 'Shop Now',
-    gradientColors: ['#1a3a52', '#243f55'] as const,
+    gradientColors: [colors.nileBlue, '#243f55'] as const,
     storeType: 'fastDelivery',
-    buttonTextColor: '#1a3a52',
+    buttonTextColor: colors.nileBlue,
   },
   {
     title: `${currencySymbol}1 Store`,
     subtitle: `${currencySymbol}1 products + delivery cashback on sharing`,
     icon: '🏷️',
     buttonText: 'Explore Deals',
-    gradientColors: ['#ffd7b5', '#E8B896'] as const,
+    gradientColors: [colors.lightPeach, colors.brand.sand] as const,
     storeType: 'budgetFriendly',
-    buttonTextColor: '#1a3a52',
+    buttonTextColor: colors.nileBlue,
   },
   {
     title: 'Luxury Store',
     subtitle: 'Premium brands with exclusive rewards',
     icon: '👑',
     buttonText: 'Shop Luxury',
-    gradientColors: ['#1a3a52', '#2d4a5f'] as const,
+    gradientColors: [colors.nileBlue, '#2d4a5f'] as const,
     storeType: 'premium',
-    buttonTextColor: '#1a3a52',
+    buttonTextColor: colors.nileBlue,
   },
   {
     title: 'Organic Store',
     subtitle: 'Eco-friendly & sustainable products',
     icon: '🌿',
     buttonText: 'Go Green',
-    gradientColors: ['#dfebf7', '#b8d4ed'] as const,
+    gradientColors: [colors.lavenderMist, '#b8d4ed'] as const,
     storeType: 'organic',
-    buttonTextColor: '#1a3a52',
+    buttonTextColor: colors.nileBlue,
   },
 ];
 
 // Map experience types to gradient colors and button text colors - Nuqta palette
 const EXPERIENCE_STYLES: Record<string, { gradientColors: readonly [string, string]; buttonTextColor: string; buttonText: string }> = {
-  fastDelivery: { gradientColors: ['#1a3a52', '#243f55'], buttonTextColor: '#1a3a52', buttonText: 'Shop Now' },
-  oneRupee: { gradientColors: ['#ffd7b5', '#E8B896'], buttonTextColor: '#1a3a52', buttonText: 'Explore Deals' },
-  budgetFriendly: { gradientColors: ['#ffd7b5', '#E8B896'], buttonTextColor: '#1a3a52', buttonText: 'Explore Deals' },
-  luxury: { gradientColors: ['#1a3a52', '#2d4a5f'], buttonTextColor: '#1a3a52', buttonText: 'Shop Luxury' },
-  premium: { gradientColors: ['#1a3a52', '#2d4a5f'], buttonTextColor: '#1a3a52', buttonText: 'Shop Luxury' },
-  organic: { gradientColors: ['#dfebf7', '#b8d4ed'], buttonTextColor: '#1a3a52', buttonText: 'Go Green' },
+  fastDelivery: { gradientColors: [colors.nileBlue, '#243f55'], buttonTextColor: colors.nileBlue, buttonText: 'Shop Now' },
+  oneRupee: { gradientColors: [colors.lightPeach, colors.brand.sand], buttonTextColor: colors.nileBlue, buttonText: 'Explore Deals' },
+  budgetFriendly: { gradientColors: [colors.lightPeach, colors.brand.sand], buttonTextColor: colors.nileBlue, buttonText: 'Explore Deals' },
+  luxury: { gradientColors: [colors.nileBlue, '#2d4a5f'], buttonTextColor: colors.nileBlue, buttonText: 'Shop Luxury' },
+  premium: { gradientColors: [colors.nileBlue, '#2d4a5f'], buttonTextColor: colors.nileBlue, buttonText: 'Shop Luxury' },
+  organic: { gradientColors: [colors.lavenderMist, '#b8d4ed'], buttonTextColor: colors.nileBlue, buttonText: 'Go Green' },
 };
 
 interface StoreExperiencesSectionProps {
@@ -116,7 +117,7 @@ const StoreExperiencesSection: React.FC<StoreExperiencesSectionProps> = memo(({
   if (isLoading) {
     return (
       <View style={[styles.container, styles.loadingContainer]}>
-        <ActivityIndicator size="small" color="#ffcd57" />
+        <ActivityIndicator size="small" color={colors.lightMustard} />
       </View>
     );
   }
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     marginBottom: 12,
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   cardsContainer: {
     gap: 4,

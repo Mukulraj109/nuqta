@@ -9,10 +9,11 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  white: '#FFFFFF',
-  textDark: '#1a3a52',
+  white: colors.background.primary,
+  textDark: colors.nileBlue,
 };
 
 interface SurpriseCoinDropCardProps {
@@ -29,8 +30,8 @@ const SurpriseCoinDropCard: React.FC<SurpriseCoinDropCardProps> = ({
   onPress,
 }) => {
   const gradientColors: readonly [string, string, string] = available
-    ? ['#ffd7b5', '#E8B896', '#D4A07A']
-    : ['#dfebf7', '#b8d4ed', '#9cc5e0'];
+    ? [colors.lightPeach, colors.brand.sand, colors.brand.caramel]
+    : [colors.lavenderMist, '#b8d4ed', '#9cc5e0'];
 
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
@@ -95,7 +96,7 @@ const SurpriseCoinDropCard: React.FC<SurpriseCoinDropCardProps> = ({
             {available && coins > 0 && (
               <View style={styles.badgeContainer}>
                 <View style={styles.coinBadge}>
-                  <Ionicons name="sparkles" size={12} color="#ffcd57" />
+                  <Ionicons name="sparkles" size={12} color={colors.lightMustard} />
                   <Text style={styles.coinText}>+{coins}</Text>
                 </View>
               </View>
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffd7b5',
+        shadowColor: colors.lightPeach,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,

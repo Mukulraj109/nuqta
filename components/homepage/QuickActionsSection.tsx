@@ -8,32 +8,33 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 // Color themes for each action - Nuqta palette
 const ACTION_THEMES = {
   voucher: {
-    iconBg: '#faf1e0',      // Linen
-    iconColor: '#1a3a52',    // Nile Blue
-    descBg: '#faf1e0',
-    descColor: '#1a3a52',
+    iconBg: colors.linen,      // Linen
+    iconColor: colors.nileBlue,    // Nile Blue
+    descBg: colors.linen,
+    descColor: colors.nileBlue,
   },
   wallet: {
-    iconBg: '#dfebf7',      // Lavender Mist
-    iconColor: '#1a3a52',    // Nile Blue
-    descBg: '#dfebf7',
-    descColor: '#1a3a52',
+    iconBg: colors.lavenderMist,      // Lavender Mist
+    iconColor: colors.nileBlue,    // Nile Blue
+    descBg: colors.lavenderMist,
+    descColor: colors.nileBlue,
   },
   offers: {
-    iconBg: '#ffd7b5',      // Light Peach
-    iconColor: '#1a3a52',    // Nile Blue
-    descBg: '#ffd7b5',
-    descColor: '#1a3a52',
+    iconBg: colors.lightPeach,      // Light Peach
+    iconColor: colors.nileBlue,    // Nile Blue
+    descBg: colors.lightPeach,
+    descColor: colors.nileBlue,
   },
   store: {
-    iconBg: '#ffcd57',      // Light Mustard
-    iconColor: '#1a3a52',    // Nile blue
-    descBg: '#ffcd57',
-    descColor: '#1a3a52',
+    iconBg: colors.lightMustard,      // Light Mustard
+    iconColor: colors.nileBlue,    // Nile blue
+    descBg: colors.lightMustard,
+    descColor: colors.nileBlue,
   },
 };
 
@@ -94,8 +95,8 @@ function QuickActionsSection({
   }, [router]);
 
   const renderValue = (actionId: string) => {
-    const greyBg = '#F3F4F6';
-    const greyText = '#6B7280';
+    const greyBg = colors.neutral[100];
+    const greyText = colors.neutral[500];
 
     switch (actionId) {
       case 'voucher':
@@ -110,7 +111,7 @@ function QuickActionsSection({
           <View style={[styles.valuePill, styles.walletPill, { backgroundColor: greyBg }]}>
             <Text style={[styles.valueText, { color: greyText }]}>Load</Text>
             <View style={[styles.plusButton, { backgroundColor: greyText }]}>
-              <Ionicons name="add" size={10} color="#FFFFFF" />
+              <Ionicons name="add" size={10} color={colors.background.primary} />
             </View>
           </View>
         );
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingTop: 8,
     paddingBottom: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginTop: -4,
   },
   actionsRow: {
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
   actionTitle: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textAlign: 'center',
     marginBottom: 4,
   },

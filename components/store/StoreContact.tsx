@@ -11,6 +11,7 @@ import {
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
+import { colors } from '@/constants/theme';
 
 export interface StoreContactInfo {
   phone?: string;
@@ -267,14 +268,14 @@ const StoreContact: React.FC<StoreContactProps> = ({ contact, storeName }) => {
       case 'linkedin':
         return '#0A66C2';
       default:
-        return '#7C3AED';
+        return colors.brand.purple;
     }
   };
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
-        <Ionicons name="call" size={24} color="#7C3AED" />
+        <Ionicons name="call" size={24} color={colors.brand.purple} />
         <Text style={styles.headerTitle}>Contact Information</Text>
       </View>
 
@@ -288,7 +289,7 @@ const StoreContact: React.FC<StoreContactProps> = ({ contact, storeName }) => {
            
           >
             <View style={styles.iconCircle}>
-              <Ionicons name="call" size={20} color="#7C3AED" />
+              <Ionicons name="call" size={20} color={colors.brand.purple} />
             </View>
             <Text style={styles.contactText}>{contact.phone}</Text>
             <Ionicons name="chevron-forward" size={20} color="#999" />
@@ -306,7 +307,7 @@ const StoreContact: React.FC<StoreContactProps> = ({ contact, storeName }) => {
            
           >
             <View style={styles.iconCircle}>
-              <Ionicons name="mail" size={20} color="#7C3AED" />
+              <Ionicons name="mail" size={20} color={colors.brand.purple} />
             </View>
             <Text style={styles.contactText}>{contact.email}</Text>
             <Ionicons name="chevron-forward" size={20} color="#999" />
@@ -323,7 +324,7 @@ const StoreContact: React.FC<StoreContactProps> = ({ contact, storeName }) => {
             onPress={handleWhatsAppPress}
            
           >
-            <View style={[styles.iconCircle, { backgroundColor: '#E8F5E9' }]}>
+            <View style={[styles.iconCircle, { backgroundColor: colors.greenMist }]}>
               <Ionicons name="logo-whatsapp" size={20} color="#25D366" />
             </View>
             <Text style={styles.contactText}>{contact.whatsapp}</Text>
@@ -342,7 +343,7 @@ const StoreContact: React.FC<StoreContactProps> = ({ contact, storeName }) => {
            
           >
             <View style={styles.iconCircle}>
-              <Ionicons name="globe" size={20} color="#7C3AED" />
+              <Ionicons name="globe" size={20} color={colors.brand.purple} />
             </View>
             <Text style={styles.contactText} numberOfLines={1}>
               {contact.website}
@@ -384,7 +385,7 @@ const StoreContact: React.FC<StoreContactProps> = ({ contact, storeName }) => {
           <Text style={styles.sectionTitle}>Address</Text>
           <View style={styles.addressCard}>
             <View style={styles.addressHeader}>
-              <Ionicons name="location" size={20} color="#7C3AED" />
+              <Ionicons name="location" size={20} color={colors.brand.purple} />
               <Text style={styles.addressTitle}>Store Location</Text>
             </View>
             <Text style={styles.addressText}>{contact.address.fullAddress}</Text>
@@ -394,7 +395,7 @@ const StoreContact: React.FC<StoreContactProps> = ({ contact, storeName }) => {
                 onPress={handleCopyAddress}
                
               >
-                <Ionicons name="copy-outline" size={16} color="#7C3AED" />
+                <Ionicons name="copy-outline" size={16} color={colors.brand.purple} />
                 <Text style={styles.addressButtonText}>Copy</Text>
               </Pressable>
               <Pressable
@@ -402,7 +403,7 @@ const StoreContact: React.FC<StoreContactProps> = ({ contact, storeName }) => {
                 onPress={handleGetDirections}
                
               >
-                <Ionicons name="navigate" size={16} color="#fff" />
+                <Ionicons name="navigate" size={16} color={colors.background.primary} />
                 <Text style={[styles.addressButtonText, styles.primaryButtonText]}>
                   Get Directions
                 </Text>
@@ -418,7 +419,7 @@ const StoreContact: React.FC<StoreContactProps> = ({ contact, storeName }) => {
           <Text style={styles.sectionTitle}>Working Hours</Text>
           <View style={styles.workingHoursCard}>
             <View style={styles.workingHoursHeader}>
-              <Ionicons name="time" size={20} color="#7C3AED" />
+              <Ionicons name="time" size={20} color={colors.brand.purple} />
               <Text style={styles.workingHoursTitle}>Store Timings</Text>
             </View>
             <View style={styles.workingHoursList}>{formatWorkingHours()}</View>
@@ -432,12 +433,12 @@ const StoreContact: React.FC<StoreContactProps> = ({ contact, storeName }) => {
         onPress={handleShareContact}
        
       >
-        <Ionicons name="share-social" size={20} color="#7C3AED" />
+        <Ionicons name="share-social" size={20} color={colors.brand.purple} />
         <Text style={styles.shareContactText}>Share Contact Info</Text>
       </Pressable>
 
       <View style={styles.footer}>
-        <Ionicons name="information-circle" size={16} color="#666" />
+        <Ionicons name="information-circle" size={16} color={colors.midGray} />
         <Text style={styles.footerText}>
           Tap on any contact method to get in touch with us directly
         </Text>
@@ -449,7 +450,7 @@ const StoreContact: React.FC<StoreContactProps> = ({ contact, storeName }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
@@ -471,7 +472,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666',
+    color: colors.midGray,
     marginBottom: 8,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -489,7 +490,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -551,21 +552,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#7C3AED',
-    backgroundColor: '#fff',
+    borderColor: colors.brand.purple,
+    backgroundColor: colors.background.primary,
   },
   primaryButton: {
-    backgroundColor: '#7C3AED',
-    borderColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
+    borderColor: colors.brand.purple,
   },
   addressButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     marginLeft: 6,
   },
   primaryButtonText: {
-    color: '#fff',
+    color: colors.background.primary,
   },
   workingHoursCard: {
     backgroundColor: '#f9f9f9',
@@ -615,14 +616,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#7C3AED',
+    borderColor: colors.brand.purple,
     marginHorizontal: 16,
     marginBottom: 16,
   },
   shareContactText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     marginLeft: 8,
   },
   footer: {
@@ -636,7 +637,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     marginLeft: 8,
     flex: 1,
     lineHeight: 18,

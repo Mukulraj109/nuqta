@@ -9,6 +9,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 const FooterCTA: React.FC = () => {
   const router = useRouter();
@@ -24,7 +25,7 @@ const FooterCTA: React.FC = () => {
 
   return (
     <LinearGradient
-      colors={['#059669', '#047857', '#065F46']}
+      colors={[colors.successScale[700], '#047857', '#065F46']}
       start={{ x: 0.5, y: 0 }}
       end={{ x: 0.5, y: 1 }}
       style={styles.container}
@@ -32,7 +33,7 @@ const FooterCTA: React.FC = () => {
       {/* Rocket Icon */}
       <View style={styles.iconContainer}>
         <View style={styles.iconCircle}>
-          <Ionicons name="rocket" size={32} color="#059669" />
+          <Ionicons name="rocket" size={32} color={colors.successScale[700]} />
         </View>
       </View>
 
@@ -55,7 +56,7 @@ const FooterCTA: React.FC = () => {
           onPress={handleExploreNearby}
          
         >
-          <Ionicons name="location" size={18} color="#059669" />
+          <Ionicons name="location" size={18} color={colors.successScale[700]} />
           <Text style={styles.primaryButtonText}>Explore Nearby Rewards</Text>
         </Pressable>
 
@@ -65,7 +66,7 @@ const FooterCTA: React.FC = () => {
           onPress={handleGoHome}
          
         >
-          <Ionicons name="home" size={18} color="#FFFFFF" />
+          <Ionicons name="home" size={18} color={colors.background.primary} />
           <Text style={styles.secondaryButtonText}>Go to Home</Text>
         </Pressable>
       </View>
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     ...Platform.select({
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginBottom: 12,
   },
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   subtitleBold: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginBottom: 28,
   },
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 14,
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   secondaryButton: {
     flexDirection: 'row',
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
   secondaryButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   decorativeCircle1: {
     position: 'absolute',

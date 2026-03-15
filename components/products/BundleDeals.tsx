@@ -16,6 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BundleItem } from '@/services/recommendationApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface BundleDealsProps {
   bundles: BundleItem[];
@@ -37,7 +38,7 @@ function BundleDeals({
           <Text style={styles.title}>Special Bundle Deals</Text>
         </View>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#ffcd57" />
+          <ActivityIndicator size="large" color={colors.lightMustard} />
         </View>
       </View>
     );
@@ -55,7 +56,7 @@ function BundleDeals({
           <Text style={styles.subtitle}>Save more when you buy together</Text>
         </View>
         <View style={styles.dealBadge}>
-          <Ionicons name="flash" size={16} color="#F59E0B" />
+          <Ionicons name="flash" size={16} color={colors.warningScale[400]} />
           <Text style={styles.dealBadgeText}>Limited Time</Text>
         </View>
       </View>
@@ -154,7 +155,7 @@ function BundleDealCard({ bundle, onAddToCart, onProductPress }: BundleDealCardP
   return (
     <View style={styles.card}>
       <LinearGradient
-        colors={['#faf1e0', '#FFFFFF']}
+        colors={[colors.linen, colors.background.primary]}
         style={styles.cardGradient}
       >
         <View style={styles.savingsBadge}>
@@ -181,7 +182,7 @@ function BundleDealCard({ bundle, onAddToCart, onProductPress }: BundleDealCardP
                     />
                   ) : (
                     <View style={styles.thumbPlaceholder}>
-                      <Ionicons name="image-outline" size={24} color="#D1D5DB" />
+                      <Ionicons name="image-outline" size={24} color={colors.neutral[300]} />
                     </View>
                   )}
                 </Pressable>
@@ -219,7 +220,7 @@ function BundleDealCard({ bundle, onAddToCart, onProductPress }: BundleDealCardP
             </View>
             {/* Always show savings row for consistent height */}
             <View style={styles.savingsHighlight}>
-              <Ionicons name="checkmark-circle" size={16} color="#ffcd57" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.lightMustard} />
               <Text style={styles.savingsAmount}>
                 {bundle.savings > 0 ? `You save ${currencySymbol}${bundle.savings}!` : 'Best Price!'}
               </Text>
@@ -228,12 +229,12 @@ function BundleDealCard({ bundle, onAddToCart, onProductPress }: BundleDealCardP
             {/* Bundle Rewards - Total Nuqta Coins & Cashback */}
             <View style={styles.bundleRewardsRow}>
               <View style={styles.bundleRewardItem}>
-                <Ionicons name="wallet-outline" size={14} color="#ffcd57" />
+                <Ionicons name="wallet-outline" size={14} color={colors.lightMustard} />
                 <Text style={styles.bundleRewardText}>{totalNuqtaCoins} {BRAND.COIN_NAME}</Text>
               </View>
               <View style={styles.rewardsDivider} />
               <View style={styles.bundleRewardItem}>
-                <Ionicons name="card-outline" size={14} color="#F59E0B" />
+                <Ionicons name="card-outline" size={14} color={colors.warningScale[400]} />
                 <Text style={styles.bundleCashbackText}>{currencySymbol}{totalCashback} cashback</Text>
               </View>
             </View>
@@ -246,12 +247,12 @@ function BundleDealCard({ bundle, onAddToCart, onProductPress }: BundleDealCardP
              
             >
               <LinearGradient
-                colors={['#ffcd57', '#e6b84e']}
+                colors={[colors.lightMustard, '#e6b84e']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.addButtonGradient}
               >
-                <Ionicons name="cart" size={18} color="#fff" />
+                <Ionicons name="cart" size={18} color={colors.background.primary} />
                 <Text style={styles.addButtonText}>Add Bundle</Text>
               </LinearGradient>
             </Pressable>
@@ -265,7 +266,7 @@ function BundleDealCard({ bundle, onAddToCart, onProductPress }: BundleDealCardP
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 16,
-    backgroundColor: '#fff'
+    backgroundColor: colors.background.primary
   },
   header: {
     flexDirection: 'row',
@@ -277,28 +278,28 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280'
+    color: colors.neutral[500]
   },
   dealBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#FDE68A'
+    borderColor: colors.warningScale[200]
   },
   dealBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#F59E0B'
+    color: colors.warningScale[400]
   },
   loadingContainer: {
     height: 200,
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
     width: 300,
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: {
       width: 0,
       height: 4
@@ -325,14 +326,14 @@ const styles = StyleSheet.create({
   cardGradient: {
     padding: 16,
     borderWidth: 2,
-    borderColor: '#faf1e0',
+    borderColor: colors.linen,
     borderRadius: 16
   },
   savingsBadge: {
     position: 'absolute',
     top: 16,
     right: 16,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
   savingsBadgeText: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#fff',
+    color: colors.background.primary,
     letterSpacing: 0.5
   },
   productsPreview: {
@@ -356,9 +357,9 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 12,
     overflow: 'hidden',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderWidth: 2,
-    borderColor: '#faf1e0'
+    borderColor: colors.linen
   },
   thumbImage: {
     width: '100%',
@@ -367,7 +368,7 @@ const styles = StyleSheet.create({
   thumbPlaceholder: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -375,14 +376,14 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     justifyContent: 'center',
     alignItems: 'center'
   },
   plusText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#fff'
+    color: colors.background.primary
   },
   moreBadge: {
     width: 40,
@@ -396,7 +397,7 @@ const styles = StyleSheet.create({
   moreText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#fff'
+    color: colors.background.primary
   },
   bundleInfo: {
     gap: 12
@@ -404,12 +405,12 @@ const styles = StyleSheet.create({
   bundleTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
     minHeight: 40
   },
   priceContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     padding: 12,
     borderRadius: 12,
     gap: 8
@@ -421,16 +422,16 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 13,
-    color: '#6B7280'
+    color: colors.neutral[500]
   },
   bundlePrice: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#ffcd57'
+    color: colors.lightMustard
   },
   regularPrice: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through'
   },
   savingsHighlight: {
@@ -438,7 +439,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 8,
@@ -447,7 +448,7 @@ const styles = StyleSheet.create({
   savingsAmount: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#ffcd57'
+    color: colors.lightMustard
   },
   addButton: {
     borderRadius: 12,
@@ -464,13 +465,13 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff'
+    color: colors.background.primary
   },
   bundleRewardsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
@@ -485,17 +486,17 @@ const styles = StyleSheet.create({
   rewardsDivider: {
     width: 1,
     height: 16,
-    backgroundColor: '#faf1e0'
+    backgroundColor: colors.linen
   },
   bundleRewardText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57'
+    color: colors.lightMustard
   },
   bundleCashbackText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#F59E0B'
+    color: colors.warningScale[400]
   }
 });
 

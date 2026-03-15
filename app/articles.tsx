@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   View,
@@ -111,7 +112,7 @@ export default function ArticlesPage() {
     <View style={styles.container}>
       {/* Animated Header with Glassmorphism */}
       <LinearGradient
-        colors={[Colors.brand.purpleLight, '#A855F7', '#C084FC']}
+        colors={[Colors.brand.purpleLight, colors.brand.purpleMedium, '#C084FC']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.headerGradient}
@@ -255,7 +256,7 @@ export default function ArticlesPage() {
            
           >
             <LinearGradient
-              colors={[Colors.brand.purpleLight, '#A855F7']}
+              colors={[Colors.brand.purpleLight, colors.brand.purpleMedium]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.retryButtonGradient}
@@ -312,7 +313,7 @@ export default function ArticlesPage() {
        
       >
         <LinearGradient
-          colors={[Colors.brand.purpleLight, '#A855F7', '#C084FC']}
+          colors={[Colors.brand.purpleLight, colors.brand.purpleMedium, '#C084FC']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.fabGradient}

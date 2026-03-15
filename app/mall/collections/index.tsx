@@ -26,6 +26,7 @@ import { MallCollection } from '../../../types/mall.types';
 import MallEmptyState from '../../../components/mall/pages/MallEmptyState';
 import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkeleton';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 

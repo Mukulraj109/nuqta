@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TrendingSearch } from '@/services/searchDiscoveryApi';
+import { colors } from '@/constants/theme';
 
 interface TrendingSearchesSectionProps {
   searches: TrendingSearch[];
@@ -19,7 +20,7 @@ function TrendingSearchesSection({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="flame" size={20} color="#ffcd57" />
+        <Ionicons name="flame" size={20} color={colors.lightMustard} />
         <Text style={styles.headerText}>Trending on ReZ</Text>
       </View>
 
@@ -31,11 +32,11 @@ function TrendingSearchesSection({
             onPress={() => onPress(search.query)}
            
           >
-            <Ionicons name="trending-up-outline" size={18} color="#1a3a52" style={styles.itemIcon} />
+            <Ionicons name="trending-up-outline" size={18} color={colors.nileBlue} style={styles.itemIcon} />
             <Text style={styles.itemText} numberOfLines={1}>
               {search.query}
             </Text>
-            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
+            <Ionicons name="chevron-forward" size={18} color={colors.neutral[400]} />
           </Pressable>
         ))}
       </View>
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   list: {
     paddingHorizontal: 16,
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 10,
     paddingVertical: 12,
     paddingHorizontal: 14,
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
   itemText: {
     flex: 1,
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
   },
 });

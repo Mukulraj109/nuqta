@@ -19,6 +19,7 @@ import surveyApiService, { Survey, SurveyCategory, UserSurveyStats } from '@/ser
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 // Category emoji mapping
 const categoryEmojis: Record<string, string> = {
   'Shopping': '📦',
@@ -50,9 +51,9 @@ const categoryColors: Record<string, { bg: string; border: string }> = {
 };
 
 const difficultyColors = {
-  easy: { bg: 'rgba(255, 205, 87, 0.1)', text: '#1a3a52', border: 'rgba(255, 205, 87, 0.3)' },
-  medium: { bg: 'rgba(249, 115, 22, 0.1)', text: '#EA580C', border: 'rgba(249, 115, 22, 0.3)' },
-  hard: { bg: 'rgba(239, 68, 68, 0.1)', text: '#DC2626', border: 'rgba(239, 68, 68, 0.3)' },
+  easy: { bg: 'rgba(255, 205, 87, 0.1)', text: colors.nileBlue, border: 'rgba(255, 205, 87, 0.3)' },
+  medium: { bg: 'rgba(249, 115, 22, 0.1)', text: colors.brand.orangeDark, border: 'rgba(249, 115, 22, 0.3)' },
+  hard: { bg: 'rgba(239, 68, 68, 0.1)', text: colors.error, border: 'rgba(239, 68, 68, 0.3)' },
 };
 
 export default function SurveysPage() {
@@ -198,21 +199,21 @@ export default function SurveysPage() {
                 </View>
                 <View style={styles.statItem}>
                   <View style={[styles.statIcon, { backgroundColor: 'rgba(59, 130, 246, 0.15)' }]}>
-                    <Ionicons name="checkmark-circle" size={18} color="#3B82F6" />
+                    <Ionicons name="checkmark-circle" size={18} color={colors.infoScale[400]} />
                   </View>
                   <Text style={styles.statValue}>{userStats.surveysCompleted}</Text>
                   <Text style={styles.statLabel}>Completed</Text>
                 </View>
                 <View style={styles.statItem}>
                   <View style={[styles.statIcon, { backgroundColor: 'rgba(249, 115, 22, 0.15)' }]}>
-                    <Ionicons name="time" size={18} color="#F97316" />
+                    <Ionicons name="time" size={18} color={colors.brand.orange} />
                   </View>
                   <Text style={styles.statValue}>{formatAvgTime(userStats.averageTime)}</Text>
                   <Text style={styles.statLabel}>Avg Time</Text>
                 </View>
                 <View style={styles.statItem}>
                   <View style={[styles.statIcon, { backgroundColor: 'rgba(236, 72, 153, 0.15)' }]}>
-                    <Ionicons name="trending-up" size={18} color="#EC4899" />
+                    <Ionicons name="trending-up" size={18} color={colors.brand.pink} />
                   </View>
                   <Text style={styles.statValue}>{userStats.completionRate}%</Text>
                   <Text style={styles.statLabel}>Success</Text>
@@ -254,7 +255,7 @@ export default function SurveysPage() {
               colors={['rgba(139, 92, 246, 0.1)', 'rgba(236, 72, 153, 0.1)']}
               style={styles.infoBannerGradient}
             >
-              <Ionicons name="document-text" size={32} color="#8B5CF6" />
+              <Ionicons name="document-text" size={32} color={colors.brand.purpleLight} />
               <View style={styles.infoBannerText}>
                 <Text style={styles.infoBannerTitle}>Earn While You Share</Text>
                 <Text style={styles.infoBannerDesc}>
@@ -320,7 +321,7 @@ export default function SurveysPage() {
                           </View>
                           {survey.isFeatured && (
                             <View style={styles.trendingBadge}>
-                              <Ionicons name="sparkles" size={10} color="#F97316" />
+                              <Ionicons name="sparkles" size={10} color={colors.brand.orange} />
                               <Text style={styles.trendingText}>Featured</Text>
                             </View>
                           )}
@@ -381,13 +382,13 @@ export default function SurveysPage() {
                         onPress={() => handleStartSurvey(survey._id)}
                       >
                         <LinearGradient
-                          colors={['#3B82F6', '#8B5CF6']}
+                          colors={[colors.infoScale[400], colors.brand.purpleLight]}
                           start={{ x: 0, y: 0 }}
                           end={{ x: 1, y: 0 }}
                           style={styles.startButtonGradient}
                         >
                           <Text style={styles.startButtonText}>Start Now</Text>
-                          <Ionicons name="chevron-forward" size={16} color="#fff" />
+                          <Ionicons name="chevron-forward" size={16} color={colors.background.primary} />
                         </LinearGradient>
                       </Pressable>
                     </View>
@@ -404,7 +405,7 @@ export default function SurveysPage() {
               style={styles.bottomCTAGradient}
             >
               <View style={styles.bottomCTAIcon}>
-                <Ionicons name="bar-chart" size={28} color="#fff" />
+                <Ionicons name="bar-chart" size={28} color={colors.background.primary} />
               </View>
               <Text style={styles.bottomCTATitle}>New Surveys Daily</Text>
               <Text style={styles.bottomCTADesc}>
@@ -542,8 +543,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   categoryButtonActive: {
-    backgroundColor: '#3B82F6',
-    borderColor: '#3B82F6',
+    backgroundColor: colors.infoScale[400],
+    borderColor: colors.infoScale[400],
   },
   categoryText: {
     fontSize: 13,
@@ -666,7 +667,7 @@ const styles = StyleSheet.create({
   trendingText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   surveyTitle: {
     fontSize: 14,

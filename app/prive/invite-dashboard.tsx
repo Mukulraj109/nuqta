@@ -5,6 +5,7 @@
  * Dark premium theme. Shows stats, active codes, leaderboard.
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -31,9 +32,9 @@ import usePriveEligibility from '@/hooks/usePriveEligibility';
 import { BRAND } from '@/constants/brand';
 
 const TIER_COLORS: Record<string, string> = {
-  entry: '#C9A962',
+  entry: colors.brand.goldAccent,
   signature: '#B8860B',
-  elite: '#FFD700',
+  elite: colors.brand.goldBright,
   none: '#6B6B6B',
 };
 
@@ -148,7 +149,7 @@ export default function PriveInviteDashboard() {
         ListHeaderComponent={
           <>
             {/* Stats Header */}
-            <LinearGradient colors={['#1A1510', '#0A0A0A']} style={styles.statsHeader}>
+            <LinearGradient colors={['#1A1510', colors.midGrayAlt]} style={styles.statsHeader}>
               <View style={styles.tierBadge}>
                 <Text style={styles.tierBadgeText}>Prive {tierLabel}</Text>
               </View>
@@ -187,16 +188,16 @@ export default function PriveInviteDashboard() {
                 disabled={!stats?.canGenerate || generatingCode}
               >
                 <LinearGradient
-                  colors={['#C9A962', '#A88B4A']}
+                  colors={[colors.brand.goldAccent, '#A88B4A']}
                   style={styles.generateGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                 >
                   {generatingCode ? (
-                    <ActivityIndicator size="small" color="#0A0A0A" />
+                    <ActivityIndicator size="small" color={colors.midGrayAlt} />
                   ) : (
                     <>
-                      <Ionicons name="share-social" size={20} color="#0A0A0A" />
+                      <Ionicons name="share-social" size={20} color={colors.midGrayAlt} />
                       <Text style={styles.generateText}>Invite Friends</Text>
                       <Text style={styles.generateSubtext}>Earn coins per referral</Text>
                     </>
@@ -356,7 +357,7 @@ const styles = StyleSheet.create({
   generateText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#0A0A0A',
+    color: colors.midGrayAlt,
   },
   generateSubtext: {
     fontSize: 12,

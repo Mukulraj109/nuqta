@@ -26,6 +26,7 @@ import {
   ValidationWarning,
 } from '@/types/voucher-redemption.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -160,7 +161,7 @@ function RedemptionFlow({
                 </ThemedText>
               </View>
               {selectedVoucher?.id === voucher.id && (
-                <Ionicons name="checkmark-circle" size={24} color="#ffcd57" />
+                <Ionicons name="checkmark-circle" size={24} color={colors.lightMustard} />
               )}
             </View>
           </Pressable>
@@ -209,7 +210,7 @@ function RedemptionFlow({
             <Ionicons
               name="laptop-outline"
               size={32}
-              color={selectedMethod === 'online' ? '#8B5CF6' : '#6B7280'}
+              color={selectedMethod === 'online' ? colors.brand.purpleLight : colors.neutral[500]}
             />
           </View>
           <ThemedText style={styles.methodTitle}>Online</ThemedText>
@@ -218,7 +219,7 @@ function RedemptionFlow({
           </ThemedText>
           {selectedMethod === 'online' && (
             <View style={styles.methodCheckmark}>
-              <Ionicons name="checkmark-circle" size={24} color="#ffcd57" />
+              <Ionicons name="checkmark-circle" size={24} color={colors.lightMustard} />
             </View>
           )}
         </Pressable>
@@ -234,7 +235,7 @@ function RedemptionFlow({
             <Ionicons
               name="storefront-outline"
               size={32}
-              color={selectedMethod === 'in_store' ? '#8B5CF6' : '#6B7280'}
+              color={selectedMethod === 'in_store' ? colors.brand.purpleLight : colors.neutral[500]}
             />
           </View>
           <ThemedText style={styles.methodTitle}>In-Store</ThemedText>
@@ -243,7 +244,7 @@ function RedemptionFlow({
           </ThemedText>
           {selectedMethod === 'in_store' && (
             <View style={styles.methodCheckmark}>
-              <Ionicons name="checkmark-circle" size={24} color="#ffcd57" />
+              <Ionicons name="checkmark-circle" size={24} color={colors.lightMustard} />
             </View>
           )}
         </Pressable>
@@ -282,21 +283,21 @@ function RedemptionFlow({
       <ScrollView style={styles.termsContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.restrictionCard}>
           <View style={styles.restrictionRow}>
-            <Ionicons name="information-circle-outline" size={20} color="#8B5CF6" />
+            <Ionicons name="information-circle-outline" size={20} color={colors.brand.purpleLight} />
             <ThemedText style={styles.restrictionLabel}>Minimum Purchase</ThemedText>
             <ThemedText style={styles.restrictionValue}>
               {currencySymbol}{restrictions.minPurchaseAmount}
             </ThemedText>
           </View>
           <View style={styles.restrictionRow}>
-            <Ionicons name="pricetag-outline" size={20} color="#8B5CF6" />
+            <Ionicons name="pricetag-outline" size={20} color={colors.brand.purpleLight} />
             <ThemedText style={styles.restrictionLabel}>Maximum Discount</ThemedText>
             <ThemedText style={styles.restrictionValue}>
               {currencySymbol}{restrictions.maxDiscount}
             </ThemedText>
           </View>
           <View style={styles.restrictionRow}>
-            <Ionicons name="repeat-outline" size={20} color="#8B5CF6" />
+            <Ionicons name="repeat-outline" size={20} color={colors.brand.purpleLight} />
             <ThemedText style={styles.restrictionLabel}>Usage Limit</ThemedText>
             <ThemedText style={styles.restrictionValue}>
               {restrictions.usageLimit} time
@@ -321,7 +322,7 @@ function RedemptionFlow({
         onPress={() => setTermsAccepted(!termsAccepted)}
       >
         <View style={[styles.checkboxBox, termsAccepted && styles.checkboxBoxChecked]}>
-          {termsAccepted && <Ionicons name="checkmark" size={16} color="#FFFFFF" />}
+          {termsAccepted && <Ionicons name="checkmark" size={16} color={colors.background.primary} />}
         </View>
         <ThemedText style={styles.checkboxLabel}>
           I accept the terms and conditions
@@ -379,7 +380,7 @@ function RedemptionFlow({
             <Ionicons
               name={selectedMethod === 'online' ? 'laptop-outline' : 'storefront-outline'}
               size={20}
-              color="#1F2937"
+              color={colors.neutral[800]}
             />
             <ThemedText style={styles.confirmationMethodText}>
               {selectedMethod === 'online' ? 'Online' : 'In-Store'}
@@ -411,7 +412,7 @@ function RedemptionFlow({
           disabled={isProcessing}
         >
           {isProcessing ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={colors.background.primary} />
           ) : (
             <ThemedText style={styles.buttonPrimaryText}>Confirm</ThemedText>
           )}
@@ -424,7 +425,7 @@ function RedemptionFlow({
   const renderSuccessStep = () => (
     <View style={styles.stepContainer}>
       <View style={styles.successIcon}>
-        <Ionicons name="checkmark-circle" size={80} color="#ffcd57" />
+        <Ionicons name="checkmark-circle" size={80} color={colors.lightMustard} />
       </View>
 
       <ThemedText style={styles.successTitle}>Redemption Successful!</ThemedText>
@@ -451,7 +452,7 @@ function RedemptionFlow({
 
       {selectedMethod === 'online' && (
         <View style={styles.onlineSuccess}>
-          <Ionicons name="checkmark-circle-outline" size={48} color="#ffcd57" />
+          <Ionicons name="checkmark-circle-outline" size={48} color={colors.lightMustard} />
           <ThemedText style={styles.onlineSuccessText}>
             Voucher will be auto-applied at checkout
           </ThemedText>
@@ -503,14 +504,14 @@ function RedemptionFlow({
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <LinearGradient
-            colors={['#8B5CF6', '#7C3AED']}
+            colors={[colors.brand.purpleLight, colors.brand.purple]}
             style={styles.modalHeader}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
           >
             <ThemedText style={styles.modalTitle}>Redeem Voucher</ThemedText>
             <Pressable onPress={handleClose} disabled={isProcessing}>
-              <Ionicons name="close" size={28} color="#FFFFFF" />
+              <Ionicons name="close" size={28} color={colors.background.primary} />
             </Pressable>
           </LinearGradient>
 
@@ -536,7 +537,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -552,7 +553,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   stepIndicator: {
     flexDirection: 'row',
@@ -565,7 +566,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     overflow: 'hidden',
   },
   stepDotInner: {
@@ -573,7 +574,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   stepDotActive: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   modalBody: {
     flex: 1,
@@ -584,12 +585,12 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
   },
   stepSubtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 24,
   },
   voucherList: {
@@ -597,7 +598,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   voucherCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -605,8 +606,8 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   voucherCardSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F3E8FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.pink,
   },
   voucherCardContent: {
     flexDirection: 'row',
@@ -617,14 +618,14 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 8,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   voucherBrandText: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
   },
   voucherDetails: {
@@ -633,23 +634,23 @@ const styles = StyleSheet.create({
   voucherValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   voucherCashback: {
     fontSize: 14,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '500',
   },
   voucherExpiry: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   methodOptions: {
     gap: 16,
     marginBottom: 20,
   },
   methodCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 16,
     padding: 20,
     borderWidth: 2,
@@ -658,8 +659,8 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   methodCardSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F3E8FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.pink,
   },
   methodIcon: {
     marginBottom: 12,
@@ -667,12 +668,12 @@ const styles = StyleSheet.create({
   methodTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   methodDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   methodCheckmark: {
@@ -685,7 +686,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   restrictionCard: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -699,12 +700,12 @@ const styles = StyleSheet.create({
   restrictionLabel: {
     flex: 1,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   restrictionValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   termsList: {
     gap: 12,
@@ -717,13 +718,13 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     marginTop: 6,
   },
   termText: {
     flex: 1,
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
     lineHeight: 20,
   },
   checkbox: {
@@ -737,21 +738,21 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 6,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkboxBoxChecked: {
-    backgroundColor: '#8B5CF6',
-    borderColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
+    borderColor: colors.brand.purpleLight,
   },
   checkboxLabel: {
     flex: 1,
     fontSize: 14,
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   confirmationCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 16,
     padding: 20,
     marginBottom: 20,
@@ -761,7 +762,7 @@ const styles = StyleSheet.create({
   },
   confirmationLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   confirmationVoucher: {
@@ -772,16 +773,16 @@ const styles = StyleSheet.create({
   confirmationBrand: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   confirmationValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   confirmationDivider: {
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginVertical: 8,
   },
   confirmationMethod: {
@@ -791,13 +792,13 @@ const styles = StyleSheet.create({
   },
   confirmationMethodText: {
     fontSize: 16,
-    color: '#1F2937',
+    color: colors.neutral[800],
     fontWeight: '500',
   },
   confirmationSavings: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   successIcon: {
     alignItems: 'center',
@@ -806,13 +807,13 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.neutral[800],
     textAlign: 'center',
     marginBottom: 8,
   },
   successSubtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 24,
   },
@@ -822,11 +823,11 @@ const styles = StyleSheet.create({
   },
   qrCodeLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 16,
   },
   qrCodeWrapper: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     borderRadius: 12,
     shadowColor: '#000',
@@ -839,7 +840,7 @@ const styles = StyleSheet.create({
   qrCodeCode: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   onlineSuccess: {
     alignItems: 'center',
@@ -847,12 +848,12 @@ const styles = StyleSheet.create({
   },
   onlineSuccessText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginTop: 12,
   },
   savingsCard: {
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -860,13 +861,13 @@ const styles = StyleSheet.create({
   },
   savingsLabel: {
     fontSize: 14,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
   },
   savingsValue: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   stepActions: {
     flexDirection: 'row',
@@ -880,20 +881,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonPrimary: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   buttonPrimaryText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   buttonSecondary: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   buttonSecondaryText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   buttonDisabled: {
     opacity: 0.5,

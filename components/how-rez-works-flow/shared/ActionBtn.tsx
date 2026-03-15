@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Text, StyleSheet, Platform, View, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
@@ -30,9 +31,9 @@ const ActionBtn: React.FC<ActionBtnProps> = ({
 }) => {
     const isPrimary = variant === 'primary';
     const colors: [string, string, string] = isPrimary
-        ? ['#059669', '#10B981', '#059669']
-        : ['#F3F4F6', '#FFFFFF', '#F3F4F6'];
-    const textColor = isPrimary ? '#FFFFFF' : '#374151';
+        ? [colors.successScale[700], colors.successScale[400], colors.successScale[700]]
+        : [colors.neutral[100], colors.background.primary, colors.neutral[100]];
+    const textColor = isPrimary ? colors.background.primary : colors.neutral[700];
 
     const scale = useSharedValue(1);
     const shimmer = useSharedValue(0);
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
     primaryShadow: {
         ...Platform.select({
             ios: {
-                shadowColor: '#059669',
+                shadowColor: colors.successScale[700],
                 shadowOffset: { width: 0, height: 8 },
                 shadowOpacity: 0.35,
                 shadowRadius: 16,

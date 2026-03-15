@@ -4,6 +4,7 @@ import Svg, { Rect, Text as SvgText, G } from 'react-native-svg';
 import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface EarningsChartProps {
   breakdown: {
@@ -26,10 +27,10 @@ function EarningsChart({ breakdown, currency }: EarningsChartProps) {
   const currencySymbol = currency || getCurrencySymbol();
   const data = useMemo(() => {
     const values = [
-      { label: 'Projects', value: breakdown.projects, color: '#8B5CF6' },
-      { label: 'Referrals', value: breakdown.referrals, color: '#ffcd57' },
-      { label: 'Share', value: breakdown.shareAndEarn, color: '#F59E0B' },
-      { label: 'Spin', value: breakdown.spin, color: '#EC4899' },
+      { label: 'Projects', value: breakdown.projects, color: colors.brand.purpleLight },
+      { label: 'Referrals', value: breakdown.referrals, color: colors.lightMustard },
+      { label: 'Share', value: breakdown.shareAndEarn, color: colors.warningScale[400] },
+      { label: 'Spin', value: breakdown.spin, color: colors.brand.pink },
     ];
 
     const maxValue = Math.max(...values.map(d => d.value), 1);
@@ -72,7 +73,7 @@ function EarningsChart({ breakdown, currency }: EarningsChartProps) {
                       y={y - 8}
                       fontSize="12"
                       fontWeight="700"
-                      fill="#1F2937"
+                      fill={colors.neutral[800]}
                       textAnchor="middle"
                     >
                       {currencySymbol}{item.value}
@@ -84,7 +85,7 @@ function EarningsChart({ breakdown, currency }: EarningsChartProps) {
                     y={CHART_HEIGHT - 5}
                     fontSize="11"
                     fontWeight="600"
-                    fill="#6B7280"
+                    fill={colors.neutral[500]}
                     textAnchor="middle"
                   >
                     {item.label}
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
   chartTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 12,
     textAlign: 'center',
   },
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
   },
   legendText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '600',
   },
 });

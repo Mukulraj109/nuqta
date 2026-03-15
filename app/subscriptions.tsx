@@ -25,6 +25,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import subscriptionApi from '@/services/subscriptionApi';
 import type { SubscriptionTier, CurrentSubscription } from '@/services/subscriptionApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function SubscriptionsPage() {
   const router = useRouter();
@@ -103,7 +104,7 @@ export default function SubscriptionsPage() {
     switch (tier) {
       case 'free': return Colors.text.secondary;
       case 'premium': return Colors.gold;
-      case 'vip': return '#8B5CF6';
+      case 'vip': return colors.brand.purpleLight;
       default: return Colors.text.primary;
     }
   };
@@ -156,7 +157,7 @@ export default function SubscriptionsPage() {
             colors={['rgba(236, 72, 153, 0.15)', 'rgba(139, 92, 246, 0.15)']}
             style={styles.bannerGradient}
           >
-            <Ionicons name="diamond-outline" size={32} color="#8B5CF6" />
+            <Ionicons name="diamond-outline" size={32} color={colors.brand.purpleLight} />
             <View style={styles.bannerText}>
               <Text style={styles.bannerTitle}>Unlock Premium Benefits</Text>
               <Text style={styles.bannerSubtitle}>

@@ -18,6 +18,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 import {
   TrendingDeal,
   formatTimeRemaining,
@@ -186,7 +187,7 @@ const TrendingDealCard: React.FC<{
             <Text style={{ fontSize: 28 }}>{deal.brand.logo}</Text>
           ) : (
             <LinearGradient
-              colors={['#ffd7b5', '#E8B896']}
+              colors={[colors.lightPeach, colors.brand.sand]}
               style={styles.logoPlaceholder}
             >
               <Text style={styles.logoInitial}>{deal.brand.name.charAt(0)}</Text>
@@ -201,7 +202,7 @@ const TrendingDealCard: React.FC<{
 
         {/* Cashback Rate - Highlighted */}
         <LinearGradient
-          colors={['#E8B896', '#D4A07A']}
+          colors={[colors.brand.sand, colors.brand.caramel]}
           style={styles.cashbackContainer}
         >
           <Text style={styles.cashbackRate}>{deal.cashbackRate}%</Text>
@@ -218,7 +219,7 @@ const TrendingDealCard: React.FC<{
               },
             ]}
           >
-            <Ionicons name="flash" size={14} color="#ffcd57" />
+            <Ionicons name="flash" size={14} color={colors.lightMustard} />
             <Text style={styles.bonusText}>+{deal.bonusCoins} coins</Text>
           </Animated.View>
         )}
@@ -226,7 +227,7 @@ const TrendingDealCard: React.FC<{
         {/* Timer with Progress Bar */}
         <View style={styles.timerWrapper}>
           <View style={styles.timerContainer}>
-            <Ionicons name="time" size={12} color="#ffd7b5" />
+            <Ionicons name="time" size={12} color={colors.lightPeach} />
             <Text style={styles.timerText}>{formatTimeRemaining(timeRemaining)}</Text>
           </View>
           <View style={styles.progressBarBackground}>
@@ -336,14 +337,14 @@ const TrendingCashback: React.FC<TrendingCashbackProps> = ({
         <View style={styles.headerLeft}>
           <View style={styles.titleRow}>
             <LinearGradient
-              colors={['#1a3a52', '#234b68']}
+              colors={[colors.nileBlue, colors.brand.nileBlueLight]}
               style={styles.headerIconContainer}
             >
-              <Ionicons name="trending-up" size={16} color="#ffcd57" />
+              <Ionicons name="trending-up" size={16} color={colors.lightMustard} />
             </LinearGradient>
             <Text style={styles.title}>Trending Cashback</Text>
             <Animated.View style={{ transform: [{ scale: flamePulseAnim }] }}>
-              <Ionicons name="flame" size={18} color="#ffcd57" />
+              <Ionicons name="flame" size={18} color={colors.lightMustard} />
             </Animated.View>
           </View>
           <Text style={styles.subtitle}>Limited time offers - Don't miss out!</Text>
@@ -355,7 +356,7 @@ const TrendingCashback: React.FC<TrendingCashbackProps> = ({
         >
           <Text style={styles.viewAllText}>View All</Text>
           <View style={styles.viewAllArrow}>
-            <Ionicons name="chevron-forward" size={14} color="#FFFFFF" />
+            <Ionicons name="chevron-forward" size={14} color={colors.background.primary} />
           </View>
         </Pressable>
       </Animated.View>
@@ -388,7 +389,7 @@ const TrendingCashback: React.FC<TrendingCashbackProps> = ({
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginTop: 8,
     marginHorizontal: 16,
     borderRadius: 24,
@@ -430,19 +431,19 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     marginLeft: 40,
   },
   viewAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E8B896',
+    backgroundColor: colors.brand.sand,
     paddingLeft: 14,
     paddingRight: 6,
     paddingVertical: 8,
@@ -452,7 +453,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   viewAllArrow: {
     width: 24,
@@ -470,7 +471,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 150,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     padding: 16,
     alignItems: 'center',
@@ -479,7 +480,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffd7b5',
+        shadowColor: colors.lightPeach,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.12,
         shadowRadius: 8,
@@ -495,7 +496,7 @@ const styles = StyleSheet.create({
     left: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ffd7b5',
+    backgroundColor: colors.lightPeach,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 8,
@@ -506,12 +507,12 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   liveText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   badge: {
@@ -526,21 +527,21 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.3,
   },
   logoContainer: {
     width: 64,
     height: 64,
     borderRadius: 18,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
     marginTop: 8,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
   },
   brandLogo: {
     width: 44,
@@ -555,12 +556,12 @@ const styles = StyleSheet.create({
   logoInitial: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   brandName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 8,
     textAlign: 'center',
   },
@@ -574,7 +575,7 @@ const styles = StyleSheet.create({
   cashbackRate: {
     fontSize: 20,
     fontWeight: '900',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: -0.5,
   },
   cashbackLabel: {
@@ -588,7 +589,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     marginBottom: 10,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 10,
@@ -596,7 +597,7 @@ const styles = StyleSheet.create({
   bonusText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#D4A07A',
+    color: colors.brand.caramel,
   },
   timerWrapper: {
     width: '100%',
@@ -606,7 +607,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 10,
@@ -615,34 +616,34 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#ffd7b5',
+    color: colors.lightPeach,
     letterSpacing: -0.2,
   },
   progressBarBackground: {
     height: 4,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderRadius: 2,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#ffd7b5',
+    backgroundColor: colors.lightPeach,
     borderRadius: 2,
   },
   // Skeleton
   skeleton: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   skeletonText: {
     height: 14,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 8,
   },
   skeletonBadge: {
     width: 80,
     height: 36,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 14,
     marginBottom: 8,
   },

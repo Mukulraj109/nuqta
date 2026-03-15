@@ -30,6 +30,7 @@ import FlightBookingFlow from '../../components/flight/FlightBookingFlow';
 import FlightBookingConfirmation from '../../components/flight/FlightBookingConfirmation';
 import RelatedFlightsSection from '../../components/flight/RelatedFlightsSection';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -363,7 +364,7 @@ export default function FlightDetailsPage() {
       <SafeAreaView style={s.container}>
         <View style={s.errorWrap}>
           <View style={s.errorIcon}>
-            <Ionicons name="cloud-offline-outline" size={48} color="#EF4444" />
+            <Ionicons name="cloud-offline-outline" size={48} color={colors.error} />
           </View>
           <Text style={s.errorTitle}>Oops!</Text>
           <Text style={s.errorMsg}>{error || 'Flight not found'}</Text>
@@ -371,7 +372,7 @@ export default function FlightDetailsPage() {
             <Text style={s.retryBtnText}>Try Again</Text>
           </Pressable>
           <Pressable onPress={() => router.back()} style={{ marginTop: 12 }}>
-            <Text style={{ color: '#6B7280', fontSize: 14 }}>Go back</Text>
+            <Text style={{ color: colors.neutral[500], fontSize: 14 }}>Go back</Text>
           </Pressable>
         </View>
       </SafeAreaView>
@@ -406,14 +407,14 @@ export default function FlightDetailsPage() {
           {/* Nav bar */}
           <View style={s.heroNav}>
             <Pressable style={s.navBtn} onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={22} color="#FFF" />
+              <Ionicons name="arrow-back" size={22} color={colors.background.primary} />
             </Pressable>
             <View style={s.navRight}>
               <Pressable style={s.navBtn} onPress={handleFavorite}>
-                <Ionicons name={isInWishlist(flight.id) ? 'heart' : 'heart-outline'} size={22} color={isInWishlist(flight.id) ? '#EF4444' : '#FFF'} />
+                <Ionicons name={isInWishlist(flight.id) ? 'heart' : 'heart-outline'} size={22} color={isInWishlist(flight.id) ? colors.error : colors.background.primary} />
               </Pressable>
               <Pressable style={s.navBtn}>
-                <Ionicons name="share-outline" size={22} color="#FFF" />
+                <Ionicons name="share-outline" size={22} color={colors.background.primary} />
               </Pressable>
             </View>
           </View>
@@ -438,7 +439,7 @@ export default function FlightDetailsPage() {
 
         {/* ── Route Card (overlaps hero) ───────────────── */}
         <View style={s.routeCardWrap}>
-          <LinearGradient colors={['#1E40AF', '#3B82F6']} style={s.routeCard} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+          <LinearGradient colors={['#1E40AF', colors.infoScale[400]]} style={s.routeCard} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
             <View style={s.routeRow}>
               {/* From */}
               <View style={s.routeEnd}>
@@ -455,7 +456,7 @@ export default function FlightDetailsPage() {
                   <View style={s.lineDot} />
                   <View style={s.lineDash} />
                   <View style={s.planeWrap}>
-                    <Ionicons name="airplane" size={18} color="#FFF" />
+                    <Ionicons name="airplane" size={18} color={colors.background.primary} />
                   </View>
                   <View style={s.lineDash} />
                   <View style={s.lineDot} />
@@ -512,7 +513,7 @@ export default function FlightDetailsPage() {
                 )}
               </View>
               <View style={s.cashbackCard}>
-                <Ionicons name="gift" size={18} color="#D97706" />
+                <Ionicons name="gift" size={18} color={colors.warningScale[700]} />
                 <Text style={s.cashbackPct}>{flight.cashback.percentage}%</Text>
                 <Text style={s.cashbackLabel}>cashback</Text>
                 <Text style={s.cashbackAmt}>Earn {currencySymbol}{flight.cashback.amount.toLocaleString(locale)}</Text>
@@ -521,10 +522,10 @@ export default function FlightDetailsPage() {
 
             {/* Book Now button — inside content flow */}
             <Pressable style={s.bookBtn} onPress={handleBookNow}>
-              <LinearGradient colors={['#2563EB', '#1D4ED8']} style={s.bookBtnGrad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+              <LinearGradient colors={[colors.brand.blue, '#1D4ED8']} style={s.bookBtnGrad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
                 <Text style={s.bookBtnText}>Book Now</Text>
                 <View style={s.bookBtnArrow}>
-                  <Ionicons name="arrow-forward" size={18} color="#2563EB" />
+                  <Ionicons name="arrow-forward" size={18} color={colors.brand.blue} />
                 </View>
               </LinearGradient>
             </Pressable>
@@ -533,24 +534,24 @@ export default function FlightDetailsPage() {
           {/* ── Quick Info Strip ────────────────────────── */}
           <View style={s.quickStrip}>
             <View style={s.quickItem}>
-              <View style={[s.quickIcon, { backgroundColor: '#EFF6FF' }]}>
-                <Ionicons name="time-outline" size={20} color="#3B82F6" />
+              <View style={[s.quickIcon, { backgroundColor: colors.tint.blue }]}>
+                <Ionicons name="time-outline" size={20} color={colors.infoScale[400]} />
               </View>
               <Text style={s.quickLabel}>Duration</Text>
               <Text style={s.quickValue}>{formatDuration(flight.duration)}</Text>
             </View>
             <View style={s.quickDivider} />
             <View style={s.quickItem}>
-              <View style={[s.quickIcon, { backgroundColor: '#F0FDF4' }]}>
-                <Ionicons name="bag-outline" size={20} color="#16A34A" />
+              <View style={[s.quickIcon, { backgroundColor: colors.successScale[50] }]}>
+                <Ionicons name="bag-outline" size={20} color={colors.brand.greenDark} />
               </View>
               <Text style={s.quickLabel}>Cabin</Text>
               <Text style={s.quickValue}>{flight.baggage.cabin}</Text>
             </View>
             <View style={s.quickDivider} />
             <View style={s.quickItem}>
-              <View style={[s.quickIcon, { backgroundColor: '#FEF3C7' }]}>
-                <Ionicons name="cube-outline" size={20} color="#D97706" />
+              <View style={[s.quickIcon, { backgroundColor: colors.tint.amberLight }]}>
+                <Ionicons name="cube-outline" size={20} color={colors.warningScale[700]} />
               </View>
               <Text style={s.quickLabel}>Check-in</Text>
               <Text style={s.quickValue}>{flight.baggage.checked}</Text>
@@ -568,24 +569,24 @@ export default function FlightDetailsPage() {
                 <CachedImage source={flight.store.logo} style={s.airlineLogo} contentFit="contain" />
               ) : (
                 <View style={[s.airlineLogo, s.airlineLogoFallback]}>
-                  <Ionicons name="airplane" size={20} color="#3B82F6" />
+                  <Ionicons name="airplane" size={20} color={colors.infoScale[400]} />
                 </View>
               )}
               <View style={{ flex: 1 }}>
                 <Text style={s.airlineName}>{flight.store.name}</Text>
                 <View style={s.airlineMeta}>
-                  <Ionicons name="checkmark-circle" size={13} color="#22C55E" />
+                  <Ionicons name="checkmark-circle" size={13} color={colors.success} />
                   <Text style={s.airlineVerified}>Verified Partner</Text>
                   {flight.rating > 0 && (
                     <>
                       <Text style={s.metaDot}>·</Text>
-                      <Ionicons name="star" size={13} color="#F59E0B" />
+                      <Ionicons name="star" size={13} color={colors.warningScale[400]} />
                       <Text style={s.airlineRating}>{flight.rating.toFixed(1)}</Text>
                     </>
                   )}
                 </View>
               </View>
-              <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
+              <Ionicons name="chevron-forward" size={18} color={colors.neutral[400]} />
             </Pressable>
           )}
 
@@ -595,7 +596,7 @@ export default function FlightDetailsPage() {
             <View style={s.amenitiesGrid}>
               {flight.amenities.map((a, i) => (
                 <View key={i} style={s.amenityChip}>
-                  <Ionicons name={amenityIconMap[a] || 'checkmark-circle-outline'} size={18} color="#3B82F6" />
+                  <Ionicons name={amenityIconMap[a] || 'checkmark-circle-outline'} size={18} color={colors.infoScale[400]} />
                   <Text style={s.amenityText}>{a}</Text>
                 </View>
               ))}
@@ -609,7 +610,7 @@ export default function FlightDetailsPage() {
             <View style={s.highlights}>
               {['Direct flight', 'Best price guaranteed', 'Instant confirmation'].map((h, i) => (
                 <View key={i} style={s.highlightRow}>
-                  <Ionicons name="checkmark-circle" size={18} color="#22C55E" />
+                  <Ionicons name="checkmark-circle" size={18} color={colors.success} />
                   <Text style={s.highlightText}>{h}</Text>
                 </View>
               ))}
@@ -620,26 +621,26 @@ export default function FlightDetailsPage() {
           <View style={s.sectionCard}>
             <View style={s.cancelHeader}>
               <View style={s.cancelIcon}>
-                <Ionicons name="shield-checkmark" size={18} color="#22C55E" />
+                <Ionicons name="shield-checkmark" size={18} color={colors.success} />
               </View>
               <Text style={s.sectionTitle}>Cancellation Policy</Text>
             </View>
             {flight.cancellationPolicy.freeCancellation && (
               <View style={s.cancelRow}>
-                <Ionicons name="checkmark-circle" size={16} color="#22C55E" />
+                <Ionicons name="checkmark-circle" size={16} color={colors.success} />
                 <Text style={s.cancelText}>
                   Free cancellation up to {flight.cancellationPolicy.cancellationDeadline}h before departure
                 </Text>
               </View>
             )}
             <View style={s.cancelRow}>
-              <Ionicons name="information-circle-outline" size={16} color="#6B7280" />
+              <Ionicons name="information-circle-outline" size={16} color={colors.neutral[500]} />
               <Text style={s.cancelText}>
                 {flight.cancellationPolicy.refundPercentage}% refund if cancelled before deadline
               </Text>
             </View>
             <View style={s.cancelRow}>
-              <Ionicons name="close-circle-outline" size={16} color="#EF4444" />
+              <Ionicons name="close-circle-outline" size={16} color={colors.error} />
               <Text style={s.cancelText}>No refund for no-shows</Text>
             </View>
           </View>
@@ -649,9 +650,9 @@ export default function FlightDetailsPage() {
             <Text style={s.sectionTitle}>Class Options</Text>
             <View style={s.classGrid}>
               {[
-                { key: 'economy' as const, label: 'Economy', icon: 'airplane-outline' as const, color: '#3B82F6' },
-                { key: 'business' as const, label: 'Business', icon: 'diamond-outline' as const, color: '#8B5CF6' },
-                { key: 'first' as const, label: 'First', icon: 'star-outline' as const, color: '#D97706' },
+                { key: 'economy' as const, label: 'Economy', icon: 'airplane-outline' as const, color: colors.infoScale[400] },
+                { key: 'business' as const, label: 'Business', icon: 'diamond-outline' as const, color: colors.brand.purpleLight },
+                { key: 'first' as const, label: 'First', icon: 'star-outline' as const, color: colors.warningScale[700] },
               ].filter(cls => flight.classOptions[cls.key].available).map(cls => (
                 <View key={cls.key} style={[s.classCard, cls.key === 'economy' && s.classCardActive]}>
                   <Ionicons name={cls.icon} size={22} color={cls.color} />
@@ -668,7 +669,7 @@ export default function FlightDetailsPage() {
               <Text style={s.sectionTitle}>Reviews</Text>
               {flight.rating > 0 && (
                 <View style={s.ratingPill}>
-                  <Ionicons name="star" size={14} color="#F59E0B" />
+                  <Ionicons name="star" size={14} color={colors.warningScale[400]} />
                   <Text style={s.ratingPillText}>{flight.rating.toFixed(1)} ({flight.reviewCount})</Text>
                 </View>
               )}
@@ -713,19 +714,19 @@ export default function FlightDetailsPage() {
 // STYLES
 // ═════════════════════════════════════════════════════════════════
 const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8FAFC' },
+  container: { flex: 1, backgroundColor: colors.tint.coolGray },
   scroll: { flex: 1 },
 
   // ── Loading / Error ───────────────────────────────────────────
   loadingWrap: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingPlane: { width: 72, height: 72, borderRadius: 36, backgroundColor: '#EFF6FF', justifyContent: 'center', alignItems: 'center', marginBottom: 16 },
-  loadingTitle: { fontSize: 16, fontWeight: '600', color: '#374151' },
+  loadingPlane: { width: 72, height: 72, borderRadius: 36, backgroundColor: colors.tint.blue, justifyContent: 'center', alignItems: 'center', marginBottom: 16 },
+  loadingTitle: { fontSize: 16, fontWeight: '600', color: colors.neutral[700] },
   errorWrap: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32 },
-  errorIcon: { width: 80, height: 80, borderRadius: 40, backgroundColor: '#FEF2F2', justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
-  errorTitle: { fontSize: 22, fontWeight: '700', color: '#111827', marginBottom: 8 },
-  errorMsg: { fontSize: 15, color: '#6B7280', textAlign: 'center', marginBottom: 24 },
-  retryBtn: { paddingHorizontal: 32, paddingVertical: 12, backgroundColor: '#3B82F6', borderRadius: 10 },
-  retryBtnText: { color: '#FFF', fontSize: 15, fontWeight: '600' },
+  errorIcon: { width: 80, height: 80, borderRadius: 40, backgroundColor: colors.errorScale[50], justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
+  errorTitle: { fontSize: 22, fontWeight: '700', color: colors.neutral[900], marginBottom: 8 },
+  errorMsg: { fontSize: 15, color: colors.neutral[500], textAlign: 'center', marginBottom: 24 },
+  retryBtn: { paddingHorizontal: 32, paddingVertical: 12, backgroundColor: colors.infoScale[400], borderRadius: 10 },
+  retryBtnText: { color: colors.background.primary, fontSize: 15, fontWeight: '600' },
 
   // ── Hero ──────────────────────────────────────────────────────
   hero: { width: screenWidth, height: 280, position: 'relative', backgroundColor: '#1E3A5F' },
@@ -735,11 +736,11 @@ const s = StyleSheet.create({
   heroNav: { position: 'absolute', top: Platform.OS === 'ios' ? 50 : 16, left: 0, right: 0, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, zIndex: 10 },
   navBtn: { width: 38, height: 38, borderRadius: 19, backgroundColor: 'rgba(0,0,0,0.35)', justifyContent: 'center', alignItems: 'center', ...Platform.select({ web: { backdropFilter: 'blur(10px)' } as any, default: {} }) },
   navRight: { flexDirection: 'row', gap: 10 },
-  discBadge: { position: 'absolute', top: Platform.OS === 'ios' ? 96 : 62, right: 16, backgroundColor: '#EF4444', paddingHorizontal: 12, paddingVertical: 5, borderRadius: 6 },
-  discBadgeText: { color: '#FFF', fontSize: 12, fontWeight: '800' },
+  discBadge: { position: 'absolute', top: Platform.OS === 'ios' ? 96 : 62, right: 16, backgroundColor: colors.error, paddingHorizontal: 12, paddingVertical: 5, borderRadius: 6 },
+  discBadgeText: { color: colors.background.primary, fontSize: 12, fontWeight: '800' },
   dots: { position: 'absolute', bottom: 50, left: 0, right: 0, flexDirection: 'row', justifyContent: 'center', gap: 6, zIndex: 5 },
   dot: { width: 7, height: 7, borderRadius: 4, backgroundColor: 'rgba(255,255,255,0.4)' },
-  dotActive: { width: 20, backgroundColor: '#FFF' },
+  dotActive: { width: 20, backgroundColor: colors.background.primary },
 
   // ── Route Card ────────────────────────────────────────────────
   routeCardWrap: { marginHorizontal: 16, marginTop: -44, zIndex: 5, borderRadius: 16, overflow: 'hidden', shadowColor: '#1E40AF', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.2, shadowRadius: 20, elevation: 10 },
@@ -747,16 +748,16 @@ const s = StyleSheet.create({
   routeRow: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
   routeEnd: { alignItems: 'center', width: 80 },
   codeCircle: { width: 52, height: 52, borderRadius: 26, backgroundColor: 'rgba(255,255,255,0.2)', justifyContent: 'center', alignItems: 'center', borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.3)', marginBottom: 8 },
-  codeText: { fontSize: 16, fontWeight: '800', color: '#FFF', letterSpacing: 1 },
-  cityText: { fontSize: 13, fontWeight: '600', color: '#FFF', marginBottom: 4, textAlign: 'center' },
-  timeText: { fontSize: 16, fontWeight: '800', color: '#FFF' },
+  codeText: { fontSize: 16, fontWeight: '800', color: colors.background.primary, letterSpacing: 1 },
+  cityText: { fontSize: 13, fontWeight: '600', color: colors.background.primary, marginBottom: 4, textAlign: 'center' },
+  timeText: { fontSize: 16, fontWeight: '800', color: colors.background.primary },
   routeMiddle: { flex: 1, alignItems: 'center', paddingTop: 14 },
   routeLine: { flexDirection: 'row', alignItems: 'center', width: '100%' },
   lineDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.6)' },
   lineDash: { flex: 1, height: 1.5, backgroundColor: 'rgba(255,255,255,0.3)' },
   planeWrap: { marginHorizontal: 6 },
   durationPill: { marginTop: 8, backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 10, paddingVertical: 3, borderRadius: 10 },
-  durationText: { fontSize: 11, fontWeight: '700', color: '#FFF' },
+  durationText: { fontSize: 11, fontWeight: '700', color: colors.background.primary },
   directText: { fontSize: 10, color: 'rgba(255,255,255,0.6)', marginTop: 3, fontWeight: '500' },
   routeFooter: { flexDirection: 'row', justifyContent: 'center', gap: 20, marginTop: 18, paddingTop: 14, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.15)' },
   routeFooterItem: { flexDirection: 'row', alignItems: 'center', gap: 5 },
@@ -766,46 +767,46 @@ const s = StyleSheet.create({
   body: { paddingHorizontal: 16, paddingTop: 20 },
 
   // ── Price Card ────────────────────────────────────────────────
-  priceCard: { backgroundColor: '#FFF', borderRadius: 16, padding: 20, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 3 },
+  priceCard: { backgroundColor: colors.background.primary, borderRadius: 16, padding: 20, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 3 },
   priceTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 18 },
-  priceLabel: { fontSize: 12, color: '#6B7280', fontWeight: '500', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6 },
+  priceLabel: { fontSize: 12, color: colors.neutral[500], fontWeight: '500', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6 },
   priceRow: { flexDirection: 'row', alignItems: 'baseline', gap: 8 },
-  priceMain: { fontSize: 28, fontWeight: '800', color: '#111827' },
-  priceOrig: { fontSize: 16, color: '#9CA3AF', textDecorationLine: 'line-through' },
-  savePill: { alignSelf: 'flex-start', backgroundColor: '#FEF3C7', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 4, marginTop: 6 },
-  savePillText: { fontSize: 11, fontWeight: '700', color: '#92400E' },
-  cashbackCard: { alignItems: 'center', backgroundColor: '#FFFBEB', paddingHorizontal: 14, paddingVertical: 10, borderRadius: 12, borderWidth: 1, borderColor: '#FDE68A', minWidth: 90 },
-  cashbackPct: { fontSize: 18, fontWeight: '800', color: '#D97706', marginTop: 2 },
-  cashbackLabel: { fontSize: 10, color: '#92400E', fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.3 },
-  cashbackAmt: { fontSize: 10, color: '#B45309', fontWeight: '500', marginTop: 4 },
+  priceMain: { fontSize: 28, fontWeight: '800', color: colors.neutral[900] },
+  priceOrig: { fontSize: 16, color: colors.neutral[400], textDecorationLine: 'line-through' },
+  savePill: { alignSelf: 'flex-start', backgroundColor: colors.tint.amberLight, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 4, marginTop: 6 },
+  savePillText: { fontSize: 11, fontWeight: '700', color: colors.brand.amberDark },
+  cashbackCard: { alignItems: 'center', backgroundColor: colors.tint.amber, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 12, borderWidth: 1, borderColor: colors.warningScale[200], minWidth: 90 },
+  cashbackPct: { fontSize: 18, fontWeight: '800', color: colors.warningScale[700], marginTop: 2 },
+  cashbackLabel: { fontSize: 10, color: colors.brand.amberDark, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.3 },
+  cashbackAmt: { fontSize: 10, color: colors.brand.amberDeep, fontWeight: '500', marginTop: 4 },
 
   // ── Book Button ───────────────────────────────────────────────
   bookBtn: { borderRadius: 12, overflow: 'hidden' },
   bookBtnGrad: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 16, gap: 10, borderRadius: 12 },
-  bookBtnText: { color: '#FFF', fontSize: 17, fontWeight: '700', letterSpacing: 0.3 },
-  bookBtnArrow: { width: 28, height: 28, borderRadius: 14, backgroundColor: '#FFF', justifyContent: 'center', alignItems: 'center' },
+  bookBtnText: { color: colors.background.primary, fontSize: 17, fontWeight: '700', letterSpacing: 0.3 },
+  bookBtnArrow: { width: 28, height: 28, borderRadius: 14, backgroundColor: colors.background.primary, justifyContent: 'center', alignItems: 'center' },
 
   // ── Quick Strip ───────────────────────────────────────────────
-  quickStrip: { flexDirection: 'row', backgroundColor: '#FFF', borderRadius: 16, padding: 16, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
+  quickStrip: { flexDirection: 'row', backgroundColor: colors.background.primary, borderRadius: 16, padding: 16, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
   quickItem: { flex: 1, alignItems: 'center' },
   quickIcon: { width: 40, height: 40, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
-  quickLabel: { fontSize: 11, color: '#6B7280', fontWeight: '500', marginBottom: 3 },
-  quickValue: { fontSize: 14, fontWeight: '700', color: '#111827' },
-  quickDivider: { width: 1, backgroundColor: '#E5E7EB', marginVertical: 4 },
+  quickLabel: { fontSize: 11, color: colors.neutral[500], fontWeight: '500', marginBottom: 3 },
+  quickValue: { fontSize: 14, fontWeight: '700', color: colors.neutral[900] },
+  quickDivider: { width: 1, backgroundColor: colors.neutral[200], marginVertical: 4 },
 
   // ── Airline Card ──────────────────────────────────────────────
-  airlineCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFF', borderRadius: 14, padding: 14, marginBottom: 12, gap: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
-  airlineLogo: { width: 44, height: 44, borderRadius: 10, backgroundColor: '#FFF', borderWidth: 1, borderColor: '#E5E7EB' },
-  airlineLogoFallback: { backgroundColor: '#EFF6FF', justifyContent: 'center', alignItems: 'center', borderColor: '#DBEAFE' },
-  airlineName: { fontSize: 15, fontWeight: '600', color: '#111827', marginBottom: 3 },
+  airlineCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.background.primary, borderRadius: 14, padding: 14, marginBottom: 12, gap: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
+  airlineLogo: { width: 44, height: 44, borderRadius: 10, backgroundColor: colors.background.primary, borderWidth: 1, borderColor: colors.neutral[200] },
+  airlineLogoFallback: { backgroundColor: colors.tint.blue, justifyContent: 'center', alignItems: 'center', borderColor: colors.tint.blueLight },
+  airlineName: { fontSize: 15, fontWeight: '600', color: colors.neutral[900], marginBottom: 3 },
   airlineMeta: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  airlineVerified: { fontSize: 12, color: '#16A34A', fontWeight: '500' },
-  metaDot: { color: '#D1D5DB', fontSize: 12 },
-  airlineRating: { fontSize: 12, color: '#92400E', fontWeight: '600' },
+  airlineVerified: { fontSize: 12, color: colors.brand.greenDark, fontWeight: '500' },
+  metaDot: { color: colors.neutral[300], fontSize: 12 },
+  airlineRating: { fontSize: 12, color: colors.brand.amberDark, fontWeight: '600' },
 
   // ── Section Card ──────────────────────────────────────────────
-  sectionCard: { backgroundColor: '#FFF', borderRadius: 16, padding: 20, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
-  sectionTitle: { fontSize: 18, fontWeight: '700', color: '#111827', marginBottom: 14 },
+  sectionCard: { backgroundColor: colors.background.primary, borderRadius: 16, padding: 20, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
+  sectionTitle: { fontSize: 18, fontWeight: '700', color: colors.neutral[900], marginBottom: 14 },
 
   // ── Amenities ─────────────────────────────────────────────────
   amenitiesGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
@@ -813,26 +814,26 @@ const s = StyleSheet.create({
   amenityText: { fontSize: 13, color: '#1E40AF', fontWeight: '500' },
 
   // ── Description ───────────────────────────────────────────────
-  descText: { fontSize: 14, lineHeight: 22, color: '#4B5563', marginBottom: 16 },
+  descText: { fontSize: 14, lineHeight: 22, color: colors.neutral[600], marginBottom: 16 },
   highlights: { gap: 10 },
   highlightRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  highlightText: { fontSize: 14, color: '#374151', fontWeight: '500' },
+  highlightText: { fontSize: 14, color: colors.neutral[700], fontWeight: '500' },
 
   // ── Cancellation ──────────────────────────────────────────────
   cancelHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 14 },
-  cancelIcon: { width: 30, height: 30, borderRadius: 8, backgroundColor: '#F0FDF4', justifyContent: 'center', alignItems: 'center' },
+  cancelIcon: { width: 30, height: 30, borderRadius: 8, backgroundColor: colors.successScale[50], justifyContent: 'center', alignItems: 'center' },
   cancelRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginBottom: 10 },
-  cancelText: { flex: 1, fontSize: 13, color: '#4B5563', lineHeight: 19 },
+  cancelText: { flex: 1, fontSize: 13, color: colors.neutral[600], lineHeight: 19 },
 
   // ── Class Options ─────────────────────────────────────────────
   classGrid: { flexDirection: 'row', gap: 10 },
-  classCard: { flex: 1, alignItems: 'center', padding: 14, backgroundColor: '#F9FAFB', borderRadius: 12, borderWidth: 1.5, borderColor: '#E5E7EB' },
-  classCardActive: { borderColor: '#3B82F6', backgroundColor: '#EFF6FF' },
-  classLabel: { fontSize: 12, fontWeight: '600', color: '#374151', marginTop: 6, marginBottom: 4 },
-  classPrice: { fontSize: 14, fontWeight: '700', color: '#111827' },
+  classCard: { flex: 1, alignItems: 'center', padding: 14, backgroundColor: colors.neutral[50], borderRadius: 12, borderWidth: 1.5, borderColor: colors.neutral[200] },
+  classCardActive: { borderColor: colors.infoScale[400], backgroundColor: colors.tint.blue },
+  classLabel: { fontSize: 12, fontWeight: '600', color: colors.neutral[700], marginTop: 6, marginBottom: 4 },
+  classPrice: { fontSize: 14, fontWeight: '700', color: colors.neutral[900] },
 
   // ── Reviews ───────────────────────────────────────────────────
   reviewHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 },
-  ratingPill: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: '#FEF3C7', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 6 },
-  ratingPillText: { fontSize: 13, fontWeight: '600', color: '#92400E' },
+  ratingPill: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.tint.amberLight, paddingHorizontal: 10, paddingVertical: 5, borderRadius: 6 },
+  ratingPillText: { fontSize: 13, fontWeight: '600', color: colors.brand.amberDark },
 });

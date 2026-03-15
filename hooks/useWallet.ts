@@ -1,4 +1,6 @@
+import { colors } from '@/constants/theme';
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 import {
   WalletState,
   WalletData,
@@ -67,7 +69,7 @@ function transformWalletResponse(backendData: any, userId: string): WalletData {
       description: `Universal rewards usable anywhere on ${BRAND.APP_NAME}`,
       iconPath: BRAND.COIN_IMAGE,
       backgroundColor: '#FFF9E6',
-      color: '#B45309',
+      color: colors.brand.amberDeep,
       isActive: rezCoin?.isActive !== false,
       earnedDate: rezCoin?.earnedDate ? new Date(rezCoin.earnedDate) : new Date(backendData.lastUpdated),
       lastUsed: rezCoin?.lastUsed ? new Date(rezCoin.lastUsed) : new Date(backendData.lastUpdated),
@@ -83,7 +85,7 @@ function transformWalletResponse(backendData: any, userId: string): WalletData {
       description: 'Special coins from campaigns & events (max 20% per bill)',
       iconPath: require('@/assets/images/promo-coin.png'),
       backgroundColor: '#FEF9E7',
-      color: '#D97706',
+      color: colors.warningScale[700],
       isActive: promoData?.isActive !== false,
       earnedDate: promoData?.earnedDate ? new Date(promoData.earnedDate) : new Date(backendData.lastUpdated),
       lastUsed: promoData?.lastUsed ? new Date(promoData.lastUsed) : new Date(backendData.lastUpdated),
@@ -358,29 +360,44 @@ export const useWallet = ({
     walletStateRef.current = walletState;
   }, [walletState]);
 
-  // Setup refresh interval
+  // Setup refresh interval — pause when app is backgrounded
   useEffect(() => {
-    if (refreshInterval && refreshInterval > 0) {
-      // Clear any existing interval first
-      if (refreshIntervalRef.current) {
-        clearInterval(refreshIntervalRef.current);
-      }
+    if (!refreshInterval || refreshInterval <= 0) return;
 
+    const startInterval = () => {
+      if (refreshIntervalRef.current) return; // already running
       refreshIntervalRef.current = setInterval(() => {
-        // Use ref to check state without adding to deps
         if (!walletStateRef.current.isLoading && !walletStateRef.current.isRefreshing) {
           refreshWallet(false);
         }
       }, refreshInterval) as unknown as NodeJS.Timeout;
+    };
 
-      return () => {
-        if (refreshIntervalRef.current) {
-          clearInterval(refreshIntervalRef.current);
-          refreshIntervalRef.current = null;
-        }
-      };
+    const stopInterval = () => {
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+        refreshIntervalRef.current = null;
+      }
+    };
+
+    const subscription = AppState.addEventListener('change', (nextState: AppStateStatus) => {
+      if (nextState === 'active') {
+        startInterval();
+      } else {
+        stopInterval();
+      }
+    });
+
+    // Only start if app is currently active
+    if (AppState.currentState === 'active') {
+      startInterval();
     }
-  }, [refreshInterval, refreshWallet]); // Removed walletState deps to prevent interval recreation
+
+    return () => {
+      stopInterval();
+      subscription.remove();
+    };
+  }, [refreshInterval, refreshWallet]);
 
   // Cleanup on unmount
   useEffect(() => {

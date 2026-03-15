@@ -26,6 +26,7 @@ import { platformAlert } from '@/utils/platformAlert';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const NUQTA_COIN = BRAND.COIN_IMAGE;
@@ -247,7 +248,7 @@ const CreatorPickDetail = () => {
           <CachedImage source={item.productImage} style={s.relImg} contentFit="cover" />
         ) : (
           <View style={[s.relImg, { justifyContent: 'center', alignItems: 'center' }]}>
-            <Ionicons name="image-outline" size={24} color="#D1D5DB" />
+            <Ionicons name="image-outline" size={24} color={colors.neutral[300]} />
           </View>
         )}
         <View style={s.relCoinBadge}>
@@ -279,7 +280,7 @@ const CreatorPickDetail = () => {
 
         {/* ---- VIDEO (if exists) ---- */}
         {pick.videoUrl && (
-          <View style={{ backgroundColor: '#000' }}>
+          <View style={{ backgroundColor: colors.text.primary }}>
             <VideoPlayer uri={pick.videoUrl} width={width} height={width * 0.56} autoPlay={false} loop={false} muted={true} style={{ borderRadius: 0 }} />
           </View>
         )}
@@ -307,7 +308,7 @@ const CreatorPickDetail = () => {
           </View>
         ) : !pick.videoUrl ? (
           <View style={{ width, height: width * 0.55, backgroundColor: Colors.background.secondary, justifyContent: 'center', alignItems: 'center' }}>
-            <Ionicons name="image-outline" size={56} color="#D1D5DB" />
+            <Ionicons name="image-outline" size={56} color={colors.neutral[300]} />
           </View>
         ) : null}
 
@@ -356,19 +357,19 @@ const CreatorPickDetail = () => {
               <Text style={s.statusLabel}>Status:</Text>
               <View style={[
                 s.statusBadge,
-                pick.status === 'approved' && { backgroundColor: '#DCFCE7' },
-                pick.status === 'rejected' && { backgroundColor: '#FEE2E2' },
-                pick.status === 'pending_review' && { backgroundColor: '#FEF3C7' },
-                pick.status === 'pending_merchant' && { backgroundColor: '#DBEAFE' },
+                pick.status === 'approved' && { backgroundColor: colors.successScale[100] },
+                pick.status === 'rejected' && { backgroundColor: colors.errorScale[100] },
+                pick.status === 'pending_review' && { backgroundColor: colors.tint.amberLight },
+                pick.status === 'pending_merchant' && { backgroundColor: colors.tint.blueLight },
                 pick.status === 'draft' && { backgroundColor: Colors.background.secondary },
                 pick.status === 'archived' && { backgroundColor: Colors.border.default },
               ]}>
                 <Text style={[
                   s.statusText,
-                  pick.status === 'approved' && { color: '#16A34A' },
+                  pick.status === 'approved' && { color: colors.brand.greenDark },
                   pick.status === 'rejected' && { color: Colors.error },
-                  pick.status === 'pending_review' && { color: '#D97706' },
-                  pick.status === 'pending_merchant' && { color: '#2563EB' },
+                  pick.status === 'pending_review' && { color: colors.warningScale[700] },
+                  pick.status === 'pending_merchant' && { color: colors.brand.blue },
                   pick.status === 'draft' && { color: Colors.text.tertiary },
                   pick.status === 'archived' && { color: Colors.text.tertiary },
                 ]}>
@@ -439,7 +440,7 @@ const CreatorPickDetail = () => {
             {pick.creator.avatar ? (
               <CachedImage source={pick.creator.avatar} style={s.avatar} />
             ) : (
-              <LinearGradient colors={[Colors.nileBlue, '#A855F7'] as const} style={s.avatar}>
+              <LinearGradient colors={[Colors.nileBlue, colors.brand.purpleMedium] as const} style={s.avatar}>
                 <Text style={s.avatarInitial}>{pick.creator.name?.charAt(0)?.toUpperCase() || '?'}</Text>
               </LinearGradient>
             )}
@@ -447,7 +448,7 @@ const CreatorPickDetail = () => {
             <View style={{ flex: 1 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                 <Text style={s.creatorName}>{pick.creator.name}</Text>
-                {pick.creator.verified && <Ionicons name="checkmark-circle" size={14} color="#3B82F6" />}
+                {pick.creator.verified && <Ionicons name="checkmark-circle" size={14} color={colors.infoScale[400]} />}
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 }}>
                 {pick.creator.tier && (
@@ -507,21 +508,21 @@ const CreatorPickDetail = () => {
           <Text style={s.sectionTitle}>How you earn</Text>
           <View style={s.stepsRow}>
             <View style={s.stepItem}>
-              <View style={[s.stepIcon, { backgroundColor: '#EFF6FF' }]}>
-                <Ionicons name="cart-outline" size={18} color="#3B82F6" />
+              <View style={[s.stepIcon, { backgroundColor: colors.tint.blue }]}>
+                <Ionicons name="cart-outline" size={18} color={colors.infoScale[400]} />
               </View>
               <Text style={s.stepLabel}>Buy this{'\n'}product</Text>
             </View>
-            <Ionicons name="chevron-forward" size={14} color="#D1D5DB" style={{ marginTop: 8 }} />
+            <Ionicons name="chevron-forward" size={14} color={colors.neutral[300]} style={{ marginTop: 8 }} />
             <View style={s.stepItem}>
-              <View style={[s.stepIcon, { backgroundColor: '#F0FDF4' }]}>
-                <Ionicons name="checkmark-circle-outline" size={18} color="#16A34A" />
+              <View style={[s.stepIcon, { backgroundColor: colors.successScale[50] }]}>
+                <Ionicons name="checkmark-circle-outline" size={18} color={colors.brand.greenDark} />
               </View>
               <Text style={s.stepLabel}>Order{'\n'}delivered</Text>
             </View>
-            <Ionicons name="chevron-forward" size={14} color="#D1D5DB" style={{ marginTop: 8 }} />
+            <Ionicons name="chevron-forward" size={14} color={colors.neutral[300]} style={{ marginTop: 8 }} />
             <View style={s.stepItem}>
-              <View style={[s.stepIcon, { backgroundColor: '#FFFBEB' }]}>
+              <View style={[s.stepIcon, { backgroundColor: colors.tint.amber }]}>
                 <CachedImage source={NUQTA_COIN} style={{ width: 18, height: 18, borderRadius: 9 }} />
               </View>
               <Text style={s.stepLabel}>Earn {estimatedCoins}{'\n'}{coinWord}</Text>
@@ -588,7 +589,7 @@ const CreatorPickDetail = () => {
       {/* ---- FIXED BOTTOM CTA ---- */}
       <View style={s.bottomBar}>
         <Pressable style={{ flex: 1, borderRadius: BorderRadius.md, overflow: 'hidden' }} onPress={handleBuy}>
-          <LinearGradient colors={['#16A34A', '#15803D'] as const} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={s.ctaInner}>
+          <LinearGradient colors={[colors.brand.greenDark, colors.successScale[700]] as const} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={s.ctaInner}>
             <View style={{ flex: 1 }}>
               <Text style={s.ctaTitle}>Buy & Earn</Text>
               <Text style={s.ctaSub}>Purchase to earn {estimatedCoins} {coinWord}</Text>
@@ -609,7 +610,7 @@ const CreatorPickDetail = () => {
 // ============================================
 
 const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F5F5' },
+  container: { flex: 1, backgroundColor: colors.tint.warmGray },
 
   // Header
   header: {
@@ -650,11 +651,11 @@ const s = StyleSheet.create({
   price: { ...Typography.h2, fontWeight: '800', color: Colors.nileBlue },
   coinPill: {
     flexDirection: 'row', alignItems: 'center', gap: 5,
-    backgroundColor: '#F0FDF4', paddingHorizontal: 10, paddingVertical: 6, borderRadius: BorderRadius.xl,
-    borderWidth: 1, borderColor: '#BBF7D0',
+    backgroundColor: colors.successScale[50], paddingHorizontal: 10, paddingVertical: 6, borderRadius: BorderRadius.xl,
+    borderWidth: 1, borderColor: colors.successScale[200],
   },
-  coinPillNum: { fontSize: 15, fontWeight: '800', color: '#16A34A' },
-  coinPillLabel: { ...Typography.caption, color: '#16A34A' },
+  coinPillNum: { fontSize: 15, fontWeight: '800', color: colors.brand.greenDark },
+  coinPillLabel: { ...Typography.caption, color: colors.brand.greenDark },
 
   // Actions
   actionRow: {
@@ -680,12 +681,12 @@ const s = StyleSheet.create({
   creatorMeta: { ...Typography.caption, color: Colors.text.tertiary },
   tierBadge: {
     flexDirection: 'row', alignItems: 'center', gap: 3,
-    backgroundColor: '#F5F3FF', paddingHorizontal: 6, paddingVertical: 2, borderRadius: BorderRadius.sm,
+    backgroundColor: colors.tint.purpleLight, paddingHorizontal: 6, paddingVertical: 2, borderRadius: BorderRadius.sm,
   },
   tierText: { ...Typography.overline, fontWeight: '600', color: Colors.nileBlue, textTransform: 'capitalize', letterSpacing: 0 },
   profileBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 2,
-    backgroundColor: '#F5F3FF', paddingHorizontal: Spacing.md, paddingVertical: 7, borderRadius: 10,
+    backgroundColor: colors.tint.purpleLight, paddingHorizontal: Spacing.md, paddingVertical: 7, borderRadius: 10,
   },
   profileBtnText: { ...Typography.bodySmall, fontWeight: '600', color: Colors.nileBlue },
 
@@ -758,7 +759,7 @@ const s = StyleSheet.create({
   statusText: { ...Typography.bodySmall, fontWeight: '600' },
   rejectionBox: {
     flexDirection: 'row', alignItems: 'flex-start', gap: 6,
-    backgroundColor: '#FEF2F2', padding: 10, borderRadius: BorderRadius.sm, marginBottom: 10,
+    backgroundColor: colors.errorScale[50], padding: 10, borderRadius: BorderRadius.sm, marginBottom: 10,
   },
   rejectionText: { flex: 1, ...Typography.bodySmall, color: Colors.error, lineHeight: 17 },
   ownPickActions: {
@@ -773,7 +774,7 @@ const s = StyleSheet.create({
   deletePickBtn: {
     flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     gap: 6, paddingVertical: 10, borderRadius: 10,
-    backgroundColor: '#FEF2F2', borderWidth: 1, borderColor: '#FECACA',
+    backgroundColor: colors.errorScale[50], borderWidth: 1, borderColor: colors.errorScale[200],
   },
   deletePickText: { fontSize: 13, fontWeight: '600', color: Colors.error },
 

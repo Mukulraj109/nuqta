@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { BRAND } from '@/constants/brand';
 import { RewardChecklistItem } from '@/hooks/usePostOrderRewards';
+import { colors } from '@/constants/theme';
 
 interface RewardsBreakdownCardProps {
   totalEarned: number;
@@ -93,7 +94,7 @@ function RewardsBreakdownCard({
       case 'completed':
         return (
           <View style={styles.statusBadgeCompleted}>
-            <Ionicons name="checkmark-circle" size={18} color="#22C55E" />
+            <Ionicons name="checkmark-circle" size={18} color={colors.success} />
           </View>
         );
       case 'available': {
@@ -170,7 +171,7 @@ function RewardsBreakdownCard({
             ]}
           >
             {item.status === 'completed' ? (
-              <Ionicons name="checkmark" size={18} color="#22C55E" />
+              <Ionicons name="checkmark" size={18} color={colors.success} />
             ) : (
               <Ionicons
                 name={getItemIcon(item)}
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...TYPOGRAPHY.h4,
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   headerRight: {
     alignItems: 'flex-end',
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E8FFF3',
   },
   itemIconCircleLocked: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   // Content
   itemContent: {

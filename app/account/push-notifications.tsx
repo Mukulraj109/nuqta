@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import notificationService from '../../services/notificationService';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface PushNotifications {
   enabled: boolean;
@@ -111,7 +112,7 @@ export default function PushNotificationsScreen() {
         accessibilityState={{ checked: value, disabled: disabled || saving }}
         accessibilityHint={disabled ? 'Enable push notifications first' : `Toggle to ${value ? 'disable' : 'enable'} ${title.toLowerCase()}`}
         trackColor={{ false: Colors.border.default, true: Colors.info }}
-        thumbColor={value ? '#FFFFFF' : Colors.background.secondary}
+        thumbColor={value ? colors.background.primary : Colors.background.secondary}
       />
     </View>
   );

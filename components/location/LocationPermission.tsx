@@ -7,6 +7,7 @@ import {
   ActivityIndicator} from 'react-native';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { useLocationPermission, useLocationInit } from '@/hooks/useLocation';
+import { colors } from '@/constants/theme';
 
 interface LocationPermissionProps {
   onPermissionGranted?: () => void;
@@ -120,7 +121,7 @@ function LocationPermission({
             disabled={isButtonDisabled}
           >
             {isButtonDisabled ? (
-              <ActivityIndicator size="small" color="#FFFFFF" />
+              <ActivityIndicator size="small" color={colors.background.primary} />
             ) : (
               <Text style={styles.compactButtonText}>
                 {getButtonText()}
@@ -171,7 +172,7 @@ function LocationPermission({
               disabled={isButtonDisabled}
             >
               {isButtonDisabled ? (
-                <ActivityIndicator size="small" color="#FFFFFF" />
+                <ActivityIndicator size="small" color={colors.background.primary} />
               ) : (
                 <Text style={styles.primaryButtonText}>
                   {getButtonText()}
@@ -241,13 +242,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 8,
     textAlign: 'center',
   },
   description: {
     fontSize: 16,
-    color: '#666666',
+    color: colors.midGray,
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: 16,
@@ -265,18 +266,18 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
   },
   compactText: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
   },
   buttonContainer: {
     width: '100%',
     gap: 12,
   },
   primaryButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 12,
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
     borderColor: '#E0E0E0',
   },
   compactButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -306,17 +307,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#C7C7CC',
   },
   primaryButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: '600',
   },
   secondaryButtonText: {
-    color: '#666666',
+    color: colors.midGray,
     fontSize: 16,
     fontWeight: '500',
   },
   compactButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600',
   },

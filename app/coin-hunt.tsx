@@ -19,6 +19,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const GAME_AREA_HEIGHT = SCREEN_HEIGHT * 0.5;
 
@@ -145,11 +146,11 @@ const CoinHuntScreen: React.FC = () => {
       {/* Score & Timer */}
       <View style={styles.statsRow}>
         <View style={styles.statBadge}>
-          <Ionicons name="wallet" size={18} color={'#FBBF24'} />
+          <Ionicons name="wallet" size={18} color={colors.warningScale[400]} />
           <Text style={styles.statValue}>{score}</Text>
         </View>
         <View style={[styles.statBadge, styles.timerBadge]}>
-          <Ionicons name="time" size={18} color={'#60A5FA'} />
+          <Ionicons name="time" size={18} color={colors.infoScale[400]} />
           <Text style={[styles.statValue, styles.timerValue]}>{timeLeft}s</Text>
         </View>
       </View>
@@ -169,7 +170,7 @@ const CoinHuntScreen: React.FC = () => {
             </Text>
             <Pressable onPress={startGame}>
               <LinearGradient
-                colors={[Colors.brand.purple, '#EC4899']}
+                colors={[Colors.brand.purple, colors.brand.pink]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.startButton}
@@ -203,7 +204,7 @@ const CoinHuntScreen: React.FC = () => {
                  
                 >
                   <LinearGradient
-                    colors={['#FBBF24', Colors.warning]}
+                    colors={[colors.warningScale[400], Colors.warning]}
                     style={styles.coin}
                   >
                     <Text style={styles.coinValue}>+{coin.value}</Text>
@@ -220,7 +221,7 @@ const CoinHuntScreen: React.FC = () => {
                 <Text style={styles.gameOverScore}>You earned {score} coins</Text>
                 <Pressable onPress={startGame}>
                   <LinearGradient
-                    colors={[Colors.success, '#14B8A6']}
+                    colors={[Colors.success, colors.tealGreen]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                     style={styles.playAgainButton}
@@ -296,10 +297,10 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FBBF24',
+    color: colors.warningScale[400],
   },
   timerValue: {
-    color: '#60A5FA',
+    color: colors.infoScale[400],
   },
   gameContainer: {
     flex: 1,
@@ -393,7 +394,7 @@ const styles = StyleSheet.create({
   gameOverScore: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FBBF24',
+    color: colors.warningScale[400],
   },
   playAgainButton: {
     paddingHorizontal: Spacing.xl,

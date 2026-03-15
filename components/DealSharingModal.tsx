@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { Deal } from '@/types/deals';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface DealSharingModalProps {
   visible: boolean;
@@ -149,7 +150,7 @@ ${deal.description || 'Don\'t miss out on this incredible offer!'}
       id: 'native',
       name: 'Share',
       icon: 'share-outline',
-      color: '#8B5CF6',
+      color: colors.brand.purpleLight,
       action: async (deal: Deal, storeName: string) => {
         try {
           const { message, url } = generateShareContent(deal, storeName);
@@ -167,7 +168,7 @@ ${deal.description || 'Don\'t miss out on this incredible offer!'}
       id: 'copy',
       name: 'Copy Link',
       icon: 'copy-outline',
-      color: '#ffcd57',
+      color: colors.lightMustard,
       action: async (deal: Deal, storeName: string) => {
         try {
           const { message, url } = generateShareContent(deal, storeName);
@@ -201,7 +202,7 @@ ${deal.description || 'Don\'t miss out on this incredible offer!'}
       id: 'sms',
       name: 'SMS',
       icon: 'chatbubble-outline',
-      color: '#3B82F6',
+      color: colors.infoScale[400],
       action: async (deal: Deal, storeName: string) => {
         try {
           const { message } = generateShareContent(deal, storeName);
@@ -285,19 +286,19 @@ ${deal.description || 'Don\'t miss out on this incredible offer!'}
                     
                     <View style={styles.dealDetails}>
                       <View style={styles.dealDetailRow}>
-                        <Ionicons name="storefront-outline" size={16} color="#8B5CF6" />
+                        <Ionicons name="storefront-outline" size={16} color={colors.brand.purpleLight} />
                         <ThemedText style={styles.dealDetailText}>Available at {storeName}</ThemedText>
                       </View>
                       
                       <View style={styles.dealDetailRow}>
-                        <Ionicons name="wallet-outline" size={16} color="#8B5CF6" />
+                        <Ionicons name="wallet-outline" size={16} color={colors.brand.purpleLight} />
                         <ThemedText style={styles.dealDetailText}>
                           Minimum bill: {currencySymbol}{deal.minimumBill.toLocaleString()}
                         </ThemedText>
                       </View>
                       
                       <View style={styles.dealDetailRow}>
-                        <Ionicons name="time-outline" size={16} color="#8B5CF6" />
+                        <Ionicons name="time-outline" size={16} color={colors.brand.purpleLight} />
                         <ThemedText style={styles.dealDetailText}>
                           Valid until: {deal.validUntil.toLocaleDateString('en-IN')}
                         </ThemedText>
@@ -320,7 +321,7 @@ ${deal.description || 'Don\'t miss out on this incredible offer!'}
                           accessibilityHint={`Double tap to share this deal using ${option.name}`}
                         >
                           <View style={[styles.sharingIcon, { backgroundColor: option.color }]}>
-                            <Ionicons name={option.icon as any} size={24} color="#fff" />
+                            <Ionicons name={option.icon as any} size={24} color={colors.background.primary} />
                           </View>
                           <ThemedText style={styles.sharingLabel}>{option.name}</ThemedText>
                         </Pressable>
@@ -333,7 +334,7 @@ ${deal.description || 'Don\'t miss out on this incredible offer!'}
                     <ThemedText style={styles.sectionTitle}>Why share deals?</ThemedText>
                     
                     <View style={styles.benefitItem}>
-                      <Ionicons name="people-outline" size={20} color="#ffcd57" />
+                      <Ionicons name="people-outline" size={20} color={colors.lightMustard} />
                       <View style={styles.benefitContent}>
                         <ThemedText style={styles.benefitTitle}>Help friends save</ThemedText>
                         <ThemedText style={styles.benefitDescription}>
@@ -343,7 +344,7 @@ ${deal.description || 'Don\'t miss out on this incredible offer!'}
                     </View>
                     
                     <View style={styles.benefitItem}>
-                      <Ionicons name="gift-outline" size={20} color="#F59E0B" />
+                      <Ionicons name="gift-outline" size={20} color={colors.warningScale[400]} />
                       <View style={styles.benefitContent}>
                         <ThemedText style={styles.benefitTitle}>Earn rewards</ThemedText>
                         <ThemedText style={styles.benefitDescription}>
@@ -353,7 +354,7 @@ ${deal.description || 'Don\'t miss out on this incredible offer!'}
                     </View>
                     
                     <View style={styles.benefitItem}>
-                      <Ionicons name="trending-up-outline" size={20} color="#8B5CF6" />
+                      <Ionicons name="trending-up-outline" size={20} color={colors.brand.purpleLight} />
                       <View style={styles.benefitContent}>
                         <ThemedText style={styles.benefitTitle}>Unlock more deals</ThemedText>
                         <ThemedText style={styles.benefitDescription}>
@@ -384,7 +385,7 @@ ${deal.description || 'Don\'t miss out on this incredible offer!'}
             ]}
           >
             <View style={styles.feedbackContent}>
-              <Ionicons name="checkmark-circle" size={20} color="#ffcd57" />
+              <Ionicons name="checkmark-circle" size={20} color={colors.lightMustard} />
               <ThemedText style={styles.feedbackText}>Deal link copied!</ThemedText>
             </View>
           </Animated.View>
@@ -419,7 +420,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
       paddingBottom: 16,
     },
     modal: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.background.primary,
       borderRadius: 20,
       width: '100%',
       maxHeight: '85%',
@@ -433,7 +434,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
       alignItems: 'center',
       padding: 20,
       borderBottomWidth: 1,
-      borderBottomColor: '#F1F5F9',
+      borderBottomColor: colors.tint.slate,
       position: 'relative',
     },
     closeButton: {
@@ -451,19 +452,19 @@ const createStyles = (screenData: { width: number; height: number }) => {
     title: {
       fontSize: 20,
       fontWeight: '700',
-      color: '#111827',
+      color: colors.neutral[900],
       marginBottom: 4,
     },
     subtitle: {
       fontSize: 14,
-      color: '#6B7280',
+      color: colors.neutral[500],
     },
     content: {
       flex: 1,
       padding: 20,
     },
     dealPreview: {
-      backgroundColor: '#F8FAFC',
+      backgroundColor: colors.tint.coolGray,
       borderRadius: 16,
       padding: 20,
       marginBottom: 24,
@@ -473,7 +474,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
       position: 'absolute',
       top: 16,
       right: 16,
-      backgroundColor: '#8B5CF6',
+      backgroundColor: colors.brand.purpleLight,
       borderRadius: 8,
       paddingHorizontal: 10,
       paddingVertical: 4,
@@ -481,18 +482,18 @@ const createStyles = (screenData: { width: number; height: number }) => {
     dealBadgeText: {
       fontSize: 12,
       fontWeight: '700',
-      color: '#fff',
+      color: colors.background.primary,
     },
     dealTitle: {
       fontSize: 18,
       fontWeight: '700',
-      color: '#111827',
+      color: colors.neutral[900],
       marginBottom: 8,
       paddingRight: 80,
     },
     dealDescription: {
       fontSize: 14,
-      color: '#6B7280',
+      color: colors.neutral[500],
       lineHeight: 20,
       marginBottom: 16,
     },
@@ -505,7 +506,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
     },
     dealDetailText: {
       fontSize: 13,
-      color: '#374151',
+      color: colors.neutral[700],
       marginLeft: 8,
     },
     sharingSection: {
@@ -514,7 +515,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
     sectionTitle: {
       fontSize: 16,
       fontWeight: '600',
-      color: '#374151',
+      color: colors.neutral[700],
       marginBottom: 16,
     },
     sharingGrid: {
@@ -539,7 +540,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
     sharingLabel: {
       fontSize: 12,
       fontWeight: '500',
-      color: '#374151',
+      color: colors.neutral[700],
       textAlign: 'center',
     },
     benefitsSection: {
@@ -557,12 +558,12 @@ const createStyles = (screenData: { width: number; height: number }) => {
     benefitTitle: {
       fontSize: 14,
       fontWeight: '600',
-      color: '#374151',
+      color: colors.neutral[700],
       marginBottom: 2,
     },
     benefitDescription: {
       fontSize: 12,
-      color: '#6B7280',
+      color: colors.neutral[500],
       lineHeight: 16,
     },
     copyFeedback: {
@@ -588,7 +589,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
     feedbackText: {
       fontSize: 14,
       fontWeight: '600',
-      color: '#fff',
+      color: colors.background.primary,
       marginLeft: 8,
     },
   });

@@ -3,6 +3,7 @@
  * Production-ready with complete booking flow
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -489,7 +490,7 @@ export default function HotelDetailsPage() {
                 />
               ) : (
                 <View style={styles.storeLogoPlaceholder}>
-                  <Ionicons name="bed" size={24} color="#EC4899" />
+                  <Ionicons name="bed" size={24} color={colors.brand.pink} />
                 </View>
               )}
               <View style={styles.storeInfo}>
@@ -514,7 +515,7 @@ export default function HotelDetailsPage() {
                 onPress={() => router.push(`/MainStorePage?storeId=${hotel.store.id}` as any)}
               >
                 <Text style={styles.viewStoreButtonText}>View</Text>
-                <Ionicons name="chevron-forward" size={16} color="#EC4899" />
+                <Ionicons name="chevron-forward" size={16} color={colors.brand.pink} />
               </Pressable>
             </View>
           </View>
@@ -557,27 +558,27 @@ export default function HotelDetailsPage() {
         {/* Hotel Details */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="information-circle" size={24} color="#EC4899" />
+            <Ionicons name="information-circle" size={24} color={colors.brand.pink} />
             <Text style={styles.sectionTitle}>Hotel Details</Text>
           </View>
           <View style={styles.detailsGrid}>
             <View style={styles.detailItem}>
               <View style={styles.detailIconContainer}>
-                <Ionicons name="time" size={24} color="#EC4899" />
+                <Ionicons name="time" size={24} color={colors.brand.pink} />
               </View>
               <Text style={styles.detailLabel}>Check-in</Text>
               <Text style={styles.detailValue}>{hotel.checkInTime}</Text>
             </View>
             <View style={styles.detailItem}>
               <View style={styles.detailIconContainer}>
-                <Ionicons name="time-outline" size={24} color="#EC4899" />
+                <Ionicons name="time-outline" size={24} color={colors.brand.pink} />
               </View>
               <Text style={styles.detailLabel}>Check-out</Text>
               <Text style={styles.detailValue}>{hotel.checkOutTime}</Text>
             </View>
             <View style={styles.detailItem}>
               <View style={styles.detailIconContainer}>
-                <Ionicons name="star" size={24} color="#EC4899" />
+                <Ionicons name="star" size={24} color={colors.brand.pink} />
               </View>
               <Text style={styles.detailLabel}>Rating</Text>
               <Text style={styles.detailValue}>
@@ -605,7 +606,7 @@ export default function HotelDetailsPage() {
         {/* Description */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="document-text-outline" size={24} color="#EC4899" />
+            <Ionicons name="document-text-outline" size={24} color={colors.brand.pink} />
             <Text style={styles.sectionTitle}>About This Hotel</Text>
           </View>
           <Text style={styles.description}>{hotel.description}</Text>
@@ -668,7 +669,7 @@ export default function HotelDetailsPage() {
          
         >
           <LinearGradient
-            colors={['#EC4899', '#DB2777']}
+            colors={[colors.brand.pink, colors.deepPink]}
             style={styles.bookButtonGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -763,7 +764,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xl,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
-    backgroundColor: '#EC4899',
+    backgroundColor: colors.brand.pink,
     borderRadius: BorderRadius.sm,
   },
   retryButtonText: {
@@ -904,7 +905,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: BorderRadius.md,
-    backgroundColor: '#FCE7F3',
+    backgroundColor: colors.pinkMist,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
@@ -928,7 +929,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.xs,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     borderRadius: 6,
@@ -960,13 +961,13 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.sm,
     borderWidth: 1,
-    borderColor: '#EC4899',
-    backgroundColor: '#FCE7F3',
+    borderColor: colors.brand.pink,
+    backgroundColor: colors.pinkMist,
   },
   viewStoreButtonText: {
     ...Typography.body,
     fontWeight: '600',
-    color: '#EC4899',
+    color: colors.brand.pink,
   },
   priceSection: {
     padding: Spacing.xl,
@@ -1032,7 +1033,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
@@ -1044,7 +1045,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -1100,7 +1101,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: BorderRadius['2xl'],
-    backgroundColor: '#FCE7F3',
+    backgroundColor: colors.pinkMist,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.sm,

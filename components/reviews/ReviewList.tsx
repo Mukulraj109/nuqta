@@ -16,6 +16,7 @@ import ReviewItem from './ReviewItem';
 import RatingStars from './RatingStars';
 import { Review, ReviewFilters, ReviewStats } from '@/types/review.types';
 import reviewService from '@/services/reviewApi';
+import { colors } from '@/constants/theme';
 
 interface ReviewListProps {
   storeId: string;
@@ -138,7 +139,7 @@ function ReviewList({
                 onPress={onWriteReviewPress}
                
               >
-                <Ionicons name="create-outline" size={18} color="#FFFFFF" />
+                <Ionicons name="create-outline" size={18} color={colors.background.primary} />
                 <ThemedText style={styles.writeButtonText}>Write Review</ThemedText>
               </Pressable>
             )}
@@ -188,11 +189,11 @@ function ReviewList({
             }}
            
           >
-            <Ionicons name="swap-vertical" size={16} color="#4B5563" />
+            <Ionicons name="swap-vertical" size={16} color={colors.neutral[600]} />
             <ThemedText style={styles.filterChipText}>
               Sort: {sortBy.charAt(0).toUpperCase() + sortBy.slice(1)}
             </ThemedText>
-            <Ionicons name="chevron-down" size={12} color="#9CA3AF" />
+            <Ionicons name="chevron-down" size={12} color={colors.neutral[400]} />
           </Pressable>
 
           {/* Divider */}
@@ -227,7 +228,7 @@ function ReviewList({
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
       <View style={styles.emptyIconContainer}>
-        <Ionicons name="chatbubble-ellipses-outline" size={48} color="#00C06A" />
+        <Ionicons name="chatbubble-ellipses-outline" size={48} color={colors.brand.green} />
       </View>
       <ThemedText style={styles.emptyTitle}>No Reviews Yet</ThemedText>
       <ThemedText style={styles.emptyText}>
@@ -239,7 +240,7 @@ function ReviewList({
           onPress={onWriteReviewPress}
          
         >
-          <Ionicons name="pencil" size={18} color="#FFFFFF" style={{ marginRight: 8 }} />
+          <Ionicons name="pencil" size={18} color={colors.background.primary} style={{ marginRight: 8 }} />
           <ThemedText style={styles.emptyButtonText}>Write First Review</ThemedText>
         </Pressable>
       )}
@@ -251,7 +252,7 @@ function ReviewList({
 
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color="#00C06A" />
+        <ActivityIndicator size="small" color={colors.brand.green} />
       </View>
     );
   };
@@ -259,7 +260,7 @@ function ReviewList({
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#00C06A" />
+        <ActivityIndicator size="large" color={colors.brand.green} />
         <ThemedText style={styles.loadingText}>Loading reviews...</ThemedText>
       </View>
     );
@@ -288,8 +289,8 @@ function ReviewList({
         <RefreshControl
           refreshing={isRefreshing}
           onRefresh={handleRefresh}
-          colors={['#00C06A']}
-          tintColor="#00C06A"
+          colors={[colors.brand.green]}
+          tintColor={colors.brand.green}
         />
       }
       contentContainerStyle={[
@@ -318,10 +319,10 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   summaryContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     borderRadius: 16,
     marginBottom: 20,
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 3,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
   },
   summaryHeader: {
     flexDirection: 'row',
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
   ratingNumber: {
     fontSize: 42,
     fontWeight: '800',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
     lineHeight: 48,
   },
@@ -354,18 +355,18 @@ const styles = StyleSheet.create({
   },
   totalReviews: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   writeButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 100,
-    shadowColor: '#00C06A',
+    shadowColor: colors.brand.green,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -373,7 +374,7 @@ const styles = StyleSheet.create({
   },
   writeButtonText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   distributionContainer: {
@@ -387,24 +388,24 @@ const styles = StyleSheet.create({
   starLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#4B5563',
+    color: colors.neutral[600],
     width: 36,
   },
   progressBarContainer: {
     flex: 1,
     height: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 100,
     overflow: 'hidden',
   },
   progressBar: {
     height: '100%',
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     borderRadius: 100,
   },
   countLabel: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     width: 32,
     textAlign: 'right',
     fontWeight: '500',
@@ -421,34 +422,34 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 100,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
   },
   sortChip: {
-    backgroundColor: '#F9FAFB',
-    borderColor: '#E5E7EB',
+    backgroundColor: colors.neutral[50],
+    borderColor: colors.neutral[200],
     paddingRight: 12,
   },
   filterChipActive: {
-    backgroundColor: '#00C06A',
-    borderColor: '#00C06A',
+    backgroundColor: colors.brand.green,
+    borderColor: colors.brand.green,
   },
   filterChipText: {
     fontSize: 13,
-    color: '#4B5563',
+    color: colors.neutral[600],
     fontWeight: '600',
   },
   filterChipTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   filterDivider: {
     width: 1,
     height: 24,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginHorizontal: 4,
   },
   emptyContainer: {
@@ -462,7 +463,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
@@ -470,13 +471,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
     textAlign: 'center',
   },
   emptyText: {
     fontSize: 15,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 24,
     textAlign: 'center',
     lineHeight: 22,
@@ -484,11 +485,11 @@ const styles = StyleSheet.create({
   emptyButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 100,
-    shadowColor: '#00C06A',
+    shadowColor: colors.brand.green,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -496,7 +497,7 @@ const styles = StyleSheet.create({
   },
   emptyButtonText: {
     fontSize: 15,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   footerLoader: {

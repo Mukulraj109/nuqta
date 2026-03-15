@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { TierConfig, LoyaltyTier } from '@/types/loyaltyRedemption.types';
+import { colors } from '@/constants/theme';
 
 interface TierBenefitsCardProps {
   tierConfig: TierConfig;
@@ -32,13 +33,13 @@ function TierBenefitsCard({
       case 'Silver':
         return ['#C0C0C0', '#A8A8A8'] as const;
       case 'Gold':
-        return ['#FFD700', '#FFA500'] as const;
+        return [colors.brand.goldBright, '#FFA500'] as const;
       case 'Platinum':
         return ['#E5E4E2', '#A9A9A9'] as const;
       case 'Diamond':
         return ['#B9F2FF', '#00CED1'] as const;
       default:
-        return ['#8B5CF6', '#7C3AED'] as const;
+        return [colors.brand.purpleLight, colors.brand.purple] as const;
     }
   };
 
@@ -73,7 +74,7 @@ function TierBenefitsCard({
       >
         <View style={styles.tierHeader}>
           <View style={styles.tierBadge}>
-            <Ionicons name="star" size={32} color="#FFFFFF" />
+            <Ionicons name="star" size={32} color={colors.background.primary} />
           </View>
           <View style={styles.tierInfo}>
             <ThemedText style={styles.tierLabel}>Current Tier</ThemedText>
@@ -82,7 +83,7 @@ function TierBenefitsCard({
         </View>
 
         <View style={styles.pointsContainer}>
-          <Ionicons name="diamond" size={20} color="#FFFFFF" />
+          <Ionicons name="diamond" size={20} color={colors.background.primary} />
           <ThemedText style={styles.currentPoints}>{currentPoints}</ThemedText>
           <ThemedText style={styles.pointsLabel}>points</ThemedText>
         </View>
@@ -133,7 +134,7 @@ function TierBenefitsCard({
 
         {tierConfig.discountPercentage > 0 && (
           <View style={styles.discountBanner}>
-            <Ionicons name="pricetag" size={20} color="#10B981" />
+            <Ionicons name="pricetag" size={20} color={colors.successScale[400]} />
             <ThemedText style={styles.discountText}>
               Extra {tierConfig.discountPercentage}% discount on all orders
             </ThemedText>
@@ -142,7 +143,7 @@ function TierBenefitsCard({
 
         {tierConfig.earningMultiplier > 1 && (
           <View style={styles.multiplierBanner}>
-            <Ionicons name="flash" size={20} color="#F59E0B" />
+            <Ionicons name="flash" size={20} color={colors.warningScale[400]} />
             <ThemedText style={styles.multiplierText}>
               {tierConfig.earningMultiplier}x points on every purchase
             </ThemedText>
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
   tierName: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   pointsContainer: {
     flexDirection: 'row',
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
   currentPoints: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   pointsLabel: {
     fontSize: 14,
@@ -226,11 +227,11 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 4,
   },
   benefitsCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginTop: -8,
@@ -249,11 +250,11 @@ const styles = StyleSheet.create({
   benefitsTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   viewAllText: {
     fontSize: 14,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
   },
   benefitsList: {
@@ -277,18 +278,18 @@ const styles = StyleSheet.create({
   benefitTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 2,
   },
   benefitDescription: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
   discountBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     padding: 12,
     borderRadius: 8,
     marginTop: 12,
@@ -298,12 +299,12 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: '600',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   multiplierBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     padding: 12,
     borderRadius: 8,
     marginTop: 8,
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
 });
 

@@ -19,6 +19,7 @@ import { ThemedText } from '@/components/ThemedText';
 import supportService from '@/services/supportApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, Gradients, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const CATEGORIES = [
   { id: 'order', label: 'Order', icon: 'cube-outline' },
@@ -101,7 +102,7 @@ export default function CreateTicketPage() {
         <LinearGradient colors={Gradients.nileBlue} style={styles.header}>
           <View style={styles.headerContent}>
             <Pressable style={styles.backButton} onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={24} color="#FFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>New Ticket</ThemedText>
             <View style={styles.placeholder} />
@@ -213,10 +214,10 @@ export default function CreateTicketPage() {
             disabled={!isValid || submitting}
           >
             {submitting ? (
-              <ActivityIndicator color="#FFF" />
+              <ActivityIndicator color={colors.background.primary} />
             ) : (
               <>
-                <Ionicons name="paper-plane" size={20} color="#FFF" />
+                <Ionicons name="paper-plane" size={20} color={colors.background.primary} />
                 <ThemedText style={styles.submitButtonText}>Submit Ticket</ThemedText>
               </>
             )}
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -280,19 +281,19 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   textInput: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 14,
     fontSize: 15,
-    color: Colors.text?.primary || '#1a1a2e',
+    color: Colors.text?.primary || colors.deepNavy,
     ...Shadows.subtle,
   },
   textArea: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 14,
     fontSize: 15,
-    color: Colors.text?.primary || '#1a1a2e',
+    color: Colors.text?.primary || colors.deepNavy,
     minHeight: 140,
     ...Shadows.subtle,
   },
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
   },
   categoryCard: {
     width: '23%',
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     paddingVertical: 12,
     alignItems: 'center',
@@ -340,7 +341,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     paddingVertical: 12,
     gap: 6,
@@ -368,7 +369,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   helpCard: {
     flexDirection: 'row',

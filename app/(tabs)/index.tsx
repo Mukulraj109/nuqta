@@ -145,7 +145,7 @@ interface BadgeAvatarProps {
 
 const BadgeAvatar: React.FC<BadgeAvatarProps> = React.memo(({ size = 24, color }) => {
   const shieldColor = color || colors.lightMustard;
-  const iconColor = color === '#0284C7' ? '#0EA5E9' : color === '#C9A962' ? '#D4AF37' : colors.nileBlue;
+  const iconColor = color === colors.brand.sky ? '#0EA5E9' : color === colors.brand.goldAccent ? '#D4AF37' : colors.nileBlue;
 
   return (
     <View style={{
@@ -463,7 +463,7 @@ export default function HomeScreen() {
   // Memoize gradient colors to avoid new array allocation on every scroll frame
   const gradientColors = useMemo((): string[] => {
     switch (activeTab) {
-      case 'prive': return ['#1F2937', '#1F2937', '#111827', '#111827'];
+      case 'prive': return [colors.neutral[800], colors.neutral[800], colors.neutral[900], colors.neutral[900]];
       case 'mall': return ['#BAE6FD', '#E0F2FE', '#F0F9FF', colors.background.primary];
       case 'cash': return [colors.lightPeach, '#FFE5D0', '#FFF0E6', colors.background.primary];
       default: return ['#ffe8a8', '#fff0c4', colors.linen, colors.background.primary];
@@ -476,15 +476,15 @@ export default function HomeScreen() {
     const isMall = activeTab === 'mall';
     const isCash = activeTab === 'cash';
     return {
-      locationIconBg: isPrive ? { backgroundColor: '#C9A962' } : isMall ? { backgroundColor: '#0284C7' } : isCash ? { backgroundColor: '#D4A07A' } : undefined,
+      locationIconBg: isPrive ? { backgroundColor: colors.brand.goldAccent } : isMall ? { backgroundColor: colors.brand.sky } : isCash ? { backgroundColor: colors.brand.caramel } : undefined,
       locationText: isPrive ? { color: colors.text.inverse, ...typography.body, fontWeight: '600' as const } : undefined,
-      chevronColor: isPrive ? '#C9A962' : isMall ? '#0284C7' : isCash ? '#D4A07A' : colors.text.tertiary,
+      chevronColor: isPrive ? colors.brand.goldAccent : isMall ? colors.brand.sky : isCash ? colors.brand.caramel : colors.text.tertiary,
       coinContainerStyle: isPrive ? { backgroundColor: 'rgba(201, 169, 98, 0.2)', borderColor: 'rgba(201, 169, 98, 0.4)' } : isMall ? { backgroundColor: 'rgba(2, 132, 199, 0.15)', borderColor: 'rgba(2, 132, 199, 0.3)' } : isCash ? { backgroundColor: 'rgba(212, 160, 122, 0.15)', borderColor: 'rgba(212, 160, 122, 0.3)' } : undefined,
-      coinTextColor: isPrive ? { color: '#C9A962' } : isMall ? { color: '#0284C7' } : isCash ? { color: '#D4A07A' } : undefined,
-      iconColor: isPrive ? colors.text.inverse : isMall ? '#0284C7' : colors.text.primary,
+      coinTextColor: isPrive ? { color: colors.brand.goldAccent } : isMall ? { color: colors.brand.sky } : isCash ? { color: colors.brand.caramel } : undefined,
+      iconColor: isPrive ? colors.text.inverse : isMall ? colors.brand.sky : colors.text.primary,
       whatsNewVariant: (isMall ? 'blue' : isPrive ? 'gold' : 'green') as 'blue' | 'gold' | 'green',
       savedPillBg: isPrive ? { backgroundColor: 'rgba(201, 169, 98, 0.25)' } : isMall ? { backgroundColor: 'rgba(2, 132, 199, 0.2)' } : isCash ? { backgroundColor: 'rgba(212, 160, 122, 0.2)' } : undefined,
-      savedTextColor: isPrive ? { color: '#C9A962' } : isMall ? { color: '#0284C7' } : isCash ? { color: '#D4A07A' } : undefined,
+      savedTextColor: isPrive ? { color: colors.brand.goldAccent } : isMall ? { color: colors.brand.sky } : isCash ? { color: colors.brand.caramel } : undefined,
     };
   }, [activeTab]);
 
@@ -664,7 +664,7 @@ export default function HomeScreen() {
             {/* Full Address Section */}
             <View style={viewStyles.addressSection}>
               <View style={viewStyles.addressHeader}>
-                <Ionicons name="location" size={16} color={activeTab === 'mall' ? '#0284C7' : activeTab === 'cash' ? '#D4A07A' : colors.lightMustard} />
+                <Ionicons name="location" size={16} color={activeTab === 'mall' ? colors.brand.sky : activeTab === 'cash' ? colors.brand.caramel : colors.lightMustard} />
                 <Text style={viewStyles.addressHeaderText}>Current Location</Text>
               </View>
               <LocationDisplay
@@ -713,7 +713,7 @@ export default function HomeScreen() {
                 <Ionicons name="search" size={12} color={colors.text.inverse} />
               </View>
               <Text style={viewStyles.changeLocationText}>Change Location</Text>
-              <Ionicons name="chevron-forward" size={14} color={activeTab === 'mall' ? '#0284C7' : activeTab === 'cash' ? '#D4A07A' : colors.lightMustard} />
+              <Ionicons name="chevron-forward" size={14} color={activeTab === 'mall' ? colors.brand.sky : activeTab === 'cash' ? colors.brand.caramel : colors.lightMustard} />
             </Pressable>
           </View>
         </Animated.View>
@@ -1118,7 +1118,7 @@ const viewStyles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: spacing.md,
     borderWidth: 1,
-    borderColor: '#BBF7D0',
+    borderColor: colors.successScale[200],
   },
   changeLocationIconWrapper: {
     width: 24,

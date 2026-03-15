@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SearchHistoryItem } from '@/services/searchHistoryService';
+import { colors } from '@/constants/theme';
 
 interface RecentSearchesProps {
   searches: SearchHistoryItem[];
@@ -30,7 +31,7 @@ function RecentSearches({
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Ionicons name="time-outline" size={18} color="#1a3a52" />
+          <Ionicons name="time-outline" size={18} color={colors.nileBlue} />
           <Text style={styles.title}>Recent Searches</Text>
         </View>
         <Pressable onPress={onClearAll}>
@@ -47,7 +48,7 @@ function RecentSearches({
             onPress={() => onSearchPress(search.query)}
           >
             <View style={styles.searchLeft}>
-              <Ionicons name="search-outline" size={16} color="#1a3a52" />
+              <Ionicons name="search-outline" size={16} color={colors.nileBlue} />
               <Text style={styles.searchQuery}>{search.query}</Text>
               {search.resultCount > 0 && (
                 <Text style={styles.resultCount}>({search.resultCount})</Text>
@@ -57,7 +58,7 @@ function RecentSearches({
               onPress={() => onRemoveSearch(search.id)}
               hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
             >
-              <Ionicons name="close-outline" size={18} color="#9CA3AF" />
+              <Ionicons name="close-outline" size={18} color={colors.neutral[400]} />
             </Pressable>
           </Pressable>
         ))}
@@ -68,7 +69,7 @@ function RecentSearches({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     marginTop: 12,
     borderRadius: 16,
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerLeft: {
     flexDirection: 'row',
@@ -96,12 +97,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   clearText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   itemsContainer: {
     gap: 8,
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
   },
   searchLeft: {
@@ -123,13 +124,13 @@ const styles = StyleSheet.create({
   },
   searchQuery: {
     fontSize: 14,
-    color: '#1F2937',
+    color: colors.neutral[800],
     fontWeight: '500',
     flex: 1,
   },
   resultCount: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 });
 

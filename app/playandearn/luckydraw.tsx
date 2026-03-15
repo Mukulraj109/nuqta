@@ -19,42 +19,43 @@ import { useGamification } from '@/contexts/GamificationContext';
 import { useWalletContext } from '@/contexts/WalletContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
 // Nuqta App Theme Colors
 const COLORS = {
-  primary: '#ffcd57',
+  primary: colors.lightMustard,
   primaryLight: '#ffe082',
-  primaryDark: '#E6B84E',
-  primaryBg: '#dfebf7',
+  primaryDark: colors.brand.goldRich,
+  primaryBg: colors.lavenderMist,
 
-  gold: '#FFC857',
+  gold: colors.brand.goldWarm,
   goldDark: '#F5A623',
-  goldBg: '#FFFBEB',
+  goldBg: colors.tint.amber,
 
-  amber: '#F59E0B',
-  amberDark: '#D97706',
-  amberBg: '#FEF3C7',
+  amber: colors.warningScale[400],
+  amberDark: colors.warningScale[700],
+  amberBg: colors.tint.amberLight,
 
-  orange: '#F97316',
-  orangeDark: '#EA580C',
-  orangeBg: '#FFF7ED',
+  orange: colors.brand.orange,
+  orangeDark: colors.brand.orangeDark,
+  orangeBg: colors.tint.orange,
 
-  background: '#faf1e0',
-  surface: '#FFFFFF',
+  background: colors.linen,
+  surface: colors.background.primary,
   surfaceSecondary: '#F0F4F8',
 
-  navy: '#1a3a52',
-  text: '#1a3a52',
+  navy: colors.nileBlue,
+  text: colors.nileBlue,
   textMuted: '#627D98',
-  textLight: '#9AA7B2',
+  textLight: colors.gray[400],
 
-  border: '#E2E8F0',
-  success: '#22C55E',
-  successBg: '#F0FDF4',
-  error: '#EF4444',
-  errorBg: '#FEF2F2',
+  border: colors.slateLight,
+  success: colors.success,
+  successBg: colors.successScale[50],
+  error: colors.error,
+  errorBg: colors.errorScale[50],
 
   shadow: 'rgba(26, 58, 82, 0.08)',
 };
@@ -114,8 +115,8 @@ const LuckyDraw = () => {
 
   const prizes: Prize[] = [
     { id: 1, name: '1000 Coins', value: 1000, icon: '💰', chance: 5, color: [COLORS.amber, COLORS.amberDark] },
-    { id: 2, name: '500 Coins', value: 500, icon: '🪙', chance: 10, color: [Colors.success, '#059669'] },
-    { id: 3, name: '250 Coins', value: 250, icon: '💵', chance: 20, color: [Colors.info, '#2563EB'] },
+    { id: 2, name: '500 Coins', value: 500, icon: '🪙', chance: 10, color: [Colors.success, colors.successScale[700]] },
+    { id: 3, name: '250 Coins', value: 250, icon: '💵', chance: 20, color: [Colors.info, colors.brand.blue] },
     { id: 4, name: '100 Coins', value: 100, icon: '💳', chance: 30, color: [Colors.brand.purpleLight, Colors.brand.purple] },
     { id: 5, name: '50 Coins', value: 50, icon: '🎁', chance: 35, color: [COLORS.orange, COLORS.orangeDark] }
   ];
@@ -306,7 +307,7 @@ const LuckyDraw = () => {
                   <ConfettiParticle
                     key={i}
                     delay={i * 120}
-                    color={[COLORS.amber, COLORS.gold, '#EC4899', '#3B82F6', COLORS.primary][i % 5]}
+                    color={[COLORS.amber, COLORS.gold, colors.brand.pink, colors.infoScale[400], COLORS.primary][i % 5]}
                   />
                 ))}
               </View>

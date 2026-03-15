@@ -26,6 +26,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { ProfileSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const NUQTA_COIN = BRAND.COIN_IMAGE;
@@ -181,7 +182,7 @@ export default function CreatorProfilePage() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#1a3a52" />
+        <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
         <LinearGradient colors={[Colors.nileBlue, '#2d5a7b']} style={styles.header}>
           <View style={styles.headerContent}>
             <Pressable style={styles.backButton} onPress={() => router.back()}>
@@ -203,7 +204,7 @@ export default function CreatorProfilePage() {
   if (error || !creator) {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#1a3a52" />
+        <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
         <LinearGradient colors={[Colors.nileBlue, '#2d5a7b']} style={styles.header}>
           <View style={styles.headerContent}>
             <Pressable style={styles.backButton} onPress={() => router.back()}>
@@ -234,7 +235,7 @@ export default function CreatorProfilePage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#1a3a52" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
 
       {/* Header */}
       <LinearGradient colors={[Colors.nileBlue, '#2d5a7b']} style={styles.header}>
@@ -271,7 +272,7 @@ export default function CreatorProfilePage() {
           <View style={styles.profileInfo}>
             <View style={styles.avatarSection}>
               <LinearGradient
-                colors={['#9333EA', '#EC4899']}
+                colors={['#9333EA', colors.brand.pink]}
                 style={styles.avatarGradient}
               >
                 {creator.avatar ? (

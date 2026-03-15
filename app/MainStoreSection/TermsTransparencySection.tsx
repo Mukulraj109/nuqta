@@ -13,6 +13,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { triggerImpact } from "@/utils/haptics";
 import { ThemedText } from "@/components/ThemedText";
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: Spacing.base,
     marginVertical: Spacing.sm,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
     borderColor: Colors.gray[100],
@@ -158,6 +159,6 @@ const styles = StyleSheet.create({
   supportLink: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#ffcd57",
+    color: colors.lightMustard,
   },
 });

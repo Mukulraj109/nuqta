@@ -1,4 +1,5 @@
 import { ScrollViewStyleReset } from 'expo-router/html';
+import { colors } from '@/constants/theme';
 
 /**
  * HTML Document customization for web platform
@@ -25,7 +26,7 @@ export default function Root({ children }: { children: React.ReactNode }) {
         <meta name="twitter:title" content="Rez - Earn, Save & Shop Smarter" />
         <meta name="twitter:description" content="Discover deals, earn rewards, and shop from local stores with Rez." />
         <meta name="twitter:image" content="/assets/og-image.png" />
-        <meta name="theme-color" content="#7C3AED" />
+        <meta name="theme-color" content={colors.brand.purple} />
 
         {/* Minimal reset - only body margin */}
         <style dangerouslySetInnerHTML={{ __html: `

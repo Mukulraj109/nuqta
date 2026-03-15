@@ -15,6 +15,7 @@ import { useFrequentlyOrdered } from '@/hooks/useReorder';
 import { router } from 'expo-router';
 import { useRegion } from '@/contexts/RegionContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/constants/theme';
 
 interface QuickReorderProps {
   limit?: number;
@@ -155,12 +156,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.gray[900],
     marginBottom: 2
   },
   subtitle: {
     fontSize: 12,
-    color: '#6b7280'
+    color: colors.neutral[500]
   },
   viewAllText: {
     fontSize: 14,
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
   },
   itemCard: {
     width: 160,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     marginRight: 12,
     shadowColor: '#000',
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
   productImage: {
     width: '100%',
     height: 120,
-    backgroundColor: '#f3f4f6'
+    backgroundColor: colors.gray[100]
   },
   itemInfo: {
     padding: 12
@@ -193,13 +194,13 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.gray[900],
     marginBottom: 4,
     minHeight: 36
   },
   storeName: {
     fontSize: 11,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 8
   },
   statsRow: {
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111827'
+    color: colors.gray[900]
   },
   reorderBadge: {
     backgroundColor: '#ede9fe',
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
   unavailableText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#dc2626'
+    color: colors.error
   },
   loadingContainer: {
     padding: 40,
@@ -250,7 +251,7 @@ const styles = StyleSheet.create({
     width: 300,
     padding: 40,
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 16,
     textAlign: 'center'
   },
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   shopButtonText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600'
   }

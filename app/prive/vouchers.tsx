@@ -25,6 +25,7 @@ import { Colors } from '@/constants/DesignSystem';
 import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertConfirm, platformAlertSimple } from '@/utils/platformAlert';
 import priveApi, { Voucher } from '@/services/priveApi';
+import { colors } from '@/constants/theme';
 
 type FilterStatus = 'all' | 'active' | 'used' | 'expired';
 
@@ -36,7 +37,7 @@ const VOUCHER_ICONS: Record<string, string> = {
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  active: '#4CAF50',
+  active: colors.brand.emerald,
   used: '#9E9E9E',
   expired: '#F44336',
   cancelled: '#FF9800',
@@ -144,7 +145,7 @@ export default function VouchersScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#1F2937', '#111827', '#0A0A0A']}
+        colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]}
         style={StyleSheet.absoluteFill}
       />
       <SafeAreaView style={styles.safeArea}>
@@ -471,7 +472,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#4CAF50',
+    backgroundColor: colors.brand.emerald,
   },
   activeText: {
     fontSize: 13,

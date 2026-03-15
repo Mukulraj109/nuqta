@@ -21,6 +21,7 @@ import { useUserSettings } from '@/hooks/useUserSettings';
 import { useApp } from '@/contexts/AppContext';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type Language = 'en' | 'hi' | 'te' | 'ta' | 'bn' | 'es' | 'fr' | 'de' | 'zh' | 'ja';
 type Region = 'IN' | 'US' | 'GB' | 'CA' | 'AU' | 'DE' | 'FR' | 'ES' | 'IT' | 'BR' | 'CN' | 'JP';
@@ -693,12 +694,12 @@ const styles = StyleSheet.create({
   infoTitle: {
     ...Typography.body,
     fontWeight: '600',
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     marginBottom: Spacing.xs,
   },
   infoText: {
     ...Typography.bodySmall,
-    color: '#0369A1',
+    color: colors.brand.skyDark,
     lineHeight: 18,
   },
   footer: {

@@ -10,6 +10,7 @@ import { PriveEmptyState } from '@/components/prive/PriveEmptyState';
 import priveApi from '@/services/priveApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const COMPARISON_ROWS = [
   { label: 'Coin Multiplier', key: 'coinMultiplier', format: (v: number) => `${v}x` },
@@ -39,7 +40,7 @@ export default function TierComparisonScreen() {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <CardGridSkeleton />
       </View>
     );
@@ -48,7 +49,7 @@ export default function TierComparisonScreen() {
   if (!data?.tiers?.length) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <PriveEmptyState icon="◈" title="Comparison unavailable" />
       </View>
     );
@@ -58,7 +59,7 @@ export default function TierComparisonScreen() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+      <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
       <ScrollView
         style={styles.scroll}
         showsVerticalScrollIndicator={false}

@@ -15,6 +15,7 @@ import {
 import socialProofApi, { CategorySocialProofStats } from '@/services/socialProofApi';
 import { socialProofStats, SocialProofStats } from '@/data/categoryDummyData';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface SocialProofSectionProps {
   stats?: SocialProofStats;
@@ -74,7 +75,7 @@ const SocialProofSection: React.FC<SocialProofSectionProps> = ({
   if (loading) {
     return (
       <View style={[styles.container, styles.loadingContainer]}>
-        <ActivityIndicator size="small" color="#ffcd57" />
+        <ActivityIndicator size="small" color={colors.lightMustard} />
       </View>
     );
   }
@@ -138,14 +139,14 @@ const SocialProofSection: React.FC<SocialProofSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     padding: 20,
     alignItems: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -171,22 +172,22 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   avatarEmoji: {
     fontSize: 18,
   },
   avatarMore: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   avatarMoreText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   statsContainer: {
     alignItems: 'center',
@@ -194,22 +195,22 @@ const styles = StyleSheet.create({
   },
   statsText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 4,
   },
   statsHighlight: {
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   earningsText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
   },
   earningsHighlight: {
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   hashtagsRow: {
     flexDirection: 'row',
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   hashtagChip: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 12,
@@ -227,29 +228,29 @@ const styles = StyleSheet.create({
   hashtagText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   recentActivity: {
     width: '100%',
     gap: 8,
   },
   activityItem: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 10,
   },
   activityText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   activityName: {
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   activityTime: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 });
 

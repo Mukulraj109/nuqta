@@ -17,6 +17,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../../types/mall.types';
+import { colors } from '@/constants/theme';
 
 interface MallNewArrivalCardProps {
   brand: MallBrand;
@@ -26,12 +27,12 @@ interface MallNewArrivalCardProps {
 }
 
 const GRADIENT_COLORS: string[][] = [
-  ['#1a3a52', '#234b68'],
-  ['#0284C7', '#0369A1'],
-  ['#234b68', '#0284C7'],
-  ['#0369A1', '#1a3a52'],
-  ['#0891B2', '#0369A1'],
-  ['#1a3a52', '#0284C7'],
+  [colors.nileBlue, colors.brand.nileBlueLight],
+  [colors.brand.sky, colors.brand.skyDark],
+  [colors.brand.nileBlueLight, colors.brand.sky],
+  [colors.brand.skyDark, colors.nileBlue],
+  [colors.cyanDark, colors.brand.skyDark],
+  [colors.nileBlue, colors.brand.sky],
 ];
 
 const MallNewArrivalCard: React.FC<MallNewArrivalCardProps> = ({
@@ -91,14 +92,14 @@ const MallNewArrivalCard: React.FC<MallNewArrivalCardProps> = ({
 
           {/* NEW badge */}
           <View style={styles.newBadge}>
-            <Ionicons name="sparkles" size={8} color="#FFFFFF" />
+            <Ionicons name="sparkles" size={8} color={colors.background.primary} />
             <Text style={styles.newBadgeText}>NEW</Text>
           </View>
 
           {/* Coin reward pill */}
           {rewardPercent > 0 && (
             <View style={styles.coinPill}>
-              <Ionicons name="flash" size={10} color="#FFFFFF" />
+              <Ionicons name="flash" size={10} color={colors.background.primary} />
               <Text style={styles.coinPillText}>{rewardPercent}% coins</Text>
             </View>
           )}
@@ -120,7 +121,7 @@ const MallNewArrivalCard: React.FC<MallNewArrivalCardProps> = ({
           {/* Early Bird Bonus */}
           {hasEarlyBird && (
             <View style={styles.earlyBirdPill}>
-              <Ionicons name="gift" size={10} color="#0284C7" />
+              <Ionicons name="gift" size={10} color={colors.brand.sky} />
               <Text style={styles.earlyBirdText}>
                 +{brand.cashback?.earlyBirdBonus ?? 0} bonus
               </Text>
@@ -138,14 +139,14 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#E8F0F8',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.08,
         shadowRadius: 10,
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
   fallbackText: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     ...Platform.select({
       ios: {
         textShadowColor: 'rgba(0, 0, 0, 0.2)',
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
     right: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#0284C7',
+    backgroundColor: colors.brand.sky,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
   newBadgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   coinPill: {
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
   coinPillText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   infoArea: {
     paddingHorizontal: 10,
@@ -244,19 +245,19 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 3,
   },
   categoryText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 6,
   },
   earlyBirdPill: {
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
   earlyBirdText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#0284C7',
+    color: colors.brand.sky,
   },
 });
 

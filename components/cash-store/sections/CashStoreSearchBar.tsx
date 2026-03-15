@@ -20,6 +20,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 interface CashStoreSearchBarProps {
   onSearchPress?: () => void;
@@ -79,7 +80,7 @@ const CashStoreSearchBar: React.FC<CashStoreSearchBarProps> = ({
           <Ionicons
             name="search"
             size={18}
-            color="#1a3a52"
+            color={colors.nileBlue}
             style={styles.searchIcon}
           />
           <Text style={styles.searchPlaceholder}>Search stores & deals...</Text>
@@ -92,12 +93,12 @@ const CashStoreSearchBar: React.FC<CashStoreSearchBarProps> = ({
          
         >
           <LinearGradient
-            colors={['#1a3a52', '#234b68']}
+            colors={[colors.nileBlue, colors.brand.nileBlueLight]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.dealsButton}
           >
-            <Ionicons name="flash" size={16} color="#ffcd57" />
+            <Ionicons name="flash" size={16} color={colors.lightMustard} />
             <Text style={styles.dealsText}>Deals</Text>
           </LinearGradient>
         </Pressable>
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,215,181,0.4)',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.06,
         shadowRadius: 8,
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
   },
   searchPlaceholder: {
     fontSize: 14,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     opacity: 0.4,
     flex: 1,
   },
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.25,
         shadowRadius: 8,
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
   dealsText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.3,
   },
 });

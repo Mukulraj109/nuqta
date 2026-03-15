@@ -16,6 +16,7 @@ import { experiencesApi, StoreExperience } from '@/services/experiencesApi';
 import { getCategoryTheme } from '@/config/categoryThemeConfig';
 import { getCategoryConfig } from '@/config/categoryConfig';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
+import { colors } from '@/constants/theme';
 
 function GenericExperiencesIndex() {
   const router = useRouter();
@@ -74,7 +75,7 @@ function GenericExperiencesIndex() {
           </View>
           {item.badge && (
             <View style={[styles.expBadge, { backgroundColor: item.badgeBg || theme.primaryColor }]}>
-              <Text style={[styles.expBadgeText, { color: item.badgeColor || '#FFFFFF' }]}>{item.badge}</Text>
+              <Text style={[styles.expBadgeText, { color: item.badgeColor || colors.background.primary }]}>{item.badge}</Text>
             </View>
           )}
         </View>
@@ -82,18 +83,18 @@ function GenericExperiencesIndex() {
         <View style={styles.expMeta}>
           {item.storeCount ? (
             <View style={styles.metaItem}>
-              <Ionicons name="storefront-outline" size={14} color="#6B7280" />
+              <Ionicons name="storefront-outline" size={14} color={colors.neutral[500]} />
               <Text style={styles.metaText}>{item.storeCount} stores</Text>
             </View>
           ) : null}
-          <Ionicons name="chevron-forward" size={18} color="#6B7280" />
+          <Ionicons name="chevron-forward" size={18} color={colors.neutral[500]} />
         </View>
 
         {item.benefits && item.benefits.length > 0 && (
           <View style={styles.benefitsRow}>
             {item.benefits.slice(0, 3).map((b, i) => (
               <View key={i} style={styles.benefitChip}>
-                <Ionicons name="checkmark" size={12} color="#22C55E" />
+                <Ionicons name="checkmark" size={12} color={colors.success} />
                 <Text style={styles.benefitText}>{b}</Text>
               </View>
             ))}
@@ -107,7 +108,7 @@ function GenericExperiencesIndex() {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Pressable onPress={() => router.back()} style={styles.backBtn} accessibilityLabel="Go back" accessibilityRole="button">
-          <Ionicons name="arrow-back" size={24} color="#111827" />
+          <Ionicons name="arrow-back" size={24} color={colors.neutral[900]} />
         </Pressable>
         <View style={{ flex: 1 }}>
           <Text style={styles.headerTitle}>{categoryName} Experiences</Text>
@@ -132,7 +133,7 @@ function GenericExperiencesIndex() {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[theme.primaryColor]} />}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <Ionicons name={(theme.defaultMissionIcon || 'sparkles-outline') as any} size={48} color="#6B7280" />
+              <Ionicons name={(theme.defaultMissionIcon || 'sparkles-outline') as any} size={48} color={colors.neutral[500]} />
               <Text style={styles.emptyTitle}>No experiences available</Text>
               <Text style={styles.emptySubtitle}>{categoryName} experiences will appear here soon</Text>
             </View>
@@ -144,34 +145,34 @@ function GenericExperiencesIndex() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F5F5' },
+  container: { flex: 1, backgroundColor: colors.tint.warmGray },
   header: {
     flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12,
-    backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: '#E5E7EB', gap: 12,
+    backgroundColor: colors.background.primary, borderBottomWidth: 1, borderBottomColor: colors.neutral[200], gap: 12,
   },
   backBtn: { padding: 4 },
-  headerTitle: { fontSize: 18, fontWeight: '700', color: '#111827' },
-  headerSubtitle: { fontSize: 12, color: '#6B7280' },
+  headerTitle: { fontSize: 18, fontWeight: '700', color: colors.neutral[900] },
+  headerSubtitle: { fontSize: 12, color: colors.neutral[500] },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { marginTop: 12, fontSize: 14, color: '#6B7280' },
+  loadingText: { marginTop: 12, fontSize: 14, color: colors.neutral[500] },
   list: { padding: 16, paddingBottom: 120 },
   expCard: { borderRadius: 16, overflow: 'hidden', marginBottom: 12 },
   expGradient: { padding: 16 },
   expHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, marginBottom: 12 },
   expIcon: { fontSize: 36 },
-  expTitle: { fontSize: 17, fontWeight: '600', color: '#111827', marginBottom: 2 },
-  expSubtitle: { fontSize: 13, color: '#6B7280' },
+  expTitle: { fontSize: 17, fontWeight: '600', color: colors.neutral[900], marginBottom: 2 },
+  expSubtitle: { fontSize: 13, color: colors.neutral[500] },
   expBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
   expBadgeText: { fontSize: 10, fontWeight: '700' },
   expMeta: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   metaItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  metaText: { fontSize: 12, color: '#6B7280' },
+  metaText: { fontSize: 12, color: colors.neutral[500] },
   benefitsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  benefitChip: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: '#F0FDF4', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
+  benefitChip: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.successScale[50], paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
   benefitText: { fontSize: 11, color: '#166534' },
   emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40, marginTop: 60 },
-  emptyTitle: { fontSize: 16, fontWeight: '600', color: '#111827', marginTop: 16 },
-  emptySubtitle: { fontSize: 13, color: '#6B7280', marginTop: 4 },
+  emptyTitle: { fontSize: 16, fontWeight: '600', color: colors.neutral[900], marginTop: 16 },
+  emptySubtitle: { fontSize: 13, color: colors.neutral[500], marginTop: 4 },
 });
 
 export default React.memo(GenericExperiencesIndex);

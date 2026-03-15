@@ -22,6 +22,7 @@ import {
   Platform,
 } from 'react-native';
 import usePerformanceDashboard from '@/hooks/usePerformanceDashboard';
+import { colors } from '@/constants/theme';
 
 // ============================================================================
 // Types
@@ -48,8 +49,8 @@ interface SectionProps {
  */
 function MetricDisplay({ label, value, unit = '', status = 'good' }: MetricDisplayProps) {
   const statusColor = {
-    good: '#10b981',
-    warning: '#f59e0b',
+    good: colors.successScale[400],
+    warning: colors.warningScale[400],
     critical: '#ef4444',
   }[status];
 
@@ -83,8 +84,8 @@ function Section({ title, children }: SectionProps) {
  */
 function PerformanceScoreBadge({ score }: { score: number }) {
   const getScoreColor = (s: number): string => {
-    if (s >= 90) return '#10b981';
-    if (s >= 70) return '#f59e0b';
+    if (s >= 90) return colors.successScale[400];
+    if (s >= 70) return colors.warningScale[400];
     return '#ef4444';
   };
 
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#f9fafb',
+    backgroundColor: colors.neutral[50],
   },
   header: {
     backgroundColor: '#6366f1',
@@ -390,7 +391,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.background.primary,
   },
   closeButton: {
     width: 32,
@@ -402,7 +403,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   closeButtonText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 20,
     fontWeight: 'bold',
   },
@@ -417,18 +418,18 @@ const styles = StyleSheet.create({
   scoreText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.background.primary,
   },
   scoreLabelText: {
     fontSize: 12,
-    color: '#fff',
+    color: colors.background.primary,
     opacity: 0.9,
   },
   content: {
     flex: 1,
   },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     marginTop: 12,
     marginHorizontal: 12,
     borderRadius: 12,
@@ -442,7 +443,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   sectionContent: {
@@ -451,7 +452,7 @@ const styles = StyleSheet.create({
   subsectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginTop: 8,
     marginBottom: 4,
   },
@@ -461,11 +462,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6',
+    borderBottomColor: colors.neutral[100],
   },
   metricLabel: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
     flex: 1,
   },
   metricValue: {
@@ -478,7 +479,7 @@ const styles = StyleSheet.create({
   },
   metricUnit: {
     fontSize: 12,
-    color: '#9ca3af',
+    color: colors.neutral[400],
   },
   slowOpItem: {
     flexDirection: 'row',
@@ -487,7 +488,7 @@ const styles = StyleSheet.create({
   },
   slowOpLabel: {
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
     flex: 1,
   },
   slowOpValue: {
@@ -502,7 +503,7 @@ const styles = StyleSheet.create({
   },
   errorTypeLabel: {
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
     textTransform: 'capitalize',
   },
   errorTypeValue: {
@@ -515,13 +516,13 @@ const styles = StyleSheet.create({
   },
   recommendationText: {
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 18,
   },
   timestamp: {
     textAlign: 'center',
     fontSize: 12,
-    color: '#9ca3af',
+    color: colors.neutral[400],
     marginVertical: 20,
   },
 });

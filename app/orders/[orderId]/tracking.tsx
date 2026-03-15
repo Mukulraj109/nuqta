@@ -9,6 +9,7 @@ import DeliveryMap from '@/components/orders/DeliveryMap';
 import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function OrderTrackingScreen() {
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
@@ -147,7 +148,7 @@ export default function OrderTrackingScreen() {
         {isReconnecting && (
           <View style={{ backgroundColor: Colors.warningScale[50], paddingHorizontal: Spacing.base, paddingVertical: 10, flexDirection: 'row', alignItems: 'center', gap: Spacing.sm }}>
             <ActivityIndicator size="small" color={Colors.warning} />
-            <Text style={{ flex: 1, color: '#92400E', ...Typography.caption }}>
+            <Text style={{ flex: 1, color: colors.brand.amberDark, ...Typography.caption }}>
               Reconnecting... (attempt {reconnectAttempts || 1})
             </Text>
             <Pressable onPress={refresh}>
@@ -277,11 +278,11 @@ export default function OrderTrackingScreen() {
                       </Text>
                       <View style={[
                         styles.serviceBookingStatus,
-                        { backgroundColor: item.serviceBookingId ? '#dfebf7' : '#faf1e0' }
+                        { backgroundColor: item.serviceBookingId ? colors.lavenderMist : colors.linen }
                       ]}>
                         <Text style={[
                           styles.serviceBookingStatusText,
-                          { color: item.serviceBookingId ? '#1a3a52' : '#ffcd57' }
+                          { color: item.serviceBookingId ? colors.nileBlue : colors.lightMustard }
                         ]}>
                           {item.serviceBookingId ? 'Confirmed' : 'Pending'}
                         </Text>
@@ -387,7 +388,7 @@ function getStatusLabel(status: string): string {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
   },
   centered: {
     flex: 1,
@@ -428,7 +429,7 @@ const styles = StyleSheet.create({
   liveIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     borderRadius: BorderRadius.md,
@@ -584,13 +585,13 @@ const styles = StyleSheet.create({
   },
   // Service Booking Styles
   serviceBookingCard: {
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     borderRadius: BorderRadius.md,
     padding: 14,
     marginHorizontal: Spacing.base,
     marginBottom: Spacing.md,
     borderWidth: 1,
-    borderColor: '#ffd7b5',
+    borderColor: colors.lightPeach,
   },
   serviceBookingHeader: {
     flexDirection: 'row',

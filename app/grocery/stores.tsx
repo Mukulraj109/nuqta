@@ -3,6 +3,7 @@
  * Browse all grocery stores with filtering
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -238,7 +239,7 @@ const GroceryStoresPage: React.FC = () => {
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#F97316', '#EA580C']}
+          colors={[colors.brand.orange, colors.brand.orangeDark]}
           style={styles.header}
         >
           <View style={styles.headerTop}>
@@ -260,7 +261,7 @@ const GroceryStoresPage: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <LinearGradient
-        colors={['#F97316', '#EA580C']}
+        colors={[colors.brand.orange, colors.brand.orangeDark]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}
@@ -325,8 +326,8 @@ const GroceryStoresPage: React.FC = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#F97316']}
-            tintColor="#F97316"
+            colors={[colors.brand.orange]}
+            tintColor={colors.brand.orange}
           />
         }
       >
@@ -482,7 +483,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   filterChipActive: {
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
   },
   filterChipText: {
     fontSize: 13,

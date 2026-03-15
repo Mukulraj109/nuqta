@@ -9,6 +9,7 @@ import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS } from '@/constants/DesignTokens';
 import { EnhancedPaymentMethod as EnhancedPaymentMethodType, PaymentBadgeType } from '@/types/storePayment.types';
+import { colors } from '@/constants/theme';
 
 interface EnhancedPaymentMethodProps {
   method: EnhancedPaymentMethodType;
@@ -17,9 +18,9 @@ interface EnhancedPaymentMethodProps {
 }
 
 const BADGE_STYLES: Record<PaymentBadgeType, { bg: string; text: string; label: string }> = {
-  best: { bg: COLORS.success[500], text: '#FFFFFF', label: 'Best' },
-  popular: { bg: COLORS.primary[500], text: '#FFFFFF', label: 'Popular' },
-  new: { bg: COLORS.secondary[500], text: '#FFFFFF', label: 'New' },
+  best: { bg: COLORS.success[500], text: colors.background.primary, label: 'Best' },
+  popular: { bg: COLORS.primary[500], text: colors.background.primary, label: 'Popular' },
+  new: { bg: COLORS.secondary[500], text: colors.background.primary, label: 'New' },
 };
 
 export const EnhancedPaymentMethodCard: React.FC<EnhancedPaymentMethodProps> = ({

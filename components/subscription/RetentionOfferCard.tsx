@@ -6,6 +6,7 @@ import { View, StyleSheet, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 export type RetentionOfferType = 'discount' | 'usage_tips' | 'benefits_reminder';
 
@@ -32,20 +33,20 @@ function RetentionOfferCard({
   const getGradient = () => {
     switch (offer.type) {
       case 'discount':
-        return ['#8B5CF6', '#A78BFA'];
+        return [colors.brand.purpleLight, colors.brand.purpleSoft];
       case 'usage_tips':
-        return ['#3B82F6', '#60A5FA'];
+        return [colors.infoScale[400], colors.infoScale[400]];
       case 'benefits_reminder':
-        return ['#F59E0B', '#FBBF24'];
+        return [colors.warningScale[400], colors.warningScale[400]];
       default:
-        return ['#8B5CF6', '#A78BFA'];
+        return [colors.brand.purpleLight, colors.brand.purpleSoft];
     }
   };
 
   return (
     <View style={styles.container}>
       <LinearGradient colors={getGradient() as any} style={styles.header}>
-        <Ionicons name={offer.icon as any} size={48} color="#FFFFFF" />
+        <Ionicons name={offer.icon as any} size={48} color={colors.background.primary} />
         <ThemedText style={styles.headerTitle}>{offer.title}</ThemedText>
       </LinearGradient>
 
@@ -74,7 +75,7 @@ function RetentionOfferCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     shadowColor: '#000',
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 16,
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
     lineHeight: 24,
     marginBottom: 20,
@@ -114,30 +115,30 @@ const styles = StyleSheet.create({
   valueText: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   actions: {
     gap: 12,
   },
   acceptButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   acceptButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
   },
   declineButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   declineButtonText: {
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontSize: 14,
     fontWeight: '600',
   },

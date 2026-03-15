@@ -26,6 +26,7 @@ import { EventItem } from '@/types/homepage.types';
 import { EVENT_COLORS } from '@/constants/EventColors';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -33,12 +34,12 @@ const COLORS = EVENT_COLORS;
 
 // Fallback categories used when backend categories aren't available yet
 const FALLBACK_CATEGORIES = [
-  { slug: 'movies', name: 'Movies', icon: '\uD83C\uDFAC', color: '#EF4444' },
-  { slug: 'concerts', name: 'Concerts', icon: '\uD83C\uDFB5', color: '#8B5CF6' },
-  { slug: 'parks', name: 'Parks', icon: '\uD83C\uDFA2', color: '#10B981' },
-  { slug: 'workshops', name: 'Workshops', icon: '\uD83C\uDFA8', color: '#F59E0B' },
-  { slug: 'gaming', name: 'Gaming', icon: '\uD83C\uDFAE', color: '#3B82F6' },
-  { slug: 'sports', name: 'Sports', icon: '\u26BD', color: '#EF4444' },
+  { slug: 'movies', name: 'Movies', icon: '\uD83C\uDFAC', color: colors.error },
+  { slug: 'concerts', name: 'Concerts', icon: '\uD83C\uDFB5', color: colors.brand.purpleLight },
+  { slug: 'parks', name: 'Parks', icon: '\uD83C\uDFA2', color: colors.successScale[400] },
+  { slug: 'workshops', name: 'Workshops', icon: '\uD83C\uDFA8', color: colors.warningScale[400] },
+  { slug: 'gaming', name: 'Gaming', icon: '\uD83C\uDFAE', color: colors.infoScale[400] },
+  { slug: 'sports', name: 'Sports', icon: '\u26BD', color: colors.error },
 ];
 
 interface DisplayEvent {
@@ -283,7 +284,7 @@ const EventsPage: React.FC = () => {
             <TextInput
               style={styles.searchInput}
               placeholder="Search events, concerts, movies..."
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               value={searchQuery}
               onChangeText={setSearchQuery}
               onSubmitEditing={handleSearch}

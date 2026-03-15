@@ -20,6 +20,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import reelApi from '@/services/reelApi';
 import { useAuth } from '@/contexts/AuthContext';
 import { formatTimeAgo } from '@/utils/timeAgoFormatter';
+import { colors } from '@/constants/theme';
 
 interface Comment {
   id: string;
@@ -598,7 +599,7 @@ const styles = StyleSheet.create({
   },
   retryText: {
     ...Typography.label,
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   footerLoader: {
     paddingVertical: Spacing.lg,

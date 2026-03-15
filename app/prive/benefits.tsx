@@ -10,6 +10,7 @@ import { PriveEmptyState } from '@/components/prive/PriveEmptyState';
 import priveApi from '@/services/priveApi';
 import { SectionListSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function BenefitsScreen() {
   const router = useRouter();
@@ -37,7 +38,7 @@ export default function BenefitsScreen() {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <SectionListSkeleton />
       </View>
     );
@@ -46,7 +47,7 @@ export default function BenefitsScreen() {
   if (!data) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         {error ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 }}>
             <Text style={{ color: PRIVE_COLORS.status.error, fontSize: 14, textAlign: 'center', marginBottom: 16 }}>{error}</Text>
@@ -70,7 +71,7 @@ export default function BenefitsScreen() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+      <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
       <ScrollView
         style={styles.scroll}
         showsVerticalScrollIndicator={false}

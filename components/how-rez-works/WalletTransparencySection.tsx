@@ -6,6 +6,7 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface TransparencyItem {
   icon: keyof typeof Ionicons.glyphMap;
@@ -14,9 +15,9 @@ interface TransparencyItem {
 }
 
 const transparencyItems: TransparencyItem[] = [
-  { icon: 'location', text: 'Where coins came from', color: '#F59E0B' },
-  { icon: 'time', text: 'When they expire', color: '#3B82F6' },
-  { icon: 'storefront', text: 'Where you can use them', color: '#10B981' },
+  { icon: 'location', text: 'Where coins came from', color: colors.warningScale[400] },
+  { icon: 'time', text: 'When they expire', color: colors.infoScale[400] },
+  { icon: 'storefront', text: 'Where you can use them', color: colors.successScale[400] },
 ];
 
 const WalletTransparencySection: React.FC = () => {
@@ -24,7 +25,7 @@ const WalletTransparencySection: React.FC = () => {
     <View style={styles.container}>
       <View style={styles.card}>
         <View style={styles.headerRow}>
-          <Ionicons name="eye-outline" size={20} color="#6B7280" />
+          <Ionicons name="eye-outline" size={20} color={colors.neutral[500]} />
           <Text style={styles.title}>Wallet Transparency</Text>
         </View>
 
@@ -47,14 +48,14 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -76,11 +77,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   subtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 14,
   },
   itemsContainer: {

@@ -25,6 +25,7 @@ import apiClient from '@/services/apiClient';
 import { platformAlert } from '@/utils/platformAlert';
 import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.config';
 import { FormPageSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 interface PendingReview {
   id: string;
@@ -221,7 +222,7 @@ export default function ReviewToEarnPage() {
         >
           <View style={styles.headerContent}>
             <Pressable style={styles.backButton} onPress={() => setSelectedItem(null)}>
-              <Ionicons name="arrow-back" size={24} color="#FFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Write Review</ThemedText>
             <View style={styles.placeholder} />
@@ -336,7 +337,7 @@ export default function ReviewToEarnPage() {
             disabled={rating === 0 || !review || submitting}
           >
             {submitting ? (
-              <ActivityIndicator color="#FFF" />
+              <ActivityIndicator color={colors.background.primary} />
             ) : (
               <ThemedText style={styles.submitButtonText}>Submit Review</ThemedText>
             )}
@@ -355,7 +356,7 @@ export default function ReviewToEarnPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Review & Earn</ThemedText>
           <View style={styles.placeholder} />
@@ -434,7 +435,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -454,7 +455,7 @@ const styles = StyleSheet.create({
   },
   statValue: {
     ...Typography.h2,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   statLabel: {
     ...Typography.bodySmall,
@@ -735,6 +736,6 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
 });

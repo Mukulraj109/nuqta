@@ -19,23 +19,24 @@ import DailySpinCard from './cards/DailySpinCard';
 import ChallengesCard from './cards/ChallengesCard';
 import StreakRewardsCard from './cards/StreakRewardsCard';
 import SurpriseCoinDropCard from './cards/SurpriseCoinDropCard';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2; // 2 cards per row with padding
 
 // Nuqta Brand Colors
 const COLORS = {
-  primary: '#ffcd57',
-  primaryDark: '#E6B84E',
-  primaryLight: '#ffcd57',
-  gold: '#FFC857',
+  primary: colors.lightMustard,
+  primaryDark: colors.brand.goldRich,
+  primaryLight: colors.lightMustard,
+  gold: colors.brand.goldWarm,
   goldDark: '#F5A623',
   goldLight: '#FFD87A',
-  white: '#FFFFFF',
-  textDark: '#1a3a52',
-  textMuted: '#6B7280',
+  white: colors.background.primary,
+  textDark: colors.nileBlue,
+  textMuted: colors.neutral[500],
   cardShadow: 'rgba(0, 0, 0, 0.1)',
-  background: '#F9FAFB',
+  background: colors.neutral[50],
 };
 
 const PlayAndEarnSection: React.FC = () => {

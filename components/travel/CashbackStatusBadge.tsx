@@ -5,6 +5,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import type { CashbackStatus } from '@/services/serviceBookingApi';
+import { colors } from '@/constants/theme';
 
 interface CashbackStatusBadgeProps {
   status: CashbackStatus;
@@ -24,25 +25,25 @@ const STATUS_CONFIG: Record<CashbackStatus, {
   pending: {
     label: 'Cashback Pending',
     color: '#94A3B8',
-    bgColor: '#F1F5F9',
+    bgColor: colors.tint.slate,
     icon: 'hourglass-outline',
   },
   held: {
     label: 'Verifying',
-    color: '#F59E0B',
-    bgColor: '#FFFBEB',
+    color: colors.warningScale[400],
+    bgColor: colors.tint.amber,
     icon: 'time-outline',
   },
   credited: {
     label: 'Cashback Credited',
-    color: '#22C55E',
-    bgColor: '#F0FDF4',
+    color: colors.success,
+    bgColor: colors.successScale[50],
     icon: 'checkmark-circle',
   },
   clawed_back: {
     label: 'Cashback Reversed',
-    color: '#EF4444',
-    bgColor: '#FEF2F2',
+    color: colors.error,
+    bgColor: colors.errorScale[50],
     icon: 'close-circle',
   },
 };

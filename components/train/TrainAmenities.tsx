@@ -5,6 +5,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface TrainAmenitiesProps {
   amenities: string[];
@@ -30,14 +31,14 @@ const TrainAmenities: React.FC<TrainAmenitiesProps> = ({ amenities }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="sparkles" size={24} color="#22C55E" />
+        <Ionicons name="sparkles" size={24} color={colors.success} />
         <Text style={styles.title}>Amenities</Text>
       </View>
       <View style={styles.amenitiesGrid}>
         {amenities.map((amenity, index) => (
           <View key={index} style={styles.amenityItem}>
             <View style={styles.iconContainer}>
-              <Ionicons name={getIcon(amenity) as any} size={20} color="#22C55E" />
+              <Ionicons name={getIcon(amenity) as any} size={20} color={colors.success} />
             </View>
             <Text style={styles.amenityText}>{amenity}</Text>
           </View>
@@ -51,8 +52,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderBottomColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.3,
   },
   amenitiesGrid: {
@@ -77,16 +78,16 @@ const styles = StyleSheet.create({
     gap: 10,
     width: '48%',
     padding: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   iconContainer: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
 });
 

@@ -21,6 +21,7 @@ import { useFeedRealtime } from '../../hooks/useFeedRealtime';
 import ActivityCard from '../../components/feed/ActivityCard';
 import FollowButton from '../../components/social/FollowButton';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const ActivityFeedPage = () => {
   const {
@@ -135,7 +136,7 @@ const ActivityFeedPage = () => {
               accessibilityRole="button"
               accessibilityHint="Loads new user suggestions"
             >
-              <Ionicons name="refresh" size={20} color="#007AFF" />
+              <Ionicons name="refresh" size={20} color={colors.brand.ios} />
             </Pressable>
           )}
         </View>
@@ -158,7 +159,7 @@ const ActivityFeedPage = () => {
               </Text>
               {(suggestedUser as any).isMutual === true && (
                 <View style={styles.mutualBadge}>
-                  <Ionicons name="people" size={10} color="#007AFF" />
+                  <Ionicons name="people" size={10} color={colors.brand.ios} />
                   <Text style={styles.mutualText}>Mutual</Text>
                 </View>
               )}
@@ -193,7 +194,7 @@ const ActivityFeedPage = () => {
 
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ActivityIndicator size="large" color={colors.brand.ios} />
       </View>
     );
   };
@@ -257,7 +258,7 @@ const ActivityFeedPage = () => {
             accessibilityState={{ expanded: showFilterMenu }}
             accessibilityHint="Opens filter menu to sort feed posts"
           >
-            <Ionicons name="options-outline" size={24} color="#000" />
+            <Ionicons name="options-outline" size={24} color={colors.text.primary} />
           </Pressable>
           <Pressable
             style={styles.headerButton}
@@ -265,7 +266,7 @@ const ActivityFeedPage = () => {
             accessibilityRole="button"
             accessibilityHint="View your notifications"
           >
-            <Ionicons name="notifications-outline" size={24} color="#000" />
+            <Ionicons name="notifications-outline" size={24} color={colors.text.primary} />
           </Pressable>
         </View>
       </View>
@@ -342,7 +343,7 @@ const ActivityFeedPage = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor="#007AFF"
+            tintColor={colors.brand.ios}
           />
         }
         onEndReached={handleLoadMore}
@@ -378,7 +379,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     ...Typography.h2,
     fontWeight: '700',
-    color: '#000'
+    color: colors.text.primary
   },
   liveIndicator: {
     width: 8,
@@ -415,7 +416,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.secondary,
   },
   filterOptionActive: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
   },
   filterText: {
     ...Typography.body,
@@ -438,7 +439,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.sm,
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     paddingHorizontal: Spacing.lg,
     paddingVertical: 10,
     borderRadius: BorderRadius['2xl'],
@@ -469,7 +470,7 @@ const styles = StyleSheet.create({
   suggestedTitle: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: '#000',
+    color: colors.text.primary,
   },
   suggestedScroll: {
     marginHorizontal: -4
@@ -497,7 +498,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 30,
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -509,7 +510,7 @@ const styles = StyleSheet.create({
   suggestedName: {
     ...Typography.body,
     fontWeight: '600',
-    color: '#000',
+    color: colors.text.primary,
     marginBottom: Spacing.sm,
     textAlign: 'center',
     width: '100%'
@@ -527,7 +528,7 @@ const styles = StyleSheet.create({
   mutualText: {
     ...Typography.overline,
     fontWeight: '600',
-    color: '#007AFF',
+    color: colors.brand.ios,
   },
   suggestedFollowButton: {
     minWidth: 80,
@@ -540,7 +541,7 @@ const styles = StyleSheet.create({
   feedTitle: {
     ...Typography.h4,
     fontWeight: '600',
-    color: '#000'
+    color: colors.text.primary
   },
   footerLoader: {
     paddingVertical: Spacing.lg,
@@ -568,7 +569,7 @@ const styles = StyleSheet.create({
     lineHeight: 20
   },
   discoverButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius['2xl']

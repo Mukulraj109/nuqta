@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface LoadingSpinnerProps {
   size?: 'small' | 'large';
@@ -18,7 +19,7 @@ interface LoadingSpinnerProps {
 
 export default function LoadingSpinner({
   size = 'large',
-  color = '#8B5CF6',
+  color = colors.brand.purpleLight,
   message,
   fullScreen = false,
 }: LoadingSpinnerProps) {
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     fontWeight: '500',
   },

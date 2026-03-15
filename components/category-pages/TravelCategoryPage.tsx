@@ -38,17 +38,18 @@ import EmptyState from '@/components/common/EmptyState';
 import { LoadingState } from '@/components/common/LoadingState';
 import { travelCategoryData, travelServiceFilters, travelModeFilters, travelQuickActions, ALL_TRAVEL_SERVICES } from '@/data/category/travelCategoryData';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  primary: '#06B6D4',
-  primaryDark: '#0891B2',
+  primary: colors.brand.cyan,
+  primaryDark: colors.cyanDark,
   primaryLight: '#ECFEFF',
-  primaryGold: '#F59E0B',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  border: '#E5E7EB',
+  primaryGold: colors.warningScale[400],
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  border: colors.neutral[200],
 };
 
 // Helper: check if a store matches a given filter
@@ -77,9 +78,9 @@ function storeMatchesFilter(store: any, filterId: string): boolean {
 
 function getPriceTier(priceForTwo?: number): { label: string; color: string } {
   if (!priceForTwo) return { label: '', color: '' };
-  if (priceForTwo < 5000) return { label: '$', color: '#22C55E' };
-  if (priceForTwo < 15000) return { label: '$$', color: '#F59E0B' };
-  return { label: '$$$', color: '#8B5CF6' };
+  if (priceForTwo < 5000) return { label: '$', color: colors.success };
+  if (priceForTwo < 15000) return { label: '$$', color: colors.warningScale[400] };
+  return { label: '$$$', color: colors.brand.purpleLight };
 }
 
 function TravelCategoryPage() {

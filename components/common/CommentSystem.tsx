@@ -17,6 +17,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 export interface Comment {
   id: string;
@@ -209,7 +210,7 @@ function CommentSystem({
             <Ionicons 
               name={comment.isLiked ? 'heart' : 'heart-outline'} 
               size={14} 
-              color={comment.isLiked ? '#EF4444' : '#666'} 
+              color={comment.isLiked ? colors.error : colors.midGray} 
             />
             {comment.likesCount > 0 && (
               <ThemedText style={[styles.actionText, comment.isLiked && styles.likedText]}>
@@ -223,7 +224,7 @@ function CommentSystem({
               style={styles.actionButton}
               onPress={() => handleReplyToComment(comment)}
             >
-              <Ionicons name="chatbubble-outline" size={14} color="#666" />
+              <Ionicons name="chatbubble-outline" size={14} color={colors.midGray} />
               <ThemedText style={styles.actionText}>Reply</ThemedText>
             </Pressable>
           )}
@@ -233,7 +234,7 @@ function CommentSystem({
               style={styles.actionButton}
               onPress={() => handleEditComment(comment)}
             >
-              <Ionicons name="create-outline" size={14} color="#666" />
+              <Ionicons name="create-outline" size={14} color={colors.midGray} />
               <ThemedText style={styles.actionText}>Edit</ThemedText>
             </Pressable>
           )}
@@ -243,7 +244,7 @@ function CommentSystem({
               style={styles.actionButton}
               onPress={() => handleDeleteComment(comment.id)}
             >
-              <Ionicons name="trash-outline" size={14} color="#EF4444" />
+              <Ionicons name="trash-outline" size={14} color={colors.error} />
               <ThemedText style={[styles.actionText, styles.deleteText]}>Delete</ThemedText>
             </Pressable>
           )}
@@ -259,7 +260,7 @@ function CommentSystem({
               <Ionicons
                 name={expandedReplies.has(comment.id) ? 'chevron-up' : 'chevron-down'}
                 size={16}
-                color="#8B5CF6"
+                color={colors.brand.purpleLight}
               />
               <ThemedText style={styles.showRepliesText}>
                 {expandedReplies.has(comment.id) ? 'Hide' : 'Show'} {comment.replies.length} reply{comment.replies.length !== 1 ? 'ies' : ''}
@@ -291,7 +292,7 @@ function CommentSystem({
 
   const renderEmpty = () => (
     <View style={styles.emptyState}>
-      <Ionicons name="chatbubble-outline" size={48} color="#D1D5DB" />
+      <Ionicons name="chatbubble-outline" size={48} color={colors.neutral[300]} />
       <ThemedText style={styles.emptyTitle}>No comments yet</ThemedText>
       <ThemedText style={styles.emptyText}>
         Be the first to share your thoughts!
@@ -316,7 +317,7 @@ function CommentSystem({
             <RefreshControl
               refreshing={isRefreshing}
               onRefresh={handleRefresh}
-              tintColor="#8B5CF6"
+              tintColor={colors.brand.purpleLight}
             />
           ) : undefined
         }
@@ -331,7 +332,7 @@ function CommentSystem({
       {/* Loading indicator */}
       {isLoading && (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#8B5CF6" />
+          <ActivityIndicator size="large" color={colors.brand.purpleLight} />
         </View>
       )}
 
@@ -343,7 +344,7 @@ function CommentSystem({
               {replyTo ? `Replying to ${replyTo.userName}` : 'Editing comment'}
             </ThemedText>
             <Pressable onPress={cancelEdit}>
-              <Ionicons name="close" size={16} color="#666" />
+              <Ionicons name="close" size={16} color={colors.midGray} />
             </Pressable>
           </View>
         )}
@@ -355,7 +356,7 @@ function CommentSystem({
             value={newComment}
             onChangeText={setNewComment}
             placeholder={placeholder}
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             multiline
             maxLength={maxLength}
             editable={!isSubmitting}
@@ -370,9 +371,9 @@ function CommentSystem({
             disabled={!newComment.trim() || isSubmitting}
           >
             {isSubmitting ? (
-              <ActivityIndicator size="small" color="#8B5CF6" />
+              <ActivityIndicator size="small" color={colors.brand.purpleLight} />
             ) : (
-              <Ionicons name="send" size={20} color="#8B5CF6" />
+              <Ionicons name="send" size={20} color={colors.brand.purpleLight} />
             )}
           </Pressable>
         </View>
@@ -390,19 +391,19 @@ function CommentSystem({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.offWhite,
   },
   header: {
     paddingVertical: 16,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.gray[200],
     backgroundColor: 'white',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
   },
   listContent: {
     paddingBottom: 16,
@@ -415,13 +416,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginTop: 16,
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -435,11 +436,11 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: 'white',
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.gray[100],
   },
   replyContainer: {
     marginLeft: 32,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   avatarContainer: {
     marginRight: 12,
@@ -448,13 +449,13 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
   },
   avatarPlaceholder: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -474,21 +475,21 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginRight: 8,
   },
   timestamp: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
   },
   editedLabel: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     fontStyle: 'italic',
   },
   commentText: {
     fontSize: 14,
-    color: '#333',
+    color: colors.darkGray,
     lineHeight: 20,
     marginBottom: 12,
   },
@@ -505,19 +506,19 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   likedButton: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
   },
   actionText: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     marginLeft: 4,
     fontWeight: '500',
   },
   likedText: {
-    color: '#EF4444',
+    color: colors.error,
   },
   deleteText: {
-    color: '#EF4444',
+    color: colors.error,
   },
   repliesContainer: {
     marginTop: 12,
@@ -529,7 +530,7 @@ const styles = StyleSheet.create({
   },
   showRepliesText: {
     fontSize: 13,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
     marginLeft: 4,
   },
@@ -538,13 +539,13 @@ const styles = StyleSheet.create({
   },
   replyItem: {
     borderLeftWidth: 2,
-    borderLeftColor: '#E5E7EB',
+    borderLeftColor: colors.gray[200],
     marginLeft: 8,
   },
   inputContainer: {
     backgroundColor: 'white',
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.gray[200],
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
@@ -555,12 +556,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     borderRadius: 8,
   },
   inputContextText: {
     fontSize: 13,
-    color: '#666',
+    color: colors.midGray,
   },
   inputRow: {
     flexDirection: 'row',
@@ -569,30 +570,30 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 8,
     fontSize: 14,
-    color: '#333',
-    backgroundColor: '#F9FAFB',
+    color: colors.darkGray,
+    backgroundColor: colors.neutral[50],
     maxHeight: 100,
   },
   sendButton: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 8,
   },
   sendButtonDisabled: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   characterCount: {
     fontSize: 11,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'right',
     marginTop: 4,
   },

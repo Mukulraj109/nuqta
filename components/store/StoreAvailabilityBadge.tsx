@@ -1,6 +1,7 @@
 // Store Availability Badge Component
 // Shows store online/offline status and business hours
 
+import { colors } from '@/constants/theme';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
   },
   responseTime: {
     fontSize: 11,
-    color: '#666',
+    color: colors.midGray,
     marginTop: 4,
   },
 });

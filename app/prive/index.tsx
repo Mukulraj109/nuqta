@@ -5,6 +5,7 @@
  * using the existing PriveSectionContainer component.
  */
 
+import { colors } from '@/constants/theme';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,6 +22,6 @@ export default function PriveHomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0A0A0A',
+    backgroundColor: colors.midGrayAlt,
   },
 });

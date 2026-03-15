@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, Dimensions } from 'react-native';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -34,7 +35,7 @@ const SkeletonBlock = ({ width, height, style, borderRadius = 8 }: {
           width: width as any,
           height,
           borderRadius,
-          backgroundColor: '#E5E7EB',
+          backgroundColor: colors.neutral[200],
           opacity,
         },
         style,
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
     marginHorizontal: 20,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     marginBottom: 20,
   },
   section: {
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 20,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   transitionRow: {
     flexDirection: 'row',

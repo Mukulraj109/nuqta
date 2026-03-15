@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TextInputProps
 } from 'react-native';
+import { colors } from '@/constants/theme';
 
 // Import CSS for web-specific styling
 if (typeof window !== 'undefined') {
@@ -100,7 +101,7 @@ function FormInput({
             (leftIcon || prefix) ? styles.inputWithIcon : null,
             style
           ]}
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.neutral[400]}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           autoComplete="off"
@@ -139,16 +140,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     minHeight: 48,
   },
   leftIconContainer: {
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 8,
     fontSize: 16,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
     alignSelf: 'center',
   },
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#374151',
+    color: colors.neutral[700],
     backgroundColor: 'transparent',
     borderWidth: 0,
     outlineWidth: 0, // Remove browser focus outline
@@ -189,9 +190,9 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   inputFocused: {
-    borderColor: '#FFC857',
+    borderColor: colors.brand.goldWarm,
     borderWidth: 2,
-    shadowColor: '#FFC857',
+    shadowColor: colors.brand.goldWarm,
     shadowOffset: {
       width: 0,
       height: 0,
@@ -201,13 +202,13 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   inputError: {
-    borderColor: '#EF4444',
+    borderColor: colors.error,
     borderWidth: 2,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
   },
   errorText: {
     fontSize: 14,
-    color: '#EF4444',
+    color: colors.error,
     marginTop: 4,
     marginLeft: 4,
   },

@@ -22,17 +22,18 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { usePriveEligibility, getEligibilityStatus, getQuickWins } from '@/hooks/usePriveEligibility';
 import { ELIGIBILITY_THRESHOLDS, PillarScore, PriveTier } from '@/types/mode.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Colors
 const COLORS = {
-  gold: '#C9A962',
+  gold: colors.brand.goldAccent,
   goldLight: '#E8D5A3',
   goldDark: '#A68B4B',
-  background: '#0A0A0A',
+  background: colors.midGrayAlt,
   cardBg: '#1A1A1A',
-  textPrimary: '#FFFFFF',
+  textPrimary: colors.background.primary,
   textSecondary: '#A0A0A0',
-  success: '#4CAF50',
+  success: colors.brand.emerald,
   warning: '#FF9800',
   error: '#F44336',
 };
@@ -44,7 +45,7 @@ const TierBadge: React.FC<{ tier: PriveTier; score: number }> = ({ tier, score }
       case 'elite':
         return {
           label: 'ELITE',
-          colors: ['#FFD700', '#FFA500'] as const,
+          colors: [colors.brand.goldBright, '#FFA500'] as const,
           icon: 'star' as const,
         };
       case 'entry':
@@ -70,7 +71,7 @@ const TierBadge: React.FC<{ tier: PriveTier; score: number }> = ({ tier, score }
         <Ionicons
           name={config.icon}
           size={24}
-          color={tier === 'none' ? '#888' : '#FFF'}
+          color={tier === 'none' ? '#888' : colors.background.primary}
         />
         <Text style={[styles.tierLabel, tier === 'none' && styles.tierLabelLocked]}>
           {config.label}
@@ -198,7 +199,7 @@ const ThresholdsInfo: React.FC<{ currentScore: number }> = ({ currentScore }) =>
           <Ionicons
             name={currentScore >= ELIGIBILITY_THRESHOLDS.ELITE_TIER ? 'star' : 'star-outline'}
             size={20}
-            color={currentScore >= ELIGIBILITY_THRESHOLDS.ELITE_TIER ? '#FFD700' : COLORS.textSecondary}
+            color={currentScore >= ELIGIBILITY_THRESHOLDS.ELITE_TIER ? colors.brand.goldBright : COLORS.textSecondary}
           />
           <Text style={styles.thresholdLabel}>Elite Tier</Text>
         </View>
@@ -324,7 +325,7 @@ export default function PriveEligibilityScreen() {
               <Text style={styles.ctaText}>
                 {tier === 'elite' ? 'Access Elite Exclusives' : 'Explore Privé Mode'}
               </Text>
-              <Ionicons name="arrow-forward" size={20} color="#000" />
+              <Ionicons name="arrow-forward" size={20} color={colors.text.primary} />
             </LinearGradient>
           </Pressable>
         )}
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.goldDark,
   },
   markerDotElite: {
-    backgroundColor: '#FFD700',
+    backgroundColor: colors.brand.goldBright,
     borderColor: '#FFA500',
   },
   markerLabel: {
@@ -622,7 +623,7 @@ const styles = StyleSheet.create({
   ctaText: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: '#000',
+    color: colors.text.primary,
   },
   progressRingBg: {
     position: 'absolute',

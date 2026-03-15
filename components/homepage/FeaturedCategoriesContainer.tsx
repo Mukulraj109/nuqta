@@ -4,6 +4,7 @@ import { ThemedText } from '@/components/ThemedText';
 import categoriesApi, { Category } from '@/services/categoriesApi';
 import CategoryProductsSection from './CategoryProductsSection';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface FeaturedCategoriesContainerProps {
   productsPerCategory?: number;
@@ -46,7 +47,7 @@ function FeaturedCategoriesContainer({
       <View style={styles.loadingContainer}>
         <View style={styles.loadingContent}>
           <View style={styles.loadingSpinner}>
-            <ActivityIndicator size="small" color="#ffcd57" />
+            <ActivityIndicator size="small" color={colors.lightMustard} />
           </View>
           <ThemedText style={styles.loadingText}>Loading categories...</ThemedText>
         </View>
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
   featuredBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontFamily: 'Inter',
     letterSpacing: 1,
   },
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 13,
-    color: '#9AA7B2',
+    color: colors.gray[400],
     fontFamily: 'Inter',
     fontWeight: '500',
   },

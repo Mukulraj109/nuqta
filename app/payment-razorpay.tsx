@@ -29,6 +29,7 @@ import { getCurrencySymbol as getPaymentCurrencySymbol } from '@/config/payment'
 import * as WebBrowser from 'expo-web-browser';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Import Razorpay for native support
 let RazorpayCheckout: any = null;
@@ -425,7 +426,7 @@ export default function PaymentPage() {
         contact: '9876543210',
         name: 'User Name',
       },
-      theme: { color: '#8B5CF6' },
+      theme: { color: colors.brand.purpleLight },
       modal: {
         ondismiss: () => {
           setCurrentStep('methods');
@@ -530,7 +531,7 @@ export default function PaymentPage() {
     switch (type) {
       case 'card': return Colors.info;
       case 'upi': return Colors.brand.purple;
-      case 'wallet': return '#EC4899';
+      case 'wallet': return colors.brand.pink;
       case 'netbanking': return Colors.success;
       default: return Colors.text.tertiary;
     }

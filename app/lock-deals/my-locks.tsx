@@ -5,6 +5,7 @@
  * Active (locked/paid_balance), Picked Up, Expired/Cancelled
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -113,7 +114,7 @@ const MyLocksPage: React.FC = () => {
       case 'locked':
         return { label: 'Locked', color: Colors.warning, bg: Colors.warningScale[50], icon: 'lock-closed' as const };
       case 'paid_balance':
-        return { label: 'Balance Paid', color: Colors.info, bg: '#EFF6FF', icon: 'checkmark-circle' as const };
+        return { label: 'Balance Paid', color: Colors.info, bg: colors.tint.blue, icon: 'checkmark-circle' as const };
       case 'picked_up':
         return { label: 'Picked Up', color: Colors.success, bg: Colors.successScale[50], icon: 'bag-check' as const };
       case 'expired':

@@ -16,6 +16,7 @@ import { useOrderTracking } from '@/hooks/useOrderTracking';
 import { useRegion } from '@/contexts/RegionContext';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const STATUS_STEPS = [
   { key: 'placed', label: 'Order Placed', icon: 'receipt-outline' as const },

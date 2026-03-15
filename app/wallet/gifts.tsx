@@ -22,6 +22,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { handleWalletError } from '@/utils/walletErrorHandler';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface Gift {
   _id: string;
@@ -49,10 +50,10 @@ const THEME_EMOJIS: Record<string, string> = {
 };
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
-  pending: { label: 'Pending', color: '#F59E0B', bg: '#FEF3C7' },
-  delivered: { label: 'Unclaimed', color: '#3B82F6', bg: '#DBEAFE' },
-  claimed: { label: 'Claimed', color: '#10B981', bg: '#D1FAE5' },
-  expired: { label: 'Expired', color: '#6B7280', bg: '#F3F4F6' },
+  pending: { label: 'Pending', color: colors.warningScale[400], bg: colors.tint.amberLight },
+  delivered: { label: 'Unclaimed', color: colors.infoScale[400], bg: colors.tint.blueLight },
+  claimed: { label: 'Claimed', color: colors.successScale[400], bg: colors.tint.green },
+  expired: { label: 'Expired', color: colors.neutral[500], bg: colors.neutral[100] },
 };
 
 export default function GiftsPage() {
@@ -163,7 +164,7 @@ export default function GiftsPage() {
                 disabled={claimingId === item._id}
               >
                 {claimingId === item._id ? (
-                  <ActivityIndicator size="small" color="#FFF" />
+                  <ActivityIndicator size="small" color={colors.background.primary} />
                 ) : (
                   <ThemedText style={styles.claimButtonText}>Claim</ThemedText>
                 )}
@@ -227,11 +228,11 @@ export default function GiftsPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>My Gifts</ThemedText>
           <Pressable style={styles.sendButton} onPress={() => router.push('/wallet/gift')}>
-            <Ionicons name="gift-outline" size={22} color="#FFF" />
+            <Ionicons name="gift-outline" size={22} color={colors.background.primary} />
           </Pressable>
         </View>
 
@@ -318,7 +319,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
   },
   sendButton: {
@@ -338,7 +339,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
   },
   tabActive: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
   },
   tabText: {
     ...Typography.label,
@@ -401,7 +402,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   messageBox: {
-    backgroundColor: Colors.gray[50] || '#F9FAFB',
+    backgroundColor: Colors.gray[50] || colors.neutral[50],
     borderRadius: BorderRadius.md,
     padding: Spacing.md,
     marginTop: Spacing.md,
@@ -431,7 +432,7 @@ const styles = StyleSheet.create({
   },
   expiryText: {
     ...Typography.caption,
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     fontWeight: '600',
   },
   claimButton: {
@@ -444,15 +445,15 @@ const styles = StyleSheet.create({
   },
   claimButtonText: {
     ...Typography.labelSmall,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   claimedText: {
     ...Typography.caption,
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   scheduledText: {
     ...Typography.caption,
-    color: '#3B82F6',
+    color: colors.infoScale[400],
   },
   emptyState: {
     flex: 1,
@@ -481,6 +482,6 @@ const styles = StyleSheet.create({
   },
   emptyButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
 });

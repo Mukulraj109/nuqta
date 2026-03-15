@@ -24,6 +24,7 @@ import LocationDisplay from '@/components/location/LocationDisplay';
 import TierBadge from '@/components/subscription/TierBadge';
 import NotificationBell from '@/components/common/NotificationBell';
 import NuqtaCoin from './ReZCoin';
+import { colors } from '@/constants/theme';
 
 /**
  * HomeHeader Props Interface
@@ -99,7 +100,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
 
   return (
     <LinearGradient
-      colors={['#ffcd57', '#E6B84E', '#ffcd57']}
+      colors={[colors.lightMustard, colors.brand.goldRich, colors.lightMustard]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={headerStyles.header}
@@ -250,7 +251,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
           {/* Full Address Section */}
           <View style={headerStyles.addressSection}>
             <View style={headerStyles.addressHeader}>
-              <Ionicons name="location" size={16} color="#1a3a52" />
+              <Ionicons name="location" size={16} color={colors.nileBlue} />
               <Text style={headerStyles.addressHeaderText}>Current Location</Text>
             </View>
             <LocationDisplay
@@ -266,7 +267,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
           {/* Coordinates Section */}
           <View style={headerStyles.coordinatesSection}>
             <View style={headerStyles.coordinatesHeader}>
-              <Ionicons name="navigate" size={14} color="#666" />
+              <Ionicons name="navigate" size={14} color={colors.midGray} />
               <Text style={headerStyles.coordinatesHeaderText}>Coordinates</Text>
             </View>
             <LocationDisplay
@@ -315,7 +316,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
         accessibilityRole="search"
         accessibilityHint="Double tap to search for stores, products, and services"
       >
-        <Ionicons name="search" size={20} color="#666" style={headerStyles.searchIcon} />
+        <Ionicons name="search" size={20} color={colors.midGray} style={headerStyles.searchIcon} />
         <Text style={textStyles.searchPlaceholder}>Search for the service</Text>
       </Pressable>
     </LinearGradient>

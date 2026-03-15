@@ -6,6 +6,7 @@ import { View, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import type { ConversationTransfer } from '@/types/supportChat.types';
+import { colors } from '@/constants/theme';
 
 interface TransferNoticeProps {
   transfer: ConversationTransfer;
@@ -15,7 +16,7 @@ function TransferNotice({ transfer }: TransferNoticeProps) {
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        <Ionicons name="swap-horizontal" size={20} color="#3B82F6" />
+        <Ionicons name="swap-horizontal" size={20} color={colors.infoScale[400]} />
       </View>
       <View style={styles.content}>
         <ThemedText style={styles.title}>Conversation Transferred</ThemedText>
@@ -25,14 +26,14 @@ function TransferNotice({ transfer }: TransferNoticeProps) {
         </ThemedText>
         {transfer.accepted ? (
           <View style={styles.status}>
-            <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+            <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
             <ThemedText style={styles.statusTextAccepted}>
               {transfer.toAgentName} has accepted
             </ThemedText>
           </View>
         ) : (
           <View style={styles.status}>
-            <Ionicons name="time" size={16} color="#F59E0B" />
+            <Ionicons name="time" size={16} color={colors.warningScale[400]} />
             <ThemedText style={styles.statusTextPending}>
               Waiting for {transfer.toAgentName} to join...
             </ThemedText>
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     borderRadius: 12,
     padding: 16,
     marginHorizontal: 16,
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#DBEAFE',
+    backgroundColor: colors.tint.blueLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 13,
-    color: '#1F2937',
+    color: colors.neutral[800],
     lineHeight: 20,
     marginBottom: 8,
   },
@@ -85,12 +86,12 @@ const styles = StyleSheet.create({
   statusTextAccepted: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   statusTextPending: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
 });
 

@@ -21,6 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
+import { colors } from '@/constants/theme';
 
 interface UGCItem {
   _id: string;
@@ -195,7 +196,7 @@ function TechStoriesPage() {
         {item.rating ? (
           <View style={styles.ratingRow}>
             {[1, 2, 3, 4, 5].map(i => (
-              <Ionicons key={i} name={i <= item.rating! ? 'star' : 'star-outline'} size={14} color={'#F59E0B'} />
+              <Ionicons key={i} name={i <= item.rating! ? 'star' : 'star-outline'} size={14} color={colors.warningScale[400]} />
             ))}
           </View>
         ) : null}
@@ -274,34 +275,34 @@ function TechStoriesPage() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F5F5' },
+  container: { flex: 1, backgroundColor: colors.tint.warmGray },
   header: {
     flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12,
-    backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: '#E5E7EB', gap: 12,
+    backgroundColor: colors.background.primary, borderBottomWidth: 1, borderBottomColor: colors.neutral[200], gap: 12,
   },
   backBtn: { padding: 4 },
-  headerTitle: { fontSize: 18, fontWeight: '700', color: '#111827' },
-  headerSubtitle: { fontSize: 12, color: '#6B7280' },
+  headerTitle: { fontSize: 18, fontWeight: '700', color: colors.neutral[900] },
+  headerSubtitle: { fontSize: 12, color: colors.neutral[500] },
   filterBar: {
     flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 10,
-    backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: '#E5E7EB', gap: 8,
+    backgroundColor: colors.background.primary, borderBottomWidth: 1, borderBottomColor: colors.neutral[200], gap: 8,
   },
   filterChip: {
     paddingHorizontal: 14, paddingVertical: 7, borderRadius: 20,
-    borderWidth: 1, borderColor: '#E5E7EB',
+    borderWidth: 1, borderColor: colors.neutral[200],
   },
-  filterChipActive: { backgroundColor: '#3B82F6', borderColor: '#3B82F6' },
-  filterText: { fontSize: 13, fontWeight: '500', color: '#6B7280' },
-  filterTextActive: { color: '#FFFFFF', fontWeight: '600' },
+  filterChipActive: { backgroundColor: colors.infoScale[400], borderColor: colors.infoScale[400] },
+  filterText: { fontSize: 13, fontWeight: '500', color: colors.neutral[500] },
+  filterTextActive: { color: colors.background.primary, fontWeight: '600' },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loadingText: { marginTop: 12, fontSize: 14, color: '#6B7280' },
+  loadingText: { marginTop: 12, fontSize: 14, color: colors.neutral[500] },
   emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40 },
   emptyEmoji: { fontSize: 48, marginBottom: 16 },
-  emptyTitle: { fontSize: 18, fontWeight: '600', color: '#111827', marginBottom: 8 },
-  emptySubtitle: { fontSize: 14, color: '#6B7280', textAlign: 'center' },
+  emptyTitle: { fontSize: 18, fontWeight: '600', color: colors.neutral[900], marginBottom: 8 },
+  emptySubtitle: { fontSize: 14, color: colors.neutral[500], textAlign: 'center' },
   list: { padding: 16, paddingBottom: 120 },
   card: {
-    backgroundColor: '#FFFFFF', borderRadius: 16, overflow: 'hidden', marginBottom: 16,
+    backgroundColor: colors.background.primary, borderRadius: 16, overflow: 'hidden', marginBottom: 16,
     elevation: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 4,
   },
   cardImageWrap: { position: 'relative' },
@@ -315,18 +316,18 @@ const styles = StyleSheet.create({
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   cardUser: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   cardAvatar: {
-    width: 32, height: 32, borderRadius: 16, backgroundColor: '#EFF6FF',
+    width: 32, height: 32, borderRadius: 16, backgroundColor: colors.tint.blue,
     justifyContent: 'center', alignItems: 'center',
   },
-  cardAvatarText: { fontSize: 14, fontWeight: '600', color: '#3B82F6' },
-  cardUserName: { fontSize: 13, fontWeight: '600', color: '#111827' },
-  cardStoreName: { fontSize: 11, color: '#6B7280' },
-  cardTime: { fontSize: 11, color: '#6B7280' },
+  cardAvatarText: { fontSize: 14, fontWeight: '600', color: colors.infoScale[400] },
+  cardUserName: { fontSize: 13, fontWeight: '600', color: colors.neutral[900] },
+  cardStoreName: { fontSize: 11, color: colors.neutral[500] },
+  cardTime: { fontSize: 11, color: colors.neutral[500] },
   ratingRow: { flexDirection: 'row', gap: 2, marginBottom: 6 },
-  cardCaption: { fontSize: 13, color: '#111827', lineHeight: 19, marginBottom: 8 },
+  cardCaption: { fontSize: 13, color: colors.neutral[900], lineHeight: 19, marginBottom: 8 },
   cardActions: { flexDirection: 'row', gap: 16 },
   cardAction: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  cardActionText: { fontSize: 12, color: '#6B7280' },
+  cardActionText: { fontSize: 12, color: colors.neutral[500] },
 });
 
 export default React.memo(TechStoriesPage);

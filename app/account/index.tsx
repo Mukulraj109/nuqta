@@ -36,6 +36,7 @@ import {
 } from '@/constants/DesignSystem';
 import analyticsService from '@/services/analyticsService';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 // ---------------------------------------------------------------------------
 // Section Card Component (memoized)
@@ -201,7 +202,7 @@ export default function AccountPage() {
             accessibilityLabel="Go back"
             accessibilityRole="button"
           >
-            <Ionicons name="arrow-back" size={22} color="#FFFFFF" />
+            <Ionicons name="arrow-back" size={22} color={colors.background.primary} />
           </Pressable>
 
           <ThemedText style={styles.headerTitle}>Account</ThemedText>
@@ -213,7 +214,7 @@ export default function AccountPage() {
             accessibilityLabel="Settings"
             accessibilityRole="button"
           >
-            <Ionicons name="settings-outline" size={20} color="#FFFFFF" />
+            <Ionicons name="settings-outline" size={20} color={colors.background.primary} />
           </Pressable>
         </View>
       </LinearGradient>
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: -0.2,
   },
   headerAction: {
@@ -374,7 +375,7 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   sectionCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: BorderRadius.lg,
     overflow: 'hidden',
     borderWidth: 1,

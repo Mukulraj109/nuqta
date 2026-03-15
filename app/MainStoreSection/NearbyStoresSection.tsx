@@ -18,6 +18,7 @@ import {
 } from "@/constants/DesignSystem";
 import { storesApi } from "@/services/storesApi";
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export interface NearbyStore {
   id: string;
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.md,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     borderRadius: BorderRadius.lg,
     marginHorizontal: Spacing.base,
     marginVertical: Spacing.sm,

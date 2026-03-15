@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -30,7 +31,7 @@ const steps = [
     icon: 'card',
     title: `Pay with ${BRAND.APP_NAME}`,
     subtitle: 'Scan QR or enter amount',
-    color: '#A855F7',
+    color: colors.brand.purpleMedium,
     bgColor: Colors.brand.purpleLight + '20',
   },
   {
@@ -38,8 +39,8 @@ const steps = [
     icon: 'share-social',
     title: 'Share / Review',
     subtitle: 'Help others discover',
-    color: '#EC4899',
-    bgColor: '#FCE7F3',
+    color: colors.brand.pink,
+    bgColor: colors.pinkMist,
   },
   {
     id: 4,
@@ -112,7 +113,7 @@ const EarnLikeThem = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={[Colors.successScale[50], '#ECFDF5', '#D1FAE5']}
+        colors={[Colors.successScale[50], colors.tint.greenLight, colors.tint.green]}
         style={styles.card}
       >
         {/* Header */}
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.xl,
     padding: Spacing.lg,
     borderWidth: 1,
-    borderColor: '#D1FAE5',
+    borderColor: colors.tint.green,
   },
   title: {
     ...Typography.h2,

@@ -8,12 +8,13 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { VibeCardProps } from '@/types/categoryTypes';
+import { colors } from '@/constants/theme';
 
 // Rez Brand Colors
 const COLORS = {
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
 };
 
 const VibeCard: React.FC<VibeCardProps> = ({ vibe, onPress }) => {

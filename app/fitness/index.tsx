@@ -3,6 +3,7 @@
  * Connected to real API data
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -26,11 +27,11 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Static categories for navigation (icons and colors)
 const categoryConfig: Record<string, { icon: string; color: string }> = {
-  gyms: { icon: '🏋️', color: '#F97316' },
+  gyms: { icon: '🏋️', color: colors.brand.orange },
   studios: { icon: '🧘', color: Colors.brand.purple },
   trainers: { icon: '💪', color: Colors.success },
   store: { icon: '🛒', color: Colors.info },
-  challenges: { icon: '🏆', color: '#EAB308' },
+  challenges: { icon: '🏆', color: colors.brand.amber },
   nutrition: { icon: '🥗', color: Colors.success },
 };
 
@@ -143,7 +144,7 @@ const FitnessPage: React.FC = () => {
   };
 
   const getCategoryIcon = (slug: string) => categoryConfig[slug]?.icon || '🏋️';
-  const getCategoryColor = (slug: string) => categoryConfig[slug]?.color || '#F97316';
+  const getCategoryColor = (slug: string) => categoryConfig[slug]?.color || colors.brand.orange;
 
   const formatCount = (count: number | undefined) => {
     if (!count) return '0';
@@ -162,7 +163,7 @@ const FitnessPage: React.FC = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#F97316', '#EA580C']}
+        colors={[colors.brand.orange, colors.brand.orangeDark]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}
@@ -204,7 +205,7 @@ const FitnessPage: React.FC = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor={'#F97316'}
+            tintColor={colors.brand.orange}
           />
         }
       >
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
   section: { padding: Spacing.base },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.md },
   sectionTitle: { fontSize: Typography.h4.fontSize, fontWeight: '700', color: Colors.nileBlue, marginBottom: Spacing.md },
-  viewAllText: { fontSize: Typography.body.fontSize, fontWeight: '600', color: '#F97316' },
+  viewAllText: { fontSize: Typography.body.fontSize, fontWeight: '600', color: colors.brand.orange },
   categoriesGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.md },
   categoryCard: { width: (SCREEN_WIDTH - 56) / 3, alignItems: 'center', padding: Spacing.md, backgroundColor: Colors.background.secondary, borderRadius: BorderRadius.lg },
   categoryIcon: { width: 48, height: 48, borderRadius: BorderRadius['2xl'], justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.sm },

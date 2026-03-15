@@ -28,6 +28,7 @@ import MallEmptyState from '../../../components/mall/pages/MallEmptyState';
 import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkeleton';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -79,7 +80,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, onPress, index }) => {
               />
             ) : (
               <LinearGradient
-                colors={[Colors.warning, '#D97706']}
+                colors={[Colors.warning, colors.warningScale[700]]}
                 style={styles.imageFallback}
               >
                 <Text style={styles.fallbackText}>{getInitials(store.name)}</Text>
@@ -289,7 +290,7 @@ export default function CategoryStoresPage() {
           <View style={styles.statDivider} />
           <View style={styles.statCard}>
             <View style={styles.coinIconContainer}>
-              <Ionicons name="gift" size={18} color="#FFD700" />
+              <Ionicons name="gift" size={18} color={colors.brand.goldBright} />
             </View>
             <Text style={styles.statLabel}>Earn Coins</Text>
           </View>
@@ -699,7 +700,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.brand.purpleLight,
   },
   premiumBadge: {
-    backgroundColor: '#EC4899',
+    backgroundColor: colors.brand.pink,
   },
   categoryBadge: {
     backgroundColor: Colors.border.default,

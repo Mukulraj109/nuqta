@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { ThemedText } from '@/components/ThemedText';
 import { GoingOutFilters } from '@/types/going-out.types';
+import { colors } from '@/constants/theme';
 
 interface FilterChip {
   id: string;
@@ -111,7 +112,7 @@ function _FilterChipsInner({
               <Ionicons
                 name={chip.icon as any}
                 size={18}
-                color={chip.isActive ? '#FFFFFF' : '#6B7280'}
+                color={chip.isActive ? colors.background.primary : colors.neutral[500]}
                 style={styles.chipIcon}
               />
               <ThemedText style={[
@@ -126,7 +127,7 @@ function _FilterChipsInner({
                   <Ionicons
                     name="checkmark"
                     size={12}
-                    color="#FFFFFF"
+                    color={colors.background.primary}
                   />
                 </View>
               )}
@@ -153,7 +154,7 @@ function _FilterChipsInner({
             <Ionicons
               name="close-circle-outline"
               size={16}
-              color="#EF4444"
+              color={colors.error}
               style={styles.chipIcon}
             />
             <ThemedText style={styles.clearAllText}>
@@ -168,7 +169,7 @@ function _FilterChipsInner({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 16,
     paddingBottom: 20,
   },
@@ -183,9 +184,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 25,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     borderWidth: 1.5,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     minWidth: 100,
     alignItems: 'center',
     ...Platform.select({
@@ -204,11 +205,11 @@ const styles = StyleSheet.create({
     }),
   },
   filterChipActive: {
-    backgroundColor: '#8B5CF6',
-    borderColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
+    borderColor: colors.brand.purpleLight,
     ...Platform.select({
       ios: {
-        shadowColor: '#8B5CF6',
+        shadowColor: colors.brand.purpleLight,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.25,
         shadowRadius: 8,
@@ -232,18 +233,18 @@ const styles = StyleSheet.create({
   chipText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     letterSpacing: 0.2,
   },
   chipTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   activeIndicator: {
     width: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 4,
@@ -252,14 +253,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderWidth: 1,
     borderColor: '#FCA5A5',
   },
   clearAllText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#EF4444',
+    color: colors.error,
   },
 });
 

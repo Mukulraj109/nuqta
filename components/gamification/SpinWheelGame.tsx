@@ -17,6 +17,7 @@ import type { SpinWheelSegment, SpinWheelResult } from '@/types/gamification.typ
 import gamificationAPI from '@/services/gamificationApi';
 import { useGamification } from '@/contexts/GamificationContext';
 import logger from '@/utils/logger';
+import { colors } from '@/constants/theme';
 
 interface SpinWheelGameProps {
   segments: SpinWheelSegment[];
@@ -158,7 +159,7 @@ function SpinWheelGame({
         {/* Pointer */}
         <View style={styles.pointerContainer}>
           <LinearGradient
-            colors={['#EF4444', '#DC2626']}
+            colors={[colors.error, colors.error]}
             style={styles.pointer}
           >
             <View style={styles.pointerTriangle} />
@@ -199,7 +200,7 @@ function SpinWheelGame({
                       <Ionicons
                         name={segment.icon as any}
                         size={24}
-                        color="#FFFFFF"
+                        color={colors.background.primary}
                         style={styles.segmentIcon}
                       />
                     )}
@@ -214,10 +215,10 @@ function SpinWheelGame({
 
           {/* Center circle */}
           <LinearGradient
-            colors={['#8B5CF6', '#6366F1']}
+            colors={[colors.brand.purpleLight, colors.brand.indigo]}
             style={styles.centerCircle}
           >
-            <Ionicons name="star" size={32} color="#FFFFFF" />
+            <Ionicons name="star" size={32} color={colors.background.primary} />
           </LinearGradient>
         </Animated.View>
       </View>
@@ -229,7 +230,7 @@ function SpinWheelGame({
     return (
       <ThemedView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#8B5CF6" />
+          <ActivityIndicator size="large" color={colors.brand.purpleLight} />
           <ThemedText style={styles.loadingText}>Loading spin wheel...</ThemedText>
         </View>
       </ThemedView>
@@ -242,7 +243,7 @@ function SpinWheelGame({
       <View style={styles.header}>
         <ThemedText style={styles.title}>Spin the Wheel</ThemedText>
         <View style={styles.spinsContainer}>
-          <Ionicons name="refresh-circle" size={20} color="#8B5CF6" />
+          <Ionicons name="refresh-circle" size={20} color={colors.brand.purpleLight} />
           <ThemedText style={styles.spinsText}>
             {spinsRemaining} spin{spinsRemaining !== 1 ? 's' : ''} left
           </ThemedText>
@@ -252,7 +253,7 @@ function SpinWheelGame({
       {/* Eligibility Warning */}
       {!canSpin && nextSpinTime && (
         <View style={styles.warningContainer}>
-          <Ionicons name="time-outline" size={20} color="#F59E0B" />
+          <Ionicons name="time-outline" size={20} color={colors.warningScale[400]} />
           <ThemedText style={styles.warningText}>
             Next spin available at {new Date(nextSpinTime).toLocaleTimeString()}
           </ThemedText>
@@ -275,29 +276,29 @@ function SpinWheelGame({
         <LinearGradient
           colors={
             isSpinning || !canSpin || spinsRemaining <= 0 || isLoading
-              ? ['#9CA3AF', '#6B7280']
-              : ['#8B5CF6', '#6366F1']
+              ? [colors.neutral[400], colors.neutral[500]]
+              : [colors.brand.purpleLight, colors.brand.indigo]
           }
           style={styles.spinButtonGradient}
         >
           {isSpinning ? (
             <>
-              <ActivityIndicator size={24} color="#FFFFFF" />
+              <ActivityIndicator size={24} color={colors.background.primary} />
               <ThemedText style={styles.spinButtonText}>Spinning...</ThemedText>
             </>
           ) : !canSpin ? (
             <>
-              <Ionicons name="lock-closed" size={24} color="#FFFFFF" />
+              <Ionicons name="lock-closed" size={24} color={colors.background.primary} />
               <ThemedText style={styles.spinButtonText}>Come Back Later</ThemedText>
             </>
           ) : spinsRemaining <= 0 ? (
             <>
-              <Ionicons name="close-circle" size={24} color="#FFFFFF" />
+              <Ionicons name="close-circle" size={24} color={colors.background.primary} />
               <ThemedText style={styles.spinButtonText}>No Spins Left</ThemedText>
             </>
           ) : (
             <>
-              <Ionicons name="play-circle" size={24} color="#FFFFFF" />
+              <Ionicons name="play-circle" size={24} color={colors.background.primary} />
               <ThemedText style={styles.spinButtonText}>SPIN NOW</ThemedText>
             </>
           )}
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   header: {
     alignItems: 'center',
@@ -339,13 +340,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   warningContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 12,
@@ -354,14 +355,14 @@ const styles = StyleSheet.create({
   },
   warningText: {
     fontSize: 13,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontWeight: '500',
   },
   spinsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
@@ -369,7 +370,7 @@ const styles = StyleSheet.create({
   spinsText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   wheelContainer: {
     width: WHEEL_SIZE,
@@ -404,7 +405,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 20,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderTopColor: '#DC2626',
+    borderTopColor: colors.error,
     position: 'absolute',
     bottom: -15,
   },
@@ -413,7 +414,7 @@ const styles = StyleSheet.create({
     height: WHEEL_SIZE,
     borderRadius: WHEEL_SIZE / 2,
     position: 'relative',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
@@ -452,7 +453,7 @@ const styles = StyleSheet.create({
   segmentText: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
   },
   centerCircle: {
@@ -474,7 +475,7 @@ const styles = StyleSheet.create({
     width: '80%',
     borderRadius: 12,
     overflow: 'hidden',
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -494,7 +495,7 @@ const styles = StyleSheet.create({
   spinButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   instructions: {
     marginTop: 20,
@@ -502,7 +503,7 @@ const styles = StyleSheet.create({
   },
   instructionsText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 18,
   },

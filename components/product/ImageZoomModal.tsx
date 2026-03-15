@@ -20,6 +20,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
+import { colors } from '@/constants/theme';
 
 /**
  * ImageZoomModal Component
@@ -130,7 +131,7 @@ export const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
       statusBarTranslucent
     >
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#000" />
+        <StatusBar barStyle="light-content" backgroundColor={colors.text.primary} />
 
         {/* Header */}
         <View style={styles.header}>
@@ -139,7 +140,7 @@ export const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
             onPress={onClose}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons name="close" size={28} color="#FFF" />
+            <Ionicons name="close" size={28} color={colors.background.primary} />
           </Pressable>
 
           <ThemedText style={styles.imageCounter}>
@@ -184,7 +185,7 @@ export const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
                 onPress={navigatePrevious}
                
               >
-                <Ionicons name="chevron-back" size={32} color="#FFF" />
+                <Ionicons name="chevron-back" size={32} color={colors.background.primary} />
               </Pressable>
             )}
 
@@ -194,7 +195,7 @@ export const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
                 onPress={navigateNext}
                
               >
-                <Ionicons name="chevron-forward" size={32} color="#FFF" />
+                <Ionicons name="chevron-forward" size={32} color={colors.background.primary} />
               </Pressable>
             )}
           </>
@@ -243,7 +244,7 @@ export const ImageZoomModal: React.FC<ImageZoomModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: colors.text.primary,
   },
 
   // Header
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
   imageCounter: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
 
   // Gallery
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   thumbnailActive: {
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
   },
   thumbnailImage: {
     width: '100%',

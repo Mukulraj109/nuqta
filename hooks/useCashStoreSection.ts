@@ -36,6 +36,7 @@ import {
   UseCashStoreSectionReturn,
   getTimeRemainingMs,
 } from '../types/cash-store.types';
+import { colors } from '@/constants/theme';
 
 interface UseCashStoreSectionOptions {
   autoFetch?: boolean;
@@ -51,8 +52,8 @@ const DEFAULT_QUICK_ACTIONS: CashStoreQuickAction[] = [
     title: 'Buy coupons & save instantly',
     subtitle: 'Get extra cashback on gift cards',
     icon: 'pricetag',
-    backgroundColor: '#FF9F1C',
-    gradientColors: ['#FF9F1C', '#F77F00'],
+    backgroundColor: colors.warning,
+    gradientColors: [colors.warning, '#F77F00'],
     action: 'buy-coupons',
   },
   {
@@ -73,8 +74,8 @@ const DEFAULT_HERO_BANNERS: CashStoreHeroBanner[] = [
     id: 'hero-1',
     title: 'Earn cashback on every online order',
     subtitle: 'Shop from 1000+ brands and get instant rewards',
-    backgroundColor: '#FF9F1C',
-    gradientColors: ['#FF9F1C', '#F77F00'],
+    backgroundColor: colors.warning,
+    gradientColors: [colors.warning, '#F77F00'],
     textColor: '#FFFFFF',
     ctaText: 'Start Shopping',
     ctaAction: 'shop',
@@ -729,7 +730,7 @@ export function useCashStoreSection(
           const urlToOpen = trackingResult?.trackingUrl || brand.externalUrl;
 
           await WebBrowser.openBrowserAsync(urlToOpen, {
-            toolbarColor: '#ffcd57',
+            toolbarColor: colors.lightMustard,
             controlsColor: '#FFFFFF',
             enableBarCollapsing: true,
             showTitle: true,

@@ -18,6 +18,7 @@ import {
 import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 interface BrandWebViewProps {
   url: string;
@@ -98,7 +99,7 @@ const BrandWebView: React.FC<BrandWebViewProps> = ({
           onPress={handleClose}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="close" size={24} color="#374151" />
+          <Ionicons name="close" size={24} color={colors.neutral[700]} />
         </Pressable>
 
         <View style={styles.titleContainer}>
@@ -119,13 +120,13 @@ const BrandWebView: React.FC<BrandWebViewProps> = ({
           onPress={handleReload}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="reload" size={20} color="#374151" />
+          <Ionicons name="reload" size={20} color={colors.neutral[700]} />
         </Pressable>
       </View>
 
       {/* URL Bar */}
       <View style={styles.urlBar}>
-        <Ionicons name="lock-closed" size={14} color="#F59E0B" />
+        <Ionicons name="lock-closed" size={14} color={colors.warningScale[400]} />
         <Text style={styles.urlText} numberOfLines={1}>
           {currentUrl.replace(/^https?:\/\//, '').split('/')[0]}
         </Text>
@@ -151,8 +152,8 @@ const BrandWebView: React.FC<BrandWebViewProps> = ({
           />
         ) : (
           <View style={styles.loadingOverlay}>
-            <Ionicons name="shield-outline" size={48} color="#EF4444" />
-            <Text style={[styles.loadingText, { color: '#EF4444' }]}>
+            <Ionicons name="shield-outline" size={48} color={colors.error} />
+            <Text style={[styles.loadingText, { color: colors.error }]}>
               This URL is not allowed. Only HTTPS URLs are supported.
             </Text>
           </View>
@@ -161,7 +162,7 @@ const BrandWebView: React.FC<BrandWebViewProps> = ({
         {/* Loading Overlay */}
         {isLoading && (
           <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="large" color="#1a3a52" />
+            <ActivityIndicator size="large" color={colors.nileBlue} />
             <Text style={styles.loadingText}>Loading...</Text>
           </View>
         )}
@@ -177,7 +178,7 @@ const BrandWebView: React.FC<BrandWebViewProps> = ({
           <Ionicons
             name="chevron-back"
             size={24}
-            color={canGoBack ? '#374151' : '#D1D5DB'}
+            color={canGoBack ? colors.neutral[700] : colors.neutral[300]}
           />
         </Pressable>
 
@@ -189,14 +190,14 @@ const BrandWebView: React.FC<BrandWebViewProps> = ({
           <Ionicons
             name="chevron-forward"
             size={24}
-            color={canGoForward ? '#374151' : '#D1D5DB'}
+            color={canGoForward ? colors.neutral[700] : colors.neutral[300]}
           />
         </Pressable>
 
         <View style={styles.navSpacer} />
 
         <View style={styles.cashbackReminder}>
-          <Ionicons name="gift-outline" size={18} color="#1a3a52" />
+          <Ionicons name="gift-outline" size={18} color={colors.nileBlue} />
           <Text style={styles.reminderText}>
             Cashback will be tracked automatically
           </Text>
@@ -209,7 +210,7 @@ const BrandWebView: React.FC<BrandWebViewProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   closeButton: {
     padding: 4,
@@ -229,11 +230,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   cashbackBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   reloadButton: {
     padding: 4,
@@ -250,7 +251,7 @@ const styles = StyleSheet.create({
   urlBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     marginHorizontal: 16,
     marginVertical: 8,
     paddingHorizontal: 12,
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
   urlText: {
     flex: 1,
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   webViewContainer: {
     flex: 1,
@@ -279,7 +280,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   bottomNav: {
     flexDirection: 'row',
@@ -287,8 +288,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     ...Platform.select({
       ios: {
         paddingBottom: 20,
@@ -307,7 +308,7 @@ const styles = StyleSheet.create({
   cashbackReminder: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
   reminderText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 });
 

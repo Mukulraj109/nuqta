@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { ThemedText } from '@/components/ThemedText';
 import { GoingOutHeaderProps } from '@/types/going-out.types';
+import { colors } from '@/constants/theme';
 
 function _GoingOutHeaderInner({
   searchQuery,
@@ -116,14 +117,14 @@ function _GoingOutHeaderInner({
         >
           <View style={styles.searchContainer}>
             <View style={styles.searchIconContainer}>
-              <Ionicons name="search" size={18} color="#8B5CF6" />
+              <Ionicons name="search" size={18} color={colors.brand.purpleLight} />
             </View>
             
             <TextInput
               ref={searchInputRef}
               style={styles.searchInput}
               placeholder="Search products, brands, stores..."
-              placeholderTextColor="#A78BFA"
+              placeholderTextColor={colors.brand.purpleSoft}
               value={searchQuery}
               onChangeText={onSearchChange}
               onSubmitEditing={handleSearch}
@@ -144,7 +145,7 @@ function _GoingOutHeaderInner({
                 accessibilityRole="button"
                 accessibilityHint="Double tap to clear search input"
               >
-                <Ionicons name="close-circle" size={18} color="#A78BFA" />
+                <Ionicons name="close-circle" size={18} color={colors.brand.purpleSoft} />
               </Pressable>
             )}
           </View>
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   headerGradient: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingTop: Platform.OS === 'ios' ? 50 : 30,
     paddingBottom: 24,
     paddingHorizontal: 20,
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 24,
     ...Platform.select({
       ios: {
-        shadowColor: '#8B5CF6',
+        shadowColor: colors.brand.purpleLight,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 12,
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#1F2937',
+    color: colors.neutral[800],
     fontWeight: '500',
     paddingVertical: 0,
   },

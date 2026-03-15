@@ -11,6 +11,7 @@ import { SectionHeader, HorizontalScrollSection } from '../common';
 import { OfferCardLightning } from '../cards';
 import { LightningDeal } from '@/types/offers.types';
 import { Spacing } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface LastChanceSectionProps {
   offers: LightningDeal[];
@@ -35,7 +36,7 @@ export const LastChanceSection: React.FC<LastChanceSectionProps> = ({
         title="Last Chance"
         subtitle="Expiring in 24 hours"
         icon="alarm"
-        iconColor="#EF4444"
+        iconColor={colors.error}
         showViewAll={offers.length > 2}
         onViewAll={onViewAll}
       />

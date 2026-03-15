@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface Location {
   city: string;
@@ -63,7 +64,7 @@ const RelatedHotelsSection: React.FC<RelatedHotelsSectionProps> = ({ currentHote
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Related Hotels</Text>
-        <ActivityIndicator size="small" color="#EC4899" style={styles.loader} />
+        <ActivityIndicator size="small" color={colors.brand.pink} style={styles.loader} />
       </View>
     );
   }
@@ -75,7 +76,7 @@ const RelatedHotelsSection: React.FC<RelatedHotelsSectionProps> = ({ currentHote
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="bed" size={24} color="#EC4899" />
+        <Ionicons name="bed" size={24} color={colors.brand.pink} />
         <Text style={styles.title}>Related Hotels</Text>
       </View>
       
@@ -107,7 +108,7 @@ const RelatedHotelsSection: React.FC<RelatedHotelsSectionProps> = ({ currentHote
               <View style={styles.hotelInfo}>
                 <Text style={styles.hotelName} numberOfLines={1}>{hotel.name}</Text>
                 <View style={styles.ratingRow}>
-                  <Ionicons name="star" size={14} color="#F59E0B" />
+                  <Ionicons name="star" size={14} color={colors.warningScale[400]} />
                   <Text style={styles.ratingText}>{rating.toFixed(1)}</Text>
                 </View>
                 <Text style={styles.priceText}>From {currencySymbol}{price.toLocaleString(locale)}</Text>
@@ -124,8 +125,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderBottomColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.3,
   },
   loader: {
@@ -147,11 +148,11 @@ const styles = StyleSheet.create({
   },
   hotelCard: {
     width: 280,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     marginRight: 16,
   },
   hotelImage: {
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 12,
     right: 12,
-    backgroundColor: '#22C55E',
+    backgroundColor: colors.success,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 8,
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   hotelInfo: {
     padding: 16,
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
   hotelName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   ratingRow: {
@@ -190,12 +191,12 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   priceText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#EC4899',
+    color: colors.brand.pink,
   },
 });
 

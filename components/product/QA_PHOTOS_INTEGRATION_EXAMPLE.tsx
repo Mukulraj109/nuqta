@@ -13,6 +13,7 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { QASection, CustomerPhotos } from '@/components/product';
+import { colors } from '@/constants/theme';
 
 // ============================================================================
 // MOCK DATA - Replace with real API calls
@@ -370,7 +371,7 @@ export default function MainStorePageExample({ route }: MainStorePageExampleProp
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
 });
 

@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -60,8 +61,8 @@ const PlayEarn = () => {
       description: 'Spin the wheel for surprises',
       icon: 'gift',
       reward: `Up to ${currencySymbol}500`,
-      color: '#A855F7',
-      gradient: ['#A855F7', Colors.brand.purple],
+      color: colors.brand.purpleMedium,
+      gradient: [colors.brand.purpleMedium, Colors.brand.purple],
       path: '/playandearn',
     },
     {
@@ -70,8 +71,8 @@ const PlayEarn = () => {
       description: 'Answer questions, win coins',
       icon: 'help-circle',
       reward: '25 coins',
-      color: '#F97316',
-      gradient: ['#F97316', '#EA580C'],
+      color: colors.brand.orange,
+      gradient: [colors.brand.orange, colors.brand.orangeDark],
       path: '/playandearn',
     },
     {
@@ -246,7 +247,7 @@ const PlayEarn = () => {
               {/* Status Indicators */}
               {activity.streak !== undefined && activity.streak > 0 && (
                 <View style={styles.statusBadge}>
-                  <Ionicons name="flame" size={12} color="#F97316" />
+                  <Ionicons name="flame" size={12} color={colors.brand.orange} />
                   <Text style={styles.statusText}>{activity.streak} day streak!</Text>
                 </View>
               )}
@@ -468,11 +469,11 @@ const styles = StyleSheet.create({
   coinsEarned: {
     ...Typography.body,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   coinsTarget: {
     ...Typography.caption,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
   progressBar: {
     height: 6,

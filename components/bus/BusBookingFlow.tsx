@@ -19,6 +19,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { LinearGradient } from 'expo-linear-gradient';
 import serviceBookingApi from '@/services/serviceBookingApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface BusDetails {
   id: string;
@@ -268,7 +269,7 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
           style={[styles.tripTypeButton, tripType === 'one-way' && styles.tripTypeButtonActive]}
           onPress={() => setTripType('one-way')}
         >
-          <Ionicons name="arrow-forward" size={20} color={tripType === 'one-way' ? '#FFFFFF' : '#F97316'} />
+          <Ionicons name="arrow-forward" size={20} color={tripType === 'one-way' ? colors.background.primary : colors.brand.orange} />
           <Text style={[styles.tripTypeText, tripType === 'one-way' && styles.tripTypeTextActive]}>
             One Way
           </Text>
@@ -277,7 +278,7 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
           style={[styles.tripTypeButton, tripType === 'round-trip' && styles.tripTypeButtonActive]}
           onPress={() => setTripType('round-trip')}
         >
-          <Ionicons name="swap-horizontal" size={20} color={tripType === 'round-trip' ? '#FFFFFF' : '#F97316'} />
+          <Ionicons name="swap-horizontal" size={20} color={tripType === 'round-trip' ? colors.background.primary : colors.brand.orange} />
           <Text style={[styles.tripTypeText, tripType === 'round-trip' && styles.tripTypeTextActive]}>
             Round Trip
           </Text>
@@ -291,7 +292,7 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
           style={styles.dateButton}
           onPress={() => setShowTravelDatePicker(true)}
         >
-          <Ionicons name="calendar" size={20} color="#F97316" />
+          <Ionicons name="calendar" size={20} color={colors.brand.orange} />
           <Text style={styles.dateText}>
             {travelDate.toLocaleDateString(locale, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
           </Text>
@@ -318,7 +319,7 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
             style={styles.dateButton}
             onPress={() => setShowReturnDatePicker(true)}
           >
-            <Ionicons name="calendar" size={20} color="#F97316" />
+            <Ionicons name="calendar" size={20} color={colors.brand.orange} />
             <Text style={styles.dateText}>
               {returnDate.toLocaleDateString(locale, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
             </Text>
@@ -346,14 +347,14 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
             style={styles.counterButton}
             onPress={() => setAdults(Math.max(1, adults - 1))}
           >
-            <Ionicons name="remove" size={20} color="#F97316" />
+            <Ionicons name="remove" size={20} color={colors.brand.orange} />
           </Pressable>
           <Text style={styles.counterValue}>{adults}</Text>
           <Pressable
             style={styles.counterButton}
             onPress={() => setAdults(adults + 1)}
           >
-            <Ionicons name="add" size={20} color="#F97316" />
+            <Ionicons name="add" size={20} color={colors.brand.orange} />
           </Pressable>
         </View>
       </View>
@@ -365,14 +366,14 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
             style={styles.counterButton}
             onPress={() => setChildren(Math.max(0, children - 1))}
           >
-            <Ionicons name="remove" size={20} color="#F97316" />
+            <Ionicons name="remove" size={20} color={colors.brand.orange} />
           </Pressable>
           <Text style={styles.counterValue}>{children}</Text>
           <Pressable
             style={styles.counterButton}
             onPress={() => setChildren(children + 1)}
           >
-            <Ionicons name="add" size={20} color="#F97316" />
+            <Ionicons name="add" size={20} color={colors.brand.orange} />
           </Pressable>
         </View>
       </View>
@@ -403,7 +404,7 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
           >
             <View style={styles.classCardHeader}>
               <View style={styles.classIcon}>
-                <Ionicons name="bus" size={28} color={isSelected ? '#FFFFFF' : '#F97316'} />
+                <Ionicons name="bus" size={28} color={isSelected ? colors.background.primary : colors.brand.orange} />
               </View>
               <View style={styles.classInfo}>
                 <Text style={[styles.classTypeName, isSelected && styles.classTypeNameSelected]}>
@@ -417,7 +418,7 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
                 </Text>
               </View>
               {isSelected && (
-                <Ionicons name="checkmark-circle" size={24} color="#FFFFFF" />
+                <Ionicons name="checkmark-circle" size={24} color={colors.background.primary} />
               )}
             </View>
             <View style={styles.classPrice}>
@@ -456,7 +457,7 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
               <Text style={styles.extraPrice}>+ {currencySymbol}{extra.price.toLocaleString(locale)}</Text>
             </View>
             <View style={[styles.checkbox, extra.selected && styles.checkboxSelected]}>
-              {extra.selected && <Ionicons name="checkmark" size={16} color="#FFFFFF" />}
+              {extra.selected && <Ionicons name="checkmark" size={16} color={colors.background.primary} />}
             </View>
           </Pressable>
         ))}
@@ -596,11 +597,11 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
       {/* Header */}
       <View style={styles.header}>
         <Pressable onPress={handleBack} style={styles.headerButton}>
-          <Ionicons name="arrow-back" size={24} color="#111827" />
+          <Ionicons name="arrow-back" size={24} color={colors.neutral[900]} />
         </Pressable>
         <Text style={styles.headerTitle}>Book Bus</Text>
         <Pressable onPress={onClose} style={styles.headerButton}>
-          <Ionicons name="close" size={24} color="#111827" />
+          <Ionicons name="close" size={24} color={colors.neutral[900]} />
         </Pressable>
       </View>
 
@@ -640,10 +641,10 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
           disabled={isSubmitting}
         >
           {isSubmitting ? (
-            <ActivityIndicator color="#FFFFFF" />
+            <ActivityIndicator color={colors.background.primary} />
           ) : (
             <LinearGradient
-              colors={['#F97316', '#EA580C']}
+              colors={[colors.brand.orange, colors.brand.orangeDark]}
               style={styles.nextButtonGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -651,7 +652,7 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
               <Text style={styles.nextButtonText}>
                 {currentStep === 4 ? 'Complete Booking' : 'Next'}
               </Text>
-              <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={20} color={colors.background.primary} />
             </LinearGradient>
           )}
         </Pressable>
@@ -663,7 +664,7 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
@@ -671,7 +672,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   headerButton: {
     width: 40,
@@ -682,7 +683,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   progressContainer: {
     flexDirection: 'row',
@@ -695,28 +696,28 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
   progressStepActive: {
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
   },
   progressStepText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   progressStepTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   progressLine: {
     width: 40,
     height: 2,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   progressLineActive: {
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
   },
   content: {
     flex: 1,
@@ -727,7 +728,7 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 24,
   },
   tripTypeContainer: {
@@ -744,20 +745,20 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#F97316',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.brand.orange,
+    backgroundColor: colors.background.primary,
   },
   tripTypeButtonActive: {
-    backgroundColor: '#F97316',
-    borderColor: '#F97316',
+    backgroundColor: colors.brand.orange,
+    borderColor: colors.brand.orange,
   },
   tripTypeText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   tripTypeTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   dateSection: {
     marginBottom: 20,
@@ -765,7 +766,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
   },
   dateButton: {
@@ -773,14 +774,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   dateText: {
     fontSize: 16,
-    color: '#111827',
+    color: colors.neutral[900],
     fontWeight: '500',
   },
   counterSection: {
@@ -796,14 +797,14 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: '#F97316',
+    borderColor: colors.brand.orange,
     justifyContent: 'center',
     alignItems: 'center',
   },
   counterValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     minWidth: 40,
     textAlign: 'center',
   },
@@ -811,13 +812,13 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     marginBottom: 16,
   },
   classCardSelected: {
-    borderColor: '#F97316',
-    backgroundColor: '#F97316',
+    borderColor: colors.brand.orange,
+    backgroundColor: colors.brand.orange,
   },
   classCardHeader: {
     flexDirection: 'row',
@@ -829,7 +830,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 16,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -839,15 +840,15 @@ const styles = StyleSheet.create({
   classTypeName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   classTypeNameSelected: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   classDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   classDescriptionSelected: {
     color: 'rgba(255, 255, 255, 0.9)',
@@ -858,11 +859,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   classPriceLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   classPriceLabelSelected: {
     color: 'rgba(255, 255, 255, 0.8)',
@@ -870,10 +871,10 @@ const styles = StyleSheet.create({
   classPriceValue: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   classPriceValueSelected: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   extraCard: {
     flexDirection: 'row',
@@ -882,13 +883,13 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     marginBottom: 12,
   },
   extraCardSelected: {
-    borderColor: '#F97316',
-    backgroundColor: '#FEF3C7',
+    borderColor: colors.brand.orange,
+    backgroundColor: colors.tint.amberLight,
   },
   extraInfo: {
     flex: 1,
@@ -896,12 +897,12 @@ const styles = StyleSheet.create({
   extraLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   extraPrice: {
     fontSize: 14,
-    color: '#F97316',
+    color: colors.brand.orange,
     fontWeight: '600',
   },
   checkbox: {
@@ -909,18 +910,18 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 6,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkboxSelected: {
-    backgroundColor: '#F97316',
-    borderColor: '#F97316',
+    backgroundColor: colors.brand.orange,
+    borderColor: colors.brand.orange,
   },
   priceSummary: {
     marginTop: 24,
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
   },
   priceRow: {
@@ -931,28 +932,28 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   priceTotal: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 2,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   totalLabel: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   totalValue: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   section: {
     marginBottom: 24,
@@ -960,17 +961,17 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   input: {
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     fontSize: 16,
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   rowInputs: {
@@ -993,52 +994,52 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     alignItems: 'center',
   },
   genderButtonActive: {
-    backgroundColor: '#F97316',
-    borderColor: '#F97316',
+    backgroundColor: colors.brand.orange,
+    borderColor: colors.brand.orange,
   },
   genderText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   genderTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   passengerCard: {
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     marginBottom: 12,
   },
   passengerNumber: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#F97316',
+    color: colors.brand.orange,
     marginBottom: 12,
   },
   footer: {
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
   },
   footerPrice: {
     marginBottom: 16,
   },
   footerPriceLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   footerPriceValue: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   nextButton: {
     borderRadius: 16,
@@ -1055,7 +1056,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   nextButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 18,
     fontWeight: '700',
   },

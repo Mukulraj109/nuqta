@@ -22,6 +22,7 @@ import { useRouter, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { achievementApi, Achievement as ApiAchievement } from '@/services/achievementApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48 - 12) / 2;
@@ -35,15 +36,15 @@ const COLORS = {
   gray500: Colors.text.secondary,
   gray600: Colors.gray[600],
   green500: Colors.success,
-  amber400: '#FBBF24',
-  amber500: '#F59E0B',
-  purple500: '#8B5CF6',
-  purple600: '#7C3AED',
-  pink500: '#EC4899',
-  blue500: '#3B82F6',
-  cyan500: '#06B6D4',
-  teal500: '#14B8A6',
-  emerald500: '#10B981',
+  amber400: colors.warningScale[400],
+  amber500: colors.warningScale[400],
+  purple500: colors.brand.purpleLight,
+  purple600: colors.brand.purple,
+  pink500: colors.brand.pink,
+  blue500: colors.infoScale[400],
+  cyan500: colors.brand.cyan,
+  teal500: colors.tealGreen,
+  emerald500: colors.successScale[400],
 };
 
 interface Achievement {
@@ -62,7 +63,7 @@ interface Achievement {
 const TIER_COLORS: Record<string, string> = {
   bronze: '#CD7F32',
   silver: '#C0C0C0',
-  gold: '#FFD700',
+  gold: colors.brand.goldBright,
   platinum: '#E5E4E2',
   diamond: '#B9F2FF',
 };
@@ -352,7 +353,7 @@ const BadgesScreen: React.FC = () => {
             <Text style={styles.ctaSubtitle}>Build streaks & unlock rewards</Text>
           </View>
           <LinearGradient
-            colors={[COLORS.amber500, '#EAB308']}
+            colors={[COLORS.amber500, colors.brand.amber]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.checkInButton}

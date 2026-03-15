@@ -27,6 +27,7 @@ import apiClient from '@/services/apiClient';
 import { useRegion } from '@/contexts/RegionContext';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const { width: screenWidth } = Dimensions.get('window');
 
 export default function DealSuccessPage() {
@@ -181,7 +182,7 @@ export default function DealSuccessPage() {
           </ThemedText>
           <Pressable style={styles.primaryBtn} onPress={() => verifyPayment()}>
             <LinearGradient
-              colors={[Colors.warning, '#D97706']}
+              colors={[Colors.warning, colors.warningScale[700]]}
               style={styles.primaryBtnGradient}
             >
               <ThemedText style={styles.primaryBtnText}>Try Again</ThemedText>
@@ -206,7 +207,7 @@ export default function DealSuccessPage() {
       <View style={styles.content}>
         <Animated.View style={[styles.successIcon, { transform: [{ scale: scaleAnim }] }]}>
           <LinearGradient
-            colors={[Colors.success, '#16A34A']}
+            colors={[Colors.success, colors.brand.greenDark]}
             style={styles.successGradient}
           >
             <Ionicons name="checkmark" size={48} color={Colors.background.primary} />
@@ -248,7 +249,7 @@ export default function DealSuccessPage() {
 
         {/* Info Box */}
         <Animated.View style={[styles.infoBox, { opacity: fadeAnim }]}>
-          <Ionicons name="information-circle" size={20} color={'#D97706'} />
+          <Ionicons name="information-circle" size={20} color={colors.warningScale[700]} />
           <ThemedText style={styles.infoText}>
             Show this code at the store to redeem your deal. You can also find it in "My Deals".
           </ThemedText>
@@ -262,7 +263,7 @@ export default function DealSuccessPage() {
           onPress={() => router.replace('/my-deals' as any)}
         >
           <LinearGradient
-            colors={[Colors.warning, '#D97706']}
+            colors={[Colors.warning, colors.warningScale[700]]}
             style={styles.primaryButtonGradient}
           >
             <ThemedText style={styles.primaryButtonText}>View My Deals</ThemedText>
@@ -349,7 +350,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   secondaryBtnText: {
-    color: '#D97706',
+    color: colors.warningScale[700],
     fontWeight: '600',
     fontSize: 14,
   },

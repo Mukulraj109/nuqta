@@ -8,6 +8,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
+import { colors } from '@/constants/theme';
 
 interface LoyaltyReward {
   visitsRequired: number;
@@ -40,7 +41,7 @@ export default function UserLoyaltyCard({
 
       {/* Loyalty Card */}
       <LinearGradient
-        colors={["#ffcd57", "#E6B84E"]}
+        colors={[colors.lightMustard, colors.brand.goldRich]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.card}
@@ -62,7 +63,7 @@ export default function UserLoyaltyCard({
 
             {/* Next Reward */}
             <View style={styles.rewardRow}>
-              <Ionicons name="gift" size={16} color="#FFFFFF" />
+              <Ionicons name="gift" size={16} color={colors.background.primary} />
               <ThemedText style={styles.rewardText}>
                 {visitsRemaining > 0
                   ? `${visitsRemaining} more ${visitsRemaining === 1 ? 'visit' : 'visits'} → ${nextReward}`
@@ -80,7 +81,7 @@ export default function UserLoyaltyCard({
               <Ionicons
                 name={rewardIcon as any || "cafe"}
                 size={28}
-                color="#1a3a52"
+                color={colors.nileBlue}
               />
             </View>
           </View>
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#1a3a52",
+    color: colors.nileBlue,
     marginBottom: 12,
   },
   card: {
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
   visitsCount: {
     fontSize: 36,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.background.primary,
     letterSpacing: -1,
     marginBottom: 12,
   },
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: "100%",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     borderRadius: 4,
   },
   rewardRow: {
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
   rewardText: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: colors.background.primary,
     flex: 1,
   },
   rewardEmoji: {
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -185,6 +186,6 @@ const styles = StyleSheet.create({
   detailsButtonText: {
     fontSize: 15,
     fontWeight: "700",
-    color: "#1a3a52",
+    color: colors.nileBlue,
   },
 });

@@ -21,6 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { COLORS } from '@/constants/DesignTokens';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -150,7 +151,7 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
     const ionIconName = getIonIconName(iconName);
     return (
       <View style={[styles.iconCircle, { backgroundColor: getIconBgColor() }]}>
-        <Ionicons name={ionIconName} size={28} color="#FFFFFF" />
+        <Ionicons name={ionIconName} size={28} color={colors.background.primary} />
       </View>
     );
   };
@@ -326,13 +327,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginRight: 8,
   },
   expiringBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
@@ -341,12 +342,12 @@ const styles = StyleSheet.create({
   expiringText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   plusIcon: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   dotSeparator: {
     width: 4,

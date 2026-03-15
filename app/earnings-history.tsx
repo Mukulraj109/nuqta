@@ -24,6 +24,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { useRegion } from '@/contexts/RegionContext';
 import { showAlert, alertOk } from '@/utils/alert';
 import { TransactionListSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 interface EarningsTransaction {
   _id: string;
@@ -96,10 +97,10 @@ export default function EarningsHistoryPage() {
     { label: 'All', value: 'all', icon: 'list', gradient: [Colors.brand.purpleLight, Colors.brand.purple] },
     { label: 'Projects', value: 'project', icon: 'briefcase', gradient: [Colors.brand.purpleLight, Colors.brand.purple] },
     { label: 'Referrals', value: 'referral', icon: 'people', gradient: [Colors.gold, Colors.nileBlue] },
-    { label: 'Social', value: 'social_media', icon: 'share-social', gradient: ['#F59E0B', '#D97706'] },
-    { label: 'Spin', value: 'spin', icon: 'trophy', gradient: ['#EC4899', '#DB2777'] },
-    { label: 'Events', value: 'events', icon: 'ticket', gradient: [Colors.brand.purple, '#6D28D9'] },
-    { label: 'Withdrawals', value: 'withdrawal', icon: 'cash', gradient: ['#EF4444', '#DC2626'] },
+    { label: 'Social', value: 'social_media', icon: 'share-social', gradient: [colors.warningScale[400], colors.warningScale[700]] },
+    { label: 'Spin', value: 'spin', icon: 'trophy', gradient: [colors.brand.pink, colors.deepPink] },
+    { label: 'Events', value: 'events', icon: 'ticket', gradient: [Colors.brand.purple, colors.brand.purpleDeep] },
+    { label: 'Withdrawals', value: 'withdrawal', icon: 'cash', gradient: [colors.error, colors.error] },
   ];
 
   const loadEarningsHistory = useCallback(async (pageNum = 1, reset = false) => {
@@ -215,11 +216,11 @@ export default function EarningsHistoryPage() {
       case 'referral':
         return [Colors.gold, Colors.nileBlue];
       case 'social_media':
-        return ['#F59E0B', '#D97706'];
+        return [colors.warningScale[400], colors.warningScale[700]];
       case 'spin':
-        return ['#EC4899', '#DB2777'];
+        return [colors.brand.pink, colors.deepPink];
       case 'withdrawal':
-        return [Colors.error, '#DC2626'];
+        return [Colors.error, colors.error];
       default:
         return [Colors.text.tertiary, Colors.text.secondary];
     }
@@ -423,7 +424,7 @@ export default function EarningsHistoryPage() {
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
       <LinearGradient
-        colors={[Colors.brand.purpleLight, Colors.brand.purple, '#6D28D9']}
+        colors={[Colors.brand.purpleLight, Colors.brand.purple, colors.brand.purpleDeep]}
         style={styles.header}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}

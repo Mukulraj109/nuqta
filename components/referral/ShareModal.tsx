@@ -20,6 +20,7 @@ import referralService from '@/services/referralApi';
 import type { ShareTemplate } from '@/types/referral.types';
 import analyticsService from '@/services/analyticsService';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface ShareModalProps {
   visible: boolean;
@@ -61,7 +62,7 @@ const getSharePlatforms = (currencySymbol: string): ShareTemplate[] => [
   {
     type: 'sms',
     icon: 'chatbox',
-    color: '#10b981',
+    color: colors.successScale[400],
     message: `Hey! Join REZ and get ${currencySymbol}30 off. Code: {CODE}\n{LINK}`,
   },
   {
@@ -168,7 +169,7 @@ function ShareModal({
       onPress={() => handleShare(platform)}
     >
       <View style={[styles.platformIcon, { backgroundColor: platform.color }]}>
-        <Ionicons name={platform.icon as any} size={24} color="#FFFFFF" />
+        <Ionicons name={platform.icon as any} size={24} color={colors.background.primary} />
       </View>
       <ThemedText style={styles.platformText}>
         {platform.type.charAt(0).toUpperCase() + platform.type.slice(1)}
@@ -182,10 +183,10 @@ function ShareModal({
         <Pressable style={styles.backdrop} onPress={onClose} />
 
         <View style={styles.modalContainer}>
-          <LinearGradient colors={['#8B5CF6', '#7C3AED']} style={styles.header}>
+          <LinearGradient colors={[colors.brand.purpleLight, colors.brand.purple]} style={styles.header}>
             <ThemedText style={styles.headerTitle}>Share Referral</ThemedText>
             <Pressable onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#FFFFFF" />
+              <Ionicons name="close" size={24} color={colors.background.primary} />
             </Pressable>
           </LinearGradient>
 
@@ -225,7 +226,7 @@ function ShareModal({
               <Pressable style={styles.codeContainer} onPress={handleCopyCode}>
                 <ThemedText style={styles.codeText}>{referralCode}</ThemedText>
                 <View style={styles.copyButton}>
-                  <Ionicons name={isCopied ? 'checkmark' : 'copy'} size={20} color="#8B5CF6" />
+                  <Ionicons name={isCopied ? 'checkmark' : 'copy'} size={20} color={colors.brand.purpleLight} />
                   <ThemedText style={styles.copyText}>{isCopied ? 'Copied!' : 'Copy'}</ThemedText>
                 </View>
               </Pressable>
@@ -238,7 +239,7 @@ function ShareModal({
                 <ThemedText style={styles.linkText} numberOfLines={1}>
                   {referralLink}
                 </ThemedText>
-                <Ionicons name="copy-outline" size={20} color="#6B7280" />
+                <Ionicons name="copy-outline" size={20} color={colors.neutral[500]} />
               </Pressable>
             </View>
 
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   modalContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   headerTitle: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 20,
     fontWeight: 'bold',
   },
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   progressCard: {
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
     borderRadius: 12,
     padding: 16,
     marginVertical: 16,
@@ -302,24 +303,24 @@ const styles = StyleSheet.create({
   progressTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     marginBottom: 8,
   },
   progressBar: {
     height: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     overflow: 'hidden',
     marginBottom: 8,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 4,
   },
   progressText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   qrSection: {
     alignItems: 'center',
@@ -328,20 +329,20 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   qrContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 20,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     marginBottom: 12,
   },
   qrSubtext: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   codeSection: {
@@ -351,23 +352,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderStyle: 'dashed',
   },
   codeText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: 2,
   },
   copyButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
@@ -376,7 +377,7 @@ const styles = StyleSheet.create({
   copyText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   linkSection: {
     marginBottom: 24,
@@ -385,16 +386,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   linkText: {
     flex: 1,
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginRight: 8,
   },
   platformsSection: {
@@ -424,7 +425,7 @@ const styles = StyleSheet.create({
   },
   platformText: {
     fontSize: 12,
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
   },
 });

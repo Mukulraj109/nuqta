@@ -10,6 +10,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface BottomBannerProps {
   /** Custom tagline (optional) */
@@ -24,7 +25,7 @@ export const BottomBanner: React.FC<BottomBannerProps> = ({
 }) => {
   return (
     <LinearGradient
-      colors={['#EEF2FF', '#E0E7FF']}
+      colors={[colors.indigoMist, '#E0E7FF']}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={[styles.container, style]}

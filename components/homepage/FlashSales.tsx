@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import flashSaleApi, { FlashSaleItem } from '@/services/flashSaleApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface FlashSaleProduct {
   id: string;
@@ -293,14 +294,14 @@ const FlashSales: React.FC<FlashSalesProps> = ({
   // Render error state
   const renderError = () => (
     <View style={styles.errorContainer}>
-      <Ionicons name="alert-circle-outline" size={48} color="#EF4444" />
+      <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
       <Text style={styles.errorText}>{error}</Text>
       <Pressable
         onPress={handleRetry}
        
         style={styles.retryButton}
       >
-        <Ionicons name="refresh" size={16} color="#FFFFFF" />
+        <Ionicons name="refresh" size={16} color={colors.background.primary} />
         <Text style={styles.retryText}>Retry</Text>
       </Pressable>
     </View>
@@ -317,7 +318,7 @@ const FlashSales: React.FC<FlashSalesProps> = ({
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={styles.headerIconContainer}>
-            <Ionicons name="flash" size={20} color="#ffcd57" />
+            <Ionicons name="flash" size={20} color={colors.lightMustard} />
           </View>
           <View style={styles.headerTextContainer}>
             <Text style={styles.title}>Flash Sales</Text>
@@ -398,7 +399,7 @@ const FlashSales: React.FC<FlashSalesProps> = ({
                       </Text>
                     )}
                     <View style={styles.coinsContainer}>
-                      <Ionicons name="star" size={12} color="#FBBF24" />
+                      <Ionicons name="star" size={12} color={colors.warningScale[400]} />
                       <Text style={styles.coinsText}>{coins} coins</Text>
                     </View>
                   </View>
@@ -445,13 +446,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '400',
   },
   countdownContainer: {
@@ -469,12 +470,12 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   countdownText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   productsContainer: {
     gap: 12,
@@ -482,14 +483,14 @@ const styles = StyleSheet.create({
   },
   productCard: {
     width: 176,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(255, 205, 87, 0.08)',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
         shadowRadius: 8,
@@ -503,7 +504,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 128,
     position: 'relative',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   productImage: {
     width: '100%',
@@ -513,7 +514,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#ffd7b5',
+    backgroundColor: colors.lightPeach,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -521,7 +522,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   stockBadge: {
     position: 'absolute',
@@ -538,7 +539,7 @@ const styles = StyleSheet.create({
   stockText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   productInfo: {
     padding: 12,
@@ -546,7 +547,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 8,
     letterSpacing: -0.2,
   },
@@ -559,11 +560,11 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   footerRow: {
@@ -574,7 +575,7 @@ const styles = StyleSheet.create({
   savingsText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   coinsContainer: {
     flexDirection: 'row',
@@ -584,43 +585,43 @@ const styles = StyleSheet.create({
   coinsText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FBBF24',
+    color: colors.warningScale[400],
   },
   // Skeleton styles
   skeletonImage: {
     width: '100%',
     height: 128,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   skeletonName: {
     width: '80%',
     height: 14,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 8,
   },
   skeletonPrice: {
     width: 70,
     height: 16,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
   },
   skeletonOriginalPrice: {
     width: 50,
     height: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
   },
   skeletonSavings: {
     width: 60,
     height: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
   },
   skeletonCoins: {
     width: 50,
     height: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
   },
   // Error styles
@@ -632,14 +633,14 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   retryButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
@@ -647,7 +648,7 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

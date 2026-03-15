@@ -12,6 +12,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { Ionicons } from '@expo/vector-icons';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { LocationCoordinates } from '@/types/location.types';
+import { colors } from '@/constants/theme';
 
 interface LocationSharingProps {
   onShare?: (location: LocationCoordinates) => void;
@@ -122,7 +123,7 @@ function LocationSharing({
           <Ionicons
             name={icon as any}
             size={24}
-            color={disabled ? '#C7C7CC' : '#007AFF'}
+            color={disabled ? '#C7C7CC' : colors.brand.ios}
           />
         </View>
         <View style={styles.actionText}>
@@ -225,7 +226,7 @@ function LocationSharing({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.tint.warmGray,
   },
   header: {
     padding: 20,
@@ -236,12 +237,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666666',
+    color: colors.midGray,
   },
   noLocationContainer: {
     padding: 40,
@@ -253,13 +254,13 @@ const styles = StyleSheet.create({
   noLocationTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333333',
+    color: colors.darkGray,
     marginTop: 16,
     marginBottom: 8,
   },
   noLocationSubtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -288,12 +289,12 @@ const styles = StyleSheet.create({
   locationTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 2,
   },
   locationSubtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
   },
   actionsContainer: {
     padding: 16,
@@ -335,12 +336,12 @@ const styles = StyleSheet.create({
   actionTitle: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 2,
   },
   actionSubtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     lineHeight: 18,
   },
   disabledText: {
@@ -358,7 +359,7 @@ const styles = StyleSheet.create({
   },
   privacyText: {
     fontSize: 14,
-    color: '#007AFF',
+    color: colors.brand.ios,
     marginLeft: 8,
     flex: 1,
   },

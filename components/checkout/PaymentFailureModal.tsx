@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 export interface PaymentFailureModalProps {
   visible: boolean;
@@ -39,24 +40,24 @@ const METHODS: {
     label: 'Pay with Wallet',
     subtitle: `Use your ${BRAND.COIN_NAME} balance`,
     icon: 'wallet-outline',
-    iconColor: '#FFFFFF',
-    iconBg: '#8B5CF6',
+    iconColor: colors.background.primary,
+    iconBg: colors.brand.purpleLight,
   },
   {
     key: 'razorpay',
     label: 'Pay with UPI/Card',
     subtitle: 'UPI, Credit/Debit Card, Net Banking',
     icon: 'card-outline',
-    iconColor: '#FFFFFF',
-    iconBg: '#3B82F6',
+    iconColor: colors.background.primary,
+    iconBg: colors.infoScale[400],
   },
   {
     key: 'cod',
     label: 'Cash on Delivery',
     subtitle: 'Pay when your order arrives',
     icon: 'cash-outline',
-    iconColor: '#FFFFFF',
-    iconBg: '#F59E0B',
+    iconColor: colors.background.primary,
+    iconBg: colors.warningScale[400],
   },
 ];
 
@@ -84,12 +85,12 @@ const PaymentFailureModal: React.FC<PaymentFailureModalProps> = ({
 
           {/* Close button */}
           <Pressable style={styles.closeBtn} onPress={onClose}>
-            <Ionicons name="close" size={22} color="#6B7280" />
+            <Ionicons name="close" size={22} color={colors.neutral[500]} />
           </Pressable>
 
           {/* Error icon */}
           <View style={styles.iconCircle}>
-            <Ionicons name="alert-circle" size={36} color="#EF4444" />
+            <Ionicons name="alert-circle" size={36} color={colors.error} />
           </View>
 
           {/* Title + message */}
@@ -116,14 +117,14 @@ const PaymentFailureModal: React.FC<PaymentFailureModalProps> = ({
                   <ThemedText style={styles.methodLabel}>{m.label}</ThemedText>
                   <ThemedText style={styles.methodSub}>{m.subtitle}</ThemedText>
                 </View>
-                <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
+                <Ionicons name="chevron-forward" size={18} color={colors.neutral[400]} />
               </Pressable>
             ))}
           </View>
 
           {/* Retry button */}
           <Pressable style={styles.retryBtn} onPress={onRetry}>
-            <Ionicons name="refresh" size={18} color="#FFFFFF" />
+            <Ionicons name="refresh" size={18} color={colors.background.primary} />
             <ThemedText style={styles.retryText}>Try Again</ThemedText>
           </Pressable>
         </View>
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   },
 
   sheet: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingHorizontal: 20,
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
     marginBottom: 16,
   },
 
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -189,13 +190,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 6,
   },
 
   message: {
     fontSize: 14,
-    color: '#EF4444',
+    color: colors.error,
     textAlign: 'center',
     marginBottom: 4,
     paddingHorizontal: 12,
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
 
   hint: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
   methodRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,
@@ -252,12 +253,12 @@ const styles = StyleSheet.create({
   methodLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   methodSub: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 1,
   },
 
@@ -267,7 +268,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     width: '100%',
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     borderRadius: 12,
     paddingVertical: 14,
   },
@@ -275,6 +276,6 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });

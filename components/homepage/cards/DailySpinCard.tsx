@@ -9,13 +9,14 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
 
 const COLORS = {
-  white: '#FFFFFF',
-  textDark: '#1a3a52',
+  white: colors.background.primary,
+  textDark: colors.nileBlue,
 };
 
 interface DailySpinCardProps {
@@ -31,7 +32,7 @@ const DailySpinCard: React.FC<DailySpinCardProps> = ({
   canSpin,
   onPress,
 }) => {
-  const gradientColors: readonly [string, string, string] = ['#ffcd57', '#E6B84E', '#d4a645'];
+  const gradientColors: readonly [string, string, string] = [colors.lightMustard, colors.brand.goldRich, '#d4a645'];
 
   return (
     <Pressable
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,

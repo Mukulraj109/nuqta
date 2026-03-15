@@ -11,15 +11,16 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { ThemedText } from '@/components/ThemedText';
 import { CategoryTabsProps } from '@/types/home-delivery.types';
+import { colors } from '@/constants/theme';
 
 // Nuqta Design System Colors
 const COLORS = {
-  primary: '#1a3a52',
-  primaryDark: '#1a3a52',
-  gold: '#ffcd57',
-  navy: '#0B2240',
+  primary: colors.nileBlue,
+  primaryDark: colors.nileBlue,
+  gold: colors.lightMustard,
+  navy: colors.brand.navyDark,
   slate: '#1F2D3D',
-  muted: '#9AA7B2',
+  muted: colors.gray[400],
   surface: '#F7FAFC',
   glassWhite: 'rgba(255, 255, 255, 0.7)',
   glassBorder: 'rgba(255, 255, 255, 0.4)',
@@ -79,7 +80,7 @@ function _CategoryTabsInner({
                       <Ionicons
                         name={category.icon as any || 'cube-outline'}
                         size={22}
-                        color="#FFFFFF"
+                        color={colors.background.primary}
                       />
                     </View>
 
@@ -230,7 +231,7 @@ const styles = StyleSheet.create({
   categoryTextActive: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
     lineHeight: 15,
   },
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
     ...Platform.select({
       ios: {
         shadowColor: COLORS.primary,
@@ -305,7 +306,7 @@ const styles = StyleSheet.create({
   countText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
   },
   countTextActive: {

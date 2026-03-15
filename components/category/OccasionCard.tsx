@@ -8,23 +8,24 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { OccasionCardProps } from '@/types/categoryTypes';
+import { colors } from '@/constants/theme';
 
 // Rez Brand Colors
 const COLORS = {
-  primaryGreen: '#ffcd57',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
+  primaryGreen: colors.lightMustard,
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
 };
 
 // Tag color mapping
 const TAG_COLORS: Record<string, string> = {
-  'Hot': '#EF4444',
-  'Trending': '#8B5CF6',
-  'Coming Soon': '#F59E0B',
-  'Special': '#EC4899',
-  'Student': '#3B82F6',
-  'New': '#ffcd57',
+  'Hot': colors.error,
+  'Trending': colors.brand.purpleLight,
+  'Coming Soon': colors.warningScale[400],
+  'Special': colors.brand.pink,
+  'Student': colors.infoScale[400],
+  'New': colors.lightMustard,
 };
 
 const OccasionCard: React.FC<OccasionCardProps> = ({ occasion, onPress }) => {

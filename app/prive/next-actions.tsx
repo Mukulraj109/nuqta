@@ -11,6 +11,7 @@ import { PriveProgressRing } from '@/components/prive/PriveProgressRing';
 import { PriveEmptyState } from '@/components/prive/PriveEmptyState';
 import { CardGridSkeleton } from '@/components/skeletons';
 import priveApi from '@/services/priveApi';
+import { colors } from '@/constants/theme';
 
 export default function NextActionsScreen() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function NextActionsScreen() {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <CardGridSkeleton />
       </View>
     );
@@ -59,7 +60,7 @@ export default function NextActionsScreen() {
   if (!data) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         {error ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 }}>
             <Text style={{ color: PRIVE_COLORS.status.error, fontSize: 14, textAlign: 'center', marginBottom: 16 }}>{error}</Text>
@@ -82,7 +83,7 @@ export default function NextActionsScreen() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+      <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
       <ScrollView
         style={styles.scroll}
         showsVerticalScrollIndicator={false}

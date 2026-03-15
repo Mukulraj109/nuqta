@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { EventItem } from '@/types/homepage.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 const CARD_WIDTH = (screenWidth - 48) / 2; // 16px padding on each side + 16px gap
@@ -92,7 +93,7 @@ const EventGridCard: React.FC<EventGridCardProps> = ({ event, onPress }) => {
           <Ionicons
             name={event.isOnline ? 'globe-outline' : 'location-outline'}
             size={10}
-            color="#FFFFFF"
+            color={colors.background.primary}
           />
           <ThemedText style={styles.typeBadgeText}>
             {event.isOnline ? 'Online' : 'Venue'}
@@ -109,7 +110,7 @@ const EventGridCard: React.FC<EventGridCardProps> = ({ event, onPress }) => {
 
         {/* Date & Time */}
         <View style={styles.dateRow}>
-          <Ionicons name="calendar-outline" size={12} color="#6B7280" />
+          <Ionicons name="calendar-outline" size={12} color={colors.neutral[500]} />
           <ThemedText style={styles.dateText}>
             {formattedDate}
             {event.time && ` • ${event.time}`}
@@ -119,7 +120,7 @@ const EventGridCard: React.FC<EventGridCardProps> = ({ event, onPress }) => {
         {/* Rating Row — only show when rating exists and > 0 */}
         {(event.rating ?? 0) > 0 && (
           <View style={styles.ratingRow}>
-            <Ionicons name="star" size={11} color="#FFC857" />
+            <Ionicons name="star" size={11} color={colors.brand.goldWarm} />
             <ThemedText style={styles.ratingText}>
               {(event.rating ?? 0).toFixed(1)}
             </ThemedText>
@@ -156,7 +157,7 @@ const EventGridCard: React.FC<EventGridCardProps> = ({ event, onPress }) => {
 const styles = StyleSheet.create({
   container: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     ...Platform.select({
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: CARD_IMAGE_HEIGHT,
     position: 'relative',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   image: {
     width: '100%',
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     left: 8,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 9,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textTransform: 'uppercase',
     letterSpacing: 0.3,
   },
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   onlineBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   venueBadge: {
     backgroundColor: 'rgba(26, 58, 82, 0.7)',
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
   typeBadgeText: {
     fontSize: 8,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   content: {
     padding: 10,
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     lineHeight: 18,
     marginBottom: 6,
   },
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   ratingRow: {
@@ -252,11 +253,11 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   reviewCount: {
     fontSize: 10,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   priceRow: {
     flexDirection: 'row',
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   freeBadge: {
-    backgroundColor: '#E8F5E9',
+    backgroundColor: colors.greenMist,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -278,10 +279,10 @@ const styles = StyleSheet.create({
   priceText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   cashbackBadge: {
-    backgroundColor: '#DCFCE7',
+    backgroundColor: colors.successScale[100],
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 9,
     fontWeight: '600',
-    color: '#16A34A',
+    color: colors.brand.greenDark,
   },
 });
 

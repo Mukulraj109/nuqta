@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -23,10 +24,10 @@ interface Step {
 }
 
 const steps: Step[] = [
-  { id: 1, icon: 'wallet-outline', label: 'Spend', color: '#ffcd57' },
-  { id: 2, icon: 'scan-outline', label: 'Scan', color: '#E6B84E' },
-  { id: 3, icon: 'layers-outline', label: 'Earn', color: '#ffcd57' },
-  { id: 4, icon: 'swap-horizontal-outline', label: 'Redeem', color: '#E6B84E' },
+  { id: 1, icon: 'wallet-outline', label: 'Spend', color: colors.lightMustard },
+  { id: 2, icon: 'scan-outline', label: 'Scan', color: colors.brand.goldRich },
+  { id: 3, icon: 'layers-outline', label: 'Earn', color: colors.lightMustard },
+  { id: 4, icon: 'swap-horizontal-outline', label: 'Redeem', color: colors.brand.goldRich },
 ];
 
 const HowNuqtaWorksCard: React.FC = () => {
@@ -68,10 +69,10 @@ const HowNuqtaWorksCard: React.FC = () => {
             {/* Info Button */}
             <Pressable style={styles.infoButton} onPress={handleNavigateToPage}>
               <LinearGradient
-                colors={['#ffcd57', '#E6B84E']}
+                colors={[colors.lightMustard, colors.brand.goldRich]}
                 style={styles.infoButtonGradient}
               >
-                <Ionicons name="information" size={14} color="#FFFFFF" />
+                <Ionicons name="information" size={14} color={colors.background.primary} />
               </LinearGradient>
             </Pressable>
           </View>
@@ -85,7 +86,7 @@ const HowNuqtaWorksCard: React.FC = () => {
                   {/* Icon Circle with gradient border */}
                   <View style={styles.iconOuterRing}>
                     <LinearGradient
-                      colors={['#ffcd57', '#E6B84E']}
+                      colors={[colors.lightMustard, colors.brand.goldRich]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
                       style={styles.iconGradientBorder}
@@ -108,7 +109,7 @@ const HowNuqtaWorksCard: React.FC = () => {
                 {index < steps.length - 1 && (
                   <View style={styles.arrowContainer}>
                     <LinearGradient
-                      colors={['#ffcd57', '#E6B84E']}
+                      colors={[colors.lightMustard, colors.brand.goldRich]}
                       start={{ x: 0, y: 0.5 }}
                       end={{ x: 1, y: 0.5 }}
                       style={styles.arrowGradient}
@@ -116,7 +117,7 @@ const HowNuqtaWorksCard: React.FC = () => {
                       <Ionicons
                         name="chevron-forward"
                         size={14}
-                        color="#FFFFFF"
+                        color={colors.background.primary}
                       />
                     </LinearGradient>
                   </View>
@@ -128,14 +129,14 @@ const HowNuqtaWorksCard: React.FC = () => {
           {/* CTA Button */}
           <Pressable style={styles.ctaButton} onPress={handleNavigateToPage}>
             <LinearGradient
-              colors={['#ffcd57', '#E6B84E', '#1a3a52']}
+              colors={[colors.lightMustard, colors.brand.goldRich, colors.nileBlue]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.ctaGradient}
             >
               <Text style={styles.ctaText}>See how it works</Text>
               <View style={styles.ctaIconWrapper}>
-                <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
+                <Ionicons name="arrow-forward" size={16} color={colors.background.primary} />
               </View>
             </LinearGradient>
           </Pressable>
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.3,
         shadowRadius: 16,
@@ -213,13 +214,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
     letterSpacing: 0.3,
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     letterSpacing: 0.2,
   },
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
     width: 47,
     height: 47,
     borderRadius: 23.5,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     ...Platform.select({
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
   stepLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     letterSpacing: 0.3,
   },
   arrowContainer: {
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.4,
     marginRight: 8,
   },

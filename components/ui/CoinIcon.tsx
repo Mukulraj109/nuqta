@@ -8,6 +8,7 @@ import React from 'react';
 import { ImageStyle, StyleProp, View, Text, StyleSheet } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface CoinIconProps {
   size?: number;
@@ -21,7 +22,7 @@ const CoinIcon: React.FC<CoinIconProps> = ({
   size = 20,
   style,
   withAmount,
-  amountColor = '#F59E0B',
+  amountColor = colors.warningScale[400],
   amountSize,
 }) => {
   const coinImage = (

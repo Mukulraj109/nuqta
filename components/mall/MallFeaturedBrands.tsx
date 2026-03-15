@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../types/mall.types';
 import MallBrandCard from './cards/MallBrandCard';
+import { colors } from '@/constants/theme';
 
 interface MallFeaturedBrandsProps {
   brands: MallBrand[];
@@ -48,22 +49,22 @@ const MallFeaturedBrands: React.FC<MallFeaturedBrandsProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#dfebf7', '#EFF6FF', '#FFFFFF']}
+          colors={[colors.lavenderMist, colors.tint.blue, colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
         >
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#1a3a52', '#234b68']}
+              colors={[colors.nileBlue, colors.brand.nileBlueLight]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="star" size={18} color="#FFFFFF" />
+              <Ionicons name="star" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Featured Stores</Text>
           </View>
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#1a3a52" />
+            <ActivityIndicator size="small" color={colors.nileBlue} />
             <Text style={styles.loadingText}>Loading stores...</Text>
           </View>
         </LinearGradient>
@@ -76,7 +77,7 @@ const MallFeaturedBrands: React.FC<MallFeaturedBrandsProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#dfebf7', '#EFF6FF', '#FFFFFF']}
+          colors={[colors.lavenderMist, colors.tint.blue, colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
@@ -84,10 +85,10 @@ const MallFeaturedBrands: React.FC<MallFeaturedBrandsProps> = ({
           {/* Section Header */}
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#1a3a52', '#234b68']}
+              colors={[colors.nileBlue, colors.brand.nileBlueLight]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="star" size={18} color="#FFFFFF" />
+              <Ionicons name="star" size={18} color={colors.background.primary} />
             </LinearGradient>
             <View style={{ flex: 1 }}>
               <Text style={styles.title}>Featured Stores</Text>
@@ -99,7 +100,7 @@ const MallFeaturedBrands: React.FC<MallFeaturedBrandsProps> = ({
 
           {/* Empty State Placeholder */}
           <View style={styles.emptyStateContainer}>
-            <Ionicons name="star-outline" size={24} color="#9CA3AF" />
+            <Ionicons name="star-outline" size={24} color={colors.neutral[400]} />
             <Text style={styles.emptyStateText}>Featured stores coming soon</Text>
           </View>
         </LinearGradient>
@@ -110,7 +111,7 @@ const MallFeaturedBrands: React.FC<MallFeaturedBrandsProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#dfebf7', '#EFF6FF', '#FFFFFF']}
+        colors={[colors.lavenderMist, colors.tint.blue, colors.background.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.gradientBackground}
@@ -124,10 +125,10 @@ const MallFeaturedBrands: React.FC<MallFeaturedBrandsProps> = ({
         {/* Section Header */}
         <View style={styles.headerRow}>
           <LinearGradient
-            colors={['#1a3a52', '#234b68']}
+            colors={[colors.nileBlue, colors.brand.nileBlueLight]}
             style={styles.iconWrapper}
           >
-            <Ionicons name="star" size={18} color="#FFFFFF" />
+            <Ionicons name="star" size={18} color={colors.background.primary} />
           </LinearGradient>
           <View style={{ flex: 1 }}>
             <Text style={styles.title}>Featured Stores</Text>
@@ -143,7 +144,7 @@ const MallFeaturedBrands: React.FC<MallFeaturedBrandsProps> = ({
             >
               <Text style={styles.viewAllText}>View All</Text>
               <View style={styles.viewAllArrow}>
-                <Ionicons name="arrow-forward" size={14} color="#1a3a52" />
+                <Ionicons name="arrow-forward" size={14} color={colors.nileBlue} />
               </View>
             </Pressable>
           )}
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -227,19 +228,19 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   viewAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
@@ -258,13 +259,13 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   viewAllArrow: {
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   emptyStateContainer: {
@@ -295,7 +296,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
 });

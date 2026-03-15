@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Enable LayoutAnimation on Android
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -77,7 +78,7 @@ const FAQItem: React.FC<{
         <Ionicons
           name={isExpanded ? 'chevron-up' : 'chevron-down'}
           size={18}
-          color={isExpanded ? '#ffcd57' : '#6B7280'}
+          color={isExpanded ? colors.lightMustard : colors.neutral[500]}
         />
       </View>
     </View>
@@ -103,7 +104,7 @@ const FAQSection: React.FC = () => {
       {/* Section Header */}
       <View style={styles.header}>
         <View style={styles.headerIcon}>
-          <Ionicons name="help-circle" size={24} color="#8B5CF6" />
+          <Ionicons name="help-circle" size={24} color={colors.brand.purpleLight} />
         </View>
         <Text style={styles.headerTitle}>Frequently Asked Questions</Text>
         <Text style={styles.headerSubtitle}>
@@ -128,7 +129,7 @@ const FAQSection: React.FC = () => {
         <Text style={styles.helpLinkText}>Still have questions?</Text>
         <View style={styles.helpButton}>
           <Text style={styles.helpButtonText}>Contact Support</Text>
-          <Ionicons name="arrow-forward" size={16} color="#ffcd57" />
+          <Ionicons name="arrow-forward" size={16} color={colors.lightMustard} />
         </View>
       </Pressable>
     </View>
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 24,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginTop: 8,
   },
   header: {
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -157,26 +158,26 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 6,
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   faqList: {
     gap: 12,
     marginBottom: 24,
   },
   faqItem: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
   },
   faqItemExpanded: {
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderColor: 'rgba(255, 205, 87, 0.2)',
   },
   questionRow: {
@@ -188,14 +189,14 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     paddingRight: 12,
   },
   iconContainer: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
   },
   answer: {
     fontSize: 13,
-    color: '#4B5563',
+    color: colors.neutral[600],
     lineHeight: 21,
     marginTop: 12,
     paddingTop: 12,
@@ -215,13 +216,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
   },
   helpLinkText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   helpButton: {
     flexDirection: 'row',
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
   helpButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 });
 

@@ -8,6 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 export interface ProductFilters {
   categories?: string[];
@@ -134,7 +135,7 @@ const FilterChips: React.FC<FilterChipsProps> = ({
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
              
             >
-              <Ionicons name="close-circle" size={18} color="#7C3AED" />
+              <Ionicons name="close-circle" size={18} color={colors.brand.purple} />
             </Pressable>
           </View>
         ))}
@@ -145,10 +146,10 @@ const FilterChips: React.FC<FilterChipsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: colors.tint.slate,
   },
   header: {
     flexDirection: 'row',
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#64748B',
+    color: colors.slateGray,
   },
   clearButton: {
     paddingVertical: 4,
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
   clearButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   chipsContainer: {
     paddingHorizontal: 16,
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
     maxWidth: 200,
     ...Platform.select({
       ios: {
-        shadowColor: '#7C3AED',
+        shadowColor: colors.brand.purple,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.1,
         shadowRadius: 2,
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
   chipText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     maxWidth: 150,
   },
 });

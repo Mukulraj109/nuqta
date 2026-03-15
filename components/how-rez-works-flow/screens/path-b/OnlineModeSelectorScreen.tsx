@@ -3,6 +3,7 @@ import { BRAND } from '@/constants/brand';
 import FlowScreenLayout from '../../shared/FlowScreenLayout';
 import OptionCard from '../../shared/OptionCard';
 import { NavigationAction, BackAction } from '../../types';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -20,8 +21,8 @@ const OnlineModeSelectorScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                 title={`${BRAND.APP_NAME} Mall`}
                 subtitle="Curated brands + extra rewards"
                 icon="bag-handle"
-                iconColor="#EC4899"
-                colors={['#FDF2F8', '#FCE7F3']}
+                iconColor={colors.brand.pink}
+                colors={['#FDF2F8', colors.pinkMist]}
                 onPress={() => onNavigate('B2')}
             />
 
@@ -29,8 +30,8 @@ const OnlineModeSelectorScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                 title="Cash Store"
                 subtitle="Any website + affiliate cashback"
                 icon="globe-outline"
-                iconColor="#F97316"
-                colors={['#FFF7ED', '#FFEDD5']}
+                iconColor={colors.brand.orange}
+                colors={[colors.tint.orange, '#FFEDD5']}
                 onPress={() => onNavigate('B3')}
             />
         </FlowScreenLayout>

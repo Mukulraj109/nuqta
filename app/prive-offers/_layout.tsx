@@ -3,6 +3,7 @@
  */
 
 import { Stack } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 export default function PriveOffersLayout() {
   return (

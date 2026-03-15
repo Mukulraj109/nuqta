@@ -19,6 +19,7 @@ import {
   SUBSCRIPTION_SHADOW,
 } from '@/styles/subscriptionStyles';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface PlanCardProps {
   tier: SubscriptionTier;
@@ -121,7 +122,7 @@ function PlanCard({
         <ThemedText style={styles.planName}>{name}</ThemedText>
         {isCurrentPlan && (
           <View style={styles.currentBadge}>
-            <Ionicons name="checkmark-circle" size={14} color="#FFFFFF" />
+            <Ionicons name="checkmark-circle" size={14} color={colors.background.primary} />
             <ThemedText style={styles.currentBadgeText}>Current Plan</ThemedText>
           </View>
         )}
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
     marginBottom: SUBSCRIPTION_SPACING.lg,
   },
   discountBadge: {
-    backgroundColor: '#DCFCE7',
+    backgroundColor: colors.successScale[100],
     paddingVertical: SUBSCRIPTION_SPACING.xs,
     paddingHorizontal: SUBSCRIPTION_SPACING.md,
     borderRadius: SUBSCRIPTION_BORDER_RADIUS.sm,
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   freeButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingVertical: SUBSCRIPTION_SPACING.lg,
     borderRadius: SUBSCRIPTION_BORDER_RADIUS.md,
     alignItems: 'center',

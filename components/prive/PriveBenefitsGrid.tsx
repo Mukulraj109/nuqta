@@ -4,6 +4,7 @@
  * Supports `condensed` prop for dashboard summary view.
  */
 
+import { colors } from '@/constants/theme';
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -39,7 +40,7 @@ const TIER_ICONS: Record<string, string> = {
 const DEFAULT_TIERS: TierBenefitData[] = [
   { tier: 'entry', displayName: 'Entry', color: '#CD7F32', coinMultiplier: 1.0, conciergeAccess: false, benefits: ['Earn coins on every order', 'Access exclusive offers', 'Daily check-in bonus'] },
   { tier: 'signature', displayName: 'Signature', color: '#C0C0C0', coinMultiplier: 1.5, conciergeAccess: true, benefits: ['1.5x coin multiplier', '24/7 Concierge access', 'Priority offers', 'Analytics dashboard'] },
-  { tier: 'elite', displayName: 'Elite', color: '#FFD700', coinMultiplier: 2.0, conciergeAccess: true, benefits: ['2x coin multiplier', '1-hour concierge SLA', 'Exclusive elite events', 'All platform benefits'] },
+  { tier: 'elite', displayName: 'Elite', color: colors.brand.goldBright, coinMultiplier: 2.0, conciergeAccess: true, benefits: ['2x coin multiplier', '1-hour concierge SLA', 'Exclusive elite events', 'All platform benefits'] },
 ];
 
 export const PriveBenefitsGrid: React.FC<PriveBenefitsGridProps> = ({
@@ -102,7 +103,7 @@ export const PriveBenefitsGrid: React.FC<PriveBenefitsGridProps> = ({
               <View style={styles.benefitsList}>
                 {tier.benefits.slice(0, condensed ? 3 : 5).map((benefit, i) => (
                   <View key={i} style={styles.benefitRow}>
-                    <Text style={[styles.benefitCheck, { color: isCurrent ? '#4CAF50' : PRIVE_COLORS.text.tertiary }]}>
+                    <Text style={[styles.benefitCheck, { color: isCurrent ? colors.brand.emerald : PRIVE_COLORS.text.tertiary }]}>
                       {isCurrent ? '✓' : '○'}
                     </Text>
                     <Text style={[styles.benefitText, isLocked && styles.benefitTextLocked]}>

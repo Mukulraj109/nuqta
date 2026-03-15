@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { webLocationService } from '@/services/webLocationService';
+import { colors } from '@/constants/theme';
 
 interface LocationOption {
   id: string;
@@ -133,11 +134,11 @@ function LocationDropdown({
     const getIconColor = () => {
       switch (item.type) {
         case 'current':
-          return '#007AFF';
+          return colors.brand.ios;
         case 'recent':
           return '#8E8E93';
         default:
-          return '#666666';
+          return colors.midGray;
       }
     };
 
@@ -170,11 +171,11 @@ function LocationDropdown({
       <View style={styles.dropdown}>
         {/* Search Input */}
         <View style={styles.searchContainer}>
-          <Ionicons name="search" size={20} color="#8B5CF6" style={styles.searchIcon} />
+          <Ionicons name="search" size={20} color={colors.brand.purpleLight} style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
             placeholder="Search for area, city..."
-            placeholderTextColor="#8B5CF6"
+            placeholderTextColor={colors.brand.purpleLight}
             value={searchQuery}
             onChangeText={setSearchQuery}
             autoCorrect={false}
@@ -199,9 +200,9 @@ function LocationDropdown({
           >
             <View style={styles.locationIconContainer}>
               {isSearching ? (
-                <ActivityIndicator size="small" color="#007AFF" />
+                <ActivityIndicator size="small" color={colors.brand.ios} />
               ) : (
-                <Ionicons name="locate" size={20} color="#007AFF" />
+                <Ionicons name="locate" size={20} color={colors.brand.ios} />
               )}
             </View>
             <View style={styles.locationInfo}>
@@ -262,12 +263,12 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     marginRight: 12,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
+    color: colors.darkGray,
     padding: 0,
     fontWeight: '500',
   },
@@ -314,11 +315,11 @@ const styles = StyleSheet.create({
   locationTitle: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 2,
   },
   currentLocationTitle: {
-    color: '#007AFF',
+    color: colors.brand.ios,
   },
   locationSubtitle: {
     fontSize: 14,

@@ -17,6 +17,7 @@ import {
   SUBSCRIPTION_SPACING,
   SUBSCRIPTION_BORDER_RADIUS,
 } from '@/styles/subscriptionStyles';
+import { colors } from '@/constants/theme';
 
 interface UpgradeBannerProps {
   currentTier: SubscriptionTier;
@@ -59,8 +60,8 @@ function UpgradeBanner({
   const message = TIER_MESSAGES[currentTier];
   const gradientColors =
     currentTier === 'free'
-      ? ['#8B5CF6', '#7C3AED']
-      : ['#F59E0B', '#D97706'];
+      ? [colors.brand.purpleLight, colors.brand.purple]
+      : [colors.warningScale[400], colors.warningScale[700]];
 
   const handleDismiss = () => {
     Animated.timing(fadeAnim, {

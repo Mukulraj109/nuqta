@@ -7,6 +7,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 function ChatSkeleton() {
   return (
@@ -66,14 +67,14 @@ function ChatSkeleton() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerText: {
     marginLeft: 12,
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     padding: 12,
     gap: 8,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
 });
 

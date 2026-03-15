@@ -20,6 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useProductSearch } from '@/hooks/useProductSearch';
 import { ProductSelectorProps, ProductSelectorProduct } from '@/types/product-selector.types';
 import ProductCard from './ProductCard';
+import { colors } from '@/constants/theme';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -159,7 +160,7 @@ function ProductSelector({
     ({ item }: { item: ProductSelectorProduct }) => (
       <View style={styles.selectedItem}>
         <View style={styles.selectedItemInfo}>
-          <Ionicons name="checkmark-circle" size={16} color="#6366F1" />
+          <Ionicons name="checkmark-circle" size={16} color={colors.brand.indigo} />
           <Text style={styles.selectedItemName} numberOfLines={1}>
             {item.name}
           </Text>
@@ -170,7 +171,7 @@ function ProductSelector({
           accessibilityRole="button"
           accessibilityLabel={`Remove ${item.name}`}
         >
-          <Ionicons name="close-circle" size={20} color="#EF4444" />
+          <Ionicons name="close-circle" size={20} color={colors.error} />
         </Pressable>
       </View>
     ),
@@ -186,11 +187,11 @@ function ProductSelector({
     if (error) {
       return (
         <View style={styles.emptyState}>
-          <Ionicons name="alert-circle-outline" size={64} color="#EF4444" />
+          <Ionicons name="alert-circle-outline" size={64} color={colors.error} />
           <Text style={styles.emptyStateTitle}>Error Loading Products</Text>
           <Text style={styles.emptyStateMessage}>{error}</Text>
           <Pressable style={styles.retryButton} onPress={refresh}>
-            <Ionicons name="refresh" size={20} color="#FFFFFF" />
+            <Ionicons name="refresh" size={20} color={colors.background.primary} />
             <Text style={styles.retryButtonText}>Retry</Text>
           </Pressable>
         </View>
@@ -200,7 +201,7 @@ function ProductSelector({
     if (query && products.length === 0) {
       return (
         <View style={styles.emptyState}>
-          <Ionicons name="search-outline" size={64} color="#9CA3AF" />
+          <Ionicons name="search-outline" size={64} color={colors.neutral[400]} />
           <Text style={styles.emptyStateTitle}>No Products Found</Text>
           <Text style={styles.emptyStateMessage}>
             Try adjusting your search to find what you're looking for
@@ -215,7 +216,7 @@ function ProductSelector({
     if (products.length === 0) {
       return (
         <View style={styles.emptyState}>
-          <Ionicons name="cube-outline" size={64} color="#9CA3AF" />
+          <Ionicons name="cube-outline" size={64} color={colors.neutral[400]} />
           <Text style={styles.emptyStateTitle}>No Products Available</Text>
           <Text style={styles.emptyStateMessage}>
             There are no products available at the moment
@@ -235,7 +236,7 @@ function ProductSelector({
 
     return (
       <View style={styles.footerLoading}>
-        <ActivityIndicator size="small" color="#6366F1" />
+        <ActivityIndicator size="small" color={colors.brand.indigo} />
         <Text style={styles.footerLoadingText}>Loading more products...</Text>
       </View>
     );
@@ -249,7 +250,7 @@ function ProductSelector({
 
     return (
       <View style={styles.headerLoading}>
-        <ActivityIndicator size="large" color="#6366F1" />
+        <ActivityIndicator size="large" color={colors.brand.indigo} />
         <Text style={styles.headerLoadingText}>Loading products...</Text>
       </View>
     );
@@ -306,17 +307,17 @@ function ProductSelector({
                 accessibilityRole="button"
                 accessibilityLabel="Close"
               >
-                <Ionicons name="close" size={28} color="#6B7280" />
+                <Ionicons name="close" size={28} color={colors.neutral[500]} />
               </Pressable>
             </View>
 
             {/* Search Bar */}
             <View style={styles.searchContainer}>
-              <Ionicons name="search" size={20} color="#9CA3AF" />
+              <Ionicons name="search" size={20} color={colors.neutral[400]} />
               <TextInput
                 style={styles.searchInput}
                 placeholder="Search products..."
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={searchQuery}
                 onChangeText={handleSearchChange}
                 autoCorrect={false}
@@ -328,7 +329,7 @@ function ProductSelector({
                   onPress={handleClearSearch}
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
-                  <Ionicons name="close-circle" size={20} color="#9CA3AF" />
+                  <Ionicons name="close-circle" size={20} color={colors.neutral[400]} />
                 </Pressable>
               )}
             </View>
@@ -361,7 +362,7 @@ function ProductSelector({
                     Selected Products ({selectedProducts.length})
                   </Text>
                   {selectedProducts.length >= minProducts && (
-                    <Ionicons name="checkmark-circle" size={20} color="#ffcd57" />
+                    <Ionicons name="checkmark-circle" size={20} color={colors.lightMustard} />
                   )}
                 </View>
                 <FlatList
@@ -404,7 +405,7 @@ function ProductSelector({
                 <Ionicons
                   name="checkmark-circle"
                   size={20}
-                  color={canConfirm ? '#FFFFFF' : '#9CA3AF'}
+                  color={canConfirm ? colors.background.primary : colors.neutral[400]}
                 />
               </Pressable>
             </View>
@@ -425,7 +426,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   modalContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -452,7 +453,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerLeft: {
     flex: 1,
@@ -460,17 +461,17 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   headerSubtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -478,12 +479,12 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   searchInput: {
     flex: 1,
     fontSize: 15,
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginLeft: 12,
     padding: 0,
   },
@@ -503,7 +504,7 @@ const styles = StyleSheet.create({
   headerLoadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   footerLoading: {
     paddingVertical: 20,
@@ -514,7 +515,7 @@ const styles = StyleSheet.create({
   },
   footerLoadingText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   emptyState: {
     paddingVertical: 60,
@@ -525,14 +526,14 @@ const styles = StyleSheet.create({
   emptyStateTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 16,
     marginBottom: 8,
     textAlign: 'center',
   },
   emptyStateMessage: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -540,14 +541,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#6366F1',
+    backgroundColor: colors.brand.indigo,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 8,
     marginTop: 20,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -556,18 +557,18 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     marginTop: 20,
   },
   clearButtonText: {
-    color: '#6366F1',
+    color: colors.brand.indigo,
     fontSize: 14,
     fontWeight: '600',
   },
   selectedSection: {
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
-    backgroundColor: '#F9FAFB',
+    borderTopColor: colors.neutral[100],
+    backgroundColor: colors.neutral[50],
     paddingHorizontal: 20,
     paddingTop: 16,
     paddingBottom: 12,
@@ -582,7 +583,7 @@ const styles = StyleSheet.create({
   selectedTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   selectedList: {
     maxHeight: 120,
@@ -591,13 +592,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderRadius: 8,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   selectedItemInfo: {
     flexDirection: 'row',
@@ -607,7 +608,7 @@ const styles = StyleSheet.create({
   },
   selectedItemName: {
     fontSize: 13,
-    color: '#1F2937',
+    color: colors.neutral[800],
     fontWeight: '500',
     flex: 1,
   },
@@ -617,22 +618,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: colors.neutral[100],
+    backgroundColor: colors.background.primary,
   },
   cancelButton: {
     flex: 1,
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     alignItems: 'center',
     justifyContent: 'center',
   },
   cancelButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   confirmButton: {
     flex: 1,
@@ -642,18 +643,18 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#6366F1',
+    backgroundColor: colors.brand.indigo,
   },
   confirmButtonDisabled: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   confirmButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   confirmButtonTextDisabled: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 });
 

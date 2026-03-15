@@ -28,6 +28,7 @@ import CoinIcon from '@/components/ui/CoinIcon';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -43,9 +44,9 @@ const COLORS = {
   gray600: Colors.gray[600],
   gray700: Colors.text.secondary,
   green500: Colors.success,
-  green600: '#16A34A',
-  orange500: '#F97316',
-  orange600: '#EA580C',
+  green600: colors.brand.greenDark,
+  orange500: colors.brand.orange,
+  orange600: colors.brand.orangeDark,
   amber500: Colors.warning,
   red500: Colors.error,
   blue500: Colors.info,
@@ -329,7 +330,7 @@ const StoreDetailPage: React.FC = () => {
   const getPartnerLevelColor = (level: string) => {
     const colors: Record<string, { bg: string; text: string }> = {
       platinum: { bg: '#E5E4E2', text: Colors.text.secondary },
-      gold: { bg: Colors.warningScale[100], text: '#92400E' },
+      gold: { bg: Colors.warningScale[100], text: colors.brand.amberDark },
       silver: { bg: Colors.background.secondary, text: Colors.text.secondary },
       bronze: { bg: '#FED7AA', text: '#9A3412' },
     };
@@ -497,7 +498,7 @@ const StoreDetailPage: React.FC = () => {
 
             {store.contact?.website ? (
               <Pressable style={styles.actionItem} onPress={handleWebsite}>
-                <View style={[styles.actionIconBox, { backgroundColor: '#EDE9FE' }]}>
+                <View style={[styles.actionIconBox, { backgroundColor: colors.tint.purple }]}>
                   <Ionicons name="globe-outline" size={22} color={COLORS.purple500} />
                 </View>
                 <Text style={styles.actionLabel}>Website</Text>

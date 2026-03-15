@@ -6,6 +6,7 @@ import FlowScreenLayout from '../../shared/FlowScreenLayout';
 import ActionBtn from '../../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -17,29 +18,29 @@ const offers = [
         title: 'Nearby',
         subtitle: 'Around you',
         icon: 'location',
-        color: '#EF4444',
-        gradient: ['#FEE2E2', '#FECACA'] as [string, string],
+        color: colors.error,
+        gradient: [colors.errorScale[100], colors.errorScale[200]] as [string, string],
     },
     {
         title: "Today's Deals",
         subtitle: 'Limited time',
         icon: 'time',
-        color: '#F59E0B',
-        gradient: ['#FEF3C7', '#FDE68A'] as [string, string],
+        color: colors.warningScale[400],
+        gradient: [colors.tint.amberLight, colors.warningScale[200]] as [string, string],
     },
     {
         title: 'BOGO',
         subtitle: 'Buy 1 Get 1',
         icon: 'pricetag',
-        color: '#8B5CF6',
-        gradient: ['#EDE9FE', '#DDD6FE'] as [string, string],
+        color: colors.brand.purpleLight,
+        gradient: [colors.tint.purple, '#DDD6FE'] as [string, string],
     },
     {
         title: 'Cashback',
         subtitle: 'Extra savings',
         icon: 'flash',
-        color: '#10B981',
-        gradient: ['#D1FAE5', '#A7F3D0'] as [string, string],
+        color: colors.successScale[400],
+        gradient: [colors.tint.green, '#A7F3D0'] as [string, string],
     },
 ];
 
@@ -50,7 +51,7 @@ const OffersHubScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
             subtitle="Find the best deals nearby and online"
             onBack={onBack}
             footer={<ActionBtn title="Use This Offer" onPress={() => onNavigate('C2')} />}
-            headerAccent="#8B5CF6"
+            headerAccent={colors.brand.purpleLight}
         >
             {/* Featured offer banner */}
             <Animated.View
@@ -58,14 +59,14 @@ const OffersHubScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                 style={styles.featuredBanner}
             >
                 <LinearGradient
-                    colors={['#7C3AED', '#6D28D9']}
+                    colors={[colors.brand.purple, colors.brand.purpleDeep]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={styles.featuredGradient}
                 >
                     <View style={styles.featuredContent}>
                         <View style={styles.featuredBadge}>
-                            <Ionicons name="star" size={12} color="#FFFFFF" />
+                            <Ionicons name="star" size={12} color={colors.background.primary} />
                             <Text style={styles.featuredBadgeText}>FEATURED</Text>
                         </View>
                         <Text style={styles.featuredTitle}>Flat 50% OFF</Text>
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         ...Platform.select({
             ios: {
-                shadowColor: '#7C3AED',
+                shadowColor: colors.brand.purple,
                 shadowOffset: { width: 0, height: 8 },
                 shadowOpacity: 0.3,
                 shadowRadius: 16,
@@ -148,13 +149,13 @@ const styles = StyleSheet.create({
     featuredBadgeText: {
         fontSize: 10,
         fontWeight: '700',
-        color: '#FFFFFF',
+        color: colors.background.primary,
         letterSpacing: 0.5,
     },
     featuredTitle: {
         fontSize: 24,
         fontWeight: '800',
-        color: '#FFFFFF',
+        color: colors.background.primary,
         marginBottom: 4,
     },
     featuredSubtitle: {
@@ -204,13 +205,13 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontSize: 16,
         fontWeight: '700',
-        color: '#1F2937',
+        color: colors.neutral[800],
         textAlign: 'center',
         marginBottom: 2,
     },
     cardSubtitle: {
         fontSize: 12,
-        color: '#6B7280',
+        color: colors.neutral[500],
         textAlign: 'center',
         marginBottom: 10,
     },

@@ -24,6 +24,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 import {
   A11yRole,
   MIN_TOUCH_TARGET_SIZE,
@@ -197,11 +198,11 @@ const AccessibleButton: React.FC<AccessibleButtonProps> = ({
    */
   const getIconColor = (): string => {
     const colorMap: Record<ButtonVariant, string> = {
-      primary: '#FFFFFF',
-      secondary: '#FFFFFF',
+      primary: colors.text.white,
+      secondary: colors.text.white,
       outline: '#9333EA',
       ghost: '#9333EA',
-      danger: '#FFFFFF',
+      danger: colors.text.white,
     };
 
     return colorMap[variant];
@@ -315,8 +316,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   dangerButton: {
-    backgroundColor: '#EF4444',
-    shadowColor: '#EF4444',
+    backgroundColor: colors.error,
+    shadowColor: colors.error,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -325,11 +326,11 @@ const styles = StyleSheet.create({
 
   // Text variant styles
   primaryText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontWeight: '600',
   },
   secondaryText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontWeight: '600',
   },
   outlineText: {
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   dangerText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontWeight: '600',
   },
 

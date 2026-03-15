@@ -8,6 +8,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { View, ActivityIndicator, StyleSheet, Text } from 'react-native';
+import { colors } from '@/constants/theme';
 
 export default function MallBrandIndex() {
   const router = useRouter();
@@ -20,7 +21,7 @@ export default function MallBrandIndex() {
   // Show loading while redirecting
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="#0284C7" />
+      <ActivityIndicator size="large" color={colors.brand.sky} />
       <Text style={styles.text}>Loading brands...</Text>
     </View>
   );
@@ -31,11 +32,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   text: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });

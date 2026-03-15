@@ -21,6 +21,7 @@ import { platformAlert } from '@/utils/platformAlert';
 import type { SpinWheelSegment, SpinWheelResult } from '@/types/gamification.types';
 import { GamePageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function SpinWheelPage() {
   const [loading, setLoading] = useState(true);
@@ -173,7 +174,7 @@ export default function SpinWheelPage() {
           headerStyle: {
             backgroundColor: Colors.brand.purpleLight,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.background.primary,
           headerTitleStyle: {
             fontWeight: 'bold',
           },
@@ -220,7 +221,7 @@ export default function SpinWheelPage() {
           <ThemedText style={styles.statsTitle}>Your Stats</ThemedText>
           <View style={styles.statsGrid}>
             <View style={styles.statCard}>
-              <Ionicons name="star" size={28} color="#FFD700" />
+              <Ionicons name="star" size={28} color={colors.brand.goldBright} />
               <ThemedText style={styles.statValue}>
                 {gamificationState.coinBalance.total.toLocaleString()}
               </ThemedText>

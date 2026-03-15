@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import notificationService from '@/services/notificationService';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/constants/theme';
 
 interface Notification {
   _id: string;
@@ -35,7 +36,7 @@ const { width } = Dimensions.get('window');
 
 function NotificationBell({
   iconSize = 24,
-  iconColor = '#1F2937'
+  iconColor = colors.neutral[800]
 }: NotificationBellProps) {
   const router = useRouter();
   const { isAuthenticated } = useAuth() as any;
@@ -170,16 +171,16 @@ function NotificationBell({
   };
 
   const getCategoryColor = (category: string) => {
-    const colors: { [key: string]: string } = {
-      order: '#3B82F6',
-      earning: '#10B981',
-      promotional: '#F59E0B',
-      social: '#8B5CF6',
-      security: '#EF4444',
-      system: '#6B7280',
-      reminder: '#EC4899',
+    const categoryColors: { [key: string]: string } = {
+      order: colors.info,
+      earning: colors.success,
+      promotional: colors.warning,
+      social: colors.brand.purpleLight,
+      security: colors.error,
+      system: colors.neutral[500],
+      reminder: colors.brand.pink,
     };
-    return colors[category] || '#6B7280';
+    return categoryColors[category] || colors.neutral[500];
   };
 
   const getCategoryIcon = (category: string) => {
@@ -257,7 +258,7 @@ function NotificationBell({
                   accessibilityState={{ disabled: marking, busy: marking }}
                 >
                   {marking ? (
-                    <ActivityIndicator size="small" color="#3B82F6" />
+                    <ActivityIndicator size="small" color={colors.infoScale[400]} />
                   ) : (
                     <Text style={styles.markAllText}>Mark all read</Text>
                   )}
@@ -269,7 +270,7 @@ function NotificationBell({
             <ScrollView style={styles.notificationsList}>
               {loading && notifications.length === 0 ? (
                 <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color="#3B82F6" />
+                  <ActivityIndicator size="large" color={colors.infoScale[400]} />
                 </View>
               ) : notifications.length > 0 ? (
                 notifications.map((notification) => (
@@ -331,7 +332,7 @@ function NotificationBell({
                 ))
               ) : (
                 <View style={styles.emptyContainer}>
-                  <Ionicons name="notifications-off-outline" size={48} color="#D1D5DB" />
+                  <Ionicons name="notifications-off-outline" size={48} color={colors.neutral[300]} />
                   <Text style={styles.emptyText}>No notifications yet</Text>
                 </View>
               )}
@@ -346,7 +347,7 @@ function NotificationBell({
               accessibilityHint="Double tap to view complete notification history"
             >
               <Text style={styles.viewAllText}>View All Notifications</Text>
-              <Ionicons name="chevron-forward" size={16} color="#3B82F6" />
+              <Ionicons name="chevron-forward" size={16} color={colors.infoScale[400]} />
             </Pressable>
           </View>
         </Pressable>
@@ -364,7 +365,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 4,
     right: 4,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     borderRadius: 10,
     minWidth: 18,
     height: 18,
@@ -373,7 +374,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   badgeText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontSize: 10,
     fontWeight: 'bold',
   },
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
   dropdown: {
     width: Math.min(width - 32, 400),
     maxHeight: '70%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -403,23 +404,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.gray[200],
   },
   dropdownTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   markAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     borderRadius: 6,
   },
   markAllText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#3B82F6',
+    color: colors.info,
   },
   notificationsList: {
     maxHeight: 400,
@@ -432,7 +433,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.gray[100],
   },
   unreadNotification: {
     backgroundColor: '#F0F9FF',
@@ -458,7 +459,7 @@ const styles = StyleSheet.create({
   notificationTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     flex: 1,
     marginRight: 8,
   },
@@ -467,11 +468,11 @@ const styles = StyleSheet.create({
   },
   notificationTime: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   notificationMessage: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
   unreadDot: {
@@ -481,7 +482,7 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#3B82F6',
+    backgroundColor: colors.info,
   },
   emptyContainer: {
     padding: 40,
@@ -489,7 +490,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 12,
   },
   viewAllButton: {
@@ -498,12 +499,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.gray[200],
   },
   viewAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#3B82F6',
+    color: colors.info,
     marginRight: 4,
   },
 });

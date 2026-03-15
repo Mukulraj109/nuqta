@@ -25,6 +25,7 @@ import offerCommentApi, { MyCommentItem } from '@/services/offerCommentApi';
 import pollApi, { PollVoteHistory } from '@/services/pollApi';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type FilterType = 'all' | 'photos' | 'reels' | 'comments' | 'votes';
 
@@ -59,7 +60,7 @@ const COLORS = {
   redLight: '#FFF0EF',
   amber: '#FF9500',
   amberLight: '#FFF8EC',
-  blue: '#007AFF',
+  blue: colors.brand.ios,
   blueLight: '#EBF5FF',
   purple: '#AF52DE',
   purpleLight: '#F5EDFB',
@@ -73,7 +74,7 @@ const TYPE_CONFIG = {
     label: 'Photo',
     color: COLORS.blue,
     bg: COLORS.blueLight,
-    gradient: ['#007AFF', '#5856D6'] as [string, string],
+    gradient: [colors.brand.ios, '#5856D6'] as [string, string],
   },
   reel: {
     icon: 'videocam' as const,
@@ -694,7 +695,7 @@ const styles = StyleSheet.create({
   coinsText: {
     ...Typography.bodySmall,
     fontWeight: '700',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
 
   // ==================== LOADING ====================

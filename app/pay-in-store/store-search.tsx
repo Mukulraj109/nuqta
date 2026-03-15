@@ -36,6 +36,7 @@ import {
   PAYMENT_SEARCH_COLORS,
 } from '@/types/paymentStoreSearch.types';
 
+import { colors } from '@/constants/theme';
 import {
   PremiumSearchHeader,
   CategoryChips,
@@ -192,7 +193,7 @@ export default function StoreSearchScreen() {
         {/* Empty State if nothing loaded */}
         {!isInitialLoading && !showNearby && !showRecent && popularStores.length === 0 && (
           <View style={styles.emptyContainer}>
-            <Ionicons name="storefront-outline" size={48} color="#9CA3AF" />
+            <Ionicons name="storefront-outline" size={48} color={colors.neutral[400]} />
             <Text style={styles.emptyText}>No stores available</Text>
             <Text style={styles.emptySubtext}>Try searching for a specific store</Text>
           </View>
@@ -207,7 +208,7 @@ export default function StoreSearchScreen() {
       <View style={styles.container}>
         {/* Background */}
         <LinearGradient
-          colors={[PAYMENT_SEARCH_COLORS.background, '#FFFFFF']}
+          colors={[PAYMENT_SEARCH_COLORS.background, colors.background.primary]}
           style={StyleSheet.absoluteFill}
         />
 
@@ -290,12 +291,12 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 16,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 4,
     textAlign: 'center',
   },

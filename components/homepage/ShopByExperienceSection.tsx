@@ -17,6 +17,7 @@ import {
 import { useRouter } from 'expo-router';
 import { experiencesApi } from '@/services/experiencesApi';
 import { getTheme } from '@/constants/experienceThemes';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#64748B',
+    color: colors.slateGray,
     marginTop: 4,
   },
   grid: {
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
   },
   cardSubtitle: {
     fontSize: 9,
-    color: '#64748B',
+    color: colors.slateGray,
     textAlign: 'center',
     fontWeight: '400',
   },
@@ -211,8 +212,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: '#ffcd57',
-    backgroundColor: '#faf1e0',
+    borderColor: colors.lightMustard,
+    backgroundColor: colors.linen,
     alignItems: 'center',
     justifyContent: 'center',
   },

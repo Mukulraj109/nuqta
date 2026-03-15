@@ -11,6 +11,7 @@ import {
 import { ThemedText } from '@/components/ThemedText';
 import { HomeDeliveryProductCard } from './HomeDeliveryProductCard';
 import { ProductGridProps, HomeDeliveryProduct } from '@/types/home-delivery.types';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -62,7 +63,7 @@ export const ProductGrid = memo(function ProductGrid({
         accessibilityLabel="Loading more products"
         accessibilityValue={{ text: "Loading" }}
       >
-        <ActivityIndicator size="small" color="#8B5CF6" />
+        <ActivityIndicator size="small" color={colors.brand.purpleLight} />
         <ThemedText style={styles.loadingText}>Loading more products...</ThemedText>
       </View>
     );
@@ -102,7 +103,7 @@ export const ProductGrid = memo(function ProductGrid({
         accessibilityLabel="Loading products"
         accessibilityValue={{ text: "Loading" }}
       >
-        <ActivityIndicator size="large" color="#8B5CF6" />
+        <ActivityIndicator size="large" color={colors.brand.purpleLight} />
         <ThemedText style={styles.loadingText}>Loading products...</ThemedText>
       </View>
     );
@@ -143,7 +144,7 @@ export const ProductGrid = memo(function ProductGrid({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   contentContainer: {
     paddingHorizontal: 20,
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
   },
   resultCount: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   emptyContainer: {
@@ -181,13 +182,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
     textAlign: 'center',
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
 });

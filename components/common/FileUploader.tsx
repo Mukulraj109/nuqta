@@ -14,11 +14,12 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { ThemedText } from '@/components/ThemedText';
-import { 
-  fileUploadService, 
-  UploadResult, 
-  UploadOptions, 
-  UploadProgress 
+import { colors } from '@/constants/theme';
+import {
+  fileUploadService,
+  UploadResult,
+  UploadOptions,
+  UploadProgress
 } from '@/services/fileUploadService';
 
 interface FileUploaderProps {
@@ -191,14 +192,14 @@ function FileUploader({
           <CachedImage source={upload.file.uri} style={styles.previewImage} />
         ) : (
           <View style={styles.videoPreview}>
-            <Ionicons name="play-circle" size={40} color="#fff" />
+            <Ionicons name="play-circle" size={40} color={colors.background.primary} />
           </View>
         )}
         
         {/* Progress overlay */}
         {upload.isUploading && (
           <View style={styles.progressOverlay}>
-            <ActivityIndicator size="small" color="#fff" />
+            <ActivityIndicator size="small" color={colors.background.primary} />
             <ThemedText style={styles.progressText}>
               {upload.uploadProgress}%
             </ThemedText>
@@ -208,14 +209,14 @@ function FileUploader({
         {/* Success indicator */}
         {upload.uploadUrl && (
           <View style={styles.successOverlay}>
-            <Ionicons name="checkmark-circle" size={24} color="#22C55E" />
+            <Ionicons name="checkmark-circle" size={24} color={colors.success} />
           </View>
         )}
         
         {/* Error indicator */}
         {upload.error && (
           <View style={styles.errorOverlay}>
-            <Ionicons name="close-circle" size={24} color="#EF4444" />
+            <Ionicons name="close-circle" size={24} color={colors.error} />
           </View>
         )}
       </View>
@@ -246,7 +247,7 @@ function FileUploader({
             style={styles.retryButton}
             onPress={() => retryUpload(upload.id)}
           >
-            <Ionicons name="refresh" size={16} color="#8B5CF6" />
+            <Ionicons name="refresh" size={16} color={colors.brand.purpleLight} />
           </Pressable>
         )}
         
@@ -254,7 +255,7 @@ function FileUploader({
           style={styles.removeButton}
           onPress={() => removeUpload(upload.id)}
         >
-          <Ionicons name="trash" size={16} color="#EF4444" />
+          <Ionicons name="trash" size={16} color={colors.error} />
         </Pressable>
       </View>
     </View>
@@ -271,9 +272,9 @@ function FileUploader({
          
         >
           {isSelecting ? (
-            <ActivityIndicator size="small" color="#8B5CF6" />
+            <ActivityIndicator size="small" color={colors.brand.purpleLight} />
           ) : (
-            <Ionicons name="cloud-upload" size={32} color="#8B5CF6" />
+            <Ionicons name="cloud-upload" size={32} color={colors.brand.purpleLight} />
           )}
           
           <ThemedText style={styles.uploadText}>
@@ -306,23 +307,23 @@ const styles = StyleSheet.create({
   },
   uploadButton: {
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
     borderStyle: 'dashed',
     borderRadius: 12,
     padding: 32,
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   uploadText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginTop: 12,
     textAlign: 'center',
   },
   uploadSubtext: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     marginTop: 4,
     textAlign: 'center',
   },
@@ -333,12 +334,12 @@ const styles = StyleSheet.create({
   uploadItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 12,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
   },
   preview: {
     width: 60,
@@ -351,12 +352,12 @@ const styles = StyleSheet.create({
   previewImage: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
   },
   videoPreview: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#1F2937',
+    backgroundColor: colors.neutral[800],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -371,7 +372,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   progressText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '600',
     marginTop: 4,
@@ -399,16 +400,16 @@ const styles = StyleSheet.create({
   fileName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 2,
   },
   fileSize: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
   },
   errorText: {
     fontSize: 11,
-    color: '#EF4444',
+    color: colors.error,
     marginTop: 2,
   },
   actions: {
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
@@ -428,7 +429,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     justifyContent: 'center',
     alignItems: 'center',
   },

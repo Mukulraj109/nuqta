@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
+import { colors } from '@/constants/theme';
 
 interface OperationalHours {
   open?: string;
@@ -120,7 +121,7 @@ export default function StoreQuickInfoCard({
         </ThemedText>
         {isVerified && (
           <View style={styles.verifiedBadge}>
-            <Ionicons name="checkmark-circle" size={20} color="#ffcd57" />
+            <Ionicons name="checkmark-circle" size={20} color={colors.lightMustard} />
           </View>
         )}
       </View>
@@ -135,7 +136,7 @@ export default function StoreQuickInfoCard({
       {/* Hours Info */}
       {hoursInfo && (
         <View style={styles.infoRow}>
-          <Ionicons name="time-outline" size={16} color="#6B7280" />
+          <Ionicons name="time-outline" size={16} color={colors.neutral[500]} />
           <ThemedText style={styles.infoText}>
             {hoursInfo.isOpen ? (
               <>
@@ -156,7 +157,7 @@ export default function StoreQuickInfoCard({
       {formattedAddress && (
         <View style={styles.locationRow}>
           <View style={styles.locationInfo}>
-            <Ionicons name="location-outline" size={16} color="#6B7280" />
+            <Ionicons name="location-outline" size={16} color={colors.neutral[500]} />
             <ThemedText style={styles.addressText} numberOfLines={1}>
               {formattedAddress}
             </ThemedText>
@@ -177,7 +178,7 @@ export default function StoreQuickInfoCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 16,
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#1a3a52",
+    color: colors.nileBlue,
     flex: 1,
   },
   verifiedBadge: {
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 14,
-    color: "#6B7280",
+    color: colors.neutral[500],
     lineHeight: 20,
     marginBottom: 12,
   },
@@ -220,21 +221,21 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 14,
-    color: "#6B7280",
+    color: colors.neutral[500],
   },
   openText: {
     color: "#00875A",
     fontWeight: "600",
   },
   closedText: {
-    color: "#DC2626",
+    color: colors.error,
     fontWeight: "600",
   },
   locationRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#F9FAFB",
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 12,
     gap: 12,
@@ -247,29 +248,29 @@ const styles = StyleSheet.create({
   },
   addressText: {
     fontSize: 13,
-    color: "#4B5563",
+    color: colors.neutral[600],
     flex: 1,
   },
   openButton: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#ffcd57",
+    borderColor: colors.lightMustard,
   },
   openDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: "#ffcd57",
+    backgroundColor: colors.lightMustard,
   },
   openButtonText: {
     fontSize: 13,
     fontWeight: "600",
-    color: "#ffcd57",
+    color: colors.lightMustard,
   },
 });

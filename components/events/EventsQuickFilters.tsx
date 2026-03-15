@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { EventFilters } from '@/services/eventsApi';
 import { EventSortOption } from '@/hooks/useEventsPage';
+import { colors } from '@/constants/theme';
 
 interface QuickFilter {
   id: string;
@@ -109,7 +110,7 @@ const EventsQuickFilters: React.FC<EventsQuickFiltersProps> = ({
           <Ionicons
             name="options-outline"
             size={16}
-            color={activeFiltersCount > 0 ? '#FFFFFF' : '#1a3a52'}
+            color={activeFiltersCount > 0 ? colors.background.primary : colors.nileBlue}
           />
           <ThemedText
             style={[
@@ -144,7 +145,7 @@ const EventsQuickFilters: React.FC<EventsQuickFiltersProps> = ({
             <Ionicons
               name={filter.icon}
               size={14}
-              color={filter.isActive ? '#FFFFFF' : '#6B7280'}
+              color={filter.isActive ? colors.background.primary : colors.neutral[500]}
             />
             <ThemedText
               style={[
@@ -165,11 +166,11 @@ const EventsQuickFilters: React.FC<EventsQuickFiltersProps> = ({
        
         accessibilityLabel={`Sort by ${getSortLabel(sortBy)}`}
       >
-        <Ionicons name="swap-vertical" size={16} color="#1a3a52" />
+        <Ionicons name="swap-vertical" size={16} color={colors.nileBlue} />
         <ThemedText style={styles.sortButtonText}>
           {getSortLabel(sortBy)}
         </ThemedText>
-        <Ionicons name="chevron-down" size={14} color="#1a3a52" />
+        <Ionicons name="chevron-down" size={14} color={colors.nileBlue} />
       </Pressable>
     </View>
   );
@@ -179,11 +180,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   scrollContent: {
     flexDirection: 'row',
@@ -194,28 +195,28 @@ const styles = StyleSheet.create({
   filterButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1.5,
-    borderColor: '#1a3a52',
+    borderColor: colors.nileBlue,
     gap: 6,
   },
   filterButtonActive: {
-    backgroundColor: '#1a3a52',
-    borderColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
+    borderColor: colors.nileBlue,
   },
   filterButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   filterButtonTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   badge: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 10,
     minWidth: 18,
     height: 18,
@@ -226,35 +227,35 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   chipButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     gap: 4,
   },
   chipButtonActive: {
-    backgroundColor: '#1a3a52',
-    borderColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
+    borderColor: colors.nileBlue,
   },
   chipText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   chipTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   sortButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
   sortButtonText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 });
 

@@ -22,6 +22,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import TierBadge from '@/components/subscription/TierBadge';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -29,7 +30,7 @@ const { width } = Dimensions.get('window');
 const COLORS = {
   primary: Colors.brand.purpleLight,
   primaryDark: Colors.brand.purple,
-  white: '#FFFFFF',
+  white: colors.background.primary,
   background: Colors.background.secondary,
   navy: Colors.nileBlue,
   gray50: Colors.background.secondary,
@@ -42,7 +43,7 @@ const COLORS = {
   greenDark: Colors.success,
   amber400: Colors.warning,
   amber500: Colors.warning,
-  gold: '#FFD700',
+  gold: colors.brand.goldBright,
   silver: '#C0C0C0',
   bronze: '#CD7F32',
   blue500: Colors.info,
@@ -1152,10 +1153,10 @@ const styles = StyleSheet.create({
   currentUserCard: {
     borderWidth: 2,
     borderColor: COLORS.primary,
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
   },
   topThreeCard: {
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     borderWidth: 1,
     borderColor: '#FCD34D',
   },
@@ -1271,7 +1272,7 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     flexDirection: 'row',
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
     gap: Spacing.md,

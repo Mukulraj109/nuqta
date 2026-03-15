@@ -27,6 +27,7 @@ import { generateIdempotencyKey } from '@/utils/idempotencyKey';
 import { handleWalletError } from '@/utils/walletErrorHandler';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface GiftCard {
   _id: string;
@@ -266,7 +267,7 @@ export default function GiftCardsPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Gift Cards</ThemedText>
           <View style={styles.placeholder} />
@@ -457,7 +458,7 @@ export default function GiftCardsPage() {
               disabled={!amount || !selectedCard.denominations.includes(Number(amount)) || loading}
             >
               {loading ? (
-                <ActivityIndicator color="#FFF" />
+                <ActivityIndicator color={colors.background.primary} />
               ) : (
                 <ThemedText style={styles.purchaseButtonText}>Buy Now</ThemedText>
               )}
@@ -491,7 +492,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -512,7 +513,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
   },
   tabActive: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
   },
   tabText: {
     ...Typography.label,
@@ -564,7 +565,7 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
   },
   categoryTextActive: {
-    color: '#FFF',
+    color: colors.background.primary,
   },
   sectionTitle: {
     ...Typography.h4,
@@ -601,7 +602,7 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   giftCard: {
     flexDirection: 'row',
@@ -647,7 +648,7 @@ const styles = StyleSheet.create({
   },
   buyButtonText: {
     ...Typography.labelSmall,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   myGiftCard: {
     backgroundColor: Colors.background.primary,
@@ -736,7 +737,7 @@ const styles = StyleSheet.create({
   },
   emptyButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   modalOverlay: {
     position: 'absolute',
@@ -838,6 +839,6 @@ const styles = StyleSheet.create({
   },
   purchaseButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
 });

@@ -6,8 +6,9 @@
  */
 import React, { useEffect, useRef, useMemo } from 'react';
 import { View, Animated, Dimensions, StyleSheet } from 'react-native';
+import { colors } from '@/constants/theme';
 
-const CONFETTI_COLORS = ['#7C3AED', '#F59E0B', '#10B981', '#EC4899', '#3B82F6', '#EF4444'];
+const CONFETTI_COLORS = [colors.brand.purple, colors.warningScale[400], colors.successScale[400], colors.brand.pink, colors.infoScale[400], colors.error];
 const PIECE_COUNT = 20;
 const DURATION = 3000;
 

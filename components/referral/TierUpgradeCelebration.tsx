@@ -17,6 +17,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { TIER_COLORS, TIER_GRADIENTS } from '@/types/referral.types';
 import type { ReferralTier } from '@/types/referral.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -125,8 +126,8 @@ function TierUpgradeCelebration({
         {/* Confetti */}
         <View style={styles.confettiContainer}>
           {confettiAnims.map((anim, index) => {
-            const colors = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899'];
-            const color = colors[index % colors.length];
+            const confettiColors = [colors.error, colors.warningScale[400], colors.successScale[400], colors.infoScale[400], colors.brand.purpleLight, colors.brand.pink];
+            const color = confettiColors[index % confettiColors.length];
 
             return (
               <Animated.View
@@ -164,12 +165,12 @@ function TierUpgradeCelebration({
           <LinearGradient colors={tierGradient} style={styles.gradient}>
             {/* Close Button */}
             <Pressable style={styles.closeButton} onPress={onClose}>
-              <Ionicons name="close" size={28} color="#FFFFFF" />
+              <Ionicons name="close" size={28} color={colors.background.primary} />
             </Pressable>
 
             {/* Trophy Icon */}
             <View style={styles.trophyContainer}>
-              <Ionicons name="trophy" size={120} color="#FFD700" />
+              <Ionicons name="trophy" size={120} color={colors.brand.goldBright} />
             </View>
 
             {/* Tier Info */}
@@ -186,7 +187,7 @@ function TierUpgradeCelebration({
               <View style={styles.benefitsList}>
                 {tierData.rewards.perReferral && (
                   <View style={styles.benefitItem}>
-                    <Ionicons name="diamond" size={24} color="#FFD700" />
+                    <Ionicons name="diamond" size={24} color={colors.brand.goldBright} />
                     <ThemedText style={styles.benefitText}>
                       {tierData.rewards.perReferral} coins per referral
                     </ThemedText>
@@ -195,7 +196,7 @@ function TierUpgradeCelebration({
 
                 {tierData.rewards.tierBonus && (
                   <View style={styles.benefitItem}>
-                    <Ionicons name="gift" size={24} color="#FFD700" />
+                    <Ionicons name="gift" size={24} color={colors.brand.goldBright} />
                     <ThemedText style={styles.benefitText}>
                       {tierData.rewards.tierBonus} coins bonus!
                     </ThemedText>
@@ -204,7 +205,7 @@ function TierUpgradeCelebration({
 
                 {tierData.rewards.voucher && (
                   <View style={styles.benefitItem}>
-                    <Ionicons name="ticket" size={24} color="#FFD700" />
+                    <Ionicons name="ticket" size={24} color={colors.brand.goldBright} />
                     <ThemedText style={styles.benefitText}>
                       {currencySymbol}{tierData.rewards.voucher.amount} {tierData.rewards.voucher.type} voucher
                     </ThemedText>
@@ -213,7 +214,7 @@ function TierUpgradeCelebration({
 
                 {tierData.rewards.lifetimePremium && (
                   <View style={styles.benefitItem}>
-                    <Ionicons name="star" size={24} color="#FFD700" />
+                    <Ionicons name="star" size={24} color={colors.brand.goldBright} />
                     <ThemedText style={styles.benefitText}>
                       Lifetime Premium Access! 🎉
                     </ThemedText>
@@ -226,7 +227,7 @@ function TierUpgradeCelebration({
             <View style={styles.actions}>
               <Pressable style={styles.shareButton} onPress={handleShare}>
                 <LinearGradient
-                  colors={['#FFFFFF', '#F3F4F6']}
+                  colors={[colors.background.primary, colors.neutral[100]]}
                   style={styles.shareButtonGradient}
                 >
                   <Ionicons name="share-social" size={24} color={tierColor} />
@@ -238,11 +239,11 @@ function TierUpgradeCelebration({
 
               <Pressable style={styles.continueButton} onPress={onClose}>
                 <LinearGradient
-                  colors={['#10B981', '#059669']}
+                  colors={[colors.successScale[400], colors.successScale[700]]}
                   style={styles.continueButtonGradient}
                 >
                   <ThemedText style={styles.continueButtonText}>Continue</ThemedText>
-                  <Ionicons name="arrow-forward" size={24} color="#FFFFFF" />
+                  <Ionicons name="arrow-forward" size={24} color={colors.background.primary} />
                 </LinearGradient>
               </Pressable>
             </View>
@@ -306,21 +307,21 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   congratsText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
     letterSpacing: 3,
     marginBottom: 8,
   },
   tierName: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 36,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
   },
   tierSubtext: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     opacity: 0.9,
     marginBottom: 32,
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   benefitsTitle: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 16,
@@ -348,7 +349,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   benefitText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 15,
     fontWeight: '600',
   },
@@ -383,7 +384,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   continueButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -400,7 +401,7 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   firework2: {
     top: '20%',

@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { COLORS } from './constants';
 import reviewsService from '@/services/reviewsApi';
+import { colors } from '@/constants/theme';
 
 interface ReviewItem {
   _id: string;
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     overflow: 'hidden',
     ...Platform.select({
-      ios: { shadowColor: '#1a3a52', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8 },
+      ios: { shadowColor: colors.nileBlue, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8 },
       android: { elevation: 2 },
       web: { boxShadow: '0 2px 8px rgba(11,34,64,0.06)' },
     }),
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   avatarFallback: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
   },

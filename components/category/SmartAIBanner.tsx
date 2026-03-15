@@ -17,6 +17,7 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface SmartAIBannerProps {
   categorySlug: string;
@@ -145,7 +146,7 @@ const SmartAIBanner: React.FC<SmartAIBannerProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#8B5CF6', '#6D28D9']}
+        colors={[colors.brand.purpleLight, colors.brand.purpleDeep]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -153,7 +154,7 @@ const SmartAIBanner: React.FC<SmartAIBannerProps> = ({
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.sparkleIcon}>
-            <Ionicons name="sparkles" size={20} color="#FFFFFF" />
+            <Ionicons name="sparkles" size={20} color={colors.background.primary} />
           </View>
           <View style={styles.headerText}>
             <Text style={styles.title}>Smart AI Search</Text>
@@ -177,7 +178,7 @@ const SmartAIBanner: React.FC<SmartAIBannerProps> = ({
             onPress={handleSearch}
            
           >
-            <Ionicons name="arrow-forward" size={18} color="#8B5CF6" />
+            <Ionicons name="arrow-forward" size={18} color={colors.brand.purpleLight} />
           </Pressable>
         </View>
 
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#8B5CF6',
+        shadowColor: colors.brand.purpleLight,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 12,
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 2,
   },
   subtitle: {
@@ -269,14 +270,14 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 44,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   searchButton: {
     width: 40,
     height: 40,
     margin: 2,
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },

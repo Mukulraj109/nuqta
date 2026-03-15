@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -512,7 +513,7 @@ const styles = StyleSheet.create({
   },
   resultsText: {
     fontSize: Typography.body.fontSize,
-    color: '#00796B',
+    color: colors.brand.teal,
     fontWeight: '600',
   },
   section: {

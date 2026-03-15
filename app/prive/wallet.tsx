@@ -35,6 +35,7 @@ import { PriveSkeletonBlock } from '@/components/prive/PriveSkeletonBlock';
 import { useWalletContext } from '@/contexts/WalletContext';
 import priveApi, { TransactionItem } from '@/services/priveApi';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const WALLET_CACHE_KEY = 'prive_wallet_cache';
 
@@ -356,7 +357,7 @@ export default function PriveWalletScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#1F2937', '#111827', '#0A0A0A']}
+        colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]}
         style={StyleSheet.absoluteFill}
       />
       <SafeAreaView style={styles.safeArea}>

@@ -14,6 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 interface FlightDetails {
   id: string;
@@ -61,7 +62,7 @@ const FlightBookingConfirmation: React.FC<FlightBookingConfirmationProps> = ({
         {/* Success Header */}
         <View style={styles.successHeader}>
           <View style={styles.successIcon}>
-            <Ionicons name="checkmark-circle" size={80} color="#22C55E" />
+            <Ionicons name="checkmark-circle" size={80} color={colors.success} />
           </View>
           <Text style={styles.successTitle}>Booking Confirmed!</Text>
           <Text style={styles.successSubtitle}>
@@ -99,7 +100,7 @@ const FlightBookingConfirmation: React.FC<FlightBookingConfirmationProps> = ({
               </View>
             </View>
             
-            <Ionicons name="airplane" size={24} color="#3B82F6" />
+            <Ionicons name="airplane" size={24} color={colors.infoScale[400]} />
             
             <View style={styles.routeItem}>
               <View style={styles.routeCode}>
@@ -122,7 +123,7 @@ const FlightBookingConfirmation: React.FC<FlightBookingConfirmationProps> = ({
 
           {bookingData.returnDate && (
             <View style={styles.returnTrip}>
-              <Ionicons name="return-down-back" size={20} color="#6B7280" />
+              <Ionicons name="return-down-back" size={20} color={colors.neutral[500]} />
               <Text style={styles.returnTripText}>Return trip included</Text>
             </View>
           )}
@@ -153,7 +154,7 @@ const FlightBookingConfirmation: React.FC<FlightBookingConfirmationProps> = ({
 
         {/* Important Information */}
         <View style={styles.infoCard}>
-          <Ionicons name="information-circle" size={24} color="#3B82F6" />
+          <Ionicons name="information-circle" size={24} color={colors.infoScale[400]} />
           <View style={styles.infoContent}>
             <Text style={styles.infoTitle}>What's Next?</Text>
             <Text style={styles.infoText}>
@@ -190,7 +191,7 @@ const FlightBookingConfirmation: React.FC<FlightBookingConfirmationProps> = ({
           onPress={onClose}
         >
           <LinearGradient
-            colors={['#3B82F6', '#2563EB']}
+            colors={[colors.infoScale[400], colors.brand.blue]}
             style={styles.primaryButtonGradient}
           >
             <Text style={styles.primaryButtonText}>Done</Text>
@@ -204,7 +205,7 @@ const FlightBookingConfirmation: React.FC<FlightBookingConfirmationProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   scrollView: {
     flex: 1,
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
   successHeader: {
     alignItems: 'center',
     padding: 32,
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
   },
   successIcon: {
     marginBottom: 16,
@@ -220,49 +221,49 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   successSubtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   bookingNumberCard: {
     margin: 20,
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#3B82F6',
+    borderColor: colors.infoScale[400],
     alignItems: 'center',
   },
   bookingNumberLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   bookingNumber: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#3B82F6',
+    color: colors.infoScale[400],
     marginBottom: 8,
     letterSpacing: 2,
   },
   bookingNote: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
   },
   section: {
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   routeCard: {
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
   },
   routeItem: {
@@ -283,14 +284,14 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 8,
-    backgroundColor: '#3B82F6',
+    backgroundColor: colors.infoScale[400],
     justifyContent: 'center',
     alignItems: 'center',
   },
   routeCodeText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   routeInfo: {
     flex: 1,
@@ -298,11 +299,11 @@ const styles = StyleSheet.create({
   routeCity: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   routeDate: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 4,
   },
   returnTrip: {
@@ -311,12 +312,12 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 12,
     padding: 12,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     borderRadius: 8,
   },
   returnTripText: {
     fontSize: 14,
-    color: '#3B82F6',
+    color: colors.infoScale[400],
     fontWeight: '600',
   },
   passengerInfo: {
@@ -324,20 +325,20 @@ const styles = StyleSheet.create({
   },
   passengerText: {
     fontSize: 16,
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 4,
   },
   classText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginTop: 8,
   },
   infoCard: {
     flexDirection: 'row',
     margin: 20,
     padding: 20,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     borderRadius: 12,
     gap: 12,
   },
@@ -347,31 +348,31 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   infoText: {
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
     lineHeight: 22,
   },
   supportCard: {
     margin: 20,
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   supportTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   supportText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 20,
   },
   footer: {
@@ -379,22 +380,22 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
   },
   secondaryButton: {
     flex: 1,
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   secondaryButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   primaryButton: {
     flex: 1,
@@ -408,7 +409,7 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

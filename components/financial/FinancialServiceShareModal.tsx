@@ -19,14 +19,15 @@ import * as Clipboard from 'expo-clipboard';
 import { Share } from 'react-native';
 import { useComprehensiveAnalytics } from '@/hooks/useComprehensiveAnalytics';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#0B2240',
-  gray100: '#F3F4F6',
-  gray600: '#6B7280',
-  purple500: '#8B5CF6',
-  green500: '#22C55E',
+  white: colors.background.primary,
+  navy: colors.brand.navyDark,
+  gray100: colors.neutral[100],
+  gray600: colors.neutral[500],
+  purple500: colors.brand.purpleLight,
+  green500: colors.success,
 };
 
 interface ShareOption {

@@ -22,6 +22,7 @@ import { ThemedText } from '@/components/ThemedText';
 import reviewService from '@/services/reviewApi';
 import { UserReview } from '@/types/review.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type FilterTab = 'all' | 'pending' | 'approved' | 'rejected';
 
@@ -121,7 +122,7 @@ export default function MyReviewsPage() {
       case 'pending':
         return (
           <View style={[styles.statusBadge, styles.statusPending]}>
-            <Ionicons name="time-outline" size={12} color="#92400E" />
+            <Ionicons name="time-outline" size={12} color={colors.brand.amberDark} />
             <Text style={styles.statusPendingText}>Awaiting approval</Text>
           </View>
         );
@@ -169,7 +170,7 @@ export default function MyReviewsPage() {
               <CachedImage source={storeLogo} style={styles.storeLogo} />
             ) : (
               <View style={[styles.storeLogo, styles.storeLogoPlaceholder]}>
-                <Ionicons name="storefront" size={20} color="#00C06A" />
+                <Ionicons name="storefront" size={20} color={colors.brand.green} />
               </View>
             )}
             <View style={styles.storeDetails}>
@@ -214,7 +215,7 @@ export default function MyReviewsPage() {
           </View>
           {review.merchantReply && (
             <View style={styles.stat}>
-              <Ionicons name="chatbox-outline" size={16} color="#00C06A" />
+              <Ionicons name="chatbox-outline" size={16} color={colors.brand.green} />
               <Text style={styles.statText}>Store replied</Text>
             </View>
           )}
@@ -224,7 +225,7 @@ export default function MyReviewsPage() {
         {review.merchantReply && (
           <View style={styles.merchantReply}>
             <View style={styles.replyHeader}>
-              <Ionicons name="business" size={16} color="#00C06A" />
+              <Ionicons name="business" size={16} color={colors.brand.green} />
               <Text style={styles.replyLabel}>Store Response</Text>
             </View>
             <Text style={styles.replyText}>{review.merchantReply}</Text>
@@ -243,7 +244,7 @@ export default function MyReviewsPage() {
             accessibilityRole="button"
             accessibilityHint={`Opens ${storeName} store page`}
           >
-            <Ionicons name="storefront-outline" size={16} color="#00C06A" />
+            <Ionicons name="storefront-outline" size={16} color={colors.brand.green} />
             <Text style={styles.actionButtonText}>View Store</Text>
           </Pressable>
           <Pressable
@@ -270,7 +271,7 @@ export default function MyReviewsPage() {
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#00C06A" />
+        <StatusBar barStyle="light-content" backgroundColor={colors.brand.green} />
 
         {/* Header */}
         <View style={styles.header}>
@@ -337,8 +338,8 @@ export default function MyReviewsPage() {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
-                tintColor="#00C06A"
-                colors={['#00C06A']}
+                tintColor={colors.brand.green}
+                colors={[colors.brand.green]}
               />
             }
             onEndReached={handleLoadMore}
@@ -357,7 +358,7 @@ export default function MyReviewsPage() {
             ListFooterComponent={
               hasMore ? (
                 <View style={styles.loadMoreContainer}>
-                  <ActivityIndicator size="small" color="#00C06A" />
+                  <ActivityIndicator size="small" color={colors.brand.green} />
                   <Text style={styles.loadMoreText}>Loading more...</Text>
                 </View>
               ) : null
@@ -410,7 +411,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.base,
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingTop: Platform.select({
       ios: 50,
       android: StatusBar.currentHeight || 16,
@@ -445,7 +446,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.secondary,
   },
   filterTabActive: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
   },
   filterTabText: {
     ...Typography.bodySmall,
@@ -485,7 +486,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   retryButton: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.sm,
@@ -510,7 +511,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   shopButton: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingHorizontal: Spacing['2xl'],
     paddingVertical: 14,
     borderRadius: BorderRadius.md,
@@ -612,7 +613,7 @@ const styles = StyleSheet.create({
   merchantReply: {
     backgroundColor: Colors.background.secondary,
     borderLeftWidth: 3,
-    borderLeftColor: '#00C06A',
+    borderLeftColor: colors.brand.green,
     padding: Spacing.md,
     borderRadius: BorderRadius.sm,
     marginBottom: Spacing.md,
@@ -627,7 +628,7 @@ const styles = StyleSheet.create({
     ...Typography.bodySmall,
     fontSize: 13,
     fontWeight: '600',
-    color: '#00C06A',
+    color: colors.brand.green,
   },
   replyText: {
     ...Typography.bodySmall,
@@ -650,15 +651,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   statusPending: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
   },
   statusPendingText: {
     ...Typography.caption,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   statusApproved: {
-    backgroundColor: '#DCFCE7',
+    backgroundColor: colors.successScale[100],
   },
   statusApprovedText: {
     ...Typography.caption,
@@ -666,7 +667,7 @@ const styles = StyleSheet.create({
     color: '#166534',
   },
   statusRejected: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
   },
   statusRejectedText: {
     ...Typography.caption,

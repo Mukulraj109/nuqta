@@ -32,6 +32,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ShimmerSkeleton } from '@/components/ui';
 import ugcApi, { UGCMedia } from '@/services/ugcApi';
 import { realVideosApi } from '@/services/realVideosApi';
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -298,8 +299,8 @@ const UGCCard = memo(function UGCCard({
 
               {mediaLoading && !mediaError && (
                 <View style={styles.skeletonOverlay}>
-                  <LinearGradient colors={['#F3F4F6', '#E5E7EB', '#F3F4F6']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.skeletonGradient} />
-                  <ActivityIndicator size="large" color="#ffcd57" style={styles.skeletonSpinner} />
+                  <LinearGradient colors={[colors.neutral[100], colors.neutral[200], colors.neutral[100]]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.skeletonGradient} />
+                  <ActivityIndicator size="large" color={colors.lightMustard} style={styles.skeletonSpinner} />
                 </View>
               )}
             </>
@@ -323,8 +324,8 @@ const UGCCard = memo(function UGCCard({
               />
               {mediaLoading && !mediaError && (
                 <View style={styles.skeletonOverlay}>
-                  <LinearGradient colors={['#F3F4F6', '#E5E7EB', '#F3F4F6']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.skeletonGradient} />
-                  <ActivityIndicator size="large" color="#ffcd57" style={styles.skeletonSpinner} />
+                  <LinearGradient colors={[colors.neutral[100], colors.neutral[200], colors.neutral[100]]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.skeletonGradient} />
+                  <ActivityIndicator size="large" color={colors.lightMustard} style={styles.skeletonSpinner} />
                 </View>
               )}
             </>
@@ -336,7 +337,7 @@ const UGCCard = memo(function UGCCard({
 
         {mediaError && (
           <View style={styles.errorOverlay}>
-            <Ionicons name="alert-circle-outline" size={32} color="#9CA3AF" />
+            <Ionicons name="alert-circle-outline" size={32} color={colors.neutral[400]} />
           </View>
         )}
 
@@ -346,7 +347,7 @@ const UGCCard = memo(function UGCCard({
         {/* View count badge */}
         <View style={styles.viewCountContainer}>
           <View style={styles.viewCountBadge}>
-            <Ionicons name="eye" size={14} color="#FFFFFF" style={styles.eyeIcon} />
+            <Ionicons name="eye" size={14} color={colors.background.primary} style={styles.eyeIcon} />
             <ThemedText style={[styles.viewCountText, { fontSize: typography.viewCountText }]}>{item.viewCount}</ThemedText>
           </View>
         </View>
@@ -366,7 +367,7 @@ const UGCCard = memo(function UGCCard({
               <Ionicons
                 name={item.isLiked ? 'heart' : 'heart-outline'}
                 size={22}
-                color={item.isLiked ? '#ffd7b5' : '#FFFFFF'}
+                color={item.isLiked ? colors.lightPeach : colors.background.primary}
                 style={styles.actionIcon}
               />
             </Animated.View>
@@ -388,7 +389,7 @@ const UGCCard = memo(function UGCCard({
               <Ionicons
                 name={item.isBookmarked ? 'bookmark' : 'bookmark-outline'}
                 size={22}
-                color={item.isBookmarked ? '#ffcd57' : '#FFFFFF'}
+                color={item.isBookmarked ? colors.lightMustard : colors.background.primary}
                 style={styles.actionIcon}
               />
             </Animated.View>
@@ -748,7 +749,7 @@ export default function UGCSection({
                 width: cardWidth,
                 height: cardHeight,
                 borderRadius: 18,
-                backgroundColor: '#E5E7EB',
+                backgroundColor: colors.neutral[200],
                 marginRight: index < 2 ? cardSpacing : 0,
                 overflow: 'hidden',
                 position: 'relative',
@@ -757,7 +758,7 @@ export default function UGCSection({
               {/* Shimmer overlay */}
               <View style={styles.skeletonOverlay}>
                 <LinearGradient
-                  colors={['#E5E7EB', '#F3F4F6', '#EDE9FE', '#F3F4F6', '#E5E7EB']}
+                  colors={[colors.neutral[200], colors.neutral[100], colors.tint.purple, colors.neutral[100], colors.neutral[200]]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.skeletonGradient}
@@ -778,14 +779,14 @@ export default function UGCSection({
           <ThemedText style={[styles.sectionTitle, { fontSize: typography.sectionTitle }]}>{title}</ThemedText>
         </View>
         <View style={[styles.errorContainer, { paddingHorizontal: horizontalPadding }]}>
-          <Ionicons name="alert-circle-outline" size={48} color="#1a3a52" />
+          <Ionicons name="alert-circle-outline" size={48} color={colors.nileBlue} />
           <ThemedText style={styles.errorText}>{error}</ThemedText>
           <Pressable
             style={styles.retryButton}
             onPress={() => fetchUGCContent()}
            
           >
-            <Ionicons name="refresh" size={20} color="#FFFFFF" />
+            <Ionicons name="refresh" size={20} color={colors.background.primary} />
             <ThemedText style={styles.retryButtonText}>Retry</ThemedText>
           </Pressable>
         </View>
@@ -801,7 +802,7 @@ export default function UGCSection({
           <ThemedText style={[styles.sectionTitle, { fontSize: typography.sectionTitle }]}>{title}</ThemedText>
         </View>
         <View style={[styles.emptyContainer, { paddingHorizontal: horizontalPadding }]}>
-          <Ionicons name="images-outline" size={64} color="#D1D5DB" />
+          <Ionicons name="images-outline" size={64} color={colors.neutral[300]} />
           <ThemedText style={styles.emptyText}>No content available yet</ThemedText>
           <ThemedText style={styles.emptySubtext}>Check back later for updates</ThemedText>
         </View>

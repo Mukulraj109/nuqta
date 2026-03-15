@@ -17,6 +17,7 @@ import {
 import { useRouter } from 'expo-router';
 import categoryMetadataApi, { Vibe } from '@/services/categoryMetadataApi';
 import { getVibesForCategory } from '@/data/categoryDummyData';
+import { colors } from '@/constants/theme';
 
 interface ShopByVibeSectionProps {
   categorySlug: string;
@@ -109,7 +110,7 @@ const ShopByVibeSection: React.FC<ShopByVibeSectionProps> = ({
   if (loading) {
     return (
       <View style={[styles.container, styles.loadingContainer]}>
-        <ActivityIndicator size="small" color="#6366F1" />
+        <ActivityIndicator size="small" color={colors.brand.indigo} />
       </View>
     );
   }
@@ -148,13 +149,13 @@ const ShopByVibeSection: React.FC<ShopByVibeSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     paddingVertical: 20,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.4,
   },
   scrollContent: {
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
   },
   vibeDescription: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 15,
   },

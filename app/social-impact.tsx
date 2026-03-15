@@ -20,6 +20,7 @@ import socialImpactApi, { SocialImpactEvent, UserImpactStats } from '@/services/
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 // Nuqta Brand Colors
 // Helper function for event type icon background colors
 const getEventTypeIconBg = (eventType?: string): string => {
@@ -161,7 +162,7 @@ export default function SocialImpactPage() {
       {/* Header */}
       <View style={styles.header}>
         <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={22} color={'#1A1A2E'} />
+          <Ionicons name="arrow-back" size={22} color={colors.deepNavy} />
         </Pressable>
         <View style={styles.headerTextContainer}>
           <Text style={styles.headerTitle}>Social Impact</Text>
@@ -546,7 +547,7 @@ const styles = StyleSheet.create({
   emptyStateTitle: {
     fontSize: Typography.bodyLarge.fontSize,
     fontWeight: '600',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
     marginTop: Spacing.md,
     marginBottom: Spacing.xs,
   },
@@ -574,7 +575,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: Typography.h4.fontSize,
     fontWeight: '700',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
   },
   headerSubtitle: {
     fontSize: Typography.bodySmall.fontSize,
@@ -604,7 +605,7 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: Typography.h4.fontSize,
     fontWeight: '700',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
     textAlign: 'center',
     marginBottom: Spacing.sm,
   },
@@ -643,7 +644,7 @@ const styles = StyleSheet.create({
   csrBenefitText: {
     fontSize: Typography.overline.fontSize,
     fontWeight: '600',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
     textAlign: 'center',
   },
   statsSection: {
@@ -659,7 +660,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: Typography.bodyLarge.fontSize,
     fontWeight: '700',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
   },
   statsGrid: {
     flexDirection: 'row',
@@ -685,7 +686,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
   },
   tabsContainer: {
     paddingHorizontal: Spacing.base,
@@ -798,7 +799,7 @@ const styles = StyleSheet.create({
   activityTitle: {
     fontSize: Typography.body.fontSize,
     fontWeight: '700',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
   },
   csrBadge: {
     paddingHorizontal: 6,
@@ -1029,7 +1030,7 @@ const styles = StyleSheet.create({
   bottomCTATitle: {
     fontSize: Typography.bodyLarge.fontSize,
     fontWeight: '700',
-    color: '#1A1A2E',
+    color: colors.deepNavy,
     marginBottom: Spacing.sm,
   },
   bottomCTADesc: {

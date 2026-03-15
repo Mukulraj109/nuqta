@@ -12,6 +12,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import gamificationAPI from '@/services/gamificationApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface CouponMetadata {
   source?: string;
@@ -87,11 +88,11 @@ function SpinHistory({ limit = 10 }: SpinHistoryProps) {
   };
 
   const getRewardColor = (item: SpinHistoryItem) => {
-    if (item.reward.coins) return '#FFD700';
-    if (item.reward.cashback) return '#ffcd57';
-    if (item.reward.discount) return '#F59E0B';
-    if (item.reward.voucher) return '#8B5CF6';
-    return '#9CA3AF';
+    if (item.reward.coins) return colors.brand.goldBright;
+    if (item.reward.cashback) return colors.lightMustard;
+    if (item.reward.discount) return colors.warningScale[400];
+    if (item.reward.voucher) return colors.brand.purpleLight;
+    return colors.neutral[400];
   };
 
   const getRewardText = (item: SpinHistoryItem) => {
@@ -125,7 +126,7 @@ function SpinHistory({ limit = 10 }: SpinHistoryProps) {
   if (loading) {
     return (
       <ThemedView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#8B5CF6" />
+        <ActivityIndicator size="large" color={colors.brand.purpleLight} />
         <ThemedText style={styles.loadingText}>Loading history...</ThemedText>
       </ThemedView>
     );
@@ -134,7 +135,7 @@ function SpinHistory({ limit = 10 }: SpinHistoryProps) {
   if (error) {
     return (
       <ThemedView style={styles.errorContainer}>
-        <Ionicons name="alert-circle" size={48} color="#EF4444" />
+        <Ionicons name="alert-circle" size={48} color={colors.error} />
         <ThemedText style={styles.errorText}>{error}</ThemedText>
         <Pressable
           style={styles.retryButton}
@@ -150,7 +151,7 @@ function SpinHistory({ limit = 10 }: SpinHistoryProps) {
   if (history.length === 0) {
     return (
       <ThemedView style={styles.emptyContainer}>
-        <Ionicons name="time-outline" size={64} color="#9CA3AF" />
+        <Ionicons name="time-outline" size={64} color={colors.neutral[400]} />
         <ThemedText style={styles.emptyTitle}>No Spin History</ThemedText>
         <ThemedText style={styles.emptyText}>
           Your spin history will appear here after you start playing!
@@ -167,8 +168,8 @@ function SpinHistory({ limit = 10 }: SpinHistoryProps) {
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-          tintColor="#8B5CF6"
-          colors={['#8B5CF6']}
+          tintColor={colors.brand.purpleLight}
+          colors={[colors.brand.purpleLight]}
         />
       }
     >
@@ -198,7 +199,7 @@ function SpinHistory({ limit = 10 }: SpinHistoryProps) {
                 <Ionicons
                   name={item.metadata.couponMetadata.isProductSpecific ? "cube-outline" : "storefront-outline"}
                   size={12}
-                  color="#6B7280"
+                  color={colors.neutral[500]}
                 />
                 <ThemedText style={styles.applicabilityText}>
                   {item.metadata.couponMetadata.isProductSpecific
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   errorContainer: {
     flex: 1,
@@ -252,17 +253,17 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 24,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   retryButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -276,12 +277,12 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   emptyText: {
     marginTop: 8,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -291,17 +292,17 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   headerSubtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   historyItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   applicabilityInfo: {
@@ -337,15 +338,15 @@ const styles = StyleSheet.create({
   },
   applicabilityText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     flex: 1,
   },
   itemDate: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   rewardBadge: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 12,

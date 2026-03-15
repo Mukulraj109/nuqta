@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 const EXTRA_WAYS = [
   {
@@ -22,8 +23,8 @@ const EXTRA_WAYS = [
     title: 'Buy Gift Cards',
     description: 'Get additional cashback when you purchase gift cards for popular brands',
     cashback: 'Up to 5% extra',
-    color: '#EC4899',
-    gradient: ['#EC4899', '#BE185D'],
+    color: colors.brand.pink,
+    gradient: [colors.brand.pink, '#BE185D'],
   },
   {
     id: 2,
@@ -31,8 +32,8 @@ const EXTRA_WAYS = [
     title: 'Use Coupon Codes',
     description: 'Stack cashback with exclusive coupon codes for maximum savings',
     cashback: 'Extra discounts',
-    color: '#8B5CF6',
-    gradient: ['#8B5CF6', '#6D28D9'],
+    color: colors.brand.purpleLight,
+    gradient: [colors.brand.purpleLight, colors.brand.purpleDeep],
   },
   {
     id: 3,
@@ -40,8 +41,8 @@ const EXTRA_WAYS = [
     title: 'Flash Deals',
     description: 'Grab time-limited offers with boosted cashback rates',
     cashback: 'Up to 50% cashback',
-    color: '#F59E0B',
-    gradient: ['#F59E0B', '#D97706'],
+    color: colors.warningScale[400],
+    gradient: [colors.warningScale[400], colors.warningScale[700]],
   },
   {
     id: 4,
@@ -49,8 +50,8 @@ const EXTRA_WAYS = [
     title: `Earn ${BRAND.COIN_NAME}`,
     description: `Earn bonus ${BRAND.COIN_NAME} on select purchases for extra rewards`,
     cashback: 'Bonus coins',
-    color: '#ffcd57',
-    gradient: ['#ffcd57', '#1a3a52'],
+    color: colors.lightMustard,
+    gradient: [colors.lightMustard, colors.nileBlue],
   },
 ];
 
@@ -65,7 +66,7 @@ const ExtraWayCard: React.FC<{
       style={styles.card}
     >
       <View style={styles.cardIconContainer}>
-        <Ionicons name={way.icon as any} size={28} color="#FFFFFF" />
+        <Ionicons name={way.icon as any} size={28} color={colors.background.primary} />
       </View>
       <Text style={styles.cardTitle}>{way.title}</Text>
       <Text style={styles.cardDescription}>{way.description}</Text>
@@ -82,7 +83,7 @@ const ExtraWaysToSaveSection: React.FC = () => {
       {/* Section Header */}
       <View style={styles.header}>
         <View style={styles.headerIcon}>
-          <Ionicons name="bulb" size={24} color="#F59E0B" />
+          <Ionicons name="bulb" size={24} color={colors.warningScale[400]} />
         </View>
         <Text style={styles.headerTitle}>Extra Ways to Save</Text>
         <Text style={styles.headerSubtitle}>
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 24,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   header: {
     marginBottom: 20,
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -121,12 +122,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 6,
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   cardsGrid: {
     flexDirection: 'row',
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 8,
   },
   cardDescription: {
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

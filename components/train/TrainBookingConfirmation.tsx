@@ -7,6 +7,7 @@ import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 interface TrainDetails {
   id: string;
@@ -65,7 +66,7 @@ const TrainBookingConfirmation: React.FC<TrainBookingConfirmationProps> = ({
       {/* Header */}
       <View style={styles.header}>
         <Pressable onPress={onClose} style={styles.closeButton}>
-          <Ionicons name="close" size={24} color="#111827" />
+          <Ionicons name="close" size={24} color={colors.neutral[900]} />
         </Pressable>
       </View>
 
@@ -73,7 +74,7 @@ const TrainBookingConfirmation: React.FC<TrainBookingConfirmationProps> = ({
         {/* Success Icon */}
         <View style={styles.successContainer}>
           <View style={styles.successIcon}>
-            <Ionicons name="checkmark-circle" size={80} color="#22C55E" />
+            <Ionicons name="checkmark-circle" size={80} color={colors.success} />
           </View>
           <Text style={styles.successTitle}>Booking Confirmed!</Text>
           <Text style={styles.successSubtitle}>
@@ -93,7 +94,7 @@ const TrainBookingConfirmation: React.FC<TrainBookingConfirmationProps> = ({
         {/* Booking Details Card */}
         <View style={styles.detailsCard}>
           <View style={styles.cardHeader}>
-            <Ionicons name="train" size={24} color="#22C55E" />
+            <Ionicons name="train" size={24} color={colors.success} />
             <Text style={styles.cardTitle}>Booking Details</Text>
           </View>
 
@@ -179,19 +180,19 @@ const TrainBookingConfirmation: React.FC<TrainBookingConfirmationProps> = ({
               <Text style={styles.extrasTitle}>Extras</Text>
               {bookingData.selectedExtras.meals && (
                 <View style={styles.extraItem}>
-                  <Ionicons name="restaurant" size={16} color="#22C55E" />
+                  <Ionicons name="restaurant" size={16} color={colors.success} />
                   <Text style={styles.extraText}>Meals</Text>
                 </View>
               )}
               {bookingData.selectedExtras.bedding && (
                 <View style={styles.extraItem}>
-                  <Ionicons name="bed" size={16} color="#22C55E" />
+                  <Ionicons name="bed" size={16} color={colors.success} />
                   <Text style={styles.extraText}>Bedding</Text>
                 </View>
               )}
               {bookingData.selectedExtras.insurance && (
                 <View style={styles.extraItem}>
-                  <Ionicons name="shield-checkmark" size={16} color="#22C55E" />
+                  <Ionicons name="shield-checkmark" size={16} color={colors.success} />
                   <Text style={styles.extraText}>Travel Insurance</Text>
                 </View>
               )}
@@ -202,7 +203,7 @@ const TrainBookingConfirmation: React.FC<TrainBookingConfirmationProps> = ({
         {/* Contact Info Card */}
         <View style={styles.detailsCard}>
           <View style={styles.cardHeader}>
-            <Ionicons name="person" size={24} color="#22C55E" />
+            <Ionicons name="person" size={24} color={colors.success} />
             <Text style={styles.cardTitle}>Contact Information</Text>
           </View>
 
@@ -224,7 +225,7 @@ const TrainBookingConfirmation: React.FC<TrainBookingConfirmationProps> = ({
 
         {/* Important Info */}
         <View style={styles.infoBox}>
-          <Ionicons name="information-circle" size={20} color="#3B82F6" />
+          <Ionicons name="information-circle" size={20} color={colors.infoScale[400]} />
           <Text style={styles.infoText}>
             A confirmation email has been sent to {bookingData.contactInfo.email}. 
             Please arrive at the station 30 minutes before departure. Keep your booking number handy.
@@ -248,7 +249,7 @@ const TrainBookingConfirmation: React.FC<TrainBookingConfirmationProps> = ({
           onPress={onClose}
         >
           <LinearGradient
-            colors={['#22C55E', '#16A34A']}
+            colors={[colors.success, colors.brand.greenDark]}
             style={styles.buttonGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -264,14 +265,14 @@ const TrainBookingConfirmation: React.FC<TrainBookingConfirmationProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   closeButton: {
     padding: 8,
@@ -289,47 +290,47 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   successSubtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   bookingNumberCard: {
     margin: 20,
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#22C55E',
+    borderColor: colors.success,
     alignItems: 'center',
   },
   bookingNumberLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   bookingNumber: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#22C55E',
+    color: colors.success,
     marginBottom: 8,
     letterSpacing: 2,
   },
   bookingNote: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
   },
   detailsCard: {
     margin: 20,
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   cardHeader: {
     flexDirection: 'row',
@@ -340,7 +341,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   detailRow: {
     flexDirection: 'row',
@@ -350,20 +351,20 @@ const styles = StyleSheet.create({
   },
   detailLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   detailValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'right',
     flex: 1,
     marginLeft: 16,
   },
   detailSubtext: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 4,
     textAlign: 'right',
   },
@@ -371,12 +372,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   extrasTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   extraItem: {
@@ -387,7 +388,7 @@ const styles = StyleSheet.create({
   },
   extraText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
   },
   infoBox: {
@@ -396,10 +397,10 @@ const styles = StyleSheet.create({
     gap: 12,
     margin: 20,
     padding: 16,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#DBEAFE',
+    borderColor: colors.tint.blueLight,
   },
   infoText: {
     flex: 1,
@@ -410,8 +411,8 @@ const styles = StyleSheet.create({
   footer: {
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
   },
   primaryButton: {
     borderRadius: 12,
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 18,
     fontWeight: '700',
   },

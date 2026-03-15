@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import creatorsApi, { Creator } from '@/services/creatorsApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -50,24 +51,24 @@ const formatCount = (count: number): string => {
 const CreatorCardSkeleton = React.memo(() => (
   <View style={styles.creatorCard}>
     <View style={styles.creatorHeader}>
-      <View style={[styles.avatarContainer, { backgroundColor: '#E5E7EB' }]} />
+      <View style={[styles.avatarContainer, { backgroundColor: colors.neutral[200] }]} />
       <View style={styles.creatorInfo}>
-        <View style={{ width: 120, height: 16, backgroundColor: '#E5E7EB', borderRadius: 4, marginBottom: 6 }} />
-        <View style={{ width: 80, height: 12, backgroundColor: '#F3F4F6', borderRadius: 4, marginBottom: 4 }} />
-        <View style={{ width: 160, height: 12, backgroundColor: '#F3F4F6', borderRadius: 4 }} />
+        <View style={{ width: 120, height: 16, backgroundColor: colors.neutral[200], borderRadius: 4, marginBottom: 6 }} />
+        <View style={{ width: 80, height: 12, backgroundColor: colors.neutral[100], borderRadius: 4, marginBottom: 4 }} />
+        <View style={{ width: 160, height: 12, backgroundColor: colors.neutral[100], borderRadius: 4 }} />
       </View>
     </View>
     <View style={styles.tagsContainer}>
       {[1, 2, 3].map((i) => (
-        <View key={i} style={[styles.tag, { width: 60, backgroundColor: '#F3F4F6' }]}>
+        <View key={i} style={[styles.tag, { width: 60, backgroundColor: colors.neutral[100] }]}>
           <Text style={{ color: 'transparent' }}>Tag</Text>
         </View>
       ))}
     </View>
-    <View style={[styles.statsContainer, { borderTopColor: '#F3F4F6' }]}>
+    <View style={[styles.statsContainer, { borderTopColor: colors.neutral[100] }]}>
       <View style={styles.statsLeft}>
         {[1, 2, 3].map((i) => (
-          <View key={i} style={{ width: 50, height: 14, backgroundColor: '#F3F4F6', borderRadius: 4 }} />
+          <View key={i} style={{ width: 50, height: 14, backgroundColor: colors.neutral[100], borderRadius: 4 }} />
         ))}
       </View>
     </View>
@@ -86,24 +87,24 @@ const CreatorCard = React.memo(({ creator, onPress }: { creator: Creator; onPres
   >
     <View style={styles.creatorHeader}>
       <LinearGradient
-        colors={['#9333EA', '#EC4899']}
+        colors={['#9333EA', colors.brand.pink]}
         style={styles.avatarContainer}
       >
         {creator.avatar ? (
           <CachedImage source={creator.avatar} style={styles.avatarImage} />
         ) : (
-          <Ionicons name="person" size={28} color="#FFFFFF" />
+          <Ionicons name="person" size={28} color={colors.background.primary} />
         )}
       </LinearGradient>
       <View style={styles.creatorInfo}>
         <View style={styles.nameRow}>
           <Text style={styles.creatorName} numberOfLines={1}>{creator.name}</Text>
           {creator.verified && (
-            <Ionicons name="checkmark-circle" size={16} color="#3B82F6" />
+            <Ionicons name="checkmark-circle" size={16} color={colors.infoScale[400]} />
           )}
           {creator.isFeatured && (
             <View style={styles.featuredBadge}>
-              <Ionicons name="star" size={10} color="#F59E0B" />
+              <Ionicons name="star" size={10} color={colors.warningScale[400]} />
               <Text style={styles.featuredText}>Featured</Text>
             </View>
           )}
@@ -132,19 +133,19 @@ const CreatorCard = React.memo(({ creator, onPress }: { creator: Creator; onPres
     <View style={styles.statsContainer}>
       <View style={styles.statsLeft}>
         <View style={styles.statItem}>
-          <Ionicons name="people" size={16} color="#9CA3AF" />
+          <Ionicons name="people" size={16} color={colors.neutral[400]} />
           <Text style={styles.statValue}>{formatCount(creator.followers)}</Text>
         </View>
         <View style={styles.statItem}>
-          <Ionicons name="bag" size={16} color="#9CA3AF" />
+          <Ionicons name="bag" size={16} color={colors.neutral[400]} />
           <Text style={styles.statValue}>{creator.totalPicks}</Text>
         </View>
         <View style={styles.statItem}>
-          <Ionicons name="star" size={16} color="#F59E0B" />
+          <Ionicons name="star" size={16} color={colors.warningScale[400]} />
           <Text style={styles.statValue}>{creator.rating.toFixed(1)}</Text>
         </View>
       </View>
-      <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+      <Ionicons name="chevron-forward" size={20} color={colors.neutral[400]} />
     </View>
   </Pressable>
 ));
@@ -265,7 +266,7 @@ export default function CreatorsPage() {
     if (loading) return null;
     return (
       <View style={styles.emptyContainer}>
-        <Ionicons name="people-outline" size={56} color="#D1D5DB" />
+        <Ionicons name="people-outline" size={56} color={colors.neutral[300]} />
         <Text style={styles.emptyTitle}>No creators found</Text>
         <Text style={styles.emptySubtitle}>
           {searchQuery
@@ -287,7 +288,7 @@ export default function CreatorsPage() {
       {/* Header */}
       <View style={styles.header}>
         <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#1F2937" />
+          <Ionicons name="arrow-back" size={24} color={colors.neutral[800]} />
         </Pressable>
         <View style={{ flex: 1 }}>
           <Text style={styles.headerTitle}>All Creators</Text>
@@ -300,12 +301,12 @@ export default function CreatorsPage() {
          
         >
           <LinearGradient
-            colors={['#9333EA', '#EC4899']}
+            colors={['#9333EA', colors.brand.pink]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.headerCta}
           >
-            <Ionicons name="add-circle" size={14} color="#FFFFFF" />
+            <Ionicons name="add-circle" size={14} color={colors.background.primary} />
             <Text style={styles.headerCtaText}>Become a Creator</Text>
           </LinearGradient>
         </Pressable>
@@ -314,17 +315,17 @@ export default function CreatorsPage() {
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <View style={styles.searchBar}>
-          <Ionicons name="search" size={18} color="#9CA3AF" />
+          <Ionicons name="search" size={18} color={colors.neutral[400]} />
           <TextInput
             style={styles.searchInput}
             value={searchQuery}
             onChangeText={setSearchQuery}
             placeholder="Search creators..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
           />
           {searchQuery.length > 0 && (
             <Pressable onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={18} color="#9CA3AF" />
+              <Ionicons name="close-circle" size={18} color={colors.neutral[400]} />
             </Pressable>
           )}
         </View>
@@ -344,7 +345,7 @@ export default function CreatorsPage() {
             >
               {selectedCategory === cat.id ? (
                 <LinearGradient
-                  colors={['#9333EA', '#EC4899']}
+                  colors={['#9333EA', colors.brand.pink]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.categoryPillGradient}
@@ -373,7 +374,7 @@ export default function CreatorsPage() {
             <Ionicons
               name={sort.icon}
               size={14}
-              color={sortBy === sort.id ? '#FFFFFF' : '#6B7280'}
+              color={sortBy === sort.id ? colors.background.primary : colors.neutral[500]}
             />
             <Text style={[
               styles.sortPillText,
@@ -395,7 +396,7 @@ export default function CreatorsPage() {
         </ScrollView>
       ) : error && creators.length === 0 ? (
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle-outline" size={48} color="#EF4444" />
+          <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
           <Text style={styles.errorTitle}>Failed to load creators</Text>
           <Text style={styles.errorMessage}>{error}</Text>
           <Pressable

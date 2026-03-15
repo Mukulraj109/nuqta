@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import { SearchResultsSummary as SearchResultsSummaryType } from '@/types/search.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface SearchResultsSummaryProps {
   query: string;
@@ -47,9 +48,9 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerRow: {
     marginBottom: 8,
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   statsRow: {
     flexDirection: 'row',
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
   },
   statText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
 });

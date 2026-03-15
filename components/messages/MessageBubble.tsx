@@ -1,6 +1,7 @@
 // Message Bubble Component
 // Displays individual message in chat
 
+import { colors } from '@/constants/theme';
 import React from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
   },
   replyToContent: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
   },
   orderReference: {
     flexDirection: 'row',
@@ -293,11 +294,11 @@ const styles = StyleSheet.create({
   orderReferenceTitle: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   orderReferenceStatus: {
     fontSize: 11,
-    color: '#666',
+    color: colors.midGray,
     marginTop: 2,
   },
   attachmentsContainer: {
@@ -319,7 +320,7 @@ const styles = StyleSheet.create({
   },
   fileName: {
     fontSize: 13,
-    color: '#333',
+    color: colors.darkGray,
     marginLeft: 8,
     flex: 1,
   },
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   otherMessageText: {
-    color: '#333',
+    color: colors.darkGray,
   },
   footer: {
     flexDirection: 'row',

@@ -6,6 +6,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface FlightDetails {
   route: {
@@ -35,7 +36,7 @@ const FlightInfoCard: React.FC<FlightInfoCardProps> = ({ flight }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#3B82F6', '#2563EB']}
+        colors={[colors.infoScale[400], colors.brand.blue]}
         style={styles.gradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -54,7 +55,7 @@ const FlightInfoCard: React.FC<FlightInfoCardProps> = ({ flight }) => {
 
           <View style={styles.flightPath}>
             <View style={styles.flightPathLine} />
-            <Ionicons name="airplane" size={24} color="#FFFFFF" />
+            <Ionicons name="airplane" size={24} color={colors.background.primary} />
             <Text style={styles.duration}>{formatDuration(flight.duration)}</Text>
           </View>
 
@@ -73,13 +74,13 @@ const FlightInfoCard: React.FC<FlightInfoCardProps> = ({ flight }) => {
         <View style={styles.detailsRow}>
           {flight.airline && (
             <View style={styles.detailItem}>
-              <Ionicons name="airplane-outline" size={16} color="#FFFFFF" />
+              <Ionicons name="airplane-outline" size={16} color={colors.background.primary} />
               <Text style={styles.detailText}>{flight.airline}</Text>
             </View>
           )}
           {flight.flightNumber && (
             <View style={styles.detailItem}>
-              <Ionicons name="ticket-outline" size={16} color="#FFFFFF" />
+              <Ionicons name="ticket-outline" size={16} color={colors.background.primary} />
               <Text style={styles.detailText}>{flight.flightNumber}</Text>
             </View>
           )}
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
   airportCodeText: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 1,
   },
   airportInfo: {
@@ -136,14 +137,14 @@ const styles = StyleSheet.create({
   airportCity: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 6,
     letterSpacing: 0.3,
   },
   time: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   flightPath: {
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
   },
   duration: {
     fontSize: 13,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginTop: 6,
     fontWeight: '600',
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '500',
   },
 });

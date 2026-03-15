@@ -6,6 +6,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface BusDetails {
   route: {
@@ -40,7 +41,7 @@ const BusInfoCard: React.FC<BusInfoCardProps> = ({ bus }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#F97316', '#EA580C']}
+        colors={[colors.brand.orange, colors.brand.orangeDark]}
         style={styles.gradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -61,7 +62,7 @@ const BusInfoCard: React.FC<BusInfoCardProps> = ({ bus }) => {
 
           <View style={styles.busPath}>
             <View style={styles.busPathLine} />
-            <Ionicons name="bus" size={24} color="#FFFFFF" />
+            <Ionicons name="bus" size={24} color={colors.background.primary} />
             <Text style={styles.duration}>{formatDuration(bus.duration)}</Text>
           </View>
 
@@ -82,19 +83,19 @@ const BusInfoCard: React.FC<BusInfoCardProps> = ({ bus }) => {
         <View style={styles.detailsRow}>
           {bus.busType && (
             <View style={styles.detailItem}>
-              <Ionicons name="bus-outline" size={16} color="#FFFFFF" />
+              <Ionicons name="bus-outline" size={16} color={colors.background.primary} />
               <Text style={styles.detailText}>{bus.busType}</Text>
             </View>
           )}
           {bus.busNumber && (
             <View style={styles.detailItem}>
-              <Ionicons name="ticket-outline" size={16} color="#FFFFFF" />
+              <Ionicons name="ticket-outline" size={16} color={colors.background.primary} />
               <Text style={styles.detailText}>{bus.busNumber}</Text>
             </View>
           )}
           {bus.rating > 0 && (
             <View style={styles.detailItem}>
-              <Ionicons name="star" size={16} color="#FFD700" />
+              <Ionicons name="star" size={16} color={colors.brand.goldBright} />
               <Text style={styles.detailText}>{bus.rating.toFixed(1)}</Text>
             </View>
           )}
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
   terminalCodeText: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 1,
   },
   terminalInfo: {
@@ -151,14 +152,14 @@ const styles = StyleSheet.create({
   terminalCity: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 6,
     letterSpacing: 0.3,
   },
   time: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   busPath: {
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   },
   duration: {
     fontSize: 13,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginTop: 6,
     fontWeight: '600',
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -198,7 +199,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '500',
   },
 });

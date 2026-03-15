@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface WalletQuickAction {
   id: string;
@@ -27,7 +28,7 @@ const WALLET_ACTIONS: WalletQuickAction[] = [
     icon: 'swap-horizontal',
     label: 'Transfer',
     route: '/wallet/transfer',
-    color: '#6366F1',
+    color: colors.brand.indigo,
     description: 'Send coins to friends',
   },
   {
@@ -35,7 +36,7 @@ const WALLET_ACTIONS: WalletQuickAction[] = [
     icon: 'gift',
     label: 'Gift Coins',
     route: '/wallet/gift',
-    color: '#EC4899',
+    color: colors.brand.pink,
     description: 'Gift coins to others',
   },
   {
@@ -43,7 +44,7 @@ const WALLET_ACTIONS: WalletQuickAction[] = [
     icon: 'time',
     label: 'Expiry',
     route: '/wallet/expiry-tracker',
-    color: '#F59E0B',
+    color: colors.warning,
     description: 'Track coin expiry',
   },
   {
@@ -51,7 +52,7 @@ const WALLET_ACTIONS: WalletQuickAction[] = [
     icon: 'card',
     label: 'Gift Cards',
     route: '/wallet/gift-cards',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     description: 'Buy gift cards',
   },
   {
@@ -59,7 +60,7 @@ const WALLET_ACTIONS: WalletQuickAction[] = [
     icon: 'calendar',
     label: 'Drops',
     route: '/wallet/scheduled-drops',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     description: 'Scheduled rewards',
   },
 ];

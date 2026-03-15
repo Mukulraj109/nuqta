@@ -14,6 +14,7 @@ import {
   Shadows,
   BorderRadius,
 } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface CartLockedItemCardProps {
   item: LockedItem;
@@ -63,10 +64,10 @@ function formatCountdown(time: ReturnType<typeof getTimeRemaining>): string {
 
 // Get countdown color based on time remaining
 function getCountdownColor(time: ReturnType<typeof getTimeRemaining>): string {
-  if (time.isExpired) return '#EF4444'; // Red
-  if (time.total < 60 * 60 * 1000) return '#F59E0B'; // Yellow - less than 1 hour
-  if (time.total < 24 * 60 * 60 * 1000) return '#F97316'; // Orange - less than 1 day
-  return '#10B981'; // Green - more than 1 day
+  if (time.isExpired) return colors.error; // Red
+  if (time.total < 60 * 60 * 1000) return colors.warningScale[400]; // Yellow - less than 1 hour
+  if (time.total < 24 * 60 * 60 * 1000) return colors.brand.orange; // Orange - less than 1 day
+  return colors.successScale[400]; // Green - more than 1 day
 }
 
 function CartLockedItemCard({
@@ -135,7 +136,7 @@ function CartLockedItemCard({
       {/* Header Badge */}
       <View style={styles.headerBadge}>
         <View style={styles.lockBadge}>
-          <Ionicons name="lock-closed" size={14} color="#7C3AED" />
+          <Ionicons name="lock-closed" size={14} color={colors.brand.purple} />
           <ThemedText style={styles.lockBadgeText}>PRICE LOCKED</ThemedText>
         </View>
         <View style={[styles.timerBadge, { backgroundColor: countdownColor + '15' }]}>
@@ -153,7 +154,7 @@ function CartLockedItemCard({
             <CachedImage source={productImage} style={styles.image} />
           ) : (
             <View style={styles.imagePlaceholder}>
-              <Ionicons name="image-outline" size={32} color="#D1D5DB" />
+              <Ionicons name="image-outline" size={32} color={colors.neutral[300]} />
             </View>
           )}
         </View>
@@ -184,7 +185,7 @@ function CartLockedItemCard({
           {/* Paid Lock Info */}
           {isPaidLock && lockFee > 0 && (
             <View style={styles.paidLockInfo}>
-              <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
               <ThemedText style={styles.paidLockText}>
                 Paid: {currencySymbol}{lockFee} (Lock Deposit)
               </ThemedText>
@@ -219,7 +220,7 @@ function CartLockedItemCard({
           disabled={timeRemaining.isExpired}
          
         >
-          <Ionicons name="cart" size={16} color="#FFFFFF" />
+          <Ionicons name="cart" size={16} color={colors.background.primary} />
           <ThemedText style={styles.purchaseButtonText}>
             {timeRemaining.isExpired ? 'Expired' : 'Complete Purchase'}
           </ThemedText>
@@ -229,7 +230,7 @@ function CartLockedItemCard({
       {/* Note about lock fee */}
       {isPaidLock && lockFee > 0 && !timeRemaining.isExpired && (
         <View style={styles.noteContainer}>
-          <Ionicons name="information-circle-outline" size={14} color="#6B7280" />
+          <Ionicons name="information-circle-outline" size={14} color={colors.neutral[500]} />
           <ThemedText style={styles.noteText}>
             {currencySymbol}{lockFee} will be deducted from your final payment
           </ThemedText>
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
   lockBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 4,
     borderRadius: BorderRadius.sm,
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
   lockBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     letterSpacing: 0.5,
   },
   timerBadge: {
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: BorderRadius.md,
     overflow: 'hidden',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   image: {
     width: '100%',
@@ -309,12 +310,12 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     lineHeight: 20,
   },
   quantity: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceRow: {
     flexDirection: 'row',
@@ -324,11 +325,11 @@ const styles = StyleSheet.create({
   lockedPrice: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   originalPrice: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   paidLockInfo: {
@@ -339,12 +340,12 @@ const styles = StyleSheet.create({
   },
   paidLockText: {
     fontSize: 12,
-    color: '#10B981',
+    color: colors.successScale[400],
     fontWeight: '500',
   },
   variant: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   actions: {
     flexDirection: 'row',
@@ -356,13 +357,13 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     alignItems: 'center',
   },
   cancelButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   purchaseButton: {
     flex: 2,
@@ -372,15 +373,15 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.md,
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
   },
   purchaseButtonDisabled: {
-    backgroundColor: '#9CA3AF',
+    backgroundColor: colors.neutral[400],
   },
   purchaseButtonText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   noteContainer: {
     flexDirection: 'row',
@@ -389,11 +390,11 @@ const styles = StyleSheet.create({
     marginTop: Spacing.sm,
     paddingTop: Spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   noteText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     flex: 1,
   },
 });

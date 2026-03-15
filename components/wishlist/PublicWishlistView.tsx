@@ -26,6 +26,7 @@ import wishlistSharingService, {
   GiftReservation,
 } from '@/services/wishlistSharingApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -183,14 +184,14 @@ function PublicWishlistView({
 
     return (
       <LinearGradient
-        colors={['#8B5CF6', '#7C3AED']}
+        colors={[colors.brand.purpleLight, colors.brand.purple]}
         style={styles.header}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
       >
         {onBack && (
           <Pressable style={styles.backButton} onPress={onBack}>
-            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
         )}
 
@@ -208,7 +209,7 @@ function PublicWishlistView({
             <View style={styles.ownerNameRow}>
               <ThemedText style={styles.ownerName}>{wishlist.owner.name}</ThemedText>
               {wishlist.owner.verified && (
-                <Ionicons name="checkmark-circle" size={16} color="#ffcd57" />
+                <Ionicons name="checkmark-circle" size={16} color={colors.lightMustard} />
               )}
             </View>
             <ThemedText style={styles.wishlistName}>{wishlist.name}</ThemedText>
@@ -245,7 +246,7 @@ function PublicWishlistView({
             <Ionicons
               name={isLiked ? 'heart' : 'heart-outline'}
               size={20}
-              color={isLiked ? '#EF4444' : '#FFFFFF'}
+              color={isLiked ? colors.error : colors.background.primary}
             />
             <ThemedText style={[styles.actionButtonText, isLiked && styles.actionButtonTextLiked]}>
               {isLiked ? 'Liked' : 'Like'}
@@ -253,7 +254,7 @@ function PublicWishlistView({
           </Pressable>
 
           <Pressable style={styles.actionButton}>
-            <Ionicons name="share-outline" size={20} color="#FFFFFF" />
+            <Ionicons name="share-outline" size={20} color={colors.background.primary} />
             <ThemedText style={styles.actionButtonText}>Share</ThemedText>
           </Pressable>
         </View>
@@ -270,7 +271,7 @@ function PublicWishlistView({
 
         {reserved && (
           <View style={styles.reservedBadge}>
-            <Ionicons name="gift" size={16} color="#FFFFFF" />
+            <Ionicons name="gift" size={16} color={colors.background.primary} />
             <ThemedText style={styles.reservedText}>Reserved</ThemedText>
           </View>
         )}
@@ -302,7 +303,7 @@ function PublicWishlistView({
             <View
               style={[
                 styles.stockBadge,
-                { backgroundColor: item.inStock ? '#ffcd57' : '#EF4444' },
+                { backgroundColor: item.inStock ? colors.lightMustard : colors.error },
               ]}
             >
               <ThemedText style={styles.stockText}>
@@ -312,7 +313,7 @@ function PublicWishlistView({
 
             {item.rating && (
               <View style={styles.ratingBadge}>
-                <Ionicons name="star" size={12} color="#F59E0B" />
+                <Ionicons name="star" size={12} color={colors.warningScale[400]} />
                 <ThemedText style={styles.ratingText}>{item.rating.toFixed(1)}</ThemedText>
               </View>
             )}
@@ -324,7 +325,7 @@ function PublicWishlistView({
                 style={styles.itemActionButton}
                 onPress={() => handleReserveGift(item.id)}
               >
-                <Ionicons name="gift-outline" size={18} color="#8B5CF6" />
+                <Ionicons name="gift-outline" size={18} color={colors.brand.purpleLight} />
                 <ThemedText style={styles.itemActionText}>Buy as Gift</ThemedText>
               </Pressable>
             )}
@@ -333,7 +334,7 @@ function PublicWishlistView({
               style={styles.itemActionButton}
               onPress={() => handleAddToMyWishlist(item.id)}
             >
-              <Ionicons name="heart-outline" size={18} color="#8B5CF6" />
+              <Ionicons name="heart-outline" size={18} color={colors.brand.purpleLight} />
               <ThemedText style={styles.itemActionText}>Add to Mine</ThemedText>
             </Pressable>
           </View>
@@ -382,7 +383,7 @@ function PublicWishlistView({
         <TextInput
           style={styles.commentInput}
           placeholder="Add a comment..."
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.neutral[400]}
           value={comment}
           onChangeText={setComment}
           multiline
@@ -393,9 +394,9 @@ function PublicWishlistView({
           disabled={!comment.trim() || isPosting}
         >
           {isPosting ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={colors.background.primary} />
           ) : (
-            <Ionicons name="send" size={20} color="#FFFFFF" />
+            <Ionicons name="send" size={20} color={colors.background.primary} />
           )}
         </Pressable>
       </View>
@@ -405,7 +406,7 @@ function PublicWishlistView({
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#8B5CF6" />
+        <ActivityIndicator size="large" color={colors.brand.purpleLight} />
         <ThemedText style={styles.loadingText}>Loading wishlist...</ThemedText>
       </View>
     );
@@ -414,7 +415,7 @@ function PublicWishlistView({
   if (error || !wishlist) {
     return (
       <View style={styles.errorContainer}>
-        <Ionicons name="alert-circle-outline" size={64} color="#EF4444" />
+        <Ionicons name="alert-circle-outline" size={64} color={colors.error} />
         <ThemedText style={styles.errorTitle}>Wishlist Not Found</ThemedText>
         <ThemedText style={styles.errorText}>
           {error || 'This wishlist might have been removed or is no longer available.'}
@@ -452,7 +453,7 @@ function PublicWishlistView({
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={handleRefresh}
-            tintColor="#8B5CF6"
+            tintColor={colors.brand.purpleLight}
           />
         }
         showsVerticalScrollIndicator={false}
@@ -464,7 +465,7 @@ function PublicWishlistView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   header: {
     paddingTop: Platform.OS === 'ios' ? 50 : 20,
@@ -491,7 +492,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     borderWidth: 3,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   ownerAvatarPlaceholder: {
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
@@ -501,7 +502,7 @@ const styles = StyleSheet.create({
   ownerInitial: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   ownerDetails: {
     flex: 1,
@@ -520,7 +521,7 @@ const styles = StyleSheet.create({
   wishlistName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 4,
   },
   wishlistDescription: {
@@ -542,7 +543,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   statLabel: {
     fontSize: 12,
@@ -568,21 +569,21 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   actionButtonLiked: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   actionButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   actionButtonTextLiked: {
-    color: '#EF4444',
+    color: colors.error,
   },
   itemsList: {
     padding: 16,
   },
   itemCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     marginBottom: 16,
     overflow: 'hidden',
@@ -595,7 +596,7 @@ const styles = StyleSheet.create({
   itemImage: {
     width: '100%',
     height: 200,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   reservedBadge: {
     position: 'absolute',
@@ -604,7 +605,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
@@ -612,7 +613,7 @@ const styles = StyleSheet.create({
   reservedText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   itemDetails: {
     padding: 16,
@@ -620,7 +621,7 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
   },
   itemPriceRow: {
@@ -632,15 +633,15 @@ const styles = StyleSheet.create({
   itemPrice: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   itemOriginalPrice: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   discountBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -648,7 +649,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   itemFooter: {
     flexDirection: 'row',
@@ -664,7 +665,7 @@ const styles = StyleSheet.create({
   stockText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   ratingBadge: {
     flexDirection: 'row',
@@ -674,7 +675,7 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   itemActions: {
     flexDirection: 'row',
@@ -686,14 +687,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingVertical: 10,
     borderRadius: 8,
   },
   itemActionText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   commentsSection: {
     marginTop: 24,
@@ -701,11 +702,11 @@ const styles = StyleSheet.create({
   commentsTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 16,
   },
   commentCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -722,14 +723,14 @@ const styles = StyleSheet.create({
     borderRadius: 18,
   },
   commentAvatarPlaceholder: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
   commentInitial: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   commentInfo: {
     flex: 1,
@@ -737,41 +738,41 @@ const styles = StyleSheet.create({
   commentAuthor: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   commentTime: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   commentText: {
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
     lineHeight: 20,
   },
   commentInputContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     gap: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 24,
     padding: 8,
     marginTop: 16,
   },
   commentInput: {
     flex: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 10,
     fontSize: 14,
-    color: '#1F2937',
+    color: colors.neutral[800],
     maxHeight: 100,
   },
   commentPostButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -782,11 +783,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   loadingText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 12,
   },
   errorContainer: {
@@ -794,23 +795,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 40,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   errorTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 16,
     marginBottom: 8,
   },
   errorText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 24,
   },
   errorButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 12,
@@ -818,7 +819,7 @@ const styles = StyleSheet.create({
   errorButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   bottomSpace: {
     height: 40,

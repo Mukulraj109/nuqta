@@ -9,6 +9,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface ShoppingOption {
   title: string;
@@ -25,26 +26,26 @@ const shoppingOptions: ShoppingOption[] = [
     title: `${BRAND.APP_NAME} Mall`,
     subtitle: 'Shop from curated brands',
     icon: 'storefront',
-    iconBgColors: ['#EC4899', '#DB2777'],
-    cardBgColors: ['#FDF2F8', '#FCE7F3'],
+    iconBgColors: [colors.brand.pink, colors.deepPink],
+    cardBgColors: ['#FDF2F8', colors.pinkMist],
     borderColor: '#FBCFE8',
     features: [
       { icon: 'star', text: 'Curated brands', color: '#D946EF' },
-      { icon: 'pricetag', text: `Special ${BRAND.APP_NAME} offers`, color: '#EC4899' },
-      { icon: 'wallet', text: 'Extra cashback', color: '#1a3a52' },
+      { icon: 'pricetag', text: `Special ${BRAND.APP_NAME} offers`, color: colors.brand.pink },
+      { icon: 'wallet', text: 'Extra cashback', color: colors.nileBlue },
     ],
   },
   {
     title: 'Cash Store',
     subtitle: 'Shop anywhere, earn rewards',
     icon: 'cash',
-    iconBgColors: ['#F97316', '#EA580C'],
-    cardBgColors: ['#FFF7ED', '#FFEDD5'],
+    iconBgColors: [colors.brand.orange, colors.brand.orangeDark],
+    cardBgColors: [colors.tint.orange, '#FFEDD5'],
     borderColor: '#FED7AA',
     features: [
-      { icon: 'globe', text: 'Shop on any major e-commerce site', color: '#3B82F6' },
-      { icon: 'card', text: 'Earn affiliate cashback', color: '#F97316' },
-      { icon: 'gift', text: 'Buy brand coupons & vouchers', color: '#8B5CF6' },
+      { icon: 'globe', text: 'Shop on any major e-commerce site', color: colors.infoScale[400] },
+      { icon: 'card', text: 'Earn affiliate cashback', color: colors.brand.orange },
+      { icon: 'gift', text: 'Buy brand coupons & vouchers', color: colors.brand.purpleLight },
     ],
   },
 ];
@@ -55,7 +56,7 @@ const OnlineShoppingSection: React.FC = () => {
       {/* Section Header */}
       <View style={styles.headerContainer}>
         <View style={styles.iconCircle}>
-          <Ionicons name="bag-handle" size={28} color="#EC4899" />
+          <Ionicons name="bag-handle" size={28} color={colors.brand.pink} />
         </View>
         <Text style={styles.sectionTitle}>Shopping online with {BRAND.APP_NAME}</Text>
         <Text style={styles.sectionSubtitle}>Two ways:</Text>
@@ -76,7 +77,7 @@ const OnlineShoppingSection: React.FC = () => {
               colors={option.iconBgColors}
               style={styles.cardIconContainer}
             >
-              <Ionicons name={option.icon} size={22} color="#FFFFFF" />
+              <Ionicons name={option.icon} size={22} color={colors.background.primary} />
             </LinearGradient>
             <View style={styles.cardTitleContainer}>
               <Text style={styles.cardTitle}>{option.title}</Text>
@@ -99,7 +100,7 @@ const OnlineShoppingSection: React.FC = () => {
       {/* CTA Button */}
       <Pressable style={styles.ctaButton}>
         <LinearGradient
-          colors={['#1a3a52', '#14303f']}
+          colors={[colors.nileBlue, '#14303f']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.ctaGradient}
@@ -114,7 +115,7 @@ const OnlineShoppingSection: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   headerContainer: {
     alignItems: 'center',
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 16,
-    backgroundColor: '#FCE7F3',
+    backgroundColor: colors.pinkMist,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -132,13 +133,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     textAlign: 'center',
     marginBottom: 8,
   },
   sectionSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   optionCard: {
     borderRadius: 16,
@@ -176,12 +177,12 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
   },
   cardSubtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   featuresContainer: {
     gap: 10,
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
   },
   featureText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     flex: 1,
   },
   ctaButton: {
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.3,
   },
 });

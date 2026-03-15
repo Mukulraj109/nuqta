@@ -23,6 +23,7 @@ import { REFERRAL_TIERS, SHARE_TEMPLATES, type ShareTemplate } from '@/types/ref
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export default function ReferralSharePage() {
   const router = useRouter();
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
     padding: Spacing.base,
     borderRadius: BorderRadius.md,
     borderWidth: 2,
-    borderColor: '#e2e8f0',
+    borderColor: colors.slateLight,
     marginBottom: Spacing.md,
   },
   qrSubtext: { ...Typography.bodySmall, color: '#94a3b8', textAlign: 'center' },
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     padding: Spacing.base,
     borderWidth: 2,
-    borderColor: '#e2e8f0',
+    borderColor: colors.slateLight,
     borderStyle: 'dashed',
   },
   codeText: {
@@ -360,7 +361,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: colors.slateLight,
   },
   linkText: { flex: 1, ...Typography.bodySmall, color: Colors.text.tertiary, marginRight: Spacing.sm },
   platformsSection: {

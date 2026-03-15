@@ -24,6 +24,7 @@ import creatorsApi from '@/services/creatorsApi';
 import apiClient from '@/services/apiClient';
 import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.config';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface ProductResult {
   _id: string;
@@ -429,7 +430,7 @@ export default function SubmitPickPage() {
               <TextInput
                 style={styles.searchInput}
                 placeholder="Search products..."
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={searchQuery}
                 onChangeText={handleSearchChange}
                 autoCapitalize="none"
@@ -505,7 +506,7 @@ export default function SubmitPickPage() {
                 )}
               </View>
             ) : (
-              <View style={[styles.mediaPickerIcon, { backgroundColor: '#EDE9FE' }]} >
+              <View style={[styles.mediaPickerIcon, { backgroundColor: colors.tint.purple }]} >
                 <Ionicons name="image-outline" size={28} color={Colors.brand.purple} />
               </View>
             )}
@@ -556,7 +557,7 @@ export default function SubmitPickPage() {
         <TextInput
           style={styles.textInput}
           placeholder="What's great about this product?"
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.neutral[400]}
           value={title}
           onChangeText={setTitle}
           maxLength={100}
@@ -568,7 +569,7 @@ export default function SubmitPickPage() {
         <TextInput
           style={[styles.textInput, { minHeight: 80, textAlignVertical: 'top' }]}
           placeholder="Tell people why you recommend this..."
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor={colors.neutral[400]}
           value={description}
           onChangeText={setDescription}
           maxLength={500}
@@ -583,7 +584,7 @@ export default function SubmitPickPage() {
           <TextInput
             style={[styles.textInput, { flex: 1 }]}
             placeholder="Add a tag..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={tagInput}
             onChangeText={setTagInput}
             onSubmitEditing={addTag}
@@ -620,7 +621,7 @@ export default function SubmitPickPage() {
          
         >
           <LinearGradient
-            colors={(!selectedProduct || !title.trim() || !hasAnyMedia || submitting || isAnyUploading) ? ['#D1D5DB', '#D1D5DB'] : ['#7C3AED', '#9333EA']}
+            colors={(!selectedProduct || !title.trim() || !hasAnyMedia || submitting || isAnyUploading) ? [colors.neutral[300], colors.neutral[300]] : [colors.brand.purple, '#9333EA']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.submitBtnGradient}
@@ -770,7 +771,7 @@ const styles = StyleSheet.create({
   tagsList: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm, marginTop: 10 },
   tagChip: {
     flexDirection: 'row', alignItems: 'center', gap: Spacing.xs,
-    backgroundColor: '#EDE9FE', borderRadius: BorderRadius.xl, paddingHorizontal: Spacing.md, paddingVertical: 6,
+    backgroundColor: colors.tint.purple, borderRadius: BorderRadius.xl, paddingHorizontal: Spacing.md, paddingVertical: 6,
   },
   tagChipText: { ...Typography.bodySmall, fontSize: 13, color: Colors.brand.purple, fontWeight: '500' },
 

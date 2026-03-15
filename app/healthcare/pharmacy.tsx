@@ -22,6 +22,7 @@ import { getImagePicker } from '@/utils/lazyImports';
 import apiClient from '@/services/apiClient';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -90,14 +91,14 @@ interface MedicineCategory {
 
 // Medicine categories
 const medicineCategories: MedicineCategory[] = [
-  { id: 'all', name: 'All', icon: 'grid', color: '#06B6D4' },
-  { id: 'pain_relief', name: 'Pain Relief', icon: 'bandage', color: '#EF4444' },
-  { id: 'vitamins', name: 'Vitamins', icon: 'nutrition', color: '#F59E0B' },
-  { id: 'diabetes', name: 'Diabetes', icon: 'water', color: '#3B82F6' },
-  { id: 'cardiac', name: 'Cardiac', icon: 'heart', color: '#EC4899' },
-  { id: 'skin_care', name: 'Skin Care', icon: 'sparkles', color: '#8B5CF6' },
-  { id: 'baby_care', name: 'Baby Care', icon: 'happy', color: '#10B981' },
-  { id: 'ayurveda', name: 'Ayurveda', icon: 'leaf', color: '#059669' },
+  { id: 'all', name: 'All', icon: 'grid', color: colors.brand.cyan },
+  { id: 'pain_relief', name: 'Pain Relief', icon: 'bandage', color: colors.error },
+  { id: 'vitamins', name: 'Vitamins', icon: 'nutrition', color: colors.warningScale[400] },
+  { id: 'diabetes', name: 'Diabetes', icon: 'water', color: colors.infoScale[400] },
+  { id: 'cardiac', name: 'Cardiac', icon: 'heart', color: colors.brand.pink },
+  { id: 'skin_care', name: 'Skin Care', icon: 'sparkles', color: colors.brand.purpleLight },
+  { id: 'baby_care', name: 'Baby Care', icon: 'happy', color: colors.successScale[400] },
+  { id: 'ayurveda', name: 'Ayurveda', icon: 'leaf', color: colors.successScale[700] },
 ];
 
 export default function PharmacyPage() {
@@ -347,7 +348,7 @@ export default function PharmacyPage() {
         {pharmacy.logo ? (
           <CachedImage source={pharmacy.logo} style={styles.pharmacyLogoImg} />
         ) : (
-          <Ionicons name="medical" size={28} color="#06B6D4" />
+          <Ionicons name="medical" size={28} color={colors.brand.cyan} />
         )}
       </View>
       <View style={styles.pharmacyInfo}>
@@ -371,7 +372,7 @@ export default function PharmacyPage() {
         </View>
       </View>
       <View style={styles.pharmacyRating}>
-        <Ionicons name="star" size={12} color="#F59E0B" />
+        <Ionicons name="star" size={12} color={colors.warningScale[400]} />
         <Text style={styles.pharmacyRatingText}>
           {pharmacy.ratings.average.toFixed(1)}
         </Text>
@@ -391,7 +392,7 @@ export default function PharmacyPage() {
             <CachedImage source={medicine.images[0]} style={styles.medicineImage} />
           ) : (
             <View style={styles.medicineImagePlaceholder}>
-              <Ionicons name="medical" size={32} color="#D1D5DB" />
+              <Ionicons name="medical" size={32} color={colors.neutral[300]} />
             </View>
           )}
           {discount > 0 && (
@@ -430,7 +431,7 @@ export default function PharmacyPage() {
             style={styles.addToCartButton}
             onPress={() => addToCart(medicine)}
           >
-            <Ionicons name="cart-outline" size={16} color="#fff" />
+            <Ionicons name="cart-outline" size={16} color={colors.background.primary} />
             <Text style={styles.addToCartText}>Add</Text>
           </Pressable>
         </View>
@@ -441,10 +442,10 @@ export default function PharmacyPage() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
-      <LinearGradient colors={['#06B6D4', '#0891B2']} style={styles.header}>
+      <LinearGradient colors={[colors.brand.cyan, colors.cyanDark]} style={styles.header}>
         <View style={styles.headerContent}>
           <Pressable onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#fff" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <View style={styles.headerTitleContainer}>
             <Text style={styles.headerTitle}>Online Pharmacy</Text>
@@ -454,7 +455,7 @@ export default function PharmacyPage() {
             style={styles.cartButton}
             onPress={() => setCartModalVisible(true)}
           >
-            <Ionicons name="cart" size={24} color="#fff" />
+            <Ionicons name="cart" size={24} color={colors.background.primary} />
             {cart.length > 0 && (
               <View style={styles.cartBadge}>
                 <Text style={styles.cartBadgeText}>{getCartItemCount()}</Text>
@@ -465,17 +466,17 @@ export default function PharmacyPage() {
 
         {/* Search Bar */}
         <View style={styles.searchContainer}>
-          <Ionicons name="search-outline" size={20} color="#6B7280" />
+          <Ionicons name="search-outline" size={20} color={colors.neutral[500]} />
           <TextInput
             style={styles.searchInput}
             placeholder="Search medicines, health products..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
           {searchQuery.length > 0 && (
             <Pressable onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={20} color="#6B7280" />
+              <Ionicons name="close-circle" size={20} color={colors.neutral[500]} />
             </Pressable>
           )}
         </View>
@@ -485,7 +486,7 @@ export default function PharmacyPage() {
         style={styles.content}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#06B6D4']} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.brand.cyan]} />
         }
       >
         {/* Upload Prescription Banner */}
@@ -494,7 +495,7 @@ export default function PharmacyPage() {
           onPress={() => setPrescriptionModalVisible(true)}
         >
           <View style={styles.prescriptionBannerIcon}>
-            <Ionicons name="document-text" size={28} color="#fff" />
+            <Ionicons name="document-text" size={28} color={colors.background.primary} />
           </View>
           <View style={styles.prescriptionBannerContent}>
             <Text style={styles.prescriptionBannerTitle}>Upload Prescription</Text>
@@ -502,7 +503,7 @@ export default function PharmacyPage() {
               Order medicines by uploading your prescription
             </Text>
           </View>
-          <Ionicons name="chevron-forward" size={24} color="#fff" />
+          <Ionicons name="chevron-forward" size={24} color={colors.background.primary} />
         </Pressable>
 
         {/* Categories */}
@@ -549,7 +550,7 @@ export default function PharmacyPage() {
             <CardGridSkeleton />
           ) : filteredMedicines.length === 0 ? (
             <View style={styles.emptyContainer}>
-              <Ionicons name="medical-outline" size={64} color="#D1D5DB" />
+              <Ionicons name="medical-outline" size={64} color={colors.neutral[300]} />
               <Text style={styles.emptyText}>No medicines found</Text>
               <Text style={styles.emptySubtext}>
                 {searchQuery
@@ -580,7 +581,7 @@ export default function PharmacyPage() {
             </View>
             <View style={styles.floatingCartAction}>
               <Text style={styles.floatingCartActionText}>View Cart</Text>
-              <Ionicons name="arrow-forward" size={20} color="#fff" />
+              <Ionicons name="arrow-forward" size={20} color={colors.background.primary} />
             </View>
           </View>
         </Pressable>
@@ -598,13 +599,13 @@ export default function PharmacyPage() {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Your Cart</Text>
               <Pressable onPress={() => setCartModalVisible(false)}>
-                <Ionicons name="close" size={24} color="#374151" />
+                <Ionicons name="close" size={24} color={colors.neutral[700]} />
               </Pressable>
             </View>
 
             {cart.length === 0 ? (
               <View style={styles.emptyCartContainer}>
-                <Ionicons name="cart-outline" size={64} color="#D1D5DB" />
+                <Ionicons name="cart-outline" size={64} color={colors.neutral[300]} />
                 <Text style={styles.emptyCartText}>Your cart is empty</Text>
                 <Pressable
                   style={styles.continueShopping}
@@ -625,7 +626,7 @@ export default function PharmacyPage() {
                             style={styles.cartItemImg}
                           />
                         ) : (
-                          <Ionicons name="medical" size={24} color="#D1D5DB" />
+                          <Ionicons name="medical" size={24} color={colors.neutral[300]} />
                         )}
                       </View>
                       <View style={styles.cartItemInfo}>
@@ -643,7 +644,7 @@ export default function PharmacyPage() {
                             updateCartQuantity(item.medicine._id, item.quantity - 1)
                           }
                         >
-                          <Ionicons name="remove" size={18} color="#06B6D4" />
+                          <Ionicons name="remove" size={18} color={colors.brand.cyan} />
                         </Pressable>
                         <Text style={styles.quantityText}>{item.quantity}</Text>
                         <Pressable
@@ -652,7 +653,7 @@ export default function PharmacyPage() {
                             updateCartQuantity(item.medicine._id, item.quantity + 1)
                           }
                         >
-                          <Ionicons name="add" size={18} color="#06B6D4" />
+                          <Ionicons name="add" size={18} color={colors.brand.cyan} />
                         </Pressable>
                       </View>
                     </View>
@@ -678,7 +679,7 @@ export default function PharmacyPage() {
                     onPress={handleCheckout}
                   >
                     <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
-                    <Ionicons name="arrow-forward" size={20} color="#fff" />
+                    <Ionicons name="arrow-forward" size={20} color={colors.background.primary} />
                   </Pressable>
                 </View>
               </>
@@ -699,7 +700,7 @@ export default function PharmacyPage() {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Upload Prescription</Text>
               <Pressable onPress={() => setPrescriptionModalVisible(false)}>
-                <Ionicons name="close" size={24} color="#374151" />
+                <Ionicons name="close" size={24} color={colors.neutral[700]} />
               </Pressable>
             </View>
 
@@ -719,7 +720,7 @@ export default function PharmacyPage() {
                     style={styles.removePreviewButton}
                     onPress={() => setPrescriptionImage(null)}
                   >
-                    <Ionicons name="close-circle" size={28} color="#EF4444" />
+                    <Ionicons name="close-circle" size={28} color={colors.error} />
                   </Pressable>
                 </View>
               ) : (
@@ -729,7 +730,7 @@ export default function PharmacyPage() {
                     onPress={() => pickPrescriptionImage(true)}
                   >
                     <View style={styles.uploadOptionIcon}>
-                      <Ionicons name="camera" size={32} color="#06B6D4" />
+                      <Ionicons name="camera" size={32} color={colors.brand.cyan} />
                     </View>
                     <Text style={styles.uploadOptionText}>Take Photo</Text>
                   </Pressable>
@@ -739,7 +740,7 @@ export default function PharmacyPage() {
                     onPress={() => pickPrescriptionImage(false)}
                   >
                     <View style={styles.uploadOptionIcon}>
-                      <Ionicons name="images" size={32} color="#06B6D4" />
+                      <Ionicons name="images" size={32} color={colors.brand.cyan} />
                     </View>
                     <Text style={styles.uploadOptionText}>From Gallery</Text>
                   </Pressable>
@@ -750,7 +751,7 @@ export default function PharmacyPage() {
               <TextInput
                 style={styles.notesInput}
                 placeholder="Any specific instructions or medicine names..."
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 multiline
                 numberOfLines={3}
                 value={prescriptionNotes}
@@ -760,17 +761,17 @@ export default function PharmacyPage() {
               <View style={styles.prescriptionTips}>
                 <Text style={styles.tipsTitle}>Tips for a valid prescription:</Text>
                 <View style={styles.tipRow}>
-                  <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                  <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
                   <Text style={styles.tipText}>
                     Must be issued by a registered doctor
                   </Text>
                 </View>
                 <View style={styles.tipRow}>
-                  <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                  <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
                   <Text style={styles.tipText}>Should be dated within last 6 months</Text>
                 </View>
                 <View style={styles.tipRow}>
-                  <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                  <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
                   <Text style={styles.tipText}>
                     Clear and readable handwriting or print
                   </Text>
@@ -786,10 +787,10 @@ export default function PharmacyPage() {
                 disabled={!prescriptionImage || isUploading}
               >
                 {isUploading ? (
-                  <ActivityIndicator color="#fff" />
+                  <ActivityIndicator color={colors.background.primary} />
                 ) : (
                   <>
-                    <Ionicons name="cloud-upload" size={20} color="#fff" />
+                    <Ionicons name="cloud-upload" size={20} color={colors.background.primary} />
                     <Text style={styles.submitPrescriptionText}>Submit Prescription</Text>
                   </>
                 )}
@@ -884,7 +885,7 @@ const styles = StyleSheet.create({
   prescriptionBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#0891B2',
+    backgroundColor: colors.cyanDark,
     marginHorizontal: Spacing.base,
     marginTop: Spacing.base,
     borderRadius: BorderRadius.md,
@@ -930,7 +931,7 @@ const styles = StyleSheet.create({
   },
   seeAllText: {
     ...Typography.body,
-    color: '#06B6D4',
+    color: colors.brand.cyan,
     fontWeight: '600',
   },
   resultCount: {
@@ -1006,7 +1007,7 @@ const styles = StyleSheet.create({
     gap: Spacing.xs,
   },
   pharmacyBadge: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: colors.infoScale[400],
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -1151,7 +1152,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#06B6D4',
+    backgroundColor: colors.brand.cyan,
     paddingVertical: Spacing.sm,
     borderRadius: 6,
     marginTop: Spacing.sm,
@@ -1170,7 +1171,7 @@ const styles = StyleSheet.create({
     bottom: Spacing.lg,
     left: Spacing.base,
     right: Spacing.base,
-    backgroundColor: '#06B6D4',
+    backgroundColor: colors.brand.cyan,
     borderRadius: BorderRadius.md,
     ...Shadows.medium,
   },
@@ -1246,7 +1247,7 @@ const styles = StyleSheet.create({
   continueShopping: {
     paddingHorizontal: Spacing.lg,
     paddingVertical: 10,
-    backgroundColor: '#06B6D4',
+    backgroundColor: colors.brand.cyan,
     borderRadius: BorderRadius.sm,
   },
   continueShoppingText: {
@@ -1289,7 +1290,7 @@ const styles = StyleSheet.create({
   cartItemPrice: {
     ...Typography.body,
     fontWeight: '700',
-    color: '#06B6D4',
+    color: colors.brand.cyan,
     marginTop: Spacing.xs,
   },
   cartItemActions: {
@@ -1348,13 +1349,13 @@ const styles = StyleSheet.create({
   totalValue: {
     ...Typography.h4,
     fontWeight: '700',
-    color: '#06B6D4',
+    color: colors.brand.cyan,
   },
   checkoutButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#06B6D4',
+    backgroundColor: colors.brand.cyan,
     paddingVertical: 14,
     borderRadius: BorderRadius.md,
     marginTop: Spacing.base,
@@ -1397,7 +1398,7 @@ const styles = StyleSheet.create({
   uploadOptionText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#0891B2',
+    color: colors.cyanDark,
   },
   prescriptionPreview: {
     margin: Spacing.base,
@@ -1463,7 +1464,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#06B6D4',
+    backgroundColor: colors.brand.cyan,
     marginHorizontal: Spacing.base,
     marginTop: Spacing.lg,
     paddingVertical: 14,

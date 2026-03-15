@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 13,
-    color: '#666666',
+    color: colors.midGray,
     fontWeight: '500',
   },
 });

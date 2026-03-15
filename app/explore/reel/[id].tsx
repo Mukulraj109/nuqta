@@ -27,6 +27,7 @@ import { toggleFollow, checkFollowStatus } from '@/services/followApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -821,7 +822,7 @@ const styles = StyleSheet.create({
   },
   readMoreText: {
     ...Typography.caption,
-    color: '#60A5FA',
+    color: colors.infoScale[400],
     fontWeight: '600',
     marginBottom: Spacing.sm,
   },
@@ -833,7 +834,7 @@ const styles = StyleSheet.create({
   },
   tag: {
     ...Typography.caption,
-    color: '#60A5FA',
+    color: colors.infoScale[400],
   },
   savingsContainer: {
     flexDirection: 'row',

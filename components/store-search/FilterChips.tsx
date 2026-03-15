@@ -11,14 +11,15 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { FilterChipsProps, SearchFilters, FilterOption } from '@/types/store-search';
-import { 
-  FILTER_CATEGORIES, 
-  GENDER_OPTIONS, 
-  COLORS, 
-  TYPOGRAPHY, 
-  SPACING, 
-  BORDER_RADIUS 
+import {
+  FILTER_CATEGORIES,
+  GENDER_OPTIONS,
+  COLORS,
+  TYPOGRAPHY,
+  SPACING,
+  BORDER_RADIUS
 } from '@/constants/search-constants';
+import { colors } from '@/constants/theme';
 
 const FilterChips: React.FC<FilterChipsProps & { parentCategorySlug?: string }> = ({
   filters,
@@ -165,7 +166,7 @@ const FilterChips: React.FC<FilterChipsProps & { parentCategorySlug?: string }> 
             <Ionicons
               name={FILTER_CATEGORIES.FASHION.icon as any}
               size={16}
-              color={isFashionActive ? '#FFFFFF' : FILTER_CATEGORIES.FASHION.color}
+              color={isFashionActive ? colors.background.primary : FILTER_CATEGORIES.FASHION.color}
               style={styles.chipIcon}
             />
             <ThemedText style={[
@@ -196,7 +197,7 @@ const FilterChips: React.FC<FilterChipsProps & { parentCategorySlug?: string }> 
             <Ionicons
               name={FILTER_CATEGORIES.GENDER.icon as any}
               size={16}
-              color={isGenderActive ? '#FFFFFF' : FILTER_CATEGORIES.GENDER.color}
+              color={isGenderActive ? colors.background.primary : FILTER_CATEGORIES.GENDER.color}
               style={styles.chipIcon}
             />
             <ThemedText style={[
@@ -211,7 +212,7 @@ const FilterChips: React.FC<FilterChipsProps & { parentCategorySlug?: string }> 
             <Ionicons
               name="chevron-down"
               size={14}
-              color={isGenderActive ? '#FFFFFF' : FILTER_CATEGORIES.GENDER.color}
+              color={isGenderActive ? colors.background.primary : FILTER_CATEGORIES.GENDER.color}
               style={styles.chevronIcon}
             />
           </Pressable>
@@ -238,7 +239,7 @@ const FilterChips: React.FC<FilterChipsProps & { parentCategorySlug?: string }> 
             <Ionicons
               name="close-circle"
               size={16}
-              color="#DC2626"
+              color={colors.error}
               style={styles.chipIcon}
             />
             <ThemedText style={styles.clearFiltersText}>
@@ -261,7 +262,7 @@ const createStyles = (screenWidth: number) => {
   return StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#F8F9FA',
+      backgroundColor: colors.offWhite,
       paddingVertical: 10,
     },
     scrollContent: {
@@ -285,9 +286,9 @@ const createStyles = (screenWidth: number) => {
       elevation: 2,
     },
     filterChipActive: {
-      backgroundColor: '#00C06A',
-      borderColor: '#00C06A',
-      shadowColor: '#00C06A',
+      backgroundColor: colors.brand.green,
+      borderColor: colors.brand.green,
+      shadowColor: colors.brand.green,
       shadowOpacity: 0.25,
       shadowRadius: 8,
       elevation: 4,
@@ -298,7 +299,7 @@ const createStyles = (screenWidth: number) => {
     clearFiltersChip: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FEE2E2',
+      backgroundColor: colors.errorScale[100],
       borderRadius: 20,
       paddingHorizontal: 12,
       paddingVertical: 8,
@@ -315,7 +316,7 @@ const createStyles = (screenWidth: number) => {
     chipText: {
       fontSize: 13,
       fontWeight: '600',
-      color: '#1F2937',
+      color: colors.neutral[800],
       letterSpacing: 0.1,
     },
     chipTextActive: {
@@ -325,7 +326,7 @@ const createStyles = (screenWidth: number) => {
     clearFiltersText: {
       fontSize: 13,
       fontWeight: '600',
-      color: '#DC2626',
+      color: colors.error,
     },
     modalOverlay: {
       flex: 1,
@@ -354,17 +355,17 @@ const createStyles = (screenWidth: number) => {
       marginBottom: SPACING.XL,
       paddingBottom: SPACING.MD,
       borderBottomWidth: 2,
-      borderBottomColor: '#F3F4F6',
+      borderBottomColor: colors.neutral[100],
     },
     modalTitle: {
       fontSize: 20,
       fontWeight: '700',
-      color: '#111827',
+      color: colors.neutral[900],
       letterSpacing: 0.3,
     },
     modalCloseButton: {
       padding: 8,
-      backgroundColor: '#F3F4F6',
+      backgroundColor: colors.neutral[100],
       borderRadius: 20,
     },
     genderOption: {
@@ -374,14 +375,14 @@ const createStyles = (screenWidth: number) => {
       paddingHorizontal: SPACING.LG,
       borderRadius: 16,
       marginBottom: 10,
-      backgroundColor: '#F9FAFB',
+      backgroundColor: colors.neutral[50],
       borderWidth: 2,
       borderColor: 'transparent',
     },
     genderOptionSelected: {
-      backgroundColor: '#00C06A',
-      borderColor: '#00C06A',
-      shadowColor: '#00C06A',
+      backgroundColor: colors.brand.green,
+      borderColor: colors.brand.green,
+      shadowColor: colors.brand.green,
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.2,
       shadowRadius: 8,
@@ -392,7 +393,7 @@ const createStyles = (screenWidth: number) => {
       marginLeft: 12,
       fontSize: 16,
       fontWeight: '600',
-      color: '#374151',
+      color: colors.neutral[700],
       letterSpacing: 0.2,
     },
     genderOptionTextSelected: {

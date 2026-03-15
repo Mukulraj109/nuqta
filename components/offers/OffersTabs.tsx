@@ -11,14 +11,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { OffersTabType } from '@/types/offers.types';
 import { Spacing, BorderRadius, Typography, Colors, Shadows } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // New Color Palette
 const PALETTE = {
-  nileBlue: '#1a3a52',
-  lightMustard: '#ffcd57',
-  linen: '#faf1e0',
-  lightPeach: '#ffd7b5',
-  lavenderMist: '#dfebf7',
+  nileBlue: colors.nileBlue,
+  lightMustard: colors.lightMustard,
+  linen: colors.linen,
+  lightPeach: colors.lightPeach,
+  lavenderMist: colors.lavenderMist,
 };
 
 interface OffersTabsProps {
@@ -84,7 +85,7 @@ export const OffersTabs: React.FC<OffersTabsProps> = ({
       gap: 6,
     },
     tabActive: {
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       ...Shadows.subtle,
     },
     iconContainer: {

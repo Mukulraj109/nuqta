@@ -12,6 +12,7 @@ import {
 import { storesApi } from "@/services/storesApi";
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export interface EarningUser {
   id: string;
@@ -35,7 +36,7 @@ export interface PeopleEarningSectionProps {
 // ];
 
 // Avatar colors for users without profile pictures - Nuqta palette
-const AVATAR_COLORS = ["#ffd7b5", "#1a3a52", "#dfebf7", "#ffcd57", "#faf1e0"];
+const AVATAR_COLORS = [colors.lightPeach, colors.nileBlue, colors.lavenderMist, colors.lightMustard, colors.linen];
 
 export default function PeopleEarningSection({
   storeId,
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
   userCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
   avatarInitial: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: colors.background.primary,
   },
   userInfo: {
     flex: 1,
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
   coinsText: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#ffcd57",
+    color: colors.lightMustard,
   },
   loadingContainer: {
     paddingVertical: Spacing.lg,

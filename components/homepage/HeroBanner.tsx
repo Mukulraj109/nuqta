@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import platformApi from '@/services/platformApi';
+import { colors } from '@/constants/theme';
 
 const HORIZONTAL_PADDING = 2;
 
@@ -80,7 +81,7 @@ function HeroBanner({ totalSaved = 0, onScanPayPress, onViewWalletPress }: HeroB
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#1a3a52', '#234b68', '#2d5c7e']}
+        colors={[colors.nileBlue, colors.brand.nileBlueLight, '#2d5c7e']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradientContainer}
@@ -91,7 +92,7 @@ function HeroBanner({ totalSaved = 0, onScanPayPress, onViewWalletPress }: HeroB
             <Ionicons
               name={isNewUser ? "wallet-outline" : "gift-outline"}
               size={18}
-              color="#ffcd57"
+              color={colors.lightMustard}
             />
           </View>
           <View style={styles.titleContainer}>
@@ -118,9 +119,9 @@ function HeroBanner({ totalSaved = 0, onScanPayPress, onViewWalletPress }: HeroB
             onPress={handleScanPayPress}
            
           >
-            <Ionicons name="qr-code-outline" size={18} color="#1a3a52" />
+            <Ionicons name="qr-code-outline" size={18} color={colors.nileBlue} />
             <Text style={[styles.ctaText, styles.ctaTextPrimary]}>Scan & Pay</Text>
-            <Ionicons name="chevron-forward" size={14} color="#1a3a52" />
+            <Ionicons name="chevron-forward" size={14} color={colors.nileBlue} />
           </Pressable>
 
           <Pressable
@@ -128,7 +129,7 @@ function HeroBanner({ totalSaved = 0, onScanPayPress, onViewWalletPress }: HeroB
             onPress={handleViewWalletPress}
            
           >
-            <Ionicons name="wallet-outline" size={18} color="#FFFFFF" />
+            <Ionicons name="wallet-outline" size={18} color={colors.background.primary} />
             <Text style={styles.ctaText}>View Wallet</Text>
             <Ionicons name="chevron-forward" size={14} color="rgba(255,255,255,0.6)" />
           </Pressable>
@@ -141,7 +142,7 @@ function HeroBanner({ totalSaved = 0, onScanPayPress, onViewWalletPress }: HeroB
             {stats.rating > 0 && (
               <>
                 <View style={styles.proofItem}>
-                  <Ionicons name="star" size={14} color="#FBBF24" />
+                  <Ionicons name="star" size={14} color={colors.warningScale[400]} />
                   <Text style={styles.proofText}>{stats.rating} rated</Text>
                 </View>
                 <View style={styles.proofDivider} />
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 14,
     paddingBottom: 14,
-    shadowColor: '#1a3a52',
+    shadowColor: colors.nileBlue,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     lineHeight: 22,
     marginBottom: 2,
   },
@@ -242,16 +243,16 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   ctaCardPrimary: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   ctaText: {
     flex: 1,
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   ctaTextPrimary: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   // Social Proof Styles
   socialProofContainer: {

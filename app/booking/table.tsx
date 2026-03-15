@@ -21,6 +21,7 @@ import storesApi from '@/services/storesApi';
 import tableBookingApi from '@/services/tableBookingApi';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -540,7 +541,7 @@ export default function TableBookingPage() {
               <TextInput
                 style={[styles.input, { color: textColor }]}
                 placeholder="Full Name *"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={customerName}
                 onChangeText={setCustomerName}
               />
@@ -557,7 +558,7 @@ export default function TableBookingPage() {
               <TextInput
                 style={[styles.input, { color: textColor }]}
                 placeholder="Phone Number *"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={customerPhone}
                 onChangeText={setCustomerPhone}
                 keyboardType="phone-pad"
@@ -569,7 +570,7 @@ export default function TableBookingPage() {
               <TextInput
                 style={[styles.input, { color: textColor }]}
                 placeholder="Email (Optional)"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={customerEmail}
                 onChangeText={setCustomerEmail}
                 keyboardType="email-address"
@@ -582,7 +583,7 @@ export default function TableBookingPage() {
               <TextInput
                 style={[styles.input, styles.textArea, { color: textColor }]}
                 placeholder="Special Requests (Optional)"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={specialRequests}
                 onChangeText={setSpecialRequests}
                 multiline
@@ -770,7 +771,7 @@ const styles = StyleSheet.create({
   },
   dateCardSelected: {
     borderColor: Colors.brand.purple,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
   },
   todayBadge: {
     position: 'absolute',
@@ -819,7 +820,7 @@ const styles = StyleSheet.create({
   },
   timeSlotSelected: {
     borderColor: Colors.brand.purple,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
   },
   timeSlotDisabled: {
     backgroundColor: Colors.background.secondary,

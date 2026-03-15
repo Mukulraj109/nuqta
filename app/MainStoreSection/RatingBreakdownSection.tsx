@@ -9,6 +9,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { triggerImpact } from "@/utils/haptics";
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -34,9 +35,9 @@ interface RatingBreakdownSectionProps {
 // Get color based on score
 const getScoreColor = (score: number): string => {
   if (score >= 80) return Colors.primary[600];
-  if (score >= 60) return "#ffcd57"; // Light Mustard
-  if (score >= 40) return "#E8B896"; // Light Peach shade
-  return "#D4A07A"; // Peach derived
+  if (score >= 60) return colors.lightMustard; // Light Mustard
+  if (score >= 40) return colors.brand.sand; // Light Peach shade
+  return colors.brand.caramel; // Peach derived
 };
 
 // Rating Category Row Component
@@ -119,7 +120,7 @@ export default memo(function RatingBreakdownSection({
                 {averageRating.toFixed(1)}
               </ThemedText>
               <View style={styles.starContainer}>
-                <Ionicons name="star" size={12} color="#fff" />
+                <Ionicons name="star" size={12} color={colors.background.primary} />
               </View>
             </LinearGradient>
           </View>
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   ratingNumber: {
     fontSize: 22,
     fontWeight: "800",
-    color: "#fff",
+    color: colors.background.primary,
   },
   starContainer: {
     position: "absolute",

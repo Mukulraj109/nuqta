@@ -24,6 +24,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { platformAlert } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -264,7 +265,7 @@ export default function SpinWinPage() {
         {!loading && (
         <View style={styles.bannerContainer}>
           <LinearGradient
-            colors={['#F59E0B', '#F97316']}
+            colors={[colors.warningScale[400], colors.brand.orange]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.banner}
@@ -323,7 +324,7 @@ export default function SpinWinPage() {
               ]}
             >
               <LinearGradient
-                colors={spinning || spinsLeft <= 0 ? [Colors.text.tertiary, Colors.text.tertiary] : ['#22C55E', '#16A34A']}
+                colors={spinning || spinsLeft <= 0 ? [Colors.text.tertiary, Colors.text.tertiary] : [colors.success, colors.brand.greenDark]}
                 style={styles.spinButtonGradient}
               >
                 {spinning ? (
@@ -346,7 +347,7 @@ export default function SpinWinPage() {
         {wonPrize && (
           <View style={styles.resultContainer}>
             <LinearGradient
-              colors={['#10B981', '#14B8A6']}
+              colors={[colors.successScale[400], colors.tealGreen]}
               style={styles.resultCard}
             >
               <Ionicons name="star" size={48} color={Colors.text.inverse} />

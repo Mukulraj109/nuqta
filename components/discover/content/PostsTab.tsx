@@ -16,16 +16,17 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { DiscoverPost } from '@/types/discover.types';
+import { colors } from '@/constants/theme';
 
 // Nuqta Brand Colors
 const NUQTA_COLORS = {
-  nileBlue: '#1a3a52',
+  nileBlue: colors.nileBlue,
   nileBlueLight: '#2a4a62',
-  mustard: '#ffcd57',
-  primaryGold: '#FFC857',
-  navy: '#0B2240',
-  gray: '#6B7280',
-  lightGray: '#F3F4F6',
+  mustard: colors.lightMustard,
+  primaryGold: colors.brand.goldWarm,
+  navy: colors.brand.navyDark,
+  gray: colors.neutral[500],
+  lightGray: colors.neutral[100],
 };
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -105,14 +106,14 @@ function PostsTab({
           {/* Video indicator */}
           {item.type === 'video' && (
             <View style={styles.videoIndicator}>
-              <Ionicons name="play" size={16} color="#FFFFFF" />
+              <Ionicons name="play" size={16} color={colors.background.primary} />
             </View>
           )}
 
           {/* Brand badge */}
           {item.isBrandPost && (
             <View style={styles.brandBadge}>
-              <Ionicons name="checkmark-circle" size={12} color="#FFFFFF" />
+              <Ionicons name="checkmark-circle" size={12} color={colors.background.primary} />
               <Text style={styles.brandBadgeText}>Brand</Text>
             </View>
           )}
@@ -120,7 +121,7 @@ function PostsTab({
           {/* Product count */}
           {productCount > 0 && (
             <View style={styles.productBadge}>
-              <Ionicons name="bag-handle" size={10} color="#FFFFFF" />
+              <Ionicons name="bag-handle" size={10} color={colors.background.primary} />
               <Text style={styles.productBadgeText}>{productCount}</Text>
             </View>
           )}
@@ -139,7 +140,7 @@ function PostsTab({
           {/* Stats */}
           <View style={styles.stats}>
             <View style={styles.statItem}>
-              <Ionicons name="heart" size={12} color="#FFFFFF" />
+              <Ionicons name="heart" size={12} color={colors.background.primary} />
               <Text style={styles.statText}>{formatCount(likeCount)}</Text>
             </View>
           </View>
@@ -165,7 +166,7 @@ function PostsTab({
     if (!loading || data.length === 0) return null;
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color="#1a3a52" />
+        <ActivityIndicator size="small" color={colors.nileBlue} />
       </View>
     );
   }, [loading, data.length]);
@@ -189,7 +190,7 @@ function PostsTab({
           colors={[NUQTA_COLORS.mustard, NUQTA_COLORS.primaryGold]}
           style={styles.emptyIconContainer}
         >
-          <Ionicons name="grid" size={40} color="#FFFFFF" />
+          <Ionicons name="grid" size={40} color={colors.background.primary} />
         </LinearGradient>
         <Text style={styles.emptyTitle}>No Posts Yet</Text>
         <Text style={styles.emptyText}>
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
     width: CARD_WIDTH,
     marginBottom: 12,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -252,7 +253,7 @@ const styles = StyleSheet.create({
   mediaContainer: {
     width: '100%',
     aspectRatio: 1,
-    backgroundColor: '#1F2937',
+    backgroundColor: colors.neutral[800],
     position: 'relative',
   },
   media: {
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   brandBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '600',
   },
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   productBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '700',
   },
@@ -326,10 +327,10 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   creatorName: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '600',
     maxWidth: 80,
@@ -347,7 +348,7 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   statText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '600',
   },
@@ -356,7 +357,7 @@ const styles = StyleSheet.create({
   },
   caption: {
     fontSize: 12,
-    color: '#4B5563',
+    color: colors.neutral[600],
     lineHeight: 16,
   },
   footerLoader: {

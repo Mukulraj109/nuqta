@@ -5,14 +5,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { CategoryTileProps, CategoryColor } from '@/types/earnPage.types';
 import { CATEGORY_GRADIENTS, CATEGORY_SOLID_COLORS, EARN_COLORS } from '@/constants/EarnPageColors';
+import { colors } from '@/constants/theme';
 
 function CategoryTile({ 
   category, 
   onPress, 
   size = 'medium' 
 }: CategoryTileProps) {
-  const gradient = CATEGORY_GRADIENTS[category.color] || ['#00C06A', '#00A85C', '#00796B'];
-  const solidColor = CATEGORY_SOLID_COLORS[category.color] || '#00C06A';
+  const gradient = CATEGORY_GRADIENTS[category.color] || [colors.brand.green, '#00A85C', colors.brand.teal];
+  const solidColor = CATEGORY_SOLID_COLORS[category.color] || colors.brand.green;
   
   const getSizeStyles = (size: string) => {
     switch (size) {
@@ -53,7 +54,7 @@ function CategoryTile({
       accessibilityState={{ disabled: !category.isActive }}
     >
       <LinearGradient
-        colors={Array.isArray(gradient) && gradient.length > 0 ? gradient : ['#00C06A', '#00A85C', '#00796B']}
+        colors={Array.isArray(gradient) && gradient.length > 0 ? gradient : [colors.brand.green, '#00A85C', colors.brand.teal]}
         style={[styles.gradient, { padding: sizeStyles.padding }]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -63,7 +64,7 @@ function CategoryTile({
             <Ionicons 
               name={category.icon as any} 
               size={sizeStyles.iconSize} 
-              color="#FFFFFF" 
+              color={colors.background.primary} 
             />
           </View>
           
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.3)',
     ...Platform.select({
       ios: {
-        shadowColor: '#00C06A',
+        shadowColor: colors.brand.green,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 12,
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.35)',
   },
   categoryName: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
     textAlign: 'center',
     lineHeight: 16,
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
   projectCountText: {
     fontSize: 10,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   inactiveOverlay: {
     position: 'absolute',
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inactiveText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '600',
     textAlign: 'center',

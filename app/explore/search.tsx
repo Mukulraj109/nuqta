@@ -20,6 +20,7 @@ import exploreApi, { ExploreStore, HotProduct } from '@/services/exploreApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -133,7 +134,7 @@ const ExploreSearchPage = () => {
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <SafeAreaView style={styles.container} edges={['top']}>
-        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+        <StatusBar barStyle="dark-content" backgroundColor={colors.background.primary} />
 
         {/* Header */}
         <View style={styles.header}>
@@ -150,7 +151,7 @@ const ExploreSearchPage = () => {
             <TextInput
               style={styles.searchInput}
               placeholder="Search stores, products..."
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               value={searchQuery}
               onChangeText={setSearchQuery}
               autoFocus
@@ -174,7 +175,7 @@ const ExploreSearchPage = () => {
             <Ionicons
               name="storefront"
               size={16}
-              color={activeTab === 'stores' ? '#FFFFFF' : '#6B7280'}
+              color={activeTab === 'stores' ? colors.background.primary : colors.neutral[500]}
             />
             <Text style={[styles.tabText, activeTab === 'stores' && styles.tabTextActive]}>
               Stores ({stores.length})
@@ -188,7 +189,7 @@ const ExploreSearchPage = () => {
             <Ionicons
               name="pricetag"
               size={16}
-              color={activeTab === 'products' ? '#FFFFFF' : '#6B7280'}
+              color={activeTab === 'products' ? colors.background.primary : colors.neutral[500]}
             />
             <Text style={[styles.tabText, activeTab === 'products' && styles.tabTextActive]}>
               Products ({products.length})
@@ -202,7 +203,7 @@ const ExploreSearchPage = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.resultsContainer}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#ffcd57']} />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.lightMustard]} />
           }
         >
           {/* Loading State */}
@@ -484,7 +485,7 @@ const styles = StyleSheet.create({
   ratingText: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   infoBadge: {
     flexDirection: 'row',
@@ -496,7 +497,7 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
   cashbackBadge: {
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     paddingHorizontal: 10,
     paddingVertical: Spacing.xs,
     borderRadius: BorderRadius.sm,
@@ -506,7 +507,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     ...Typography.bodySmall,
     fontWeight: '600',
-    color: '#15803D',
+    color: colors.successScale[700],
   },
   productCard: {
     flexDirection: 'row',
@@ -559,7 +560,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
   },
   offerBadge: {
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
     borderRadius: 6,
@@ -569,7 +570,7 @@ const styles = StyleSheet.create({
   offerText: {
     ...Typography.caption,
     fontWeight: '600',
-    color: '#15803D',
+    color: colors.successScale[700],
   },
 });
 

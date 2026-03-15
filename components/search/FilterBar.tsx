@@ -8,6 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 export type SortOption = 'best_value' | 'price_low' | 'price_high' | 'cashback_high' | 'distance' | 'rating';
 
@@ -60,7 +61,7 @@ function FilterBar({
           <Ionicons 
             name="chevron-down" 
             size={16} 
-            color={activeFilters.length > 0 ? '#1a3a52' : '#6B7280'} 
+            color={activeFilters.length > 0 ? colors.nileBlue : colors.neutral[500]} 
           />
           {activeFilters.length > 0 && (
             <View style={styles.filterBadge}>
@@ -99,7 +100,7 @@ function FilterBar({
             <Ionicons
               name={showSortDropdown ? 'chevron-up' : 'chevron-down'}
               size={16}
-              color="#6B7280"
+              color={colors.neutral[500]}
             />
           </Pressable>
         </View>
@@ -130,7 +131,7 @@ function FilterBar({
                 {option.label}
               </Text>
               {currentSort === option.value && (
-                <Ionicons name="checkmark" size={16} color="#1a3a52" />
+                <Ionicons name="checkmark" size={16} color={colors.nileBlue} />
               )}
             </Pressable>
           ))}
@@ -142,9 +143,9 @@ function FilterBar({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
     position: 'relative',
     zIndex: 10,
   },
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 9,
     borderRadius: 22,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     gap: 6,
     position: 'relative',
     borderWidth: 1.5,
@@ -168,22 +169,22 @@ const styles = StyleSheet.create({
   },
   filterButtonActive: {
     backgroundColor: 'rgba(26, 58, 82, 0.08)',
-    borderColor: '#1a3a52',
+    borderColor: colors.nileBlue,
   },
   filterButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   filterButtonTextActive: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '700',
   },
   filterBadge: {
     position: 'absolute',
     top: -6,
     right: -6,
-    backgroundColor: '#FFC857',
+    backgroundColor: colors.brand.goldWarm,
     borderRadius: 12,
     minWidth: 22,
     height: 22,
@@ -191,10 +192,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 6,
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
     ...Platform.select({
       ios: {
-        shadowColor: '#FFC857',
+        shadowColor: colors.brand.goldWarm,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.4,
         shadowRadius: 4,
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
     }),
   },
   filterBadgeText: {
-    color: '#1F2937',
+    color: colors.neutral[800],
     fontSize: 11,
     fontWeight: '800',
     letterSpacing: 0.2,
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
   sortLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   sortButton: {
     flexDirection: 'row',
@@ -230,19 +231,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     gap: 6,
   },
   sortButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   dropdown: {
     position: 'absolute',
     top: '100%',
     right: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 8,
     minWidth: 200,
@@ -274,11 +275,11 @@ const styles = StyleSheet.create({
   },
   dropdownItemText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
   },
   dropdownItemTextActive: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '700',
   },
 });

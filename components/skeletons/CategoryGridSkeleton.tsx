@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { colors } from '@/constants/theme';
 import {
   View,
   StyleSheet,
@@ -122,13 +123,13 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   skeletonCircle: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginBottom: 8,
   },
   skeletonText: {
     width: 60,
     height: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginTop: 4,
   },

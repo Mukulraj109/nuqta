@@ -5,6 +5,7 @@ import { EarningCard as EarningCardType, EarningCardTheme } from '@/types/earnin
 import { formatPrice } from '@/utils/priceFormatter';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface EarningCardProps {
   card: EarningCardType;
@@ -13,20 +14,20 @@ interface EarningCardProps {
 const themeConfig: Record<EarningCardType['theme'], EarningCardTheme> = {
   purple: {
     gradientColors: ['#8B5FBF', '#6A4C93'],
-    iconColor: '#FFD700',
-    textColor: '#FFFFFF',
+    iconColor: colors.brand.goldBright,
+    textColor: colors.background.primary,
     buttonColor: 'rgba(255, 255, 255, 0.2)',
   },
   teal: {
     gradientColors: ['#20B2AA', '#008B8B'],
-    iconColor: '#FFD700',
-    textColor: '#FFFFFF',
+    iconColor: colors.brand.goldBright,
+    textColor: colors.background.primary,
     buttonColor: 'rgba(255, 255, 255, 0.2)',
   },
   pink: {
     gradientColors: ['#FF69B4', '#DA70D6'],
-    iconColor: '#FFD700',
-    textColor: '#FFFFFF',
+    iconColor: colors.brand.goldBright,
+    textColor: colors.background.primary,
     buttonColor: 'rgba(255, 255, 255, 0.2)',
   },
 };

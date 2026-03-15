@@ -14,6 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ACCOUNT_COLORS } from '@/types/account.types';
+import { colors } from '@/constants/theme';
 
 interface EditInstructionsModalProps {
   visible: boolean;

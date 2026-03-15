@@ -17,6 +17,7 @@ import { PROFILE_COLORS } from '@/types/profile.types';
 import { QUICK_MESSAGE_TEMPLATES } from '@/types/messaging.types';
 import { useRouter } from 'expo-router';
 import storeMessagingService from '@/services/storeMessagingApi';
+import { colors } from '@/constants/theme';
 
 interface ContactStoreModalProps {
   visible: boolean;
@@ -237,7 +238,7 @@ function ContactStoreModal({
               </View>
             </View>
             <Pressable onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#333" />
+              <Ionicons name="close" size={24} color={colors.darkGray} />
             </Pressable>
           </View>
 
@@ -292,7 +293,7 @@ function ContactStoreModal({
                 'Email',
                 `Send email to ${storeEmail}`,
                 handleEmail,
-                '#3B82F6'
+                colors.info
               )}
             </View>
 
@@ -310,7 +311,7 @@ function ContactStoreModal({
 
             {/* Help Text */}
             <View style={styles.helpTextContainer}>
-              <Ionicons name="information-circle-outline" size={16} color="#666" />
+              <Ionicons name="information-circle-outline" size={16} color={colors.midGray} />
               <ThemedText style={styles.helpText}>
                 Your conversation history will be saved so you can reference it later
               </ThemedText>
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 4,
   },
   storeStatus: {
@@ -379,7 +380,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
   },
   closeButton: {
     padding: 4,
@@ -395,7 +396,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666',
+    color: colors.midGray,
     marginBottom: 12,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -404,7 +405,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.offWhite,
     borderRadius: 12,
     marginBottom: 12,
   },
@@ -425,12 +426,12 @@ const styles = StyleSheet.create({
   contactOptionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 2,
   },
   contactOptionDescription: {
     fontSize: 13,
-    color: '#666',
+    color: colors.midGray,
   },
   quickActionsContainer: {
     gap: 8,
@@ -447,20 +448,20 @@ const styles = StyleSheet.create({
   quickActionText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#333',
+    color: colors.darkGray,
     marginLeft: 12,
   },
   helpTextContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     padding: 20,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.offWhite,
     margin: 20,
     borderRadius: 8,
   },
   helpText: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     marginLeft: 8,
     flex: 1,
     lineHeight: 18,

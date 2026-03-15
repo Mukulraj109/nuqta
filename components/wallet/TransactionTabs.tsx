@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { WalletTab, TransactionCategory } from '@/types/wallet.types';
+import { colors } from '@/constants/theme';
 
 interface TransactionTabsProps {
   tabs: WalletTab[];
@@ -96,10 +97,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: 'white',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: colors.slateLight,
     minWidth: 70,
     justifyContent: 'center',
-    shadowColor: '#64748B',
+    shadowColor: colors.slateGray,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 6,
@@ -107,9 +108,9 @@ const styles = StyleSheet.create({
     marginVertical: 1,
   },
   activeTab: {
-    backgroundColor: '#8B5CF6',
-    borderColor: '#8B5CF6',
-    shadowColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
+    borderColor: colors.brand.purpleLight,
+    shadowColor: colors.brand.purpleLight,
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 8,
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   badge: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 10,
     minWidth: 20,
     height: 20,
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 6,
     marginLeft: 8,
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.15,
     shadowRadius: 3,
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     lineHeight: 13,
   },
   activeBadgeText: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 });
 

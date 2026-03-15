@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { navigationDebugger } from '@/utils/navigationDebug';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 // ReZ Design System Colors
 
@@ -65,7 +66,7 @@ const brands: BrandItem[] = [
     originalPrice: 60,
     discountedPrice: 54,
     isEnabled: false,
-    gradientColors: ['#D1D5DB', '#9CA3AF']
+    gradientColors: [colors.neutral[300], colors.neutral[400]]
   },
 ];
 
@@ -147,7 +148,7 @@ export default function TransactionsPreviewScreen() {
             <Ionicons
               name="arrow-forward"
               size={14}
-              color={brand.isEnabled ? Colors.gold : '#9CA3AF'}
+              color={brand.isEnabled ? Colors.gold : colors.neutral[400]}
             />
           </View>
           <Text style={[

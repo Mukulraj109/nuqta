@@ -20,6 +20,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { useRegion } from '@/contexts/RegionContext';
 import { useAuth } from '@/contexts/AuthContext';
 import apiClient from '@/services/apiClient';
+import { colors } from '@/constants/theme';
 
 interface RefundStep {
   id: string;
@@ -233,7 +234,7 @@ export default function RefundInitiatedPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Refund Status</ThemedText>
           <View style={styles.placeholder} />
@@ -315,7 +316,7 @@ export default function RefundInitiatedPage() {
                     step.status === 'current' && styles.timelineDotCurrent,
                   ]}>
                     {step.status === 'completed' && (
-                      <Ionicons name="checkmark" size={12} color="#FFF" />
+                      <Ionicons name="checkmark" size={12} color={colors.background.primary} />
                     )}
                   </View>
                   {index < refund.steps.length - 1 && (
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -621,7 +622,7 @@ const styles = StyleSheet.create({
   },
   helpButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   noteCard: {
     flexDirection: 'row',
@@ -672,6 +673,6 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
 });

@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import logger from '@/utils/logger';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 /**
  * DeliveryInformation Component
@@ -189,7 +190,7 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Ionicons name="location" size={20} color="#8B5CF6" />
+        <Ionicons name="location" size={20} color={colors.brand.purpleLight} />
         <ThemedText style={styles.title}>Check Delivery</ThemedText>
       </View>
 
@@ -199,7 +200,7 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
           <TextInput
             style={styles.input}
             placeholder="Enter Pin Code"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={pinCode}
             onChangeText={handlePinCodeChange}
             keyboardType="number-pad"
@@ -218,7 +219,7 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
          
         >
           {isChecking ? (
-            <ActivityIndicator size="small" color="#FFF" />
+            <ActivityIndicator size="small" color={colors.background.primary} />
           ) : (
             <ThemedText style={styles.checkButtonText}>Check</ThemedText>
           )}
@@ -228,7 +229,7 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
       {/* Error Message */}
       {error && (
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle" size={16} color="#EF4444" />
+          <Ionicons name="alert-circle" size={16} color={colors.error} />
           <ThemedText style={styles.errorText}>{error}</ThemedText>
         </View>
       )}
@@ -238,7 +239,7 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
         <View style={styles.estimateContainer}>
           {/* Delivery Date */}
           <View style={styles.estimateRow}>
-            <Ionicons name="time-outline" size={20} color="#10B981" />
+            <Ionicons name="time-outline" size={20} color={colors.successScale[400]} />
             <View style={styles.estimateContent}>
               <ThemedText style={styles.estimateLabel}>Estimated Delivery</ThemedText>
               <ThemedText style={styles.estimateValue}>
@@ -255,7 +256,7 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
             <Ionicons
               name={deliveryEstimate.isFreeDelivery ? 'gift' : 'cash-outline'}
               size={20}
-              color={deliveryEstimate.isFreeDelivery ? '#10B981' : '#6B7280'}
+              color={deliveryEstimate.isFreeDelivery ? colors.successScale[400] : colors.neutral[500]}
             />
             <View style={styles.estimateContent}>
               <ThemedText style={styles.estimateLabel}>Shipping Cost</ThemedText>
@@ -289,7 +290,7 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
               <Ionicons
                 name={showOptions ? 'chevron-up' : 'chevron-down'}
                 size={16}
-                color="#8B5CF6"
+                color={colors.brand.purpleLight}
               />
             </Pressable>
           )}
@@ -338,7 +339,7 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
       {/* Delivery Not Available */}
       {deliveryEstimate && !deliveryEstimate.isAvailable && (
         <View style={styles.notAvailableContainer}>
-          <Ionicons name="close-circle" size={24} color="#EF4444" />
+          <Ionicons name="close-circle" size={24} color={colors.error} />
           <ThemedText style={styles.notAvailableText}>
             Delivery not available to this location
           </ThemedText>
@@ -348,11 +349,11 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
       {/* Delivery Benefits */}
       <View style={styles.benefits}>
         <View style={styles.benefitItem}>
-          <Ionicons name="shield-checkmark" size={16} color="#10B981" />
+          <Ionicons name="shield-checkmark" size={16} color={colors.successScale[400]} />
           <ThemedText style={styles.benefitText}>Safe & Secure Delivery</ThemedText>
         </View>
         <View style={styles.benefitItem}>
-          <Ionicons name="cube" size={16} color="#10B981" />
+          <Ionicons name="cube" size={16} color={colors.successScale[400]} />
           <ThemedText style={styles.benefitText}>Quality Checked</ThemedText>
         </View>
       </View>
@@ -362,11 +363,11 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     marginBottom: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
 
   // Header
@@ -379,7 +380,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   // Input
@@ -391,18 +392,18 @@ const styles = StyleSheet.create({
   inputContainer: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     borderRadius: 8,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   input: {
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
-    color: '#111827',
+    color: colors.neutral[900],
   },
   checkButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
@@ -411,10 +412,10 @@ const styles = StyleSheet.create({
     minWidth: 80,
   },
   checkButtonDisabled: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   checkButtonText: {
-    color: '#FFF',
+    color: colors.background.primary,
     fontSize: 15,
     fontWeight: '600',
   },
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     padding: 12,
     borderRadius: 8,
     marginBottom: 12,
@@ -431,13 +432,13 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 13,
-    color: '#DC2626',
+    color: colors.error,
     flex: 1,
   },
 
   // Estimate
   estimateContainer: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
@@ -453,18 +454,18 @@ const styles = StyleSheet.create({
   },
   estimateLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   estimateValue: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   freeDeliveryText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   costRow: {
     flexDirection: 'row',
@@ -473,7 +474,7 @@ const styles = StyleSheet.create({
   },
   thresholdText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 4,
   },
 
@@ -488,7 +489,7 @@ const styles = StyleSheet.create({
   optionsToggleText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 
   // Options List
@@ -500,15 +501,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     padding: 12,
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     gap: 12,
   },
   optionItemSelected: {
-    borderColor: '#8B5CF6',
-    backgroundColor: '#F3E8FF',
+    borderColor: colors.brand.purpleLight,
+    backgroundColor: colors.tint.pink,
   },
 
   // Radio Button
@@ -517,7 +518,7 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 2,
@@ -526,7 +527,7 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
 
   // Option Content
@@ -542,15 +543,15 @@ const styles = StyleSheet.create({
   optionName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   optionCost: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   freeBadge: {
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
@@ -558,18 +559,18 @@ const styles = StyleSheet.create({
   freeBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   optionDescription: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // Not Available
   notAvailableContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
@@ -577,7 +578,7 @@ const styles = StyleSheet.create({
   },
   notAvailableText: {
     fontSize: 14,
-    color: '#DC2626',
+    color: colors.error,
     fontWeight: '500',
   },
 
@@ -594,7 +595,7 @@ const styles = StyleSheet.create({
   },
   benefitText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

@@ -7,6 +7,7 @@ import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 interface HotelDetails {
   id: string;
@@ -67,7 +68,7 @@ const HotelBookingConfirmation: React.FC<HotelBookingConfirmationProps> = ({
       {/* Header */}
       <View style={styles.header}>
         <Pressable onPress={onClose} style={styles.closeButton}>
-          <Ionicons name="close" size={24} color="#111827" />
+          <Ionicons name="close" size={24} color={colors.neutral[900]} />
         </Pressable>
       </View>
 
@@ -75,7 +76,7 @@ const HotelBookingConfirmation: React.FC<HotelBookingConfirmationProps> = ({
         {/* Success Icon */}
         <View style={styles.successContainer}>
           <View style={styles.successIcon}>
-            <Ionicons name="checkmark-circle" size={80} color="#22C55E" />
+            <Ionicons name="checkmark-circle" size={80} color={colors.success} />
           </View>
           <Text style={styles.successTitle}>Booking Confirmed!</Text>
           <Text style={styles.successSubtitle}>
@@ -97,7 +98,7 @@ const HotelBookingConfirmation: React.FC<HotelBookingConfirmationProps> = ({
         {/* Booking Details Card */}
         <View style={styles.detailsCard}>
           <View style={styles.cardHeader}>
-            <Ionicons name="bed" size={24} color="#EC4899" />
+            <Ionicons name="bed" size={24} color={colors.brand.pink} />
             <Text style={styles.cardTitle}>Booking Details</Text>
           </View>
 
@@ -185,25 +186,25 @@ const HotelBookingConfirmation: React.FC<HotelBookingConfirmationProps> = ({
               <Text style={styles.extrasTitle}>Extras</Text>
               {bookingData.selectedExtras.breakfast && (
                 <View style={styles.extraItem}>
-                  <Ionicons name="restaurant" size={16} color="#EC4899" />
+                  <Ionicons name="restaurant" size={16} color={colors.brand.pink} />
                   <Text style={styles.extraText}>Breakfast</Text>
                 </View>
               )}
               {bookingData.selectedExtras.wifi && (
                 <View style={styles.extraItem}>
-                  <Ionicons name="wifi" size={16} color="#EC4899" />
+                  <Ionicons name="wifi" size={16} color={colors.brand.pink} />
                   <Text style={styles.extraText}>Wi-Fi</Text>
                 </View>
               )}
               {bookingData.selectedExtras.parking && (
                 <View style={styles.extraItem}>
-                  <Ionicons name="car" size={16} color="#EC4899" />
+                  <Ionicons name="car" size={16} color={colors.brand.pink} />
                   <Text style={styles.extraText}>Parking</Text>
                 </View>
               )}
               {bookingData.selectedExtras.lateCheckout && (
                 <View style={styles.extraItem}>
-                  <Ionicons name="time" size={16} color="#EC4899" />
+                  <Ionicons name="time" size={16} color={colors.brand.pink} />
                   <Text style={styles.extraText}>Late Check-out</Text>
                 </View>
               )}
@@ -214,7 +215,7 @@ const HotelBookingConfirmation: React.FC<HotelBookingConfirmationProps> = ({
         {/* Contact Info Card */}
         <View style={styles.detailsCard}>
           <View style={styles.cardHeader}>
-            <Ionicons name="person" size={24} color="#EC4899" />
+            <Ionicons name="person" size={24} color={colors.brand.pink} />
             <Text style={styles.cardTitle}>Contact Information</Text>
           </View>
 
@@ -236,7 +237,7 @@ const HotelBookingConfirmation: React.FC<HotelBookingConfirmationProps> = ({
 
         {/* Important Info */}
         <View style={styles.infoBox}>
-          <Ionicons name="information-circle" size={20} color="#3B82F6" />
+          <Ionicons name="information-circle" size={20} color={colors.infoScale[400]} />
           <Text style={styles.infoText}>
             A confirmation email has been sent to {bookingData.contactInfo.email}. 
             Please check-in at the hotel reception on your arrival date.
@@ -260,7 +261,7 @@ const HotelBookingConfirmation: React.FC<HotelBookingConfirmationProps> = ({
           onPress={onClose}
         >
           <LinearGradient
-            colors={['#EC4899', '#DB2777']}
+            colors={[colors.brand.pink, colors.deepPink]}
             style={styles.buttonGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -276,14 +277,14 @@ const HotelBookingConfirmation: React.FC<HotelBookingConfirmationProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   closeButton: {
     padding: 8,
@@ -301,21 +302,21 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   successSubtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   detailsCard: {
     margin: 20,
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   cardHeader: {
     flexDirection: 'row',
@@ -326,7 +327,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   detailRow: {
     flexDirection: 'row',
@@ -336,20 +337,20 @@ const styles = StyleSheet.create({
   },
   detailLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   detailValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'right',
     flex: 1,
     marginLeft: 16,
   },
   detailSubtext: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 4,
     textAlign: 'right',
   },
@@ -357,12 +358,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   extrasTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   extraItem: {
@@ -373,7 +374,7 @@ const styles = StyleSheet.create({
   },
   extraText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
   },
   infoBox: {
@@ -382,10 +383,10 @@ const styles = StyleSheet.create({
     gap: 12,
     margin: 20,
     padding: 16,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#DBEAFE',
+    borderColor: colors.tint.blueLight,
   },
   infoText: {
     flex: 1,
@@ -398,8 +399,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -5 },
     shadowOpacity: 0.05,
@@ -408,7 +409,7 @@ const styles = StyleSheet.create({
   },
   viewBookingsButton: {
     flex: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
@@ -417,7 +418,7 @@ const styles = StyleSheet.create({
   viewBookingsButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   primaryButton: {
     flex: 1,
@@ -430,7 +431,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 18,
     fontWeight: '700',
   },

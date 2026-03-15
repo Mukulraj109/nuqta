@@ -30,6 +30,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { StripeCardForm } from '@/components/payment';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Initialize Stripe lazily — SDK is only loaded when this promise is first awaited
 const stripePromise = getStripePromise(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
@@ -56,8 +57,8 @@ type PaymentMethod = 'card' | 'wallet';
 const COLORS = {
   white: Colors.background.primary,
   navy: Colors.nileBlue,
-  peach: '#E8B896',
-  peachLight: '#ffd7b5',
+  peach: colors.brand.sand,
+  peachLight: colors.lightPeach,
   warmBg: '#F4F1ED',
   gray50: Colors.background.secondary,
   gray100: Colors.background.secondary,
@@ -283,7 +284,7 @@ export default function VoucherBrandDetailPage() {
 
   const brandGradient = brand?.backgroundColor
     ? [brand.backgroundColor, adjustColor(brand.backgroundColor, -20)]
-    : [COLORS.navy, '#234b68'];
+    : [COLORS.navy, colors.brand.nileBlueLight];
 
   if (isLoading) {
     return <DetailPageSkeleton />;
@@ -418,7 +419,7 @@ export default function VoucherBrandDetailPage() {
                 onPress={() => setPaymentMethod('card')}
                
               >
-                <View style={[styles.paymentMethodIcon, paymentMethod === 'card' && { backgroundColor: '#EDE9FE' }]}>
+                <View style={[styles.paymentMethodIcon, paymentMethod === 'card' && { backgroundColor: colors.tint.purple }]}>
                   <Ionicons name="card" size={20} color={paymentMethod === 'card' ? COLORS.purple : COLORS.gray500} />
                 </View>
                 <Text style={[styles.paymentMethodLabel, paymentMethod === 'card' && styles.paymentMethodLabelSelected]}>
@@ -436,7 +437,7 @@ export default function VoucherBrandDetailPage() {
                 onPress={() => setPaymentMethod('wallet')}
                
               >
-                <View style={[styles.paymentMethodIcon, paymentMethod === 'wallet' && { backgroundColor: '#ECFDF5' }]}>
+                <View style={[styles.paymentMethodIcon, paymentMethod === 'wallet' && { backgroundColor: colors.tint.greenLight }]}>
                   <Ionicons name="wallet" size={20} color={paymentMethod === 'wallet' ? COLORS.green : COLORS.gray500} />
                 </View>
                 <Text style={[styles.paymentMethodLabel, paymentMethod === 'wallet' && styles.paymentMethodLabelSelected]}>
@@ -524,7 +525,7 @@ export default function VoucherBrandDetailPage() {
         >
           <LinearGradient
             colors={selectedDenomination
-              ? (paymentMethod === 'card' ? ['#A78BFA', COLORS.purple] : ['#34D399', Colors.success])
+              ? (paymentMethod === 'card' ? [colors.brand.purpleSoft, COLORS.purple] : [colors.successScale[400], Colors.success])
               : [COLORS.gray200, COLORS.gray200]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -651,7 +652,7 @@ export default function VoucherBrandDetailPage() {
                    
                   >
                     <LinearGradient
-                      colors={['#34D399', Colors.success]}
+                      colors={[colors.successScale[400], Colors.success]}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 0 }}
                       style={styles.alertButtonGradient}
@@ -955,7 +956,7 @@ const styles = StyleSheet.create({
   },
   paymentMethodWalletSelected: {
     borderColor: COLORS.green,
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
   },
   paymentMethodIcon: {
     width: 36,
@@ -1142,13 +1143,13 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.base,
   },
   alertIconSuccess: {
-    backgroundColor: '#ECFDF5',
+    backgroundColor: colors.tint.greenLight,
   },
   alertIconError: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
   },
   alertIconConfirm: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
   },
   alertTitle: {
     ...Typography.h4,

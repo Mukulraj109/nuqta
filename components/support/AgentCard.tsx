@@ -7,6 +7,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import type { SupportAgent } from '@/types/supportChat.types';
+import { colors } from '@/constants/theme';
 
 interface AgentCardProps {
   agent: SupportAgent;
@@ -17,15 +18,15 @@ function AgentCard({ agent, showDetails = false }: AgentCardProps) {
   const getStatusColor = () => {
     switch (agent.status) {
       case 'online':
-        return '#10B981';
+        return colors.successScale[400];
       case 'away':
-        return '#F59E0B';
+        return colors.warningScale[400];
       case 'busy':
-        return '#EF4444';
+        return colors.error;
       case 'offline':
-        return '#6B7280';
+        return colors.neutral[500];
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   };
 
@@ -95,14 +96,14 @@ function AgentCard({ agent, showDetails = false }: AgentCardProps) {
           <View style={styles.details}>
             {agent.department && (
               <View style={styles.detailRow}>
-                <Ionicons name="business-outline" size={14} color="#6B7280" />
+                <Ionicons name="business-outline" size={14} color={colors.neutral[500]} />
                 <ThemedText style={styles.detailText}>{agent.department}</ThemedText>
               </View>
             )}
 
             {agent.rating && (
               <View style={styles.detailRow}>
-                <Ionicons name="star" size={14} color="#F59E0B" />
+                <Ionicons name="star" size={14} color={colors.warningScale[400]} />
                 <ThemedText style={styles.detailText}>
                   {agent.rating.toFixed(1)} rating
                 </ThemedText>
@@ -111,7 +112,7 @@ function AgentCard({ agent, showDetails = false }: AgentCardProps) {
 
             {agent.responseTime && (
               <View style={styles.detailRow}>
-                <Ionicons name="timer-outline" size={14} color="#6B7280" />
+                <Ionicons name="timer-outline" size={14} color={colors.neutral[500]} />
                 <ThemedText style={styles.detailText}>
                   ~{Math.round(agent.responseTime / 60)}min response
                 </ThemedText>
@@ -120,7 +121,7 @@ function AgentCard({ agent, showDetails = false }: AgentCardProps) {
 
             {agent.languages && agent.languages.length > 0 && (
               <View style={styles.detailRow}>
-                <Ionicons name="language-outline" size={14} color="#6B7280" />
+                <Ionicons name="language-outline" size={14} color={colors.neutral[500]} />
                 <ThemedText style={styles.detailText}>
                   {agent.languages.join(', ')}
                 </ThemedText>
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -186,12 +187,12 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
   },
   title: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 6,
   },
   statusRow: {
@@ -207,17 +208,17 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   separator: {
     fontSize: 12,
-    color: '#D1D5DB',
+    color: colors.neutral[300],
     marginHorizontal: 6,
   },
   typingText: {
     fontSize: 12,
-    color: '#10B981',
+    color: colors.successScale[400],
     fontStyle: 'italic',
   },
   details: {
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

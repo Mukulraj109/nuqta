@@ -5,6 +5,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface FlightAmenitiesProps {
   amenities: string[];
@@ -31,7 +32,7 @@ const FlightAmenities: React.FC<FlightAmenitiesProps> = ({ amenities }) => {
             <Ionicons
               name={amenityIcons[amenity] || 'checkmark-circle-outline'}
               size={24}
-              color="#3B82F6"
+              color={colors.infoScale[400]}
             />
             <Text style={styles.amenityText}>{amenity}</Text>
           </View>
@@ -45,12 +46,12 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   grid: {
@@ -63,13 +64,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
     padding: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
     minWidth: '45%',
   },
   amenityText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
   },
 });

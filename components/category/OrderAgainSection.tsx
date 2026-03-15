@@ -5,15 +5,16 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import ordersService, { Order } from '../../services/ordersApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Use same colors as FoodDiningCategoryPage
 const COLORS = {
-    primaryGreen: '#ffcd57',
-    primaryGold: '#F59E0B',
-    textPrimary: '#111827',
-    textSecondary: '#6B7280',
-    white: '#FFFFFF',
-    background: '#F5F5F5',
+    primaryGreen: colors.lightMustard,
+    primaryGold: colors.warningScale[400],
+    textPrimary: colors.neutral[900],
+    textSecondary: colors.neutral[500],
+    white: colors.background.primary,
+    background: colors.tint.warmGray,
 };
 
 interface OrderAgainSectionProps {
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: '100%',
         height: 90,
-        backgroundColor: '#F3F4F6',
+        backgroundColor: colors.neutral[100],
     },
     image: {
         width: '100%',

@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface QuickAction {
   id: string;
@@ -271,7 +272,7 @@ export default function HelpPage() {
       
       {/* Header */}
       <LinearGradient
-        colors={[Colors.brand.purpleLight, '#A855F7'] as const}
+        colors={[Colors.brand.purpleLight, colors.brand.purpleMedium] as const}
         style={styles.header}
       >
         <View style={styles.headerContent}>

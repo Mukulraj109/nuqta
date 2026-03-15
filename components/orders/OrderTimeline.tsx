@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface TimelineStep {
   status: string;
@@ -215,25 +216,25 @@ function OrderTimeline({
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
   header: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   estimatedTimeContainer: {
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     padding: 12,
     borderRadius: 8,
     marginBottom: 20,
     borderLeftWidth: 4,
-    borderLeftColor: '#1a3a52',
+    borderLeftColor: colors.nileBlue,
   },
   estimatedTimeLabel: {
     fontSize: 12,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   estimatedTime: {
@@ -256,20 +257,20 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: colors.neutral[200],
     borderWidth: 2,
-    borderColor: '#9ca3af',
+    borderColor: colors.neutral[400],
     justifyContent: 'center',
     alignItems: 'center',
   },
   timelineDotCompleted: {
-    backgroundColor: '#ffcd57',
-    borderColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
+    borderColor: colors.lightMustard,
   },
   timelineDotActive: {
-    backgroundColor: '#1a3a52',
-    borderColor: '#1a3a52',
-    shadowColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
+    borderColor: colors.nileBlue,
+    shadowColor: colors.nileBlue,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 8,
@@ -282,18 +283,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   timelineDotCheck: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: 'bold',
   },
   timelineLine: {
     flex: 1,
     width: 2,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: colors.neutral[200],
     marginTop: 4,
   },
   timelineLineCompleted: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   timelineRight: {
     flex: 1,
@@ -305,34 +306,34 @@ const styles = StyleSheet.create({
   timelineTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   timelineTitleCompleted: {
-    color: '#111827',
+    color: colors.neutral[900],
   },
   timelineTitleActive: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   timelineMessage: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   timelineTimestamp: {
     fontSize: 12,
-    color: '#9ca3af',
+    color: colors.neutral[400],
   },
   detailedTimeline: {
     marginTop: 16,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
+    borderTopColor: colors.neutral[200],
   },
   detailedTimelineHeader: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   detailedTimelineItem: {
@@ -343,7 +344,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     marginRight: 12,
     marginTop: 6,
   },
@@ -352,12 +353,12 @@ const styles = StyleSheet.create({
   },
   detailedTimelineMessage: {
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 2,
   },
   detailedTimelineTimestamp: {
     fontSize: 11,
-    color: '#9ca3af',
+    color: colors.neutral[400],
   },
 });
 

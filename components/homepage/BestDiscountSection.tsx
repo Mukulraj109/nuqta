@@ -11,6 +11,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useRouter } from 'expo-router';
 import categoriesApi, { Category } from '@/services/categoriesApi';
 import CategorySectionCard from './cards/CategorySectionCard';
+import { colors } from '@/constants/theme';
 
 interface BestDiscountSectionProps {
   title?: string;
@@ -151,7 +152,7 @@ function BestDiscountSection({
       {/* Content */}
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#ffcd57" />
+          <ActivityIndicator size="small" color={colors.lightMustard} />
         </View>
       ) : error ? (
         <View style={styles.errorContainer}>
@@ -201,11 +202,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   viewAllButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   listContent: {
     paddingHorizontal: 16,
@@ -237,12 +238,12 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 12,
     textAlign: 'center',
   },
   retryButton: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
@@ -250,6 +251,6 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });

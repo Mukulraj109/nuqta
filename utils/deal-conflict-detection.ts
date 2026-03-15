@@ -1,4 +1,5 @@
 import { Deal, DealValidationError, AppliedDeal } from '@/types/deals';
+import { colors } from '@/constants/theme';
 
 export interface DealConflict {
   type: 'CATEGORY_CONFLICT' | 'USAGE_LIMIT' | 'MINIMUM_BILL' | 'STACKING_RESTRICTION' | 'MUTUAL_EXCLUSION';
@@ -285,7 +286,7 @@ const calculateOptimalDealCombination = (
 export const getConflictSeverityColor = (severity: DealConflict['severity']): string => {
   switch (severity) {
     case 'ERROR':
-      return '#EF4444';
+      return colors.error;
     case 'WARNING':
       return '#F59E0B';
     case 'INFO':

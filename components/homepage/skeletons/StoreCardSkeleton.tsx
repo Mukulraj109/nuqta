@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import SkeletonCard from '@/components/common/SkeletonCard';
+import { colors } from '@/constants/theme';
 
 interface StoreCardSkeletonProps {
   width?: number;
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     ...Platform.select({

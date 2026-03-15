@@ -1,4 +1,5 @@
 // AIInsightCard.tsx - AI-powered savings insight card
+import { colors } from '@/constants/theme';
 import React from "react";
 import {
   View,
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
   },
   bestTimeText: {
     fontSize: 13,
-    color: "#666666",
+    color: colors.midGray,
     marginTop: 6,
     fontWeight: "500",
   },

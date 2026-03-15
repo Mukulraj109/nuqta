@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   View,
@@ -19,7 +20,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 const PRIZE_TYPE_CONFIG: Record<string, { icon: string; color: string; label: string }> = {
   coins: { icon: 'flash', color: Colors.warning, label: 'Coins' },
   cashback: { icon: 'cash', color: Colors.success, label: 'Cashback' },
-  discount: { icon: 'pricetag', color: '#EC4899', label: 'Discount' },
+  discount: { icon: 'pricetag', color: colors.brand.pink, label: 'Discount' },
   voucher: { icon: 'ticket', color: Colors.brand.purple, label: 'Voucher' },
 };
 

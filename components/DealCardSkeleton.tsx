@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { colors } from '@/constants/theme';
 import {
   View,
   StyleSheet,
@@ -145,7 +146,7 @@ function DealCardSkeleton() {
 const createStyles = (screenWidth: number) => {
   return StyleSheet.create({
     card: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.background.primary,
       borderRadius: 16,
       marginBottom: 16,
       padding: 20,
@@ -164,7 +165,7 @@ const createStyles = (screenWidth: number) => {
         },
       }),
       borderWidth: 1,
-      borderColor: '#F1F5F9',
+      borderColor: colors.tint.slate,
     },
     badge: {
       position: 'absolute',
@@ -172,13 +173,13 @@ const createStyles = (screenWidth: number) => {
       right: 16,
       width: 80,
       height: 24,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.neutral[200],
       borderRadius: 8,
     },
     title: {
       width: screenWidth * 0.6,
       height: 20,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.neutral[200],
       borderRadius: 4,
       marginTop: 8,
       marginBottom: 8,
@@ -186,21 +187,21 @@ const createStyles = (screenWidth: number) => {
     description: {
       width: screenWidth * 0.7,
       height: 16,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.neutral[200],
       borderRadius: 4,
       marginBottom: 8,
     },
     minimumBill: {
       width: screenWidth * 0.4,
       height: 16,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.neutral[200],
       borderRadius: 4,
       marginBottom: 12,
     },
     categoryBadge: {
       width: 60,
       height: 20,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.neutral[200],
       borderRadius: 12,
       marginBottom: 12,
     },
@@ -212,14 +213,14 @@ const createStyles = (screenWidth: number) => {
     availabilityIcon: {
       width: 16,
       height: 16,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.neutral[200],
       borderRadius: 8,
       marginRight: 8,
     },
     availabilityText: {
       width: screenWidth * 0.5,
       height: 14,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.neutral[200],
       borderRadius: 4,
     },
     termsContainer: {
@@ -233,26 +234,26 @@ const createStyles = (screenWidth: number) => {
     termBullet: {
       width: 4,
       height: 4,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.neutral[200],
       borderRadius: 2,
       marginRight: 12,
     },
     termText: {
       width: screenWidth * 0.65,
       height: 12,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.neutral[200],
       borderRadius: 4,
     },
     termTextShort: {
       width: screenWidth * 0.5,
       height: 12,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.neutral[200],
       borderRadius: 4,
     },
     button: {
       width: '100%',
       height: 48,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.neutral[200],
       borderRadius: 12,
     },
   });

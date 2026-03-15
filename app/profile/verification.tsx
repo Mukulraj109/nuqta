@@ -17,6 +17,7 @@ import verificationService, { VerificationStatus } from '@/services/verification
 import { useAuth } from '@/contexts/AuthContext';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { FormPageSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 // Cross-platform alert that works on web
 const showAlert = (title: string, message: string, onOk?: () => void) => {
@@ -36,7 +37,7 @@ const ZONE_CONFIGS: Record<string, {
   student: {
     title: 'Student Verification',
     icon: 'school',
-    color: '#3B82F6',
+    color: colors.infoScale[400],
     methods: [
       { id: 'edu_email', label: 'College Email (.edu/.ac.in)', type: 'email' },
       { id: 'student_id', label: 'Student ID Card', type: 'document' },
@@ -47,7 +48,7 @@ const ZONE_CONFIGS: Record<string, {
   corporate: {
     title: 'Corporate Verification',
     icon: 'briefcase',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     methods: [
       { id: 'corporate_email', label: 'Work Email', type: 'email' },
     ],
@@ -56,7 +57,7 @@ const ZONE_CONFIGS: Record<string, {
   defence: {
     title: 'Defence Personnel',
     icon: 'shield',
-    color: '#059669',
+    color: colors.successScale[700],
     methods: [
       { id: 'military_id', label: 'Military ID', type: 'document' },
       { id: 'service_card', label: 'Service Card', type: 'document' },
@@ -69,7 +70,7 @@ const ZONE_CONFIGS: Record<string, {
   healthcare: {
     title: 'Healthcare Heroes',
     icon: 'medkit',
-    color: '#DC2626',
+    color: colors.error,
     methods: [
       { id: 'hospital_id', label: 'Hospital ID', type: 'document' },
       { id: 'medical_council', label: 'Medical Council Certificate', type: 'document' },
@@ -81,7 +82,7 @@ const ZONE_CONFIGS: Record<string, {
   senior: {
     title: 'Senior Citizen',
     icon: 'person',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     methods: [
       { id: 'age_verification', label: 'Age Verification (60+)', type: 'auto' },
     ],
@@ -90,7 +91,7 @@ const ZONE_CONFIGS: Record<string, {
   teacher: {
     title: 'Teacher Verification',
     icon: 'book',
-    color: '#10B981',
+    color: colors.successScale[400],
     methods: [
       { id: 'school_id', label: 'School ID', type: 'document' },
       { id: 'college_id', label: 'College ID', type: 'document' },
@@ -102,7 +103,7 @@ const ZONE_CONFIGS: Record<string, {
   government: {
     title: 'Government Employee',
     icon: 'business',
-    color: '#6366F1',
+    color: colors.brand.indigo,
     methods: [
       { id: 'govt_id', label: 'Government ID', type: 'document' },
       { id: 'pay_slip', label: 'Pay Slip', type: 'document' },
@@ -113,7 +114,7 @@ const ZONE_CONFIGS: Record<string, {
   differentlyAbled: {
     title: 'Differently Abled',
     icon: 'heart',
-    color: '#EC4899',
+    color: colors.brand.pink,
     methods: [
       { id: 'disability_certificate', label: 'Disability Certificate', type: 'document' },
       { id: 'udid_card', label: 'UDID Card', type: 'document' },
@@ -338,7 +339,7 @@ export default function VerificationPage() {
         <LinearGradient colors={[config.color, config.color + 'CC']} style={styles.header}>
           <SafeAreaView edges={['top']}>
             <Pressable onPress={() => router.back()} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={24} color="#FFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
           </SafeAreaView>
         </LinearGradient>
@@ -379,14 +380,14 @@ export default function VerificationPage() {
         <LinearGradient colors={[config.color, config.color + 'CC']} style={styles.header}>
           <SafeAreaView edges={['top']}>
             <Pressable onPress={() => router.back()} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={24} color="#FFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
           </SafeAreaView>
         </LinearGradient>
 
         <View style={styles.verifiedContainer}>
           <View style={[styles.verifiedIconContainer, { backgroundColor: '#F59E0B20' }]}>
-            <Ionicons name="time" size={80} color="#F59E0B" />
+            <Ionicons name="time" size={80} color={colors.warningScale[400]} />
           </View>
           <ThemedText style={styles.verifiedTitle}>Verification Pending</ThemedText>
           <ThemedText style={styles.verifiedSubtitle}>
@@ -420,7 +421,7 @@ export default function VerificationPage() {
         <LinearGradient colors={[config.color, config.color + 'CC']} style={styles.header}>
           <SafeAreaView edges={['top']}>
             <Pressable onPress={() => router.back()} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={24} color="#FFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
           </SafeAreaView>
         </LinearGradient>
@@ -470,11 +471,11 @@ export default function VerificationPage() {
         <SafeAreaView edges={['top']}>
           <View style={styles.headerContent}>
             <Pressable onPress={() => router.back()} style={styles.backButton}>
-              <Ionicons name="arrow-back" size={24} color="#FFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
             <View style={styles.headerCenter}>
               <View style={styles.headerIconContainer}>
-                <Ionicons name={config.icon} size={32} color="#FFF" />
+                <Ionicons name={config.icon} size={32} color={colors.background.primary} />
               </View>
               <ThemedText style={styles.headerTitle}>{config.title}</ThemedText>
               <ThemedText style={styles.headerSubtitle}>{config.description}</ThemedText>
@@ -708,10 +709,10 @@ export default function VerificationPage() {
             disabled={!selectedMethod || loading}
           >
             {loading ? (
-              <ActivityIndicator color="#FFF" />
+              <ActivityIndicator color={colors.background.primary} />
             ) : (
               <>
-                <Ionicons name="checkmark-circle-outline" size={20} color="#FFF" />
+                <Ionicons name="checkmark-circle-outline" size={20} color={colors.background.primary} />
                 <ThemedText style={styles.submitButtonText}>Submit Verification</ThemedText>
               </>
             )}
@@ -819,7 +820,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...Typography.h3,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
     textAlign: 'center',
   },
@@ -991,7 +992,7 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
   },
   optionChipTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   submitSection: {
     marginTop: Spacing.xl,
@@ -1009,7 +1010,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     ...Typography.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   disclaimerText: {
@@ -1059,7 +1060,7 @@ const styles = StyleSheet.create({
   },
   primaryButtonText: {
     ...Typography.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   secondaryButton: {

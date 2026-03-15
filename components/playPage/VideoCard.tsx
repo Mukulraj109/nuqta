@@ -9,6 +9,7 @@ import { getIOSVideoProps, getVideoLoadingStrategy } from '@/utils/videoUtils';
 import ShimmerEffect from '@/components/common/ShimmerEffect';
 import { useVideoManager } from '@/hooks/useVideoManager';
 import logger from '@/utils/logger';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -312,7 +313,7 @@ function VideoCard({
           />
         ) : (
           <View style={[StyleSheet.absoluteFill, styles.errorContainer]}>
-            <Ionicons name="videocam-off" size={40} color="#666" />
+            <Ionicons name="videocam-off" size={40} color={colors.midGray} />
             <ThemedText style={styles.errorText}>Video unavailable</ThemedText>
           </View>
         )}
@@ -325,13 +326,13 @@ function VideoCard({
               width="100%"
               height="100%"
               style={styles.shimmerBackground}
-              shimmerColors={['#E5E7EB', '#FFFFFF', '#E5E7EB']}
+              shimmerColors={[colors.neutral[200], colors.background.primary, colors.neutral[200]]}
               duration={1200}
             />
             
             <View style={styles.loadingContent}>
               <View style={styles.loadingSpinner}>
-                <Ionicons name="play-circle" size={36} color="#FFFFFF" />
+                <Ionicons name="play-circle" size={36} color={colors.background.primary} />
               </View>
               
               {loadingProgress > 0 && (
@@ -370,7 +371,7 @@ function VideoCard({
         {/* View count overlay */}
         <View style={styles.viewCountContainer}>
           <View style={styles.viewCountPill}>
-            <Ionicons name="eye" size={12} color="#FFFFFF" />
+            <Ionicons name="eye" size={12} color={colors.background.primary} />
             <ThemedText style={styles.viewCountText}>
               {item.viewCount}
             </ThemedText>
@@ -381,7 +382,7 @@ function VideoCard({
         {showProductCount && item.productCount && item.productCount > 0 && (
           <View style={styles.productCountContainer}>
             <View style={styles.productCountPill}>
-              <Ionicons name="pricetag" size={12} color="#FFFFFF" />
+              <Ionicons name="pricetag" size={12} color={colors.background.primary} />
               <ThemedText style={styles.productCountText}>
                 {item.productCount} {item.productCount === 1 ? 'product' : 'products'}
               </ThemedText>
@@ -405,7 +406,7 @@ function VideoCard({
               <Ionicons
                 name={isMuted ? "volume-mute" : "volume-high"}
                 size={24}
-                color="#FFFFFF"
+                color={colors.background.primary}
               />
             </Pressable>
 
@@ -421,7 +422,7 @@ function VideoCard({
               <Ionicons
                 name="expand"
                 size={24}
-                color="#FFFFFF"
+                color={colors.background.primary}
               />
             </Pressable>
           </View>
@@ -437,7 +438,7 @@ function VideoCard({
             accessibilityRole="button"
             accessibilityHint="Double tap to view and purchase products featured in this video"
           >
-            <Ionicons name="cart" size={18} color="#FFFFFF" />
+            <Ionicons name="cart" size={18} color={colors.background.primary} />
             <ThemedText style={styles.shopNowText}>Shop Now</ThemedText>
           </Pressable>
         )}
@@ -459,7 +460,7 @@ function VideoCard({
                 <Ionicons
                   name={isLiked ? "heart" : "heart-outline"}
                   size={28}
-                  color={isLiked ? "#EF4444" : "#FFFFFF"}
+                  color={isLiked ? colors.error : colors.background.primary}
                 />
               </Animated.View>
               {likeCount > 0 && (
@@ -478,7 +479,7 @@ function VideoCard({
               accessibilityRole="button"
               accessibilityHint="Double tap to view and add comments"
             >
-              <Ionicons name="chatbubble-outline" size={26} color="#FFFFFF" />
+              <Ionicons name="chatbubble-outline" size={26} color={colors.background.primary} />
               {item.engagement?.comments && item.engagement.comments > 0 && (
                 <ThemedText style={styles.socialActionText}>
                   {item.engagement.comments >= 1000
@@ -497,7 +498,7 @@ function VideoCard({
               accessibilityRole="button"
               accessibilityHint="Double tap to share this video with others"
             >
-              <Ionicons name="paper-plane-outline" size={26} color="#FFFFFF" />
+              <Ionicons name="paper-plane-outline" size={26} color={colors.background.primary} />
               {item.engagement?.shares && item.engagement.shares > 0 && (
                 <ThemedText style={styles.socialActionText}>
                   {item.engagement.shares >= 1000
@@ -572,12 +573,12 @@ const styles = StyleSheet.create({
   errorContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   errorText: {
     marginTop: 8,
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
   },
   loadingContainer: {
@@ -620,11 +621,11 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 2,
   },
   loadingText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -644,7 +645,7 @@ const styles = StyleSheet.create({
     // // backdropFilter: 'blur(10px)', // Not supported in React Native // Glass effect - not supported in React Native
   },
   viewCountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '600',
   },
@@ -668,7 +669,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   productCountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '600',
   },
@@ -680,7 +681,7 @@ const styles = StyleSheet.create({
     padding: 20, // More generous padding
   },
   description: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600', // Slightly bolder
     lineHeight: 22, // Better line spacing
     marginBottom: 12, // More space below
@@ -704,7 +705,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   hashtagText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11, // Slightly larger
     fontWeight: '600',
     letterSpacing: 0.2,
@@ -720,7 +721,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
   },
   controlsContainer: {
     position: 'absolute',
@@ -762,7 +763,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   shopNowText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 13,
     fontWeight: '700',
     letterSpacing: 0.5,
@@ -780,7 +781,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   socialActionText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '600',
     textShadowColor: 'rgba(0, 0, 0, 0.7)',

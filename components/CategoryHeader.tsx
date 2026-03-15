@@ -27,6 +27,7 @@ import { useWalletContext } from '@/contexts/WalletContext';
 import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
 import { profileMenuSections } from '@/data/profileData';
 import { CategoryBanner } from '@/config/categoryConfig';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -74,32 +75,32 @@ const CATEGORY_VISUALS: Record<string, {
   'Fashion': {
     icon: 'shirt',
     headerIcon: 'shirt-outline',
-    gradientColors: ['#A855F7', '#C084FC', '#E9D5FF'],
-    accentColor: '#A855F7',
+    gradientColors: [colors.brand.purpleMedium, '#C084FC', '#E9D5FF'],
+    accentColor: colors.brand.purpleMedium,
     glowColor: 'rgba(168, 85, 247, 0.4)',
     tagline: 'Style Your Way',
   },
   'Fitness & Sports': {
     icon: 'fitness',
     headerIcon: 'fitness-outline',
-    gradientColors: ['#F97316', '#FB923C', '#FED7AA'],
-    accentColor: '#F97316',
+    gradientColors: [colors.brand.orange, '#FB923C', '#FED7AA'],
+    accentColor: colors.brand.orange,
     glowColor: 'rgba(249, 115, 22, 0.3)',
     tagline: 'Stay Strong',
   },
   'Education & Learning': {
     icon: 'school',
     headerIcon: 'school-outline',
-    gradientColors: ['#6366F1', '#818CF8', '#C7D2FE'],
-    accentColor: '#6366F1',
+    gradientColors: [colors.brand.indigo, '#818CF8', '#C7D2FE'],
+    accentColor: colors.brand.indigo,
     glowColor: 'rgba(99, 102, 241, 0.4)',
     tagline: 'Learn & Grow',
   },
   'Home Services': {
     icon: 'home',
     headerIcon: 'home-outline',
-    gradientColors: ['#F59E0B', '#FBBF24', '#FEF3C7'],
-    accentColor: '#F59E0B',
+    gradientColors: [colors.warningScale[400], colors.warningScale[400], colors.tint.amberLight],
+    accentColor: colors.warningScale[400],
     glowColor: 'rgba(245, 158, 11, 0.4)',
     tagline: 'Home Made Better',
   },
@@ -114,24 +115,24 @@ const CATEGORY_VISUALS: Record<string, {
   'Entertainment': {
     icon: 'game-controller',
     headerIcon: 'game-controller-outline',
-    gradientColors: ['#8B5CF6', '#A78BFA', '#DDD6FE'],
-    accentColor: '#8B5CF6',
+    gradientColors: [colors.brand.purpleLight, colors.brand.purpleSoft, '#DDD6FE'],
+    accentColor: colors.brand.purpleLight,
     glowColor: 'rgba(139, 92, 246, 0.4)',
     tagline: 'Fun Never Stops',
   },
   'Financial Lifestyle': {
     icon: 'wallet',
     headerIcon: 'wallet-outline',
-    gradientColors: ['#14B8A6', '#2DD4BF', '#CCFBF1'],
-    accentColor: '#14B8A6',
+    gradientColors: [colors.tealGreen, '#2DD4BF', '#CCFBF1'],
+    accentColor: colors.tealGreen,
     glowColor: 'rgba(20, 184, 166, 0.4)',
     tagline: 'Smart Savings',
   },
   'Electronics': {
     icon: 'phone-portrait',
     headerIcon: 'phone-portrait-outline',
-    gradientColors: ['#3B82F6', '#60A5FA', '#DBEAFE'],
-    accentColor: '#3B82F6',
+    gradientColors: [colors.infoScale[400], colors.infoScale[400], colors.tint.blueLight],
+    accentColor: colors.infoScale[400],
     glowColor: 'rgba(59, 130, 246, 0.4)',
     tagline: 'Tech Deals Await',
   },
@@ -160,8 +161,8 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({
   const categoryVisuals = CATEGORY_VISUALS[categoryName] || {
     icon: 'grid',
     headerIcon: 'grid-outline',
-    gradientColors: ['#00C06A', '#00896B', '#0B2240'],
-    accentColor: '#00C06A',
+    gradientColors: [colors.brand.green, '#00896B', colors.brand.navyDark],
+    accentColor: colors.brand.green,
     glowColor: 'rgba(0, 192, 106, 0.4)',
     tagline: 'Great Deals',
   };
@@ -250,7 +251,7 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({
     <View style={styles.wrapper}>
       {/* Main Gradient Background */}
       <LinearGradient
-        colors={[gradientColors[0], gradientColors[1], '#0B2240']}
+        colors={[gradientColors[0], gradientColors[1], colors.brand.navyDark]}
         style={styles.container}
         start={{ x: 0, y: 0 }}
         end={{ x: 0.5, y: 1 }}
@@ -288,7 +289,7 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({
             {/* Center: Category Title with Icon */}
             <View style={styles.titleContainer}>
               <View style={styles.titleIconWrapper}>
-                <Ionicons name={categoryVisuals.headerIcon} size={20} color="#FFFFFF" />
+                <Ionicons name={categoryVisuals.headerIcon} size={20} color={colors.background.primary} />
               </View>
               <Text style={styles.categoryTitle}>{categoryName}</Text>
             </View>
@@ -327,7 +328,7 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({
                 onPress={() => authState.isAuthenticated && showModal()}
               >
                 <LinearGradient
-                  colors={['#FFD700', '#FFA500', categoryVisuals.accentColor]}
+                  colors={[colors.brand.goldBright, '#FFA500', categoryVisuals.accentColor]}
                   style={styles.profileGradient}
                 >
                   <Text style={styles.profileInitial}>
@@ -360,7 +361,7 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({
                 {/* Left side - Text content */}
                 <View style={styles.bannerTextSection}>
                   <View style={styles.taglineContainer}>
-                    <Ionicons name={categoryVisuals.icon} size={14} color="#FFFFFF" />
+                    <Ionicons name={categoryVisuals.icon} size={14} color={colors.background.primary} />
                     <Text style={styles.taglineText}>{categoryVisuals.tagline}</Text>
                   </View>
 
@@ -377,13 +378,13 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({
                    
                   >
                     <LinearGradient
-                      colors={['#FFD700', '#FFA500']}
+                      colors={[colors.brand.goldBright, '#FFA500']}
                       style={styles.ctaGradient}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 0 }}
                     >
                       <Text style={styles.ctaText}>{banner.tag}</Text>
-                      <Ionicons name="arrow-forward" size={14} color="#0B2240" />
+                      <Ionicons name="arrow-forward" size={14} color={colors.brand.navyDark} />
                     </LinearGradient>
                   </Pressable>
                 </View>
@@ -392,7 +393,7 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({
                 <View style={styles.discountSection}>
                   <View style={styles.discountBadge}>
                     <LinearGradient
-                      colors={['#FFD700', '#FF8C00']}
+                      colors={[colors.brand.goldBright, '#FF8C00']}
                       style={styles.discountGradient}
                     >
                       <Text style={styles.uptoText}>UPTO</Text>
@@ -563,7 +564,7 @@ const styles = StyleSheet.create({
   coinText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   profileButton: {
     width: 42,
@@ -703,7 +704,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#FFD700',
+        shadowColor: colors.brand.goldBright,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.4,
         shadowRadius: 8,
@@ -723,7 +724,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#0B2240',
+    color: colors.brand.navyDark,
     letterSpacing: 0.5,
   },
   discountSection: {
@@ -741,7 +742,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#FFD700',
+        shadowColor: colors.brand.goldBright,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.5,
         shadowRadius: 12,
@@ -764,19 +765,19 @@ const styles = StyleSheet.create({
   uptoText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#0B2240',
+    color: colors.brand.navyDark,
     letterSpacing: 1,
   },
   discountValue: {
     fontSize: 28,
     fontWeight: '900',
-    color: '#0B2240',
+    color: colors.brand.navyDark,
     lineHeight: 32,
   },
   offText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#0B2240',
+    color: colors.brand.navyDark,
     letterSpacing: 1,
   },
 });

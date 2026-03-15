@@ -9,6 +9,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 interface StatBox {
   value: number | string;
@@ -45,9 +46,9 @@ const LoyaltyRewardsHubCard: React.FC<LoyaltyRewardsHubCardProps> = ({
 
   const stats: StatBox[] = [
     { value: activeBrands, label: 'Active Brands' },
-    { value: streaks, label: 'Streaks', valueColor: '#ffcd57' },
-    { value: unlocked, label: 'Unlocked', valueColor: '#ffcd57' },
-    { value: tiers, label: 'Tiers', valueColor: '#1a3a52' },
+    { value: streaks, label: 'Streaks', valueColor: colors.lightMustard },
+    { value: unlocked, label: 'Unlocked', valueColor: colors.lightMustard },
+    { value: tiers, label: 'Tiers', valueColor: colors.nileBlue },
   ];
 
   // Loading skeleton for stat box
@@ -67,7 +68,7 @@ const LoyaltyRewardsHubCard: React.FC<LoyaltyRewardsHubCardProps> = ({
         disabled={isLoading}
       >
         <LinearGradient
-          colors={['#faf1e0', '#ffd7b5']} // Linen to light purple gradient
+          colors={[colors.linen, colors.lightPeach]} // Linen to light purple gradient
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.cardGradient}
@@ -77,7 +78,7 @@ const LoyaltyRewardsHubCard: React.FC<LoyaltyRewardsHubCardProps> = ({
             <View style={styles.headerLeft}>
               {/* Trophy Icon */}
               <View style={styles.iconContainer}>
-                <Ionicons name="trophy" size={24} color="#ffcd57" />
+                <Ionicons name="trophy" size={24} color={colors.lightMustard} />
               </View>
               <View style={styles.titleContainer}>
                 <Text style={styles.title}>Loyalty & Rewards Hub</Text>
@@ -92,7 +93,7 @@ const LoyaltyRewardsHubCard: React.FC<LoyaltyRewardsHubCardProps> = ({
               disabled={isLoading}
             >
               <Text style={styles.viewLinkText}>View</Text>
-              <Ionicons name="chevron-forward" size={14} color="#ffcd57" />
+              <Ionicons name="chevron-forward" size={14} color={colors.lightMustard} />
             </Pressable>
           </View>
 
@@ -181,13 +182,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '400',
   },
   viewLink: {
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   viewLinkText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   statsContainer: {
     flexDirection: 'row',
@@ -227,13 +228,13 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
     letterSpacing: -0.3,
   },
   statLabel: {
     fontSize: 11,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '500',
     textAlign: 'center',
   },

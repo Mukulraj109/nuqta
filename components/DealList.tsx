@@ -14,6 +14,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Deal, DealCategory } from '@/types/deals';
 import DealCard from '@/components/DealCard';
 import DealCardSkeleton from '@/components/DealCardSkeleton';
+import { colors } from '@/constants/theme';
 
 export type SortOption = 'priority' | 'discount' | 'expiry' | 'alphabetical';
 export type FilterOption = 'all' | DealCategory;
@@ -156,7 +157,7 @@ function DealList({
       <Ionicons 
         name={filterBy === 'all' ? "gift-outline" : "funnel-outline"} 
         size={48} 
-        color="#D1D5DB" 
+        color={colors.neutral[300]} 
       />
       <ThemedText style={styles.emptyTitle}>
         {filterBy === 'all' ? 'No deals available' : 'No deals match your filter'}
@@ -191,7 +192,7 @@ function DealList({
           </ThemedText>
           {selectedDeals.length > 0 && (
             <View style={styles.selectedSummary}>
-              <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
               <ThemedText style={styles.selectedText}>
                 {selectedDeals.length} selected
               </ThemedText>
@@ -205,7 +206,7 @@ function DealList({
             style={styles.controlButton}
             onPress={() => setShowFilterModal(true)}
           >
-            <Ionicons name="funnel-outline" size={16} color="#ffcd57" />
+            <Ionicons name="funnel-outline" size={16} color={colors.lightMustard} />
             <ThemedText style={styles.controlButtonText} numberOfLines={1}>
               {filterBy === 'all' ? 'Filter' : `Filter: ${getCategoryDisplayName(filterBy)}`}
             </ThemedText>
@@ -221,7 +222,7 @@ function DealList({
               setSortBy(nextSort);
             }}
           >
-            <Ionicons name="swap-vertical-outline" size={16} color="#ffcd57" />
+            <Ionicons name="swap-vertical-outline" size={16} color={colors.lightMustard} />
             <ThemedText style={styles.controlButtonText} numberOfLines={1}>
               Sort: {getSortDisplayName(sortBy)}
             </ThemedText>
@@ -317,8 +318,8 @@ function DealList({
             <RefreshControl
               refreshing={isRefreshing}
               onRefresh={handleRefresh}
-              tintColor="#ffcd57"
-              colors={['#ffcd57']}
+              tintColor={colors.lightMustard}
+              colors={[colors.lightMustard]}
             />
           ) : undefined
         }
@@ -335,7 +336,7 @@ function DealList({
       {/* Loading overlay for refresh */}
       {isLoading && processedDeals.length > 0 && (
         <View style={styles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#ffcd57" />
+          <ActivityIndicator size="large" color={colors.lightMustard} />
         </View>
       )}
     </View>
@@ -377,7 +378,7 @@ const createStyles = (screenData: { width: number; height: number }, isTablet: b
   header: {
     paddingBottom: screenData.width < 375 ? 12 : 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: colors.tint.slate,
     marginBottom: screenData.width < 375 ? 12 : 16,
     paddingHorizontal: screenData.width < 375 ? 12 : 16,
     paddingTop: 8,
@@ -393,7 +394,7 @@ const createStyles = (screenData: { width: number; height: number }, isTablet: b
   summaryText: {
     fontSize: screenData.width < 375 ? 14 : 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     flex: screenData.width < 414 ? 1 : 0,
   },
   selectedSummary: {
@@ -403,7 +404,7 @@ const createStyles = (screenData: { width: number; height: number }, isTablet: b
   selectedText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#10B981',
+    color: colors.successScale[400],
     marginLeft: 4,
   },
   controlsContainer: {
@@ -415,12 +416,12 @@ const createStyles = (screenData: { width: number; height: number }, isTablet: b
   controlButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     borderRadius: 8,
     paddingHorizontal: screenData.width < 375 ? 10 : 12,
     paddingVertical: screenData.width < 375 ? 8 : 10,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: colors.slateLight,
     flex: screenData.width < 414 ? 1 : 0,
     justifyContent: 'center',
     minHeight: 44, // Ensure minimum touch target
@@ -429,7 +430,7 @@ const createStyles = (screenData: { width: number; height: number }, isTablet: b
   controlButtonText: {
     fontSize: screenData.width < 375 ? 12 : 14,
     fontWeight: '500',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     marginLeft: 6,
     textAlign: 'center',
   },
@@ -442,12 +443,12 @@ const createStyles = (screenData: { width: number; height: number }, isTablet: b
     alignItems: 'center',
   },
   quickFilter: {
-    backgroundColor: '#F1F5F9',
+    backgroundColor: colors.tint.slate,
     borderRadius: screenData.width < 375 ? 12 : 16,
     paddingHorizontal: screenData.width < 375 ? 8 : 12,
     paddingVertical: screenData.width < 375 ? 4 : 6,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: colors.slateLight,
     minHeight: 32,
     justifyContent: 'center',
     alignItems: 'center',
@@ -455,17 +456,17 @@ const createStyles = (screenData: { width: number; height: number }, isTablet: b
     maxWidth: screenData.width < 375 ? screenData.width * 0.25 : screenData.width * 0.3,
   },
   quickFilterActive: {
-    backgroundColor: '#ffcd57',
-    borderColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
+    borderColor: colors.lightMustard,
   },
   quickFilterText: {
     fontSize: screenData.width < 375 ? 10 : 12,
     fontWeight: '500',
-    color: '#64748B',
+    color: colors.slateGray,
     textAlign: 'center',
   },
   quickFilterTextActive: {
-    color: '#fff',
+    color: colors.background.primary,
   },
   listContainer: {
     paddingBottom: 24,
@@ -494,19 +495,19 @@ const createStyles = (screenData: { width: number; height: number }, isTablet: b
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginTop: 16,
     marginBottom: 8,
     textAlign: 'center',
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
   },
   clearFilterButton: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -515,7 +516,7 @@ const createStyles = (screenData: { width: number; height: number }, isTablet: b
   clearFilterText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.background.primary,
   },
   loadingOverlay: {
     position: 'absolute',

@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import type { SpinWheelResult } from '@/types/gamification.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface CelebrationModalProps {
   visible: boolean;
@@ -93,15 +94,15 @@ function CelebrationModal({
   const getPrizeColor = () => {
     switch (result.prize?.type) {
       case 'coins':
-        return ['#FFD700', '#FFA500'];
+        return [colors.brand.goldBright, '#FFA500'];
       case 'cashback':
-        return ['#ffcd57', '#1a3a52'];
+        return [colors.lightMustard, colors.nileBlue];
       case 'discount':
-        return ['#F59E0B', '#D97706'];
+        return [colors.warningScale[400], colors.warningScale[700]];
       case 'voucher':
-        return ['#8B5CF6', '#7C3AED'];
+        return [colors.brand.purpleLight, colors.brand.purple];
       default:
-        return ['#3B82F6', '#2563EB'];
+        return [colors.infoScale[400], colors.brand.blue];
     }
   };
 
@@ -147,7 +148,7 @@ function CelebrationModal({
             onPress={onClose}
            
           >
-            <Ionicons name="close-circle" size={32} color="#6B7280" />
+            <Ionicons name="close-circle" size={32} color={colors.neutral[500]} />
           </Pressable>
 
           {/* Celebration Icon */}
@@ -187,7 +188,7 @@ function CelebrationModal({
               <View style={styles.coinsRow}>
                 <ThemedText style={styles.coinsLabel}>New Balance:</ThemedText>
                 <View style={styles.balanceContainer}>
-                  <Ionicons name="star" size={20} color="#FFD700" />
+                  <Ionicons name="star" size={20} color={colors.brand.goldBright} />
                   <ThemedText style={styles.balanceValue}>{newBalance}</ThemedText>
                 </View>
               </View>
@@ -198,7 +199,7 @@ function CelebrationModal({
           {tournamentUpdate && (
             <View style={styles.tournamentBanner}>
               <View style={styles.tournamentBannerRow}>
-                <Ionicons name="trophy" size={18} color="#F59E0B" />
+                <Ionicons name="trophy" size={18} color={colors.warningScale[400]} />
                 <ThemedText style={styles.tournamentBannerTitle}>{tournamentUpdate.tournamentName}</ThemedText>
               </View>
               <View style={styles.tournamentBannerStats}>
@@ -206,7 +207,7 @@ function CelebrationModal({
                   <ThemedText style={styles.tournamentBannerValue}>+{tournamentUpdate.pointsAdded}</ThemedText>
                   <ThemedText style={styles.tournamentBannerLabel}>Points</ThemedText>
                 </View>
-                <View style={[styles.tournamentBannerStat, { borderLeftWidth: 1, borderLeftColor: '#E5E7EB' }]}>
+                <View style={[styles.tournamentBannerStat, { borderLeftWidth: 1, borderLeftColor: colors.neutral[200] }]}>
                   <ThemedText style={styles.tournamentBannerValue}>#{tournamentUpdate.newRank}</ThemedText>
                   <ThemedText style={styles.tournamentBannerLabel}>Rank</ThemedText>
                 </View>
@@ -221,7 +222,7 @@ function CelebrationModal({
                 <Ionicons
                   name={result.prize.couponDetails.isProductSpecific ? "pricetag" : "storefront"}
                   size={20}
-                  color="#8B5CF6"
+                  color={colors.brand.purpleLight}
                 />
                 <ThemedText style={styles.applicabilityTitle}>
                   {result.prize.couponDetails.isProductSpecific ? 'Product-Specific' : 'Store-Wide'}
@@ -234,7 +235,7 @@ function CelebrationModal({
                 </ThemedText>
 
                 <View style={styles.storeTag}>
-                  <Ionicons name="storefront" size={14} color="#6B7280" />
+                  <Ionicons name="storefront" size={14} color={colors.neutral[500]} />
                   <ThemedText style={styles.storeTagText}>
                     {result.prize.couponDetails.storeName}
                   </ThemedText>
@@ -242,7 +243,7 @@ function CelebrationModal({
 
                 {result.prize.couponDetails.isProductSpecific && result.prize.couponDetails.productName && (
                   <View style={styles.productTag}>
-                    <Ionicons name="cube" size={14} color="#6B7280" />
+                    <Ionicons name="cube" size={14} color={colors.neutral[500]} />
                     <ThemedText style={styles.productTagText}>
                       {result.prize.couponDetails.productName}
                     </ThemedText>
@@ -255,7 +256,7 @@ function CelebrationModal({
           {/* Other Reward Types Info */}
           {result.prize?.type !== 'coins' && result.prize?.type !== 'nothing' && (
             <View style={styles.rewardInfo}>
-              <Ionicons name="checkmark-circle" size={20} color="#ffcd57" />
+              <Ionicons name="checkmark-circle" size={20} color={colors.lightMustard} />
               <ThemedText style={styles.rewardText}>
                 {result.prize?.type === 'cashback' && 'Cashback added to your wallet!'}
                 {result.prize?.type === 'discount' && 'Discount coupon added to your coupons!'}
@@ -271,7 +272,7 @@ function CelebrationModal({
            
           >
             <LinearGradient
-              colors={['#8B5CF6', '#7C3AED']}
+              colors={[colors.brand.purpleLight, colors.brand.purple]}
               style={styles.awesomeButtonGradient}
             >
               <ThemedText style={styles.awesomeButtonText}>Awesome!</ThemedText>
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
   congratsText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -339,17 +340,17 @@ const styles = StyleSheet.create({
   },
   prizeLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   prizeValue: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   coinsInfo: {
     width: '100%',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
@@ -361,16 +362,16 @@ const styles = StyleSheet.create({
   },
   coinsLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   coinsEarned: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   divider: {
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginVertical: 12,
   },
   balanceContainer: {
@@ -381,11 +382,11 @@ const styles = StyleSheet.create({
   balanceValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   couponDetailsContainer: {
     width: '100%',
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -401,14 +402,14 @@ const styles = StyleSheet.create({
   applicabilityTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   applicabilityContent: {
     gap: 10,
   },
   applicabilityText: {
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 18,
   },
   storeTag: {
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
   },
   storeTagText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   productTag: {
@@ -438,13 +439,13 @@ const styles = StyleSheet.create({
   },
   productTagText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   rewardInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 12,
@@ -453,18 +454,18 @@ const styles = StyleSheet.create({
   },
   rewardText: {
     fontSize: 13,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '500',
     flex: 1,
   },
   tournamentBanner: {
     width: '100%',
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     borderRadius: 12,
     padding: 14,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: colors.warningScale[200],
   },
   tournamentBannerRow: {
     flexDirection: 'row',
@@ -475,7 +476,7 @@ const styles = StyleSheet.create({
   tournamentBannerTitle: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     flex: 1,
   },
   tournamentBannerStats: {
@@ -489,11 +490,11 @@ const styles = StyleSheet.create({
   tournamentBannerValue: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   tournamentBannerLabel: {
     fontSize: 10,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontWeight: '500',
     marginTop: 2,
   },
@@ -501,7 +502,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 12,
     overflow: 'hidden',
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,

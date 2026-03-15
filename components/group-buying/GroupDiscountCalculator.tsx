@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { GroupBuyingGroup } from '@/types/groupBuying.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface GroupDiscountCalculatorProps {
   group: GroupBuyingGroup;
@@ -34,7 +35,7 @@ function GroupDiscountCalculator({ group }: GroupDiscountCalculatorProps) {
     <View style={styles.container}>
       {/* Current Savings Card */}
       <LinearGradient
-        colors={['#8B5CF6', '#7C3AED']}
+        colors={[colors.brand.purpleLight, colors.brand.purple]}
         style={styles.savingsCard}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -79,11 +80,11 @@ function GroupDiscountCalculator({ group }: GroupDiscountCalculatorProps) {
             >
               <View style={styles.tierIcon}>
                 {isUnlocked ? (
-                  <Ionicons name="checkmark-circle" size={24} color="#10B981" />
+                  <Ionicons name="checkmark-circle" size={24} color={colors.successScale[400]} />
                 ) : isNext ? (
-                  <Ionicons name="radio-button-off" size={24} color="#F59E0B" />
+                  <Ionicons name="radio-button-off" size={24} color={colors.warningScale[400]} />
                 ) : (
-                  <Ionicons name="lock-closed" size={24} color="#9CA3AF" />
+                  <Ionicons name="lock-closed" size={24} color={colors.neutral[400]} />
                 )}
               </View>
               <View style={styles.tierContent}>
@@ -170,12 +171,12 @@ const styles = StyleSheet.create({
   tierTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   tierSubtitle: {
     fontSize: 13,
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     fontWeight: '500',
   },
   tierItem: {
@@ -183,17 +184,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
     borderRadius: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     marginBottom: 8,
     gap: 12,
   },
   tierItemActive: {
-    backgroundColor: '#EDE9FE',
+    backgroundColor: colors.tint.purple,
     borderWidth: 2,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
   },
   tierItemUnlocked: {
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
   },
   tierIcon: {
     width: 40,
@@ -207,22 +208,22 @@ const styles = StyleSheet.create({
   tierMembers: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 2,
   },
   tierMembersActive: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   tierDiscount: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   tierDiscountActive: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   activeBadge: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface SkeletonCardProps {
   width?: number | string;
@@ -64,7 +65,7 @@ function SkeletonCard({
           width: finalWidth,
           height,
           borderRadius: finalBorderRadius,
-          backgroundColor: '#E5E7EB',
+          backgroundColor: colors.gray[200],
           overflow: 'hidden',
         },
         style,
@@ -79,7 +80,7 @@ function SkeletonCard({
         }}
       >
         <LinearGradient
-          colors={['#E5E7EB', '#F9FAFB', '#E5E7EB']}
+          colors={[colors.neutral[200], colors.neutral[50], colors.neutral[200]]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={{

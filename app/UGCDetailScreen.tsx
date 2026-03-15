@@ -30,6 +30,7 @@ import { shouldCountView, recordView } from '@/utils/viewTracker';
 import { useRegion } from '@/contexts/RegionContext';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -802,7 +803,7 @@ export default function UGCDetailScreen() {
             <Ionicons
               name={isLiked ? 'heart' : 'heart-outline'}
               size={32}
-              color={isLiked ? Colors.error : '#FFF'}
+              color={isLiked ? Colors.error : colors.background.primary}
             />
           </Animated.View>
           <Text style={styles.actionCount}>{formatCount(likesCount)}</Text>
@@ -813,7 +814,7 @@ export default function UGCDetailScreen() {
           <Ionicons
             name={isBookmarked ? 'bookmark' : 'bookmark-outline'}
             size={30}
-            color={isBookmarked ? Colors.warning : '#FFF'}
+            color={isBookmarked ? Colors.warning : colors.background.primary}
           />
         </Pressable>
 
@@ -926,7 +927,7 @@ export default function UGCDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: colors.text.primary,
     justifyContent: 'center',
     alignItems: 'center',
     ...(Platform.OS === 'web' && { overflow: 'hidden' as const }),
@@ -1081,7 +1082,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#000',
+    borderColor: colors.text.primary,
   },
   actionButton: {
     alignItems: 'center',

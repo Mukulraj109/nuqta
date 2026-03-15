@@ -10,6 +10,7 @@ import React, { useState, useCallback, memo } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Image as ExpoImage } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface FastImageProps {
   source: string | { uri: string };
@@ -63,7 +64,7 @@ const FastImage = memo(({
   if (hasError) {
     return (
       <View style={[containerStyle, styles.errorContainer]}>
-        <Ionicons name="image-outline" size={Math.min(width || 32, height || 32) / 2} color="#9CA3AF" />
+        <Ionicons name="image-outline" size={Math.min(width || 32, height || 32) / 2} color={colors.neutral[400]} />
       </View>
     );
   }
@@ -73,7 +74,7 @@ const FastImage = memo(({
       {/* Loading indicator */}
       {isLoading && showLoader && (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="small" color="#7C3AED" />
+          <ActivityIndicator size="small" color={colors.brand.purple} />
         </View>
       )}
 
@@ -108,18 +109,18 @@ FastImage.displayName = 'FastImage';
 const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
   },
   loaderContainer: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
   },
   errorContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
 });
 

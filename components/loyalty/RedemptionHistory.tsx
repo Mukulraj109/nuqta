@@ -8,6 +8,7 @@ import { View, FlatList, StyleSheet, Pressable, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { RedemptionRecord } from '@/types/loyaltyRedemption.types';
+import { colors } from '@/constants/theme';
 
 interface RedemptionHistoryProps {
   redemptions: RedemptionRecord[];
@@ -18,15 +19,15 @@ function RedemptionHistory({ redemptions, onViewDetails }: RedemptionHistoryProp
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active':
-        return '#10B981';
+        return colors.successScale[400];
       case 'used':
-        return '#6B7280';
+        return colors.neutral[500];
       case 'expired':
-        return '#EF4444';
+        return colors.error;
       case 'cancelled':
-        return '#F59E0B';
+        return colors.warningScale[400];
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   };
 
@@ -55,7 +56,7 @@ function RedemptionHistory({ redemptions, onViewDetails }: RedemptionHistoryProp
        
       >
         <View style={styles.redemptionIcon}>
-          <Ionicons name="gift" size={24} color="#8B5CF6" />
+          <Ionicons name="gift" size={24} color={colors.brand.purpleLight} />
         </View>
 
         <View style={styles.redemptionContent}>
@@ -77,7 +78,7 @@ function RedemptionHistory({ redemptions, onViewDetails }: RedemptionHistoryProp
 
           {item.expiresAt && item.status === 'active' && (
             <View style={styles.expiryInfo}>
-              <Ionicons name="time-outline" size={14} color="#F59E0B" />
+              <Ionicons name="time-outline" size={14} color={colors.warningScale[400]} />
               <ThemedText style={styles.expiryText}>
                 Expires {new Date(item.expiresAt).toLocaleDateString()}
               </ThemedText>
@@ -87,7 +88,7 @@ function RedemptionHistory({ redemptions, onViewDetails }: RedemptionHistoryProp
 
         <View style={styles.redemptionRight}>
           <View style={styles.pointsBadge}>
-            <Ionicons name="diamond" size={14} color="#F59E0B" />
+            <Ionicons name="diamond" size={14} color={colors.warningScale[400]} />
             <ThemedText style={styles.pointsText}>{item.pointsSpent}</ThemedText>
           </View>
 
@@ -105,7 +106,7 @@ function RedemptionHistory({ redemptions, onViewDetails }: RedemptionHistoryProp
   if (redemptions.length === 0) {
     return (
       <View style={styles.emptyState}>
-        <Ionicons name="receipt-outline" size={64} color="#D1D5DB" />
+        <Ionicons name="receipt-outline" size={64} color={colors.neutral[300]} />
         <ThemedText style={styles.emptyTitle}>No redemptions yet</ThemedText>
         <ThemedText style={styles.emptyText}>
           Your redeemed rewards will appear here
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
   },
   redemptionCard: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -160,18 +161,18 @@ const styles = StyleSheet.create({
   redemptionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   redemptionDate: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   codeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -180,13 +181,13 @@ const styles = StyleSheet.create({
   },
   codeLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginRight: 4,
   },
   codeValue: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   expiryInfo: {
     flexDirection: 'row',
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
   },
   expiryText: {
     fontSize: 12,
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   redemptionRight: {
     alignItems: 'flex-end',
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
   pointsText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   statusBadge: {
     flexDirection: 'row',
@@ -233,13 +234,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 16,
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
   },
 });

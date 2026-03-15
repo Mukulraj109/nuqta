@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -89,7 +90,7 @@ const EventCategoryTabs: React.FC<EventCategoryTabsProps> = ({
                 <Ionicons
                   name={category.icon}
                   size={18}
-                  color={isActive ? '#FFFFFF' : '#6B7280'}
+                  color={isActive ? colors.background.primary : colors.neutral[500]}
                 />
               </View>
               <ThemedText
@@ -110,9 +111,9 @@ const EventCategoryTabs: React.FC<EventCategoryTabsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   scrollContent: {
     paddingHorizontal: 12,
@@ -134,22 +135,22 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 6,
   },
   iconContainerActive: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
   },
   categoryLabel: {
     fontSize: 11,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   categoryLabelActive: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
   },
 });

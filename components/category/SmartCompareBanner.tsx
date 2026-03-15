@@ -16,6 +16,7 @@ import {
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface SmartCompareBannerProps {
   categorySlug?: string;
@@ -45,7 +46,7 @@ const SmartCompareBanner: React.FC<SmartCompareBannerProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#3B82F6', '#1D4ED8']}
+        colors={[colors.infoScale[400], '#1D4ED8']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#3B82F6',
+        shadowColor: colors.infoScale[400],
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 2,
   },
   subtitle: {
@@ -164,14 +165,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 14,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   compareButton: {
     height: 44,
     paddingHorizontal: 18,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#3B82F6',
+    color: colors.infoScale[400],
   },
   storesRow: {
     flexDirection: 'row',

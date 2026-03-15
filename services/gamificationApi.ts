@@ -2,6 +2,7 @@
 // Handles daily check-in, spin wheel, and other gamification features
 
 import apiClient, { ApiResponse } from './apiClient';
+import { colors } from '@/constants/theme';
 
 const devLog = {
   log: __DEV__ ? console.log.bind(console) : () => {},
@@ -746,7 +747,7 @@ class GamificationApiService {
           title: poster.title,
           subtitle: poster.subtitle || poster.description,
           image: poster.image || poster.imageUrl,
-          colors: Array.isArray(poster.colors) ? poster.colors : ['#F97316', '#EF4444'],
+          colors: Array.isArray(poster.colors) ? poster.colors : ['#F97316', colors.error],
           shareBonus: poster.shareBonus || poster.bonus || 50,
           isActive: poster.isActive ?? true,
         }));

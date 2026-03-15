@@ -11,6 +11,7 @@ import type {
   RazorpayPaymentData,
   PaymentMethodType,
 } from '@/types/payment.types';
+import { colors } from '@/constants/theme';
 
 // Import Razorpay for native support (requires expo-dev-client)
 let RazorpayCheckout: any = null;
@@ -160,7 +161,7 @@ class RazorpayService {
           contact: userDetails?.contact || '',
           name: userDetails?.name || 'User',
         },
-        theme: { color: '#8B5CF6' },
+        theme: { color: colors.brand.purpleLight },
         notes: metadata || {},
         modal: {
           ondismiss: () => {
@@ -221,7 +222,7 @@ class RazorpayService {
                 email: userDetails?.email || 'user@example.com',
                 contact: userDetails?.contact || '',
               },
-              theme: { color: '#8B5CF6' },
+              theme: { color: colors.brand.purpleLight },
               handler: (response: RazorpayPaymentData) => {
                 resolve(response);
               },

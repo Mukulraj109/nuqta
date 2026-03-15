@@ -13,6 +13,7 @@ import { productApi, HomepageProduct } from '@/services/productApi';
 import CategoryProductCard from './cards/CategoryProductCard';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface CategoryProductsSectionProps {
   categorySlug: string;
@@ -134,7 +135,7 @@ function CategoryProductsSection({
          
         >
           <ThemedText style={styles.viewAllText}>View all</ThemedText>
-          <Ionicons name="chevron-forward" size={14} color="#1a3a52" style={styles.viewAllIcon} />
+          <Ionicons name="chevron-forward" size={14} color={colors.nileBlue} style={styles.viewAllIcon} />
         </Pressable>
       </View>
 
@@ -142,24 +143,24 @@ function CategoryProductsSection({
       {loading ? (
         <View style={styles.loadingContainer}>
           <View style={styles.loadingSpinner}>
-            <ActivityIndicator size="small" color="#ffcd57" />
+            <ActivityIndicator size="small" color={colors.lightMustard} />
           </View>
           <ThemedText style={styles.loadingText}>Fetching deals...</ThemedText>
         </View>
       ) : error ? (
         <View style={styles.errorContainer}>
           <View style={styles.errorIconContainer}>
-            <Ionicons name="cloud-offline-outline" size={32} color="#9AA7B2" />
+            <Ionicons name="cloud-offline-outline" size={32} color={colors.gray[400]} />
           </View>
           <ThemedText style={styles.errorText}>{error}</ThemedText>
           <Pressable style={styles.retryButton} onPress={fetchProducts}>
             <LinearGradient
-              colors={['#ffcd57', '#1a3a52']}
+              colors={[colors.lightMustard, colors.nileBlue]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.retryGradient}
             >
-              <Ionicons name="refresh" size={14} color="#FFFFFF" />
+              <Ionicons name="refresh" size={14} color={colors.background.primary} />
               <ThemedText style={styles.retryText}>Try again</ThemedText>
             </LinearGradient>
           </Pressable>
@@ -200,14 +201,14 @@ const styles = StyleSheet.create({
   titleAccent: {
     width: 4,
     height: 22,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 2,
     marginRight: 10,
   },
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontFamily: 'Poppins',
     letterSpacing: -0.3,
   },
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontFamily: 'Inter',
   },
   viewAllIcon: {
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 13,
-    color: '#9AA7B2',
+    color: colors.gray[400],
     fontFamily: 'Inter',
     fontWeight: '500',
   },
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 16,
     textAlign: 'center',
     fontFamily: 'Inter',
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.25,
         shadowRadius: 6,
@@ -310,7 +311,7 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontFamily: 'Inter',
   },
 });

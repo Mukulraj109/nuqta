@@ -15,6 +15,7 @@ import { SectionHeader, HorizontalScrollSection } from '../common';
 import { CountdownTimer } from '../common/CountdownTimer';
 import { CoinDrop } from '@/types/offers.types';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface CoinDropsSectionProps {
   coinDrops: CoinDrop[];
@@ -40,7 +41,7 @@ export const CoinDropsSection: React.FC<CoinDropsSectionProps> = ({
     },
     card: {
       width: 160,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 2,
       borderColor: isDark ? 'rgba(255, 200, 87, 0.4)' : Colors.gold,
@@ -55,13 +56,13 @@ export const CoinDropsSection: React.FC<CoinDropsSectionProps> = ({
     multiplierText: {
       fontSize: 18,
       fontWeight: '900',
-      color: '#FFFFFF',
+      color: colors.background.primary,
       letterSpacing: 1,
     },
     multiplierSubtext: {
       fontSize: 10,
       fontWeight: '600',
-      color: '#FFFFFF',
+      color: colors.background.primary,
       opacity: 0.9,
     },
     content: {
@@ -72,7 +73,7 @@ export const CoinDropsSection: React.FC<CoinDropsSectionProps> = ({
       width: 56,
       height: 56,
       borderRadius: 14,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.background.primary,
       overflow: 'hidden',
       borderWidth: 2,
       borderColor: Colors.gold,
@@ -93,7 +94,7 @@ export const CoinDropsSection: React.FC<CoinDropsSectionProps> = ({
       justifyContent: 'center',
     },
     logoText: {
-      color: '#FFFFFF',
+      color: colors.background.primary,
       fontSize: 22,
       fontWeight: '700',
     },
@@ -133,7 +134,7 @@ export const CoinDropsSection: React.FC<CoinDropsSectionProps> = ({
     timerContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: isDark ? 'rgba(239, 68, 68, 0.2)' : '#FEE2E2',
+      backgroundColor: isDark ? 'rgba(239, 68, 68, 0.2)' : colors.errorScale[100],
       paddingHorizontal: 8,
       paddingVertical: 4,
       borderRadius: 6,
@@ -204,7 +205,7 @@ export const CoinDropsSection: React.FC<CoinDropsSectionProps> = ({
                 <Ionicons
                   name="time"
                   size={12}
-                  color="#EF4444"
+                  color={colors.error}
                   style={styles.timerIcon}
                 />
                 <CountdownTimer endTime={coinDrop.endTime} size="small" showIcon={false} />

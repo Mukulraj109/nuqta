@@ -4,6 +4,7 @@ import { Review, ReviewStats } from '@/types/reviews';
 
 // RatingBreakdown format used in ReviewModal
 export interface RatingBreakdown {
+  [key: number]: number;
   5: number;
   4: number;
   3: number;
@@ -135,9 +136,10 @@ export function useStoreReviews(
         // Update stats
         if (summary) {
           // Handle both summary and ratingStats formats
-          const breakdown = summary.ratingBreakdown || summary.distribution || {};
-          const averageRating = summary.averageRating || summary.average || 0;
-          const totalReviews = summary.totalReviews || summary.count || 0;
+          const summaryAny = summary as any;
+          const breakdown = summary.ratingBreakdown || summaryAny.distribution || {};
+          const averageRating = summary.averageRating || summaryAny.average || 0;
+          const totalReviews = summary.totalReviews || summaryAny.count || 0;
           
           setStats({
             averageRating,
@@ -163,7 +165,7 @@ export function useStoreReviews(
 
         // Update pagination
         if (pagination) {
-          setHasMore(pagination.hasNext || false);
+          setHasMore((pagination as any).hasNext || false);
         }
       } else {
         throw new Error(response.message || 'Failed to fetch reviews');

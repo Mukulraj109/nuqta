@@ -18,6 +18,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { CashbackActivity, formatCurrency } from '../../../types/cash-store.types';
+import { colors } from '@/constants/theme';
 
 interface CashbackActivitySectionProps {
   activities: CashbackActivity[];
@@ -30,32 +31,32 @@ interface CashbackActivitySectionProps {
 const getStatusColor = (status: CashbackActivity['status']): string => {
   switch (status) {
     case 'pending':
-      return '#E8B896';
+      return colors.brand.sand;
     case 'confirmed':
-      return '#1a3a52';
+      return colors.nileBlue;
     case 'available':
-      return '#ffcd57';
+      return colors.lightMustard;
     case 'expired':
     case 'cancelled':
-      return '#D4A07A';
+      return colors.brand.caramel;
     default:
-      return '#6B7280';
+      return colors.neutral[500];
   }
 };
 
 const getStatusGradient = (status: CashbackActivity['status']): string[] => {
   switch (status) {
     case 'pending':
-      return ['#E8B896', '#D4A07A'];
+      return [colors.brand.sand, colors.brand.caramel];
     case 'confirmed':
-      return ['#1a3a52', '#243f55'];
+      return [colors.nileBlue, '#243f55'];
     case 'available':
-      return ['#D4A07A', '#1a3a52'];
+      return [colors.brand.caramel, colors.nileBlue];
     case 'expired':
     case 'cancelled':
-      return ['#D4A07A', '#c99077'];
+      return [colors.brand.caramel, '#c99077'];
     default:
-      return ['#6B7280', '#4B5563'];
+      return [colors.neutral[500], colors.neutral[600]];
   }
 };
 
@@ -184,7 +185,7 @@ const ActivityItem: React.FC<{
         ]}
       >
         <LinearGradient colors={statusGradient} style={styles.timelineDot}>
-          <Ionicons name={statusIcon as any} size={12} color="#FFFFFF" />
+          <Ionicons name={statusIcon as any} size={12} color={colors.background.primary} />
         </LinearGradient>
       </Animated.View>
 
@@ -207,7 +208,7 @@ const ActivityItem: React.FC<{
           ) : activity.brand.logo ? (
             <Text style={{ fontSize: 28 }}>{activity.brand.logo}</Text>
           ) : (
-            <LinearGradient colors={['#ffd7b5', '#E8B896']} style={styles.logoPlaceholder}>
+            <LinearGradient colors={[colors.lightPeach, colors.brand.sand]} style={styles.logoPlaceholder}>
               <Text style={styles.logoInitial}>{activity.brand.name.charAt(0)}</Text>
             </LinearGradient>
           )}
@@ -220,7 +221,7 @@ const ActivityItem: React.FC<{
             Purchase: {formatCurrency(activity.purchaseAmount)}
           </Text>
           <View style={styles.dateRow}>
-            <Ionicons name="calendar-outline" size={10} color="#9CA3AF" />
+            <Ionicons name="calendar-outline" size={10} color={colors.neutral[400]} />
             <Text style={styles.dateText}>{formatDate(activity.date)}</Text>
           </View>
         </View>
@@ -243,7 +244,7 @@ const ActivityItem: React.FC<{
 
         {/* Arrow Indicator */}
         <View style={styles.arrowIndicator}>
-          <Ionicons name="chevron-forward" size={16} color="#D1D5DB" />
+          <Ionicons name="chevron-forward" size={16} color={colors.neutral[300]} />
         </View>
       </Pressable>
     </Animated.View>
@@ -328,10 +329,10 @@ const CashbackActivitySection: React.FC<CashbackActivitySectionProps> = ({
         <Animated.View style={[styles.header, { opacity: headerFadeAnim }]}>
           <View style={styles.titleRow}>
             <LinearGradient
-              colors={['#ffd7b5', '#E8B896']}
+              colors={[colors.lightPeach, colors.brand.sand]}
               style={styles.headerIconContainer}
             >
-              <Ionicons name="receipt" size={16} color="#FFFFFF" />
+              <Ionicons name="receipt" size={16} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Your Cashback Activity</Text>
           </View>
@@ -340,10 +341,10 @@ const CashbackActivitySection: React.FC<CashbackActivitySectionProps> = ({
         {/* Empty State */}
         <View style={styles.emptyState}>
           <LinearGradient
-            colors={['#F9FAFB', '#F3F4F6']}
+            colors={[colors.neutral[50], colors.neutral[100]]}
             style={styles.emptyIconContainer}
           >
-            <Ionicons name="wallet-outline" size={40} color="#D1D5DB" />
+            <Ionicons name="wallet-outline" size={40} color={colors.neutral[300]} />
           </LinearGradient>
           <Text style={styles.emptyTitle}>No activity yet</Text>
           <Text style={styles.emptySubtitle}>
@@ -351,11 +352,11 @@ const CashbackActivitySection: React.FC<CashbackActivitySectionProps> = ({
           </Text>
           <Pressable style={styles.emptyButton} onPress={onStartShopping || onViewAllPress}>
             <LinearGradient
-              colors={['#ffd7b5', '#E8B896']}
+              colors={[colors.lightPeach, colors.brand.sand]}
               style={styles.emptyButtonGradient}
             >
               <Text style={styles.emptyButtonText}>Start Shopping</Text>
-              <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={16} color={colors.background.primary} />
             </LinearGradient>
           </Pressable>
         </View>
@@ -370,10 +371,10 @@ const CashbackActivitySection: React.FC<CashbackActivitySectionProps> = ({
         <View style={styles.headerLeft}>
           <View style={styles.titleRow}>
             <LinearGradient
-              colors={['#ffd7b5', '#E8B896']}
+              colors={[colors.lightPeach, colors.brand.sand]}
               style={styles.headerIconContainer}
             >
-              <Ionicons name="receipt" size={16} color="#FFFFFF" />
+              <Ionicons name="receipt" size={16} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Your Cashback Activity</Text>
           </View>
@@ -386,7 +387,7 @@ const CashbackActivitySection: React.FC<CashbackActivitySectionProps> = ({
         >
           <Text style={styles.viewAllText}>View All</Text>
           <View style={styles.viewAllArrow}>
-            <Ionicons name="chevron-forward" size={14} color="#FFFFFF" />
+            <Ionicons name="chevron-forward" size={14} color={colors.background.primary} />
           </View>
         </Pressable>
       </Animated.View>
@@ -412,7 +413,7 @@ const CashbackActivitySection: React.FC<CashbackActivitySectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginTop: 8,
     marginHorizontal: 16,
     borderRadius: 24,
@@ -454,19 +455,19 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     marginLeft: 42,
   },
   viewAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingLeft: 14,
     paddingRight: 6,
     paddingVertical: 8,
@@ -476,7 +477,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   viewAllArrow: {
     width: 24,
@@ -501,7 +502,7 @@ const styles = StyleSheet.create({
     top: 36,
     bottom: -4,
     width: 2,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   timelineDotContainer: {
     position: 'absolute',
@@ -516,7 +517,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -537,23 +538,23 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingRight: 10,
     paddingLeft: 14,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 16,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
   },
   logoContainer: {
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
   },
   brandLogo: {
     width: 30,
@@ -568,7 +569,7 @@ const styles = StyleSheet.create({
   logoInitial: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   activityContent: {
     flex: 1,
@@ -576,12 +577,12 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 3,
   },
   purchaseAmount: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 3,
     fontWeight: '500',
   },
@@ -592,7 +593,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
   activityRight: {
@@ -637,12 +638,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 6,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -660,22 +661,22 @@ const styles = StyleSheet.create({
   emptyButtonText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // Skeleton
   skeleton: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   skeletonText: {
     height: 12,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 6,
   },
   skeletonBadge: {
     width: 70,
     height: 22,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 10,
   },
 });

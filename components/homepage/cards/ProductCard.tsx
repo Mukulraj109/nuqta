@@ -19,6 +19,7 @@ import { useToast } from '@/hooks/useToast';
 import { getProductId } from '@/types/product-unified.types';
 import { formatPrice as formatPriceUtil } from '@/utils/priceFormatter';
 import CachedImage from '@/components/ui/CachedImage';
+import { colors } from '@/constants/theme';
 
 function ProductCard({
   product,
@@ -292,7 +293,7 @@ function ProductCard({
             <Ionicons
               name={isInWishlist(productId) ? "heart" : "heart-outline"}
               size={20}
-              color={isInWishlist(productId) ? "#ffcd57" : "#FFFFFF"}
+              color={isInWishlist(productId) ? colors.lightMustard : colors.background.primary}
             />
           </Pressable>
         </View>
@@ -364,7 +365,7 @@ function ProductCard({
                 accessibilityLabel={`Earn ${cashbackPercentage}% cashback, up to ${formatPrice(finalCashback)}`}
                 accessibilityRole="text"
               >
-                <Ionicons name="cash" size={12} color="#1a3a52" style={{ marginRight: 4 }} />
+                <Ionicons name="cash" size={12} color={colors.nileBlue} style={{ marginRight: 4 }} />
                 <ThemedText style={styles.cashbackText}>
                   Earn {cashbackPercentage}% cashback
                 </ThemedText>
@@ -394,7 +395,7 @@ function ProductCard({
                   accessibilityHint="Double tap to subscribe to notifications when this product is available"
                   accessibilityState={{ disabled: subscribing[productId] }}
                 >
-                  <Ionicons name="notifications-outline" size={18} color="#ffcd57" />
+                  <Ionicons name="notifications-outline" size={18} color={colors.lightMustard} />
                   <ThemedText style={styles.notifyMeText}>
                     {subscribing[productId] ? 'Subscribing...' : 'Notify Me'}
                   </ThemedText>
@@ -415,7 +416,7 @@ function ProductCard({
                     accessibilityRole="button"
                     accessibilityHint={quantityInCart > 1 ? "Double tap to decrease quantity by one" : "Double tap to remove product from cart"}
                   >
-                    <Ionicons name="remove" size={18} color="#FFFFFF" />
+                    <Ionicons name="remove" size={18} color={colors.background.primary} />
                   </Pressable>
 
                   <View
@@ -439,7 +440,7 @@ function ProductCard({
                     accessibilityHint={quantityInCart >= stock ? `Maximum stock reached: ${stock}` : "Double tap to increase quantity by one"}
                     accessibilityState={{ disabled: quantityInCart >= stock }}
                   >
-                    <Ionicons name="add" size={18} color="#FFFFFF" />
+                    <Ionicons name="add" size={18} color={colors.background.primary} />
                   </Pressable>
                 </View>
               ) : (
@@ -458,7 +459,7 @@ function ProductCard({
                   accessibilityHint="Double tap to add this product to your shopping cart"
                   accessibilityState={{ disabled: !canAddToCartStock }}
                 >
-                  <Ionicons name="cart" size={18} color="#FFFFFF" />
+                  <Ionicons name="cart" size={18} color={colors.background.primary} />
                   <ThemedText style={styles.addToCartText}>Add to Cart</ThemedText>
                 </Pressable>
               )}
@@ -517,14 +518,14 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(255, 205, 87, 0.08)',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.08,
         shadowRadius: 24,
@@ -584,18 +585,18 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   newBadge: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
   },
   newBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '700',
   },
   discountBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   discountBadgeText: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontSize: 10,
     fontWeight: '700',
   },
@@ -615,7 +616,7 @@ const styles = StyleSheet.create({
   },
   brand: {
     fontSize: 10,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
     textTransform: 'uppercase',
     lineHeight: 12,
@@ -623,7 +624,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     lineHeight: 18,
     minHeight: 36,
     maxHeight: 36,
@@ -636,11 +637,11 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   ratingCount: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceContainer: {
     flexDirection: 'row',
@@ -650,16 +651,16 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   savings: {
     fontSize: 11,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '500',
   },
   cashbackContainer: {
@@ -675,16 +676,16 @@ const styles = StyleSheet.create({
   },
   cashbackText: {
     fontSize: 11,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
   },
   cashbackAmount: {
     fontSize: 10,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
   },
   lowStockContainer: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -693,11 +694,11 @@ const styles = StyleSheet.create({
   },
   lowStockText: {
     fontSize: 11,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontWeight: '600',
   },
   outOfStockContainer: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -706,7 +707,7 @@ const styles = StyleSheet.create({
   },
   outOfStockText: {
     fontSize: 11,
-    color: '#DC2626',
+    color: colors.error,
     fontWeight: '600',
   },
   addToCartButton: {
@@ -714,21 +715,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
   },
   addToCartText: {
     fontSize: 13,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   quantityControls: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 8,
     paddingVertical: 6,
     paddingHorizontal: 4,
@@ -749,7 +750,7 @@ const styles = StyleSheet.create({
   },
   quantityText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   quantityButtonDisabled: {
@@ -757,23 +758,23 @@ const styles = StyleSheet.create({
   },
   addToCartButtonDisabled: {
     opacity: 0.5,
-    backgroundColor: '#234b68',
+    backgroundColor: colors.brand.nileBlueLight,
   },
   notifyMeButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,
     borderWidth: 1.5,
-    borderColor: '#ffcd57',
+    borderColor: colors.lightMustard,
   },
   notifyMeText: {
     fontSize: 13,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
   notifyMeButtonDisabled: {

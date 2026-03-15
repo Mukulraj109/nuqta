@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { Suspense, ComponentType } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
@@ -30,7 +31,7 @@ export default function LazyComponent({
 }: LazyComponentProps) {
   const defaultFallback = (
     <View style={styles.fallbackContainer}>
-      <ActivityIndicator size="large" color="#6366F1" />
+      <ActivityIndicator size="large" color={colors.brand.indigo} />
     </View>
   );
 

@@ -11,6 +11,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Achievement } from '@/services/achievementApi';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -98,7 +99,7 @@ function AchievementToast({
         style={styles.touchable}
       >
         <LinearGradient
-          colors={[achievement.color || '#8B5CF6', '#7C3AED']}
+          colors={[achievement.color || colors.brand.purpleLight, colors.brand.purple]}
           style={styles.gradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -110,12 +111,12 @@ function AchievementToast({
                 <Ionicons
                   name={achievement.icon as any || 'trophy'}
                   size={32}
-                  color="#FFD700"
+                  color={colors.brand.goldBright}
                 />
               </View>
               {/* Sparkle effect */}
               <View style={styles.sparkle}>
-                <Ionicons name="sparkles" size={16} color="#FFD700" />
+                <Ionicons name="sparkles" size={16} color={colors.brand.goldBright} />
               </View>
             </View>
 

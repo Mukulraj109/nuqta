@@ -19,6 +19,7 @@ import { DealCardProps } from '@/types/deals';
 import { calculateDealDiscount } from '@/utils/deal-validation';
 import FastImage from '@/components/common/FastImage';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 function DealCard({
   deal,
@@ -202,7 +203,7 @@ function DealCard({
               {/* Deal Priority Indicator */}
               {deal.priority <= 2 && (
                 <View style={styles.priorityBadge}>
-                  <Ionicons name="star" size={12} color="#FFD700" />
+                  <Ionicons name="star" size={12} color={colors.brand.goldBright} />
                   <ThemedText style={styles.priorityText}>Featured</ThemedText>
                 </View>
               )}
@@ -217,7 +218,7 @@ function DealCard({
               {/* Expiry Warning */}
               {isExpiringSoon() && (
                 <View style={styles.expiryWarning}>
-                  <Ionicons name="time-outline" size={12} color="#EF4444" />
+                  <Ionicons name="time-outline" size={12} color={colors.error} />
                   <ThemedText style={styles.expiryText}>{timeLeft}</ThemedText>
                 </View>
               )}
@@ -231,7 +232,7 @@ function DealCard({
             {/* Deal Priority Indicator */}
             {deal.priority <= 2 && (
               <View style={styles.priorityBadge}>
-                <Ionicons name="star" size={12} color="#FFD700" />
+                <Ionicons name="star" size={12} color={colors.brand.goldBright} />
                 <ThemedText style={styles.priorityText}>Featured</ThemedText>
               </View>
             )}
@@ -246,7 +247,7 @@ function DealCard({
             {/* Expiry Warning */}
             {isExpiringSoon() && (
               <View style={styles.expiryWarning}>
-                <Ionicons name="time-outline" size={12} color="#EF4444" />
+                <Ionicons name="time-outline" size={12} color={colors.error} />
                 <ThemedText style={styles.expiryText}>{timeLeft}</ThemedText>
               </View>
             )}
@@ -279,7 +280,7 @@ function DealCard({
             <Ionicons 
               name={deal.isOfflineOnly ? "storefront-outline" : "globe-outline"} 
               size={14} 
-              color="#6B7280" 
+              color={colors.neutral[500]} 
             />
             <ThemedText style={styles.availabilityText}>
               {deal.isOfflineOnly ? 'In-store only' : 'Online & In-store'}
@@ -292,7 +293,7 @@ function DealCard({
           {/* Usage Limit */}
           {deal.usageLimit && (
             <View style={styles.usageContainer}>
-              <Ionicons name="repeat-outline" size={14} color="#ffcd57" />
+              <Ionicons name="repeat-outline" size={14} color={colors.lightMustard} />
               <ThemedText style={styles.usageText}>
                 {deal.usageLimit - (deal.usageCount || 0)} uses remaining
               </ThemedText>
@@ -313,7 +314,7 @@ function DealCard({
             <Ionicons
               name={showPreview ? "chevron-up-outline" : "chevron-down-outline"}
               size={16}
-              color="#ffcd57"
+              color={colors.lightMustard}
             />
           </Pressable>
         </View>
@@ -361,7 +362,7 @@ function DealCard({
           <Ionicons 
             name={isAdded ? "checkmark-circle" : "add-circle-outline"} 
             size={20} 
-            color="#fff" 
+            color={colors.background.primary} 
             style={styles.actionButtonIcon}
           />
           <ThemedText style={styles.actionButtonText}>
@@ -377,16 +378,16 @@ export default React.memo(DealCard);
 
 // Helper functions
 const getCategoryColor = (category: string): string => {
-  const colors: Record<string, string> = {
-    'instant-discount': '#ffcd57',
-    'cashback': '#10B981',
-    'buy-one-get-one': '#FFC857',
-    'seasonal': '#EF4444',
-    'first-time': '#3B82F6',
-    'loyalty': '#00796B',
-    'clearance': '#DC2626',
+  const categoryColorMap: Record<string, string> = {
+    'instant-discount': colors.lightMustard,
+    'cashback': colors.successScale[400],
+    'buy-one-get-one': colors.brand.goldWarm,
+    'seasonal': colors.error,
+    'first-time': colors.infoScale[400],
+    'loyalty': colors.brand.teal,
+    'clearance': colors.error,
   };
-  return colors[category] || '#6B7280';
+  return categoryColorMap[category] || colors.neutral[500];
 };
 
 const getCategoryDisplayName = (category: string): string => {
@@ -412,7 +413,7 @@ const createStyles = (screenWidth: number) => {
   
   return StyleSheet.create({
     card: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.background.primary,
       borderRadius: isSmallScreen ? 16 : 20,
       marginBottom: 16,
       marginHorizontal: 0, // Full width - no horizontal margin
@@ -431,15 +432,15 @@ const createStyles = (screenWidth: number) => {
         },
       }),
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.neutral[200],
       overflow: 'hidden',
     },
     cardSelected: {
-      borderColor: '#10B981',
+      borderColor: colors.successScale[400],
       borderWidth: 2,
       ...Platform.select({
         ios: {
-          shadowColor: '#10B981',
+          shadowColor: colors.successScale[400],
           shadowOpacity: 0.15,
         },
         android: {
@@ -458,7 +459,7 @@ const createStyles = (screenWidth: number) => {
       width: '100%',
       height: isSmallScreen ? 180 : 200,
       position: 'relative',
-      backgroundColor: '#F3F4F6',
+      backgroundColor: colors.neutral[100],
     },
     dealImage: {
       width: '100%',
@@ -478,7 +479,7 @@ const createStyles = (screenWidth: number) => {
       left: isSmallScreen ? 12 : 16,
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FEF3C7',
+      backgroundColor: colors.tint.amberLight,
       paddingHorizontal: isSmallScreen ? 8 : 10,
       paddingVertical: 4,
       borderRadius: 12,
@@ -501,7 +502,7 @@ const createStyles = (screenWidth: number) => {
     priorityText: {
       fontSize: isSmallScreen ? 9 : 10,
       fontWeight: '600',
-      color: '#92400E',
+      color: colors.brand.amberDark,
       marginLeft: 3,
     },
     discountBadge: {
@@ -528,14 +529,14 @@ const createStyles = (screenWidth: number) => {
       }),
     },
     defaultBadge: {
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.neutral[200],
     },
     discountText: {
       fontSize: isSmallScreen ? 11 : 12,
       fontWeight: '700',
     },
     defaultBadgeText: {
-      color: '#374151',
+      color: colors.neutral[700],
     },
     expiryWarning: {
       position: 'absolute',
@@ -543,7 +544,7 @@ const createStyles = (screenWidth: number) => {
       right: isSmallScreen ? 12 : 16,
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FEE2E2',
+      backgroundColor: colors.errorScale[100],
       paddingHorizontal: isSmallScreen ? 8 : 10,
       paddingVertical: 4,
       borderRadius: 12,
@@ -566,7 +567,7 @@ const createStyles = (screenWidth: number) => {
     expiryText: {
       fontSize: isSmallScreen ? 9 : 10,
       fontWeight: '600',
-      color: '#EF4444',
+      color: colors.error,
       marginLeft: 3,
     },
     dealContent: {
@@ -580,19 +581,19 @@ const createStyles = (screenWidth: number) => {
     dealTitle: {
       fontSize: isSmallScreen ? 16 : 18,
       fontWeight: '700',
-      color: '#111827',
+      color: colors.neutral[900],
       marginBottom: 8,
       lineHeight: isSmallScreen ? 20 : 24,
     },
     dealDescription: {
       fontSize: isSmallScreen ? 12 : 13,
-      color: '#6B7280',
+      color: colors.neutral[500],
       lineHeight: isSmallScreen ? 16 : 18,
       marginBottom: 12,
     },
     minimumBill: {
       fontSize: isSmallScreen ? 13 : 14,
-      color: '#4B5563',
+      color: colors.neutral[600],
       marginBottom: 16,
       fontWeight: '500',
     },
@@ -610,7 +611,7 @@ const createStyles = (screenWidth: number) => {
     categoryText: {
       fontSize: isSmallScreen ? 10 : 11,
       fontWeight: '600',
-      color: '#fff',
+      color: colors.background.primary,
     },
     availabilityContainer: {
       flexDirection: 'row',
@@ -620,7 +621,7 @@ const createStyles = (screenWidth: number) => {
     },
     availabilityText: {
       fontSize: 12,
-      color: '#6B7280',
+      color: colors.neutral[500],
       marginLeft: 6,
       flex: 1,
     },
@@ -630,7 +631,7 @@ const createStyles = (screenWidth: number) => {
     },
     moreDetailsText: {
       fontSize: 12,
-      color: '#ffcd57',
+      color: colors.lightMustard,
       fontWeight: '600',
     },
     usageContainer: {
@@ -640,7 +641,7 @@ const createStyles = (screenWidth: number) => {
     },
     usageText: {
       fontSize: 12,
-      color: '#ffcd57',
+      color: colors.lightMustard,
       marginLeft: 6,
       fontWeight: '500',
     },
@@ -653,18 +654,18 @@ const createStyles = (screenWidth: number) => {
     },
     previewToggleText: {
       fontSize: 13,
-      color: '#ffcd57',
+      color: colors.lightMustard,
       fontWeight: '600',
       marginRight: 4,
     },
     previewPanel: {
-      backgroundColor: '#F8FAFC',
+      backgroundColor: colors.tint.coolGray,
       borderRadius: 12,
       marginHorizontal: isSmallScreen ? 16 : 20,
       marginBottom: 16,
       overflow: 'hidden',
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.neutral[200],
     },
     previewContent: {
       padding: isSmallScreen ? 14 : 16,
@@ -672,7 +673,7 @@ const createStyles = (screenWidth: number) => {
     previewTitle: {
       fontSize: 13,
       fontWeight: '600',
-      color: '#374151',
+      color: colors.neutral[700],
       marginBottom: 8,
     },
     previewRow: {
@@ -682,27 +683,27 @@ const createStyles = (screenWidth: number) => {
     },
     previewFinal: {
       borderTopWidth: 1,
-      borderTopColor: '#E5E7EB',
+      borderTopColor: colors.neutral[200],
       paddingTop: 6,
       marginTop: 4,
     },
     previewLabel: {
       fontSize: 12,
-      color: '#6B7280',
+      color: colors.neutral[500],
     },
     previewValue: {
       fontSize: 12,
-      color: '#374151',
+      color: colors.neutral[700],
       fontWeight: '500',
     },
     previewSavings: {
       fontSize: 12,
-      color: '#10B981',
+      color: colors.successScale[400],
       fontWeight: '700',
     },
     previewFinalAmount: {
       fontSize: 13,
-      color: '#111827',
+      color: colors.neutral[900],
       fontWeight: '700',
     },
     termsContainer: {
@@ -718,18 +719,18 @@ const createStyles = (screenWidth: number) => {
       width: 4,
       height: 4,
       borderRadius: 2,
-      backgroundColor: '#ffcd57',
+      backgroundColor: colors.lightMustard,
       marginTop: 6,
       marginRight: 8,
     },
     termText: {
       fontSize: 11,
-      color: '#6B7280',
+      color: colors.neutral[500],
       flex: 1,
       lineHeight: 16,
     },
     actionButton: {
-      backgroundColor: '#ffcd57',
+      backgroundColor: colors.lightMustard,
       borderRadius: 0, // Full width button
       paddingVertical: isSmallScreen ? 16 : 18,
       paddingHorizontal: isSmallScreen ? 16 : 20,
@@ -738,7 +739,7 @@ const createStyles = (screenWidth: number) => {
       justifyContent: 'center',
       ...Platform.select({
         ios: {
-          shadowColor: '#ffcd57',
+          shadowColor: colors.lightMustard,
           shadowOffset: { width: 0, height: -2 },
           shadowOpacity: 0.15,
           shadowRadius: 6,
@@ -754,10 +755,10 @@ const createStyles = (screenWidth: number) => {
       minHeight: 56, // Larger touch target
     },
     actionButtonSelected: {
-      backgroundColor: '#10B981',
+      backgroundColor: colors.successScale[400],
       ...Platform.select({
         ios: {
-          shadowColor: '#10B981',
+          shadowColor: colors.successScale[400],
         },
         web: {
           boxShadow: '0 -2px 6px rgba(16,185,129,0.15)',
@@ -768,7 +769,7 @@ const createStyles = (screenWidth: number) => {
       marginRight: 6,
     },
     actionButtonText: {
-      color: '#fff',
+      color: colors.background.primary,
       fontSize: isSmallScreen ? 14 : 16,
       fontWeight: '700',
       textAlign: 'center',

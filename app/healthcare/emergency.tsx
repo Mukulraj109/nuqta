@@ -25,11 +25,12 @@ import { Ionicons } from '@expo/vector-icons';
 import emergencyApi, { EmergencyContact, EmergencyBooking } from '@/services/emergencyApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const COLORS = {
   white: Colors.background.primary,
-  navy: '#0B2240',
+  navy: colors.brand.navyDark,
   gray50: Colors.background.secondary,
   gray100: Colors.background.secondary,
   gray200: Colors.border.default,
@@ -45,26 +46,26 @@ const COLORS = {
 
 // Emergency contact type icons mapping
 const typeIcons: Record<string, { icon: string; color: string; label: string }> = {
-  ambulance: { icon: '🚑', color: '#EF4444', label: 'Ambulance' },
-  hospital: { icon: '🏥', color: '#3B82F6', label: 'Hospital' },
-  blood_bank: { icon: '🩸', color: '#DC2626', label: 'Blood Bank' },
-  fire: { icon: '🚒', color: '#F97316', label: 'Fire' },
+  ambulance: { icon: '🚑', color: colors.error, label: 'Ambulance' },
+  hospital: { icon: '🏥', color: colors.infoScale[400], label: 'Hospital' },
+  blood_bank: { icon: '🩸', color: colors.error, label: 'Blood Bank' },
+  fire: { icon: '🚒', color: colors.brand.orange, label: 'Fire' },
   police: { icon: '👮', color: '#1D4ED8', label: 'Police' },
-  poison_control: { icon: '☠️', color: '#7C3AED', label: 'Poison Control' },
-  mental_health: { icon: '🧠', color: '#10B981', label: 'Mental Health' },
-  women_helpline: { icon: '👩', color: '#EC4899', label: 'Women Helpline' },
-  child_helpline: { icon: '👶', color: '#F59E0B', label: 'Child Helpline' },
-  disaster: { icon: '🆘', color: '#EF4444', label: 'Disaster' },
-  covid: { icon: '🦠', color: '#22C55E', label: 'COVID-19' },
-  other: { icon: '📞', color: '#6B7280', label: 'Other' },
+  poison_control: { icon: '☠️', color: colors.brand.purple, label: 'Poison Control' },
+  mental_health: { icon: '🧠', color: colors.successScale[400], label: 'Mental Health' },
+  women_helpline: { icon: '👩', color: colors.brand.pink, label: 'Women Helpline' },
+  child_helpline: { icon: '👶', color: colors.warningScale[400], label: 'Child Helpline' },
+  disaster: { icon: '🆘', color: colors.error, label: 'Disaster' },
+  covid: { icon: '🦠', color: colors.success, label: 'COVID-19' },
+  other: { icon: '📞', color: colors.neutral[500], label: 'Other' },
 };
 
 // Quick call numbers
 const quickCallNumbers = [
-  { number: '112', label: 'Emergency', icon: '🚨', color: '#EF4444' },
-  { number: '102', label: 'Ambulance', icon: '🚑', color: '#EF4444' },
+  { number: '112', label: 'Emergency', icon: '🚨', color: colors.error },
+  { number: '102', label: 'Ambulance', icon: '🚑', color: colors.error },
   { number: '100', label: 'Police', icon: '👮', color: '#1D4ED8' },
-  { number: '101', label: 'Fire', icon: '🚒', color: '#F97316' },
+  { number: '101', label: 'Fire', icon: '🚒', color: colors.brand.orange },
 ];
 
 const EmergencyPage: React.FC = () => {
@@ -188,7 +189,7 @@ const EmergencyPage: React.FC = () => {
     return (
       <View style={styles.activeBookingCard}>
         <LinearGradient
-          colors={['#EF4444', '#DC2626']}
+          colors={[colors.error, colors.error]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.activeBookingGradient}
@@ -407,7 +408,7 @@ const EmergencyPage: React.FC = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#EF4444', '#DC2626']}
+        colors={[colors.error, colors.error]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}
@@ -438,7 +439,7 @@ const EmergencyPage: React.FC = () => {
           onPress={() => setShowBookingModal(true)}
         >
           <LinearGradient
-            colors={['#3B82F6', '#2563EB']}
+            colors={[colors.infoScale[400], colors.brand.blue]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.bookAmbulanceGradient}

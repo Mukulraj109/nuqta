@@ -7,6 +7,7 @@
 
 import { lazyLoad } from '@/utils/lazyLoad';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { colors } from '@/constants/theme';
 
 // ============================================================================
 // Loading Fallback
@@ -14,7 +15,7 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
 const ModalLoader = () => (
   <View style={styles.modalLoader}>
-    <ActivityIndicator size="large" color="#8B5CF6" />
+    <ActivityIndicator size="large" color={colors.brand.purpleLight} />
   </View>
 );
 

@@ -11,6 +11,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { GroupMember } from '@/types/groupBuying.types';
+import { colors } from '@/constants/theme';
 
 interface GroupMembersListProps {
   members: GroupMember[];
@@ -40,7 +41,7 @@ function GroupMembersList({
               />
             ) : (
               <View style={styles.avatarPlaceholder}>
-                <Ionicons name="person" size={24} color="#8B5CF6" />
+                <Ionicons name="person" size={24} color={colors.brand.purpleLight} />
               </View>
             )}
           </View>
@@ -51,7 +52,7 @@ function GroupMembersList({
               <Text style={styles.memberName}>{member.userName}</Text>
               {member.userId === creatorId && (
                 <View style={styles.creatorBadge}>
-                  <Ionicons name="star" size={12} color="#F59E0B" />
+                  <Ionicons name="star" size={12} color={colors.warningScale[400]} />
                   <Text style={styles.creatorText}>Creator</Text>
                 </View>
               )}
@@ -73,9 +74,9 @@ function GroupMembersList({
           {/* Payment Status */}
           <View style={styles.statusContainer}>
             {member.isPaid ? (
-              <Ionicons name="checkmark-circle" size={24} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={24} color={colors.successScale[400]} />
             ) : (
-              <Ionicons name="time-outline" size={24} color="#F59E0B" />
+              <Ionicons name="time-outline" size={24} color={colors.warningScale[400]} />
             )}
           </View>
         </View>
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   memberCard: {
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#EDE9FE',
+    backgroundColor: colors.tint.purple,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -149,13 +150,13 @@ const styles = StyleSheet.create({
   memberName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   creatorBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
@@ -163,10 +164,10 @@ const styles = StyleSheet.create({
   creatorText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   youBadge: {
-    backgroundColor: '#DBEAFE',
+    backgroundColor: colors.tint.blueLight,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
   youText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#3B82F6',
+    color: colors.infoScale[400],
   },
   detailsRow: {
     flexDirection: 'row',
@@ -183,15 +184,15 @@ const styles = StyleSheet.create({
   },
   quantity: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   separator: {
     fontSize: 13,
-    color: '#D1D5DB',
+    color: colors.neutral[300],
   },
   joinedTime: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   statusContainer: {
     marginLeft: 8,

@@ -26,6 +26,7 @@ import { platformAlert } from '@/utils/platformAlert';
 import { videoUploadService } from '@/services/videoUploadService';
 import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.config';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 type ContentType = 'post' | 'reel' | 'story';
 
@@ -224,7 +225,7 @@ export default function UploadPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="close" size={24} color="#FFF" />
+            <Ionicons name="close" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Create</ThemedText>
           <Pressable
@@ -234,7 +235,7 @@ export default function UploadPage() {
           >
             {uploading ? (
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                <ActivityIndicator color="#FFF" size="small" />
+                <ActivityIndicator color={colors.background.primary} size="small" />
                 {uploadProgress > 0 && <ThemedText style={styles.postButtonText}>{uploadProgress}%</ThemedText>}
               </View>
             ) : (
@@ -503,7 +504,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   postButton: {
     backgroundColor: 'rgba(255,255,255,0.2)',
@@ -516,7 +517,7 @@ const styles = StyleSheet.create({
   },
   postButtonText: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   content: {
     flex: 1,

@@ -12,6 +12,7 @@
 import React from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 function ProductCardSkeleton() {
   return (
@@ -89,7 +90,7 @@ function ProductCardSkeleton() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 16,

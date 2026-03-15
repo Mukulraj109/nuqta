@@ -13,6 +13,7 @@ import ActionBtn from '../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../types';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -25,24 +26,24 @@ const earningOptions = [
         title: 'Upload Bill',
         subtitle: 'Earn coins on any purchase',
         coins: '+20',
-        colors: ['#FEF3C7', '#FDE68A'] as [string, string],
-        iconColor: '#F59E0B',
+        colors: [colors.tint.amberLight, colors.warningScale[200]] as [string, string],
+        iconColor: colors.warningScale[400],
     },
     {
         icon: 'star',
         title: 'Write Review',
         subtitle: 'Share your experience',
         coins: '+15',
-        colors: ['#FCE7F3', '#FBCFE8'] as [string, string],
-        iconColor: '#EC4899',
+        colors: [colors.pinkMist, '#FBCFE8'] as [string, string],
+        iconColor: colors.brand.pink,
     },
     {
         icon: 'share-social',
         title: 'Share with Friends',
         subtitle: 'Invite & earn together',
         coins: '+50',
-        colors: ['#DBEAFE', '#BFDBFE'] as [string, string],
-        iconColor: '#3B82F6',
+        colors: [colors.tint.blueLight, colors.infoScale[200]] as [string, string],
+        iconColor: colors.infoScale[400],
     },
 ];
 
@@ -61,12 +62,12 @@ const SocialEarningScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                     style={styles.headerIllustration}
                 >
                     <LinearGradient
-                        colors={['#1a3a52', '#ffcd57']}
+                        colors={[colors.nileBlue, colors.lightMustard]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                         style={styles.coinStack}
                     >
-                        <Ionicons name="layers" size={32} color="#FFFFFF" />
+                        <Ionicons name="layers" size={32} color={colors.background.primary} />
                         <View style={styles.plusBadge}>
                             <Text style={styles.plusText}>+</Text>
                         </View>
@@ -99,7 +100,7 @@ const SocialEarningScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                                             <Text style={styles.optionSubtitle}>{option.subtitle}</Text>
                                         </View>
                                         <View style={styles.coinsTag}>
-                                            <Ionicons name="layers" size={14} color="#1a3a52" />
+                                            <Ionicons name="layers" size={14} color={colors.nileBlue} />
                                             <Text style={styles.coinsText}>{option.coins}</Text>
                                         </View>
                                     </View>
@@ -114,7 +115,7 @@ const SocialEarningScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                     entering={FadeInUp.delay(600).springify()}
                     style={styles.tipCard}
                 >
-                    <Ionicons name="bulb" size={20} color="#F59E0B" />
+                    <Ionicons name="bulb" size={20} color={colors.warningScale[400]} />
                     <Text style={styles.tipText}>
                         The more you engage, the faster you unlock tier benefits!
                     </Text>
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
         position: 'relative',
         ...Platform.select({
             ios: {
-                shadowColor: '#1a3a52',
+                shadowColor: colors.nileBlue,
                 shadowOffset: { width: 0, height: 8 },
                 shadowOpacity: 0.3,
                 shadowRadius: 16,
@@ -158,16 +159,16 @@ const styles = StyleSheet.create({
         width: 32,
         height: 32,
         borderRadius: 16,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.background.primary,
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 3,
-        borderColor: '#faf1e0',
+        borderColor: colors.linen,
     },
     plusText: {
         fontSize: 20,
         fontWeight: '900',
-        color: '#1a3a52',
+        color: colors.nileBlue,
     },
     optionsContainer: {
         gap: 16,
@@ -209,18 +210,18 @@ const styles = StyleSheet.create({
     optionTitle: {
         fontSize: 17,
         fontWeight: '700',
-        color: '#1F2937',
+        color: colors.neutral[800],
         marginBottom: 4,
     },
     optionSubtitle: {
         fontSize: 14,
-        color: '#6B7280',
+        color: colors.neutral[500],
     },
     coinsTag: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 4,
-        backgroundColor: '#faf1e0',
+        backgroundColor: colors.linen,
         paddingHorizontal: 12,
         paddingVertical: 8,
         borderRadius: 12,
@@ -228,23 +229,23 @@ const styles = StyleSheet.create({
     coinsText: {
         fontSize: 15,
         fontWeight: '800',
-        color: '#1a3a52',
+        color: colors.nileBlue,
     },
     tipCard: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 12,
-        backgroundColor: '#FFFBEB',
+        backgroundColor: colors.tint.amber,
         padding: 16,
         borderRadius: 16,
         marginTop: 24,
         borderWidth: 1,
-        borderColor: '#FEF3C7',
+        borderColor: colors.tint.amberLight,
     },
     tipText: {
         flex: 1,
         fontSize: 14,
-        color: '#92400E',
+        color: colors.brand.amberDark,
         lineHeight: 20,
     },
 });

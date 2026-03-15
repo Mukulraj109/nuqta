@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useGlobalPreferences } from '@/services/globalPreferencesService';
+import { colors } from '@/constants/theme';
 
 export default function PreferencesDemo() {
   const { preferences, animations, sounds, haptics } = useGlobalPreferences();
@@ -137,18 +138,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   loadingText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginTop: 50,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
     marginBottom: 30,
   },
@@ -166,12 +167,12 @@ const styles = StyleSheet.create({
   statusTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 10,
   },
   statusText: {
     fontSize: 16,
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 5,
   },
   buttonContainer: {
@@ -192,13 +193,13 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   primaryButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   successButton: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
   },
   errorButton: {
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
   },
   buttonText: {
     color: 'white',
@@ -219,12 +220,12 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 10,
   },
   infoText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 5,
     lineHeight: 20,
   },

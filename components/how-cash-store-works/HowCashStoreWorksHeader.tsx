@@ -15,6 +15,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { colors } from '@/constants/theme';
 
 const HowCashStoreWorksHeader: React.FC = () => {
   const router = useRouter();
@@ -36,7 +37,7 @@ const HowCashStoreWorksHeader: React.FC = () => {
           style={styles.backButton}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="arrow-back" size={24} color="#1F2937" />
+          <Ionicons name="arrow-back" size={24} color={colors.neutral[800]} />
         </Pressable>
         <Text style={styles.title}>How Cash Store Works</Text>
         <View style={styles.placeholder} />
@@ -47,9 +48,9 @@ const HowCashStoreWorksHeader: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -73,14 +74,14 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   placeholder: {
     width: 40,

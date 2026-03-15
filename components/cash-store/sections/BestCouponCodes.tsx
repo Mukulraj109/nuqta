@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { CashStoreCoupon } from '../../../types/cash-store.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface BestCouponCodesProps {
   coupons: CashStoreCoupon[];
@@ -139,7 +140,7 @@ const CouponCard: React.FC<{
         {/* Verified Badge */}
         {coupon.isVerified && (
           <View style={styles.verifiedBadge}>
-            <Ionicons name="shield-checkmark" size={10} color="#FFFFFF" />
+            <Ionicons name="shield-checkmark" size={10} color={colors.background.primary} />
             <Text style={styles.verifiedText}>Verified</Text>
           </View>
         )}
@@ -147,7 +148,7 @@ const CouponCard: React.FC<{
         {/* Exclusive Badge */}
         {coupon.isExclusive && (
           <View style={styles.exclusiveBadge}>
-            <Ionicons name="diamond" size={10} color="#ffcd57" />
+            <Ionicons name="diamond" size={10} color={colors.lightMustard} />
             <Text style={styles.exclusiveText}>Exclusive</Text>
           </View>
         )}
@@ -160,7 +161,7 @@ const CouponCard: React.FC<{
             <Text style={{ fontSize: 28 }}>{coupon.brand.logo}</Text>
           ) : (
             <LinearGradient
-              colors={['#ffd7b5', '#E8B896']}
+              colors={[colors.lightPeach, colors.brand.sand]}
               style={styles.logoPlaceholder}
             >
               <Text style={styles.logoInitial}>{coupon.brand.name.charAt(0)}</Text>
@@ -211,17 +212,17 @@ const CouponCard: React.FC<{
              
             >
               <LinearGradient
-                colors={isCopied ? ['#1a3a52', '#234b68'] : ['#E8B896', '#D4A07A']}
+                colors={isCopied ? [colors.nileBlue, colors.brand.nileBlueLight] : [colors.brand.sand, colors.brand.caramel]}
                 style={styles.copyButtonGradient}
               >
                 {isCopied ? (
                   <>
-                    <Ionicons name="checkmark" size={14} color="#FFFFFF" />
+                    <Ionicons name="checkmark" size={14} color={colors.background.primary} />
                     <Text style={styles.copyText}>COPIED</Text>
                   </>
                 ) : (
                   <>
-                    <Ionicons name="copy" size={14} color="#FFFFFF" />
+                    <Ionicons name="copy" size={14} color={colors.background.primary} />
                     <Text style={styles.copyText}>COPY</Text>
                   </>
                 )}
@@ -233,7 +234,7 @@ const CouponCard: React.FC<{
         {/* Validity */}
         {coupon.validUntil && (
           <View style={styles.validityRow}>
-            <Ionicons name="time-outline" size={12} color="#6B7280" />
+            <Ionicons name="time-outline" size={12} color={colors.neutral[500]} />
             <Text style={styles.validityText}>
               Valid till {new Date(coupon.validUntil).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
             </Text>
@@ -337,14 +338,14 @@ const BestCouponCodes: React.FC<BestCouponCodesProps> = ({
         <View style={styles.headerLeft}>
           <View style={styles.titleRow}>
             <LinearGradient
-              colors={['#1a3a52', '#234b68']}
+              colors={[colors.nileBlue, colors.brand.nileBlueLight]}
               style={styles.headerIconContainer}
             >
-              <Ionicons name="pricetags" size={18} color="#ffcd57" />
+              <Ionicons name="pricetags" size={18} color={colors.lightMustard} />
             </LinearGradient>
             <Text style={styles.headerTitle}>Best Coupon Codes</Text>
             <Animated.View style={{ transform: [{ scale: shieldPulseAnim }] }}>
-              <Ionicons name="shield-checkmark" size={20} color="#E8B896" />
+              <Ionicons name="shield-checkmark" size={20} color={colors.brand.sand} />
             </Animated.View>
           </View>
           <Text style={styles.subtitle}>Verified & tested daily</Text>
@@ -356,7 +357,7 @@ const BestCouponCodes: React.FC<BestCouponCodesProps> = ({
         >
           <Text style={styles.viewAllText}>View All</Text>
           <View style={styles.viewAllArrow}>
-            <Ionicons name="chevron-forward" size={14} color="#FFFFFF" />
+            <Ionicons name="chevron-forward" size={14} color={colors.background.primary} />
           </View>
         </Pressable>
       </Animated.View>
@@ -387,7 +388,7 @@ const BestCouponCodes: React.FC<BestCouponCodesProps> = ({
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginTop: 8,
     marginHorizontal: 16,
     borderRadius: 24,
@@ -429,18 +430,18 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   viewAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E8B896',
+    backgroundColor: colors.brand.sand,
     paddingLeft: 14,
     paddingRight: 6,
     paddingVertical: 8,
@@ -450,7 +451,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   viewAllArrow: {
     width: 24,
@@ -468,7 +469,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 220,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     padding: 16,
     borderWidth: 1,
@@ -476,7 +477,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffd7b5',
+        shadowColor: colors.lightPeach,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 8,
@@ -493,7 +494,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#ffd7b5',
+    backgroundColor: colors.lightPeach,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -502,7 +503,7 @@ const styles = StyleSheet.create({
   verifiedText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   exclusiveBadge: {
     position: 'absolute',
@@ -511,7 +512,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -520,20 +521,20 @@ const styles = StyleSheet.create({
   exclusiveText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   logoContainer: {
     width: 56,
     height: 56,
     borderRadius: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
     marginTop: 20,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
   },
   brandLogo: {
     width: 40,
@@ -548,11 +549,11 @@ const styles = StyleSheet.create({
   logoInitial: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   brandName: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 6,
     fontWeight: '500',
   },
@@ -562,19 +563,19 @@ const styles = StyleSheet.create({
   discount: {
     fontSize: 24,
     fontWeight: '900',
-    color: '#E8B896',
+    color: colors.brand.sand,
     letterSpacing: -0.5,
   },
   title: {
     fontSize: 13,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     lineHeight: 18,
     marginBottom: 6,
     fontWeight: '500',
   },
   minOrder: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginBottom: 12,
   },
   successRateContainer: {
@@ -588,23 +589,23 @@ const styles = StyleSheet.create({
   },
   successRateLabel: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   successRateValue: {
     fontSize: 11,
-    color: '#E8B896',
+    color: colors.brand.sand,
     fontWeight: '700',
   },
   successRateBarBg: {
     height: 6,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 3,
     overflow: 'hidden',
   },
   successRateBarFill: {
     height: '100%',
-    backgroundColor: '#E8B896',
+    backgroundColor: colors.brand.sand,
     borderRadius: 3,
   },
   codeSection: {
@@ -617,18 +618,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dashedBorder: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#ffd7b5',
+    borderColor: colors.lightPeach,
     borderStyle: 'dashed',
   },
   codeText: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: 1.5,
     textAlign: 'center',
   },
@@ -647,7 +648,7 @@ const styles = StyleSheet.create({
   copyText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   validityRow: {
@@ -657,28 +658,28 @@ const styles = StyleSheet.create({
   },
   validityText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   // Skeleton
   skeleton: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   skeletonText: {
     height: 14,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 8,
   },
   skeletonDiscount: {
     width: 100,
     height: 28,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 6,
     marginBottom: 8,
   },
   skeletonCode: {
     height: 44,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 10,
     marginTop: 8,
   },

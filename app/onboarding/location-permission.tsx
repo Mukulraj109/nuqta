@@ -12,6 +12,7 @@ import { navigationDebugger } from '@/utils/navigationDebug';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 export default function LocationPermissionScreen() {
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
@@ -120,7 +121,7 @@ export default function LocationPermissionScreen() {
               {/* Phone Frame */}
               <View style={styles.phone}>
                 <LinearGradient
-                  colors={['#FFFFFF', '#F8FAFC']}
+                  colors={[colors.background.primary, colors.tint.coolGray]}
                   style={styles.phoneScreen}
                 >
                   {/* Map Lines */}
@@ -136,7 +137,7 @@ export default function LocationPermissionScreen() {
                       colors={[Colors.gold, Colors.nileBlue]}
                       style={styles.storeIconInner}
                     >
-                      <Ionicons name="restaurant" size={12} color="#FFF" />
+                      <Ionicons name="restaurant" size={12} color={colors.background.primary} />
                     </LinearGradient>
                   </View>
                   <View style={[styles.storeIcon, styles.store2]}>
@@ -144,7 +145,7 @@ export default function LocationPermissionScreen() {
                       colors={[Colors.gold, Colors.goldDark]}
                       style={styles.storeIconInner}
                     >
-                      <Ionicons name="cart" size={12} color="#FFF" />
+                      <Ionicons name="cart" size={12} color={colors.background.primary} />
                     </LinearGradient>
                   </View>
                   <View style={[styles.storeIcon, styles.store3]}>
@@ -152,7 +153,7 @@ export default function LocationPermissionScreen() {
                       colors={[Colors.gold, Colors.nileBlue]}
                       style={styles.storeIconInner}
                     >
-                      <Ionicons name="cafe" size={12} color="#FFF" />
+                      <Ionicons name="cafe" size={12} color={colors.background.primary} />
                     </LinearGradient>
                   </View>
                 </LinearGradient>
@@ -165,7 +166,7 @@ export default function LocationPermissionScreen() {
                   colors={[Colors.gold, Colors.goldDark]}
                   style={styles.pinTop}
                 >
-                  <Ionicons name="location" size={16} color="#FFF" />
+                  <Ionicons name="location" size={16} color={colors.background.primary} />
                 </LinearGradient>
                 <View style={styles.pinShadow} />
               </View>
@@ -210,14 +211,14 @@ export default function LocationPermissionScreen() {
             <LinearGradient
               colors={
                 (state.isLoading || isRequesting)
-                  ? ['#D1D5DB', '#D1D5DB']
+                  ? [colors.neutral[300], colors.neutral[300]]
                   : [Colors.gold, Colors.nileBlue]
               }
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.primaryButton}
             >
-              <Ionicons name="location" size={20} color="#FFFFFF" />
+              <Ionicons name="location" size={20} color={colors.background.primary} />
               <Text style={styles.primaryButtonText}>
                 {(state.isLoading || isRequesting) ? 'Getting Location...' : 'Allow Location Access'}
               </Text>

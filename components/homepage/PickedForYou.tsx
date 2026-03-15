@@ -18,6 +18,7 @@ import { useHomepageNavigation } from '@/hooks/useHomepage';
 import { SectionSkeleton } from '@/components/homepage/skeletons';
 import { useRegion } from '@/contexts/RegionContext';
 import { formatPrice as formatPriceUtil } from '@/utils/priceFormatter';
+import { colors } from '@/constants/theme';
 
 const CARD_GAP = 12;
 
@@ -27,9 +28,9 @@ interface PickedForYouProps {
 }
 
 const MATCH_COLORS = {
-  high: { bg: '#DCFCE7', text: '#15803D', ring: '#22C55E' },   // 90%+
-  medium: { bg: '#FEF3C7', text: '#92400E', ring: '#F59E0B' }, // 70-89%
-  low: { bg: '#E0E7FF', text: '#3730A3', ring: '#6366F1' },    // <70%
+  high: { bg: colors.successScale[100], text: colors.successScale[700], ring: colors.success },   // 90%+
+  medium: { bg: colors.tint.amberLight, text: colors.brand.amberDark, ring: colors.warningScale[400] }, // 70-89%
+  low: { bg: '#E0E7FF', text: '#3730A3', ring: colors.brand.indigo },    // <70%
 };
 
 function getMatchTheme(score: number) {
@@ -152,7 +153,7 @@ const PickedForYou: React.FC<PickedForYouProps> = ({
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <View style={styles.headerIconWrap}>
-              <Ionicons name="sparkles" size={16} color="#FFFFFF" />
+              <Ionicons name="sparkles" size={16} color={colors.background.primary} />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.title}>Picked For You</Text>
@@ -160,7 +161,7 @@ const PickedForYou: React.FC<PickedForYouProps> = ({
             </View>
           </View>
           <View style={styles.aiTag}>
-            <Ionicons name="flash" size={10} color="#F59E0B" />
+            <Ionicons name="flash" size={10} color={colors.warningScale[400]} />
             <Text style={styles.aiTagText}>AI Powered</Text>
           </View>
         </View>
@@ -185,7 +186,7 @@ const PickedForYou: React.FC<PickedForYouProps> = ({
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={styles.headerIconWrap}>
-            <Ionicons name="sparkles" size={16} color="#FFFFFF" />
+            <Ionicons name="sparkles" size={16} color={colors.background.primary} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.title}>Picked For You</Text>
@@ -194,7 +195,7 @@ const PickedForYou: React.FC<PickedForYouProps> = ({
         </View>
         <Pressable onPress={handleViewAll} style={styles.seeAllBtn}>
           <Text style={styles.seeAllText}>See All</Text>
-          <Ionicons name="chevron-forward" size={14} color="#1a3a52" />
+          <Ionicons name="chevron-forward" size={14} color={colors.nileBlue} />
         </Pressable>
       </View>
 
@@ -233,7 +234,7 @@ const PickedForYou: React.FC<PickedForYouProps> = ({
                   />
                 ) : (
                   <LinearGradient
-                    colors={['#F0F4F8', '#E2E8F0']}
+                    colors={['#F0F4F8', colors.slateLight]}
                     style={styles.placeholderImage}
                   >
                     <Ionicons name="cube-outline" size={36} color="#94A3B8" />
@@ -303,14 +304,14 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 10,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   subtitleText: {
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 20,
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
   aiTagText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   seeAllBtn: {
     flexDirection: 'row',
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
   seeAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   // ── Cards ──
   productsContainer: {
@@ -351,11 +352,11 @@ const styles = StyleSheet.create({
   },
   productCard: {
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
         shadowRadius: 12,
@@ -372,7 +373,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     height: 150,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     position: 'relative',
     overflow: 'hidden',
   },
@@ -412,7 +413,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 6,
@@ -420,7 +421,7 @@ const styles = StyleSheet.create({
   discountTagText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // ── Info ──
   productInfo: {
@@ -430,7 +431,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     lineHeight: 19,
   },
   productReason: {
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   originalPrice: {
     fontSize: 12,

@@ -23,6 +23,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import menuApi, { MenuCategory as ApiMenuCategory, MenuItem as ApiMenuItem } from '@/services/menuApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface MenuItem {
   id: string;
@@ -517,7 +518,7 @@ export default function MenuPage() {
       {cart.length > 0 && (
         <View style={styles.cartFooter}>
           <LinearGradient
-            colors={[Colors.brand.purple, '#6D28D9']}
+            colors={[Colors.brand.purple, colors.brand.purpleDeep]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.cartGradient}
@@ -691,7 +692,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: BorderRadius.lg,
-    backgroundColor: '#EDE9FE',
+    backgroundColor: colors.tint.purple,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
@@ -902,7 +903,7 @@ const styles = StyleSheet.create({
   },
   allergenText: {
     fontSize: 11,
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
 
   // Right side (image + add button)
@@ -994,7 +995,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     ...Typography.bodyLarge,
     fontWeight: '700',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: Spacing.xs,
   },
   emptyText: {

@@ -11,6 +11,7 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 interface UGCCardSkeletonProps {
   cardWidth?: number;
@@ -91,8 +92,8 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     overflow: 'hidden',
     position: 'relative',
-    backgroundColor: '#F3F4F6',
-    shadowColor: '#1F2937',
+    backgroundColor: colors.neutral[100],
+    shadowColor: colors.neutral[800],
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.15,
     shadowRadius: 20,

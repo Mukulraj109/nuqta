@@ -31,6 +31,7 @@ import { PriveActivitySummary } from './PriveActivitySummary';
 import { PriveBenefitsGrid } from './PriveBenefitsGrid';
 import { PriveConciergeCard } from './PriveConciergeCard';
 import PriveHeroBanner from './PriveHeroBanner';
+import { colors } from '@/constants/theme';
 
 export const PriveSectionContainer: React.FC = () => {
   const router = useRouter();
@@ -81,7 +82,7 @@ export const PriveSectionContainer: React.FC = () => {
     return (
       <View style={styles.loadingContainer}>
         <LinearGradient
-          colors={['#1F2937', '#111827', '#0A0A0A']}
+          colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]}
           style={StyleSheet.absoluteFill}
         />
         <ActivityIndicator size="large" color={PRIVE_COLORS.gold.primary} />
@@ -94,7 +95,7 @@ export const PriveSectionContainer: React.FC = () => {
     return (
       <View style={styles.errorContainer}>
         <LinearGradient
-          colors={['#1F2937', '#111827', '#0A0A0A']}
+          colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]}
           style={StyleSheet.absoluteFill}
         />
         <Text style={styles.errorText}>⚠️ {error}</Text>
@@ -102,7 +103,7 @@ export const PriveSectionContainer: React.FC = () => {
           style={{ marginTop: 16, paddingHorizontal: 24, paddingVertical: 12, backgroundColor: '#C9A96233', borderRadius: 10 }}
           onPress={refresh}
         >
-          <Text style={{ color: '#C9A962', fontSize: 14, fontWeight: '600' }}>Try Again</Text>
+          <Text style={{ color: colors.brand.goldAccent, fontSize: 14, fontWeight: '600' }}>Try Again</Text>
         </Pressable>
       </View>
     );
@@ -112,7 +113,7 @@ export const PriveSectionContainer: React.FC = () => {
     <View style={styles.outerContainer}>
       {/* Dark Privé Gradient Background */}
       <LinearGradient
-        colors={['#1F2937', '#111827', '#0A0A0A']}
+        colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]}
         style={styles.gradientBackground}
       />
 

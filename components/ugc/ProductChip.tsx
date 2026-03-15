@@ -12,6 +12,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ProductReference } from '@/types/ugc-upload.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface ProductChipProps {
   product: ProductReference;
@@ -51,7 +52,7 @@ function ProductChip({
         />
       ) : (
         <View style={[styles.image, styles.imagePlaceholder]} accessible={false}>
-          <Ionicons name="image-outline" size={24} color="#9CA3AF" />
+          <Ionicons name="image-outline" size={24} color={colors.neutral[400]} />
         </View>
       )}
 
@@ -87,7 +88,7 @@ function ProductChip({
         <Ionicons
           name="close-circle"
           size={24}
-          color={disabled ? '#9CA3AF' : '#EF4444'}
+          color={disabled ? colors.neutral[400] : colors.error}
         />
       </Pressable>
     </View>
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   imagePlaceholder: {
     justifyContent: 'center',
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   priceContainer: {
     flexDirection: 'row',
@@ -140,17 +141,17 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   originalPrice: {
     fontSize: 11,
     fontWeight: '400',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   store: {
     fontSize: 11,
-    color: '#666',
+    color: colors.midGray,
   },
   removeButton: {
     padding: 4,

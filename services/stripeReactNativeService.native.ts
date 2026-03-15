@@ -8,6 +8,7 @@ import type {
   PaymentResponse,
   StripePaymentIntent,
 } from '@/types/payment.types';
+import { colors } from '@/constants/theme';
 
 // Import Stripe React Native - Only on native platforms
 // The module contains native-only code that cannot be imported on web
@@ -165,7 +166,7 @@ class StripeReactNativeService {
         allowsDelayedPaymentMethods: true,
         appearance: {
           colors: {
-            primary: '#8B5CF6',
+            primary: colors.brand.purpleLight,
             background: '#FFFFFF',
             componentBackground: '#F3F4F6',
             componentBorder: '#E5E7EB',

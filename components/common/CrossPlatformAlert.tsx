@@ -9,6 +9,7 @@ import {
   Animated,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface AlertButton {
   text: string;
@@ -113,14 +114,14 @@ export const CrossPlatformAlertProvider: React.FC<{ children: React.ReactNode }>
   const getIconColor = () => {
     switch (alertData?.type) {
       case 'success':
-        return '#1a3a52';  // Nile Blue
+        return colors.nileBlue;  // Nile Blue
       case 'error':
-        return '#EF4444';
+        return colors.error;
       case 'warning':
-        return '#ffcd57';  // Light Mustard
+        return colors.lightMustard;  // Light Mustard
       case 'info':
       default:
-        return '#1a3a52';  // Nile Blue
+        return colors.nileBlue;  // Nile Blue
     }
   };
 
@@ -218,7 +219,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   alertContainer: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     padding: 24,
     width: Platform.OS === 'web' ? 400 : '85%',
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
     textAlign: 'center',
   },
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
   },
   message: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 24,
   },
@@ -257,12 +258,12 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,
     alignItems: 'center',
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -273,23 +274,23 @@ const styles = StyleSheet.create({
     minWidth: 120,
   },
   cancelButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     shadowColor: '#000',
     shadowOpacity: 0.1,
   },
   destructiveButton: {
-    backgroundColor: '#EF4444',
-    shadowColor: '#EF4444',
+    backgroundColor: colors.error,
+    shadowColor: colors.error,
   },
   buttonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   cancelButtonText: {
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   destructiveButtonText: {
-    color: '#FFF',
+    color: colors.background.primary,
   },
 });

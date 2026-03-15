@@ -16,6 +16,7 @@ import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -28,24 +29,24 @@ const coins = [
         desc: 'Usable everywhere',
         amount: '250',
         icon: 'layers',
-        color: '#1a3a52',
-        gradient: ['#faf1e0', '#ffd7b5'] as [string, string],
+        color: colors.nileBlue,
+        gradient: [colors.linen, colors.lightPeach] as [string, string],
     },
     {
         name: 'Brand Coins',
         desc: 'Never expire',
         amount: '150',
         icon: 'diamond',
-        color: '#7C3AED',
-        gradient: ['#EDE9FE', '#DDD6FE'] as [string, string],
+        color: colors.brand.purple,
+        gradient: [colors.tint.purple, '#DDD6FE'] as [string, string],
     },
     {
         name: 'Promo Coins',
         desc: 'Limited time offers',
         amount: '50',
         icon: 'flash',
-        color: '#F59E0B',
-        gradient: ['#FEF3C7', '#FDE68A'] as [string, string],
+        color: colors.warningScale[400],
+        gradient: [colors.tint.amberLight, colors.warningScale[200]] as [string, string],
     },
 ];
 
@@ -71,27 +72,27 @@ const WalletOverviewScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
             subtitle="All your rewards in one place"
             onBack={onBack}
             footer={<ActionBtn title="See How to Use" onPress={() => onNavigate('D2')} />}
-            headerAccent="#F59E0B"
+            headerAccent={colors.warningScale[400]}
         >
             <View style={styles.container}>
                 {/* Wallet hero */}
                 <Animated.View style={[styles.walletHero, walletStyle]}>
                     <LinearGradient
-                        colors={['#1F2937', '#374151']}
+                        colors={[colors.neutral[800], colors.neutral[700]]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                         style={styles.walletGradient}
                     >
                         <View style={styles.walletHeader}>
                             <View style={styles.walletIcon}>
-                                <Ionicons name="wallet" size={24} color="#F59E0B" />
+                                <Ionicons name="wallet" size={24} color={colors.warningScale[400]} />
                             </View>
                             <Text style={styles.walletLabel}>TOTAL BALANCE</Text>
                         </View>
                         <Text style={styles.walletAmount}>450 Coins</Text>
                         <Text style={styles.walletValue}>Worth ~{currencySymbol}450</Text>
                         <View style={styles.walletChip}>
-                            <Ionicons name="trending-up" size={14} color="#ffcd57" />
+                            <Ionicons name="trending-up" size={14} color={colors.lightMustard} />
                             <Text style={styles.chipText}>+85 this month</Text>
                         </View>
                     </LinearGradient>
@@ -132,7 +133,7 @@ const WalletOverviewScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                     entering={FadeInUp.delay(600).springify()}
                     style={styles.infoTip}
                 >
-                    <Ionicons name="information-circle" size={20} color="#3B82F6" />
+                    <Ionicons name="information-circle" size={20} color={colors.infoScale[400]} />
                     <Text style={styles.infoText}>
                         {`1 ${BRAND.COIN_SINGLE} = ${currencySymbol}1. Use them anywhere in the ${BRAND.APP_NAME} network!`}
                     </Text>
@@ -182,18 +183,18 @@ const styles = StyleSheet.create({
     walletLabel: {
         fontSize: 12,
         fontWeight: '700',
-        color: '#9CA3AF',
+        color: colors.neutral[400],
         letterSpacing: 1.5,
     },
     walletAmount: {
         fontSize: 42,
         fontWeight: '900',
-        color: '#FFFFFF',
+        color: colors.background.primary,
         marginBottom: 4,
     },
     walletValue: {
         fontSize: 16,
-        color: '#9CA3AF',
+        color: colors.neutral[400],
         marginBottom: 16,
     },
     walletChip: {
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
     chipText: {
         fontSize: 13,
         fontWeight: '600',
-        color: '#ffcd57',
+        color: colors.lightMustard,
     },
     coinsSection: {
         gap: 12,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: 14,
         fontWeight: '700',
-        color: '#6B7280',
+        color: colors.neutral[500],
         textTransform: 'uppercase',
         letterSpacing: 1,
         marginBottom: 4,
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
     },
     coinDesc: {
         fontSize: 13,
-        color: '#6B7280',
+        color: colors.neutral[500],
     },
     coinAmountContainer: {
         alignItems: 'flex-end',
@@ -260,18 +261,18 @@ const styles = StyleSheet.create({
     },
     coinUnit: {
         fontSize: 11,
-        color: '#6B7280',
+        color: colors.neutral[500],
         fontWeight: '600',
     },
     infoTip: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10,
-        backgroundColor: '#EFF6FF',
+        backgroundColor: colors.tint.blue,
         padding: 14,
         borderRadius: 14,
         borderWidth: 1,
-        borderColor: '#DBEAFE',
+        borderColor: colors.tint.blueLight,
     },
     infoText: {
         flex: 1,

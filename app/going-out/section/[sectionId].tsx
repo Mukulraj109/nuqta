@@ -18,6 +18,7 @@ import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import productsApi from '@/services/productsApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 interface SectionProduct {
   _id: string;
   name: string;
@@ -104,7 +105,7 @@ export default function GoingOutSectionPage() {
         <ThemedText style={styles.productPrice}>{getPrice(item)}</ThemedText>
         {item.ratings?.average ? (
           <View style={styles.ratingRow}>
-            <Ionicons name="star" size={12} color="#F59E0B" />
+            <Ionicons name="star" size={12} color={colors.warningScale[400]} />
             <ThemedText style={styles.ratingText}>{item.ratings.average.toFixed(1)} ({item.ratings.count})</ThemedText>
           </View>
         ) : null}
@@ -127,7 +128,7 @@ export default function GoingOutSectionPage() {
       <StatusBar barStyle="dark-content" />
       <View style={styles.header}>
         <Pressable onPress={() => goBack('/going-out' as any)} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#1a3a52" />
+          <Ionicons name="arrow-back" size={24} color={colors.nileBlue} />
         </Pressable>
         <ThemedText style={styles.headerTitle}>
           {(sectionId || '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
@@ -150,7 +151,7 @@ export default function GoingOutSectionPage() {
             <ThemedText style={styles.emptyText}>No products in this section yet</ThemedText>
           </View>
         }
-        ListFooterComponent={loadingMore ? <ActivityIndicator size="small" color="#1a3a52" style={{ padding: 16 }} /> : null}
+        ListFooterComponent={loadingMore ? <ActivityIndicator size="small" color={colors.nileBlue} style={{ padding: 16 }} /> : null}
       />
     </SafeAreaView>
   );

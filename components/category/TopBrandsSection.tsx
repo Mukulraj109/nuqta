@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { getBrandsForCategory, Brand } from '@/data/categoryDummyData';
+import { colors } from '@/constants/theme';
 
 interface TopBrandsSectionProps {
   categorySlug: string;
@@ -129,13 +130,13 @@ const TopBrandsSection: React.FC<TopBrandsSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     paddingVertical: 20,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -158,19 +159,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.4,
   },
   seeAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 8,
   },
   seeAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
     marginBottom: 6,
   },
@@ -225,37 +226,37 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   tagBadge: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 4,
     marginBottom: 6,
   },
   tagPremium: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
   },
   tagTrending: {
-    backgroundColor: '#DBEAFE',
+    backgroundColor: colors.tint.blueLight,
   },
   tagPopular: {
-    backgroundColor: '#FCE7F3',
+    backgroundColor: colors.pinkMist,
   },
   tagText: {
     fontSize: 9,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   tagTextPremium: {
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   tagTextTrending: {
-    color: '#2563EB',
+    color: colors.brand.blue,
   },
   tagTextPopular: {
-    color: '#DB2777',
+    color: colors.deepPink,
   },
   ratingRow: {
     flexDirection: 'row',
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
   ratingValue: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

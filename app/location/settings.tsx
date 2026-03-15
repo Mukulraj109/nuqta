@@ -17,6 +17,7 @@ import { useGreetingCustomization } from '@/hooks/useGreeting';
 import LocationDisplay from '@/components/location/LocationDisplay';
 import TimeDisplay from '@/components/location/TimeDisplay';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function LocationSettingsScreen() {
   const router = useRouter();
@@ -109,7 +110,7 @@ export default function LocationSettingsScreen() {
     <View style={styles.settingItem}>
       <View style={styles.settingContent}>
         <View style={styles.settingIcon}>
-          <Ionicons name={icon as any} size={24} color={disabled ? '#C7C7CC' : '#007AFF'} />
+          <Ionicons name={icon as any} size={24} color={disabled ? '#C7C7CC' : colors.brand.ios} />
         </View>
         <View style={styles.settingText}>
           <Text style={[styles.settingTitle, disabled && styles.disabledText]}>
@@ -124,8 +125,8 @@ export default function LocationSettingsScreen() {
         value={value}
         onValueChange={onValueChange}
         disabled={disabled}
-        trackColor={{ false: '#E0E0E0', true: '#007AFF' }}
-        thumbColor={value ? '#FFFFFF' : '#FFFFFF'}
+        trackColor={{ false: '#E0E0E0', true: colors.brand.ios }}
+        thumbColor={value ? colors.background.primary : colors.background.primary}
       />
     </View>
   );
@@ -148,7 +149,7 @@ export default function LocationSettingsScreen() {
         {getLanguageName(code)}
       </Text>
       {customConfig.language === code && (
-        <Ionicons name="checkmark" size={20} color="#007AFF" />
+        <Ionicons name="checkmark" size={20} color={colors.brand.ios} />
       )}
     </Pressable>
   );
@@ -398,7 +399,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   permissionButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.sm,
@@ -465,7 +466,7 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
   selectedLanguageText: {
-    color: '#007AFF',
+    color: colors.brand.ios,
     fontWeight: '600',
   },
   actionButton: {

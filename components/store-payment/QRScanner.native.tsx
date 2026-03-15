@@ -26,16 +26,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { QRCodeData } from '@/types/storePayment.types';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const SCANNER_SIZE = SCREEN_WIDTH * 0.75;
 
 // Nuqta Brand Colors
 const NUQTA_COLORS = {
-  primary: '#ffcd57',
+  primary: colors.lightMustard,
   primaryGlow: 'rgba(255, 205, 87, 0.5)',
-  orange: '#F97316',
-  navy: '#0B2240',
+  orange: colors.brand.orange,
+  navy: colors.brand.navyDark,
   background: '#18181B',
   overlay: 'rgba(0, 0, 0, 0.6)',
 };
@@ -182,10 +183,10 @@ function QRScanner({ onScan, onClose, onManualEntry }: QRScannerProps) {
       {/* Top Header */}
       <View style={styles.header}>
         <Pressable style={styles.headerBtn} onPress={onClose}>
-          <Ionicons name="close" size={26} color="#FFFFFF" />
+          <Ionicons name="close" size={26} color={colors.background.primary} />
         </Pressable>
         <Pressable style={styles.headerBtn}>
-          <Ionicons name="ellipsis-vertical" size={22} color="#FFFFFF" />
+          <Ionicons name="ellipsis-vertical" size={22} color={colors.background.primary} />
         </Pressable>
       </View>
 
@@ -228,7 +229,7 @@ function QRScanner({ onScan, onClose, onManualEntry }: QRScannerProps) {
       {/* Error Message */}
       {error && (
         <View style={styles.errorBanner}>
-          <Ionicons name="alert-circle" size={18} color="#FFFFFF" />
+          <Ionicons name="alert-circle" size={18} color={colors.background.primary} />
           <Text style={styles.errorText}>{error}</Text>
         </View>
       )}
@@ -244,12 +245,12 @@ function QRScanner({ onScan, onClose, onManualEntry }: QRScannerProps) {
             <Ionicons
               name={flashOn ? 'flash' : 'flash-outline'}
               size={24}
-              color={flashOn ? NUQTA_COLORS.primary : '#FFFFFF'}
+              color={flashOn ? NUQTA_COLORS.primary : colors.background.primary}
             />
           </Pressable>
 
           <Pressable style={styles.actionBtn} onPress={onManualEntry}>
-            <Ionicons name="keypad-outline" size={24} color="#FFFFFF" />
+            <Ionicons name="keypad-outline" size={24} color={colors.background.primary} />
           </Pressable>
         </View>
 
@@ -319,17 +320,17 @@ const styles = StyleSheet.create({
   permissionTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 8,
   },
   permissionText: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 16,
   },
   permissionSubtext: {
     fontSize: 15,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginBottom: 32,
   },
   grantButton: {
@@ -342,14 +343,14 @@ const styles = StyleSheet.create({
   grantButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   cancelButton: {
     paddingVertical: 12,
   },
   cancelButtonText: {
     fontSize: 15,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   header: {
     position: 'absolute',
@@ -399,7 +400,7 @@ const styles = StyleSheet.create({
   promoIconText: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   promoText: {
     fontSize: 14,
@@ -498,7 +499,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     flex: 1,
   },
   bottomSection: {
@@ -563,7 +564,7 @@ const styles = StyleSheet.create({
   paymentIconText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   infoSubtext: {
     fontSize: 12,
@@ -588,7 +589,7 @@ const styles = StyleSheet.create({
   rezLogoText: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   securityBadges: {
     flexDirection: 'row',
@@ -602,7 +603,7 @@ const styles = StyleSheet.create({
   badgeTitle: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   badgeSubtitle: {
     fontSize: 7,

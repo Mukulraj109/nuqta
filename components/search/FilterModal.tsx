@@ -13,17 +13,18 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Slider from '@/components/common/CrossPlatformSlider';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
 // Nuqta Brand Colors
 const COLORS = {
-  primary: '#ffcd57',
-  primaryDark: '#1a3a52',
-  gold: '#ffcd57',
-  navy: '#1a3a52',
+  primary: colors.lightMustard,
+  primaryDark: colors.nileBlue,
+  gold: colors.lightMustard,
+  navy: colors.nileBlue,
   slate: '#1F2D3D',
-  muted: '#9AA7B2',
+  muted: colors.gray[400],
   surface: '#F7FAFC',
 };
 
@@ -120,7 +121,7 @@ function FilterModal({
           <View style={styles.header}>
             <Text style={styles.headerTitle}>Filters</Text>
             <Pressable onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#1F2937" />
+              <Ionicons name="close" size={24} color={colors.neutral[800]} />
             </Pressable>
           </View>
 
@@ -145,9 +146,9 @@ function FilterModal({
                       priceRange: { ...prev.priceRange, min: value },
                     }))
                   }
-                  minimumTrackTintColor="#1a3a52"
-                  maximumTrackTintColor="#E5E7EB"
-                  thumbTintColor="#1a3a52"
+                  minimumTrackTintColor={colors.nileBlue}
+                  maximumTrackTintColor={colors.neutral[200]}
+                  thumbTintColor={colors.nileBlue}
                 />
                 <Slider
                   style={styles.slider}
@@ -161,9 +162,9 @@ function FilterModal({
                       priceRange: { ...prev.priceRange, max: value },
                     }))
                   }
-                  minimumTrackTintColor="#1a3a52"
-                  maximumTrackTintColor="#E5E7EB"
-                  thumbTintColor="#1a3a52"
+                  minimumTrackTintColor={colors.nileBlue}
+                  maximumTrackTintColor={colors.neutral[200]}
+                  thumbTintColor={colors.nileBlue}
                 />
               </View>
             </View>
@@ -184,7 +185,7 @@ function FilterModal({
                     <Ionicons
                       name="star"
                       size={16}
-                      color={filters.rating === option.value ? '#FFFFFF' : '#F59E0B'}
+                      color={filters.rating === option.value ? colors.background.primary : colors.warningScale[400]}
                     />
                     <Text
                       style={[
@@ -232,7 +233,7 @@ function FilterModal({
                       name={category.icon as any}
                       size={18}
                       color={
-                        filters.categories.includes(category.id) ? '#FFFFFF' : '#1a3a52'
+                        filters.categories.includes(category.id) ? colors.background.primary : colors.nileBlue
                       }
                     />
                     <Text
@@ -262,9 +263,9 @@ function FilterModal({
                   onValueChange={(value) =>
                     setFilters(prev => ({ ...prev, cashbackMin: value }))
                   }
-                  minimumTrackTintColor="#10B981"
-                  maximumTrackTintColor="#E5E7EB"
-                  thumbTintColor="#10B981"
+                  minimumTrackTintColor={colors.successScale[400]}
+                  maximumTrackTintColor={colors.neutral[200]}
+                  thumbTintColor={colors.successScale[400]}
                 />
               </View>
             </View>
@@ -283,7 +284,7 @@ function FilterModal({
                   ]}
                 >
                   {filters.inStock && (
-                    <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+                    <Ionicons name="checkmark" size={16} color={colors.background.primary} />
                   )}
                 </View>
               </Pressable>
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -334,18 +335,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   closeButton: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
   },
   priceDisplay: {
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
   priceText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   sliderContainer: {
     paddingHorizontal: 4,
@@ -390,19 +391,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     gap: 6,
   },
   ratingOptionActive: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
   },
   ratingText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   ratingTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   categoriesGrid: {
     flexDirection: 'row',
@@ -415,22 +416,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     gap: 6,
   },
   categoryChipActive: {
-    backgroundColor: '#1a3a52',
-    borderColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
+    borderColor: colors.nileBlue,
   },
   categoryChipText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   categoryChipTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   cashbackContainer: {
     paddingHorizontal: 4,
@@ -438,7 +439,7 @@ const styles = StyleSheet.create({
   cashbackValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#10B981',
+    color: colors.successScale[400],
     marginBottom: 8,
   },
   toggleRow: {
@@ -450,51 +451,51 @@ const styles = StyleSheet.create({
   toggleLabel: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   toggle: {
     width: 24,
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     justifyContent: 'center',
     alignItems: 'center',
   },
   toggleActive: {
-    backgroundColor: '#10B981',
-    borderColor: '#10B981',
+    backgroundColor: colors.successScale[400],
+    borderColor: colors.successScale[400],
   },
   footer: {
     flexDirection: 'row',
     padding: 20,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   resetButton: {
     flex: 1,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
   },
   resetButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   applyButton: {
     flex: 2,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     alignItems: 'center',
   },
   applyButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

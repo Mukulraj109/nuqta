@@ -25,18 +25,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import productComparisonApi, { ProductComparison, ComparisonProduct } from '@/services/productComparisonApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  primaryGold: '#F59E0B',
-  dark: '#1a3a52',
-  green: '#22C55E',
-  red: '#EF4444',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  border: '#E5E7EB',
-  winnerBg: '#F0FDF4',
+  primaryGold: colors.warningScale[400],
+  dark: colors.nileBlue,
+  green: colors.success,
+  red: colors.error,
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  border: colors.neutral[200],
+  winnerBg: colors.successScale[50],
 };
 
 interface SelectedProduct {
@@ -829,7 +830,7 @@ const styles = StyleSheet.create({
   howSteps: { gap: 14 },
   howStep: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   howStepIcon: {
-    width: 36, height: 36, borderRadius: 18, backgroundColor: '#FEF3C7',
+    width: 36, height: 36, borderRadius: 18, backgroundColor: colors.tint.amberLight,
     justifyContent: 'center', alignItems: 'center',
   },
   howStepText: { fontSize: 14, color: COLORS.textPrimary, fontWeight: '500' },
@@ -872,7 +873,7 @@ const styles = StyleSheet.create({
   stockRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   expressBadge: {
     fontSize: 10, fontWeight: '700', color: COLORS.primaryGold,
-    backgroundColor: '#FEF3C7', paddingHorizontal: 6, paddingVertical: 2,
+    backgroundColor: colors.tint.amberLight, paddingHorizontal: 6, paddingVertical: 2,
     borderRadius: 4, marginTop: 4, textAlign: 'center',
   },
   viewProductBtn: {
@@ -913,7 +914,7 @@ const styles = StyleSheet.create({
   modalCloseBtn: { padding: 4, width: 32 },
   modalTitle: { fontSize: 18, fontWeight: '600', color: COLORS.textPrimary },
   modalSearchBar: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: '#F3F4F6',
+    flexDirection: 'row', alignItems: 'center', backgroundColor: colors.neutral[100],
     borderRadius: 12, paddingHorizontal: 12, paddingVertical: 10, marginHorizontal: 16,
     marginTop: 12, gap: 8,
   },

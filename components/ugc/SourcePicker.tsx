@@ -14,6 +14,7 @@ import {
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { UploadSource } from '@/types/ugc-upload.types';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -70,14 +71,14 @@ function SourcePicker({
          
         >
           <View style={[styles.iconContainer, styles.cameraIcon]}>
-            <Ionicons name="videocam" size={32} color="#FFFFFF" />
+            <Ionicons name="videocam" size={32} color={colors.background.primary} />
           </View>
           <Text style={styles.optionTitle}>Record Video</Text>
           <Text style={styles.optionDescription}>
             Use your camera to record a new video
           </Text>
           <View style={styles.actionIndicator}>
-            <Ionicons name="chevron-forward" size={20} color="#8B5CF6" />
+            <Ionicons name="chevron-forward" size={20} color={colors.brand.purpleLight} />
           </View>
         </Pressable>
 
@@ -89,14 +90,14 @@ function SourcePicker({
          
         >
           <View style={[styles.iconContainer, styles.galleryIcon]}>
-            <Ionicons name="images" size={32} color="#FFFFFF" />
+            <Ionicons name="images" size={32} color={colors.background.primary} />
           </View>
           <Text style={styles.optionTitle}>Choose from Gallery</Text>
           <Text style={styles.optionDescription}>
             Select an existing video from your library
           </Text>
           <View style={styles.actionIndicator}>
-            <Ionicons name="chevron-forward" size={20} color="#8B5CF6" />
+            <Ionicons name="chevron-forward" size={20} color={colors.brand.purpleLight} />
           </View>
         </Pressable>
 
@@ -108,14 +109,14 @@ function SourcePicker({
          
         >
           <View style={[styles.iconContainer, styles.urlIcon]}>
-            <Ionicons name="link" size={32} color="#FFFFFF" />
+            <Ionicons name="link" size={32} color={colors.background.primary} />
           </View>
           <Text style={styles.optionTitle}>Import from URL</Text>
           <Text style={styles.optionDescription}>
             Paste a video URL from the web
           </Text>
           <View style={styles.actionIndicator}>
-            <Ionicons name="chevron-forward" size={20} color="#8B5CF6" />
+            <Ionicons name="chevron-forward" size={20} color={colors.brand.purpleLight} />
           </View>
         </Pressable>
       </View>
@@ -132,7 +133,7 @@ function SourcePicker({
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Import Video from URL</Text>
               <Pressable onPress={handleCancelUrl} style={styles.closeButton}>
-                <Ionicons name="close" size={24} color="#666" />
+                <Ionicons name="close" size={24} color={colors.midGray} />
               </Pressable>
             </View>
 
@@ -143,7 +144,7 @@ function SourcePicker({
             <TextInput
               style={styles.urlInput}
               placeholder="https://example.com/video.mp4"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               value={urlInput}
               onChangeText={setUrlInput}
               autoCapitalize="none"
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -221,23 +222,23 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   cameraIcon: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   galleryIcon: {
-    backgroundColor: '#EC4899',
+    backgroundColor: colors.brand.pink,
   },
   urlIcon: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: colors.infoScale[400],
   },
   optionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 8,
   },
   optionDescription: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
     lineHeight: 20,
     paddingHorizontal: 20,
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     padding: 24,
     width: '100%',
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     flex: 1,
   },
   closeButton: {
@@ -294,19 +295,19 @@ const styles = StyleSheet.create({
   },
   modalDescription: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     marginBottom: 20,
     lineHeight: 20,
   },
   urlInput: {
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderRadius: 12,
     padding: 16,
     fontSize: 16,
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 24,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   modalActions: {
     flexDirection: 'row',
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
@@ -322,15 +323,15 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#666',
+    color: colors.midGray,
   },
   submitButton: {
     flex: 1,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

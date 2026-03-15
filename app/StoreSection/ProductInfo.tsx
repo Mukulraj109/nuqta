@@ -19,6 +19,7 @@ import PriceAndRewardsSection from "@/components/product/PriceAndRewardsSection"
 import LockProductSection from "@/components/product/LockProductSection";
 import { useLocation } from "@/contexts/LocationContext";
 import { useCart } from "@/contexts/CartContext";
+import { colors } from '@/constants/theme';
 
 // Haversine formula for distance calculation between two coordinates
 function calculateDistance(
@@ -269,7 +270,7 @@ export default memo(function ProductScreen({
 
           {/* Location Row */}
           <View style={styles.locationRow}>
-            <Ionicons name="location" size={16} color="#ffcd57" />
+            <Ionicons name="location" size={16} color={colors.lightMustard} />
             {distanceText ? (
               <Text style={styles.distanceText}>{distanceText}</Text>
             ) : null}
@@ -308,7 +309,7 @@ export default memo(function ProductScreen({
             ) : null}
             {(dynamicData?.computedDelivery || dynamicData?.store?.operationalInfo?.deliveryTime || dynamicData?.deliveryInfo?.estimatedDays) ? (
               <View style={styles.deliveryBadge}>
-                <Ionicons name="time-outline" size={14} color="#6B7280" />
+                <Ionicons name="time-outline" size={14} color={colors.neutral[500]} />
                 <Text style={styles.deliveryText}>
                   {dynamicData?.computedDelivery || dynamicData?.store?.operationalInfo?.deliveryTime || dynamicData?.deliveryInfo?.estimatedDays}
                 </Text>
@@ -319,7 +320,7 @@ export default memo(function ProductScreen({
           {/* rating/review section */}
           <View style={styles.ratingRow}>
             <View style={styles.ratingBadge}>
-              <Ionicons name="star" size={14} color="#FBBF24" />
+              <Ionicons name="star" size={14} color={colors.warningScale[400]} />
               <Text style={styles.ratingText}>{rating.toFixed(1)}</Text>
             </View>
             <Text style={styles.reviewCount}>
@@ -331,7 +332,7 @@ export default memo(function ProductScreen({
             <View style={styles.peopleBought}>
               <Text style={styles.peopleNumber}>{dynamicData?.analytics?.todayPurchases || dynamicData?.todayPurchases || 0}</Text>
               <View style={styles.avatarGroup}>
-                {["#ff6b6b", "#4ecdc4", "#3b82f6", "#f9ca24"].map((color, i) => (
+                {["#ff6b6b", "#4ecdc4", colors.infoScale[400], "#f9ca24"].map((color, i) => (
                   <LinearGradient
                     key={i}
                     colors={[color, color]}
@@ -357,7 +358,7 @@ export default memo(function ProductScreen({
                 ]}
               >
                 <LinearGradient
-                  colors={["#ffcd57", "#1a3a52"]}
+                  colors={[colors.lightMustard, colors.nileBlue]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.sliderGradient}
@@ -371,7 +372,7 @@ export default memo(function ProductScreen({
                 onPress={onStoreVisitPress}
               >
                 <View style={styles.segmentContent}>
-                  <Ionicons name="storefront" size={16} color={active === "visit" ? "#fff" : "#ffcd57"} />
+                  <Ionicons name="storefront" size={16} color={active === "visit" ? colors.background.primary : colors.lightMustard} />
                   <Text style={[styles.segmentText, active === "visit" ? styles.segmentTextActive : styles.segmentTextInactive]}>
                     STORE VISIT
                   </Text>
@@ -385,7 +386,7 @@ export default memo(function ProductScreen({
                 onPress={onBookNowPress}
               >
                 <View style={styles.segmentContent}>
-                  <Ionicons name="calendar-outline" size={16} color={active === "book" ? "#fff" : "#ffcd57"} />
+                  <Ionicons name="calendar-outline" size={16} color={active === "book" ? colors.background.primary : colors.lightMustard} />
                   <Text style={[styles.segmentText, active === "book" ? styles.segmentTextActive : styles.segmentTextInactive]}>
                     Book Now
                   </Text>
@@ -445,13 +446,13 @@ export default memo(function ProductScreen({
 });
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: { flex: 1, backgroundColor: colors.background.primary },
   infoContainer: { padding: 16, paddingTop: 18 },
   title: { fontSize: 22, fontWeight: "700", marginBottom: 4 },
   brandName: {
     fontSize: 14,
     fontWeight: "500",
-    color: "#6B7280",
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   categoryTagContainer: {
@@ -459,7 +460,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   categoryTag: {
-    backgroundColor: "#EEF2FF",
+    backgroundColor: colors.indigoMist,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
@@ -469,7 +470,7 @@ const styles = StyleSheet.create({
   categoryTagText: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#6366F1",
+    color: colors.brand.indigo,
   },
   description: { fontSize: 14, color: "#555", marginBottom: 12 },
   locationRow: {
@@ -480,13 +481,13 @@ const styles = StyleSheet.create({
   locationText: {
     fontSize: 14,
     marginLeft: 6,
-    color: "#374151",
+    color: colors.neutral[700],
     flex: 1,
   },
   distanceText: {
     fontSize: 14,
     marginLeft: 6,
-    color: "#ffcd57",
+    color: colors.lightMustard,
     fontWeight: "700",
   },
   availabilityRow: {
@@ -496,22 +497,22 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   openBadge: {
-    backgroundColor: "#DCFCE7",
+    backgroundColor: colors.successScale[100],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: "#16A34A",
+    borderColor: colors.brand.greenDark,
   },
   openText: {
-    color: "#16A34A",
+    color: colors.brand.greenDark,
     fontSize: 13,
     fontWeight: "600",
   },
   deliveryBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F3F4F6",
+    backgroundColor: colors.neutral[100],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -519,36 +520,36 @@ const styles = StyleSheet.create({
   },
   deliveryText: {
     fontSize: 13,
-    color: "#6B7280",
+    color: colors.neutral[500],
     fontWeight: "500",
   },
   ratingRow: { flexDirection: "row", alignItems: "center", marginBottom: 12 },
   ratingBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F3F4F6",
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 14,
   },
   ratingText: { marginLeft: 6, fontWeight: "700" },
-  reviewCount: { marginLeft: 12, fontWeight: "600", color: "#6B7280", fontSize: 14 },
+  reviewCount: { marginLeft: 12, fontWeight: "600", color: colors.neutral[500], fontSize: 14 },
 
   peopleBought: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F8FAFC",
+    backgroundColor: colors.tint.coolGray,
     padding: 14,
     borderRadius: 16,
     marginTop: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: "#F1F5F9",
+    borderColor: colors.tint.slate,
   },
-  peopleNumber: { fontSize: 17, fontWeight: "800", color: "#111827" },
+  peopleNumber: { fontSize: 17, fontWeight: "800", color: colors.neutral[900] },
   avatarGroup: { flexDirection: "row", marginLeft: 10 },
-  avatar: { width: 28, height: 28, borderRadius: 14, borderWidth: 2, borderColor: "#fff" },
-  peopleText: { marginLeft: 10, color: "#6B7280", fontSize: 14, fontWeight: "500" },
+  avatar: { width: 28, height: 28, borderRadius: 14, borderWidth: 2, borderColor: colors.background.primary },
+  peopleText: { marginLeft: 10, color: colors.neutral[500], fontSize: 14, fontWeight: "500" },
 
   /* Segmented control styles */
   segmentContainer: {
@@ -556,7 +557,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderWidth: 1.5,
     borderColor: "rgba(255, 205, 87, 0.2)",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     overflow: "hidden",
     position: "relative",
     flexDirection: "row",
@@ -596,9 +597,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
   segmentTextActive: {
-    color: "#fff",
+    color: colors.background.primary,
   },
   segmentTextInactive: {
-    color: "#ffcd57",
+    color: colors.lightMustard,
   },
 });

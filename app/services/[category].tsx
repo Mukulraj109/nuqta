@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useCallback, useEffect, memo } from 'react';
 import {
   View,
@@ -83,7 +84,7 @@ const ServiceCard = memo(({
         {/* Rating */}
         {rating > 0 && (
           <View style={styles.ratingContainer}>
-            <Ionicons name="star" size={12} color={'#FFC857'} />
+            <Ionicons name="star" size={12} color={colors.brand.goldWarm} />
             <ThemedText style={styles.ratingText}>
               {rating.toFixed(1)} ({ratingCount})
             </ThemedText>
@@ -221,7 +222,7 @@ export default function ServiceCategoryPage() {
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#00C06A', '#00796B']}
+          colors={[colors.brand.green, colors.brand.teal]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.headerGradient}
@@ -251,7 +252,7 @@ export default function ServiceCategoryPage() {
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#00C06A', '#00796B']}
+          colors={[colors.brand.green, colors.brand.teal]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.headerGradient}
@@ -287,7 +288,7 @@ export default function ServiceCategoryPage() {
     <View style={styles.container}>
       {/* Header with ReZ Green Gradient */}
       <LinearGradient
-        colors={['#00C06A', '#00796B']}
+        colors={[colors.brand.green, colors.brand.teal]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.headerGradient}
@@ -330,7 +331,7 @@ export default function ServiceCategoryPage() {
           <Ionicons
             name={showSortOptions ? "chevron-up" : "chevron-down"}
             size={16}
-            color={'#00C06A'}
+            color={colors.brand.green}
           />
         </Pressable>
       </View>
@@ -354,7 +355,7 @@ export default function ServiceCategoryPage() {
                 {option.label}
               </ThemedText>
               {sortBy === option.value && (
-                <Ionicons name="checkmark" size={18} color={'#00C06A'} />
+                <Ionicons name="checkmark" size={18} color={colors.brand.green} />
               )}
             </Pressable>
           ))}
@@ -370,8 +371,8 @@ export default function ServiceCategoryPage() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            colors={['#00C06A']}
-            tintColor={'#00C06A'}
+            colors={[colors.brand.green]}
+            tintColor={colors.brand.green}
           />
         }
         onScroll={({ nativeEvent }) => {
@@ -385,7 +386,7 @@ export default function ServiceCategoryPage() {
       >
         {services.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Ionicons name="cube-outline" size={48} color={'#9AA7B2'} />
+            <Ionicons name="cube-outline" size={48} color={colors.gray[400]} />
             <ThemedText style={styles.emptyText}>No services available</ThemedText>
             <ThemedText style={styles.emptySubtext}>
               Check back later for new services
@@ -408,7 +409,7 @@ export default function ServiceCategoryPage() {
         {/* Loading More Indicator */}
         {loadingMore && (
           <View style={styles.loadingMoreContainer}>
-            <ActivityIndicator size="small" color={'#00C06A'} />
+            <ActivityIndicator size="small" color={colors.brand.green} />
             <ThemedText style={styles.loadingMoreText}>Loading more...</ThemedText>
           </View>
         )}
@@ -481,7 +482,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: Spacing.md,
     fontSize: Typography.body.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
   },
   errorContainer: {
     flex: 1,
@@ -497,11 +498,11 @@ const styles = StyleSheet.create({
   },
   retryButton: {
     marginTop: Spacing.lg,
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingHorizontal: Spacing.xl,
     paddingVertical: 14,
     borderRadius: 14,
-    shadowColor: '#00C06A',
+    shadowColor: colors.brand.green,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -525,7 +526,7 @@ const styles = StyleSheet.create({
   },
   resultsCount: {
     fontSize: Typography.body.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
     fontWeight: '500',
   },
   sortButton: {
@@ -539,7 +540,7 @@ const styles = StyleSheet.create({
   },
   sortButtonText: {
     fontSize: Typography.body.fontSize,
-    color: '#00C06A',
+    color: colors.brand.green,
     fontWeight: '600',
   },
   sortOptionsContainer: {
@@ -565,7 +566,7 @@ const styles = StyleSheet.create({
     color: '#1F2D3D',
   },
   sortOptionTextActive: {
-    color: '#00C06A',
+    color: colors.brand.green,
     fontWeight: '600',
   },
   // Services Grid
@@ -612,7 +613,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     left: 8,
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: BorderRadius.sm,
@@ -634,7 +635,7 @@ const styles = StyleSheet.create({
   },
   storeName: {
     fontSize: Typography.bodySmall.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
     marginBottom: 6,
   },
   ratingContainer: {
@@ -661,16 +662,16 @@ const styles = StyleSheet.create({
   },
   originalPrice: {
     fontSize: Typography.bodySmall.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
     textDecorationLine: 'line-through',
   },
   // Primary Button from TASK.md
   getServiceButton: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
-    shadowColor: '#00C06A',
+    shadowColor: colors.brand.green,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -696,7 +697,7 @@ const styles = StyleSheet.create({
   },
   emptySubtext: {
     fontSize: Typography.body.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
     marginTop: Spacing.xs,
   },
   // Loading more
@@ -709,7 +710,7 @@ const styles = StyleSheet.create({
   },
   loadingMoreText: {
     fontSize: Typography.body.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
   },
   endOfListContainer: {
     alignItems: 'center',
@@ -717,6 +718,6 @@ const styles = StyleSheet.create({
   },
   endOfListText: {
     fontSize: Typography.body.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
   },
 });

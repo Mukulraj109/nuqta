@@ -10,6 +10,7 @@ import usePriveEligibility from '@/hooks/usePriveEligibility';
 import priveApi from '@/services/priveApi';
 import { ChatSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function ConciergeScreen() {
   const { tier } = usePriveEligibility();
@@ -67,7 +68,7 @@ export default function ConciergeScreen() {
   if (tierRank[tier] < 2) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <PriveEmptyState
           icon="◆"
           title="Concierge is available for Signature and Elite members"
@@ -80,7 +81,7 @@ export default function ConciergeScreen() {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
         <ChatSkeleton />
       </View>
     );
@@ -88,7 +89,7 @@ export default function ConciergeScreen() {
 
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#1F2937', '#111827', '#0A0A0A']} style={StyleSheet.absoluteFill} />
+      <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
       <ScrollView
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   submitDisabled: { opacity: 0.5 },
-  submitText: { fontSize: 14, fontWeight: '600', color: '#0A0A0A' },
+  submitText: { fontSize: 14, fontWeight: '600', color: colors.midGrayAlt },
   sectionTitle: { fontSize: 14, fontWeight: '600', color: PRIVE_COLORS.text.primary, marginBottom: PRIVE_SPACING.lg },
   ticketCard: {
     backgroundColor: PRIVE_COLORS.background.secondary,

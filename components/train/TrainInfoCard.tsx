@@ -6,6 +6,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface TrainDetails {
   route: {
@@ -36,7 +37,7 @@ const TrainInfoCard: React.FC<TrainInfoCardProps> = ({ train }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#22C55E', '#16A34A']}
+        colors={[colors.success, colors.brand.greenDark]}
         style={styles.gradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -57,7 +58,7 @@ const TrainInfoCard: React.FC<TrainInfoCardProps> = ({ train }) => {
 
           <View style={styles.trainPath}>
             <View style={styles.trainPathLine} />
-            <Ionicons name="train" size={24} color="#FFFFFF" />
+            <Ionicons name="train" size={24} color={colors.background.primary} />
             <Text style={styles.duration}>{formatDuration(train.duration)}</Text>
           </View>
 
@@ -78,19 +79,19 @@ const TrainInfoCard: React.FC<TrainInfoCardProps> = ({ train }) => {
         <View style={styles.detailsRow}>
           {train.trainType && (
             <View style={styles.detailItem}>
-              <Ionicons name="train-outline" size={16} color="#FFFFFF" />
+              <Ionicons name="train-outline" size={16} color={colors.background.primary} />
               <Text style={styles.detailText}>{train.trainType}</Text>
             </View>
           )}
           {train.trainNumber && (
             <View style={styles.detailItem}>
-              <Ionicons name="ticket-outline" size={16} color="#FFFFFF" />
+              <Ionicons name="ticket-outline" size={16} color={colors.background.primary} />
               <Text style={styles.detailText}>{train.trainNumber}</Text>
             </View>
           )}
           {train.rating > 0 && (
             <View style={styles.detailItem}>
-              <Ionicons name="star" size={16} color="#FFD700" />
+              <Ionicons name="star" size={16} color={colors.brand.goldBright} />
               <Text style={styles.detailText}>{train.rating.toFixed(1)}</Text>
             </View>
           )}
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
   stationCodeText: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 1,
   },
   stationInfo: {
@@ -147,14 +148,14 @@ const styles = StyleSheet.create({
   stationCity: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 6,
     letterSpacing: 0.3,
   },
   time: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   trainPath: {
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
   },
   duration: {
     fontSize: 13,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginTop: 6,
     fontWeight: '600',
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '500',
   },
 });

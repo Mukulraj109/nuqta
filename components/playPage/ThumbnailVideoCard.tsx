@@ -5,12 +5,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { UGCVideoItem, PLAY_PAGE_COLORS } from '@/types/playPage.types';
+import { colors } from '@/constants/theme';
 
 // ReZ Design System Colors
 const COLORS = {
-  primary: '#00C06A',
-  primaryDark: '#00796B',
-  gold: '#FFC857',
+  primary: colors.brand.green,
+  primaryDark: colors.brand.teal,
+  gold: colors.brand.goldWarm,
 };
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -75,7 +76,7 @@ function ThumbnailVideoCard({
         {/* View count badge (top-left) */}
         <View style={styles.viewCountContainer}>
           <View style={styles.viewCountPill}>
-            <Ionicons name="eye" size={10} color="#FFFFFF" />
+            <Ionicons name="eye" size={10} color={colors.background.primary} />
             <ThemedText style={styles.viewCountText}>
               {item.viewCount}
             </ThemedText>
@@ -85,7 +86,7 @@ function ThumbnailVideoCard({
         {/* Play button overlay (center) */}
         <View style={styles.playButtonContainer}>
           <View style={styles.playButton}>
-            <Ionicons name="play" size={24} color="#FFFFFF" />
+            <Ionicons name="play" size={24} color={colors.background.primary} />
           </View>
         </View>
 
@@ -113,7 +114,7 @@ function ThumbnailVideoCard({
           {/* Product count badge (bottom-right) */}
           {item.products && item.products.length > 0 && (
             <View style={styles.productCountBadge}>
-              <Ionicons name="pricetag" size={10} color="#FFFFFF" />
+              <Ionicons name="pricetag" size={10} color={colors.background.primary} />
               <ThemedText style={styles.productCountText}>
                 {item.products.length}
               </ThemedText>
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   viewCountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '600',
   },
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
     minHeight: 60, // Fixed height to prevent misalignment
   },
   description: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
     fontSize: 11,
     lineHeight: 14,
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   hashtagText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 8,
     fontWeight: '600',
     opacity: 0.85,
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   productCountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '600',
   },

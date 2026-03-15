@@ -24,6 +24,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface UGCItem {
   _id: string;
@@ -207,7 +208,7 @@ export default function CategoryStoriesPage() {
         {item.rating ? (
           <View style={styles.ratingRow}>
             {[1, 2, 3, 4, 5].map(i => (
-              <Ionicons key={i} name={i <= item.rating! ? 'star' : 'star-outline'} size={14} color={'#F59E0B'} />
+              <Ionicons key={i} name={i <= item.rating! ? 'star' : 'star-outline'} size={14} color={colors.warningScale[400]} />
             ))}
           </View>
         ) : null}
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14, paddingVertical: 7, borderRadius: BorderRadius.xl,
     borderWidth: 1, borderColor: Colors.border.default,
   },
-  filterChipActive: { backgroundColor: Colors.info, borderColor: '#3B82F6' },
+  filterChipActive: { backgroundColor: Colors.info, borderColor: colors.infoScale[400] },
   filterText: { ...Typography.bodySmall, fontWeight: '500', color: Colors.text.tertiary },
   filterTextActive: { color: Colors.text.inverse, fontWeight: '600' },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
@@ -324,7 +325,7 @@ const styles = StyleSheet.create({
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.sm },
   cardUser: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   cardAvatar: {
-    width: 32, height: 32, borderRadius: BorderRadius.lg, backgroundColor: '#EFF6FF',
+    width: 32, height: 32, borderRadius: BorderRadius.lg, backgroundColor: colors.tint.blue,
     justifyContent: 'center', alignItems: 'center',
   },
   cardAvatarText: { ...Typography.body, fontWeight: '600', color: Colors.info },

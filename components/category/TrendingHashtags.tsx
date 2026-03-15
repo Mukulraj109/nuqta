@@ -18,6 +18,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import categoryMetadataApi, { TrendingHashtag } from '@/services/categoryMetadataApi';
 import { getTrendingHashtagsForCategory } from '@/data/categoryDummyData';
+import { colors } from '@/constants/theme';
 
 interface TrendingHashtagsProps {
   categorySlug: string;
@@ -106,7 +107,7 @@ const TrendingHashtags: React.FC<TrendingHashtagsProps> = ({
   if (loading) {
     return (
       <View style={[styles.container, styles.loadingContainer]}>
-        <ActivityIndicator size="small" color="#EF4444" />
+        <ActivityIndicator size="small" color={colors.error} />
       </View>
     );
   }
@@ -119,7 +120,7 @@ const TrendingHashtags: React.FC<TrendingHashtagsProps> = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.titleRow}>
-          <Ionicons name="trending-up" size={18} color="#EF4444" />
+          <Ionicons name="trending-up" size={18} color={colors.error} />
           <Text style={styles.sectionTitle}>Trending Now</Text>
         </View>
       </View>
@@ -146,12 +147,12 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 12,
     paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 16,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.04,
         shadowRadius: 8,
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
   },
   countText: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
 });

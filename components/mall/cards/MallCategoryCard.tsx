@@ -20,6 +20,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallCategory } from '../../../types/mall.types';
+import { colors } from '@/constants/theme';
 
 // Category images from assets
 const CATEGORY_IMAGES: Record<string, ImageSourcePropType> = {
@@ -54,91 +55,91 @@ const CATEGORY_THEMES: Record<string, {
   icon: keyof typeof Ionicons.glyphMap;
 }> = {
   fashion: {
-    gradient: ['#1a3a52', '#234b68'],
+    gradient: [colors.nileBlue, colors.brand.nileBlueLight],
     icon: 'shirt-outline',
   },
   'food & dining': {
-    gradient: ['#0284C7', '#0369A1'],
+    gradient: [colors.brand.sky, colors.brand.skyDark],
     icon: 'restaurant-outline',
   },
   food: {
-    gradient: ['#0284C7', '#0369A1'],
+    gradient: [colors.brand.sky, colors.brand.skyDark],
     icon: 'restaurant-outline',
   },
   entertainment: {
-    gradient: ['#234b68', '#0284C7'],
+    gradient: [colors.brand.nileBlueLight, colors.brand.sky],
     icon: 'game-controller-outline',
   },
   healthcare: {
-    gradient: ['#0369A1', '#1a3a52'],
+    gradient: [colors.brand.skyDark, colors.nileBlue],
     icon: 'medical-outline',
   },
   health: {
-    gradient: ['#0369A1', '#1a3a52'],
+    gradient: [colors.brand.skyDark, colors.nileBlue],
     icon: 'medical-outline',
   },
   travel: {
-    gradient: ['#0891B2', '#0369A1'],
+    gradient: [colors.cyanDark, colors.brand.skyDark],
     icon: 'airplane-outline',
   },
   'travel & experiences': {
-    gradient: ['#0891B2', '#0369A1'],
+    gradient: [colors.cyanDark, colors.brand.skyDark],
     icon: 'airplane-outline',
   },
   education: {
-    gradient: ['#1a3a52', '#0284C7'],
+    gradient: [colors.nileBlue, colors.brand.sky],
     icon: 'school-outline',
   },
   'education & learning': {
-    gradient: ['#1a3a52', '#0284C7'],
+    gradient: [colors.nileBlue, colors.brand.sky],
     icon: 'school-outline',
   },
   electronics: {
-    gradient: ['#334155', '#1a3a52'],
+    gradient: ['#334155', colors.nileBlue],
     icon: 'laptop-outline',
   },
   beauty: {
-    gradient: ['#0284C7', '#234b68'],
+    gradient: [colors.brand.sky, colors.brand.nileBlueLight],
     icon: 'sparkles-outline',
   },
   groceries: {
-    gradient: ['#0E7490', '#1a3a52'],
+    gradient: ['#0E7490', colors.nileBlue],
     icon: 'cart-outline',
   },
   sports: {
-    gradient: ['#2563EB', '#1a3a52'],
+    gradient: [colors.brand.blue, colors.nileBlue],
     icon: 'fitness-outline',
   },
   home: {
-    gradient: ['#0369A1', '#0E7490'],
+    gradient: [colors.brand.skyDark, '#0E7490'],
     icon: 'home-outline',
   },
   lifestyle: {
-    gradient: ['#234b68', '#0369A1'],
+    gradient: [colors.brand.nileBlueLight, colors.brand.skyDark],
     icon: 'heart-outline',
   },
   'beauty & wellness': {
-    gradient: ['#0284C7', '#234b68'],
+    gradient: [colors.brand.sky, colors.brand.nileBlueLight],
     icon: 'sparkles-outline',
   },
   'fitness & sports': {
-    gradient: ['#2563EB', '#1a3a52'],
+    gradient: [colors.brand.blue, colors.nileBlue],
     icon: 'fitness-outline',
   },
   'home services': {
-    gradient: ['#0369A1', '#0E7490'],
+    gradient: [colors.brand.skyDark, '#0E7490'],
     icon: 'home-outline',
   },
 };
 
 // Fallback gradients - all blue-family
 const FALLBACK_GRADIENTS: [string, string][] = [
-  ['#1a3a52', '#234b68'],
-  ['#0284C7', '#0369A1'],
-  ['#234b68', '#0284C7'],
-  ['#0369A1', '#1a3a52'],
-  ['#0891B2', '#0369A1'],
-  ['#1a3a52', '#0284C7'],
+  [colors.nileBlue, colors.brand.nileBlueLight],
+  [colors.brand.sky, colors.brand.skyDark],
+  [colors.brand.nileBlueLight, colors.brand.sky],
+  [colors.brand.skyDark, colors.nileBlue],
+  [colors.cyanDark, colors.brand.skyDark],
+  [colors.nileBlue, colors.brand.sky],
 ];
 
 const MallCategoryCard: React.FC<MallCategoryCardProps> = ({
@@ -189,7 +190,7 @@ const MallCategoryCard: React.FC<MallCategoryCardProps> = ({
                 <Ionicons
                   name={iconName}
                   size={22}
-                  color="#FFFFFF"
+                  color={colors.background.primary}
                 />
               )}
             </View>
@@ -202,7 +203,7 @@ const MallCategoryCard: React.FC<MallCategoryCardProps> = ({
 
               {/* Coins Info pill */}
               <View style={styles.coinsPill}>
-                <Ionicons name="flash" size={10} color="#FFFFFF" />
+                <Ionicons name="flash" size={10} color={colors.background.primary} />
                 <Text style={styles.coinsText}>{rewardText}</Text>
               </View>
             </View>
@@ -290,7 +291,7 @@ const styles = StyleSheet.create({
   categoryName: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 6,
     letterSpacing: -0.2,
     lineHeight: 20,
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
   coinsText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.2,
   },
 });

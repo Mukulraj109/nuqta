@@ -19,19 +19,20 @@ import {
   BORDER_RADIUS,
   SHADOWS
 } from '@/constants/search-constants';
+import { colors } from '@/constants/theme';
 
 // Generate a consistent color from store name for letter avatar
 const getAvatarColor = (name: string): string => {
-  const colors = [
-    '#4F46E5', '#7C3AED', '#DB2777', '#DC2626',
-    '#EA580C', '#D97706', '#65A30D', '#059669',
-    '#0891B2', '#2563EB', '#4338CA', '#6D28D9',
+  const avatarColors = [
+    '#4F46E5', colors.brand.purple, colors.deepPink, colors.error,
+    colors.brand.orangeDark, colors.warningScale[700], '#65A30D', colors.successScale[700],
+    colors.cyanDark, colors.brand.blue, '#4338CA', colors.brand.purpleDeep,
   ];
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  return colors[Math.abs(hash) % colors.length];
+  return avatarColors[Math.abs(hash) % avatarColors.length];
 };
 
 const StoreCard: React.FC<StoreCardProps & {
@@ -109,7 +110,7 @@ const StoreCard: React.FC<StoreCardProps & {
             </ThemedText>
             {ratingDisplay && (
               <View style={styles.ratingBadge}>
-                <Ionicons name="star" size={10} color="#FFF" />
+                <Ionicons name="star" size={10} color={colors.background.primary} />
                 <ThemedText style={styles.ratingText}>{ratingDisplay}</ThemedText>
               </View>
             )}
@@ -136,7 +137,7 @@ const StoreCard: React.FC<StoreCardProps & {
             )}
             {store.distance != null && (
               <View style={styles.distanceBadge}>
-                <Ionicons name="navigate" size={10} color="#6B7280" />
+                <Ionicons name="navigate" size={10} color={colors.neutral[500]} />
                 <ThemedText style={styles.distanceText}>
                   {store.distance < 1
                     ? `${Math.round(store.distance * 1000)}m`
@@ -146,13 +147,13 @@ const StoreCard: React.FC<StoreCardProps & {
             )}
             {(store.cashbackPercent ?? 0) > 0 && (
               <View style={styles.cashbackBadge}>
-                <Ionicons name="gift" size={10} color="#059669" />
+                <Ionicons name="gift" size={10} color={colors.successScale[700]} />
                 <ThemedText style={styles.cashbackText}>{store.cashbackPercent}% cashback</ThemedText>
               </View>
             )}
             {store.estimatedDelivery && (
               <View style={styles.deliveryBadge}>
-                <Ionicons name="time" size={10} color="#6366F1" />
+                <Ionicons name="time" size={10} color={colors.brand.indigo} />
                 <ThemedText style={styles.deliveryText}>{store.estimatedDelivery}</ThemedText>
               </View>
             )}
@@ -218,7 +219,7 @@ const createStyles = (screenWidth: number) => {
       borderWidth: 1,
       borderColor: 'rgba(0,0,0,0.04)',
       elevation: 2,
-      shadowColor: '#1a3a52',
+      shadowColor: colors.nileBlue,
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.06,
       shadowRadius: 12,
@@ -241,7 +242,7 @@ const createStyles = (screenWidth: number) => {
       alignItems: 'center',
     },
     letterAvatarText: {
-      color: '#FFFFFF',
+      color: colors.background.primary,
       fontSize: 22,
       fontWeight: '800',
     },
@@ -258,7 +259,7 @@ const createStyles = (screenWidth: number) => {
       width: 14,
       height: 14,
       borderRadius: 7,
-      backgroundColor: '#10B981',
+      backgroundColor: colors.successScale[400],
       borderWidth: 2.5,
       borderColor: COLORS.WHITE,
     },
@@ -283,14 +284,14 @@ const createStyles = (screenWidth: number) => {
     ratingBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#10B981',
+      backgroundColor: colors.successScale[400],
       borderRadius: 8,
       paddingHorizontal: 7,
       paddingVertical: 3,
       gap: 3,
     },
     ratingText: {
-      color: '#FFFFFF',
+      color: colors.background.primary,
       fontSize: 11.5,
       fontWeight: '800',
     },
@@ -325,7 +326,7 @@ const createStyles = (screenWidth: number) => {
     nuqtaPayBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FFF7ED',
+      backgroundColor: colors.tint.orange,
       paddingHorizontal: 8,
       paddingVertical: 3,
       borderRadius: 10,
@@ -341,7 +342,7 @@ const createStyles = (screenWidth: number) => {
     distanceBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#F3F4F6',
+      backgroundColor: colors.neutral[100],
       paddingHorizontal: 8,
       paddingVertical: 3,
       borderRadius: 10,
@@ -350,12 +351,12 @@ const createStyles = (screenWidth: number) => {
     distanceText: {
       fontSize: 10.5,
       fontWeight: '600',
-      color: '#6B7280',
+      color: colors.neutral[500],
     },
     cashbackBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#ECFDF5',
+      backgroundColor: colors.tint.greenLight,
       paddingHorizontal: 8,
       paddingVertical: 3,
       borderRadius: 10,
@@ -366,12 +367,12 @@ const createStyles = (screenWidth: number) => {
     cashbackText: {
       fontSize: 10.5,
       fontWeight: '700',
-      color: '#059669',
+      color: colors.successScale[700],
     },
     deliveryBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#EEF2FF',
+      backgroundColor: colors.indigoMist,
       paddingHorizontal: 8,
       paddingVertical: 3,
       borderRadius: 10,
@@ -394,7 +395,7 @@ const createStyles = (screenWidth: number) => {
       paddingTop: SPACING.SM,
       paddingBottom: SPACING.SM,
       borderTopWidth: 1,
-      borderTopColor: '#F3F4F6',
+      borderTopColor: colors.neutral[100],
       backgroundColor: '#FAFBFC',
     },
     quickActionsContainer: {
@@ -402,7 +403,7 @@ const createStyles = (screenWidth: number) => {
       paddingBottom: SPACING.SM,
       paddingTop: SPACING.XS,
       borderTopWidth: 1,
-      borderTopColor: '#F3F4F6',
+      borderTopColor: colors.neutral[100],
     },
   });
 };

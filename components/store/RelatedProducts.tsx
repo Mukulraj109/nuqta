@@ -14,6 +14,7 @@ import SkeletonLoader from '@/components/common/SkeletonLoader';
 import productsService from '@/services/productsApi';
 import { useToast } from '@/hooks/useToast';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 interface RelatedProductsProps {
   productId: string;
@@ -153,7 +154,7 @@ function RelatedProducts({
       >
         {retrying ? (
           <>
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={colors.background.primary} />
             <Text style={styles.retryText}>Retrying...</Text>
           </>
         ) : (
@@ -231,12 +232,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   viewAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   listContent: {
     paddingHorizontal: 16,
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
   skeletonCard: {
     width: CARD_WIDTH,
     marginRight: CARD_SPACING,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     ...Platform.select({
@@ -296,13 +297,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
     textAlign: 'center',
   },
   emptyDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -321,13 +322,13 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#EF4444',
+    color: colors.error,
     marginBottom: 8,
     textAlign: 'center',
   },
   errorDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 20,
@@ -336,14 +337,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
     minWidth: 120,
     ...Platform.select({
       ios: {
-        shadowColor: '#7C3AED',
+        shadowColor: colors.brand.purple,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
@@ -354,7 +355,7 @@ const styles = StyleSheet.create({
     }),
   },
   retryText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontSize: 14,
     fontWeight: '600',
     marginLeft: 8,

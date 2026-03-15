@@ -22,6 +22,7 @@ import MerchantVideoSection from '@/components/playPage/MerchantVideoSection';
 import ArticleSection from '@/components/playPage/ArticleSection';
 import UGCVideoSection from '@/components/playPage/UGCVideoSection';
 import logger from '@/utils/logger';
+import { colors } from '@/constants/theme';
 
 export default function PlayScreen() {
   const router = useRouter();
@@ -239,13 +240,13 @@ export default function PlayScreen() {
         {/* Quick Actions */}
         <View style={styles.quickActionsRow}>
           <Pressable style={styles.quickActionButton} onPress={() => router.push('/social/reels')}>
-            <LinearGradient colors={['#EC4899', '#DB2777']} style={styles.quickActionGradient}>
+            <LinearGradient colors={[colors.brand.pink, colors.deepPink]} style={styles.quickActionGradient}>
               <Ionicons name="videocam" size={20} color={Colors.text.inverse} />
               <ThemedText style={styles.quickActionText}>Reels</ThemedText>
             </LinearGradient>
           </Pressable>
           <Pressable style={styles.quickActionButton} onPress={() => router.push('/social/upload')}>
-            <LinearGradient colors={['#8B5CF6', '#7C3AED']} style={styles.quickActionGradient}>
+            <LinearGradient colors={[colors.brand.purpleLight, colors.brand.purple]} style={styles.quickActionGradient}>
               <Ionicons name="add-circle" size={20} color={Colors.text.inverse} />
               <ThemedText style={styles.quickActionText}>Create</ThemedText>
             </LinearGradient>

@@ -24,6 +24,7 @@ import realVouchersApi from '../../services/realVouchersApi';
 import couponService from '../../services/couponApi';
 import type { Coupon } from '../../services/couponApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // ─── Types ──────────────────────────────────────────────────
 type ActiveTab = 'gift-cards' | 'coupons';
@@ -358,7 +359,7 @@ export default function BuyCouponsPage() {
     if (giftCardsLoadingMore) {
       return (
         <View style={styles.footerLoader}>
-          <ActivityIndicator size="small" color="#D4A07A" />
+          <ActivityIndicator size="small" color={colors.brand.caramel} />
           <Text style={styles.footerText}>Loading more...</Text>
         </View>
       );
@@ -395,7 +396,7 @@ export default function BuyCouponsPage() {
     return (
       <View style={styles.emptyContainer}>
         <View style={styles.emptyIconWrap}>
-          <Ionicons name={debouncedSearch.length >= 2 ? 'search-outline' : 'gift-outline'} size={28} color="#D4A07A" />
+          <Ionicons name={debouncedSearch.length >= 2 ? 'search-outline' : 'gift-outline'} size={28} color={colors.brand.caramel} />
         </View>
         <Text style={styles.emptyTitle}>
           {debouncedSearch.length >= 2 ? 'No gift cards found' : 'No gift cards yet'}
@@ -440,7 +441,7 @@ export default function BuyCouponsPage() {
     return (
       <View style={styles.emptyContainer}>
         <View style={styles.emptyIconWrap}>
-          <Ionicons name={debouncedSearch.length >= 2 ? 'search-outline' : 'pricetag-outline'} size={28} color="#D4A07A" />
+          <Ionicons name={debouncedSearch.length >= 2 ? 'search-outline' : 'pricetag-outline'} size={28} color={colors.brand.caramel} />
         </View>
         <Text style={styles.emptyTitle}>
           {debouncedSearch.length >= 2 ? 'No coupons found' : 'No coupons available'}
@@ -464,7 +465,7 @@ export default function BuyCouponsPage() {
         <View style={[styles.stickyHeader, { paddingTop: skeletonTop }]}>
           <View style={styles.headerRow}>
             <Pressable onPress={() => router.back()} style={styles.backBtn}>
-              <Ionicons name="chevron-back" size={20} color="#1a3a52" />
+              <Ionicons name="chevron-back" size={20} color={colors.nileBlue} />
             </Pressable>
             <Text style={styles.headerTitle}>Gift Cards & Coupons</Text>
             <View style={{ width: 36 }} />
@@ -507,7 +508,7 @@ export default function BuyCouponsPage() {
       <View style={[styles.stickyHeader, { paddingTop: headerTop }]}>
         <View style={styles.headerRow}>
           <Pressable onPress={() => router.back()} style={styles.backBtn}>
-            <Ionicons name="chevron-back" size={20} color="#1a3a52" />
+            <Ionicons name="chevron-back" size={20} color={colors.nileBlue} />
           </Pressable>
           <Text style={styles.headerTitle}>Gift Cards & Coupons</Text>
           <View style={{ width: 36 }} />
@@ -515,7 +516,7 @@ export default function BuyCouponsPage() {
 
         {/* Search */}
         <View style={[styles.searchBar, searchFocused && styles.searchBarFocused]}>
-          <Ionicons name="search" size={15} color={searchFocused ? '#D4A07A' : '#94A3B8'} />
+          <Ionicons name="search" size={15} color={searchFocused ? colors.brand.caramel : '#94A3B8'} />
           <TextInput
             style={styles.searchInput}
             value={searchQuery}
@@ -590,8 +591,8 @@ export default function BuyCouponsPage() {
             <RefreshControl
               refreshing={giftCardsRefreshing}
               onRefresh={handleGiftCardRefresh}
-              tintColor="#D4A07A"
-              colors={['#D4A07A']}
+              tintColor={colors.brand.caramel}
+              colors={[colors.brand.caramel]}
             />
           }
           onEndReached={handleGiftCardLoadMore}
@@ -617,8 +618,8 @@ export default function BuyCouponsPage() {
             <RefreshControl
               refreshing={couponsRefreshing}
               onRefresh={handleCouponRefresh}
-              tintColor="#D4A07A"
-              colors={['#D4A07A']}
+              tintColor={colors.brand.caramel}
+              colors={[colors.brand.caramel]}
             />
           }
           initialNumToRender={10}
@@ -807,7 +808,7 @@ const CouponCard = React.memo(({
             </View>
             {coupon.isFeatured && (
               <View style={styles.couponFeaturedBadge}>
-                <Ionicons name="star" size={10} color="#E8B896" />
+                <Ionicons name="star" size={10} color={colors.brand.sand} />
                 <Text style={styles.couponFeaturedText}>Featured</Text>
               </View>
             )}
@@ -841,7 +842,7 @@ const CouponCard = React.memo(({
           {/* Bottom row: code + claim button */}
           <View style={styles.couponBottomRow}>
             <View style={styles.couponCodeBox}>
-              <Ionicons name="ticket-outline" size={13} color={isClaimed ? Colors.success : '#D4A07A'} />
+              <Ionicons name="ticket-outline" size={13} color={isClaimed ? Colors.success : colors.brand.caramel} />
               <Text style={styles.couponCodeText}>
                 {isClaimed ? coupon.couponCode : maskedCode}
               </Text>
@@ -880,12 +881,12 @@ const CouponCard = React.memo(({
               style={styles.claimedGuide}
              
             >
-              <Ionicons name="checkmark-circle" size={14} color="#22C55E" />
+              <Ionicons name="checkmark-circle" size={14} color={colors.success} />
               <Text style={styles.claimedGuideText}>
                 Coupon saved! Apply it at checkout or
               </Text>
               <Text style={styles.claimedGuideLink}> view my coupons</Text>
-              <Ionicons name="chevron-forward" size={12} color="#E8B896" />
+              <Ionicons name="chevron-forward" size={12} color={colors.brand.sand} />
             </Pressable>
           )}
         </View>
@@ -1021,7 +1022,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   searchBarFocused: {
-    borderColor: '#E8B896',
+    borderColor: colors.brand.sand,
     backgroundColor: '#FBF9F6',
   },
   searchInput: {
@@ -1111,7 +1112,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    backgroundColor: '#E8B896',
+    backgroundColor: colors.brand.sand,
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: BorderRadius.sm,
@@ -1180,7 +1181,7 @@ const styles = StyleSheet.create({
   cashbackRate: {
     ...Typography.h4,
     fontWeight: '800',
-    color: '#E8B896',
+    color: colors.brand.sand,
     letterSpacing: -0.5,
   },
   cashbackLabel: {
@@ -1227,7 +1228,7 @@ const styles = StyleSheet.create({
   },
   couponAccent: {
     width: 5,
-    backgroundColor: '#E8B896',
+    backgroundColor: colors.brand.sand,
   },
   couponContent: {
     flex: 1,
@@ -1259,7 +1260,7 @@ const styles = StyleSheet.create({
   couponFeaturedText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#E8B896',
+    color: colors.brand.sand,
   },
   couponTitle: {
     fontSize: 15,
@@ -1342,7 +1343,7 @@ const styles = StyleSheet.create({
   claimedGuideLink: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#E8B896',
+    color: colors.brand.sand,
   },
 
   // ── Footer ──

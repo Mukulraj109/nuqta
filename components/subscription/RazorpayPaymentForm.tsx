@@ -16,6 +16,7 @@ import { ThemedText } from '@/components/ThemedText';
 import razorpayService from '@/services/razorpayService';
 import type { RazorpayPaymentData } from '@/types/payment.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface RazorpayPaymentFormProps {
   visible: boolean;
@@ -140,14 +141,14 @@ function RazorpayPaymentForm({
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <LinearGradient
-            colors={['#8B5CF6', '#A855F7', '#EC4899']}
+            colors={[colors.brand.purpleLight, colors.brand.purpleMedium, colors.brand.pink]}
             style={styles.modalHeader}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
           >
             <ThemedText style={styles.modalTitle}>Subscription Payment</ThemedText>
             <Pressable onPress={handleClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#FFFFFF" />
+              <Ionicons name="close" size={24} color={colors.background.primary} />
             </Pressable>
           </LinearGradient>
 
@@ -175,7 +176,7 @@ function RazorpayPaymentForm({
             {/* Status Display */}
             {paymentStatus === 'processing' && (
               <View style={styles.statusContainer}>
-                <ActivityIndicator size="large" color="#8B5CF6" />
+                <ActivityIndicator size="large" color={colors.brand.purpleLight} />
                 <ThemedText style={styles.statusText}>Processing Payment...</ThemedText>
                 <ThemedText style={styles.statusSubtext}>
                   Please complete the payment in the Razorpay window
@@ -185,18 +186,18 @@ function RazorpayPaymentForm({
 
             {paymentStatus === 'failed' && error && (
               <View style={styles.errorContainer}>
-                <Ionicons name="close-circle" size={48} color="#EF4444" />
+                <Ionicons name="close-circle" size={48} color={colors.error} />
                 <ThemedText style={styles.errorTitle}>Payment Failed</ThemedText>
                 <ThemedText style={styles.errorText}>{error}</ThemedText>
 
                 <Pressable style={styles.retryButton} onPress={handleRetry}>
                   <LinearGradient
-                    colors={['#8B5CF6', '#7C3AED']}
+                    colors={[colors.brand.purpleLight, colors.brand.purple]}
                     style={styles.retryButtonGradient}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                   >
-                    <Ionicons name="refresh" size={20} color="#FFFFFF" />
+                    <Ionicons name="refresh" size={20} color={colors.background.primary} />
                     <ThemedText style={styles.retryButtonText}>Retry Payment</ThemedText>
                   </LinearGradient>
                 </Pressable>
@@ -205,7 +206,7 @@ function RazorpayPaymentForm({
 
             {!isConfigured && (
               <View style={styles.errorContainer}>
-                <Ionicons name="alert-circle" size={48} color="#F59E0B" />
+                <Ionicons name="alert-circle" size={48} color={colors.warningScale[400]} />
                 <ThemedText style={styles.errorTitle}>Configuration Error</ThemedText>
                 <ThemedText style={styles.errorText}>
                   Razorpay is not configured. Please contact support.
@@ -223,7 +224,7 @@ function RazorpayPaymentForm({
 
           {/* Security Badge */}
           <View style={styles.securityBadge}>
-            <Ionicons name="shield-checkmark" size={16} color="#ffcd57" />
+            <Ionicons name="shield-checkmark" size={16} color={colors.lightMustard} />
             <ThemedText style={styles.securityText}>
               Secured by Razorpay
             </ThemedText>
@@ -243,7 +244,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     width: '100%',
     maxWidth: 500,
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalTitle: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 20,
     fontWeight: 'bold',
     flex: 1,
@@ -273,7 +274,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   detailsContainer: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
@@ -286,16 +287,16 @@ const styles = StyleSheet.create({
   },
   detailLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   detailValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   totalRow: {
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     paddingTop: 12,
     marginTop: 8,
     marginBottom: 0,
@@ -303,12 +304,12 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   totalValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   statusContainer: {
     alignItems: 'center',
@@ -317,12 +318,12 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginTop: 16,
   },
   statusSubtext: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginTop: 8,
   },
@@ -333,12 +334,12 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     marginTop: 16,
   },
   errorText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginTop: 8,
     marginBottom: 20,
@@ -357,19 +358,19 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
   },
   cancelButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',
     marginTop: 12,
   },
   cancelButtonText: {
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontSize: 16,
     fontWeight: '600',
   },
@@ -378,12 +379,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     gap: 6,
   },
   securityText: {
     fontSize: 12,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
 });

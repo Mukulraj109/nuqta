@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export default function SurveyCompletePage() {
   const router = useRouter();
@@ -103,7 +104,7 @@ export default function SurveyCompletePage() {
             ]}
           >
             <LinearGradient
-              colors={['#ffcd57', '#ffcd57']}
+              colors={[colors.lightMustard, colors.lightMustard]}
               style={styles.successGradient}
             >
               <Ionicons name="checkmark" size={56} color={Colors.text.inverse} />
@@ -171,7 +172,7 @@ export default function SurveyCompletePage() {
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
               <View style={styles.statIcon}>
-                <Ionicons name="document-text-outline" size={20} color="#8B5CF6" />
+                <Ionicons name="document-text-outline" size={20} color={colors.brand.purpleLight} />
               </View>
               <Text style={styles.statValue}>{surveyTitle || 'Survey'}</Text>
               <Text style={styles.statLabel}>Completed</Text>
@@ -215,7 +216,7 @@ export default function SurveyCompletePage() {
             onPress={handleBackToSurveys}
           >
             <LinearGradient
-              colors={['#3B82F6', '#8B5CF6']}
+              colors={[colors.infoScale[400], colors.brand.purpleLight]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.primaryButtonGradient}

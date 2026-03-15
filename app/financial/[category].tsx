@@ -15,16 +15,17 @@ import { ANALYTICS_EVENTS } from '@/services/analytics/events';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 
 // Fallback data
 const fallbackCategoryData: Record<string, any> = {
-  bills: { title: 'Bill Payment', icon: '📄', gradientColors: ['#3B82F6', '#2563EB'] },
-  ott: { title: 'OTT & DTH', icon: '📺', gradientColors: ['#EF4444', '#DC2626'] },
-  recharge: { title: 'Mobile Recharge', icon: '📱', gradientColors: ['#22C55E', '#16A34A'] },
-  gold: { title: 'Digital Gold', icon: '🪙', gradientColors: ['#F59E0B', '#D97706'] },
-  insurance: { title: 'Insurance', icon: '🛡️', gradientColors: ['#8B5CF6', '#7C3AED'] },
-  offers: { title: 'Offers', icon: '🎁', gradientColors: ['#EC4899', '#DB2777'] },
+  bills: { title: 'Bill Payment', icon: '📄', gradientColors: [colors.infoScale[400], colors.brand.blue] },
+  ott: { title: 'OTT & DTH', icon: '📺', gradientColors: [colors.error, colors.error] },
+  recharge: { title: 'Mobile Recharge', icon: '📱', gradientColors: [colors.success, colors.brand.greenDark] },
+  gold: { title: 'Digital Gold', icon: '🪙', gradientColors: [colors.warningScale[400], colors.warningScale[700]] },
+  insurance: { title: 'Insurance', icon: '🛡️', gradientColors: [colors.brand.purpleLight, colors.brand.purple] },
+  offers: { title: 'Offers', icon: '🎁', gradientColors: [colors.brand.pink, colors.deepPink] },
 };
 
 const FinancialCategoryPage: React.FC = () => {

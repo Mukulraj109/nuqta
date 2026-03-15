@@ -17,6 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import couponService, { UserCoupon } from '@/services/couponApi';
 import vouchersService from '@/services/realVouchersApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface VoucherOption {
   id: string;
@@ -233,19 +234,19 @@ function VoucherSelectionModal({
         <LinearGradient
           colors={
             isCurrentlyApplied
-              ? ['#ffcd57', '#1a3a52']
+              ? [colors.lightMustard, colors.nileBlue]
               : !isEligible
-              ? ['#9CA3AF', '#6B7280']
+              ? [colors.neutral[400], colors.neutral[500]]
               : voucher.type === 'coupon'
-              ? ['#8B5CF6', '#7C3AED']
-              : ['#F59E0B', '#D97706']
+              ? [colors.brand.purpleLight, colors.brand.purple]
+              : [colors.warningScale[400], colors.warningScale[700]]
           }
           style={styles.voucherGradient}
         >
           {/* Best Offer Badge */}
           {voucher.isBestOffer && isEligible && !isCurrentlyApplied && (
             <View style={styles.bestOfferBadge}>
-              <Ionicons name="star" size={12} color="#FFF" />
+              <Ionicons name="star" size={12} color={colors.background.primary} />
               <ThemedText style={styles.bestOfferText}>Best Offer</ThemedText>
             </View>
           )}
@@ -261,7 +262,7 @@ function VoucherSelectionModal({
           <View style={styles.codeSection}>
             <ThemedText style={styles.code}>{voucher.code}</ThemedText>
             {isCurrentlyApplied && (
-              <Ionicons name="checkmark-circle" size={20} color="#FFF" />
+              <Ionicons name="checkmark-circle" size={20} color={colors.background.primary} />
             )}
           </View>
 
@@ -332,7 +333,7 @@ function VoucherSelectionModal({
               Apply Coupon or Voucher
             </ThemedText>
             <Pressable onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#374151" />
+              <Ionicons name="close" size={24} color={colors.neutral[700]} />
             </Pressable>
           </View>
 
@@ -341,7 +342,7 @@ function VoucherSelectionModal({
             <TextInput
               style={styles.codeInput}
               placeholder="Enter coupon or voucher code"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               value={manualCode}
               onChangeText={setManualCode}
               autoCapitalize="characters"
@@ -395,7 +396,7 @@ function VoucherSelectionModal({
               style={styles.bestOfferBanner}
               onPress={() => handleVoucherSelect(bestOffer)}
             >
-              <Ionicons name="star" size={20} color="#F59E0B" />
+              <Ionicons name="star" size={20} color={colors.warningScale[400]} />
               <View style={styles.bestOfferContent}>
                 <ThemedText style={styles.bestOfferBannerTitle}>
                   Best Offer: {bestOffer.code}
@@ -404,7 +405,7 @@ function VoucherSelectionModal({
                   Save {currencySymbol}{calculateDiscount(bestOffer).toFixed(0)} on this order
                 </ThemedText>
               </View>
-              <Ionicons name="chevron-forward" size={20} color="#8B5CF6" />
+              <Ionicons name="chevron-forward" size={20} color={colors.brand.purpleLight} />
             </Pressable>
           )}
 
@@ -412,12 +413,12 @@ function VoucherSelectionModal({
           <ScrollView style={styles.voucherList} showsVerticalScrollIndicator={false}>
             {loading ? (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#8B5CF6" />
+                <ActivityIndicator size="large" color={colors.brand.purpleLight} />
                 <ThemedText style={styles.loadingText}>Loading offers...</ThemedText>
               </View>
             ) : filteredVouchers.length === 0 ? (
               <View style={styles.emptyContainer}>
-                <Ionicons name="ticket-outline" size={64} color="#9CA3AF" />
+                <Ionicons name="ticket-outline" size={64} color={colors.neutral[400]} />
                 <ThemedText style={styles.emptyTitle}>
                   No {activeTab === 'all' ? 'offers' : activeTab} available
                 </ThemedText>
@@ -434,7 +435,7 @@ function VoucherSelectionModal({
           {currentVoucher && (
             <View style={styles.currentApplied}>
               <View style={styles.currentInfo}>
-                <Ionicons name="checkmark-circle" size={20} color="#ffcd57" />
+                <Ionicons name="checkmark-circle" size={20} color={colors.lightMustard} />
                 <View style={styles.currentText}>
                   <ThemedText style={styles.currentCode}>
                     {currentVoucher.code} Applied
@@ -462,7 +463,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '85%',
@@ -474,12 +475,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   closeButton: {
     padding: 4,
@@ -492,23 +493,23 @@ const styles = StyleSheet.create({
   },
   codeInput: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 14,
-    color: '#111827',
+    color: colors.neutral[900],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   applyButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 12,
     paddingHorizontal: 24,
     justifyContent: 'center',
   },
   applyButtonText: {
-    color: '#FFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -526,14 +527,14 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   activeTab: {
-    borderBottomColor: '#8B5CF6',
+    borderBottomColor: colors.brand.purpleLight,
   },
   tabText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   activeTabText: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
   },
   bestOfferBanner: {
@@ -546,7 +547,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#F59E0B',
+    borderColor: colors.warningScale[400],
   },
   bestOfferContent: {
     flex: 1,
@@ -554,12 +555,12 @@ const styles = StyleSheet.create({
   bestOfferBannerTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     marginBottom: 2,
   },
   bestOfferBannerDesc: {
     fontSize: 12,
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   voucherList: {
     paddingHorizontal: 20,
@@ -577,7 +578,7 @@ const styles = StyleSheet.create({
   },
   appliedCard: {
     borderWidth: 2,
-    borderColor: '#1a3a52',
+    borderColor: colors.nileBlue,
   },
   ineligibleCard: {
     opacity: 0.6,
@@ -600,7 +601,7 @@ const styles = StyleSheet.create({
   bestOfferText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   typeBadge: {
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
@@ -613,7 +614,7 @@ const styles = StyleSheet.create({
   typeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   codeSection: {
     flexDirection: 'row',
@@ -624,41 +625,41 @@ const styles = StyleSheet.create({
   code: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
     letterSpacing: 1,
   },
   discountValue: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#FFF',
+    color: colors.background.primary,
     marginBottom: 4,
   },
   maxDiscount: {
     fontSize: 12,
-    color: '#FFF',
+    color: colors.background.primary,
     opacity: 0.9,
     marginBottom: 8,
   },
   voucherTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
     marginBottom: 4,
   },
   voucherDescription: {
     fontSize: 12,
-    color: '#FFF',
+    color: colors.background.primary,
     opacity: 0.9,
     marginBottom: 8,
   },
   minOrder: {
     fontSize: 12,
-    color: '#FFF',
+    color: colors.background.primary,
     opacity: 0.8,
     marginBottom: 8,
   },
   minOrderMet: {
-    color: '#FFF',
+    color: colors.background.primary,
     opacity: 1,
     fontWeight: '600',
   },
@@ -673,11 +674,11 @@ const styles = StyleSheet.create({
   savingsText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   expiry: {
     fontSize: 11,
-    color: '#FFF',
+    color: colors.background.primary,
     opacity: 0.7,
   },
   loadingContainer: {
@@ -686,7 +687,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 12,
   },
   emptyContainer: {
@@ -696,25 +697,25 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#374151',
+    color: colors.neutral[700],
     marginTop: 16,
     marginBottom: 4,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   currentApplied: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     marginHorizontal: 20,
     marginTop: 16,
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#1a3a52',
+    borderColor: colors.nileBlue,
   },
   currentInfo: {
     flexDirection: 'row',
@@ -728,15 +729,15 @@ const styles = StyleSheet.create({
   currentCode: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 2,
   },
   currentSavings: {
     fontSize: 12,
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   removeButton: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
@@ -744,7 +745,7 @@ const styles = StyleSheet.create({
   removeButtonText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#DC2626',
+    color: colors.error,
   },
 });
 

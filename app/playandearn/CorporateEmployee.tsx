@@ -16,6 +16,7 @@ import programApi from '../../services/programApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -201,7 +202,7 @@ const CorporateEmployee = () => {
       case 'Easy':
         return { color: Colors.success, bg: 'rgba(16, 185, 129, 0.1)', border: 'rgba(16, 185, 129, 0.3)' };
       case 'Medium':
-        return { color: '#F97316', bg: 'rgba(249, 115, 22, 0.1)', border: 'rgba(249, 115, 22, 0.3)' };
+        return { color: colors.brand.orange, bg: 'rgba(249, 115, 22, 0.1)', border: 'rgba(249, 115, 22, 0.3)' };
       case 'Hard':
         return { color: Colors.error, bg: 'rgba(239, 68, 68, 0.1)', border: 'rgba(239, 68, 68, 0.3)' };
       default:
@@ -210,7 +211,7 @@ const CorporateEmployee = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#000' : Colors.background.primary }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? colors.text.primary : Colors.background.primary }]}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={[styles.header, { backgroundColor: isDark ? 'rgba(0,0,0,0.95)' : 'rgba(255,255,255,0.95)' }]}>
@@ -252,7 +253,7 @@ const CorporateEmployee = () => {
               </View>
               <View style={[styles.statCard, { backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : Colors.background.primary }]}>
                 <View style={styles.statHeader}>
-                  <Ionicons name="people" size={16} color="#A855F7" />
+                  <Ionicons name="people" size={16} color={colors.brand.purpleMedium} />
                   <Text style={[styles.statLabel, { color: isDark ? Colors.text.tertiary : Colors.text.tertiary }]}>Referrals</Text>
                 </View>
                 <Text style={[styles.statValue, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>{myStats.referrals}</Text>
@@ -324,16 +325,16 @@ const CorporateEmployee = () => {
                   </View>
 
                   {challenge.status === 'active' && (
-                    <View style={[styles.progressContainer, { backgroundColor: isDark ? 'rgba(59, 130, 246, 0.1)' : Colors.infoScale[50], borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : '#BFDBFE' }]}>
+                    <View style={[styles.progressContainer, { backgroundColor: isDark ? 'rgba(59, 130, 246, 0.1)' : Colors.infoScale[50], borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : colors.infoScale[200] }]}>
                       <View style={styles.progressHeader}>
                         <Text style={[styles.progressLabel, { color: isDark ? '#93C5FD' : '#1E40AF' }]}>Progress</Text>
-                        <Text style={[styles.progressValue, { color: isDark ? '#60A5FA' : Colors.info }]}>
+                        <Text style={[styles.progressValue, { color: isDark ? colors.infoScale[400] : Colors.info }]}>
                           {challenge.progress}/{challenge.total}
                         </Text>
                       </View>
                       <View style={[styles.progressBar, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : Colors.border.default }]}>
                         <LinearGradient
-                          colors={[Colors.info, '#A855F7']}
+                          colors={[Colors.info, colors.brand.purpleMedium]}
                           start={{ x: 0, y: 0 }}
                           end={{ x: 1, y: 0 }}
                           style={[styles.progressFill, { width: `${(challenge.progress / challenge.total) * 100}%` }]}
@@ -355,7 +356,7 @@ const CorporateEmployee = () => {
                   )}
 
                   {challenge.bonus && (
-                    <View style={[styles.bonusContainer, { backgroundColor: isDark ? 'rgba(245, 158, 11, 0.1)' : '#FFF7ED', borderColor: isDark ? 'rgba(245, 158, 11, 0.3)' : '#FED7AA' }]}>
+                    <View style={[styles.bonusContainer, { backgroundColor: isDark ? 'rgba(245, 158, 11, 0.1)' : colors.tint.orange, borderColor: isDark ? 'rgba(245, 158, 11, 0.3)' : '#FED7AA' }]}>
                       <Ionicons name="gift" size={16} color={Colors.warning} />
                       <Text style={[styles.bonusText, { color: Colors.warning }]}>{challenge.bonus}</Text>
                     </View>
@@ -378,13 +379,13 @@ const CorporateEmployee = () => {
                       </View>
                       {challenge.brandedReward > 0 && (
                         <View style={styles.rewardItem}>
-                          <Ionicons name="bag" size={20} color="#A855F7" />
-                          <Text style={[styles.rewardText, { color: '#A855F7' }]}>+{challenge.brandedReward}</Text>
+                          <Ionicons name="bag" size={20} color={colors.brand.purpleMedium} />
+                          <Text style={[styles.rewardText, { color: colors.brand.purpleMedium }]}>+{challenge.brandedReward}</Text>
                         </View>
                       )}
                     </View>
                     <Pressable style={styles.startButton}>
-                      <LinearGradient colors={[Colors.info, '#A855F7']} style={styles.startButtonGradient}>
+                      <LinearGradient colors={[Colors.info, colors.brand.purpleMedium]} style={styles.startButtonGradient}>
                         <Text style={styles.startButtonText}>
                           {challenge.status === 'active' ? 'Continue' : 'Start'}
                         </Text>
@@ -443,14 +444,14 @@ const CorporateEmployee = () => {
               </View>
             ))}
 
-            <View style={[styles.ctaCard, { backgroundColor: isDark ? 'rgba(59, 130, 246, 0.1)' : Colors.infoScale[50], borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : '#BFDBFE' }]}>
+            <View style={[styles.ctaCard, { backgroundColor: isDark ? 'rgba(59, 130, 246, 0.1)' : Colors.infoScale[50], borderColor: isDark ? 'rgba(59, 130, 246, 0.3)' : colors.infoScale[200] }]}>
               <Ionicons name="business" size={48} color={Colors.info} style={styles.ctaIcon} />
               <Text style={[styles.ctaTitle, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>Don't see your company?</Text>
               <Text style={[styles.ctaText, { color: isDark ? Colors.text.tertiary : Colors.text.tertiary }]}>
                 Request your HR to partner with ${BRAND.APP_NAME} for exclusive employee perks
               </Text>
               <Pressable style={styles.ctaButton}>
-                <LinearGradient colors={[Colors.info, '#A855F7']} style={styles.ctaButtonGradient}>
+                <LinearGradient colors={[Colors.info, colors.brand.purpleMedium]} style={styles.ctaButtonGradient}>
                   <Text style={styles.ctaButtonText}>Request Partnership</Text>
                 </LinearGradient>
               </Pressable>

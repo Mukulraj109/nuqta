@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { colors } from '@/constants/theme';
 
 interface EventSearchBarProps {
   searchQuery: string;
@@ -41,9 +42,9 @@ function EventSearchBar({
 
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
-  const borderColor = useThemeColor({ light: '#E5E7EB', dark: '#374151' }, 'border');
+  const borderColor = useThemeColor({ light: colors.neutral[200], dark: colors.neutral[700] }, 'border');
   const tintColor = useThemeColor({}, 'tint');
-  const placeholderColor = useThemeColor({ light: '#9CA3AF', dark: '#6B7280' }, 'text');
+  const placeholderColor = useThemeColor({ light: colors.neutral[400], dark: colors.neutral[500] }, 'text');
 
   useEffect(() => {
     Animated.timing(animatedValue, {
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     maxHeight: 200,
     zIndex: 1000,
     ...Platform.select({
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   suggestionIcon: {
     marginRight: 12,

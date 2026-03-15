@@ -14,6 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 /**
  * StockNotificationModal Component
@@ -138,10 +139,10 @@ export const StockNotificationModal: React.FC<StockNotificationModalProps> = ({
               {/* Header Icon */}
               <View style={styles.iconContainer}>
                 <LinearGradient
-                  colors={['#8B5CF6', '#6D28D9']}
+                  colors={[colors.brand.purpleLight, colors.brand.purpleDeep]}
                   style={styles.iconGradient}
                 >
-                  <Ionicons name="notifications-outline" size={40} color="#FFF" />
+                  <Ionicons name="notifications-outline" size={40} color={colors.background.primary} />
                 </LinearGradient>
               </View>
 
@@ -164,13 +165,13 @@ export const StockNotificationModal: React.FC<StockNotificationModalProps> = ({
               {/* Email Input */}
               <View style={styles.inputGroup}>
                 <View style={styles.inputLabelRow}>
-                  <Ionicons name="mail-outline" size={18} color="#6B7280" />
+                  <Ionicons name="mail-outline" size={18} color={colors.neutral[500]} />
                   <ThemedText style={styles.inputLabel}>Email Address *</ThemedText>
                 </View>
                 <TextInput
                   style={styles.input}
                   placeholder="your.email@example.com"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.neutral[400]}
                   value={email}
                   onChangeText={(text) => {
                     setEmail(text);
@@ -185,13 +186,13 @@ export const StockNotificationModal: React.FC<StockNotificationModalProps> = ({
               {/* Phone Input (Optional) */}
               <View style={styles.inputGroup}>
                 <View style={styles.inputLabelRow}>
-                  <Ionicons name="call-outline" size={18} color="#6B7280" />
+                  <Ionicons name="call-outline" size={18} color={colors.neutral[500]} />
                   <ThemedText style={styles.inputLabel}>Phone Number (Optional)</ThemedText>
                 </View>
                 <TextInput
                   style={styles.input}
                   placeholder="+1 234 567 8900"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.neutral[400]}
                   value={phone}
                   onChangeText={(text) => {
                     setPhone(text);
@@ -204,7 +205,7 @@ export const StockNotificationModal: React.FC<StockNotificationModalProps> = ({
               {/* Error Message */}
               {error && (
                 <View style={styles.errorContainer}>
-                  <Ionicons name="alert-circle" size={16} color="#EF4444" />
+                  <Ionicons name="alert-circle" size={16} color={colors.error} />
                   <ThemedText style={styles.errorText}>{error}</ThemedText>
                 </View>
               )}
@@ -217,14 +218,14 @@ export const StockNotificationModal: React.FC<StockNotificationModalProps> = ({
                
               >
                 <LinearGradient
-                  colors={['#8B5CF6', '#6D28D9']}
+                  colors={[colors.brand.purpleLight, colors.brand.purpleDeep]}
                   style={styles.buttonGradient}
                 >
                   {isSubmitting ? (
-                    <ActivityIndicator size="small" color="#FFF" />
+                    <ActivityIndicator size="small" color={colors.background.primary} />
                   ) : (
                     <>
-                      <Ionicons name="notifications" size={20} color="#FFF" />
+                      <Ionicons name="notifications" size={20} color={colors.background.primary} />
                       <ThemedText style={styles.subscribeButtonText}>
                         Notify Me
                       </ThemedText>
@@ -252,10 +253,10 @@ export const StockNotificationModal: React.FC<StockNotificationModalProps> = ({
             <View style={styles.successContainer}>
               <View style={styles.successIconContainer}>
                 <LinearGradient
-                  colors={['#10B981', '#059669']}
+                  colors={[colors.successScale[400], colors.successScale[700]]}
                   style={styles.successIconGradient}
                 >
-                  <Ionicons name="checkmark-circle" size={60} color="#FFF" />
+                  <Ionicons name="checkmark-circle" size={60} color={colors.background.primary} />
                 </LinearGradient>
               </View>
 
@@ -265,7 +266,7 @@ export const StockNotificationModal: React.FC<StockNotificationModalProps> = ({
               </ThemedText>
 
               <View style={styles.successInfo}>
-                <Ionicons name="mail" size={20} color="#8B5CF6" />
+                <Ionicons name="mail" size={20} color={colors.brand.purpleLight} />
                 <ThemedText style={styles.successEmail}>{email}</ThemedText>
               </View>
             </View>
@@ -277,7 +278,7 @@ export const StockNotificationModal: React.FC<StockNotificationModalProps> = ({
             onPress={handleClose}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons name="close" size={24} color="#9CA3AF" />
+            <Ionicons name="close" size={24} color={colors.neutral[400]} />
           </Pressable>
         </View>
       </KeyboardAvoidingView>
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: modalWidth,
     maxHeight: '80%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     overflow: 'hidden',
     shadowColor: '#000',
@@ -327,13 +328,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 24,
     lineHeight: 20,
@@ -343,22 +344,22 @@ const styles = StyleSheet.create({
   // Product Info
   productInfo: {
     width: '100%',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 12,
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   productName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 4,
   },
   variantDetails: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // Input
@@ -375,25 +376,25 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   input: {
     width: '100%',
     height: 48,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderRadius: 10,
     paddingHorizontal: 16,
     fontSize: 15,
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   // Error
   errorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderRadius: 8,
@@ -424,7 +425,7 @@ const styles = StyleSheet.create({
   subscribeButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   buttonDisabled: {
     opacity: 0.6,
@@ -438,11 +439,11 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   privacyNote: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     lineHeight: 16,
   },
@@ -465,13 +466,13 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
     textAlign: 'center',
   },
   successSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 24,
     lineHeight: 20,
@@ -480,7 +481,7 @@ const styles = StyleSheet.create({
   successInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 10,
@@ -489,7 +490,7 @@ const styles = StyleSheet.create({
   successEmail: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6D28D9',
+    color: colors.brand.purpleDeep,
   },
 
   // Close Button
@@ -500,7 +501,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,

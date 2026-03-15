@@ -19,6 +19,7 @@ import {
   SUBSCRIPTION_BORDER_RADIUS,
 } from '@/styles/subscriptionStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { colors } from '@/constants/theme';
 
 interface TrialBannerProps {
   daysRemaining: number;
@@ -32,17 +33,17 @@ const TRIAL_BENEFITS = {
   free: {
     title: 'Your Free Trial',
     benefits: ['Basic cashback', 'Access to all stores', 'Email support'],
-    color: ['#6B7280', '#9CA3AF'],
+    color: [colors.neutral[500], colors.neutral[400]],
   },
   premium: {
     title: 'Your Premium Trial',
     benefits: ['2x Cashback', 'Free delivery', 'Priority support'],
-    color: ['#8B5CF6', '#A78BFA'],
+    color: [colors.brand.purpleLight, colors.brand.purpleSoft],
   },
   vip: {
     title: 'Your VIP Trial',
     benefits: ['3x Cashback', 'Free delivery', 'Concierge service'],
-    color: ['#F59E0B', '#FBBF24'],
+    color: [colors.warningScale[400], colors.warningScale[400]],
   },
 };
 

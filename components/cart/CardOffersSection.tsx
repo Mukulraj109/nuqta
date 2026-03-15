@@ -24,6 +24,7 @@ import {
   BorderRadius,
   Typography,
 } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface CardOffersSectionProps {
   storeId?: string;
@@ -151,14 +152,14 @@ function CardOffersSection({
           accessibilityRole="button"
         >
           <LinearGradient
-            colors={['#10B981', '#059669']}
+            colors={[colors.successScale[400], colors.successScale[700]]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.appliedOfferGradient}
           >
             <View style={styles.appliedOfferContent}>
               <View style={styles.appliedOfferIcon}>
-                <Ionicons name="checkmark-circle" size={24} color="#FFFFFF" />
+                <Ionicons name="checkmark-circle" size={24} color={colors.background.primary} />
               </View>
               <View style={styles.appliedOfferText}>
                 <ThemedText style={styles.appliedOfferTitle}>
@@ -168,7 +169,7 @@ function CardOffersSection({
                   {appliedOffer.name} - Save {discountAmount}
                 </ThemedText>
               </View>
-              <Ionicons name="chevron-forward" size={20} color="#FFFFFF" />
+              <Ionicons name="chevron-forward" size={20} color={colors.background.primary} />
             </View>
           </LinearGradient>
         </Pressable>
@@ -244,7 +245,7 @@ function CardOffersSection({
         accessibilityRole="button"
       >
         <LinearGradient
-          colors={['#F3E8FF', '#FFFFFF']}
+          colors={[colors.tint.pink, colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.offerGradient}

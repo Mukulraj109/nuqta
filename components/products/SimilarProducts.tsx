@@ -14,6 +14,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ProductRecommendation } from '@/services/recommendationApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface SimilarProductsProps {
   similarProducts: ProductRecommendation[];
@@ -44,7 +45,7 @@ function SimilarProducts({
           <Text style={styles.title}>Similar Products</Text>
         </View>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#ffcd57" />
+          <ActivityIndicator size="large" color={colors.lightMustard} />
         </View>
       </View>
     );
@@ -61,7 +62,7 @@ function SimilarProducts({
         {onViewAll && similarProducts.length > 6 && (
           <Pressable onPress={onViewAll} style={styles.viewAllButton}>
             <Text style={styles.viewAllText}>View All</Text>
-            <Ionicons name="chevron-forward" size={16} color="#ffcd57" />
+            <Ionicons name="chevron-forward" size={16} color={colors.lightMustard} />
           </Pressable>
         )}
       </View>
@@ -173,7 +174,7 @@ function ProductCard({ recommendation, onPress }: ProductCardProps) {
           />
         ) : (
           <View style={styles.imagePlaceholder}>
-            <Ionicons name="image-outline" size={40} color="#D1D5DB" />
+            <Ionicons name="image-outline" size={40} color={colors.neutral[300]} />
           </View>
         )}
         {discount && discount > 0 && (
@@ -183,7 +184,7 @@ function ProductCard({ recommendation, onPress }: ProductCardProps) {
         )}
         {similarity && similarity > 0.8 && (
           <View style={styles.matchBadge}>
-            <Ionicons name="checkmark-circle" size={16} color="#ffcd57" />
+            <Ionicons name="checkmark-circle" size={16} color={colors.lightMustard} />
             <Text style={styles.matchText}>Great Match</Text>
           </View>
         )}
@@ -202,7 +203,7 @@ function ProductCard({ recommendation, onPress }: ProductCardProps) {
 
         {reasons && reasons.length > 0 && (
           <View style={styles.reasonContainer}>
-            <Ionicons name="information-circle-outline" size={12} color="#ffcd57" />
+            <Ionicons name="information-circle-outline" size={12} color={colors.lightMustard} />
             <Text style={styles.reason} numberOfLines={1}>
               {reasons[0]}
             </Text>
@@ -218,7 +219,7 @@ function ProductCard({ recommendation, onPress }: ProductCardProps) {
 
         {rating && (
           <View style={styles.ratingRow}>
-            <Ionicons name="star" size={12} color="#FBBF24" />
+            <Ionicons name="star" size={12} color={colors.warningScale[400]} />
             <Text style={styles.rating}>
               {typeof rating.value === 'string'
                 ? parseFloat(rating.value).toFixed(1)
@@ -231,11 +232,11 @@ function ProductCard({ recommendation, onPress }: ProductCardProps) {
         {/* Rewards Row - Cashback & Nuqta Coins */}
         <View style={styles.rewardsRow}>
           <View style={styles.rewardItem}>
-            <Ionicons name="wallet-outline" size={12} color="#ffcd57" />
+            <Ionicons name="wallet-outline" size={12} color={colors.lightMustard} />
             <Text style={styles.rewardText}>{rezCoins} coins</Text>
           </View>
           <View style={styles.rewardItem}>
-            <Ionicons name="card-outline" size={12} color="#F59E0B" />
+            <Ionicons name="card-outline" size={12} color={colors.warningScale[400]} />
             <Text style={styles.cashbackText}>{currencySymbol}{cashbackAmount}</Text>
           </View>
         </View>
@@ -247,7 +248,7 @@ function ProductCard({ recommendation, onPress }: ProductCardProps) {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 16,
-    backgroundColor: '#fff'
+    backgroundColor: colors.background.primary
   },
   header: {
     flexDirection: 'row',
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937'
+    color: colors.neutral[800]
   },
   viewAllButton: {
     flexDirection: 'row',
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffcd57'
+    color: colors.lightMustard
   },
   loadingContainer: {
     height: 200,
@@ -282,17 +283,17 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 160,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#E5E7EB'
+    borderColor: colors.neutral[200]
   },
   imageContainer: {
     position: 'relative',
     width: '100%',
     height: 160,
-    backgroundColor: '#fff'
+    backgroundColor: colors.background.primary
   },
   image: {
     width: '100%',
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
   imagePlaceholder: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 4
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#fff'
+    color: colors.background.primary
   },
   matchBadge: {
     position: 'absolute',
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
     left: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 12,
@@ -334,7 +335,7 @@ const styles = StyleSheet.create({
   matchText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#ffcd57'
+    color: colors.lightMustard
   },
   info: {
     padding: 12,
@@ -343,12 +344,12 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2
   },
   brand: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4
   },
   reasonContainer: {
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   },
   reason: {
     fontSize: 11,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontStyle: 'italic',
     flex: 1
   },
@@ -372,11 +373,11 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#ffcd57'
+    color: colors.lightMustard
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through'
   },
   ratingRow: {
@@ -387,11 +388,11 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1F2937'
+    color: colors.neutral[800]
   },
   ratingCount: {
     fontSize: 11,
-    color: '#9CA3AF'
+    color: colors.neutral[400]
   },
   rewardsRow: {
     flexDirection: 'row',
@@ -400,7 +401,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
     paddingTop: 6,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6'
+    borderTopColor: colors.neutral[100]
   },
   rewardItem: {
     flexDirection: 'row',
@@ -410,12 +411,12 @@ const styles = StyleSheet.create({
   rewardText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#ffcd57'
+    color: colors.lightMustard
   },
   cashbackText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#F59E0B'
+    color: colors.warningScale[400]
   }
 });
 

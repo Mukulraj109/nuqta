@@ -15,6 +15,7 @@ import { useCart } from '@/contexts/CartContext';
 import { showToast } from '@/components/common/ToastManager';
 import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDataNormalizer';
 import { formatPrice } from '@/utils/priceFormatter';
+import { colors } from '@/constants/theme';
 
 interface CategoryCardProps {
   item: CategoryItem;
@@ -186,7 +187,7 @@ function CategoryCard({
 
     return (
       <View style={styles.ratingContainer}>
-        <Ionicons name="star" size={12} color="#FFD700" />
+        <Ionicons name="star" size={12} color={colors.brand.goldBright} />
         <ThemedText style={styles.ratingText}>
           {formattedRating}
         </ThemedText>
@@ -217,7 +218,7 @@ function CategoryCard({
 
     return (
       <View style={styles.timingContainer}>
-        <Ionicons name="time-outline" size={12} color="#6B7280" />
+        <Ionicons name="time-outline" size={12} color={colors.neutral[500]} />
         <ThemedText style={styles.timingText}>
           {deliveryTime}
         </ThemedText>
@@ -264,7 +265,7 @@ function CategoryCard({
 
     return (
       <View style={styles.locationContainer}>
-        <Ionicons name="location-outline" size={12} color="#6B7280" />
+        <Ionicons name="location-outline" size={12} color={colors.neutral[500]} />
         <ThemedText style={styles.locationText} numberOfLines={1}>
           {address}
         </ThemedText>
@@ -327,7 +328,7 @@ function CategoryCard({
             <Ionicons 
               name="heart-outline" 
               size={18} 
-              color="#6B7280" 
+              color={colors.neutral[500]} 
             />
           </Pressable>
         )}
@@ -372,7 +373,7 @@ function CategoryCard({
                     }}
                    
                   >
-                    <Ionicons name="remove" size={18} color="#FFFFFF" />
+                    <Ionicons name="remove" size={18} color={colors.background.primary} />
                   </Pressable>
 
                   <View style={styles.quantityDisplay}>
@@ -395,7 +396,7 @@ function CategoryCard({
                     }}
                    
                   >
-                    <Ionicons name="add" size={18} color="#FFFFFF" />
+                    <Ionicons name="add" size={18} color={colors.background.primary} />
                   </Pressable>
                 </View>
               ) : (
@@ -406,7 +407,7 @@ function CategoryCard({
                   disabled={isAddingToCart}
                 >
                   {isAddingToCart ? (
-                    <ActivityIndicator size="small" color="#FFFFFF" />
+                    <ActivityIndicator size="small" color={colors.background.primary} />
                   ) : (
                     <ThemedText style={styles.addToCartText}>Add to cart</ThemedText>
                   )}
@@ -437,7 +438,7 @@ function CategoryCard({
           </ThemedText>
           {showQuickActions && (
             <Pressable onPress={handleToggleFavorite}>
-              <Ionicons name="heart-outline" size={20} color="#6B7280" />
+              <Ionicons name="heart-outline" size={20} color={colors.neutral[500]} />
             </Pressable>
           )}
         </View>
@@ -493,10 +494,10 @@ function CategoryCard({
         {showQuickActions && (
           <View style={styles.featuredActions}>
             <Pressable style={styles.featuredFavoriteButton} onPress={handleToggleFavorite}>
-              <Ionicons name="heart-outline" size={20} color="#FFFFFF" />
+              <Ionicons name="heart-outline" size={20} color={colors.background.primary} />
             </Pressable>
             <Pressable style={styles.featuredAddButton} onPress={handleAddToCart}>
-              <Ionicons name="add" size={20} color="#FFFFFF" />
+              <Ionicons name="add" size={20} color={colors.background.primary} />
             </Pressable>
           </View>
         )}
@@ -527,7 +528,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 205, 87, 0.12)',
   },
   elevatedCard: {
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.2,
     shadowRadius: 20,
@@ -539,7 +540,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
   },
   flatCard: {
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.12,
     shadowRadius: 14,
@@ -550,7 +551,7 @@ const styles = StyleSheet.create({
     height: 160,
     minHeight: 160,
     maxHeight: 160,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255, 205, 87, 0.08)',
   },
@@ -571,18 +572,18 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   featuredBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   popularBadge: {
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
   },
   newBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   badgeText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   favoriteButton: {
     position: 'absolute',
@@ -594,7 +595,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -612,7 +613,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 8,
     lineHeight: 20,
     height: 40,
@@ -637,15 +638,15 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   ratingMaxText: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   ratingCount: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   timingContainer: {
     flexDirection: 'row',
@@ -654,7 +655,7 @@ const styles = StyleSheet.create({
   },
   timingText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceContainer: {
     flexDirection: 'row',
@@ -668,12 +669,12 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 17,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: 0.3,
   },
   originalPrice: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textDecorationLine: 'line-through',
   },
   cashbackContainer: {
@@ -691,11 +692,11 @@ const styles = StyleSheet.create({
   },
   cashbackText: {
     fontSize: 11,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '700',
   },
   addToCartButton: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingVertical: 12,
     borderRadius: 14,
     alignItems: 'center',
@@ -703,7 +704,7 @@ const styles = StyleSheet.create({
     minHeight: 44,
     maxHeight: 44,
     justifyContent: 'center',
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.4,
     shadowRadius: 12,
@@ -714,7 +715,7 @@ const styles = StyleSheet.create({
   addToCartText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   addToCartButtonDisabled: {
     backgroundColor: '#e6b94e',
@@ -724,7 +725,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 14,
     paddingVertical: 6,
     paddingHorizontal: 6,
@@ -732,7 +733,7 @@ const styles = StyleSheet.create({
     height: 44,
     minHeight: 44,
     maxHeight: 44,
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -755,7 +756,7 @@ const styles = StyleSheet.create({
   },
   quantityText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   bottomSection: {
@@ -797,12 +798,12 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginRight: 8,
   },
   description: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
     marginBottom: 8,
   },
@@ -820,7 +821,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   detailedFooter: {
     flexDirection: 'row',
@@ -857,12 +858,12 @@ const styles = StyleSheet.create({
   featuredTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 4,
   },
   featuredDescription: {
     fontSize: 12,
-    color: '#E5E7EB',
+    color: colors.neutral[200],
     lineHeight: 16,
     marginBottom: 8,
   },
@@ -889,7 +890,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     alignItems: 'center',
     justifyContent: 'center',
   },

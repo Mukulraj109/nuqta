@@ -30,6 +30,7 @@ import MallEmptyState from '../../../components/mall/pages/MallEmptyState';
 import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkeleton';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 // Filter config for header styling
 const FILTER_CONFIG: Record<FilterType, {
@@ -49,19 +50,19 @@ const FILTER_CONFIG: Record<FilterType, {
   'featured': {
     title: 'Featured Stores',
     icon: 'star',
-    colors: [Colors.warning, '#D97706'],
+    colors: [Colors.warning, colors.warningScale[700]],
     description: 'Hand-picked stores with best deals'
   },
   'new': {
     title: 'New Stores',
     icon: 'sparkles',
-    colors: ['#EC4899', '#DB2777'],
+    colors: [colors.brand.pink, colors.deepPink],
     description: `Recently added to ${BRAND.APP_NAME} Mall`
   },
   'top-rated': {
     title: 'Top Rated',
     icon: 'trophy',
-    colors: [Colors.info, '#2563EB'],
+    colors: [Colors.info, colors.brand.blue],
     description: 'Highest rated by our users'
   },
   'luxury': {
@@ -70,12 +71,12 @@ const FILTER_CONFIG: Record<FilterType, {
     colors: ['#0F172A', '#1E293B'],
     description: 'Exclusive access to world-class luxury brands',
     isLuxury: true,
-    accentColor: '#FFD700'
+    accentColor: colors.brand.goldBright
   },
   'trending': {
     title: 'Trending Stores',
     icon: 'flame',
-    colors: [Colors.error, '#DC2626'],
+    colors: [Colors.error, colors.error],
     description: 'Most popular stores right now'
   },
   'reward-boosters': {
@@ -311,7 +312,7 @@ export default function BrandsListingPage() {
         <View style={styles.headerContent}>
           {isLuxuryTheme ? (
             <LinearGradient
-              colors={['#FFD700', Colors.warning]}
+              colors={[colors.brand.goldBright, Colors.warning]}
               style={styles.luxuryIconWrapper}
             >
               <Ionicons name={filterConfig.icon as any} size={28} color="#0F172A" />
@@ -324,7 +325,7 @@ export default function BrandsListingPage() {
           <Text style={styles.headerTitle}>{filterConfig.title}</Text>
           {isLuxuryTheme && (
             <View style={styles.luxuryPremiumBadge}>
-              <Ionicons name="star" size={10} color="#FFD700" />
+              <Ionicons name="star" size={10} color={colors.brand.goldBright} />
               <Text style={styles.luxuryPremiumText}>PREMIUM</Text>
             </View>
           )}
@@ -343,14 +344,14 @@ export default function BrandsListingPage() {
           </View>
           <View style={[styles.statDivider, isLuxuryTheme && styles.luxuryStatDivider]} />
           <View style={styles.statItem}>
-            <Ionicons name="gift" size={18} color="#FFD700" />
+            <Ionicons name="gift" size={18} color={colors.brand.goldBright} />
             <Text style={styles.statLabel}>{isLuxuryTheme ? 'Premium Rewards' : 'Earn Coins'}</Text>
           </View>
           {isLuxuryTheme && (
             <>
               <View style={[styles.statDivider, styles.luxuryStatDivider]} />
               <View style={styles.statItem}>
-                <Ionicons name="shield-checkmark" size={18} color="#FFD700" />
+                <Ionicons name="shield-checkmark" size={18} color={colors.brand.goldBright} />
                 <Text style={styles.statLabel}>Verified</Text>
               </View>
             </>
@@ -423,7 +424,7 @@ export default function BrandsListingPage() {
       <View style={styles.container}>
         {/* Background Gradient */}
         <LinearGradient
-          colors={['#faf1e0', '#faf1e0', Colors.background.secondary]}
+          colors={[colors.linen, colors.linen, Colors.background.secondary]}
           style={StyleSheet.absoluteFillObject}
         />
 
@@ -638,7 +639,7 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
   resultsCountBadge: {
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: Spacing.md,
     paddingVertical: 6,
     borderRadius: BorderRadius.xl,
@@ -693,7 +694,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     ...Platform.select({
       ios: {
-        shadowColor: '#FFD700',
+        shadowColor: colors.brand.goldBright,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.4,
         shadowRadius: 8,
@@ -718,7 +719,7 @@ const styles = StyleSheet.create({
   luxuryPremiumText: {
     ...Typography.overline,
     fontWeight: '800',
-    color: '#FFD700',
+    color: colors.brand.goldBright,
     letterSpacing: 1.5,
   },
   luxuryDescription: {
@@ -731,7 +732,7 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.lg,
   },
   luxuryStatValue: {
-    color: '#FFD700',
+    color: colors.brand.goldBright,
   },
   luxuryStatDivider: {
     backgroundColor: 'rgba(255, 215, 0, 0.3)',
@@ -742,6 +743,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 215, 0, 0.3)',
   },
   luxuryResultsCount: {
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
 });

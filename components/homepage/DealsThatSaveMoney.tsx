@@ -22,21 +22,22 @@ import { BlurView } from 'expo-blur';
 import realOffersApi, { Offer } from '@/services/realOffersApi';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Nuqta Brand Colors
 const COLORS = {
-  primary: '#ffcd57',
-  primaryDark: '#E6B84E',
-  white: '#FFFFFF',
+  primary: colors.lightMustard,
+  primaryDark: colors.brand.goldRich,
+  white: colors.background.primary,
   black: '#000000',
-  textDark: '#1a3a52',
-  textMuted: '#6B7280',
+  textDark: colors.nileBlue,
+  textMuted: colors.neutral[500],
   cardShadow: 'rgba(0, 0, 0, 0.1)',
-  tabActive: '#ffcd57',
-  tabInactive: '#E5E7EB',
-  tabBg: '#F3F4F6',
-  background: '#faf1e0', // Linen background
-  backgroundLight: '#faf1e0', // Linen light
+  tabActive: colors.lightMustard,
+  tabInactive: colors.neutral[200],
+  tabBg: colors.neutral[100],
+  background: colors.linen, // Linen background
+  backgroundLight: colors.linen, // Linen light
 };
 
 // Category card data structure
@@ -132,20 +133,20 @@ const mapIconToIonicon = (icon: string): keyof typeof Ionicons.glyphMap => {
 const generateGradientColors = (bgColor: string, iconColor: string): readonly [string, string, string] => {
   // Use predefined gradients based on icon color
   const gradientMap: Record<string, readonly [string, string, string]> = {
-    '#6366F1': ['#A5B4FC', '#818CF8', '#6366F1'], // Indigo - Student
+    [colors.brand.indigo]: ['#A5B4FC', '#818CF8', colors.brand.indigo], // Indigo - Student
     '#0EA5E9': ['#7DD3FC', '#38BDF8', '#0EA5E9'], // Sky - Corporate
-    '#ffd7b5': ['#F9A8D4', '#F472B6', '#ffd7b5'], // Pink - Women
-    '#F59E0B': ['#FCD34D', '#FBBF24', '#F59E0B'], // Amber - Birthday
-    '#ffcd57': ['#ffe5a3', '#ffd97a', '#ffcd57'], // Mustard gradient - Senior
-    '#1a3a52': ['#C4B5FD', '#A78BFA', '#1a3a52'], // Violet - First time
-    '#1a3a52': ['#2d5c7e', '#234b68', '#1a3a52'], // Nile Blue gradient - Defence
-    '#DC2626': ['#FCA5A5', '#F87171', '#DC2626'], // Red - Healthcare
-    '#243f55': ['#C4B5FD', '#A78BFA', '#243f55'], // Purple - Senior
-    '#2d4a5f': ['#93C5FD', '#60A5FA', '#2d4a5f'], // Blue - Teachers
-    '#0891B2': ['#67E8F9', '#22D3EE', '#0891B2'], // Cyan - Government
-    '#E8B896': ['#FDBA74', '#FB923C', '#E8B896'], // Orange - Disabled
+    colors.lightPeach: ['#F9A8D4', '#F472B6', colors.lightPeach], // Pink - Women
+    [colors.warningScale[400]]: ['#FCD34D', colors.warningScale[400], colors.warningScale[400]], // Amber - Birthday
+    [colors.lightMustard]: ['#ffe5a3', '#ffd97a', colors.lightMustard], // Mustard gradient - Senior
+    [colors.nileBlue]: ['#C4B5FD', colors.brand.purpleSoft, colors.nileBlue], // Violet - First time
+    [colors.nileBlue]: ['#2d5c7e', colors.brand.nileBlueLight, colors.nileBlue], // Nile Blue gradient - Defence
+    [colors.error]: ['#FCA5A5', colors.errorScale[400], colors.error], // Red - Healthcare
+    '#243f55': ['#C4B5FD', colors.brand.purpleSoft, '#243f55'], // Purple - Senior
+    '#2d4a5f': ['#93C5FD', colors.infoScale[400], '#2d4a5f'], // Blue - Teachers
+    colors.cyanDark: ['#67E8F9', '#22D3EE', colors.cyanDark], // Cyan - Government
+    [colors.brand.sand]: ['#FDBA74', '#FB923C', colors.brand.sand], // Orange - Disabled
   };
-  return gradientMap[iconColor] || ['#E5E7EB', '#D1D5DB', '#9CA3AF'];
+  return gradientMap[iconColor] || [colors.neutral[200], colors.neutral[300], colors.neutral[400]];
 };
 
 // Fallback static exclusive categories (used when API fails)
@@ -156,7 +157,7 @@ const FALLBACK_EXCLUSIVE_CATEGORIES: ExclusiveZoneCard[] = [
     title: 'Students',
     subtitle: 'Campus Zone',
     icon: 'school-outline',
-    gradientColors: ['#60A5FA', '#1a3a52', '#2d4a5f'] as const,
+    gradientColors: [colors.infoScale[400], colors.nileBlue, '#2d4a5f'] as const,
     offersCount: 0,
     verificationRequired: true,
     eligibilityType: 'student',
@@ -168,7 +169,7 @@ const FALLBACK_EXCLUSIVE_CATEGORIES: ExclusiveZoneCard[] = [
     title: 'Corporate',
     subtitle: 'Corporate Zone',
     icon: 'briefcase-outline',
-    gradientColors: ['#A78BFA', '#1a3a52', '#243f55'] as const,
+    gradientColors: [colors.brand.purpleSoft, colors.nileBlue, '#243f55'] as const,
     offersCount: 0,
     verificationRequired: true,
     eligibilityType: 'corporate_email',
@@ -180,7 +181,7 @@ const FALLBACK_EXCLUSIVE_CATEGORIES: ExclusiveZoneCard[] = [
     title: 'Women Exclusive',
     subtitle: 'Special Rewards',
     icon: 'heart-outline',
-    gradientColors: ['#F472B6', '#ffd7b5', '#E8B896'] as const,
+    gradientColors: ['#F472B6', colors.lightPeach, colors.brand.sand] as const,
     offersCount: 0,
     verificationRequired: false,
     eligibilityType: 'gender',
@@ -192,7 +193,7 @@ const FALLBACK_EXCLUSIVE_CATEGORIES: ExclusiveZoneCard[] = [
     title: 'Birthday Specials',
     subtitle: 'Celebrate & Save',
     icon: 'gift-outline',
-    gradientColors: ['#FB923C', '#ffcd57', '#E8B896'] as const,
+    gradientColors: ['#FB923C', colors.lightMustard, colors.brand.sand] as const,
     offersCount: 0,
     verificationRequired: false,
     eligibilityType: 'birthday_month',
@@ -207,7 +208,7 @@ const FALLBACK_CASHBACK_CATEGORIES: CashbackCard[] = [
     title: 'Double Cashback',
     subtitle: 'Earn 2X coins',
     icon: 'cash-outline',
-    gradientColors: ['#FDE68A', '#FCD34D', '#FBBF24'] as const,
+    gradientColors: [colors.warningScale[200], '#FCD34D', colors.warningScale[400]] as const,
     multiplier: 2,
     type: 'double_cashback',
   },
@@ -216,7 +217,7 @@ const FALLBACK_CASHBACK_CATEGORIES: CashbackCard[] = [
     title: 'Coin Drops',
     subtitle: 'Boosted rewards',
     icon: 'flash-outline',
-    gradientColors: ['#ffe5a3', '#ffd97a', '#ffcd57'] as const,
+    gradientColors: ['#ffe5a3', '#ffd97a', colors.lightMustard] as const,
     type: 'coin_drop',
   },
 ];
@@ -529,7 +530,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
             title: campaign.title,
             subtitle: campaign.subtitle || `${campaign.multiplier}X cashback`,
             icon: mapIconToIonicon(campaign.icon || 'flash'),
-            gradientColors: ['#FDE68A', '#FCD34D', '#FBBF24'] as const,
+            gradientColors: [colors.warningScale[200], '#FCD34D', colors.warningScale[400]] as const,
             multiplier: campaign.multiplier,
             type: 'double_cashback',
           });
@@ -544,7 +545,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
             title: drop.storeName || 'Coin Drop',
             subtitle: `${drop.multiplier}X - ${currencySymbol}${drop.boostedCashback} cashback`,
             icon: mapIconToIonicon(drop.icon || 'flash'),
-            gradientColors: ['#ffe5a3', '#ffd97a', '#ffcd57'] as const,
+            gradientColors: ['#ffe5a3', '#ffd97a', colors.lightMustard] as const,
             multiplier: drop.multiplier,
             type: 'coin_drop',
           });
@@ -598,7 +599,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
             title: 'Nearby Offers',
             subtitle: `${nearbyCount} offers`,
             icon: 'location-outline',
-            iconColor: '#60A5FA',
+            iconColor: colors.infoScale[400],
             bgColor: '#1E3A8A',
             count: nearbyCount,
           });
@@ -617,7 +618,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
             title: "Today's Deals",
             subtitle: `${todayCount} offers`,
             icon: 'time-outline',
-            iconColor: '#ffcd57',
+            iconColor: colors.lightMustard,
             bgColor: '#7C2D12',
             count: todayCount,
           });
@@ -631,8 +632,8 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
             title: 'BOGO',
             subtitle: `${bogoCount} offers`,
             icon: 'pricetag-outline',
-            iconColor: '#ffcd57',
-            bgColor: '#1a3a52',
+            iconColor: colors.lightMustard,
+            bgColor: colors.nileBlue,
             badge: '2x',
             count: bogoCount,
           });
@@ -646,7 +647,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
             title: 'Flash Sale',
             subtitle: `${flashCount} offers`,
             icon: 'flash-outline',
-            iconColor: '#EF4444',
+            iconColor: colors.error,
             bgColor: '#7F1D1D',
             count: flashCount,
           });
@@ -660,7 +661,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
             title: 'Super Cashback',
             subtitle: `${cashbackCount} offers`,
             icon: 'cash-outline',
-            iconColor: '#F59E0B',
+            iconColor: colors.warningScale[400],
             bgColor: '#78350F',
             count: cashbackCount,
           });
@@ -676,7 +677,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
             title: 'Freebies',
             subtitle: `${freebieCount} offers`,
             icon: 'gift-outline',
-            iconColor: '#A855F7',
+            iconColor: colors.brand.purpleMedium,
             bgColor: '#581C87',
             count: freebieCount,
           });
@@ -690,7 +691,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
               title: 'All Offers',
               subtitle: `${response.data.length} offers`,
               icon: 'grid-outline',
-              iconColor: '#1a3a52',
+              iconColor: colors.nileBlue,
               bgColor: '#4C1D95',
               count: response.data.length,
             }
@@ -707,7 +708,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
           title: 'All Offers',
           subtitle: '0 offers',
           icon: 'grid-outline',
-          iconColor: '#1a3a52',
+          iconColor: colors.nileBlue,
           bgColor: '#4C1D95',
           count: 0,
         },
@@ -776,13 +777,13 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
   const getGradientColors = (bgColor: string, iconColor: string): [string, string, string] => {
     // Create lighter, pastel gradient variations based on the base color
     const colorMap: Record<string, [string, string, string]> = {
-      '#1E3A8A': ['#93C5FD', '#60A5FA', '#1a3a52'], // Light Blue - Nearby
+      '#1E3A8A': ['#93C5FD', colors.infoScale[400], colors.nileBlue], // Light Blue - Nearby
       '#7C2D12': ['#FED7AA', '#FDB573', '#FB923C'], // Light Orange - Today's
-      '#14532D': ['#2d5c7e', '#234b68', '#1a3a52'], // Nile blue - BOGO
-      '#7F1D1D': ['#FCA5A5', '#F87171', '#EF4444'], // Light Red - Flash
-      '#78350F': ['#FDE68A', '#FCD34D', '#FBBF24'], // Light Amber - Cashback
-      '#581C87': ['#C4B5FD', '#A78BFA', '#1a3a52'], // Light Purple - Freebies
-      '#4C1D95': ['#DDD6FE', '#C4B5FD', '#A78BFA'], // Light Purple - All
+      '#14532D': ['#2d5c7e', colors.brand.nileBlueLight, colors.nileBlue], // Nile blue - BOGO
+      '#7F1D1D': ['#FCA5A5', colors.errorScale[400], colors.error], // Light Red - Flash
+      '#78350F': [colors.warningScale[200], '#FCD34D', colors.warningScale[400]], // Light Amber - Cashback
+      '#581C87': ['#C4B5FD', colors.brand.purpleSoft, colors.nileBlue], // Light Purple - Freebies
+      '#4C1D95': ['#DDD6FE', '#C4B5FD', colors.brand.purpleSoft], // Light Purple - All
     };
     return colorMap[bgColor] || [bgColor, bgColor, bgColor];
   };
@@ -831,7 +832,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
   const renderSkeletonCard = (index: number) => (
     <View key={`skeleton-${index}`} style={styles.exclusiveCard}>
       <LinearGradient
-        colors={['#E5E7EB', '#F3F4F6', '#E5E7EB']}
+        colors={[colors.neutral[200], colors.neutral[100], colors.neutral[200]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.exclusiveCardGradient}
@@ -880,7 +881,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
         {/* Lock badge for unverified zones */}
         {showLock && (
           <View style={styles.lockBadgeContainer}>
-            <Ionicons name="lock-closed" size={12} color="#FFF" />
+            <Ionicons name="lock-closed" size={12} color={colors.background.primary} />
           </View>
         )}
         <LinearGradient
@@ -979,7 +980,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
     const gradientColors: readonly [string, string, string] =
       item.gradientColors?.length >= 3
         ? [item.gradientColors[0], item.gradientColors[1], item.gradientColors[2]] as const
-        : ['#E5E7EB', '#D1D5DB', '#9CA3AF'] as const;
+        : [colors.neutral[200], colors.neutral[300], colors.neutral[400]] as const;
 
     // Check if verification is required and user is not verified
     const needsVerification = item.requiresVerification && item.verificationType !== 'none';
@@ -1009,7 +1010,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
         {/* Lock badge for verification-required items */}
         {showLock && (
           <View style={styles.lockBadgeContainer}>
-            <Ionicons name="lock-closed" size={12} color="#FFF" />
+            <Ionicons name="lock-closed" size={12} color={colors.background.primary} />
           </View>
         )}
         <LinearGradient
@@ -1265,7 +1266,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={styles.headerIconContainer}>
-            <Ionicons name={(sectionConfig?.icon || 'flash') as any} size={20} color="#ffd7b5" />
+            <Ionicons name={(sectionConfig?.icon || 'flash') as any} size={20} color={colors.lightPeach} />
           </View>
           <View style={styles.headerTextContainer}>
             <Text style={styles.headerTitle} numberOfLines={1}>{sectionConfig?.title || 'Deals that save you money'}</Text>
@@ -1337,7 +1338,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
          
         >
           <LinearGradient
-            colors={['#ffcd57', '#e6b84e', '#d4a847']}
+            colors={[colors.lightMustard, '#e6b84e', '#d4a847']}
             style={styles.viewAllGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -1434,7 +1435,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.15,
         shadowRadius: 6,
@@ -1590,7 +1591,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#ffd7b5',
+    backgroundColor: colors.lightPeach,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2.5,
@@ -1598,7 +1599,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
     ...Platform.select({
       ios: {
-        shadowColor: '#ffd7b5',
+        shadowColor: colors.lightPeach,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.5,
         shadowRadius: 4,
@@ -1611,7 +1612,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: 0.5,
   },
   // Lock badge for verification-required zones
@@ -1635,7 +1636,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 10,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
@@ -1643,7 +1644,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.4,
         shadowRadius: 4,
@@ -1664,7 +1665,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 12,
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   skeletonTextContainer: {
     flex: 1,
@@ -1674,13 +1675,13 @@ const styles = StyleSheet.create({
     width: '70%',
     height: 14,
     borderRadius: 7,
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   skeletonSubtitle: {
     width: '50%',
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   loadingContainer: {
     paddingVertical: 40,

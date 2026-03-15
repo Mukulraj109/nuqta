@@ -21,6 +21,7 @@ import type { IssueCategory } from '@/types/supportChat.types';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing } from '@/constants/DesignSystem';
 import analyticsService from '@/services/analyticsService';
+import { colors } from '@/constants/theme';
 
 export default function SupportChatPage() {
   const router = useRouter();

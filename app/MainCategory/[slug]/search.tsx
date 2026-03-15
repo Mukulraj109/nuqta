@@ -4,6 +4,7 @@
  * Searches only within the category for stores, gadgets, and products
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
   View,
@@ -450,7 +451,7 @@ const styles = StyleSheet.create({
   suggestionsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm },
   suggestionChip: {
     flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, paddingVertical: 10,
-    borderRadius: BorderRadius.md, backgroundColor: '#EFF6FF', gap: 6,
+    borderRadius: BorderRadius.md, backgroundColor: colors.tint.blue, gap: 6,
   },
   suggestionText: { ...Typography.bodySmall, color: Colors.info, fontWeight: '500' },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
@@ -471,7 +472,7 @@ const styles = StyleSheet.create({
   resultImage: { width: 56, height: 56, borderRadius: BorderRadius.md, backgroundColor: Colors.border.default },
   resultImagePlaceholder: {
     position: 'absolute', left: 12, justifyContent: 'center', alignItems: 'center',
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
   },
   resultContent: { flex: 1 },
   resultName: { ...Typography.body, fontWeight: '600', color: Colors.text.primary },

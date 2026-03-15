@@ -15,6 +15,7 @@ import { useOrderTracking } from '@/hooks/useOrderTracking';
 import { useRegion } from '@/contexts/RegionContext';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const STATUS_STEPS = [
   { key: 'placed', label: 'Order Placed', icon: 'receipt-outline' as const },
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
   backBtn: { padding: Spacing.sm, marginRight: Spacing.sm },
   headerTitle: { ...Typography.h4, fontWeight: '700', color: Colors.nileBlue },
   headerSub: { ...Typography.bodySmall, color: Colors.text.tertiary, marginTop: 2 },
-  liveBadge: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#DCFCE7', paddingHorizontal: 10, paddingVertical: Spacing.xs, borderRadius: BorderRadius.md },
+  liveBadge: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.successScale[100], paddingHorizontal: 10, paddingVertical: Spacing.xs, borderRadius: BorderRadius.md },
   liveDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: Colors.success, marginRight: Spacing.xs },
   liveText: { ...Typography.caption, fontWeight: '700', color: Colors.success },
 

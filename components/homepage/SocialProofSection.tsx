@@ -13,22 +13,23 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import socialProofApi from '@/services/socialProofApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
 // Nuqta Brand Colors
 const COLORS = {
-  primary: '#ffcd57',
-  primaryDark: '#E6B84E',
-  primaryLight: '#ffcd57',
-  gold: '#ffcd57',
+  primary: colors.lightMustard,
+  primaryDark: colors.brand.goldRich,
+  primaryLight: colors.lightMustard,
+  gold: colors.lightMustard,
   goldDark: '#F5A623',
-  white: '#FFFFFF',
-  textDark: '#1a3a52',
-  textMuted: '#6B7280',
+  white: colors.background.primary,
+  textDark: colors.nileBlue,
+  textMuted: colors.neutral[500],
   cardShadow: 'rgba(0, 0, 0, 0.1)',
-  background: '#faf1e0',
-  success: '#1a3a52',
+  background: colors.linen,
+  success: colors.nileBlue,
 };
 
 interface NearbyActivity {

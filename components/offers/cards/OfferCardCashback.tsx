@@ -18,6 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { useRegion } from '@/contexts/RegionContext';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface OfferCardCashbackProps {
   id: string;
@@ -45,20 +46,20 @@ export const OfferCardCashback: React.FC<OfferCardCashbackProps> = ({
   const currencySymbol = getCurrencySymbol();
 
   // Determine colors based on super status
-  const accentColor = isSuper ? '#F59E0B' : Colors.primary[600];
+  const accentColor = isSuper ? colors.warningScale[400] : Colors.primary[600];
   const accentBg = isSuper
-    ? (isDark ? 'rgba(245, 158, 11, 0.15)' : '#FFFBEB')
+    ? (isDark ? 'rgba(245, 158, 11, 0.15)' : colors.tint.amber)
     : (isDark ? 'rgba(0, 192, 106, 0.1)' : '#E6F9F0');
 
   const styles = StyleSheet.create({
     container: {
       width: 180,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 1.5,
       borderColor: isSuper
         ? (isDark ? 'rgba(245, 158, 11, 0.3)' : '#FCD34D')
-        : (isDark ? theme.colors.border.light : '#E5E7EB'),
+        : (isDark ? theme.colors.border.light : colors.neutral[200]),
       overflow: 'hidden',
       ...(isDark ? {} : Shadows.medium),
     },
@@ -75,7 +76,7 @@ export const OfferCardCashback: React.FC<OfferCardCashbackProps> = ({
       left: 10,
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#F59E0B',
+      backgroundColor: colors.warningScale[400],
       paddingHorizontal: 8,
       paddingVertical: 4,
       borderRadius: 6,
@@ -83,7 +84,7 @@ export const OfferCardCashback: React.FC<OfferCardCashbackProps> = ({
     superText: {
       fontSize: 9,
       fontWeight: '800',
-      color: '#FFFFFF',
+      color: colors.background.primary,
       marginLeft: 3,
       letterSpacing: 0.5,
     },
@@ -91,10 +92,10 @@ export const OfferCardCashback: React.FC<OfferCardCashbackProps> = ({
       width: 56,
       height: 56,
       borderRadius: 14,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.background.primary,
       overflow: 'hidden',
       borderWidth: 2,
-      borderColor: '#FFFFFF',
+      borderColor: colors.background.primary,
       ...Shadows.subtle,
       alignItems: 'center',
       justifyContent: 'center',
@@ -111,7 +112,7 @@ export const OfferCardCashback: React.FC<OfferCardCashbackProps> = ({
       justifyContent: 'center',
     },
     logoText: {
-      color: '#FFFFFF',
+      color: colors.background.primary,
       fontSize: 22,
       fontWeight: '700',
     },
@@ -191,7 +192,7 @@ export const OfferCardCashback: React.FC<OfferCardCashbackProps> = ({
       <View style={styles.header}>
         {isSuper && (
           <View style={styles.superBadge}>
-            <Ionicons name="flash" size={10} color="#FFFFFF" />
+            <Ionicons name="flash" size={10} color={colors.background.primary} />
             <Text style={styles.superText}>SUPER</Text>
           </View>
         )}

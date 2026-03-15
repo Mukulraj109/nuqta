@@ -16,6 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const CashStoreFooterCTA: React.FC = () => {
   const router = useRouter();
@@ -34,7 +35,7 @@ const CashStoreFooterCTA: React.FC = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#ffcd57', '#1a3a52']}
+        colors={[colors.lightMustard, colors.nileBlue]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -46,7 +47,7 @@ const CashStoreFooterCTA: React.FC = () => {
         {/* Content */}
         <View style={styles.content}>
           <View style={styles.coinIcon}>
-            <Ionicons name="sparkles" size={32} color="#FFC857" />
+            <Ionicons name="sparkles" size={32} color={colors.brand.goldWarm} />
           </View>
 
           <Text style={styles.title}>Ready to Start Earning?</Text>
@@ -79,7 +80,7 @@ const CashStoreFooterCTA: React.FC = () => {
               onPress={handleStartShopping}
              
             >
-              <Ionicons name="cart" size={20} color="#1a3a52" />
+              <Ionicons name="cart" size={20} color={colors.nileBlue} />
               <Text style={styles.primaryButtonText}>Start Shopping</Text>
             </Pressable>
 
@@ -89,7 +90,7 @@ const CashStoreFooterCTA: React.FC = () => {
              
             >
               <Text style={styles.secondaryButtonText}>View All Brands</Text>
-              <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={18} color={colors.background.primary} />
             </Pressable>
           </View>
         </View>
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 8,
     paddingBottom: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   gradient: {
     borderRadius: 24,
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.3,
         shadowRadius: 12,
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 8,
     textAlign: 'center',
   },
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 4,
   },
   statLabel: {
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 16,
@@ -218,7 +219,7 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   secondaryButton: {
     flexDirection: 'row',
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
   secondaryButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   bottomPadding: {
     height: 16,

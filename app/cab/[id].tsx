@@ -34,6 +34,7 @@ import CabInfoCard from '../../components/cab/CabInfoCard';
 import CabAmenities from '../../components/cab/CabAmenities';
 import CabCancellationPolicy from '../../components/cab/CabCancellationPolicy';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -479,7 +480,7 @@ export default function CabDetailsPage() {
                 <Ionicons
                   name={isInWishlist(cab.id) ? 'heart' : 'heart-outline'}
                   size={24}
-                  color={isInWishlist(cab.id) ? '#EF4444' : '#FFFFFF'}
+                  color={isInWishlist(cab.id) ? colors.error : colors.background.primary}
                 />
               </Pressable>
               <Pressable style={styles.actionButton}>
@@ -512,7 +513,7 @@ export default function CabDetailsPage() {
         {/* Store/Provider Info */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="business" size={24} color="#EAB308" />
+            <Ionicons name="business" size={24} color={colors.brand.amber} />
             <Text style={styles.sectionTitle}>Service Provider</Text>
           </View>
           <View style={styles.storeCard}>
@@ -566,13 +567,13 @@ export default function CabDetailsPage() {
         {/* Details Grid */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="information-circle" size={24} color="#EAB308" />
+            <Ionicons name="information-circle" size={24} color={colors.brand.amber} />
             <Text style={styles.sectionTitle}>Trip Details</Text>
           </View>
           <View style={styles.detailsGrid}>
             <View style={styles.detailItem}>
               <View style={styles.detailIconContainer}>
-                <Ionicons name="time-outline" size={20} color="#EAB308" />
+                <Ionicons name="time-outline" size={20} color={colors.brand.amber} />
               </View>
               <Text style={styles.detailLabel}>Duration</Text>
               <Text style={styles.detailValue}>
@@ -582,7 +583,7 @@ export default function CabDetailsPage() {
             {cab.distance && (
               <View style={styles.detailItem}>
                 <View style={styles.detailIconContainer}>
-                  <Ionicons name="location-outline" size={20} color="#EAB308" />
+                  <Ionicons name="location-outline" size={20} color={colors.brand.amber} />
                 </View>
                 <Text style={styles.detailLabel}>Distance</Text>
                 <Text style={styles.detailValue}>{cab.distance} km</Text>
@@ -590,14 +591,14 @@ export default function CabDetailsPage() {
             )}
             <View style={styles.detailItem}>
               <View style={styles.detailIconContainer}>
-                <Ionicons name="car-outline" size={20} color="#EAB308" />
+                <Ionicons name="car-outline" size={20} color={colors.brand.amber} />
               </View>
               <Text style={styles.detailLabel}>Cab Type</Text>
               <Text style={styles.detailValue}>{cab.cabType || 'Intercity'}</Text>
             </View>
             <View style={styles.detailItem}>
               <View style={styles.detailIconContainer}>
-                <Ionicons name="star" size={20} color="#EAB308" />
+                <Ionicons name="star" size={20} color={colors.brand.amber} />
               </View>
               <Text style={styles.detailLabel}>Rating</Text>
               <Text style={styles.detailValue}>{cab.rating.toFixed(1)}</Text>
@@ -608,7 +609,7 @@ export default function CabDetailsPage() {
         {/* Amenities */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Ionicons name="sparkles" size={24} color="#EAB308" />
+            <Ionicons name="sparkles" size={24} color={colors.brand.amber} />
             <Text style={styles.sectionTitle}>Amenities</Text>
           </View>
           <CabAmenities amenities={cab.amenities} />
@@ -663,7 +664,7 @@ export default function CabDetailsPage() {
               </View>
             </View>
             <View style={styles.cashbackInfo}>
-              <Ionicons name="cash" size={18} color="#EAB308" />
+              <Ionicons name="cash" size={18} color={colors.brand.amber} />
               <Text style={styles.cashbackInfoText}>{cab.cashback.percentage}% Cashback</Text>
             </View>
           </View>
@@ -677,7 +678,7 @@ export default function CabDetailsPage() {
            
           >
             <LinearGradient
-              colors={['#EAB308', '#CA8A04', '#A16207']}
+              colors={[colors.brand.amber, '#CA8A04', '#A16207']}
               style={styles.bookButtonGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -784,7 +785,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xl,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
-    backgroundColor: '#EAB308',
+    backgroundColor: colors.brand.amber,
     borderRadius: BorderRadius.md,
   },
   retryButtonText: {
@@ -921,7 +922,7 @@ const styles = StyleSheet.create({
   viewStoreButton: {
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
-    backgroundColor: '#EAB308',
+    backgroundColor: colors.brand.amber,
     borderRadius: BorderRadius.sm,
   },
   viewStoreButtonText: {
@@ -952,7 +953,7 @@ const styles = StyleSheet.create({
   priceValue: {
     ...Typography.h1,
     fontWeight: '800',
-    color: '#EAB308',
+    color: colors.brand.amber,
   },
   originalPrice: {
     ...Typography.h4,
@@ -960,7 +961,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
   },
   cashbackBadge: {
-    backgroundColor: '#EAB308',
+    backgroundColor: colors.brand.amber,
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
@@ -1007,7 +1008,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: BorderRadius.xl,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.sm,
@@ -1097,23 +1098,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.md,
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: colors.warningScale[200],
   },
   cashbackInfoText: {
     ...Typography.bodySmall,
     fontSize: 13,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   bookButton: {
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
-    shadowColor: '#EAB308',
+    shadowColor: colors.brand.amber,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,

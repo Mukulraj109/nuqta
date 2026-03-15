@@ -30,6 +30,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import usePostOrderRewards from '@/hooks/usePostOrderRewards';
 import RewardsBreakdownCard from '@/components/rewards/RewardsBreakdownCard';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export default function PaymentSuccessScreen() {
   const router = useRouter();
@@ -167,7 +168,7 @@ export default function PaymentSuccessScreen() {
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
           >
-            <Ionicons name="checkmark" size={64} color="#FFFFFF" />
+            <Ionicons name="checkmark" size={64} color={colors.background.primary} />
           </LinearGradient>
         </Animated.View>
 
@@ -189,7 +190,7 @@ export default function PaymentSuccessScreen() {
         {rewards.firstVisitBonus != null && rewards.firstVisitBonus > 0 && (
           <Animated.View style={[styles.firstVisitCard, { opacity: contentOpacity }]}>
             <LinearGradient
-              colors={['#FFF7ED', '#FEF3C7']}
+              colors={[colors.tint.orange, colors.tint.amberLight]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.firstVisitGradient}
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.lg,
     padding: SPACING.lg,
     borderWidth: 1,
-    borderColor: '#F59E0B',
+    borderColor: colors.warningScale[400],
   },
   firstVisitContent: {
     flexDirection: 'row',
@@ -353,16 +354,16 @@ const styles = StyleSheet.create({
   firstVisitTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     marginBottom: 2,
   },
   firstVisitSubtitle: {
     fontSize: 13,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     lineHeight: 18,
   },
   firstVisitBadge: {
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
   firstVisitBadgeText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   loyaltyCard: {
     width: '100%',
@@ -460,6 +461,6 @@ const styles = StyleSheet.create({
   },
   homeButtonText: {
     ...TYPOGRAPHY.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });

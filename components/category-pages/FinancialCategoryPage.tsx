@@ -39,17 +39,18 @@ import { LoadingState } from '@/components/common/LoadingState';
 import { financialCategoryData, financialServiceFilters, financialModeFilters, financialQuickActions, ALL_FINANCIAL_SERVICES } from '@/data/category/financialCategoryData';
 import { useRegion } from '@/contexts/RegionContext';
 import { useWalletContext } from '@/contexts/WalletContext';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  primary: '#14B8A6',
+  primary: colors.tealGreen,
   primaryDark: '#0D9488',
   primaryLight: '#F0FDFA',
-  primaryGold: '#F59E0B',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  border: '#E5E7EB',
+  primaryGold: colors.warningScale[400],
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  border: colors.neutral[200],
 };
 
 // Helper: check if a store matches a given filter
@@ -78,9 +79,9 @@ function storeMatchesFilter(store: any, filterId: string): boolean {
 
 function getPriceTier(priceForTwo?: number): { label: string; color: string } {
   if (!priceForTwo) return { label: '', color: '' };
-  if (priceForTwo < 500) return { label: '$', color: '#22C55E' };
-  if (priceForTwo < 1500) return { label: '$$', color: '#F59E0B' };
-  return { label: '$$$', color: '#8B5CF6' };
+  if (priceForTwo < 500) return { label: '$', color: colors.success };
+  if (priceForTwo < 1500) return { label: '$$', color: colors.warningScale[400] };
+  return { label: '$$$', color: colors.brand.purpleLight };
 }
 
 function FinancialCategoryPage() {

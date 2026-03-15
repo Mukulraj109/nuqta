@@ -16,6 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface CashbackSummaryCardProps {
   total: number;
@@ -49,7 +50,7 @@ const CashbackSummaryCard: React.FC<CashbackSummaryCardProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#1a3a52', '#243f55']}
+          colors={[colors.nileBlue, '#243f55']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.card}
@@ -68,7 +69,7 @@ const CashbackSummaryCard: React.FC<CashbackSummaryCardProps> = ({
     <View style={styles.container}>
       <Pressable onPress={handlePress}>
         <LinearGradient
-          colors={['#1a3a52', '#243f55']}
+          colors={[colors.nileBlue, '#243f55']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.card}
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
     padding: 20,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
   totalAmount: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: -0.5,
   },
   walletIconContainer: {
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // Skeleton styles
   skeletonContainer: {

@@ -11,6 +11,7 @@ import { SectionHeader, HorizontalScrollSection } from '../common';
 import { OfferCardLightning } from '../cards';
 import { LightningDeal } from '@/types/offers.types';
 import { Spacing } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface LightningDealsSectionProps {
   deals: LightningDeal[];
@@ -35,7 +36,7 @@ export const LightningDealsSection: React.FC<LightningDealsSectionProps> = ({
         title="Lightning Deals"
         subtitle="Limited time offers"
         icon="flash"
-        iconColor="#ffcd57"
+        iconColor={colors.lightMustard}
         showViewAll={deals.length > 3}
         onViewAll={onViewAll}
       />

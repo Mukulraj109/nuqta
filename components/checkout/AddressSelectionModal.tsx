@@ -14,6 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { CheckoutDeliveryAddress } from '@/types/checkout.types';
+import { colors } from '@/constants/theme';
 
 interface AddressSelectionModalProps {
   visible: boolean;
@@ -48,11 +49,11 @@ function AddressSelectionModal({
   const getAddressTypeColor = (type?: string) => {
     switch (type) {
       case 'HOME':
-        return '#ffcd57';
+        return colors.lightMustard;
       case 'OFFICE':
-        return '#3B82F6';
+        return colors.infoScale[400];
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   };
 
@@ -69,24 +70,24 @@ function AddressSelectionModal({
           <View style={styles.modalHeader}>
             <ThemedText style={styles.modalTitle}>Select Delivery Address</ThemedText>
             <Pressable onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#1F2937" />
+              <Ionicons name="close" size={24} color={colors.neutral[800]} />
             </Pressable>
           </View>
 
           {loading ? (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#ffcd57" />
+              <ActivityIndicator size="large" color={colors.lightMustard} />
               <ThemedText style={styles.loadingText}>Loading addresses...</ThemedText>
             </View>
           ) : addresses.length === 0 ? (
             <View style={styles.emptyContainer}>
-              <Ionicons name="location-outline" size={64} color="#E5E7EB" />
+              <Ionicons name="location-outline" size={64} color={colors.neutral[200]} />
               <ThemedText style={styles.emptyTitle}>No Saved Addresses</ThemedText>
               <ThemedText style={styles.emptyDescription}>
                 Add a delivery address to continue with your order
               </ThemedText>
               <Pressable style={styles.addNewButton} onPress={onAddNew}>
-                <Ionicons name="add-circle" size={20} color="#FFFFFF" />
+                <Ionicons name="add-circle" size={20} color={colors.background.primary} />
                 <ThemedText style={styles.addNewButtonText}>Add New Address</ThemedText>
               </Pressable>
             </View>
@@ -119,7 +120,7 @@ function AddressSelectionModal({
                           <Ionicons
                             name={getAddressTypeIcon(address.type)}
                             size={18}
-                            color="#FFFFFF"
+                            color={colors.background.primary}
                           />
                         </View>
 
@@ -137,7 +138,7 @@ function AddressSelectionModal({
 
                           {address.phone && (
                             <View style={styles.phoneRow}>
-                              <Ionicons name="call-outline" size={12} color="#6B7280" />
+                              <Ionicons name="call-outline" size={12} color={colors.neutral[500]} />
                               <ThemedText style={styles.phoneText}>{address.phone}</ThemedText>
                             </View>
                           )}
@@ -153,7 +154,7 @@ function AddressSelectionModal({
 
                           {address.instructions && (
                             <View style={styles.instructionsRow}>
-                              <Ionicons name="information-circle-outline" size={12} color="#9CA3AF" />
+                              <Ionicons name="information-circle-outline" size={12} color={colors.neutral[400]} />
                               <ThemedText style={styles.instructionsText} numberOfLines={1}>
                                 {address.instructions}
                               </ThemedText>
@@ -180,7 +181,7 @@ function AddressSelectionModal({
               {/* Add New Address Button */}
               <View style={styles.footer}>
                 <Pressable style={styles.addNewOutlineButton} onPress={onAddNew}>
-                  <Ionicons name="add-circle-outline" size={20} color="#ffcd57" />
+                  <Ionicons name="add-circle-outline" size={20} color={colors.lightMustard} />
                   <ThemedText style={styles.addNewOutlineButtonText}>Add New Address</ThemedText>
                 </Pressable>
               </View>
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '80%',
@@ -227,12 +228,12 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   closeButton: {
     padding: 4,
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   emptyContainer: {
     flex: 1,
@@ -258,20 +259,20 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 16,
     marginBottom: 8,
   },
   emptyDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 24,
   },
   addNewButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 24,
     paddingVertical: 14,
     borderRadius: 12,
@@ -280,7 +281,7 @@ const styles = StyleSheet.create({
   addNewButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   addressList: {
     flex: 1,
@@ -290,15 +291,15 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   addressItem: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     marginBottom: 12,
     borderWidth: 2,
     borderColor: 'transparent',
   },
   addressItemSelected: {
-    borderColor: '#ffcd57',
-    backgroundColor: '#F0FDF4',
+    borderColor: colors.lightMustard,
+    backgroundColor: colors.successScale[50],
   },
   addressItemContent: {
     flexDirection: 'row',
@@ -327,10 +328,10 @@ const styles = StyleSheet.create({
   addressTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   defaultBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
@@ -338,7 +339,7 @@ const styles = StyleSheet.create({
   defaultBadgeText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   phoneRow: {
     flexDirection: 'row',
@@ -348,17 +349,17 @@ const styles = StyleSheet.create({
   },
   phoneText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   addressLine: {
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
     marginBottom: 2,
     lineHeight: 20,
   },
   addressCity: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   instructionsRow: {
     flexDirection: 'row',
@@ -368,7 +369,7 @@ const styles = StyleSheet.create({
   },
   instructionsText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontStyle: 'italic',
     flex: 1,
   },
@@ -382,40 +383,40 @@ const styles = StyleSheet.create({
     height: 22,
     borderRadius: 11,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     alignItems: 'center',
     justifyContent: 'center',
   },
   radioOuterSelected: {
-    borderColor: '#ffcd57',
+    borderColor: colors.lightMustard,
   },
   radioInner: {
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   footer: {
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
     paddingBottom: Platform.OS === 'ios' ? 34 : 16,
   },
   addNewOutlineButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: '#ffcd57',
+    borderColor: colors.lightMustard,
     gap: 8,
   },
   addNewOutlineButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 });
 

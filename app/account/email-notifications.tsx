@@ -14,6 +14,7 @@ import { FormPageSkeleton } from '@/components/skeletons';
 import notificationService from '../../services/notificationService';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface EmailNotifications {
   enabled: boolean;
@@ -103,7 +104,7 @@ export default function EmailNotificationsScreen() {
         onValueChange={onValueChange}
         disabled={disabled || saving}
         trackColor={{ false: Colors.border.default, true: Colors.info }}
-        thumbColor={value ? '#FFFFFF' : Colors.background.secondary}
+        thumbColor={value ? colors.background.primary : Colors.background.secondary}
         accessibilityLabel={`${title}${value ? ', enabled' : ', disabled'}`}
         accessibilityRole="switch"
         accessibilityState={{ checked: value, disabled: disabled || saving }}

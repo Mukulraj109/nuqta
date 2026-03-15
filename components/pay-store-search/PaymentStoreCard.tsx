@@ -23,6 +23,7 @@ import {
   SEARCH_ANIMATIONS,
 } from '@/types/paymentStoreSearch.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -33,57 +34,57 @@ const SPRING_CONFIG = {
 
 // New Color Palette
 const COLORS = {
-  primary: '#ffcd57',           // Light Mustard
+  primary: colors.lightMustard,           // Light Mustard
   primaryDark: '#e6b84e',
   primaryLight: 'rgba(255, 205, 87, 0.12)',  // Mustard light
   primaryGlow: 'rgba(255, 205, 87, 0.15)',   // Mustard glow
-  nileBlue: '#1a3a52',
+  nileBlue: colors.nileBlue,
 
   // Status colors
-  open: '#22C55E',
-  closed: '#EF4444',
+  open: colors.success,
+  closed: colors.error,
 
   // Tag colors
-  tagTop: '#F97316',
-  tagBrand: '#3B82F6',
-  tagHot: '#EF4444',
-  tagLocal: '#ffcd57',
-  tagOnline: '#6B7280',
-  tagVerified: '#8B5CF6',
-  tagFast: '#06B6D4',
-  tagPremium: '#F59E0B',
-  tagOrganic: '#22C55E',
+  tagTop: colors.brand.orange,
+  tagBrand: colors.infoScale[400],
+  tagHot: colors.error,
+  tagLocal: colors.lightMustard,
+  tagOnline: colors.neutral[500],
+  tagVerified: colors.brand.purpleLight,
+  tagFast: colors.brand.cyan,
+  tagPremium: colors.warningScale[400],
+  tagOrganic: colors.success,
 
   // Partner levels
   partnerBronze: '#CD7F32',
   partnerSilver: '#C0C0C0',
-  partnerGold: '#FFD700',
+  partnerGold: colors.brand.goldBright,
   partnerPlatinum: '#E5E4E2',
 
   // Category logo colors
-  grocery: '#F97316',
-  fashion: '#8B5CF6',
-  restaurant: '#EF4444',
-  organic: '#22C55E',
-  electronics: '#3B82F6',
-  entertainment: '#EC4899',
-  travel: '#06B6D4',
+  grocery: colors.brand.orange,
+  fashion: colors.brand.purpleLight,
+  restaurant: colors.error,
+  organic: colors.success,
+  electronics: colors.infoScale[400],
+  entertainment: colors.brand.pink,
+  travel: colors.brand.cyan,
   beauty: '#F472B6',
-  default: '#0B2240',
+  default: colors.brand.navyDark,
 
   // Text
-  textPrimary: '#1F2937',
-  textSecondary: '#6B7280',
-  textMuted: '#9CA3AF',
+  textPrimary: colors.neutral[800],
+  textSecondary: colors.neutral[500],
+  textMuted: colors.neutral[400],
 
   // Backgrounds
-  surface: '#FFFFFF',
+  surface: colors.background.primary,
   glassWhite: 'rgba(255, 255, 255, 0.92)',
   glassBorder: 'rgba(0, 0, 0, 0.06)',
 
   // Rating
-  ratingBg: '#FEF3C7',
-  ratingStar: '#F59E0B',
+  ratingBg: colors.tint.amberLight,
+  ratingStar: colors.warningScale[400],
 };
 
 export const PaymentStoreCard: React.FC<PaymentStoreCardProps> = ({
@@ -167,11 +168,11 @@ export const PaymentStoreCard: React.FC<PaymentStoreCardProps> = ({
         entering={FadeInDown.delay(index * 60).springify().damping(15)}
         style={[styles.compactContainer, animatedStyle]}
       >
-        <View style={[styles.compactLogo, { backgroundColor: store.logo ? '#F3F4F6' : logoColor }]}>
+        <View style={[styles.compactLogo, { backgroundColor: store.logo ? colors.neutral[100] : logoColor }]}>
           {store.logo ? (
             <CachedImage source={{ uri: store.logo }} style={styles.compactLogoImage} contentFit="cover" cachePolicy="memory-disk" />
           ) : (
-            <Ionicons name="storefront" size={22} color="#FFF" />
+            <Ionicons name="storefront" size={22} color={colors.background.primary} />
           )}
         </View>
         <Text style={styles.compactName} numberOfLines={2}>{store.name}</Text>
@@ -220,16 +221,16 @@ export const PaymentStoreCard: React.FC<PaymentStoreCardProps> = ({
         {/* Row 1: Logo + Info + Discount */}
         <View style={styles.topRow}>
           {/* Logo */}
-          <View style={[styles.logo, { backgroundColor: store.logo ? '#F8FAFC' : logoColor }]}>
+          <View style={[styles.logo, { backgroundColor: store.logo ? colors.tint.coolGray : logoColor }]}>
             {store.logo ? (
               <CachedImage source={{ uri: store.logo }} style={styles.logoImage} contentFit="cover" cachePolicy="memory-disk" />
             ) : (
-              <Ionicons name="storefront" size={26} color="#FFF" />
+              <Ionicons name="storefront" size={26} color={colors.background.primary} />
             )}
             {/* Partner Badge on Logo */}
             {store.offers?.partnerLevel && (
               <View style={[styles.partnerBadge, { backgroundColor: getPartnerColor(store.offers.partnerLevel) }]}>
-                <Ionicons name="star" size={8} color="#FFF" />
+                <Ionicons name="star" size={8} color={colors.background.primary} />
               </View>
             )}
           </View>
@@ -243,7 +244,7 @@ export const PaymentStoreCard: React.FC<PaymentStoreCardProps> = ({
                 <View style={styles.tagsInline}>
                   {tags.slice(0, 2).map((tag, i) => (
                     <View key={i} style={[styles.tagSmall, { backgroundColor: tag.color }]}>
-                      <Ionicons name={tag.icon as any} size={9} color="#FFF" />
+                      <Ionicons name={tag.icon as any} size={9} color={colors.background.primary} />
                       <Text style={styles.tagSmallText}>{tag.label}</Text>
                     </View>
                   ))}
@@ -279,7 +280,7 @@ export const PaymentStoreCard: React.FC<PaymentStoreCardProps> = ({
           {discount && discount > 0 && (
             <View style={styles.discountBadge}>
               <LinearGradient colors={[COLORS.primary, COLORS.primaryDark]} style={styles.discountGradient}>
-                <Ionicons name="pricetag" size={10} color="#1a3a52" />
+                <Ionicons name="pricetag" size={10} color={colors.nileBlue} />
                 <Text style={styles.discountText}>{discount}%</Text>
               </LinearGradient>
             </View>
@@ -343,7 +344,7 @@ export const PaymentStoreCard: React.FC<PaymentStoreCardProps> = ({
                 style={styles.payGradient}
               >
                 <Text style={styles.payText}>Pay Now</Text>
-                <Ionicons name="arrow-forward" size={16} color="#1a3a52" />
+                <Ionicons name="arrow-forward" size={16} color={colors.nileBlue} />
               </LinearGradient>
             </Pressable>
 
@@ -417,7 +418,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FFF',
+    borderColor: colors.background.primary,
   },
 
   info: {
@@ -457,7 +458,7 @@ const styles = StyleSheet.create({
   tagSmallText: {
     fontSize: 8,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
   },
 
   category: {
@@ -534,7 +535,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#1a3a52',  // Nile Blue for contrast
+    color: colors.nileBlue,  // Nile Blue for contrast
   },
 
   // Features Row
@@ -647,7 +648,7 @@ const styles = StyleSheet.create({
   payText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',  // Nile Blue for contrast on Mustard
+    color: colors.nileBlue,  // Nile Blue for contrast on Mustard
   },
 
   viewButton: {

@@ -24,6 +24,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export default function ReviewPage() {
   const router = useRouter();
@@ -172,7 +173,7 @@ export default function ReviewPage() {
             <Ionicons
               name={star <= rating ? 'star' : 'star-outline'}
               size={28}
-              color={star <= rating ? '#FFD700' : Colors.border.default}
+              color={star <= rating ? colors.brand.goldBright : Colors.border.default}
             />
           </Pressable>
         ))}
@@ -232,7 +233,7 @@ export default function ReviewPage() {
             <>
               {loadingStore ? (
                 <View style={styles.storeIconContainer}>
-                  <ActivityIndicator size="small" color="#00C06A" />
+                  <ActivityIndicator size="small" color={colors.brand.green} />
                 </View>
               ) : storeLogo ? (
                 <CachedImage
@@ -242,7 +243,7 @@ export default function ReviewPage() {
                 />
               ) : (
                 <View style={styles.storeIconContainer}>
-                  <Ionicons name="storefront" size={48} color="#00C06A" />
+                  <Ionicons name="storefront" size={48} color={colors.brand.green} />
                 </View>
               )}
               <Text style={styles.productTitle}>{loadingStore ? 'Loading...' : (storeName || 'Store')}</Text>
@@ -296,7 +297,7 @@ export default function ReviewPage() {
               <Ionicons
                 name="create-outline"
                 size={20}
-                color="#6D28D9"
+                color={colors.brand.purpleDeep}
                 style={styles.writeIcon}
               />
             <TextInput
@@ -308,7 +309,7 @@ export default function ReviewPage() {
     outlineStyle: 'none', // Web only
   } as any}
   placeholder="Write your experience here..."
-  placeholderTextColor="#9CA3AF"
+  placeholderTextColor={colors.neutral[400]}
   multiline
   numberOfLines={3}
   value={reviewText}
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: Spacing.md,
     borderWidth: 3,
-    borderColor: '#BBF7D0',
+    borderColor: colors.successScale[200],
   },
   productTitle: {
     ...Typography.bodyLarge,
@@ -441,7 +442,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   reviewCard: {
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
     borderRadius: BorderRadius.xl,
     padding: Spacing.lg,
     shadowColor: Colors.brand.purpleLight,

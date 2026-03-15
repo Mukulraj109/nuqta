@@ -1,6 +1,7 @@
 // Conversation List Component
 // Displays list of all conversations
 
+import { colors } from '@/constants/theme';
 import React from 'react';
 import { View, FlatList, Pressable, StyleSheet, Platform } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     flex: 1,
   },
   storeNameUnread: {
@@ -260,12 +261,12 @@ const styles = StyleSheet.create({
   },
   lastMessage: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     flex: 1,
   },
   lastMessageUnread: {
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   orderContext: {
     flexDirection: 'row',

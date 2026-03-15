@@ -13,6 +13,7 @@ import { useStoreDiscovery, DiscoveryStore } from '@/hooks/useStoreDiscovery';
 import TopStoreCard from './cards/TopStoreCard';
 import PopularStoreCard from './cards/PopularStoreCard';
 import StoreDiscoverySkeleton from './skeletons/StoreDiscoverySkeleton';
+import { colors } from '@/constants/theme';
 
 interface StoreDiscoverySectionProps {
   limit?: number;
@@ -246,13 +247,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   viewAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   scrollContent: {
     paddingHorizontal: 20,

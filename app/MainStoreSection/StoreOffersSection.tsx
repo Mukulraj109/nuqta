@@ -19,6 +19,7 @@ import {
 } from "@/constants/DesignSystem";
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export interface Offer {
   id: string;
@@ -71,11 +72,11 @@ export default function StoreOffersSection({
       case "percentage":
         return "#FF3B30";
       case "flat":
-        return "#ffcd57";
+        return colors.lightMustard;
       case "cashback":
-        return "#007AFF";
+        return colors.brand.ios;
       default:
-        return "#ffcd57";
+        return colors.lightMustard;
     }
   };
 
@@ -197,14 +198,14 @@ const styles = StyleSheet.create({
   viewAll: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#ffcd57",
+    color: colors.lightMustard,
   },
   offersList: {
     paddingHorizontal: Spacing.base,
     gap: Spacing.md,
   },
   offerCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     borderRadius: BorderRadius.lg,
     padding: Spacing.md,
     borderWidth: 1,
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 11,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: colors.background.primary,
   },
   validity: {
     fontSize: 12,
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
     color: "#FF9500",
   },
   applyButton: {
-    backgroundColor: "#ffcd57",
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: Spacing.md,
     paddingVertical: 10,
     borderRadius: BorderRadius.md,
@@ -270,6 +271,6 @@ const styles = StyleSheet.create({
   applyButtonText: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: colors.background.primary,
   },
 });

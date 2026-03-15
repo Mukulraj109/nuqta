@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import programApi from '../../services/programApi';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const SocialImpactEventDetail = () => {
   const router = useRouter();
@@ -193,7 +194,7 @@ const SocialImpactEventDetail = () => {
       title: 'Community Kitchen Volunteering',
       icon: '🍲',
       iconBg: 'rgba(249, 115, 22, 0.2)',
-      iconColor: '#F97316',
+      iconColor: colors.brand.orange,
       organizer: 'Feed the Need NGO',
       logo: '🤝',
       date: 'Every Sunday',
@@ -249,7 +250,7 @@ const SocialImpactEventDetail = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#000' : Colors.background.primary }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? colors.text.primary : Colors.background.primary }]}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={[styles.header, { backgroundColor: isDark ? 'rgba(0,0,0,0.95)' : 'rgba(255,255,255,0.95)' }]}>
@@ -284,7 +285,7 @@ const SocialImpactEventDetail = () => {
             </View>
             <View style={[styles.infoCard, { backgroundColor: isDark ? Colors.text.primary : Colors.background.primary, borderColor: isDark ? 'rgba(255,255,255,0.1)' : Colors.border.default }]}>
               <View style={styles.infoHeader}>
-                <Ionicons name="time" size={16} color={'#F97316'} />
+                <Ionicons name="time" size={16} color={colors.brand.orange} />
                 <Text style={[styles.infoLabel, { color: isDark ? Colors.text.tertiary : Colors.text.tertiary }]}>Time</Text>
               </View>
               <Text style={[styles.infoValue, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>{event.time}</Text>
@@ -314,7 +315,7 @@ const SocialImpactEventDetail = () => {
 
           {/* Impact & Progress */}
           <LinearGradient
-            colors={isDark ? ['rgba(255, 205, 87, 0.1)', 'rgba(20, 184, 166, 0.1)'] : ['#faf1e0', '#F0FDFA']}
+            colors={isDark ? ['rgba(255, 205, 87, 0.1)', 'rgba(20, 184, 166, 0.1)'] : [colors.linen, '#F0FDFA']}
             style={[styles.impactCard, { borderColor: isDark ? 'rgba(255, 205, 87, 0.3)' : '#A7F3D0' }]}
           >
             <View style={styles.impactHeader}>
@@ -345,7 +346,7 @@ const SocialImpactEventDetail = () => {
               <Text style={[styles.sectionTitle, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>Rewards</Text>
             </View>
             <View style={styles.rewardsList}>
-              <View style={[styles.rewardCard, { backgroundColor: isDark ? 'rgba(255, 205, 87, 0.1)' : '#faf1e0' }]}>
+              <View style={[styles.rewardCard, { backgroundColor: isDark ? 'rgba(255, 205, 87, 0.1)' : colors.linen }]}>
                 <View style={styles.rewardHeader}>
                   <Text style={styles.rewardEmoji}>💰</Text>
                   <Text style={[styles.rewardLabel, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>{BRAND.COIN_NAME}</Text>
@@ -358,7 +359,7 @@ const SocialImpactEventDetail = () => {
                     <Text style={styles.rewardEmoji}>🏪</Text>
                     <Text style={[styles.rewardLabel, { color: isDark ? Colors.text.inverse : Colors.text.primary }]}>{event.rewards.brandName} Coins</Text>
                   </View>
-                  <Text style={[styles.rewardAmount, { color: '#A855F7' }]}>+{event.rewards.brandedCoins}</Text>
+                  <Text style={[styles.rewardAmount, { color: colors.brand.purpleMedium }]}>+{event.rewards.brandedCoins}</Text>
                 </View>
               )}
             </View>

@@ -6,6 +6,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface HotelDetails {
   name: string;
@@ -27,7 +28,7 @@ const HotelInfoCard: React.FC<HotelInfoCardProps> = ({ hotel }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#EC4899', '#DB2777']}
+        colors={[colors.brand.pink, colors.deepPink]}
         style={styles.gradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -35,12 +36,12 @@ const HotelInfoCard: React.FC<HotelInfoCardProps> = ({ hotel }) => {
         {/* Hotel Name & Location */}
         <View style={styles.header}>
           <View style={styles.hotelIcon}>
-            <Ionicons name="bed" size={28} color="#FFFFFF" />
+            <Ionicons name="bed" size={28} color={colors.background.primary} />
           </View>
           <View style={styles.hotelInfo}>
             <Text style={styles.hotelName} numberOfLines={2}>{hotel.name}</Text>
             <View style={styles.locationRow}>
-              <Ionicons name="location" size={16} color="#FFFFFF" />
+              <Ionicons name="location" size={16} color={colors.background.primary} />
               <Text style={styles.locationText}>{hotel.location.address || hotel.location.city}</Text>
             </View>
           </View>
@@ -50,7 +51,7 @@ const HotelInfoCard: React.FC<HotelInfoCardProps> = ({ hotel }) => {
         <View style={styles.timesContainer}>
           <View style={styles.timeItem}>
             <View style={styles.timeIcon}>
-              <Ionicons name="log-in" size={20} color="#FFFFFF" />
+              <Ionicons name="log-in" size={20} color={colors.background.primary} />
             </View>
             <View style={styles.timeInfo}>
               <Text style={styles.timeLabel}>Check-in</Text>
@@ -62,7 +63,7 @@ const HotelInfoCard: React.FC<HotelInfoCardProps> = ({ hotel }) => {
 
           <View style={styles.timeItem}>
             <View style={styles.timeIcon}>
-              <Ionicons name="log-out" size={20} color="#FFFFFF" />
+              <Ionicons name="log-out" size={20} color={colors.background.primary} />
             </View>
             <View style={styles.timeInfo}>
               <Text style={styles.timeLabel}>Check-out</Text>
@@ -80,7 +81,7 @@ const HotelInfoCard: React.FC<HotelInfoCardProps> = ({ hotel }) => {
                   key={i}
                   name={i < hotel.starRating! ? 'star' : 'star-outline'}
                   size={16}
-                  color="#FFD700"
+                  color={colors.brand.goldBright}
                 />
               ))}
               <Text style={styles.starText}>{hotel.starRating} Star</Text>
@@ -88,7 +89,7 @@ const HotelInfoCard: React.FC<HotelInfoCardProps> = ({ hotel }) => {
           )}
           {hotel.rating > 0 && (
             <View style={styles.userRating}>
-              <Ionicons name="star" size={16} color="#FFFFFF" />
+              <Ionicons name="star" size={16} color={colors.background.primary} />
               <Text style={styles.ratingText}>{hotel.rating.toFixed(1)}</Text>
             </View>
           )}
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
   hotelName: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 8,
     letterSpacing: -0.3,
   },
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
   timeValue: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   timeDivider: {
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   },
   starText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
     marginLeft: 4,
   },
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

@@ -56,6 +56,7 @@ import TravelBookingDeals from './sections/TravelBookingDeals';
 import HowItWorksPreview from './sections/HowItWorksPreview';
 import CashbackActivitySection from './sections/CashbackActivitySection';
 import CashStoreSkeleton from './skeletons/CashStoreSkeleton';
+import { colors } from '@/constants/theme';
 
 interface CashStoreSectionContainerProps {
   onScrollToTop?: () => void;
@@ -106,8 +107,8 @@ const CashStoreSectionContainer: React.FC<CashStoreSectionContainerProps> = ({
           const urlToOpen = trackingResult?.trackingUrl || deal.externalUrl;
 
           await WebBrowser.openBrowserAsync(urlToOpen, {
-            toolbarColor: '#1a3a52', // Nile Blue
-            controlsColor: '#FFFFFF',
+            toolbarColor: colors.nileBlue, // Nile Blue
+            controlsColor: colors.background.primary,
           });
         } catch (error) {
           if (deal.externalUrl) {
@@ -147,8 +148,8 @@ const CashStoreSectionContainer: React.FC<CashStoreSectionContainerProps> = ({
           const urlToOpen = trackingResult?.trackingUrl || deal.externalUrl;
 
           await WebBrowser.openBrowserAsync(urlToOpen, {
-            toolbarColor: '#1a3a52', // Nile Blue
-            controlsColor: '#FFFFFF',
+            toolbarColor: colors.nileBlue, // Nile Blue
+            controlsColor: colors.background.primary,
           });
         } catch (error) {
           if (deal.externalUrl) {
@@ -268,7 +269,7 @@ const CashStoreSectionContainer: React.FC<CashStoreSectionContainerProps> = ({
     <View style={styles.outerContainer}>
       {/* Gradient Background - Soft warm canvas so sections pop */}
       <LinearGradient
-        colors={['#ffd7b5', '#FFF5EE', '#faf1e0', '#F9FAFB', '#FFFFFF']}
+        colors={[colors.lightPeach, '#FFF5EE', colors.linen, colors.neutral[50], colors.background.primary]}
         locations={[0, 0.08, 0.25, 0.55, 1]}
         style={styles.gradientBackground}
       />
@@ -282,8 +283,8 @@ const CashStoreSectionContainer: React.FC<CashStoreSectionContainerProps> = ({
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={refresh}
-            tintColor="#1a3a52"
-            colors={['#1a3a52']}
+            tintColor={colors.nileBlue}
+            colors={[colors.nileBlue]}
           />
         }
       >
@@ -411,7 +412,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   errorContainer: {
@@ -424,13 +425,13 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
     textAlign: 'center',
   },
   errorSubtext: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   bottomSpacer: {

@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ProfileCompletionCardProps } from '@/types/profile';
+import { colors } from '@/constants/theme';
 
 const ProfileCompletionCard: React.FC<ProfileCompletionCardProps> = ({
   name,
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   completeButtonText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '500',
   },
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

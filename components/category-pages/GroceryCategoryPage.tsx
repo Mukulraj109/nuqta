@@ -45,20 +45,21 @@ import { storesApi } from '@/services/storesApi';
 import apiClient from '@/services/apiClient';
 import { useRegion } from '@/contexts/RegionContext';
 import { groceryQuickActions } from '@/data/category/groceryCategoryData';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  primaryGreen: '#22C55E',
-  primaryGold: '#F59E0B',
-  dark: '#1a3a52',
+  primaryGreen: colors.success,
+  primaryGold: colors.warningScale[400],
+  dark: colors.nileBlue,
   darkDeep: '#0f2638',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  green: '#22C55E',
-  greenLight: '#DCFCE7',
-  greenDark: '#16A34A',
-  border: '#E5E7EB',
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  green: colors.success,
+  greenLight: colors.successScale[100],
+  greenDark: colors.brand.greenDark,
+  border: colors.neutral[200],
 };
 
 const GROCERY_TABS = [
@@ -80,7 +81,7 @@ const SectionHeaderSkeleton = () => (
 const StoreCardSkeleton = ({ count = 3 }: { count?: number }) => (
   <View style={{ paddingHorizontal: 16, gap: 12 }}>
     {Array.from({ length: count }).map((_, i) => (
-      <View key={i} style={{ backgroundColor: '#fff', borderRadius: 16, padding: 12 }}>
+      <View key={i} style={{ backgroundColor: colors.background.primary, borderRadius: 16, padding: 12 }}>
         <View style={{ flexDirection: 'row', gap: 12 }}>
           <SkeletonLoader width={64} height={64} borderRadius={12} />
           <View style={{ flex: 1, gap: 6 }}>
@@ -96,7 +97,7 @@ const StoreCardSkeleton = ({ count = 3 }: { count?: number }) => (
 const ProductCardSkeleton = ({ count = 4 }: { count?: number }) => (
   <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingRight: 16 }}>
     {Array.from({ length: count }).map((_, i) => (
-      <View key={i} style={{ width: 140, padding: 8, borderRadius: 12, backgroundColor: '#fff' }}>
+      <View key={i} style={{ width: 140, padding: 8, borderRadius: 12, backgroundColor: colors.background.primary }}>
         <SkeletonLoader width="100%" height={120} borderRadius={8} />
         <View style={{ marginTop: 8, gap: 4 }}>
           <SkeletonLoader width="60%" height={10} borderRadius={4} />
@@ -142,7 +143,7 @@ const StoreCard = ({ store, variant = 'default' }: { store: any; variant?: 'defa
           )}
           {store.deliveryCategories?.fastDelivery && (
             <View style={styles.storeBadge60Compact}>
-              <Ionicons name="flash" size={10} color="#000" />
+              <Ionicons name="flash" size={10} color={colors.text.primary} />
               <Text style={styles.storeBadge60TextCompact}>60-min</Text>
             </View>
           )}
@@ -262,7 +263,7 @@ const ProductCard = ({ product, currencySymbol }: { product: any; currencySymbol
             contentFit="cover"
           />
         ) : (
-          <View style={[styles.productImage, { backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center' }]}>
+          <View style={[styles.productImage, { backgroundColor: colors.neutral[100], justifyContent: 'center', alignItems: 'center' }]}>
             <Ionicons name="cube-outline" size={28} color={COLORS.textSecondary} />
           </View>
         )}
@@ -273,7 +274,7 @@ const ProductCard = ({ product, currencySymbol }: { product: any; currencySymbol
         )}
         {product.deliveryCategories?.fastDelivery && (
           <View style={styles.productBadge60}>
-            <Ionicons name="flash" size={10} color="#000" />
+            <Ionicons name="flash" size={10} color={colors.text.primary} />
             <Text style={styles.productBadge60Text}>60-min</Text>
           </View>
         )}
@@ -724,7 +725,7 @@ function GroceryCategoryPage() {
           style={styles.billUploadGradient}
         >
           <View style={styles.billUploadContent}>
-            <Ionicons name="cloud-upload-outline" size={32} color="#3B82F6" />
+            <Ionicons name="cloud-upload-outline" size={32} color={colors.infoScale[400]} />
             <View style={styles.billUploadText}>
               <Text style={styles.billUploadTitle}>Upload Grocery Bill</Text>
               <Text style={styles.billUploadSubtitle}>Get cashback on any grocery purchase</Text>
@@ -774,7 +775,7 @@ function GroceryCategoryPage() {
         </View>
       )}
 
-      <StreakLoyaltySection categorySlug={slug} primaryColor="#22C55E" />
+      <StreakLoyaltySection categorySlug={slug} primaryColor={colors.success} />
 
       {/* Enhanced UGC Social Proof Section */}
       <EnhancedUGCSocialProofSection
@@ -826,7 +827,7 @@ const styles = StyleSheet.create({
     width: 180, padding: 12, borderRadius: 16, backgroundColor: COLORS.white,
   },
   storeLogoCompact: {
-    width: 48, height: 48, borderRadius: 12, backgroundColor: '#F3F4F6',
+    width: 48, height: 48, borderRadius: 12, backgroundColor: colors.neutral[100],
     justifyContent: 'center', alignItems: 'center', marginBottom: 8,
   },
   storeLogoImage: { width: 40, height: 40 },
@@ -839,7 +840,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12,
     backgroundColor: 'rgba(34,197,94,0.1)',
   },
-  storeBadgeTextCompact: { fontSize: 11, color: '#15803D', fontWeight: '500' },
+  storeBadgeTextCompact: { fontSize: 11, color: colors.successScale[700], fontWeight: '500' },
   storeBadge60Compact: {
     flexDirection: 'row', alignItems: 'center', paddingHorizontal: 6,
     paddingVertical: 3, borderRadius: 12, backgroundColor: COLORS.primaryGreen, gap: 3,
@@ -849,7 +850,7 @@ const styles = StyleSheet.create({
   storeCard: { padding: 12, borderRadius: 16, backgroundColor: COLORS.white, marginBottom: 12 },
   storeCardContent: { flexDirection: 'row', gap: 12, marginBottom: 12 },
   storeLogo: {
-    width: 64, height: 64, borderRadius: 12, backgroundColor: '#F3F4F6',
+    width: 64, height: 64, borderRadius: 12, backgroundColor: colors.neutral[100],
     justifyContent: 'center', alignItems: 'center',
   },
   storeInfo: { flex: 1 },
@@ -859,14 +860,14 @@ const styles = StyleSheet.create({
   storeOpenDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: COLORS.green },
   storeOpenText: { fontSize: 11, color: COLORS.green, fontWeight: '500' },
   storeClosedBadge: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  storeClosedDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#EF4444' },
-  storeClosedText: { fontSize: 11, color: '#EF4444', fontWeight: '500' },
+  storeClosedDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.error },
+  storeClosedText: { fontSize: 11, color: colors.error, fontWeight: '500' },
   storeMeta: { flexDirection: 'row', gap: 12 },
   storeMetaItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   storeMetaText: { fontSize: 12, color: COLORS.textSecondary },
   storeFooter: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingTop: 12, borderTopWidth: 1, borderTopColor: '#F3F4F6',
+    paddingTop: 12, borderTopWidth: 1, borderTopColor: colors.neutral[100],
   },
   storeCoins: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   storeCoinsText: { fontSize: 13, color: COLORS.primaryGold, fontWeight: '500' },
@@ -908,7 +909,7 @@ const styles = StyleSheet.create({
   billUploadText: { flex: 1 },
   billUploadTitle: { fontSize: 16, fontWeight: '600', color: COLORS.textPrimary, marginBottom: 4 },
   billUploadSubtitle: { fontSize: 13, color: COLORS.textSecondary },
-  billUploadButton: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: 8, backgroundColor: '#3B82F6' },
+  billUploadButton: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: 8, backgroundColor: colors.infoScale[400] },
   billUploadButtonText: { fontSize: 14, fontWeight: '600', color: COLORS.white },
   // Suggestions
   suggestionsList: { gap: 8 },
@@ -916,7 +917,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', padding: 12,
     borderRadius: 12, backgroundColor: COLORS.white, gap: 8,
   },
-  suggestionText: { flex: 1, fontSize: 13, color: '#374151' },
+  suggestionText: { flex: 1, fontSize: 13, color: colors.neutral[700] },
   // Compare banner
   compareBanner: {
     marginHorizontal: 16, marginTop: 20, borderRadius: 20, overflow: 'hidden',

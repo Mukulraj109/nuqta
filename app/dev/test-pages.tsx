@@ -16,6 +16,7 @@ import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface PageLink {
   name: string;
@@ -32,7 +33,7 @@ interface PageCategory {
 const PAGE_CATEGORIES: PageCategory[] = [
   {
     title: 'Legal Pages',
-    color: '#6366F1',
+    color: colors.brand.indigo,
     pages: [
       { name: `About ${BRAND.APP_NAME}`, path: '/legal/about', icon: 'information-circle' },
       { name: 'Terms & Conditions', path: '/legal/terms', icon: 'document-text' },
@@ -42,7 +43,7 @@ const PAGE_CATEGORIES: PageCategory[] = [
   },
   {
     title: 'System Pages',
-    color: '#EF4444',
+    color: colors.error,
     pages: [
       { name: 'App Update Required', path: '/system/app-update', icon: 'cloud-download' },
       { name: 'Maintenance', path: '/system/maintenance', icon: 'construct' },
@@ -51,14 +52,14 @@ const PAGE_CATEGORIES: PageCategory[] = [
   },
   {
     title: 'Authentication',
-    color: '#10B981',
+    color: colors.successScale[400],
     pages: [
       { name: 'Account Recovery', path: '/account-recovery', icon: 'key' },
     ],
   },
   {
     title: 'Search Pages',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     pages: [
       { name: 'AI Search', path: '/search/ai-search', icon: 'sparkles' },
       { name: 'Nearby Hotspots', path: '/search/hotspots', icon: 'location' },
@@ -66,7 +67,7 @@ const PAGE_CATEGORIES: PageCategory[] = [
   },
   {
     title: 'Offers Pages',
-    color: '#EC4899',
+    color: colors.brand.pink,
     pages: [
       { name: 'AI Recommended', path: '/offers/ai-recommended', icon: 'sparkles' },
       { name: 'Friends Redeemed', path: '/offers/friends-redeemed', icon: 'people' },
@@ -77,7 +78,7 @@ const PAGE_CATEGORIES: PageCategory[] = [
   },
   {
     title: 'Offer Zones',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     pages: [
       { name: 'Student Zone', path: '/offers/zones/student', icon: 'school' },
       { name: 'Corporate Zone', path: '/offers/zones/corporate', icon: 'briefcase' },
@@ -96,7 +97,7 @@ const PAGE_CATEGORIES: PageCategory[] = [
   },
   {
     title: 'Wallet Pages',
-    color: '#FFC857',
+    color: colors.brand.goldWarm,
     pages: [
       { name: 'P2P Transfer', path: '/wallet/transfer', icon: 'swap-horizontal' },
       { name: 'Gift Coins', path: '/wallet/gift', icon: 'gift' },
@@ -107,14 +108,14 @@ const PAGE_CATEGORIES: PageCategory[] = [
   },
   {
     title: 'Payments',
-    color: '#14B8A6',
+    color: colors.tealGreen,
     pages: [
       { name: 'Refund Initiated', path: '/payments/refund-initiated', icon: 'receipt' },
     ],
   },
   {
     title: 'Checkout',
-    color: '#F97316',
+    color: colors.brand.orange,
     pages: [
       { name: 'EMI Selection', path: '/checkout/emi-selection', icon: 'calculator' },
     ],
@@ -130,7 +131,7 @@ const PAGE_CATEGORIES: PageCategory[] = [
   },
   {
     title: 'Earn Pages',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     pages: [
       { name: 'Share to Earn', path: '/earn/share', icon: 'share-social' },
       { name: 'Review to Earn', path: '/earn/review', icon: 'star' },
@@ -138,7 +139,7 @@ const PAGE_CATEGORIES: PageCategory[] = [
   },
   {
     title: 'Support Pages',
-    color: '#059669',
+    color: colors.successScale[700],
     pages: [
       { name: 'Ticket Detail', path: '/support/ticket/test-123', icon: 'ticket' },
       { name: 'Call Support', path: '/support/call', icon: 'call' },
@@ -168,7 +169,7 @@ export default function TestPagesScreen() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Test All Pages</ThemedText>
           <View style={styles.placeholder} />
@@ -246,7 +247,7 @@ export default function TestPagesScreen() {
                 onPress={() => router.push(category.pages[0].path as any)}
               >
                 <View style={[styles.quickLinkIcon, { backgroundColor: category.color }]}>
-                  <Ionicons name={category.pages[0].icon as any} size={20} color="#FFF" />
+                  <Ionicons name={category.pages[0].icon as any} size={20} color={colors.background.primary} />
                 </View>
                 <ThemedText style={styles.quickLinkText} numberOfLines={1}>
                   {category.title}
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -302,7 +303,7 @@ const styles = StyleSheet.create({
   },
   statValue: {
     ...Typography.h1,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   statLabel: {
     ...Typography.bodySmall,
@@ -356,7 +357,7 @@ const styles = StyleSheet.create({
   },
   categoryCount: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
     fontSize: 12,
   },
   categoryTitle: {

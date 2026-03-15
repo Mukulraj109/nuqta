@@ -19,6 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { getProductsForCategory, DummyProduct } from '@/data/categoryDummyData';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface TrendingProductsSectionProps {
   categorySlug: string;
@@ -71,7 +72,7 @@ const ProductCard = memo(({
         {/* 60 Min Badge */}
         {product.is60Min && (
           <View style={styles.deliveryBadge}>
-            <Ionicons name="flash" size={10} color="#F59E0B" />
+            <Ionicons name="flash" size={10} color={colors.warningScale[400]} />
             <Text style={styles.deliveryText}>60min</Text>
           </View>
         )}
@@ -167,13 +168,13 @@ const TrendingProductsSection: React.FC<TrendingProductsSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     paddingVertical: 20,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.4,
   },
   trendingBadge: {
@@ -216,13 +217,13 @@ const styles = StyleSheet.create({
   seeAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 8,
   },
   seeAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -230,7 +231,7 @@ const styles = StyleSheet.create({
   },
   productCard: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     height: 140,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     position: 'relative',
   },
   imagePlaceholder: {
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     left: 8,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 4,
@@ -262,13 +263,13 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   tagBadge: {
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 4,
@@ -276,13 +277,13 @@ const styles = StyleSheet.create({
   tagText: {
     fontSize: 9,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   deliveryBadge: {
     position: 'absolute',
     bottom: 8,
     right: 8,
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 4,
@@ -293,7 +294,7 @@ const styles = StyleSheet.create({
   deliveryText: {
     fontSize: 9,
     fontWeight: '600',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   productInfo: {
     padding: 12,
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 2,
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     lineHeight: 18,
     marginBottom: 6,
   },
@@ -326,11 +327,11 @@ const styles = StyleSheet.create({
   ratingValue: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   reviewCount: {
     fontSize: 10,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   priceRow: {
     flexDirection: 'row',
@@ -341,11 +342,11 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   cashbackRow: {
@@ -365,7 +366,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 });
 

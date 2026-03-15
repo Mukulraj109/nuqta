@@ -15,6 +15,7 @@ import {
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion, RegionId } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Region data with flags
 const REGIONS: { id: RegionId; name: string; flag: string; description: string }[] = [
@@ -75,7 +76,7 @@ export function RegionSelector({
        
       >
         <Text style={styles.compactFlag}>{currentRegionData.flag}</Text>
-        <Ionicons name="chevron-down" size={12} color="#666" />
+        <Ionicons name="chevron-down" size={12} color={colors.midGray} />
 
         <RegionModal
           visible={modalVisible}
@@ -99,7 +100,7 @@ export function RegionSelector({
         {showLabel && (
           <>
             <Text style={styles.regionName}>{currentRegionData.name}</Text>
-            <Ionicons name="chevron-down" size={16} color="#666" />
+            <Ionicons name="chevron-down" size={16} color={colors.midGray} />
           </>
         )}
       </Pressable>
@@ -143,7 +144,7 @@ function RegionModal({
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Select Region</Text>
             <Pressable onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#333" />
+              <Ionicons name="close" size={24} color={colors.darkGray} />
             </Pressable>
           </View>
 
@@ -153,7 +154,7 @@ function RegionModal({
 
           {isChanging && (
             <View style={styles.loadingOverlay}>
-              <ActivityIndicator size="large" color="#007AFF" />
+              <ActivityIndicator size="large" color={colors.brand.ios} />
               <Text style={styles.loadingText}>Switching region...</Text>
             </View>
           )}
@@ -176,7 +177,7 @@ function RegionModal({
                   <Text style={styles.regionDescription}>{region.description}</Text>
                 </View>
                 {region.id === currentRegion && (
-                  <Ionicons name="checkmark-circle" size={24} color="#007AFF" />
+                  <Ionicons name="checkmark-circle" size={24} color={colors.brand.ios} />
                 )}
               </Pressable>
             ))}
@@ -242,7 +243,7 @@ export function RegionSelectorPage() {
             <Text style={styles.pageRegionDescription}>{region.description}</Text>
           </View>
           {region.id === state.currentRegion ? (
-            <Ionicons name="checkmark-circle" size={28} color="#007AFF" />
+            <Ionicons name="checkmark-circle" size={28} color={colors.brand.ios} />
           ) : (
             <View style={styles.unselectedCircle} />
           )}
@@ -251,7 +252,7 @@ export function RegionSelectorPage() {
 
       {isChanging && (
         <View style={styles.pageLoading}>
-          <ActivityIndicator size="small" color="#007AFF" />
+          <ActivityIndicator size="small" color={colors.brand.ios} />
           <Text style={styles.pageLoadingText}>Updating region...</Text>
         </View>
       )}
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
   },
   regionName: {
     fontSize: 14,
-    color: '#333',
+    color: colors.darkGray,
     fontWeight: '500',
   },
 
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingTop: 8,
@@ -319,14 +320,14 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   closeButton: {
     padding: 4,
   },
   modalSubtitle: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: 8,
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 8,
-    color: '#666',
+    color: colors.midGray,
     fontSize: 14,
   },
   regionsContainer: {
@@ -356,7 +357,7 @@ const styles = StyleSheet.create({
   },
   selectedRegion: {
     backgroundColor: '#E8F4FD',
-    borderColor: '#007AFF',
+    borderColor: colors.brand.ios,
   },
   regionFlag: {
     fontSize: 32,
@@ -368,11 +369,11 @@ const styles = StyleSheet.create({
   regionOptionName: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   regionDescription: {
     fontSize: 13,
-    color: '#666',
+    color: colors.midGray,
     marginTop: 2,
   },
   cancelButton: {
@@ -385,25 +386,25 @@ const styles = StyleSheet.create({
   },
   cancelText: {
     fontSize: 16,
-    color: '#666',
+    color: colors.midGray,
     fontWeight: '500',
   },
 
   // Page styles
   pageContainer: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     padding: 20,
   },
   pageTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 8,
   },
   pageSubtitle: {
     fontSize: 15,
-    color: '#666',
+    color: colors.midGray,
     marginBottom: 24,
     lineHeight: 22,
   },
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
   },
   pageSelectedRegion: {
     backgroundColor: '#E8F4FD',
-    borderColor: '#007AFF',
+    borderColor: colors.brand.ios,
   },
   pageRegionFlag: {
     fontSize: 40,
@@ -431,11 +432,11 @@ const styles = StyleSheet.create({
   pageRegionName: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   pageRegionDescription: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     marginTop: 4,
   },
   unselectedCircle: {
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   pageLoadingText: {
-    color: '#007AFF',
+    color: colors.brand.ios,
     fontSize: 14,
   },
 });

@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { NotificationCardProps } from '@/types/earnPage.types';
 import { NOTIFICATION_COLORS, EARN_COLORS } from '@/constants/EarnPageColors';
+import { colors } from '@/constants/theme';
 
 function NotificationCard({ 
   notification, 
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     borderRadius: 8,
     padding: 3,
   },

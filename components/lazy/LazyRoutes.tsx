@@ -7,6 +7,7 @@
 
 import { lazyLoad } from '@/utils/lazyLoad';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { colors } from '@/constants/theme';
 
 // ============================================================================
 // Loading Fallback
@@ -14,7 +15,7 @@ import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 
 const RouteLoader = () => (
   <View style={styles.routeLoader}>
-    <ActivityIndicator size="large" color="#8B5CF6" />
+    <ActivityIndicator size="large" color={colors.brand.purpleLight} />
     <Text style={styles.loadingText}>Loading...</Text>
   </View>
 );
@@ -430,6 +431,6 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#666',
+    color: colors.midGray,
   },
 });

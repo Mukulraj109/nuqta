@@ -15,6 +15,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/priveTheme';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import priveApi, { TransactionItem } from '@/services/priveApi';
+import { colors } from '@/constants/theme';
 
 export default function ActivityHistoryScreen() {
   const [transactions, setTransactions] = useState<TransactionItem[]>([]);
@@ -109,7 +110,7 @@ export default function ActivityHistoryScreen() {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#1F2937', '#111827', '#0A0A0A']}
+        colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]}
         style={StyleSheet.absoluteFill}
       />
 

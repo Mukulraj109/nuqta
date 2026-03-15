@@ -21,6 +21,7 @@ import { useSecurity } from '@/contexts/SecurityContext';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import userSettingsApi from '@/services/userSettingsApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type TwoFactorMethod = '2FA_SMS' | '2FA_EMAIL' | '2FA_APP';
 
@@ -631,7 +632,7 @@ const styles = StyleSheet.create({
   },
   warningCard: {
     flexDirection: 'row',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     padding: Spacing.base,
     borderRadius: BorderRadius.md,
     marginBottom: Spacing.lg,
@@ -639,7 +640,7 @@ const styles = StyleSheet.create({
   warningText: {
     flex: 1,
     ...Typography.body,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     marginLeft: Spacing.md,
     lineHeight: 20,
   },

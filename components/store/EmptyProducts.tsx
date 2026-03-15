@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { colors } from '@/constants/theme';
 
 export default function EmptyProducts() {
   return (
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 60,
     paddingHorizontal: 32,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     marginHorizontal: 16,
     marginTop: 16,
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
@@ -48,13 +49,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
   },

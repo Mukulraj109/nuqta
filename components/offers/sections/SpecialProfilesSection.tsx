@@ -13,6 +13,7 @@ import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { SectionHeader, HorizontalScrollSection } from '../common';
 import { SpecialProfile } from '@/types/offers.types';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface SpecialProfilesSectionProps {
   profiles: SpecialProfile[];
@@ -42,7 +43,7 @@ export const SpecialProfilesSection: React.FC<SpecialProfilesSectionProps> = ({
     },
     card: {
       width: 140,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 1.5,
       overflow: 'hidden',
@@ -82,10 +83,10 @@ export const SpecialProfilesSection: React.FC<SpecialProfilesSectionProps> = ({
       borderRadius: 8,
     },
     verifiedBadge: {
-      backgroundColor: '#D1FAE5',
+      backgroundColor: colors.tint.green,
     },
     unverifiedBadge: {
-      backgroundColor: isDark ? 'rgba(245, 158, 11, 0.2)' : '#FEF3C7',
+      backgroundColor: isDark ? 'rgba(245, 158, 11, 0.2)' : colors.tint.amberLight,
     },
     statusText: {
       fontSize: 10,
@@ -93,10 +94,10 @@ export const SpecialProfilesSection: React.FC<SpecialProfilesSectionProps> = ({
       marginLeft: 4,
     },
     verifiedText: {
-      color: '#059669',
+      color: colors.successScale[700],
     },
     unverifiedText: {
-      color: '#D97706',
+      color: colors.warningScale[700],
     },
     verifyPrompt: {
       marginHorizontal: Spacing.base,
@@ -141,7 +142,7 @@ export const SpecialProfilesSection: React.FC<SpecialProfilesSectionProps> = ({
     verifyButtonText: {
       fontSize: 11,
       fontWeight: '700',
-      color: '#FFFFFF',
+      color: colors.background.primary,
     },
   });
 
@@ -200,7 +201,7 @@ export const SpecialProfilesSection: React.FC<SpecialProfilesSectionProps> = ({
                 <Ionicons
                   name={profile.isVerified ? 'checkmark-circle' : 'lock-closed'}
                   size={12}
-                  color={profile.isVerified ? '#059669' : '#D97706'}
+                  color={profile.isVerified ? colors.successScale[700] : colors.warningScale[700]}
                 />
                 <Text
                   style={[
@@ -229,7 +230,7 @@ export const SpecialProfilesSection: React.FC<SpecialProfilesSectionProps> = ({
        
       >
         <View style={styles.verifyIcon}>
-          <Ionicons name="shield-checkmark" size={20} color="#FFFFFF" />
+          <Ionicons name="shield-checkmark" size={20} color={colors.background.primary} />
         </View>
         <View style={styles.verifyText}>
           <Text style={styles.verifyTitle}>Don't see your deals?</Text>

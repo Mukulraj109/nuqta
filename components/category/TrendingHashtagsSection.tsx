@@ -7,13 +7,14 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TrendingHashtagsSectionProps, TrendingHashtag } from '@/types/categoryTypes';
+import { colors } from '@/constants/theme';
 
 // Rez Brand Colors
 const COLORS = {
-  primaryGreen: '#ffcd57',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
+  primaryGreen: colors.lightMustard,
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
 };
 
 interface HashtagChipProps {
@@ -49,7 +50,7 @@ const TrendingHashtagsSection: React.FC<TrendingHashtagsSectionProps> = ({
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Ionicons name="trending-up" size={20} color="#EC4899" />
+        <Ionicons name="trending-up" size={20} color={colors.brand.pink} />
         <Text style={styles.headerTitle}>Trending Now</Text>
       </View>
 

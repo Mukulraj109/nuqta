@@ -18,6 +18,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface EnhancedCoinBadgeProps {
   /** User's coin balance */
@@ -59,7 +60,7 @@ export const EnhancedCoinBadge: React.FC<EnhancedCoinBadgeProps> = ({
 
   const content = (
     <LinearGradient
-      colors={['#F59E0B', '#D97706']}
+      colors={[colors.warningScale[400], colors.warningScale[700]]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
       style={[
@@ -120,14 +121,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    shadowColor: '#F59E0B',
+    shadowColor: colors.warningScale[400],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 4,
   },
   coinText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
 });

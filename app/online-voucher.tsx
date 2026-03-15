@@ -26,6 +26,7 @@ import { ErrorState } from '@/components/common/ErrorState';
 import { LoadingState } from '@/components/common/LoadingState';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width, height } = Dimensions.get('window');
 const CAROUSEL_HEIGHT = 200;
@@ -36,11 +37,11 @@ const SNAP_INTERVAL = CARD_WIDTH + CARD_SPACING;
 
 // Premium ReZ Brand Colors (unique to this page)
 const COLORS = {
-  primary: '#00C06A',
-  primaryDark: '#00796B',
+  primary: colors.brand.green,
+  primaryDark: colors.brand.teal,
   gold: Colors.gold,
   goldDark: Colors.warning,
-  navy: '#0B2240',
+  navy: colors.brand.navyDark,
   slate: '#1F2D3D',
   muted: Colors.text.tertiary,
   surface: Colors.background.secondary,
@@ -442,7 +443,7 @@ export default function OnlineVoucherPage() {
                                   {/* Icon Container */}
                                   <View style={styles.heroIconWrapper}>
                                     <LinearGradient
-                                      colors={['#FFFFFF', '#F8F9FA']}
+                                      colors={[colors.background.primary, colors.offWhite]}
                                       style={styles.heroIconInner}
                                       start={{ x: 0, y: 0 }}
                                       end={{ x: 1, y: 1 }}
@@ -645,8 +646,8 @@ export default function OnlineVoucherPage() {
           <View style={styles.brandHeader}>
             <LinearGradient
               colors={[
-                brand.backgroundColor || '#F3F4F6',
-                (brand.backgroundColor || '#F3F4F6') + 'CC',
+                brand.backgroundColor || colors.neutral[100],
+                (brand.backgroundColor || colors.neutral[100]) + 'CC',
               ]}
               style={styles.brandLogo}
               start={{ x: 0, y: 0 }}
@@ -709,8 +710,8 @@ export default function OnlineVoucherPage() {
         <View style={styles.newBrandCardContent}>
           <LinearGradient
             colors={[
-              item.backgroundColor || '#F3F4F6',
-              (item.backgroundColor || '#F3F4F6') + 'DD',
+              item.backgroundColor || colors.neutral[100],
+              (item.backgroundColor || colors.neutral[100]) + 'DD',
             ]}
             style={styles.newBrandLogo}
             start={{ x: 0, y: 0 }}
@@ -843,7 +844,7 @@ export default function OnlineVoucherPage() {
 
       {/* Premium Animated Gradient Background */}
       <LinearGradient
-        colors={['#E8F5E9', '#E0F2F1', '#F3E5F5', '#E8F5E9']}
+        colors={[colors.greenMist, '#E0F2F1', '#F3E5F5', colors.greenMist]}
         style={styles.backgroundGradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}

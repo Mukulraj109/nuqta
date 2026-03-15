@@ -25,6 +25,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { DetailPageSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Brand configurations
@@ -40,7 +41,7 @@ const brandConfigs: Record<string, {
     name: 'Nykaa',
     logo: '💅',
     description: 'India\'s leading beauty and wellness destination',
-    color: '#EC4899',
+    color: colors.brand.pink,
     category: 'Beauty',
     tags: ['beauty', 'cosmetics', 'skincare', 'nykaa'],
   },

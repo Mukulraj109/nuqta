@@ -20,6 +20,7 @@ import projectsService from '@/services/realProjectsApi';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface ServiceProject {
   id: string;
@@ -221,7 +222,7 @@ const MyServicesPage = () => {
       <StatusBar barStyle="light-content" backgroundColor={Colors.success} />
 
       {/* Header */}
-      <LinearGradient colors={[Colors.success, '#059669']} style={styles.header}>
+      <LinearGradient colors={[Colors.success, colors.successScale[700]]} style={styles.header}>
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={handleBackPress}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />

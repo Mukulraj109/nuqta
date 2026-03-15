@@ -26,6 +26,7 @@ import CoinIcon from '@/components/ui/CoinIcon';
 import lockDealApi, { LockPriceDeal, LockDealFilters } from '@/services/lockDealApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
@@ -221,7 +222,7 @@ const LockDealsPage: React.FC = () => {
     <View>
       {/* Hero Banner */}
       <LinearGradient
-        colors={['#0B2240', '#1a3a52']}
+        colors={[colors.brand.navyDark, colors.nileBlue]}
         style={styles.heroBanner}
       >
         <View style={styles.heroContent}>

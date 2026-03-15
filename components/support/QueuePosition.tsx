@@ -6,6 +6,7 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import type { QueueInfo } from '@/types/supportChat.types';
+import { colors } from '@/constants/theme';
 
 interface QueuePositionProps {
   queueInfo: QueueInfo;
@@ -50,10 +51,10 @@ function QueuePosition({ queueInfo }: QueuePositionProps) {
   };
 
   const getQueueColor = (): string => {
-    if (queueInfo.position === 1) return '#10B981';
-    if (queueInfo.position <= 3) return '#3B82F6';
-    if (queueInfo.position <= 5) return '#F59E0B';
-    return '#6B7280';
+    if (queueInfo.position === 1) return colors.successScale[400];
+    if (queueInfo.position <= 3) return colors.infoScale[400];
+    if (queueInfo.position <= 5) return colors.warningScale[400];
+    return colors.neutral[500];
   };
 
   return (
@@ -86,7 +87,7 @@ function QueuePosition({ queueInfo }: QueuePositionProps) {
 
         <View style={styles.statsRow}>
           <View style={styles.stat}>
-            <Ionicons name="time-outline" size={20} color="#6B7280" />
+            <Ionicons name="time-outline" size={20} color={colors.neutral[500]} />
             <View style={styles.statInfo}>
               <ThemedText style={styles.statLabel}>Est. wait time</ThemedText>
               <ThemedText style={styles.statValue}>
@@ -98,7 +99,7 @@ function QueuePosition({ queueInfo }: QueuePositionProps) {
           <View style={styles.divider} />
 
           <View style={styles.stat}>
-            <Ionicons name="people-outline" size={20} color="#6B7280" />
+            <Ionicons name="people-outline" size={20} color={colors.neutral[500]} />
             <View style={styles.statInfo}>
               <ThemedText style={styles.statLabel}>In queue</ThemedText>
               <ThemedText style={styles.statValue}>
@@ -113,7 +114,7 @@ function QueuePosition({ queueInfo }: QueuePositionProps) {
             <View
               style={[
                 styles.agentDot,
-                { backgroundColor: queueInfo.availableAgents > 0 ? '#10B981' : '#6B7280' },
+                { backgroundColor: queueInfo.availableAgents > 0 ? colors.successScale[400] : colors.neutral[500] },
               ]}
             />
             <ThemedText style={styles.agentText}>
@@ -134,7 +135,7 @@ function QueuePosition({ queueInfo }: QueuePositionProps) {
       </View>
 
       <View style={styles.tip}>
-        <Ionicons name="bulb-outline" size={16} color="#F59E0B" />
+        <Ionicons name="bulb-outline" size={16} color={colors.warningScale[400]} />
         <ThemedText style={styles.tipText}>
           While you wait, you can browse our FAQs for instant answers
         </ThemedText>
@@ -172,13 +173,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   content: {
     gap: 16,
   },
   positionCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
   },
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -205,13 +206,13 @@ const styles = StyleSheet.create({
   },
   positionLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 2,
   },
   positionMessage: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   statsRow: {
     flexDirection: 'row',
@@ -228,24 +229,24 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 2,
   },
   statValue: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   divider: {
     width: 1,
     height: 32,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginHorizontal: 12,
   },
   agentInfo: {
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   agentStatus: {
     flexDirection: 'row',
@@ -261,11 +262,11 @@ const styles = StyleSheet.create({
   agentText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   agentSubtext: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 16,
   },
   loadingContainer: {
@@ -277,13 +278,13 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontStyle: 'italic',
   },
   tip: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     borderRadius: 8,
     padding: 12,
     marginTop: 16,
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
   tipText: {
     flex: 1,
     fontSize: 12,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     lineHeight: 18,
   },
 });

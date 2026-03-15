@@ -19,6 +19,7 @@ import { useVoucherPurchase } from '@/hooks/useVoucherPurchase';
 import { useWalletContext } from '@/contexts/WalletContext';
 import logger from '@/utils/logger';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -230,7 +231,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
               onPress={handleClose}
               disabled={purchasing}
             >
-              <Ionicons name="close" size={24} color="#6B7280" />
+              <Ionicons name="close" size={24} color={colors.neutral[500]} />
             </Pressable>
           </View>
 
@@ -242,14 +243,14 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
             <View style={styles.brandSection}>
               <LinearGradient
                 colors={[
-                  brand.backgroundColor || '#F3F4F6',
-                  (brand.backgroundColor || '#F3F4F6') + 'DD',
+                  brand.backgroundColor || colors.neutral[100],
+                  (brand.backgroundColor || colors.neutral[100]) + 'DD',
                 ]}
-                style={[styles.brandLogo, { backgroundColor: brand.backgroundColor || '#F3F4F6' }]}
+                style={[styles.brandLogo, { backgroundColor: brand.backgroundColor || colors.neutral[100] }]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <ThemedText style={[styles.brandLogoText, { color: brand.logoColor || '#000' }]}>
+                <ThemedText style={[styles.brandLogoText, { color: brand.logoColor || colors.text.primary }]}>
                   {brand.logo}
                 </ThemedText>
               </LinearGradient>
@@ -262,7 +263,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
                   </ThemedText>
                 )}
                 <View style={styles.cashbackBadge}>
-                  <Ionicons name="cash" size={14} color="#ffcd57" />
+                  <Ionicons name="cash" size={14} color={colors.lightMustard} />
                   <ThemedText style={styles.cashbackText}>
                     Up to {brand.cashbackRate}% cashback
                   </ThemedText>
@@ -309,7 +310,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
                     >
                       {isSelected && (
                         <View style={styles.selectedIndicator}>
-                          <Ionicons name="checkmark-circle" size={20} color="#ffcd57" />
+                          <Ionicons name="checkmark-circle" size={20} color={colors.lightMustard} />
                         </View>
                       )}
 
@@ -380,7 +381,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
              
             >
               <LinearGradient
-                colors={canPurchase ? ['#9333EA', '#7C3AED'] : ['#D1D5DB', '#9CA3AF']}
+                colors={canPurchase ? ['#9333EA', colors.brand.purple] : [colors.neutral[300], colors.neutral[400]]}
                 style={styles.purchaseButtonGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -446,7 +447,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
         <View style={styles.confirmOverlay}>
           <View style={styles.successModal}>
             <View style={styles.successIconContainer}>
-              <Ionicons name="checkmark-circle" size={80} color="#ffcd57" />
+              <Ionicons name="checkmark-circle" size={80} color={colors.lightMustard} />
             </View>
             <ThemedText style={styles.successTitle}>Purchase Successful!</ThemedText>
             <ThemedText style={styles.successMessage}>
@@ -462,7 +463,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
                 onPress={handleViewMyVouchers}
               >
                 <LinearGradient
-                  colors={['#ffcd57', '#1a3a52']}
+                  colors={[colors.lightMustard, colors.nileBlue]}
                   style={styles.successButtonGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
@@ -519,12 +520,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   closeButton: {
     padding: 4,
@@ -537,7 +538,7 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   brandLogo: {
     width: 64,
@@ -556,18 +557,18 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   brandDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   cashbackBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
     alignSelf: 'flex-start',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -575,11 +576,11 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   walletSection: {
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   walletRow: {
     flexDirection: 'row',
@@ -594,7 +595,7 @@ const styles = StyleSheet.create({
   walletLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   walletBalance: {
     fontSize: 20,
@@ -607,7 +608,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   denominationGrid: {
@@ -619,19 +620,19 @@ const styles = StyleSheet.create({
     width: (width - 64) / 2,
     backgroundColor: 'white',
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
     position: 'relative',
   },
   denominationCardSelected: {
-    borderColor: '#1a3a52',
-    backgroundColor: '#faf1e0',
+    borderColor: colors.nileBlue,
+    backgroundColor: colors.linen,
   },
   denominationCardDisabled: {
-    borderColor: '#F3F4F6',
-    backgroundColor: '#F9FAFB',
+    borderColor: colors.neutral[100],
+    backgroundColor: colors.neutral[50],
     opacity: 0.6,
   },
   selectedIndicator: {
@@ -642,22 +643,22 @@ const styles = StyleSheet.create({
   denominationAmount: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   denominationAmountSelected: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   denominationAmountDisabled: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   insufficientLabel: {
     fontSize: 11,
-    color: '#EF4444',
+    color: colors.error,
     textAlign: 'center',
   },
   summarySection: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     margin: 20,
     marginTop: 0,
     padding: 16,
@@ -671,12 +672,12 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   summaryValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   summaryValueHighlight: {
     fontSize: 16,
@@ -688,20 +689,20 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   cancelButton: {
     flex: 1,
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     alignItems: 'center',
   },
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   purchaseButton: {
     flex: 1,
@@ -751,13 +752,13 @@ const styles = StyleSheet.create({
   confirmTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 16,
     marginBottom: 12,
   },
   confirmMessage: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 24,
     marginBottom: 24,
@@ -775,7 +776,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   confirmCancelButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   confirmPurchaseButton: {
     backgroundColor: '#9333EA',
@@ -783,7 +784,7 @@ const styles = StyleSheet.create({
   confirmCancelText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   confirmPurchaseText: {
     fontSize: 16,
@@ -810,20 +811,20 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
     textAlign: 'center',
   },
   successMessage: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 24,
     marginBottom: 8,
   },
   successSubMessage: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 28,
@@ -853,7 +854,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   successCloseButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
@@ -861,7 +862,7 @@ const styles = StyleSheet.create({
   successCloseText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

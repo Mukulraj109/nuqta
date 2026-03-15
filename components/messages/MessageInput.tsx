@@ -1,6 +1,7 @@
 // Message Input Component
 // Text input with send button and attachment options
 
+import { colors } from '@/constants/theme';
 import React, { useState, useRef } from 'react';
 import {
   View,
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.offWhite,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
     gap: 16,
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
   },
   attachmentOptionText: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     fontSize: 15,
     maxHeight: 100,
-    color: '#333',
+    color: colors.darkGray,
   },
   sendButton: {
     width: 40,

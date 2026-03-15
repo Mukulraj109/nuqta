@@ -19,6 +19,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { CashStoreQuickAction } from '../../../types/cash-store.types';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const HORIZONTAL_PADDING = 16;
@@ -27,12 +28,12 @@ const CARD_WIDTH = (SCREEN_WIDTH - (HORIZONTAL_PADDING * 2) - CARD_GAP) / 2;
 
 // Nuqta Color Palette - Cash Store Peach Theme
 const NUQTA_COLORS = {
-  nileBlue: '#1a3a52',
+  nileBlue: colors.nileBlue,
   nileBlueLight: '#2A5577',
-  linen: '#faf1e0',
-  lightPeach: '#ffd7b5',
-  peachDark: '#E8B896',
-  peachDarker: '#D4A07A',
+  linen: colors.linen,
+  lightPeach: colors.lightPeach,
+  peachDark: colors.brand.sand,
+  peachDarker: colors.brand.caramel,
 };
 
 // Default 4 quick actions - strategic use of all Nuqta palette colors
@@ -42,8 +43,8 @@ const DEFAULT_QUICK_ACTIONS: CashStoreQuickAction[] = [
     title: 'Buy Coupons',
     subtitle: 'Get extra cashback',
     icon: 'pricetag',
-    backgroundColor: '#E8B896',
-    gradientColors: ['#E8B896', '#D4A07A'],
+    backgroundColor: colors.brand.sand,
+    gradientColors: [colors.brand.sand, colors.brand.caramel],
     action: 'buy-coupons',
   },
   {
@@ -52,7 +53,7 @@ const DEFAULT_QUICK_ACTIONS: CashStoreQuickAction[] = [
     subtitle: 'Double rewards',
     icon: 'wallet',
     backgroundColor: NUQTA_COLORS.nileBlue,
-    gradientColors: ['#1a3a52', '#234b68'],
+    gradientColors: [colors.nileBlue, colors.brand.nileBlueLight],
     action: 'extra-coins',
     badge: '2X',
   },
@@ -61,8 +62,8 @@ const DEFAULT_QUICK_ACTIONS: CashStoreQuickAction[] = [
     title: 'Track Cashback',
     subtitle: 'View your earnings',
     icon: 'trending-up',
-    backgroundColor: '#ffd7b5',
-    gradientColors: ['#ffd7b5', '#E8B896'],
+    backgroundColor: colors.lightPeach,
+    gradientColors: [colors.lightPeach, colors.brand.sand],
     action: 'track-cashback',
   },
   {
@@ -70,8 +71,8 @@ const DEFAULT_QUICK_ACTIONS: CashStoreQuickAction[] = [
     title: 'Trending Offers',
     subtitle: 'Hot deals today',
     icon: 'flame',
-    backgroundColor: '#1a3a52',
-    gradientColors: ['#234b68', '#1a3a52'],
+    backgroundColor: colors.nileBlue,
+    gradientColors: [colors.brand.nileBlueLight, colors.nileBlue],
     action: 'trending',
     badge: 'NEW',
   },
@@ -186,13 +187,13 @@ const ActionCard: React.FC<{
             <Ionicons
               name={action.icon as any}
               size={20}
-              color={isLight ? '#1a3a52' : '#FFFFFF'}
+              color={isLight ? colors.nileBlue : colors.background.primary}
             />
           </Animated.View>
 
           {/* Text Content — full width below icon */}
           <View style={styles.textContainer}>
-            <Text style={[styles.title, isLight && { color: '#1a3a52' }]}>
+            <Text style={[styles.title, isLight && { color: colors.nileBlue }]}>
               {action.title}
             </Text>
             <Text style={[styles.subtitle, isLight && { color: 'rgba(26,58,82,0.6)' }]}>
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 2,
     letterSpacing: -0.2,
   },
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 7,
     paddingVertical: 2,
     borderRadius: 6,
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: 0.3,
   },
 });

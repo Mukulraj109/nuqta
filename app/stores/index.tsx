@@ -24,6 +24,7 @@ import storesApi from '@/services/storesApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Category configurations
@@ -35,13 +36,13 @@ const categoryConfigs: Record<string, {
 }> = {
   'beauty-wellness': {
     title: 'Beauty & Wellness',
-    color: '#EC4899',
+    color: colors.brand.pink,
     tags: ['beauty', 'salon', 'spa', 'wellness'],
     icon: '💄',
   },
   'food-dining': {
     title: 'Food & Dining',
-    color: '#F97316',
+    color: colors.brand.orange,
     tags: ['food', 'restaurant', 'cafe', 'dining'],
     icon: '🍔',
   },

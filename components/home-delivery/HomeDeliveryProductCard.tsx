@@ -12,6 +12,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { HomeDeliveryProductCardProps } from '@/types/home-delivery.types';
 import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDataNormalizer';
 import { formatPrice } from '@/utils/priceFormatter';
+import { colors } from '@/constants/theme';
 
 function _HomeDeliveryProductCardInner({
   product,
@@ -74,7 +75,7 @@ function _HomeDeliveryProductCardInner({
           />
         ) : (
           <View style={[styles.productImage, styles.placeholderImage]}>
-            <Ionicons name="image-outline" size={40} color="#9CA3AF" />
+            <Ionicons name="image-outline" size={40} color={colors.neutral[400]} />
           </View>
         )}
         
@@ -97,7 +98,7 @@ function _HomeDeliveryProductCardInner({
         {/* Free Shipping Badge */}
         {product.shipping?.freeShippingEligible && (
           <View style={styles.shippingBadge}>
-            <Ionicons name="car-outline" size={12} color="#1a3a52" />
+            <Ionicons name="car-outline" size={12} color={colors.nileBlue} />
             <ThemedText style={styles.shippingText}>Free</ThemedText>
           </View>
         )}
@@ -135,7 +136,7 @@ function _HomeDeliveryProductCardInner({
           {/* Rating */}
           {normalizedRating.value !== null && (
             <View style={styles.ratingContainer}>
-              <Ionicons name="star" size={12} color="#F59E0B" />
+              <Ionicons name="star" size={12} color={colors.warningScale[400]} />
               <ThemedText style={styles.ratingText}>
                 {normalizedRating.value.toFixed(1)}
               </ThemedText>
@@ -146,7 +147,7 @@ function _HomeDeliveryProductCardInner({
         {/* Cashback */}
         {showCashback && product.cashback?.percentage && (
           <View style={styles.cashbackContainer}>
-            <Ionicons name="gift-outline" size={14} color="#1a3a52" />
+            <Ionicons name="gift-outline" size={14} color={colors.nileBlue} />
             <ThemedText style={styles.cashbackText}>
               Upto {product.cashback.percentage}% cash back
             </ThemedText>
@@ -156,7 +157,7 @@ function _HomeDeliveryProductCardInner({
         {/* Delivery Time */}
         {showDeliveryTime && product.deliveryTime && (
           <View style={styles.deliveryContainer}>
-            <Ionicons name="time-outline" size={12} color="#6B7280" />
+            <Ionicons name="time-outline" size={12} color={colors.neutral[500]} />
             <ThemedText style={styles.deliveryText}>
               {product.deliveryTime}
             </ThemedText>
@@ -166,7 +167,7 @@ function _HomeDeliveryProductCardInner({
         {/* Store Info */}
         {product.store?.name && (
           <View style={styles.storeContainer}>
-            <Ionicons name="storefront-outline" size={12} color="#6B7280" />
+            <Ionicons name="storefront-outline" size={12} color={colors.neutral[500]} />
             <ThemedText style={styles.storeText} numberOfLines={1}>
               {product.store.name}
             </ThemedText>
@@ -179,11 +180,11 @@ function _HomeDeliveryProductCardInner({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
     height: 380, // Fixed height for all cards
     ...Platform.select({
       ios: {
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
   productImage: {
     width: '100%',
     height: 150,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   placeholderImage: {
     justifyContent: 'center',
@@ -223,13 +224,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     left: 8,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
   },
   discountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '600',
   },
@@ -237,13 +238,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
   },
   newText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '600',
   },
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   shippingText: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontSize: 10,
     fontWeight: '600',
   },
@@ -271,13 +272,13 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     lineHeight: 18,
     minHeight: 36, // Fixed height for 2 lines
   },
   brandText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '400',
     minHeight: 16,
     marginTop: 4,
@@ -297,11 +298,11 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   ratingContainer: {
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   cashbackContainer: {
@@ -327,7 +328,7 @@ const styles = StyleSheet.create({
   },
   cashbackText: {
     fontSize: 11,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
   },
   deliveryContainer: {
@@ -338,7 +339,7 @@ const styles = StyleSheet.create({
   },
   deliveryText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   storeContainer: {
@@ -348,7 +349,7 @@ const styles = StyleSheet.create({
   },
   storeText: {
     fontSize: 10,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '400',
     flex: 1,
   },

@@ -12,16 +12,17 @@ import travelApi, { TravelService, TravelServicesByCategoryResponse } from '@/se
 import { useRegion } from '@/contexts/RegionContext';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 
 // Fallback gradient colors for categories
 const categoryGradients: Record<string, string[]> = {
-  flights: ['#3B82F6', '#2563EB'],
-  hotels: ['#EC4899', '#DB2777'],
-  trains: ['#22C55E', '#16A34A'],
-  bus: ['#F97316', '#EA580C'],
-  cab: ['#EAB308', '#CA8A04'],
-  packages: ['#8B5CF6', '#7C3AED'],
+  flights: [colors.infoScale[400], colors.brand.blue],
+  hotels: [colors.brand.pink, colors.deepPink],
+  trains: [colors.success, colors.brand.greenDark],
+  bus: [colors.brand.orange, colors.brand.orangeDark],
+  cab: [colors.brand.amber, '#CA8A04'],
+  packages: [colors.brand.purpleLight, colors.brand.purple],
 };
 
 const TravelCategoryPage: React.FC = () => {

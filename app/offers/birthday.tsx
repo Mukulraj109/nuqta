@@ -25,6 +25,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@
 import apiClient from '@/services/apiClient';
 import { useAuth } from '@/contexts/AuthContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -138,7 +139,7 @@ export default function BirthdayRewardsPage() {
            
           >
             <LinearGradient
-              colors={['#F59E0B', '#EA580C']}
+              colors={[colors.warningScale[400], colors.brand.orangeDark]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.claimGradient}
@@ -153,11 +154,11 @@ export default function BirthdayRewardsPage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#F59E0B" translucent />
+      <StatusBar barStyle="light-content" backgroundColor={colors.warningScale[400]} translucent />
       
       {/* Header with Gradient */}
       <LinearGradient
-        colors={['#F59E0B', '#EA580C', '#DC2626']}
+        colors={[colors.warningScale[400], colors.brand.orangeDark, colors.error]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.header}
@@ -169,7 +170,7 @@ export default function BirthdayRewardsPage() {
               onPress={() => router.back()}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
 
             <View style={styles.headerTitleContainer}>
@@ -229,7 +230,7 @@ export default function BirthdayRewardsPage() {
             ) : (
               <View style={styles.birthdayCountdown}>
                 <View style={styles.countdownIcon}>
-                  <Ionicons name="calendar" size={28} color="#A78BFA" />
+                  <Ionicons name="calendar" size={28} color={colors.brand.purpleSoft} />
                 </View>
                 <View style={styles.countdownContent}>
                   <ThemedText style={styles.countdownTitle}>
@@ -251,7 +252,7 @@ export default function BirthdayRewardsPage() {
         <View style={styles.giftsSection}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionHeaderRow}>
-              <Ionicons name="gift" size={20} color="#F59E0B" />
+              <Ionicons name="gift" size={20} color={colors.warningScale[400]} />
               <ThemedText style={styles.sectionTitle}>Your Birthday Gifts</ThemedText>
             </View>
             <ThemedText style={styles.sectionSubtitle}>Claim within your birthday week</ThemedText>
@@ -285,7 +286,7 @@ export default function BirthdayRewardsPage() {
 
         {/* Party Mode */}
         <View style={styles.partyCard}>
-          <Ionicons name="balloon" size={24} color="#A78BFA" />
+          <Ionicons name="balloon" size={24} color={colors.brand.purpleSoft} />
           <View style={styles.partyContent}>
             <ThemedText style={styles.partyTitle}>Share Your Birthday Joy</ThemedText>
             <ThemedText style={styles.partySubtitle}>
@@ -306,12 +307,12 @@ export default function BirthdayRewardsPage() {
          
         >
           <LinearGradient
-            colors={['#F59E0B', '#EC4899']}
+            colors={[colors.warningScale[400], colors.brand.pink]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.ctaGradient}
           >
-            <Ionicons name="gift" size={20} color="#FFFFFF" style={{ marginRight: Spacing.sm }} />
+            <Ionicons name="gift" size={20} color={colors.background.primary} style={{ marginRight: Spacing.sm }} />
             <ThemedText style={styles.ctaButtonText}>Claim All Birthday Gifts</ThemedText>
           </LinearGradient>
         </Pressable>
@@ -347,7 +348,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...Typography.h3,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   headerSubtitle: {
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
   },
   heroStatValue: {
     ...Typography.h2,
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     fontWeight: '700',
     marginBottom: 2,
   },
@@ -464,7 +465,7 @@ const styles = StyleSheet.create({
   },
   updateButtonText: {
     ...Typography.labelSmall,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   giftsSection: {
@@ -501,7 +502,7 @@ const styles = StyleSheet.create({
     right: -24,
     width: 96,
     height: 24,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     transform: [{ rotate: '45deg' }],
     alignItems: 'center',
     justifyContent: 'center',
@@ -509,7 +510,7 @@ const styles = StyleSheet.create({
   },
   giftRibbonText: {
     ...Typography.caption,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   giftContent: {
@@ -572,7 +573,7 @@ const styles = StyleSheet.create({
   },
   claimButtonText: {
     ...Typography.labelSmall,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   bonusCoinsCard: {
@@ -606,7 +607,7 @@ const styles = StyleSheet.create({
   },
   bonusCoinsValue: {
     ...Typography.h2,
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     fontWeight: '700',
     marginBottom: 2,
   },
@@ -624,7 +625,7 @@ const styles = StyleSheet.create({
   },
   creditedBadgeText: {
     ...Typography.caption,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   partyCard: {
@@ -658,7 +659,7 @@ const styles = StyleSheet.create({
   },
   shareButtonText: {
     ...Typography.labelSmall,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   fixedCTA: {
@@ -684,7 +685,7 @@ const styles = StyleSheet.create({
   },
   ctaButtonText: {
     ...Typography.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
 });

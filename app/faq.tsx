@@ -19,6 +19,7 @@ import { ThemedText } from '@/components/ThemedText';
 import supportService, { FAQ as FAQType, FAQCategory } from '@/services/supportApi';
 import { SectionListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function FAQPage() {
   const router = useRouter();
@@ -494,7 +495,7 @@ const styles = StyleSheet.create({
   faqIcon: {
     width: 40,
     height: 40,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     borderRadius: BorderRadius.xl,
     justifyContent: 'center',
     alignItems: 'center',
@@ -557,7 +558,7 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
   contactCard: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     borderRadius: BorderRadius.md,
     padding: Spacing.lg,
     flexDirection: 'column',

@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
   bestDealText: {
     ...Typography.caption,
     fontWeight: '600',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
   storesTable: {
     marginBottom: Spacing.base,

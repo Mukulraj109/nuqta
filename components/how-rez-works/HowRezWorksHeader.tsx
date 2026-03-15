@@ -11,6 +11,7 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/contexts/AuthContext';
 import { useWalletContext } from '@/contexts/WalletContext';
+import { colors } from '@/constants/theme';
 
 interface HowRezWorksHeaderProps {
   onBackPress?: () => void;
@@ -48,7 +49,7 @@ const HowRezWorksHeader: React.FC<HowRezWorksHeaderProps> = ({ onBackPress }) =>
           onPress={handleBack}
          
         >
-          <Ionicons name="arrow-back" size={24} color="#1F2937" />
+          <Ionicons name="arrow-back" size={24} color={colors.neutral[800]} />
         </Pressable>
 
         {/* Title */}
@@ -62,7 +63,7 @@ const HowRezWorksHeader: React.FC<HowRezWorksHeaderProps> = ({ onBackPress }) =>
         >
           <View style={styles.coinSection}>
             <View style={styles.coinIcon}>
-              <Ionicons name="wallet" size={14} color="#FFC857" />
+              <Ionicons name="wallet" size={14} color={colors.brand.goldWarm} />
             </View>
             <Text style={styles.coinText}>
               {coinBalance.toLocaleString()}
@@ -87,11 +88,11 @@ const HowRezWorksHeader: React.FC<HowRezWorksHeaderProps> = ({ onBackPress }) =>
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 16,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   topRow: {
     flexDirection: 'row',
@@ -103,26 +104,26 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     flex: 1,
     marginLeft: 12,
   },
   balanceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#D1FAE5',
+    borderColor: colors.tint.green,
   },
   coinSection: {
     flexDirection: 'row',
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 6,
@@ -140,22 +141,22 @@ const styles = StyleSheet.create({
   coinText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   divider: {
     width: 1,
     height: 16,
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     marginHorizontal: 10,
   },
   cashText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   subtitle: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     marginTop: 4,
   },

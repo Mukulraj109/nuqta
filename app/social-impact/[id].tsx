@@ -25,6 +25,7 @@ import socialImpactApi, { SocialImpactEvent } from '@/services/socialImpactApi';
 import { platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 // Nuqta Brand Colors
 const COLORS = {
@@ -548,7 +549,7 @@ export default function SocialImpactEventDetail() {
             </View>
             <View style={styles.quickInfoCard}>
               <View style={styles.quickInfoHeader}>
-                <Ionicons name="time" size={16} color="#F97316" />
+                <Ionicons name="time" size={16} color={colors.brand.orange} />
                 <Text style={styles.quickInfoLabel}>Time</Text>
               </View>
               <Text style={styles.quickInfoValue}>{formatEventTime(event.eventTime)}</Text>
@@ -704,7 +705,7 @@ export default function SocialImpactEventDetail() {
                       <Ionicons name="sparkles" size={18} color={Colors.brand.purpleLight} />
                       <Text style={styles.rewardLabel}>Brand Coins</Text>
                     </View>
-                    <Text style={[styles.rewardValue, { color: '#8B5CF6' }]}>+{event.rewards.brandCoins}</Text>
+                    <Text style={[styles.rewardValue, { color: colors.brand.purpleLight }]}>+{event.rewards.brandCoins}</Text>
                     <Text style={styles.brandName}>{event.sponsor.brandCoinName}</Text>
                   </View>
                 )}
@@ -724,7 +725,7 @@ export default function SocialImpactEventDetail() {
                   <Ionicons
                     name={req.isMandatory ? "alert-circle" : "checkmark-circle"}
                     size={16}
-                    color={req.isMandatory ? "#EF4444" : COLORS.primary}
+                    color={req.isMandatory ? colors.error : COLORS.primary}
                   />
                   <Text style={styles.listText}>
                     {req.text}
@@ -950,7 +951,7 @@ export default function SocialImpactEventDetail() {
                         You have been checked in for this event. Enjoy the experience!
                       </Text>
                       <Pressable
-                        style={[styles.checkInPrimaryButton, { backgroundColor: '#10B981' }]}
+                        style={[styles.checkInPrimaryButton, { backgroundColor: colors.successScale[400] }]}
                         onPress={closeCheckInModal}
                       >
                         <Ionicons name="checkmark" size={18} color={COLORS.white} />
@@ -1010,7 +1011,7 @@ export default function SocialImpactEventDetail() {
                       value={otpInput}
                       onChangeText={(text) => setOtpInput(text.replace(/[^0-9]/g, ''))}
                       placeholder="000000"
-                      placeholderTextColor="#D1D5DB"
+                      placeholderTextColor={colors.neutral[300]}
                       keyboardType="number-pad"
                       maxLength={6}
                       textAlign="center"
@@ -1018,7 +1019,7 @@ export default function SocialImpactEventDetail() {
                     <Pressable
                       style={[
                         styles.checkInPrimaryButton,
-                        { backgroundColor: '#8B5CF6' },
+                        { backgroundColor: colors.brand.purpleLight },
                         otpInput.length !== 6 && { opacity: 0.5 },
                       ]}
                       onPress={handleVerifyOTP}
@@ -1047,7 +1048,7 @@ export default function SocialImpactEventDetail() {
                       {event?.verificationConfig?.geoFenceRadiusMeters || 500}m of the event venue.
                     </Text>
                     <Pressable
-                      style={[styles.checkInPrimaryButton, { backgroundColor: '#10B981' }]}
+                      style={[styles.checkInPrimaryButton, { backgroundColor: colors.successScale[400] }]}
                       onPress={handleGeoCheckIn}
                       disabled={geoLoading}
                     >

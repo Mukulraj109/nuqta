@@ -19,6 +19,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
 import reviewsApi from '@/services/reviewsApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface Review {
   _id: string;
@@ -302,7 +303,7 @@ export default function ReviewsPage() {
                     return (
                       <View key={rating} style={styles.ratingRow}>
                         <ThemedText style={styles.ratingLabel}>{rating}</ThemedText>
-                        <Ionicons name="star" size={14} color="#F59E0B" />
+                        <Ionicons name="star" size={14} color={colors.warningScale[400]} />
                         <View style={styles.ratingBar}>
                           <View style={[styles.ratingBarFill, { width: `${percentage}%` }]} />
                         </View>
@@ -650,7 +651,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.xl,

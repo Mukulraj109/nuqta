@@ -20,6 +20,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const { width } = Dimensions.get('window');
 
 export default function SubscriptionPlansPage() {
@@ -475,7 +476,7 @@ export default function SubscriptionPlansPage() {
 
       {/* Premium Glassmorphism Background */}
       <LinearGradient
-        colors={[Colors.background.secondary, '#E8F5E9', Colors.background.secondary]}
+        colors={[Colors.background.secondary, colors.greenMist, Colors.background.secondary]}
         style={styles.backgroundGradient}
       />
 
@@ -639,7 +640,7 @@ export default function SubscriptionPlansPage() {
               'Email support',
               'Basic wishlist',
             ]),
-            ['#9CA3AF', '#6B7280'],
+            [colors.neutral[400], colors.neutral[500]],
             'person-outline'
           )}
 

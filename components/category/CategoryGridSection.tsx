@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface Subcategory {
   id: string;
@@ -32,9 +33,9 @@ interface CategoryGridSectionProps {
 }
 
 const COLORS = [
-  '#ffcd57', '#3B82F6', '#EC4899', '#F59E0B',
-  '#8B5CF6', '#EF4444', '#06B6D4', '#ffcd57',
-  '#22C55E', '#F97316', '#6366F1', '#14B8A6',
+  colors.lightMustard, colors.infoScale[400], colors.brand.pink, colors.warningScale[400],
+  colors.brand.purpleLight, colors.error, colors.brand.cyan, colors.lightMustard,
+  colors.success, colors.brand.orange, colors.brand.indigo, colors.tealGreen,
 ];
 
 // Check if icon is an Ionicons name (contains "-outline" or "-sharp") vs emoji
@@ -140,14 +141,14 @@ const CategoryGridSection: React.FC<CategoryGridSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     paddingVertical: 20,
     paddingHorizontal: 16,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -169,19 +170,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.4,
   },
   seeAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 8,
   },
   seeAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   grid: {
     flexDirection: 'row',
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
     marginBottom: 4,
     lineHeight: 14,

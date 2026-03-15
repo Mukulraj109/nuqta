@@ -31,6 +31,7 @@ import type { ImagePickerAsset } from 'expo-image-picker';
 import { getImagePicker } from '@/utils/lazyImports';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 // Type for tracking submission status per order
 interface OrderSubmissionMap {
@@ -505,7 +506,7 @@ export default function EarnFromSocialMediaPage() {
             </View>
             <View style={styles.earningsStatDivider} />
             <View style={styles.earningsStat}>
-              <ThemedText style={[styles.earningsStatValue, { color: '#B45309' }]}>{earnings.pendingAmount}</ThemedText>
+              <ThemedText style={[styles.earningsStatValue, { color: colors.brand.amberDeep }]}>{earnings.pendingAmount}</ThemedText>
               <ThemedText style={styles.earningsStatLabel}>Pending</ThemedText>
             </View>
             <View style={styles.earningsStatDivider} />
@@ -529,23 +530,23 @@ export default function EarnFromSocialMediaPage() {
         <ThemedText style={styles.howItWorksTitle}>How It Works</ThemedText>
         <View style={styles.stepsRow}>
           <View style={styles.stepItem}>
-            <View style={[styles.stepCircle, { backgroundColor: '#EDE9FE' }]}>
-              <Ionicons name="bag-check-outline" size={20} color="#6D28D9" />
+            <View style={[styles.stepCircle, { backgroundColor: colors.tint.purple }]}>
+              <Ionicons name="bag-check-outline" size={20} color={colors.brand.purpleDeep} />
             </View>
             <ThemedText style={styles.stepLabel}>Buy</ThemedText>
             <ThemedText style={styles.stepDesc}>Make a purchase</ThemedText>
           </View>
-          <Ionicons name="arrow-forward" size={16} color="#D1D5DB" style={{ marginTop: 16 }} />
+          <Ionicons name="arrow-forward" size={16} color={colors.neutral[300]} style={{ marginTop: 16 }} />
           <View style={styles.stepItem}>
-            <View style={[styles.stepCircle, { backgroundColor: '#DBEAFE' }]}>
+            <View style={[styles.stepCircle, { backgroundColor: colors.tint.blueLight }]}>
               <Ionicons name="share-social-outline" size={20} color="#1D4ED8" />
             </View>
             <ThemedText style={styles.stepLabel}>Share</ThemedText>
             <ThemedText style={styles.stepDesc}>Post on social media</ThemedText>
           </View>
-          <Ionicons name="arrow-forward" size={16} color="#D1D5DB" style={{ marginTop: 16 }} />
+          <Ionicons name="arrow-forward" size={16} color={colors.neutral[300]} style={{ marginTop: 16 }} />
           <View style={styles.stepItem}>
-            <View style={[styles.stepCircle, { backgroundColor: '#D1FAE5' }]}>
+            <View style={[styles.stepCircle, { backgroundColor: colors.tint.green }]}>
               <Ionicons name="wallet-outline" size={20} color="#047857" />
             </View>
             <ThemedText style={styles.stepLabel}>Earn</ThemedText>
@@ -571,7 +572,7 @@ export default function EarnFromSocialMediaPage() {
         <CardGridSkeleton />
       ) : shareableOrders.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Ionicons name="bag-outline" size={64} color="#D1D5DB" />
+          <Ionicons name="bag-outline" size={64} color={colors.neutral[300]} />
           <ThemedText style={styles.emptyTitle}>No Completed Orders</ThemedText>
           <ThemedText style={styles.emptyDescription}>
             Complete orders or pay in store to earn coins by sharing on social media!
@@ -611,15 +612,15 @@ export default function EarnFromSocialMediaPage() {
           </ThemedText>
           {pastSubmissions.slice(0, 5).map((post) => {
             const statusColors: Record<string, string> = {
-              pending: '#B45309',
+              pending: colors.brand.amberDeep,
               approved: '#047857',
               rejected: Colors.error,
               credited: Colors.nileBlue,
             };
             const statusBgColors: Record<string, string> = {
-              pending: '#FEF3C7',
-              approved: '#D1FAE5',
-              rejected: '#FEE2E2',
+              pending: colors.tint.amberLight,
+              approved: colors.tint.green,
+              rejected: colors.errorScale[100],
               credited: Colors.background.tertiary,
             };
             const statusIcons: Record<string, string> = {
@@ -959,7 +960,7 @@ export default function EarnFromSocialMediaPage() {
           disabled={submitting || selectedMedia.length === 0}
         >
           <LinearGradient
-            colors={selectedMedia.length > 0 ? EarnSocialData.ui.gradients.primary as any : ['#D1D5DB', '#9CA3AF']}
+            colors={selectedMedia.length > 0 ? EarnSocialData.ui.gradients.primary as any : [colors.neutral[300], colors.neutral[400]]}
             style={[styles.uploadButtonGradient, { pointerEvents: 'none' } as any]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -1593,7 +1594,7 @@ const styles = StyleSheet.create({
   selectedCashback: {
     ...Typography.body,
     fontWeight: '500',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
 
   // Steps Container

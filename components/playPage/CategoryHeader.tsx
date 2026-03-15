@@ -3,13 +3,14 @@ import { View, Pressable, StyleSheet, ScrollView, Platform } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { CategoryHeaderProps, PLAY_PAGE_COLORS } from '@/types/playPage.types';
+import { colors } from '@/constants/theme';
 
 // ReZ Design System Colors
 const COLORS = {
-  primary: '#00C06A',
-  primaryDark: '#00796B',
-  gold: '#FFC857',
-  navy: '#0B2240',
+  primary: colors.brand.green,
+  primaryDark: colors.brand.teal,
+  gold: colors.brand.goldWarm,
+  navy: colors.brand.navyDark,
 };
 
 function CategoryHeader({
@@ -62,7 +63,7 @@ function CategoryHeader({
               <LinearGradient
                 colors={
                   isActive
-                    ? ['#FFFFFF', 'rgba(255,255,255,0.9)']
+                    ? [colors.background.primary, 'rgba(255,255,255,0.9)']
                     : ['rgba(255,255,255,0.15)', 'rgba(255,255,255,0.08)']
                 }
                 style={styles.tabContent}
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   headerTitle: {
-    color: '#FFF',
+    color: colors.background.primary,
     fontSize: 22,
     fontWeight: '700',
     textAlign: 'center',

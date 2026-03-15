@@ -6,6 +6,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ReferralSectionProps } from '@/types/earnPage.types';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 function ReferralSection({
   referralData,
@@ -93,7 +94,7 @@ function ReferralSection({
         ]}
       >
         <LinearGradient
-          colors={['#FFFFFF', '#F8FAFC', '#F1F5F9']}
+          colors={[colors.background.primary, colors.tint.coolGray, colors.tint.slate]}
           style={styles.cardBackground}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -125,12 +126,12 @@ function ReferralSection({
                   ]}
                 >
                   <LinearGradient
-                    colors={['#FFD700', '#FFA500']}
+                    colors={[colors.brand.goldBright, '#FFA500']}
                     style={styles.coinGradient}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                   >
-                    <Ionicons name="star" size={idx === 3 ? 14 : idx === 1 ? 12 : idx === 5 ? 13 : 10} color="#FFFFFF" />
+                    <Ionicons name="star" size={idx === 3 ? 14 : idx === 1 ? 12 : idx === 5 ? 13 : 10} color={colors.background.primary} />
                   </LinearGradient>
                 </Animated.View>
               ))}
@@ -156,12 +157,12 @@ function ReferralSection({
                   ]}
                 >
                   <LinearGradient
-                    colors={['#6366F1', '#4F46E5']}
+                    colors={[colors.brand.indigo, '#4F46E5']}
                     style={styles.phoneGradient}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                   >
-                    <Ionicons name="phone-portrait" size={28} color="#FFFFFF" />
+                    <Ionicons name="phone-portrait" size={28} color={colors.background.primary} />
                     <View style={styles.phoneScreen}>
                       <View style={styles.screenLine} />
                       <View style={styles.screenLine} />
@@ -189,14 +190,14 @@ function ReferralSection({
                   ]}
                 >
                   <LinearGradient
-                    colors={['#ffcd57', '#1a3a52']}
+                    colors={[colors.lightMustard, colors.nileBlue]}
                     style={styles.phoneGradient}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                   >
-                    <Ionicons name="download" size={28} color="#FFFFFF" />
+                    <Ionicons name="download" size={28} color={colors.background.primary} />
                     <View style={styles.phoneScreen}>
-                      <Ionicons name="arrow-down" size={16} color="#FFFFFF" />
+                      <Ionicons name="arrow-down" size={16} color={colors.background.primary} />
                     </View>
                   </LinearGradient>
                 </Animated.View>
@@ -221,12 +222,12 @@ function ReferralSection({
                 ]}
               >
                 <LinearGradient
-                  colors={['#EC4899', '#DB2777']}
+                  colors={[colors.brand.pink, colors.deepPink]}
                   style={styles.personAvatar}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                 >
-                  <Ionicons name="person" size={16} color="#FFFFFF" />
+                  <Ionicons name="person" size={16} color={colors.background.primary} />
                 </LinearGradient>
               </Animated.View>
               
@@ -248,12 +249,12 @@ function ReferralSection({
                 ]}
               >
                 <LinearGradient
-                  colors={['#ffcd57', '#1a3a52']}
+                  colors={[colors.lightMustard, colors.nileBlue]}
                   style={styles.personAvatar}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                 >
-                  <Ionicons name="person" size={16} color="#FFFFFF" />
+                  <Ionicons name="person" size={16} color={colors.background.primary} />
                 </LinearGradient>
               </Animated.View>
             </View>
@@ -277,9 +278,9 @@ function ReferralSection({
             ]}
           >
             {[
-              { value: referralData.totalReferrals, label: 'Total Referrals', icon: 'people', gradient: ['#ffcd57', '#1a3a52'] },
-              { value: `${currencySymbol}${referralData.totalEarningsFromReferrals}`, label: 'Earned', icon: 'wallet', gradient: ['#ffcd57', '#1a3a52'] },
-              { value: `${currencySymbol}${referralData.referralBonus}`, label: 'Per Referral', icon: 'gift', gradient: ['#FFC857', '#F5A623'] },
+              { value: referralData.totalReferrals, label: 'Total Referrals', icon: 'people', gradient: [colors.lightMustard, colors.nileBlue] },
+              { value: `${currencySymbol}${referralData.totalEarningsFromReferrals}`, label: 'Earned', icon: 'wallet', gradient: [colors.lightMustard, colors.nileBlue] },
+              { value: `${currencySymbol}${referralData.referralBonus}`, label: 'Per Referral', icon: 'gift', gradient: [colors.brand.goldWarm, '#F5A623'] },
             ].map((stat, idx) => (
               <View key={idx} style={styles.statItem}>
                 <LinearGradient
@@ -288,7 +289,7 @@ function ReferralSection({
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                 >
-                  <Ionicons name={stat.icon as any} size={18} color="#FFFFFF" />
+                  <Ionicons name={stat.icon as any} size={18} color={colors.background.primary} />
                 </LinearGradient>
                 <View style={styles.statNumberWrapper}>
                   <ThemedText style={styles.statNumber}>
@@ -324,12 +325,12 @@ function ReferralSection({
              
             >
               <LinearGradient
-                colors={['#ffcd57', '#e5b84e', '#1a3a52']}
+                colors={[colors.lightMustard, '#e5b84e', colors.nileBlue]}
                 style={styles.shareButtonGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Ionicons name="share-social" size={18} color="#FFFFFF" />
+                <Ionicons name="share-social" size={18} color={colors.background.primary} />
                 <ThemedText style={styles.shareButtonText}>Share Link</ThemedText>
               </LinearGradient>
             </Pressable>
@@ -379,7 +380,7 @@ const styles = StyleSheet.create({
   titleUnderline: {
     width: 60,
     height: 4,
-    backgroundColor: '#FFC857',
+    backgroundColor: colors.brand.goldWarm,
     borderRadius: 2,
     marginTop: 2,
   },
@@ -391,7 +392,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 200, 87, 0.2)',
     ...Platform.select({
       ios: {
-        shadowColor: '#FFC857',
+        shadowColor: colors.brand.goldWarm,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.2,
         shadowRadius: 16,
@@ -447,7 +448,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#FFD700',
+        shadowColor: colors.brand.goldBright,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -604,14 +605,14 @@ statNumberWrapper: {
 statNumber: {
   fontSize: 20,
   fontWeight: '800',
-  color: '#1F2937',
+  color: colors.neutral[800],
   marginBottom: 2,
   letterSpacing: -0.3,
   textAlign: 'center',
 },
 statLabel: {
   fontSize: 11,
-  color: '#6B7280',
+  color: colors.neutral[500],
   fontWeight: '600',
   textAlign: 'center',
   letterSpacing: 0.2,
@@ -635,7 +636,7 @@ statLabel: {
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -658,7 +659,7 @@ statLabel: {
   shareButtonText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.2,
   },
   learnButton: {

@@ -15,14 +15,15 @@ import { useRegion } from '@/contexts/RegionContext';
 import { SectionHeader, HorizontalScrollSection } from '../common';
 import { BankOffer } from '@/types/offers.types';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // New Color Palette
 const PALETTE = {
-  nileBlue: '#1a3a52',
-  lightMustard: '#ffcd57',
-  linen: '#faf1e0',
-  lightPeach: '#ffd7b5',
-  lavenderMist: '#dfebf7',
+  nileBlue: colors.nileBlue,
+  lightMustard: colors.lightMustard,
+  linen: colors.linen,
+  lightPeach: colors.lightPeach,
+  lavenderMist: colors.lavenderMist,
 };
 
 interface BankOffersSectionProps {
@@ -61,13 +62,13 @@ export const BankOffersSection: React.FC<BankOffersSectionProps> = ({
   const getCardTypeColor = (type: string) => {
     switch (type) {
       case 'credit':
-        return '#8B5CF6';
+        return colors.brand.purpleLight;
       case 'debit':
-        return '#3B82F6';
+        return colors.infoScale[400];
       case 'wallet':
         return PALETTE.lightMustard;
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   };
 
@@ -77,10 +78,10 @@ export const BankOffersSection: React.FC<BankOffersSectionProps> = ({
     },
     card: {
       width: 200,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 1,
-      borderColor: isDark ? theme.colors.border.light : '#E5E7EB',
+      borderColor: isDark ? theme.colors.border.light : colors.neutral[200],
       overflow: 'hidden',
       ...(isDark ? {} : Shadows.medium),
     },
@@ -88,18 +89,18 @@ export const BankOffersSection: React.FC<BankOffersSectionProps> = ({
       flexDirection: 'row',
       alignItems: 'center',
       padding: Spacing.md,
-      backgroundColor: isDark ? 'rgba(59, 130, 246, 0.1)' : '#EFF6FF',
+      backgroundColor: isDark ? 'rgba(59, 130, 246, 0.1)' : colors.tint.blue,
       borderBottomWidth: 1,
-      borderBottomColor: isDark ? 'rgba(59, 130, 246, 0.2)' : '#DBEAFE',
+      borderBottomColor: isDark ? 'rgba(59, 130, 246, 0.2)' : colors.tint.blueLight,
     },
     bankLogoContainer: {
       width: 44,
       height: 44,
       borderRadius: 10,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.background.primary,
       overflow: 'hidden',
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.neutral[200],
       ...Shadows.subtle,
       alignItems: 'center',
       justifyContent: 'center',
@@ -112,12 +113,12 @@ export const BankOffersSection: React.FC<BankOffersSectionProps> = ({
     bankLogoPlaceholder: {
       width: '100%',
       height: '100%',
-      backgroundColor: '#3B82F6',
+      backgroundColor: colors.infoScale[400],
       alignItems: 'center',
       justifyContent: 'center',
     },
     bankLogoText: {
-      color: '#FFFFFF',
+      color: colors.background.primary,
       fontSize: 16,
       fontWeight: '700',
     },
@@ -183,7 +184,7 @@ export const BankOffersSection: React.FC<BankOffersSectionProps> = ({
         title="Bank & Wallet Offers"
         subtitle="Extra rewards on payments"
         icon="card"
-        iconColor="#3B82F6"
+        iconColor={colors.infoScale[400]}
         showViewAll={offers.length > 3}
         onViewAll={onViewAll}
       />

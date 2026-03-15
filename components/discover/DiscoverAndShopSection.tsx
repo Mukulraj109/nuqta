@@ -22,20 +22,21 @@ import { realVideosApi } from '@/services/realVideosApi';
 import DiscoverAndShopHeader from './DiscoverAndShopHeader';
 import DiscoverAndShopTabBar from './DiscoverAndShopTabBar';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 // Nuqta Brand Colors
 const NUQTA_COLORS = {
-  nileBlue: '#1a3a52',
+  nileBlue: colors.nileBlue,
   nileBlueLight: '#2a4a62',
-  mustard: '#ffcd57',
-  primaryGold: '#FFC857',
-  navy: '#0B2240',
-  gray: '#6B7280',
-  lightGray: '#F3F4F6',
+  mustard: colors.lightMustard,
+  primaryGold: colors.brand.goldWarm,
+  navy: colors.brand.navyDark,
+  gray: colors.neutral[500],
+  lightGray: colors.neutral[100],
   black: '#000000',
-  white: '#FFFFFF',
+  white: colors.background.primary,
 };
 
 interface DiscoverAndShopSectionProps {
@@ -443,7 +444,7 @@ function DiscoverAndShopSection({
                     <Ionicons 
                       name={likedReels.has(reel._id) ? "heart" : "heart-outline"} 
                       size={18} 
-                      color={likedReels.has(reel._id) ? "#EF4444" : "#374151"} 
+                      color={likedReels.has(reel._id) ? colors.error : colors.neutral[700]} 
                     />
                   </Pressable>
                   <Pressable
@@ -455,7 +456,7 @@ function DiscoverAndShopSection({
                     <Ionicons
                       name={bookmarkedReels.has(reel._id) ? "bookmark" : "bookmark-outline"}
                       size={18}
-                      color={bookmarkedReels.has(reel._id) ? NUQTA_COLORS.mustard : "#374151"}
+                      color={bookmarkedReels.has(reel._id) ? NUQTA_COLORS.mustard : colors.neutral[700]}
                     />
                   </Pressable>
                   <Pressable
@@ -463,7 +464,7 @@ function DiscoverAndShopSection({
                     onPress={(e) => handleShoppingBag(reel, e)}
                    
                   >
-                    <Ionicons name="bag-outline" size={18} color="#374151" />
+                    <Ionicons name="bag-outline" size={18} color={colors.neutral[700]} />
                   </Pressable>
                 </View>
 
@@ -473,7 +474,7 @@ function DiscoverAndShopSection({
                   <View style={styles.playButtonGlowRing} />
                   {/* Play button */}
                   <View style={styles.playButton}>
-                    <Ionicons name="play" size={24} color="#FFFFFF" />
+                    <Ionicons name="play" size={24} color={colors.background.primary} />
                   </View>
                 </View>
 
@@ -590,7 +591,7 @@ function DiscoverAndShopSection({
                 >
                   <View style={styles.cardBorder} />
                   <View style={styles.patternOverlay}>
-                    <View style={[styles.glowCircle, { top: -40, right: -40, backgroundColor: '#8B5CF6' }]} />
+                    <View style={[styles.glowCircle, { top: -40, right: -40, backgroundColor: colors.brand.purpleLight }]} />
                     <View style={[styles.glowCircle, { bottom: -30, left: -30, backgroundColor: NUQTA_COLORS.mustard }]} />
                   </View>
 
@@ -621,7 +622,7 @@ function DiscoverAndShopSection({
                   {/* Brand badge - only show for actual merchant content */}
                   {isMerchantPost && (
                     <View style={styles.brandBadge}>
-                      <Ionicons name="checkmark-circle" size={12} color="#FFFFFF" />
+                      <Ionicons name="checkmark-circle" size={12} color={colors.background.primary} />
                       <Text style={styles.brandBadgeText}>Brand</Text>
                     </View>
                   )}
@@ -629,7 +630,7 @@ function DiscoverAndShopSection({
                   {/* Shop badge for posts with products */}
                   {productCount > 0 && !isMerchantPost && (
                     <View style={styles.shopBadgeTop}>
-                      <Ionicons name="bag-handle" size={12} color="#FFFFFF" />
+                      <Ionicons name="bag-handle" size={12} color={colors.background.primary} />
                       <Text style={styles.shopBadgeText}>Shop</Text>
                     </View>
                   )}
@@ -639,7 +640,7 @@ function DiscoverAndShopSection({
                       {productCount > 0 ? `Shop ${productCount} items` : 'View post'}
                     </Text>
                     <View style={styles.storeInfo}>
-                      <Ionicons name="heart" size={12} color="#EF4444" />
+                      <Ionicons name="heart" size={12} color={colors.error} />
                       <Text style={styles.viewsText}>{formatCount(likes)}</Text>
                       <Text style={styles.separator}> • </Text>
                       <Text style={styles.viewsText}>{formatCount(views)} views</Text>
@@ -738,7 +739,7 @@ function DiscoverAndShopSection({
                 >
                   <View style={styles.cardBorder} />
                   <View style={styles.patternOverlay}>
-                    <View style={[styles.glowCircle, { top: -40, right: -40, backgroundColor: '#3B82F6' }]} />
+                    <View style={[styles.glowCircle, { top: -40, right: -40, backgroundColor: colors.infoScale[400] }]} />
                     <View style={[styles.glowCircle, { bottom: -30, left: -30, backgroundColor: NUQTA_COLORS.nileBlue }]} />
                   </View>
 
@@ -885,7 +886,7 @@ function DiscoverAndShopSection({
 
                   {productCount > 0 && (
                     <View style={styles.shopBadgeTop}>
-                      <Ionicons name="bag-handle" size={12} color="#FFFFFF" />
+                      <Ionicons name="bag-handle" size={12} color={colors.background.primary} />
                       <Text style={styles.shopBadgeText}>Shop {productCount}</Text>
                     </View>
                   )}
@@ -909,7 +910,7 @@ function DiscoverAndShopSection({
                       {productCount > 0 ? `Shop ${productCount} products` : 'View image'}
                     </Text>
                     <View style={styles.storeInfo}>
-                      <Ionicons name="heart" size={12} color="#EF4444" />
+                      <Ionicons name="heart" size={12} color={colors.error} />
                       <Text style={styles.viewsText}>{formatCount(likes)}</Text>
                     </View>
                   </View>
@@ -995,12 +996,12 @@ function DiscoverAndShopSection({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginBottom: 80,
   },
   contentContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingBottom: 20,
   },
   savingsHeader: {
@@ -1010,7 +1011,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 8,
     paddingBottom: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginBottom: 0,
   },
   savingsHeaderLeft: {
@@ -1020,14 +1021,14 @@ const styles = StyleSheet.create({
   savingsTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
     letterSpacing: -0.2,
     flexShrink: 1,
   },
   savingsSubtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '400',
     lineHeight: 18,
   },
@@ -1042,7 +1043,7 @@ const styles = StyleSheet.create({
     color: NUQTA_COLORS.nileBlue,
   },
   reelsContainer: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     paddingTop: 12,
     paddingBottom: 28,
     marginBottom: 0,
@@ -1062,7 +1063,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     overflow: 'hidden',
     marginRight: 18,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     ...Platform.select({
       ios: {
         shadowColor: NUQTA_COLORS.nileBlue,
@@ -1136,7 +1137,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     flex: 1,
     letterSpacing: -0.2,
   },
@@ -1152,7 +1153,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1.5,
@@ -1205,7 +1206,7 @@ const styles = StyleSheet.create({
   savingsText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
     letterSpacing: -0.2,
   },
@@ -1222,18 +1223,18 @@ const styles = StyleSheet.create({
   },
   storeName: {
     fontSize: 11,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '600',
     flex: 1,
   },
   separator: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '400',
   },
   viewsText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   loadingContainer: {
@@ -1257,7 +1258,7 @@ const styles = StyleSheet.create({
     height: 28,
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   brandBadge: {
     position: 'absolute',
@@ -1273,7 +1274,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   brandBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '700',
   },
@@ -1288,7 +1289,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   categoryBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '700',
     textTransform: 'capitalize',
@@ -1307,7 +1308,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   shopBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '700',
   },

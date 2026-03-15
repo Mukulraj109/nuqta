@@ -28,6 +28,7 @@ import productGalleryApi from '@/services/productGalleryApi';
 import ZoomableImage from './ZoomableImage';
 import analyticsService from '@/services/analyticsService';
 import { useGalleryImagePreloader } from './GalleryImagePreloader';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -341,7 +342,7 @@ function GalleryViewerModal({
                 accessibilityHint="Double tap to close the gallery"
                 accessibilityRole="button"
               >
-                <Ionicons name="close" size={28} color="#FFF" />
+                <Ionicons name="close" size={28} color={colors.background.primary} />
               </Pressable>
 
               <View style={styles.headerCenter} accessibilityRole="header">
@@ -379,7 +380,7 @@ function GalleryViewerModal({
                   <Ionicons
                     name={viewMode === 'carousel' ? 'grid' : 'albums'}
                     size={24}
-                    color="#FFF"
+                    color={colors.background.primary}
                   />
                 </Pressable>
                 <Pressable
@@ -393,7 +394,7 @@ function GalleryViewerModal({
                   <Ionicons
                     name={showInfo ? 'information-circle' : 'information-circle-outline'}
                     size={24}
-                    color="#FFF"
+                    color={colors.background.primary}
                   />
                 </Pressable>
                 <Pressable
@@ -404,7 +405,7 @@ function GalleryViewerModal({
                   accessibilityHint="Double tap to share this gallery item"
                   accessibilityRole="button"
                 >
-                  <Ionicons name="share-social" size={24} color="#FFF" />
+                  <Ionicons name="share-social" size={24} color={colors.background.primary} />
                 </Pressable>
               </View>
             </View>
@@ -447,7 +448,7 @@ function GalleryViewerModal({
                 )}
                 {isLoading && index === currentIndex && (
                   <View style={styles.loadingOverlay}>
-                    <ActivityIndicator size="large" color="#FFF" />
+                    <ActivityIndicator size="large" color={colors.background.primary} />
                   </View>
                 )}
               </View>
@@ -482,12 +483,12 @@ function GalleryViewerModal({
                 />
                 {item.type === 'video' && (
                   <View style={styles.gridVideoBadge}>
-                    <Ionicons name="play-circle" size={20} color="#FFF" />
+                    <Ionicons name="play-circle" size={20} color={colors.background.primary} />
                   </View>
                 )}
                 {index === currentIndex && (
                   <View style={styles.gridSelectedIndicator}>
-                    <Ionicons name="checkmark-circle" size={24} color="#3B82F6" />
+                    <Ionicons name="checkmark-circle" size={24} color={colors.infoScale[400]} />
                   </View>
                 )}
               </Pressable>
@@ -504,7 +505,7 @@ function GalleryViewerModal({
                 onPress={goToPrevious}
                 hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
               >
-                <Ionicons name="chevron-back" size={32} color="#FFF" />
+                <Ionicons name="chevron-back" size={32} color={colors.background.primary} />
               </Pressable>
             )}
 
@@ -514,7 +515,7 @@ function GalleryViewerModal({
                 onPress={goToNext}
                 hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
               >
-                <Ionicons name="chevron-forward" size={32} color="#FFF" />
+                <Ionicons name="chevron-forward" size={32} color={colors.background.primary} />
               </Pressable>
             )}
           </>
@@ -584,7 +585,7 @@ function GalleryViewerModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: colors.text.primary,
   },
   header: {
     position: 'absolute',
@@ -620,7 +621,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
     marginBottom: 2,
   },
   headerSubtitle: {
@@ -694,7 +695,7 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
     marginBottom: 8,
   },
   infoDescription: {
@@ -717,7 +718,7 @@ const styles = StyleSheet.create({
   },
   tagText: {
     fontSize: 12,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '500',
   },
   viewCountContainer: {
@@ -746,7 +747,7 @@ const styles = StyleSheet.create({
   },
   statText: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '500',
   },
   pagination: {
@@ -767,7 +768,7 @@ const styles = StyleSheet.create({
   },
   paginationDotActive: {
     width: 24,
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
   },
   // Grid view styles
   gridScrollView: {

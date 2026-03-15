@@ -60,6 +60,7 @@ import type {
   PageConfigSection,
   PageConfigServiceType,
 } from '@/services/categoriesApi';
+import { colors } from '@/constants/theme';
 
 // Per-section error boundary: isolates crashes so one section doesn't blank the whole page
 class SectionErrorBoundary extends React.Component<
@@ -116,7 +117,7 @@ const StoreCardSkeleton = ({ count = 3, variant = 'default' }: { count?: number;
   return (
     <View style={{ paddingHorizontal: 16, gap: 12 }}>
       {Array.from({ length: count }).map((_, i) => (
-        <View key={i} style={{ backgroundColor: '#fff', borderRadius: 12, overflow: 'hidden' }}>
+        <View key={i} style={{ backgroundColor: colors.background.primary, borderRadius: 12, overflow: 'hidden' }}>
           {!isCompact && <SkeletonLoader width="100%" height={140} borderRadius={0} />}
           <View style={{ padding: 12, gap: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -242,7 +243,7 @@ const StoreCard = ({
           />
         ) : (
           <View style={[styles.storeImage, styles.storeImagePlaceholder]}>
-            <Ionicons name="storefront" size={40} color="#9CA3AF" />
+            <Ionicons name="storefront" size={40} color={colors.neutral[400]} />
             <Text style={styles.storeImagePlaceholderText}>{store.name}</Text>
           </View>
         )}
@@ -258,15 +259,15 @@ const StoreCard = ({
               <Text style={styles.badgeNewText}>NEW</Text>
             </View>
           )}
-          <View style={[styles.badgeStatus, { backgroundColor: openStatus.isOpen ? '#ECFDF5' : '#FEF2F2' }]}>
-            <View style={[styles.statusDot, { backgroundColor: openStatus.isOpen ? '#22C55E' : '#EF4444' }]} />
-            <Text style={{ fontSize: 10, fontWeight: '600', color: openStatus.isOpen ? '#059669' : '#DC2626' }}>
+          <View style={[styles.badgeStatus, { backgroundColor: openStatus.isOpen ? colors.tint.greenLight : colors.errorScale[50] }]}>
+            <View style={[styles.statusDot, { backgroundColor: openStatus.isOpen ? colors.success : colors.error }]} />
+            <Text style={{ fontSize: 10, fontWeight: '600', color: openStatus.isOpen ? colors.successScale[700] : colors.error }}>
               {openStatus.isOpen ? 'Open' : 'Closed'}
             </Text>
           </View>
           {store.deliveryCategories?.fastDelivery && (
             <View style={styles.badge60Min}>
-              <Ionicons name="flash" size={10} color="#000" />
+              <Ionicons name="flash" size={10} color={colors.text.primary} />
               <Text style={styles.badge60MinText}>60 min</Text>
             </View>
           )}
@@ -289,7 +290,7 @@ const StoreCard = ({
 
         {/* Rating Badge */}
         <View style={styles.storeRating}>
-          <Ionicons name="star" size={12} color="#F59E0B" />
+          <Ionicons name="star" size={12} color={colors.warningScale[400]} />
           <Text style={styles.storeRatingText}>
             {store.ratings?.average?.toFixed(1) || '4.5'}
           </Text>
@@ -306,13 +307,13 @@ const StoreCard = ({
         {/* Meta Info */}
         <View style={styles.storeMeta}>
           <View style={styles.storeMetaItem}>
-            <Ionicons name="location-outline" size={12} color="#6B7280" />
+            <Ionicons name="location-outline" size={12} color={colors.neutral[500]} />
             <Text style={styles.storeMetaText}>
               {store.distance ? `${store.distance} km` : store.location?.city || 'Nearby'}
             </Text>
           </View>
           <View style={styles.storeMetaItem}>
-            <Ionicons name="time-outline" size={12} color="#6B7280" />
+            <Ionicons name="time-outline" size={12} color={colors.neutral[500]} />
             <Text style={styles.storeMetaText}>
               {store.operationalInfo?.deliveryTime || '30-35 min'}
             </Text>
@@ -329,7 +330,7 @@ const StoreCard = ({
           <View style={styles.deliveryInfoRow}>
             {store.operationalInfo?.deliveryFee !== undefined && (
               <View style={styles.storeMetaItem}>
-                <Ionicons name="bicycle-outline" size={12} color="#6B7280" />
+                <Ionicons name="bicycle-outline" size={12} color={colors.neutral[500]} />
                 <Text style={styles.storeMetaText}>
                   {store.operationalInfo.deliveryFee === 0 ? 'Free delivery' : `${currencySymbol}${store.operationalInfo.deliveryFee} delivery`}
                 </Text>
@@ -349,7 +350,7 @@ const StoreCard = ({
         {/* Rewards Row */}
         <View style={styles.storeRewardsRow}>
           <View style={styles.storeCoins}>
-            <Ionicons name="star" size={14} color="#F59E0B" />
+            <Ionicons name="star" size={14} color={colors.warningScale[400]} />
             <Text style={styles.storeCoinsText}>
               Earn {currencySymbol}{coinsEarned} coins
             </Text>
@@ -381,7 +382,7 @@ const StoreCard = ({
             }}
            
           >
-            <Ionicons name="calendar-outline" size={14} color="#FFFFFF" />
+            <Ionicons name="calendar-outline" size={14} color={colors.background.primary} />
             <Text style={styles.reserveButtonText}>Reserve</Text>
           </Pressable>
         )}
@@ -396,12 +397,12 @@ const StoreCard = ({
 const ServiceTypeCard = ({ serviceType, onPress }: { serviceType: PageConfigServiceType; onPress: () => void }) => (
   <Pressable style={styles.serviceTypeCard} onPress={onPress}>
     <LinearGradient
-      colors={serviceType.gradient?.length >= 2 ? [...serviceType.gradient] : ['#6366F1', '#818CF8']}
+      colors={serviceType.gradient?.length >= 2 ? [...serviceType.gradient] : [colors.brand.indigo, '#818CF8']}
       style={styles.serviceTypeGradient}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
     >
-      <Ionicons name={serviceType.icon as any} size={28} color="#FFFFFF" />
+      <Ionicons name={serviceType.icon as any} size={28} color={colors.background.primary} />
       <Text style={styles.serviceTypeLabel}>{serviceType.label}</Text>
       <Text style={styles.serviceTypeDescription} numberOfLines={2}>{serviceType.description}</Text>
     </LinearGradient>
@@ -517,8 +518,8 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
   const curatedCollections = pageConfig?.curatedCollections || [];
   const searchPlaceholders = pageConfig?.searchPlaceholders || {};
   const valuePropItems = pageConfig?.valuePropItems || [
-    { icon: 'cash-outline', text: 'Cashback on every order', color: '#34D399' },
-    { icon: 'wallet-outline', text: 'Earn coins to reuse', color: '#FBBF24' },
+    { icon: 'cash-outline', text: 'Cashback on every order', color: colors.successScale[400] },
+    { icon: 'wallet-outline', text: 'Earn coins to reuse', color: colors.warningScale[400] },
     { icon: 'gift-outline', text: 'Loyalty rewards', color: '#F472B6' },
   ];
 
@@ -896,7 +897,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
             <Text style={styles.loyaltyHubTitle}>{section.title || `${pageConfig?.categoryName} Loyalty Hub`}</Text>
             <Text style={styles.loyaltyHubSubtitle}>{section.subtitle || 'Track streaks, unlock rewards'}</Text>
           </View>
-          <Ionicons name="chevron-forward" size={20} color="#6B7280" />
+          <Ionicons name="chevron-forward" size={20} color={colors.neutral[500]} />
         </View>
         <View style={styles.loyaltyHubStats}>
           <View style={styles.loyaltyHubStat}>
@@ -905,7 +906,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
           </View>
           <View style={styles.loyaltyHubStat}>
             <Text style={styles.loyaltyHubStatLabel}>Active Brands</Text>
-            <Text style={[styles.loyaltyHubStatValue, { color: '#F59E0B' }]}>{loyaltyStats.brandsCount}</Text>
+            <Text style={[styles.loyaltyHubStatValue, { color: colors.warningScale[400] }]}>{loyaltyStats.brandsCount}</Text>
           </View>
           <View style={styles.loyaltyHubStat}>
             <Text style={styles.loyaltyHubStatLabel}>Next Reward</Text>
@@ -939,9 +940,9 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
         <View style={styles.sortFilterBar}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.sortFilterContent}>
             <Pressable style={styles.sortButton} onPress={() => setShowSortModal(true)}>
-              <Ionicons name="swap-vertical-outline" size={16} color="#111827" />
+              <Ionicons name="swap-vertical-outline" size={16} color={colors.neutral[900]} />
               <Text style={styles.sortButtonText}>{sortOptionsConfig.find((o: any) => o.id === sortOption)?.label || 'Sort'}</Text>
-              <Ionicons name="chevron-down" size={14} color="#6B7280" />
+              <Ionicons name="chevron-down" size={14} color={colors.neutral[500]} />
             </Pressable>
             {filterConfig.showPriceFilter && (
             <Pressable
@@ -956,7 +957,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
               style={[styles.filterChip, activeFilters.minRating ? styles.filterChipActive : null]}
               onPress={() => setActiveFilters(f => f.minRating ? { ...f, minRating: undefined } : { ...f, minRating: filterConfig.ratingThreshold })}
             >
-              <Ionicons name="star" size={12} color={activeFilters.minRating ? '#FFFFFF' : '#F59E0B'} />
+              <Ionicons name="star" size={12} color={activeFilters.minRating ? colors.background.primary : colors.warningScale[400]} />
               <Text style={[styles.filterChipText, activeFilters.minRating && styles.filterChipTextActive]}>{filterConfig.ratingThreshold}.0+</Text>
             </Pressable>
             )}
@@ -965,7 +966,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
               style={[styles.filterChip, activeFilters.openNow ? styles.filterChipActive : null]}
               onPress={() => setActiveFilters(f => f.openNow ? { ...f, openNow: undefined } : { ...f, openNow: true })}
             >
-              <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: activeFilters.openNow ? '#FFFFFF' : '#22C55E' }} />
+              <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: activeFilters.openNow ? colors.background.primary : colors.success }} />
               <Text style={[styles.filterChipText, activeFilters.openNow && styles.filterChipTextActive]}>Open Now</Text>
             </Pressable>
             )}
@@ -985,7 +986,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
                     onPress={() => setActiveDietary(prev => isActive ? prev.filter(d => d !== opt.id) : [...prev, opt.id])}
                   >
                     <Text style={styles.dietaryIcon}>{opt.icon}</Text>
-                    <Text style={[styles.dietaryLabel, isActive && { color: '#FFFFFF', fontWeight: '600' }]}>{opt.label}</Text>
+                    <Text style={[styles.dietaryLabel, isActive && { color: colors.background.primary, fontWeight: '600' }]}>{opt.label}</Text>
                   </Pressable>
                 );
               })}
@@ -995,7 +996,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
 
         {/* Store Cards Section Header */}
         <View style={[styles.sectionHeader, { marginTop: 16 }]}>
-          <Ionicons name="storefront-outline" size={20} color="#6B7280" />
+          <Ionicons name="storefront-outline" size={20} color={colors.neutral[500]} />
           <Text style={styles.sectionTitle}>{section.title || `All ${pageConfig?.categoryName || 'Stores'}`}</Text>
           <Text style={styles.sectionCount}>{displayStores.length}+ places</Text>
         </View>
@@ -1050,9 +1051,9 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
                   style={[styles.modalOption, sortOption === opt.id && styles.modalOptionActive]}
                   onPress={() => { setSortOption(opt.id); setShowSortModal(false); }}
                 >
-                  <Ionicons name={opt.icon as any} size={20} color={sortOption === opt.id ? '#F59E0B' : '#6B7280'} />
+                  <Ionicons name={opt.icon as any} size={20} color={sortOption === opt.id ? colors.warningScale[400] : colors.neutral[500]} />
                   <Text style={[styles.modalOptionText, sortOption === opt.id && styles.modalOptionTextActive]}>{opt.label}</Text>
-                  {sortOption === opt.id && <Ionicons name="checkmark-circle" size={20} color="#F59E0B" />}
+                  {sortOption === opt.id && <Ionicons name="checkmark-circle" size={20} color={colors.warningScale[400]} />}
                 </Pressable>
               ))}
             </View>
@@ -1154,7 +1155,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
               onPress={() => router.push(`/MainCategory/${slug}/search?tags=${col.tags}` as any)}
              
             >
-              <LinearGradient colors={col.gradient?.length >= 2 ? [...col.gradient] : ['#6366F1', '#818CF8']} style={styles.curatedGradient}>
+              <LinearGradient colors={col.gradient?.length >= 2 ? [...col.gradient] : [colors.brand.indigo, '#818CF8']} style={styles.curatedGradient}>
                 <Text style={styles.curatedIconText}>{col.icon}</Text>
                 <Text style={styles.curatedTitle}>{col.title}</Text>
                 <Text style={styles.curatedSubtitle}>{col.subtitle}</Text>
@@ -1169,7 +1170,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
   const renderValuePropositionSection = () => (
     <View key="value-proposition" style={styles.valuePropCard}>
       <LinearGradient
-        colors={['#1a3a52', '#0f2638']}
+        colors={[colors.nileBlue, '#0f2638']}
         style={styles.valuePropGradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -1200,7 +1201,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
            
           >
             <Text style={styles.savingsButtonText}>View Details</Text>
-            <Ionicons name="chevron-forward" size={14} color="#1a3a52" />
+            <Ionicons name="chevron-forward" size={14} color={colors.nileBlue} />
           </Pressable>
         </View>
       </LinearGradient>
@@ -1340,7 +1341,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
                   <Ionicons
                     name={tab.icon as any}
                     size={18}
-                    color={activeTab === tab.id ? '#FFFFFF' : '#6B7280'}
+                    color={activeTab === tab.id ? colors.background.primary : colors.neutral[500]}
                   />
                   <Text style={[
                     styles.tabLabel,
@@ -1405,7 +1406,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.tint.warmGray,
   },
   contentContainer: {
     paddingBottom: 100,
@@ -1423,7 +1424,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     gap: 8,
   },
   socialProofEmoji: {
@@ -1432,18 +1433,18 @@ const styles = StyleSheet.create({
   socialProofText: {
     flex: 1,
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   socialProofUser: {
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   socialProofBrand: {
     fontWeight: '500',
   },
   socialProofTime: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // Loyalty Hub
@@ -1479,12 +1480,12 @@ const styles = StyleSheet.create({
   loyaltyHubTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 2,
   },
   loyaltyHubSubtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   loyaltyHubStats: {
     flexDirection: 'row',
@@ -1494,22 +1495,22 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 8,
     borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   loyaltyHubStatLabel: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   loyaltyHubStatValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   // Tabs
   tabsContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 8,
   },
   tabs: {
@@ -1528,10 +1529,10 @@ const styles = StyleSheet.create({
   tabActive: {},
   tabLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   tabLabelActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   tabContent: {
@@ -1556,19 +1557,19 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   sectionCount: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // Sort & Filter
   sortFilterBar: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   sortFilterContent: {
     paddingHorizontal: 16,
@@ -1580,13 +1581,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     gap: 6,
   },
   sortButtonText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   filterChip: {
     flexDirection: 'row',
@@ -1594,26 +1595,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     gap: 4,
   },
   filterChipActive: {
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
   },
   filterChipText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   filterChipTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
 
   // Dietary
   dietaryStrip: {
     paddingVertical: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   dietaryContent: {
     paddingHorizontal: 16,
@@ -1625,7 +1626,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     gap: 6,
   },
   dietaryIcon: {
@@ -1633,7 +1634,7 @@ const styles = StyleSheet.create({
   },
   dietaryLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
 
@@ -1645,7 +1646,7 @@ const styles = StyleSheet.create({
   // Store Card (mirrors RestaurantCard)
   storeCard: {
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     overflow: 'hidden',
     marginBottom: 16,
   },
@@ -1666,14 +1667,14 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   storeImagePlaceholder: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
   storeImagePlaceholderText: {
     marginTop: 8,
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     textAlign: 'center',
     paddingHorizontal: 8,
@@ -1698,13 +1699,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 12,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     gap: 3,
   },
   badge60MinText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#000',
+    color: colors.text.primary,
   },
   badgeHalal: {
     paddingHorizontal: 8,
@@ -1715,29 +1716,29 @@ const styles = StyleSheet.create({
   badgeHalalText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   badgePureVeg: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    backgroundColor: '#22C55E',
+    backgroundColor: colors.success,
   },
   badgePureVegText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   badgeCashbackPurple: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   badgeCashbackPurpleText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   badgeNew: {
     paddingHorizontal: 8,
@@ -1747,7 +1748,7 @@ const styles = StyleSheet.create({
   badgeNewText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   badgeStatus: {
     flexDirection: 'row',
@@ -1777,11 +1778,11 @@ const styles = StyleSheet.create({
   storeRatingText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   storeRatingCount: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   storeContent: {
     padding: 12,
@@ -1789,12 +1790,12 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 2,
   },
   storeTags: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   storeMeta: {
     flexDirection: 'row',
@@ -1810,11 +1811,11 @@ const styles = StyleSheet.create({
   },
   storeMetaText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   storePriceForTwo: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 4,
   },
   deliveryInfoRow: {
@@ -1828,12 +1829,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: colors.tint.greenLight,
   },
   freeDeliveryText: {
     fontSize: 10,
     fontWeight: '500',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   storeRewardsRow: {
     flexDirection: 'row',
@@ -1841,7 +1842,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   storeCoins: {
     flexDirection: 'row',
@@ -1851,11 +1852,11 @@ const styles = StyleSheet.create({
   storeCoinsText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   reviewBonusText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   visitProgressRow: {
     flexDirection: 'row',
@@ -1866,7 +1867,7 @@ const styles = StyleSheet.create({
   visitProgressText: {
     fontSize: 11,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   unlockRewardText: {
     fontSize: 11,
@@ -1877,7 +1878,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingVertical: 10,
     borderRadius: 12,
     marginTop: 10,
@@ -1885,7 +1886,7 @@ const styles = StyleSheet.create({
   reserveButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   // Service Type Cards
@@ -1907,7 +1908,7 @@ const styles = StyleSheet.create({
   serviceTypeLabel: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginTop: 8,
   },
   serviceTypeDescription: {
@@ -1939,7 +1940,7 @@ const styles = StyleSheet.create({
   curatedTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   curatedSubtitle: {
     fontSize: 11,
@@ -1965,7 +1966,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   valuePropBrand: {
-    color: '#FBBF24',
+    color: colors.warningScale[400],
     fontWeight: '800',
   },
   valuePropGrid: {
@@ -2014,7 +2015,7 @@ const styles = StyleSheet.create({
   savingsAmount: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#FBBF24',
+    color: colors.warningScale[400],
   },
   savingsButton: {
     flexDirection: 'row',
@@ -2023,12 +2024,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 10,
-    backgroundColor: '#FBBF24',
+    backgroundColor: colors.warningScale[400],
   },
   savingsButtonText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 
   // Modal
@@ -2038,7 +2039,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20,
@@ -2047,7 +2048,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   modalOption: {
@@ -2056,7 +2057,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     gap: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   modalOptionActive: {
     backgroundColor: 'rgba(245, 158, 11, 0.08)',
@@ -2067,11 +2068,11 @@ const styles = StyleSheet.create({
   modalOptionText: {
     flex: 1,
     fontSize: 15,
-    color: '#111827',
+    color: colors.neutral[900],
   },
   modalOptionTextActive: {
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
 
   // Pagination
@@ -2079,9 +2080,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -13,6 +13,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface OrderHistoryItemProps {
   order: any;
@@ -51,16 +52,16 @@ const OrderHistoryItem: React.FC<OrderHistoryItemProps> = ({ order, onPress, onR
 
   const getStatusColor = (s: string): string => {
     switch (s) {
-      case 'placed': return '#F59E0B';
-      case 'confirmed': return '#3B82F6';
-      case 'preparing': return '#8B5CF6';
-      case 'ready': return '#06B6D4';
-      case 'dispatched': return '#10B981';
-      case 'delivered': return '#059669';
-      case 'cancelled': return '#EF4444';
-      case 'refunded': return '#6B7280';
-      case 'returned': return '#F97316';
-      default: return '#6B7280';
+      case 'placed': return colors.warningScale[400];
+      case 'confirmed': return colors.infoScale[400];
+      case 'preparing': return colors.brand.purpleLight;
+      case 'ready': return colors.brand.cyan;
+      case 'dispatched': return colors.successScale[400];
+      case 'delivered': return colors.successScale[700];
+      case 'cancelled': return colors.error;
+      case 'refunded': return colors.neutral[500];
+      case 'returned': return colors.brand.orange;
+      default: return colors.neutral[500];
     }
   };
 
@@ -123,9 +124,9 @@ const OrderHistoryItem: React.FC<OrderHistoryItemProps> = ({ order, onPress, onR
                   fulfillmentType === 'drive_thru' ? 'car-outline' :
                   fulfillmentType === 'dine_in' ? 'restaurant-outline' : 'bicycle-outline'
                 }
-                size={10} color="#1a3a52"
+                size={10} color={colors.nileBlue}
               />
-              <Text style={{ fontSize: 10, fontWeight: '600', color: '#1a3a52' }}>
+              <Text style={{ fontSize: 10, fontWeight: '600', color: colors.nileBlue }}>
                 {fulfillmentType === 'pickup' ? 'Pickup' :
                  fulfillmentType === 'drive_thru' ? 'Drive-Thru' :
                  fulfillmentType === 'dine_in' ? 'Dine-In' : ''}
@@ -133,7 +134,7 @@ const OrderHistoryItem: React.FC<OrderHistoryItemProps> = ({ order, onPress, onR
             </View>
           )}
           <View style={[styles.statusBadge, { backgroundColor: getStatusColor(status) }]}>
-            <Ionicons name={getStatusIcon(status) as any} size={12} color="#FFFFFF" />
+            <Ionicons name={getStatusIcon(status) as any} size={12} color={colors.background.primary} />
             <Text style={styles.statusText}>{formatStatus(status)}</Text>
           </View>
         </View>
@@ -161,7 +162,7 @@ const OrderHistoryItem: React.FC<OrderHistoryItemProps> = ({ order, onPress, onR
                   />
                 ) : (
                   <View style={styles.placeholderImage}>
-                    <Ionicons name="image-outline" size={24} color="#9CA3AF" />
+                    <Ionicons name="image-outline" size={24} color={colors.neutral[400]} />
                   </View>
                 )}
               </View>
@@ -217,7 +218,7 @@ const OrderHistoryItem: React.FC<OrderHistoryItemProps> = ({ order, onPress, onR
               accessibilityLabel={`View receipt for order ${orderNumber}`}
               accessibilityRole="button"
             >
-              <Ionicons name="receipt-outline" size={12} color="#7C3AED" />
+              <Ionicons name="receipt-outline" size={12} color={colors.brand.purple} />
               <Text style={styles.receiptButtonText}>Receipt</Text>
             </Pressable>
           )}
@@ -247,7 +248,7 @@ const OrderHistoryItem: React.FC<OrderHistoryItemProps> = ({ order, onPress, onR
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -269,12 +270,12 @@ const styles = StyleSheet.create({
   orderNumber: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 2,
   },
   orderDate: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   statusBadge: {
     flexDirection: 'row',
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   statusText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '600',
     marginLeft: 4,
@@ -303,7 +304,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     overflow: 'hidden',
     marginRight: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   itemImage: {
     width: '100%',
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   itemDetails: {
     flex: 1,
@@ -323,26 +324,26 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 2,
   },
   itemQuantity: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 2,
   },
   itemVariant: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   itemPrice: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   moreItems: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontStyle: 'italic',
     textAlign: 'center',
     marginTop: 4,
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   totalContainer: {
     flexDirection: 'row',
@@ -361,13 +362,13 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginRight: 8,
   },
   totalAmount: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   actions: {
     flexDirection: 'row',
@@ -377,12 +378,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   actionButtonText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   receiptButton: {
     flexDirection: 'row',
@@ -390,13 +391,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 6,
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
     gap: 4,
   },
   receiptButtonText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
 });
 

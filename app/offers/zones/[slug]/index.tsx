@@ -25,6 +25,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import realOffersApi from '@/services/realOffersApi';
 import logger from '@/utils/logger';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -79,63 +80,63 @@ interface ZoneTheme {
 
 const ZONE_THEMES: Record<string, ZoneTheme> = {
   student: {
-    gradientColors: ['#3B82F6', '#2563EB', '#1D4ED8'],
+    gradientColors: [colors.infoScale[400], colors.brand.blue, '#1D4ED8'],
     ionicon: 'school',
     emoji: '',
     tagLabel: 'Students Only',
     placeholderSubtitle: 'Campus deals & student discounts',
   },
   birthday: {
-    gradientColors: ['#F59E0B', '#D97706', '#B45309'],
+    gradientColors: [colors.warningScale[400], colors.warningScale[700], colors.brand.amberDeep],
     ionicon: 'gift',
     emoji: '',
     tagLabel: 'Birthday Special',
     placeholderSubtitle: 'Celebrate with exclusive deals',
   },
   corporate: {
-    gradientColors: ['#A78BFA', '#8B5CF6', '#6D28D9'],
+    gradientColors: [colors.brand.purpleSoft, colors.brand.purpleLight, colors.brand.purpleDeep],
     ionicon: 'briefcase',
     emoji: '',
     tagLabel: 'Corporate',
     placeholderSubtitle: 'Exclusive corporate benefits',
   },
   senior: {
-    gradientColors: ['#FCD34D', '#F59E0B', '#D97706'],
+    gradientColors: ['#FCD34D', colors.warningScale[400], colors.warningScale[700]],
     ionicon: 'heart',
     emoji: '',
     tagLabel: 'Senior Citizens',
     placeholderSubtitle: 'Special deals for senior citizens',
   },
   heroes: {
-    gradientColors: ['#34D399', '#10B981', '#059669'],
+    gradientColors: [colors.successScale[400], colors.successScale[400], colors.successScale[700]],
     ionicon: 'shield',
     emoji: '',
     tagLabel: 'Heroes',
     placeholderSubtitle: 'Saluting our heroes with exclusive offers',
   },
   defence: {
-    gradientColors: ['#34D399', '#10B981', '#059669'],
+    gradientColors: [colors.successScale[400], colors.successScale[400], colors.successScale[700]],
     ionicon: 'shield-checkmark',
     emoji: '',
     tagLabel: 'Defence',
     placeholderSubtitle: 'Thank you for your service',
   },
   women: {
-    gradientColors: ['#F472B6', '#EC4899', '#DB2777'],
+    gradientColors: ['#F472B6', colors.brand.pink, colors.deepPink],
     ionicon: 'flower',
     emoji: '',
     tagLabel: 'Women Exclusive',
     placeholderSubtitle: 'Exclusive offers for women',
   },
   'first-time': {
-    gradientColors: ['#60A5FA', '#3B82F6', '#2563EB'],
+    gradientColors: [colors.infoScale[400], colors.infoScale[400], colors.brand.blue],
     ionicon: 'sparkles',
     emoji: '',
     tagLabel: 'First-Time User',
     placeholderSubtitle: 'Welcome! Special first-time offers',
   },
   loyalty: {
-    gradientColors: ['#FBBF24', '#F59E0B', '#D97706'],
+    gradientColors: [colors.warningScale[400], colors.warningScale[400], colors.warningScale[700]],
     ionicon: 'star',
     emoji: '',
     tagLabel: 'Loyalty',
@@ -144,7 +145,7 @@ const ZONE_THEMES: Record<string, ZoneTheme> = {
 };
 
 const DEFAULT_THEME: ZoneTheme = {
-  gradientColors: ['#6366F1', '#4F46E5', '#4338CA'],
+  gradientColors: [colors.brand.indigo, '#4F46E5', '#4338CA'],
   ionicon: 'pricetag',
   emoji: '',
   tagLabel: 'Exclusive',
@@ -440,7 +441,7 @@ export default function ExclusiveZonePage() {
               onPress={() => router.back()}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
 
             <View style={styles.headerTitleContainer}>
@@ -453,7 +454,7 @@ export default function ExclusiveZonePage() {
             </View>
 
             <View style={styles.headerIconContainer}>
-              <Ionicons name={ionicon} size={28} color="#FFFFFF" />
+              <Ionicons name={ionicon} size={28} color={colors.background.primary} />
             </View>
           </View>
         </SafeAreaView>
@@ -487,7 +488,7 @@ export default function ExclusiveZonePage() {
               <View style={styles.verificationCard}>
                 <View style={styles.verificationRow}>
                   <View style={styles.verificationLeft}>
-                    <Ionicons name="alert-circle" size={20} color="#FBBF24" />
+                    <Ionicons name="alert-circle" size={20} color={colors.warningScale[400]} />
                     <ThemedText style={styles.verificationText}>
                       Verify to unlock all deals
                     </ThemedText>
@@ -603,7 +604,7 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     ...Typography.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   // Header
@@ -627,7 +628,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...Typography.h3,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
   },
   headerSubtitle: {
@@ -707,7 +708,7 @@ const styles = StyleSheet.create({
   },
   verificationText: {
     ...Typography.body,
-    color: '#FBBF24',
+    color: colors.warningScale[400],
   },
   verifyButton: {
     paddingHorizontal: Spacing.base,
@@ -716,7 +717,7 @@ const styles = StyleSheet.create({
   },
   verifyButtonText: {
     ...Typography.labelSmall,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   activeBadge: {
@@ -726,7 +727,7 @@ const styles = StyleSheet.create({
   },
   activeBadgeText: {
     ...Typography.caption,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
 

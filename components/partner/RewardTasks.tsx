@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { RewardTask } from '@/types/partner.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface RewardTasksProps {
   tasks: RewardTask[];
@@ -44,17 +45,17 @@ function RewardTasks({
   const getTaskColor = (type: RewardTask['type']) => {
     switch (type) {
       case 'review':
-        return ['#F59E0B', '#FBBF24'] as const;
+        return [colors.warningScale[400], colors.warningScale[400]] as const;
       case 'purchase':
-        return ['#ffcd57', '#1a3a52'] as const;
+        return [colors.lightMustard, colors.nileBlue] as const;
       case 'referral':
-        return ['#ffcd57', '#ffe4a3'] as const;
+        return [colors.lightMustard, '#ffe4a3'] as const;
       case 'social':
-        return ['#EF4444', '#F87171'] as const;
+        return [colors.error, colors.errorScale[400]] as const;
       case 'profile':
-        return ['#3B82F6', '#60A5FA'] as const;
+        return [colors.infoScale[400], colors.infoScale[400]] as const;
       default:
-        return ['#6B7280', '#9CA3AF'] as const;
+        return [colors.neutral[500], colors.neutral[400]] as const;
     }
   };
 
@@ -132,7 +133,7 @@ function RewardTasks({
         {/* Task Icon */}
         <View style={styles.taskIconContainer}>
           <LinearGradient
-            colors={isCompleted ? ['#ffcd57', '#1a3a52'] : colors}
+            colors={isCompleted ? [colors.lightMustard, colors.nileBlue] : colors}
             style={styles.taskIconGradient}
           >
             <Ionicons 
@@ -203,7 +204,7 @@ function RewardTasks({
         <View style={styles.statusContainer}>
           {isClaimed ? (
             <View style={styles.claimedStatus}>
-              <Ionicons name="checkmark-circle" size={24} color="#ffcd57" />
+              <Ionicons name="checkmark-circle" size={24} color={colors.lightMustard} />
               <Text style={styles.claimedStatusText}>Claimed</Text>
             </View>
           ) : isCompleted ? (
@@ -212,7 +213,7 @@ function RewardTasks({
               onPress={() => handleTaskPress(task)}
             >
               <LinearGradient
-                colors={['#ffcd57', '#1a3a52']}
+                colors={[colors.lightMustard, colors.nileBlue]}
                 style={styles.claimButtonGradient}
               >
                 <Ionicons name="gift" size={16} color="white" />
@@ -221,7 +222,7 @@ function RewardTasks({
             </Pressable>
           ) : (
             <View style={styles.pendingStatus}>
-              <Ionicons name="time" size={20} color="#F59E0B" />
+              <Ionicons name="time" size={20} color={colors.warningScale[400]} />
               <Text style={styles.pendingStatusText}>In Progress</Text>
             </View>
           )}
@@ -239,7 +240,7 @@ function RewardTasks({
       <View style={styles.header}>
         <View style={styles.headerIcon}>
           <LinearGradient
-            colors={['#ffcd57', '#1a3a52']}
+            colors={[colors.lightMustard, colors.nileBlue]}
             style={styles.headerIconGradient}
           >
             <Ionicons name="trophy" size={20} color="white" />
@@ -255,19 +256,19 @@ function RewardTasks({
           <Text style={styles.statLabel}>Total Tasks</Text>
         </View>
         <View style={styles.statCard}>
-          <Text style={[styles.statNumber, { color: '#ffcd57' }]}>
+          <Text style={[styles.statNumber, { color: colors.lightMustard }]}>
             {completedTasks.length}
           </Text>
           <Text style={styles.statLabel}>Completed</Text>
         </View>
         <View style={styles.statCard}>
-          <Text style={[styles.statNumber, { color: '#F59E0B' }]}>
+          <Text style={[styles.statNumber, { color: colors.warningScale[400] }]}>
             {pendingTasks.length}
           </Text>
           <Text style={styles.statLabel}>In Progress</Text>
         </View>
         <View style={styles.statCard}>
-          <Text style={[styles.statNumber, { color: '#ffcd57' }]}>
+          <Text style={[styles.statNumber, { color: colors.lightMustard }]}>
             {completedTasks.filter(t => !t.reward.isClaimed).length}
           </Text>
           <Text style={styles.statLabel}>Ready to Claim</Text>
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   statsContainer: {
     flexDirection: 'row',
@@ -356,12 +357,12 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   tasksContainer: {
@@ -373,21 +374,21 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
   },
   taskCard: {
     flexDirection: 'row',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   completedTaskCard: {
-    backgroundColor: '#faf1e0',
-    borderColor: '#ffcd57',
+    backgroundColor: colors.linen,
+    borderColor: colors.lightMustard,
   },
   claimedTaskCard: {
     opacity: 0.7,
@@ -414,12 +415,12 @@ const styles = StyleSheet.create({
   taskTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     flex: 1,
     marginRight: 8,
   },
   completedTaskTitle: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   taskTypeBadge: {
     borderRadius: 12,
@@ -432,7 +433,7 @@ const styles = StyleSheet.create({
   },
   taskDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 12,
     lineHeight: 20,
   },
@@ -447,17 +448,17 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontSize: 12,
-    color: '#4B5563',
+    color: colors.neutral[600],
     fontWeight: '500',
   },
   progressPercentage: {
     fontSize: 12,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '700',
   },
   progressBar: {
     height: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 2,
     overflow: 'hidden',
   },
@@ -475,22 +476,22 @@ const styles = StyleSheet.create({
   },
   rewardLabel: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
     marginBottom: 2,
   },
   rewardTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
   },
   completedRewardTitle: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   rewardDescription: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   rewardValueContainer: {
     backgroundColor: '#ffcd5720',
@@ -505,10 +506,10 @@ const styles = StyleSheet.create({
   rewardValue: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   completedRewardValue: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   statusContainer: {
     marginLeft: 12,
@@ -519,7 +520,7 @@ const styles = StyleSheet.create({
   },
   claimedStatusText: {
     fontSize: 12,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
     marginTop: 4,
   },
@@ -544,7 +545,7 @@ const styles = StyleSheet.create({
   },
   pendingStatusText: {
     fontSize: 12,
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     fontWeight: '600',
     marginTop: 4,
   },

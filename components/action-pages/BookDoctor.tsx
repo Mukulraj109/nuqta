@@ -27,22 +27,23 @@ import apiClient from '@/services/apiClient';
 import { storesApi } from '@/services/storesApi';
 import { useAuth } from '@/contexts/AuthContext';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
   blue: '#0EA5E9',
-  blueDark: '#0284C7',
+  blueDark: colors.brand.sky,
   blueLight: '#F0F9FF',
-  dark: '#1a3a52',
+  dark: colors.nileBlue,
   darkDeep: '#0f2638',
-  gold: '#FBBF24',
-  goldDark: '#F59E0B',
-  green: '#22C55E',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F8F9FA',
-  border: '#E5E7EB',
-  unavailable: '#E5E7EB',
+  gold: colors.warningScale[400],
+  goldDark: colors.warningScale[400],
+  green: colors.success,
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.offWhite,
+  border: colors.neutral[200],
+  unavailable: colors.neutral[200],
 };
 
 const SPECIALTIES = [
@@ -360,7 +361,7 @@ function BookDoctorPage() {
             <View style={styles.confirmDivider} />
             <View style={styles.confirmRow}>
               <View style={[styles.confirmRowIcon, { backgroundColor: 'rgba(139,92,246,0.1)' }]}>
-                <Ionicons name="person" size={16} color="#8B5CF6" />
+                <Ionicons name="person" size={16} color={colors.brand.purpleLight} />
               </View>
               <View>
                 <Text style={styles.confirmRowLabel}>Specialty</Text>
@@ -370,7 +371,7 @@ function BookDoctorPage() {
             <View style={styles.confirmDivider} />
             <View style={styles.confirmRow}>
               <View style={[styles.confirmRowIcon, { backgroundColor: 'rgba(59,130,246,0.1)' }]}>
-                <Ionicons name="calendar" size={16} color="#3B82F6" />
+                <Ionicons name="calendar" size={16} color={colors.infoScale[400]} />
               </View>
               <View>
                 <Text style={styles.confirmRowLabel}>Date & Time</Text>
@@ -569,7 +570,7 @@ const styles = StyleSheet.create({
   },
   storeImgWrap: { position: 'relative' },
   storeImg: { width: 64, height: 64, borderRadius: 14 },
-  storeImgPlaceholder: { backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center' },
+  storeImgPlaceholder: { backgroundColor: colors.neutral[100], justifyContent: 'center', alignItems: 'center' },
   storeCashbackBadge: { position: 'absolute', bottom: -4, right: -4, backgroundColor: COLORS.blue, borderRadius: 8, paddingHorizontal: 5, paddingVertical: 2 },
   storeCashbackText: { fontSize: 9, fontWeight: '700', color: COLORS.white },
   storeInfo: { flex: 1 },
@@ -616,11 +617,11 @@ const styles = StyleSheet.create({
   timeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   timeChip: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: 12, backgroundColor: COLORS.white, minWidth: 70, alignItems: 'center', borderWidth: 1, borderColor: 'transparent' },
   timeChipActive: { backgroundColor: COLORS.blue, borderColor: COLORS.blue },
-  timeChipUnavailable: { backgroundColor: '#F3F4F6', borderColor: '#E5E7EB' },
+  timeChipUnavailable: { backgroundColor: colors.neutral[100], borderColor: colors.neutral[200] },
   timeText: { fontSize: 13, fontWeight: '500', color: COLORS.textPrimary },
   timeTextActive: { color: COLORS.white },
-  timeTextUnavailable: { color: '#D1D5DB' },
-  timeFullText: { fontSize: 9, color: '#D1D5DB', marginTop: 1, fontWeight: '500' },
+  timeTextUnavailable: { color: colors.neutral[300] },
+  timeFullText: { fontSize: 9, color: colors.neutral[300], marginTop: 1, fontWeight: '500' },
   inputGroup: { backgroundColor: COLORS.white, borderRadius: 14, borderWidth: 1, borderColor: COLORS.border, overflow: 'hidden', marginBottom: 12 },
   inputRow: { flexDirection: 'row', alignItems: 'center' },
   inputIcon: { marginLeft: 14 },
@@ -655,7 +656,7 @@ const styles = StyleSheet.create({
   confirmRowIcon: { width: 36, height: 36, borderRadius: 10, justifyContent: 'center', alignItems: 'center' },
   confirmRowLabel: { fontSize: 11, color: COLORS.textSecondary },
   confirmRowValue: { fontSize: 15, fontWeight: '600', color: COLORS.textPrimary, marginTop: 1 },
-  confirmDivider: { height: 1, backgroundColor: '#F3F4F6', marginVertical: 10, marginLeft: 50 },
+  confirmDivider: { height: 1, backgroundColor: colors.neutral[100], marginVertical: 10, marginLeft: 50 },
   confirmNote: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, padding: 16, backgroundColor: COLORS.blueLight, borderRadius: 14, marginBottom: 24, width: '100%' },
   confirmNoteText: { flex: 1, fontSize: 13, color: COLORS.blueDark, lineHeight: 18 },
   doneBtn: { width: '100%', paddingVertical: 16, backgroundColor: COLORS.blue, borderRadius: 16, alignItems: 'center' },

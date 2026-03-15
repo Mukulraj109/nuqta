@@ -23,6 +23,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
 import realOffersApi from '@/services/realOffersApi';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -57,12 +58,12 @@ interface SpecialProfile {
 
 // Icon and gradient mapping for profiles
 const PROFILE_CONFIG: Record<string, { emoji: string; gradientColors: string[] }> = {
-  'defence': { emoji: '🪖', gradientColors: ['#059669', '#047857', '#065F46'] },
-  'healthcare': { emoji: '🩺', gradientColors: ['#0EA5E9', '#0284C7', '#0369A1'] },
-  'senior': { emoji: '👴', gradientColors: ['#F59E0B', '#D97706', '#B45309'] },
-  'teachers': { emoji: '📚', gradientColors: ['#8B5CF6', '#7C3AED', '#6D28D9'] },
-  'government': { emoji: '🏛️', gradientColors: ['#6366F1', '#4F46E5', '#4338CA'] },
-  'differently-abled': { emoji: '♿', gradientColors: ['#EC4899', '#DB2777', '#BE185D'] },
+  'defence': { emoji: '🪖', gradientColors: [colors.successScale[700], '#047857', '#065F46'] },
+  'healthcare': { emoji: '🩺', gradientColors: ['#0EA5E9', colors.brand.sky, colors.brand.skyDark] },
+  'senior': { emoji: '👴', gradientColors: [colors.warningScale[400], colors.warningScale[700], colors.brand.amberDeep] },
+  'teachers': { emoji: '📚', gradientColors: [colors.brand.purpleLight, colors.brand.purple, colors.brand.purpleDeep] },
+  'government': { emoji: '🏛️', gradientColors: [colors.brand.indigo, '#4F46E5', '#4338CA'] },
+  'differently-abled': { emoji: '♿', gradientColors: [colors.brand.pink, colors.deepPink, '#BE185D'] },
 };
 
 export default function HeroesZonePage() {
@@ -210,7 +211,7 @@ export default function HeroesZonePage() {
   };
 
   const getProfileConfig = (slug: string) => {
-    return PROFILE_CONFIG[slug] || { emoji: '🎖️', gradientColors: ['#6366F1', '#4F46E5', '#4338CA'] };
+    return PROFILE_CONFIG[slug] || { emoji: '🎖️', gradientColors: [colors.brand.indigo, '#4F46E5', '#4338CA'] };
   };
 
   const renderSkeletonProfile = () => (
@@ -247,7 +248,7 @@ export default function HeroesZonePage() {
             <View style={styles.profileHeaderContent}>
               <View style={styles.profileTitleRow}>
                 <ThemedText style={styles.profileTitle}>{profile.name}</ThemedText>
-                {isVerified && <Ionicons name="checkmark-circle" size={16} color="#FFFFFF" />}
+                {isVerified && <Ionicons name="checkmark-circle" size={16} color={colors.background.primary} />}
               </View>
               <ThemedText style={styles.profileSubtitle}>
                 {profile.discountRange || `${profile.offersCount} exclusive deals`}
@@ -268,7 +269,7 @@ export default function HeroesZonePage() {
             {!isVerified ? (
               <View style={styles.verificationCard}>
                 <View style={styles.verificationContent}>
-                  <Ionicons name="cloud-upload" size={20} color="#F59E0B" />
+                  <Ionicons name="cloud-upload" size={20} color={colors.warningScale[400]} />
                   <View style={styles.verificationText}>
                     <ThemedText style={styles.verificationTitle}>Verification Required</ThemedText>
                     <ThemedText style={styles.verificationSubtitle}>
@@ -368,11 +369,11 @@ export default function HeroesZonePage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#6366F1" translucent />
+      <StatusBar barStyle="light-content" backgroundColor={colors.brand.indigo} translucent />
 
       {/* Header */}
       <LinearGradient
-        colors={['#6366F1', '#4F46E5', '#4338CA']}
+        colors={[colors.brand.indigo, '#4F46E5', '#4338CA']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.header}
@@ -380,7 +381,7 @@ export default function HeroesZonePage() {
         <SafeAreaView edges={['top']} style={styles.safeHeader}>
           <View style={styles.headerContent}>
             <Pressable style={styles.backButton} onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
 
             <View style={styles.headerTitleContainer}>
@@ -494,13 +495,13 @@ const styles = StyleSheet.create({
   centerContent: { justifyContent: 'center', alignItems: 'center', padding: Spacing.xl },
   errorText: { ...Typography.body, color: Colors.text.secondary, textAlign: 'center', marginTop: Spacing.md, marginBottom: Spacing.lg },
   retryButton: { backgroundColor: Colors.primary[600], paddingHorizontal: Spacing.lg, paddingVertical: Spacing.md, borderRadius: BorderRadius.md },
-  retryButtonText: { ...Typography.button, color: '#FFFFFF' },
+  retryButtonText: { ...Typography.button, color: colors.background.primary },
   header: { paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight || 0 },
   safeHeader: { paddingBottom: Spacing.base },
   headerContent: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: Spacing.base, paddingVertical: Spacing.md },
   backButton: { padding: Spacing.sm, marginRight: Spacing.sm },
   headerTitleContainer: { flex: 1, alignItems: 'center' },
-  headerTitle: { ...Typography.h3, color: '#FFFFFF', fontWeight: '700' },
+  headerTitle: { ...Typography.h3, color: colors.background.primary, fontWeight: '700' },
   headerSubtitle: { ...Typography.bodySmall, color: 'rgba(255, 255, 255, 0.8)', marginTop: 2 },
   headerIcon: { width: 40, alignItems: 'center' },
   emoji: { fontSize: 32 },
@@ -524,7 +525,7 @@ const styles = StyleSheet.create({
   profileIcon: { fontSize: 32 },
   profileHeaderContent: { flex: 1 },
   profileTitleRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.xs, marginBottom: 2 },
-  profileTitle: { ...Typography.h4, color: '#FFFFFF', fontWeight: '600' },
+  profileTitle: { ...Typography.h4, color: colors.background.primary, fontWeight: '600' },
   profileSubtitle: { ...Typography.bodySmall, color: 'rgba(255, 255, 255, 0.7)' },
   profileContent: { backgroundColor: Colors.background.primary, padding: Spacing.base },
   verificationCard: { padding: Spacing.base, borderRadius: BorderRadius.lg, backgroundColor: 'rgba(255, 255, 255, 0.05)', marginBottom: Spacing.base },
@@ -532,8 +533,8 @@ const styles = StyleSheet.create({
   verificationText: { flex: 1 },
   verificationTitle: { ...Typography.body, color: Colors.text.primary, fontWeight: '600', marginBottom: 2 },
   verificationSubtitle: { ...Typography.caption, color: Colors.text.tertiary },
-  verifyButton: { backgroundColor: '#F59E0B', paddingHorizontal: Spacing.base, paddingVertical: Spacing.sm, borderRadius: BorderRadius.md },
-  verifyButtonText: { ...Typography.labelSmall, color: '#FFFFFF', fontWeight: '600' },
+  verifyButton: { backgroundColor: colors.warningScale[400], paddingHorizontal: Spacing.base, paddingVertical: Spacing.sm, borderRadius: BorderRadius.md },
+  verifyButtonText: { ...Typography.labelSmall, color: colors.background.primary, fontWeight: '600' },
   verifiedCard: { flexDirection: 'row', alignItems: 'center', padding: Spacing.md, borderRadius: BorderRadius.lg, backgroundColor: 'rgba(46, 204, 113, 0.1)', borderWidth: 1, borderColor: 'rgba(46, 204, 113, 0.2)', marginBottom: Spacing.base, gap: Spacing.sm },
   verifiedText: { ...Typography.bodySmall, color: Colors.success },
   dealsTitle: { ...Typography.label, color: Colors.text.tertiary, marginBottom: Spacing.md },
@@ -549,16 +550,16 @@ const styles = StyleSheet.create({
   dealItemStore: { ...Typography.label, color: Colors.text.primary, fontWeight: '600', marginBottom: 2 },
   dealItemTitle: { ...Typography.caption, color: Colors.text.tertiary },
   dealItemDiscount: { backgroundColor: 'rgba(99, 102, 241, 0.15)', paddingHorizontal: Spacing.sm, paddingVertical: 4, borderRadius: BorderRadius.sm },
-  dealItemDiscountText: { ...Typography.labelSmall, color: '#6366F1', fontWeight: '700' },
+  dealItemDiscountText: { ...Typography.labelSmall, color: colors.brand.indigo, fontWeight: '700' },
   noDealsText: { ...Typography.body, color: Colors.text.tertiary, textAlign: 'center', padding: Spacing.md },
   verificationHint: { ...Typography.caption, color: Colors.text.tertiary, textAlign: 'center', marginTop: Spacing.base },
   emptyState: { alignItems: 'center', padding: Spacing.xl },
   emptyStateText: { ...Typography.body, color: Colors.text.tertiary, marginTop: Spacing.md },
   supportCard: { margin: Spacing.base, padding: Spacing.base, backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: BorderRadius.lg, alignItems: 'center' },
   supportText: { ...Typography.bodySmall, color: Colors.text.tertiary, textAlign: 'center' },
-  supportLink: { color: '#6366F1', fontWeight: '600' },
+  supportLink: { color: colors.brand.indigo, fontWeight: '600' },
   fixedCTA: { position: 'absolute', bottom: 70, left: 0, right: 0, padding: Spacing.base, backgroundColor: Colors.background.primary, borderTopWidth: 1, borderTopColor: Colors.border.light, ...Shadows.medium },
   ctaButton: { borderRadius: BorderRadius.lg, overflow: 'hidden' },
   ctaGradient: { paddingVertical: Spacing.base, alignItems: 'center', justifyContent: 'center' },
-  ctaButtonText: { ...Typography.button, color: '#FFFFFF', fontWeight: '600' },
+  ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' },
 });

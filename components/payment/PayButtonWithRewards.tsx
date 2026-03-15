@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { RewardsPreview } from '@/types/storePayment.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface PayButtonWithRewardsProps {
   amountToPay: number;
@@ -80,7 +81,7 @@ export const PayButtonWithRewards: React.FC<PayButtonWithRewardsProps> = ({
               isProcessing || disabled
                 ? [COLORS.neutral[400], COLORS.neutral[500]]
                 : isFreePayment
-                ? [COLORS.nuqta.nileBlue, '#234b68']
+                ? [COLORS.nuqta.nileBlue, colors.brand.nileBlueLight]
                 : [COLORS.nuqta.mustard, COLORS.nuqta.peach]
             }
             start={{ x: 0, y: 0 }}
@@ -88,7 +89,7 @@ export const PayButtonWithRewards: React.FC<PayButtonWithRewardsProps> = ({
             style={styles.button}
           >
             {isProcessing ? (
-              <ActivityIndicator size="small" color="#FFFFFF" />
+              <ActivityIndicator size="small" color={colors.background.primary} />
             ) : (
               <>
                 <Text style={[
@@ -109,7 +110,7 @@ export const PayButtonWithRewards: React.FC<PayButtonWithRewardsProps> = ({
                   <Ionicons
                     name="arrow-forward"
                     size={18}
-                    color={isFreePayment ? '#FFFFFF' : COLORS.nuqta.nileBlue}
+                    color={isFreePayment ? colors.background.primary : COLORS.nuqta.nileBlue}
                   />
                 </View>
               </>
@@ -218,7 +219,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     ...TYPOGRAPHY.button,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 17,
     fontWeight: '700',
   },

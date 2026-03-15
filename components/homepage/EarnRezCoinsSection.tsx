@@ -12,18 +12,19 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useHomeTab } from '@/contexts/HomeTabContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const CARD_GAP = 10;
 
 // Brand Colors - matching other homepage components
 const COLORS = {
-  primary: '#ffcd57',
-  primaryDark: '#E6B84E',
-  primaryLight: '#dfebf7',
-  white: '#FFFFFF',
-  textDark: '#1A1A2E',
-  textMuted: '#6B7280',
+  primary: colors.lightMustard,
+  primaryDark: colors.brand.goldRich,
+  primaryLight: colors.lavenderMist,
+  white: colors.background.primary,
+  textDark: colors.deepNavy,
+  textMuted: colors.neutral[500],
   border: 'rgba(255, 205, 87, 0.15)',
   cardBg: 'rgba(255, 255, 255, 0.95)',
 };
@@ -98,7 +99,7 @@ const EarnNuqtaCoinsSection: React.FC = () => {
                   <Text style={styles.largeEmoji}>🛒</Text>
                 </View>
                 <View style={styles.popularBadge}>
-                  <Ionicons name="star" size={10} color="#ffcd57" />
+                  <Ionicons name="star" size={10} color={colors.lightMustard} />
                   <Text style={styles.popularText}>Popular</Text>
                 </View>
               </View>
@@ -133,7 +134,7 @@ const EarnNuqtaCoinsSection: React.FC = () => {
                 />
                 <View style={styles.payCardContent}>
                   <View style={styles.payIconBox}>
-                    <Ionicons name="card-outline" size={20} color="#1a3a52" />
+                    <Ionicons name="card-outline" size={20} color={colors.nileBlue} />
                   </View>
                   <View style={styles.payTextContent}>
                     <Text style={styles.payCardTitle}>Pay in Store</Text>
@@ -141,7 +142,7 @@ const EarnNuqtaCoinsSection: React.FC = () => {
                   </View>
                 </View>
                 <View style={styles.payArrow}>
-                  <Ionicons name="chevron-forward" size={16} color="#1a3a52" />
+                  <Ionicons name="chevron-forward" size={16} color={colors.nileBlue} />
                 </View>
               </LinearGradient>
             </Pressable>
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
   popularText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   largeCardFooter: {
     gap: 3,

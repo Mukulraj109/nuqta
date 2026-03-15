@@ -10,6 +10,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 interface PromotionBannerSkeletonProps {
   count?: number;
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   banner: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     shadowColor: '#000',

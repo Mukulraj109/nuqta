@@ -11,6 +11,7 @@ import { CoinBalance, COIN_TYPES, CoinType } from '@/types/wallet';
 import { Colors, Spacing, BorderRadius, Shadows } from '@/constants/DesignSystem';
 
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 const nuqtaCoinImage = BRAND.COIN_IMAGE;
 
 interface CoinDetailCardProps {
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   infoWarning: {
-    color: '#D97706',
+    color: colors.warningScale[700],
     fontWeight: '600',
   },
 });

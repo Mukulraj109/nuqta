@@ -19,6 +19,7 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import cashbackService, { CashbackCampaign } from '@/services/cashbackApi';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -38,16 +39,16 @@ const CATEGORY_IMAGES = {
 
 // Category configuration with routes and default cashback rates - Nuqta palette
 const CATEGORIES = [
-  { id: 'dining', label: 'Dining', image: CATEGORY_IMAGES.dining, route: '/MainCategory/food-dining', defaultCashback: 20, iconBg: '#faf1e0' },
-  { id: 'grocery', label: 'Grocery', image: CATEGORY_IMAGES.grocery, route: '/MainCategory/grocery-essentials', defaultCashback: 20, iconBg: '#faf1e0' },
-  { id: 'fashion', label: 'Fashion', image: CATEGORY_IMAGES.fashion, route: '/MainCategory/fashion', defaultCashback: 20, iconBg: '#ffd7b5' },
-  { id: 'beauty', label: 'Beauty', image: CATEGORY_IMAGES.beauty, route: '/MainCategory/beauty-wellness', defaultCashback: 20, iconBg: '#ffd7b5' },
-  { id: 'health', label: 'Health', image: CATEGORY_IMAGES.health, route: '/MainCategory/healthcare', defaultCashback: 20, iconBg: '#dfebf7' },
-  { id: 'fitness', label: 'Fitness', image: CATEGORY_IMAGES.fitness, route: '/MainCategory/fitness-sports', defaultCashback: 20, iconBg: '#faf1e0' },
-  { id: 'events', label: 'Events', image: CATEGORY_IMAGES.events, route: '/events', defaultCashback: 20, iconBg: '#faf1e0' },
-  { id: 'stores', label: 'Stores', image: CATEGORY_IMAGES.stores, route: '/StoreListPage', defaultCashback: 20, iconBg: '#dfebf7' },
-  { id: 'education', label: 'Education', image: CATEGORY_IMAGES.education, route: '/MainCategory/education-learning', defaultCashback: 20, iconBg: '#dfebf7' },
-  { id: 'travel', label: 'Travel', image: CATEGORY_IMAGES.travel, route: '/MainCategory/travel-experiences', defaultCashback: 20, iconBg: '#dfebf7' },
+  { id: 'dining', label: 'Dining', image: CATEGORY_IMAGES.dining, route: '/MainCategory/food-dining', defaultCashback: 20, iconBg: colors.linen },
+  { id: 'grocery', label: 'Grocery', image: CATEGORY_IMAGES.grocery, route: '/MainCategory/grocery-essentials', defaultCashback: 20, iconBg: colors.linen },
+  { id: 'fashion', label: 'Fashion', image: CATEGORY_IMAGES.fashion, route: '/MainCategory/fashion', defaultCashback: 20, iconBg: colors.lightPeach },
+  { id: 'beauty', label: 'Beauty', image: CATEGORY_IMAGES.beauty, route: '/MainCategory/beauty-wellness', defaultCashback: 20, iconBg: colors.lightPeach },
+  { id: 'health', label: 'Health', image: CATEGORY_IMAGES.health, route: '/MainCategory/healthcare', defaultCashback: 20, iconBg: colors.lavenderMist },
+  { id: 'fitness', label: 'Fitness', image: CATEGORY_IMAGES.fitness, route: '/MainCategory/fitness-sports', defaultCashback: 20, iconBg: colors.linen },
+  { id: 'events', label: 'Events', image: CATEGORY_IMAGES.events, route: '/events', defaultCashback: 20, iconBg: colors.linen },
+  { id: 'stores', label: 'Stores', image: CATEGORY_IMAGES.stores, route: '/StoreListPage', defaultCashback: 20, iconBg: colors.lavenderMist },
+  { id: 'education', label: 'Education', image: CATEGORY_IMAGES.education, route: '/MainCategory/education-learning', defaultCashback: 20, iconBg: colors.lavenderMist },
+  { id: 'travel', label: 'Travel', image: CATEGORY_IMAGES.travel, route: '/MainCategory/travel-experiences', defaultCashback: 20, iconBg: colors.lavenderMist },
 ] as const;
 
 // Category ID to campaign category name mappings for API matching
@@ -184,7 +185,7 @@ const CategoryCashbackGrid: React.FC<CategoryCashbackGridProps> = memo(({ onCate
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Ionicons name="gift" size={18} color="#ffcd57" style={styles.headerIcon} />
+          <Ionicons name="gift" size={18} color={colors.lightMustard} style={styles.headerIcon} />
           <Text style={styles.headerTitle}>Earn rewards in every category</Text>
         </View>
       </View>
@@ -220,7 +221,7 @@ const CategoryCashbackGrid: React.FC<CategoryCashbackGridProps> = memo(({ onCate
                 </View>
                 <Text style={styles.categoryName}>{category.label}</Text>
                 <View style={styles.cashbackContainer}>
-                  <Ionicons name="logo-bitcoin" size={10} color="#ffcd57" />
+                  <Ionicons name="logo-bitcoin" size={10} color={colors.lightMustard} />
                   <Text style={styles.cashbackText}>
                     Up to {getCashbackRate(category.id)}%
                   </Text>
@@ -249,7 +250,7 @@ const CategoryCashbackGrid: React.FC<CategoryCashbackGridProps> = memo(({ onCate
                 </View>
                 <Text style={styles.categoryName}>{category.label}</Text>
                 <View style={styles.cashbackContainer}>
-                  <Ionicons name="logo-bitcoin" size={10} color="#ffcd57" />
+                  <Ionicons name="logo-bitcoin" size={10} color={colors.lightMustard} />
                   <Text style={styles.cashbackText}>
                     Up to {getCashbackRate(category.id)}%
                   </Text>
@@ -263,7 +264,7 @@ const CategoryCashbackGrid: React.FC<CategoryCashbackGridProps> = memo(({ onCate
       {/* Pay in Store Promo Card */}
       <Pressable onPress={() => router.push('/pay-in-store' as any)}>
         <LinearGradient
-          colors={['#1a3a52', '#234b68', '#2d5c7e']}
+          colors={[colors.nileBlue, colors.brand.nileBlueLight, '#2d5c7e']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.promoCard}
@@ -275,7 +276,7 @@ const CategoryCashbackGrid: React.FC<CategoryCashbackGridProps> = memo(({ onCate
             </Text>
 
             <View style={styles.promoButton}>
-              <Ionicons name="qr-code-outline" size={20} color="#ffcd57" />
+              <Ionicons name="qr-code-outline" size={20} color={colors.lightMustard} />
               <Text style={styles.promoButtonText}>Scan QR & Pay</Text>
             </View>
           </View>
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 8,
     paddingBottom: 2,
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
   },
   header: {
     flexDirection: 'row',
@@ -319,11 +320,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   headerSubtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   scrollView: {
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     paddingVertical: 8,
     paddingHorizontal: 10,
@@ -376,7 +377,7 @@ const styles = StyleSheet.create({
   categoryName: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textAlign: 'center',
     marginTop: 2,
   },
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
   },
   cashbackText: {
     fontSize: 10,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
   // Promo Card styles
@@ -400,7 +401,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.25,
         shadowRadius: 12,
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
   promoTitle: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 4,
     letterSpacing: 0.5,
   },
@@ -434,7 +435,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 14,
     paddingHorizontal: 32,
     borderRadius: 14,
@@ -458,7 +459,7 @@ const styles = StyleSheet.create({
   promoButtonText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   promoFooter: {
     flexDirection: 'row',

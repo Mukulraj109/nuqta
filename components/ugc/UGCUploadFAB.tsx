@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { colors } from '@/constants/theme';
 
 interface UGCUploadFABProps {
   onPress: () => void;
@@ -111,7 +112,7 @@ function UGCUploadFAB({
         accessibilityHint="Opens upload modal to create and share content"
         accessibilityRole="button"
       >
-        <Ionicons name="camera" size={28} color="#FFFFFF" />
+        <Ionicons name="camera" size={28} color={colors.background.primary} />
       </Pressable>
     </Animated.View>
   );
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 8,

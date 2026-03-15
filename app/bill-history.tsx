@@ -22,6 +22,7 @@ import { billUploadService } from '@/services/billUploadService';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface Bill {
   _id: string;
@@ -311,7 +312,7 @@ export default function BillHistoryPage() {
 
         {bill.verificationStatus === 'approved' && bill.cashbackAmount && (
           <View style={styles.cashbackContainer}>
-            <Ionicons name="gift" size={16} color="#10B981" />
+            <Ionicons name="gift" size={16} color={colors.successScale[400]} />
             <Text style={styles.cashbackText}>
               Cashback: {formatCurrency(bill.cashbackAmount)}
             </Text>
@@ -436,7 +437,7 @@ export default function BillHistoryPage() {
                 <View style={styles.detailSection}>
                   <Text style={styles.detailSectionTitle}>Cashback</Text>
                   <View style={styles.cashbackDetailContainer}>
-                    <Ionicons name="gift" size={32} color="#10B981" />
+                    <Ionicons name="gift" size={32} color={colors.successScale[400]} />
                     <Text style={styles.cashbackDetailAmount}>
                       {formatCurrency(selectedBill.cashbackAmount)}
                     </Text>
@@ -452,7 +453,7 @@ export default function BillHistoryPage() {
                 <View style={styles.detailSection}>
                   <Text style={styles.detailSectionTitle}>Rejection Reason</Text>
                   <View style={styles.rejectionDetailContainer}>
-                    <Ionicons name="alert-circle" size={24} color="#EF4444" />
+                    <Ionicons name="alert-circle" size={24} color={colors.error} />
                     <Text style={styles.rejectionDetailText}>
                       {selectedBill.rejectionReason}
                     </Text>
@@ -559,11 +560,11 @@ export default function BillHistoryPage() {
             <Text style={styles.statLabel}>Total Bills</Text>
           </View>
           <View style={styles.statCard}>
-            <Text style={[styles.statValue, { color: '#F59E0B' }]}>{stats.pending}</Text>
+            <Text style={[styles.statValue, { color: colors.warningScale[400] }]}>{stats.pending}</Text>
             <Text style={styles.statLabel}>Pending</Text>
           </View>
           <View style={styles.statCard}>
-            <Text style={[styles.statValue, { color: '#10B981' }]}>
+            <Text style={[styles.statValue, { color: colors.successScale[400] }]}>
               {formatCurrency(stats.totalCashback)}
             </Text>
             <Text style={styles.statLabel}>Cashback Earned</Text>
@@ -747,18 +748,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: Spacing.sm,
     padding: Spacing.sm,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: colors.tint.greenLight,
     borderRadius: BorderRadius.sm,
     gap: 6,
   },
   cashbackText: {
     flex: 1,
     ...Typography.bodySmall,
-    color: '#10B981',
+    color: colors.successScale[400],
     fontWeight: '600',
   },
   creditedBadge: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
     borderRadius: 4,
@@ -771,7 +772,7 @@ const styles = StyleSheet.create({
   rejectionContainer: {
     marginTop: Spacing.sm,
     padding: Spacing.sm,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderRadius: BorderRadius.sm,
   },
   rejectionReason: {
@@ -780,7 +781,7 @@ const styles = StyleSheet.create({
   },
   resubmissionCounter: {
     fontSize: 11,
-    color: '#DC2626',
+    color: colors.error,
     marginTop: Spacing.xs,
     fontWeight: '500',
   },
@@ -909,24 +910,24 @@ const styles = StyleSheet.create({
   cashbackDetailContainer: {
     alignItems: 'center',
     padding: Spacing.base,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: colors.tint.greenLight,
     borderRadius: BorderRadius.md,
   },
   cashbackDetailAmount: {
     ...Typography.h1,
     fontWeight: '700',
-    color: '#10B981',
+    color: colors.successScale[400],
     marginVertical: Spacing.sm,
   },
   cashbackDetailStatus: {
     ...Typography.body,
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   rejectionDetailContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     padding: Spacing.base,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderRadius: BorderRadius.md,
     gap: Spacing.md,
   },
@@ -942,21 +943,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#FEF9F2',
     borderRadius: BorderRadius.sm,
     borderLeftWidth: 3,
-    borderLeftColor: '#F59E0B',
+    borderLeftColor: colors.warningScale[400],
   },
   resubmissionDetailText: {
     ...Typography.body,
-    color: '#D97706',
+    color: colors.warningScale[700],
     fontWeight: '600',
     marginBottom: Spacing.xs,
   },
   resubmissionDetailSubtext: {
     ...Typography.bodySmall,
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   resubmissionLimitText: {
     ...Typography.bodySmall,
-    color: '#DC2626',
+    color: colors.error,
     fontWeight: '600',
   },
   resubmitButton: {

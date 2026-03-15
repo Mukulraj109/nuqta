@@ -19,6 +19,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { CashStoreBrand } from '../../../types/cash-store.types';
+import { colors } from '@/constants/theme';
 
 interface TopOnlineBrandsProps {
   brands: CashStoreBrand[];
@@ -103,7 +104,7 @@ const BrandCard: React.FC<{
           {/* Hot indicator */}
           {isHot && (
             <View style={styles.hotDot}>
-              <Ionicons name="flame" size={7} color="#FFFFFF" />
+              <Ionicons name="flame" size={7} color={colors.background.primary} />
             </View>
           )}
 
@@ -119,7 +120,7 @@ const BrandCard: React.FC<{
               <Text style={{ fontSize: 28 }}>{brand.logo}</Text>
             ) : (
               <LinearGradient
-                colors={['#ffd7b5', '#E8B896']}
+                colors={[colors.lightPeach, colors.brand.sand]}
                 style={styles.logoPlaceholder}
               >
                 <Text style={styles.logoInitial}>{brand.name.charAt(0)}</Text>
@@ -142,7 +143,7 @@ const BrandCard: React.FC<{
           {/* Rating */}
           {brand.rating ? (
             <View style={styles.ratingRow}>
-              <Ionicons name="star" size={9} color="#D4A07A" />
+              <Ionicons name="star" size={9} color={colors.brand.caramel} />
               <Text style={styles.ratingText}>{brand.rating.toFixed(1)}</Text>
             </View>
           ) : null}
@@ -202,14 +203,14 @@ const SkeletonCard: React.FC<{ index: number }> = memo(({ index }) => {
 const EmptyState: React.FC<{ onViewAllPress: () => void }> = memo(({ onViewAllPress }) => (
   <View style={styles.emptyContainer}>
     <View style={styles.emptyIconWrap}>
-      <Ionicons name="storefront-outline" size={28} color="#D4A07A" />
+      <Ionicons name="storefront-outline" size={28} color={colors.brand.caramel} />
     </View>
     <Text style={styles.emptyTitle}>Discover Top Brands</Text>
     <Text style={styles.emptySubtitle}>Shop online and earn cashback</Text>
     <Pressable onPress={onViewAllPress}>
-      <LinearGradient colors={['#1a3a52', '#234b68']} style={styles.emptyCTA}>
+      <LinearGradient colors={[colors.nileBlue, colors.brand.nileBlueLight]} style={styles.emptyCTA}>
         <Text style={styles.emptyCTAText}>Explore Brands</Text>
-        <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+        <Ionicons name="arrow-forward" size={14} color={colors.background.primary} />
       </LinearGradient>
     </Pressable>
   </View>
@@ -230,14 +231,14 @@ const FilteredEmptyState: React.FC<{
   const displayName = FILTER_DISPLAY_NAMES[filterName] || filterName;
   return (
     <View style={styles.filteredEmptyContainer}>
-      <Ionicons name="search-outline" size={28} color="#D1D5DB" />
+      <Ionicons name="search-outline" size={28} color={colors.neutral[300]} />
       <Text style={styles.filteredEmptyTitle}>No brands found</Text>
       <Text style={styles.filteredEmptySubtitle}>
         No brands match "{displayName}". Try another category.
       </Text>
       {onResetFilter && (
         <Pressable onPress={onResetFilter} style={styles.resetBtn}>
-          <Ionicons name="refresh-outline" size={14} color="#1a3a52" />
+          <Ionicons name="refresh-outline" size={14} color={colors.nileBlue} />
           <Text style={styles.resetBtnText}>Show All</Text>
         </Pressable>
       )}
@@ -311,7 +312,7 @@ const TopOnlineBrands: React.FC<TopOnlineBrandsProps> = ({
           >
             <Text style={styles.viewAllText}>See All</Text>
             <View style={styles.viewAllArrow}>
-              <Ionicons name="chevron-forward" size={12} color="#1a3a52" />
+              <Ionicons name="chevron-forward" size={12} color={colors.nileBlue} />
             </View>
           </Pressable>
         </Animated.View>
@@ -354,7 +355,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#D4A07A',
+        shadowColor: colors.brand.caramel,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.12,
         shadowRadius: 12,
@@ -415,7 +416,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.2,
   },
   countBadge: {
@@ -427,11 +428,11 @@ const styles = StyleSheet.create({
   countText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D4A07A',
+    color: colors.brand.caramel,
   },
   subtitle: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
   viewAllBtn: {
@@ -449,7 +450,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   viewAllArrow: {
     width: 22,
@@ -476,7 +477,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#D4A07A',
+        shadowColor: colors.brand.caramel,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.1,
         shadowRadius: 8,
@@ -504,7 +505,7 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -525,7 +526,7 @@ const styles = StyleSheet.create({
   logoInitial: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   hotDot: {
     position: 'absolute',
@@ -534,7 +535,7 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 2,
@@ -546,7 +547,7 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textAlign: 'center',
     marginBottom: 5,
   },
@@ -559,7 +560,7 @@ const styles = StyleSheet.create({
   cashbackPercent: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#D4A07A',
+    color: colors.brand.caramel,
   },
   ratingRow: {
     flexDirection: 'row',
@@ -575,11 +576,11 @@ const styles = StyleSheet.create({
 
   // ── Skeleton ──
   skeletonBg: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   skeletonLine: {
     height: 10,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginTop: 4,
   },
@@ -602,12 +603,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
   },
   emptySubtitle: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginBottom: 16,
   },
   emptyCTA: {
@@ -621,7 +622,7 @@ const styles = StyleSheet.create({
   emptyCTAText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   filteredEmptyContainer: {
     alignItems: 'center',
@@ -631,13 +632,13 @@ const styles = StyleSheet.create({
   filteredEmptyTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginTop: 8,
     marginBottom: 4,
   },
   filteredEmptySubtitle: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     marginBottom: 14,
   },
@@ -655,7 +656,7 @@ const styles = StyleSheet.create({
   resetBtnText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 });
 

@@ -9,6 +9,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import StoreFollowButton from './StoreFollowButton';
+import { colors } from '@/constants/theme';
 
 // ============================================================================
 // EXAMPLE 1: Integration in MainStorePage Header
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   storeSubtitle: {
     fontSize: 14,
@@ -357,7 +358,7 @@ const styles = StyleSheet.create({
   // Example 2: Store Card
   storeCard: {
     width: 280,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     marginRight: 16,
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
   storeCardImage: {
     width: '100%',
     height: 160,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   storeCardContent: {
     padding: 16,
@@ -378,12 +379,12 @@ const styles = StyleSheet.create({
   storeCardName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   storeCardDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   storeCardStats: {
@@ -392,11 +393,11 @@ const styles = StyleSheet.create({
   },
   storeCardRating: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   storeCardDistance: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   storeCardFollowButton: {
     position: 'absolute',
@@ -409,15 +410,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   storeListLogo: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     marginRight: 12,
   },
   storeListContent: {
@@ -426,31 +427,31 @@ const styles = StyleSheet.create({
   storeListName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   storeListCategory: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 2,
   },
   storeListRating: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 
   // Example 4: Following Stores
   sectionTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     padding: 16,
   },
   followingStoreItem: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginBottom: 8,
     marginHorizontal: 16,
     borderRadius: 12,
@@ -464,7 +465,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     marginRight: 12,
   },
   followingStoreInfo: {
@@ -473,18 +474,18 @@ const styles = StyleSheet.create({
   followingStoreName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   followingStoreFollowers: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // Example 5: Store Details Modal
   modalContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   modalHeader: {
     position: 'relative',
@@ -492,7 +493,7 @@ const styles = StyleSheet.create({
   modalBanner: {
     width: '100%',
     height: 200,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   modalHeaderOverlay: {
     position: 'absolute',
@@ -511,7 +512,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginRight: 12,
   },
   modalHeaderText: {
@@ -520,12 +521,12 @@ const styles = StyleSheet.create({
   modalStoreName: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 4,
   },
   modalStoreCategory: {
     fontSize: 14,
-    color: '#E5E7EB',
+    color: colors.neutral[200],
   },
   modalFollowButton: {
     alignSelf: 'flex-start',
@@ -535,7 +536,7 @@ const styles = StyleSheet.create({
   },
   modalDescription: {
     fontSize: 15,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 22,
   },
 
@@ -546,13 +547,13 @@ const styles = StyleSheet.create({
   recommendedTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     paddingHorizontal: 16,
     marginBottom: 16,
   },
   recommendedCard: {
     width: 180,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     marginLeft: 16,
@@ -565,7 +566,7 @@ const styles = StyleSheet.create({
   recommendedCardImage: {
     width: '100%',
     height: 120,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   recommendedCardContent: {
     padding: 12,
@@ -573,12 +574,12 @@ const styles = StyleSheet.create({
   recommendedCardName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   recommendedCardRating: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
 
@@ -591,10 +592,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   dynamicHeaderInfo: {
     flex: 1,
@@ -602,19 +603,19 @@ const styles = StyleSheet.create({
   dynamicStoreName: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   dynamicStoreRating: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   dynamicContent: {
     padding: 16,
   },
   dynamicDescription: {
     fontSize: 15,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 22,
   },
 });

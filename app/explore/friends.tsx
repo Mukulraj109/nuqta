@@ -19,6 +19,7 @@ import exploreApi, { CommunityActivity } from '@/services/exploreApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -109,10 +110,10 @@ const FriendsActivityPage = () => {
       case 'friend_saved':
         return <Ionicons name="wallet" size={18} color={Colors.gold} />;
       case 'trending':
-        return <Ionicons name="flame" size={18} color="#F97316" />;
+        return <Ionicons name="flame" size={18} color={colors.brand.orange} />;
       case 'review':
       case 'friend_review':
-        return <Ionicons name="star" size={18} color="#F59E0B" />;
+        return <Ionicons name="star" size={18} color={colors.warningScale[400]} />;
       case 'popular':
         return <Ionicons name="heart" size={18} color={Colors.error} />;
       default:
@@ -155,7 +156,7 @@ const FriendsActivityPage = () => {
             <Ionicons
               name="people"
               size={16}
-              color={activeTab === 'shopping' ? '#ffcd57' : '#6B7280'}
+              color={activeTab === 'shopping' ? colors.lightMustard : colors.neutral[500]}
             />
             <Text style={[styles.tabText, activeTab === 'shopping' && styles.tabTextActive]}>
               Shopping Now ({friends.filter(f => f.isLive).length})
@@ -169,7 +170,7 @@ const FriendsActivityPage = () => {
             <Ionicons
               name="pulse"
               size={16}
-              color={activeTab === 'activity' ? '#ffcd57' : '#6B7280'}
+              color={activeTab === 'activity' ? colors.lightMustard : colors.neutral[500]}
             />
             <Text style={[styles.tabText, activeTab === 'activity' && styles.tabTextActive]}>
               Activity ({activities.length})

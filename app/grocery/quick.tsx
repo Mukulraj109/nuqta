@@ -25,6 +25,7 @@ import { storesApi } from '@/services/storesApi';
 import { cartApi } from '@/services/cartApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 interface QuickStore {
   id: string;
   name: string;
@@ -171,7 +172,7 @@ const QuickDeliveryPage: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <LinearGradient
-        colors={['#10B981', '#059669']}
+        colors={[colors.successScale[400], colors.successScale[700]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}
@@ -279,8 +280,8 @@ const QuickDeliveryPage: React.FC = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            colors={['#10B981']}
-            tintColor="#10B981"
+            colors={[colors.successScale[400]]}
+            tintColor={colors.successScale[400]}
           />
         }
       >
@@ -493,7 +494,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   storePillActive: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
   },
   storePillLogo: {
     width: 20,
@@ -537,7 +538,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   categoryChipActive: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
   },
   categoryIcon: {
     fontSize: 14,
@@ -569,7 +570,7 @@ const styles = StyleSheet.create({
   seeAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   storesScroll: {
     paddingRight: 16,
@@ -586,7 +587,7 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: BorderRadius.sm,

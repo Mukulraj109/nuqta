@@ -16,6 +16,7 @@ import RetentionOfferCard from '@/components/subscription/RetentionOfferCard';
 import { TIER_NAMES } from '@/types/subscription.types';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type CancellationReason =
   | 'too_expensive'
@@ -474,7 +475,7 @@ export default function CancelFeedbackPage() {
             accessibilityHint="Double tap to keep your subscription and go back"
           >
             <LinearGradient
-              colors={['#8B5CF6', '#7C3AED']}
+              colors={[colors.brand.purpleLight, colors.brand.purple]}
               style={styles.keepButtonGradient}
             >
               <ThemedText style={styles.keepButtonText}>Keep My Subscription</ThemedText>
@@ -515,7 +516,7 @@ export default function CancelFeedbackPage() {
       <StatusBar barStyle="light-content" backgroundColor={Colors.error} />
 
       {/* Header */}
-      <LinearGradient colors={['#EF4444', '#DC2626']} style={styles.header}>
+      <LinearGradient colors={[colors.error, colors.error]} style={styles.header}>
         <View style={styles.headerContainer}>
           <Pressable
             onPress={() => router.back()}
@@ -610,7 +611,7 @@ const styles = StyleSheet.create({
   },
   reasonOptionSelected: {
     borderColor: Colors.error,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
   },
   radioButton: {
     width: 24,
@@ -703,9 +704,9 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
   },
   warningBox: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderWidth: 2,
-    borderColor: '#FEE2E2',
+    borderColor: colors.errorScale[100],
     borderRadius: BorderRadius.md,
     padding: Spacing.lg,
     alignItems: 'center',
@@ -812,12 +813,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   cancelButton: {
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     paddingVertical: Spacing.base,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FEE2E2',
+    borderColor: colors.errorScale[100],
   },
   cancelButtonText: {
     color: Colors.error,

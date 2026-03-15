@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import partnerApi, { ClaimableOffer } from '@/services/partnerApi';
+import { colors } from '@/constants/theme';
 
 interface PartnerVouchersSectionProps {
   onVoucherCopied?: (code: string) => void;
@@ -21,15 +22,15 @@ interface PartnerVouchersSectionProps {
 }
 
 const COLORS = {
-  primary: '#ffcd57',
-  primaryDark: '#00796B',
-  gold: '#FFC857',
-  navy: '#0B2240',
+  primary: colors.lightMustard,
+  primaryDark: colors.brand.teal,
+  gold: colors.brand.goldWarm,
+  navy: colors.brand.navyDark,
   surface: '#F7FAFC',
-  white: '#FFFFFF',
-  textPrimary: '#1F2937',
-  textSecondary: '#6B7280',
-  border: '#E5E7EB',
+  white: colors.background.primary,
+  textPrimary: colors.neutral[800],
+  textSecondary: colors.neutral[500],
+  border: colors.neutral[200],
 };
 
 function PartnerVouchersSection({
@@ -99,7 +100,7 @@ function PartnerVouchersSection({
         {/* Left Badge */}
         <View style={styles.voucherLeft}>
           <LinearGradient
-            colors={expired ? ['#9CA3AF', '#6B7280'] : [COLORS.primary, COLORS.primaryDark]}
+            colors={expired ? [colors.neutral[400], colors.neutral[500]] : [COLORS.primary, COLORS.primaryDark]}
             style={styles.voucherBadge}
           >
             <Text style={styles.voucherDiscount}>{item.discount}%</Text>
@@ -141,7 +142,7 @@ function PartnerVouchersSection({
             <Ionicons
               name={expired ? 'close-circle' : 'time-outline'}
               size={14}
-              color={expired ? '#EF4444' : COLORS.textSecondary}
+              color={expired ? colors.error : COLORS.textSecondary}
             />
             <Text
               style={[styles.expiryText, expired && styles.expiryTextExpired]}
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
   codeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 6,
     paddingVertical: 6,
     paddingHorizontal: 10,
@@ -413,7 +414,7 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
   },
   expiryTextExpired: {
-    color: '#EF4444',
+    color: colors.error,
   },
   applyButton: {
     backgroundColor: COLORS.primary,

@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocationFeatures, useCurrentLocation } from '@/hooks/useLocation';
 import { locationService } from '@/services/locationService';
 import { LocationCoordinates } from '@/types/location.types';
+import { colors } from '@/constants/theme';
 
 interface NearbyStore {
   id: string;
@@ -171,21 +172,21 @@ function NearbyStores({
           <View style={styles.storeDetails}>
             {showDistance && (
               <View style={styles.detailItem}>
-                <Ionicons name="location-outline" size={14} color="#666666" />
+                <Ionicons name="location-outline" size={14} color={colors.midGray} />
                 <Text style={styles.detailText}>{formatDistance(item.distance)}</Text>
               </View>
             )}
 
             {showRating && item.rating > 0 && (
               <View style={styles.detailItem}>
-                <Ionicons name="star" size={14} color="#FFD700" />
+                <Ionicons name="star" size={14} color={colors.brand.goldBright} />
                 <Text style={styles.detailText}>{item.rating.toFixed(1)}</Text>
               </View>
             )}
 
             {item.categories.length > 0 && (
               <View style={styles.detailItem}>
-                <Ionicons name="pricetag-outline" size={14} color="#666666" />
+                <Ionicons name="pricetag-outline" size={14} color={colors.midGray} />
                 <Text style={styles.detailText} numberOfLines={1}>
                   {item.categories[0]}
                 </Text>
@@ -226,7 +227,7 @@ function NearbyStores({
   if (locationLoading) {
     return (
       <View style={[styles.container, style]}>
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ActivityIndicator size="large" color={colors.brand.ios} />
         <Text style={styles.loadingText}>Getting your location...</Text>
       </View>
     );
@@ -257,7 +258,7 @@ function NearbyStores({
       {/* Stores List */}
       {isLoading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#007AFF" />
+          <ActivityIndicator size="large" color={colors.brand.ios} />
           <Text style={styles.loadingText}>Finding stores...</Text>
         </View>
       ) : error ? (
@@ -276,8 +277,8 @@ function NearbyStores({
             <RefreshControl
               refreshing={isRefreshing}
               onRefresh={handleRefresh}
-              tintColor="#007AFF"
-              colors={['#007AFF']}
+              tintColor={colors.brand.ios}
+              colors={[colors.brand.ios]}
             />
           }
           ListEmptyComponent={renderEmptyState}
@@ -301,12 +302,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
   },
   loadingContainer: {
     flex: 1,
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#666666',
+    color: colors.midGray,
     marginTop: 12,
   },
   storeItem: {
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 8,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.tint.warmGray,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -362,7 +363,7 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333333',
+    color: colors.darkGray,
     flex: 1,
     marginRight: 8,
   },
@@ -378,7 +379,7 @@ const styles = StyleSheet.create({
   },
   storeAddress: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     marginBottom: 8,
     lineHeight: 18,
   },
@@ -394,7 +395,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 12,
-    color: '#666666',
+    color: colors.midGray,
   },
   arrowContainer: {
     marginLeft: 8,
@@ -411,13 +412,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333333',
+    color: colors.darkGray,
     marginTop: 16,
     marginBottom: 8,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -436,13 +437,13 @@ const styles = StyleSheet.create({
   },
   errorSubtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 20,
   },
   retryButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 8,
@@ -455,13 +456,13 @@ const styles = StyleSheet.create({
   noLocationTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333333',
+    color: colors.darkGray,
     marginTop: 16,
     marginBottom: 8,
   },
   noLocationSubtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     textAlign: 'center',
     lineHeight: 20,
   },

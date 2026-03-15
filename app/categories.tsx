@@ -22,6 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import categoriesApi, { Category } from '@/services/categoriesApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -33,42 +34,42 @@ const COLORS = {
   gray200: Colors.border.default,
   gray600: Colors.text.tertiary,
   green500: Colors.success,
-  cyan500: '#06B6D4',
+  cyan500: colors.brand.cyan,
   amber500: Colors.warning,
 };
 
 // Section configurations with icons and colors
 const SECTION_CONFIG: Record<string, { icon: string; color: string }> = {
-  electronics: { icon: '📱', color: '#3B82F6' },
-  fashion: { icon: '👗', color: '#EC4899' },
-  home: { icon: '🏠', color: '#8B5CF6' },
+  electronics: { icon: '📱', color: colors.infoScale[400] },
+  fashion: { icon: '👗', color: colors.brand.pink },
+  home: { icon: '🏠', color: colors.brand.purpleLight },
   beauty: { icon: '💄', color: '#F472B6' },
-  sports: { icon: '⚽', color: '#22C55E' },
-  toys: { icon: '🎮', color: '#EAB308' },
-  books: { icon: '📚', color: '#6366F1' },
-  jewelry: { icon: '💎', color: '#F59E0B' },
-  food: { icon: '🍕', color: '#F97316' },
-  grocery: { icon: '🛒', color: '#22C55E' },
-  dineout: { icon: '🍽️', color: '#EF4444' },
+  sports: { icon: '⚽', color: colors.success },
+  toys: { icon: '🎮', color: colors.brand.amber },
+  books: { icon: '📚', color: colors.brand.indigo },
+  jewelry: { icon: '💎', color: colors.warningScale[400] },
+  food: { icon: '🍕', color: colors.brand.orange },
+  grocery: { icon: '🛒', color: colors.success },
+  dineout: { icon: '🍽️', color: colors.error },
   cafe: { icon: '☕', color: '#78350F' },
   flights: { icon: '✈️', color: '#0EA5E9' },
-  hotels: { icon: '🏨', color: '#8B5CF6' },
-  movies: { icon: '🎬', color: '#EF4444' },
-  events: { icon: '🎭', color: '#EC4899' },
-  concerts: { icon: '🎵', color: '#7C3AED' },
-  parks: { icon: '🎢', color: '#22C55E' },
-  repair: { icon: '🔧', color: '#3B82F6' },
-  cleaning: { icon: '🧹', color: '#22C55E' },
-  salon: { icon: '💇', color: '#EC4899' },
-  fitness: { icon: '💪', color: '#F97316' },
-  healthcare: { icon: '🏥', color: '#EF4444' },
-  plumbing: { icon: '🚿', color: '#06B6D4' },
-  bills: { icon: '📄', color: '#3B82F6' },
-  recharge: { icon: '📱', color: '#22C55E' },
-  gold: { icon: '🪙', color: '#F59E0B' },
-  insurance: { icon: '🛡️', color: '#8B5CF6' },
-  loans: { icon: '💳', color: '#EC4899' },
-  ott: { icon: '📺', color: '#EF4444' },
+  hotels: { icon: '🏨', color: colors.brand.purpleLight },
+  movies: { icon: '🎬', color: colors.error },
+  events: { icon: '🎭', color: colors.brand.pink },
+  concerts: { icon: '🎵', color: colors.brand.purple },
+  parks: { icon: '🎢', color: colors.success },
+  repair: { icon: '🔧', color: colors.infoScale[400] },
+  cleaning: { icon: '🧹', color: colors.success },
+  salon: { icon: '💇', color: colors.brand.pink },
+  fitness: { icon: '💪', color: colors.brand.orange },
+  healthcare: { icon: '🏥', color: colors.error },
+  plumbing: { icon: '🚿', color: colors.brand.cyan },
+  bills: { icon: '📄', color: colors.infoScale[400] },
+  recharge: { icon: '📱', color: colors.success },
+  gold: { icon: '🪙', color: colors.warningScale[400] },
+  insurance: { icon: '🛡️', color: colors.brand.purpleLight },
+  loans: { icon: '💳', color: colors.brand.pink },
+  ott: { icon: '📺', color: colors.error },
 };
 
 // Fallback categories - using /MainCategory/ routes for consistency
@@ -76,38 +77,38 @@ const FALLBACK_SECTIONS = [
   {
     section: 'Shopping',
     items: [
-      { id: 'electronics', title: 'Electronics', icon: '📱', color: '#3B82F6', route: '/MainCategory/electronics' },
-      { id: 'fashion', title: 'Fashion', icon: '👗', color: '#EC4899', route: '/MainCategory/fashion' },
-      { id: 'grocery', title: 'Grocery', icon: '🛒', color: '#10B981', route: '/MainCategory/grocery-essentials' },
+      { id: 'electronics', title: 'Electronics', icon: '📱', color: colors.infoScale[400], route: '/MainCategory/electronics' },
+      { id: 'fashion', title: 'Fashion', icon: '👗', color: colors.brand.pink, route: '/MainCategory/fashion' },
+      { id: 'grocery', title: 'Grocery', icon: '🛒', color: colors.successScale[400], route: '/MainCategory/grocery-essentials' },
       { id: 'beauty', title: 'Beauty', icon: '💄', color: '#F472B6', route: '/MainCategory/beauty-wellness' },
     ],
   },
   {
     section: 'Food & Dining',
     items: [
-      { id: 'food-dining', title: 'Food & Dining', icon: '🍕', color: '#F97316', route: '/MainCategory/food-dining' },
+      { id: 'food-dining', title: 'Food & Dining', icon: '🍕', color: colors.brand.orange, route: '/MainCategory/food-dining' },
     ],
   },
   {
     section: 'Travel & Entertainment',
     items: [
       { id: 'travel', title: 'Travel', icon: '✈️', color: '#0EA5E9', route: '/MainCategory/travel-experiences' },
-      { id: 'entertainment', title: 'Entertainment', icon: '🎭', color: '#EC4899', route: '/MainCategory/entertainment' },
+      { id: 'entertainment', title: 'Entertainment', icon: '🎭', color: colors.brand.pink, route: '/MainCategory/entertainment' },
     ],
   },
   {
     section: 'Services',
     items: [
-      { id: 'home-services', title: 'Home Services', icon: '🏠', color: '#F59E0B', route: '/MainCategory/home-services' },
-      { id: 'fitness', title: 'Fitness', icon: '💪', color: '#8B5CF6', route: '/MainCategory/fitness-sports' },
-      { id: 'healthcare', title: 'Healthcare', icon: '🏥', color: '#EF4444', route: '/MainCategory/healthcare' },
-      { id: 'education', title: 'Education', icon: '🎓', color: '#3B82F6', route: '/MainCategory/education-learning' },
+      { id: 'home-services', title: 'Home Services', icon: '🏠', color: colors.warningScale[400], route: '/MainCategory/home-services' },
+      { id: 'fitness', title: 'Fitness', icon: '💪', color: colors.brand.purpleLight, route: '/MainCategory/fitness-sports' },
+      { id: 'healthcare', title: 'Healthcare', icon: '🏥', color: colors.error, route: '/MainCategory/healthcare' },
+      { id: 'education', title: 'Education', icon: '🎓', color: colors.infoScale[400], route: '/MainCategory/education-learning' },
     ],
   },
   {
     section: 'Financial Services',
     items: [
-      { id: 'financial', title: 'Financial', icon: '💳', color: '#14B8A6', route: '/MainCategory/financial-lifestyle' },
+      { id: 'financial', title: 'Financial', icon: '💳', color: colors.tealGreen, route: '/MainCategory/financial-lifestyle' },
     ],
   },
 ];
@@ -134,7 +135,7 @@ const CategoriesPage: React.FC = () => {
   const [totalCategories, setTotalCategories] = useState(0);
 
   const transformCategory = (cat: Category): DisplayCategory => {
-    const config = SECTION_CONFIG[cat.slug] || { icon: '📦', color: '#6B7280' };
+    const config = SECTION_CONFIG[cat.slug] || { icon: '📦', color: colors.neutral[500] };
     return {
       id: cat._id,
       title: cat.name,
@@ -218,7 +219,7 @@ const CategoriesPage: React.FC = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#06B6D4', '#0891B2']}
+        colors={[colors.brand.cyan, colors.cyanDark]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}
@@ -288,7 +289,7 @@ const CategoriesPage: React.FC = () => {
 
         <View style={styles.promoBanner}>
           <LinearGradient
-            colors={['#22C55E', '#16A34A']}
+            colors={[colors.success, colors.brand.greenDark]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.promoGradient}

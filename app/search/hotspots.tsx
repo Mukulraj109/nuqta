@@ -22,6 +22,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { apiClient } from '@/utils/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -31,8 +32,8 @@ const NUQTA = {
   nileBlueLight: '#243f55',
   lightMustard: Colors.gold,
   mustardDark: '#e5b84d',
-  linen: '#faf1e0',
-  lavenderMist: '#dfebf7',
+  linen: colors.linen,
+  lavenderMist: colors.lavenderMist,
 };
 
 interface HotspotFromAPI {
@@ -241,7 +242,7 @@ export default function HotspotsPage() {
               <Ionicons
                 name="list"
                 size={18}
-                color={viewMode === 'list' ? NUQTA.nileBlue : '#FFF'}
+                color={viewMode === 'list' ? NUQTA.nileBlue : colors.background.primary}
               />
             </Pressable>
             <Pressable
@@ -251,7 +252,7 @@ export default function HotspotsPage() {
               <Ionicons
                 name="map"
                 size={18}
-                color={viewMode === 'map' ? NUQTA.nileBlue : '#FFF'}
+                color={viewMode === 'map' ? NUQTA.nileBlue : colors.background.primary}
               />
             </Pressable>
           </View>

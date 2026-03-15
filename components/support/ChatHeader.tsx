@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import type { SupportAgent } from '@/types/supportChat.types';
+import { colors } from '@/constants/theme';
 
 interface ChatHeaderProps {
   agent: SupportAgent | null;
@@ -32,19 +33,19 @@ function ChatHeader({
   const [showMenu, setShowMenu] = useState(false);
 
   const getStatusColor = () => {
-    if (!agent) return '#6B7280';
+    if (!agent) return colors.neutral[500];
 
     switch (agent.status) {
       case 'online':
-        return '#10B981';
+        return colors.successScale[400];
       case 'away':
-        return '#F59E0B';
+        return colors.warningScale[400];
       case 'busy':
-        return '#EF4444';
+        return colors.error;
       case 'offline':
-        return '#6B7280';
+        return colors.neutral[500];
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   };
 
@@ -75,7 +76,7 @@ function ChatHeader({
 
   return (
     <>
-      <LinearGradient colors={['#10B981', '#059669']} style={styles.container}>
+      <LinearGradient colors={[colors.successScale[400], colors.successScale[700]]} style={styles.container}>
         <View style={styles.content}>
           <Pressable onPress={onBack} style={styles.backButton}>
             <View style={styles.buttonInner}>
@@ -163,7 +164,7 @@ function ChatHeader({
                   onEndChat();
                 }}
               >
-                <Ionicons name="checkmark-circle-outline" size={20} color="#10B981" />
+                <Ionicons name="checkmark-circle-outline" size={20} color={colors.successScale[400]} />
                 <ThemedText style={styles.menuItemText}>End Chat</ThemedText>
               </Pressable>
             )}
@@ -175,7 +176,7 @@ function ChatHeader({
                   onCall();
                 }}
               >
-                <Ionicons name="call-outline" size={20} color="#3B82F6" />
+                <Ionicons name="call-outline" size={20} color={colors.infoScale[400]} />
                 <ThemedText style={styles.menuItemText}>Request Call</ThemedText>
               </Pressable>
             )}
@@ -183,7 +184,7 @@ function ChatHeader({
               style={[styles.menuItem, styles.menuItemLast]}
               onPress={() => setShowMenu(false)}
             >
-              <Ionicons name="close-outline" size={20} color="#6B7280" />
+              <Ionicons name="close-outline" size={20} color={colors.neutral[500]} />
               <ThemedText style={styles.menuItemText}>Cancel</ThemedText>
             </Pressable>
           </View>
@@ -327,7 +328,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     gap: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   menuItemLast: {
     borderBottomWidth: 0,
@@ -335,7 +336,7 @@ const styles = StyleSheet.create({
   menuItemText: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
 });
 

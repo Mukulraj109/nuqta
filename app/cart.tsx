@@ -40,6 +40,7 @@ import cartApi from '@/services/cartApi';
 import { CartItemSkeleton } from '@/components/common/SkeletonLoader';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 // Helper function to format time slot for display
 const formatTimeSlot = (start: string, end?: string): string => {
@@ -610,7 +611,7 @@ export default function CartPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#faf1e0', // Nuqta Linen background
+    backgroundColor: colors.linen, // Nuqta Linen background
   },
   listContainer: {
     flex: 1,
@@ -648,7 +649,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 24,
     borderWidth: 1,
-    borderColor: '#ffd7b5', // Light Peach
+    borderColor: colors.lightPeach, // Light Peach
   },
   emptyTitle: {
     fontSize: 22,

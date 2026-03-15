@@ -23,6 +23,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { useGoingOutPage } from '@/hooks/useGoingOutPage';
 import { GoingOutProduct } from '@/types/going-out.types';
+import { colors } from '@/constants/theme';
 
 export default function GoingOutPage() {
   const router = useRouter();
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.base,
     ...Platform.select({
       ios: {
-        shadowColor: '#8B5CF6',
+        shadowColor: colors.brand.purpleLight,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -524,7 +525,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#8B5CF6',
+        shadowColor: colors.brand.purpleLight,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,

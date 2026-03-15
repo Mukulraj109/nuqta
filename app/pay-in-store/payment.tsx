@@ -50,6 +50,7 @@ import {
   PayButtonWithRewards,
   StripeCardForm,
 } from '@/components/payment';
+import { colors } from '@/constants/theme';
 
 // Initialize Stripe lazily — SDK is only loaded when this promise is first awaited
 const stripePromise = getStripePromise(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
@@ -439,9 +440,9 @@ export default function PaymentScreen() {
                     theme: 'stripe',
                     variables: {
                       colorPrimary: COLORS.primary[500],
-                      colorBackground: '#FFFFFF',
-                      colorText: '#111827',
-                      colorDanger: '#EF4444',
+                      colorBackground: colors.background.primary,
+                      colorText: colors.neutral[900],
+                      colorDanger: colors.error,
                       fontFamily: 'system-ui, -apple-system, sans-serif',
                       borderRadius: '12px',
                     },
@@ -503,7 +504,7 @@ export default function PaymentScreen() {
             <View style={styles.upiInputContainer}>
               <Text style={styles.upiInputLabel}>Enter your UPI ID</Text>
               <View style={[styles.upiInputWrapper, upiError && styles.upiInputError]}>
-                <Ionicons name="phone-portrait-outline" size={20} color={upiError ? "#EF4444" : "#6B7280"} />
+                <Ionicons name="phone-portrait-outline" size={20} color={upiError ? colors.error : colors.neutral[500]} />
                 <TextInput
                   value={upiId}
                   onChangeText={(text) => {
@@ -511,7 +512,7 @@ export default function PaymentScreen() {
                     if (upiError) setUpiError(null);
                   }}
                   placeholder="yourname@upi"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.neutral[400]}
                   style={styles.upiTextInput}
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -520,7 +521,7 @@ export default function PaymentScreen() {
               </View>
               {upiError ? (
                 <View style={styles.upiErrorContainer}>
-                  <Ionicons name="alert-circle" size={14} color="#EF4444" />
+                  <Ionicons name="alert-circle" size={14} color={colors.error} />
                   <Text style={styles.upiErrorText}>{upiError}</Text>
                 </View>
               ) : (
@@ -561,7 +562,7 @@ export default function PaymentScreen() {
                 ]}
               >
                 {upiProcessing ? (
-                  <ActivityIndicator size="small" color="#FFFFFF" />
+                  <ActivityIndicator size="small" color={colors.background.primary} />
                 ) : (
                   <Text
                     style={styles.upiPayButtonText}
@@ -647,7 +648,7 @@ const styles = StyleSheet.create({
   upiModalContent: {
     width: '100%',
     maxWidth: 420,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     padding: 24,
     ...SHADOWS.lg,
@@ -661,15 +662,15 @@ const styles = StyleSheet.create({
   upiTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   upiSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   upiAmountContainer: {
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
     padding: 16,
     borderRadius: 12,
     alignItems: 'center',
@@ -677,13 +678,13 @@ const styles = StyleSheet.create({
   },
   upiAmountLabel: {
     fontSize: 13,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
   },
   upiAmount: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   upiInputContainer: {
     marginBottom: 16,
@@ -691,22 +692,22 @@ const styles = StyleSheet.create({
   upiInputLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
   },
   upiInputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     borderRadius: 12,
     padding: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     gap: 10,
   },
   upiInputError: {
-    borderColor: '#EF4444',
-    backgroundColor: '#FEF2F2',
+    borderColor: colors.error,
+    backgroundColor: colors.errorScale[50],
   },
   upiErrorContainer: {
     flexDirection: 'row',
@@ -716,18 +717,18 @@ const styles = StyleSheet.create({
   },
   upiErrorText: {
     fontSize: 12,
-    color: '#EF4444',
+    color: colors.error,
   },
   upiTextInput: {
     flex: 1,
     fontSize: 16,
-    color: '#111827',
+    color: colors.neutral[900],
     padding: 0,
     margin: 0,
   },
   upiHint: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 6,
   },
   upiButtonContainer: {
@@ -739,27 +740,27 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
   },
   upiCancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   upiPayButton: {
     flex: 1,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     alignItems: 'center',
   },
   upiPayButtonDisabled: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   upiPayButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });

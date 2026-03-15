@@ -14,6 +14,7 @@ import { useRouter } from 'expo-router';
 import exploreApi, { HotProduct } from '../../../services/exploreApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
 

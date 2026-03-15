@@ -9,17 +9,18 @@ import CachedImage from '@/components/ui/CachedImage';
 import { ThemedText } from '@/components/ThemedText';
 import { useRouter } from 'expo-router';
 import servicesService from '@/services/servicesApi';
+import { colors } from '@/constants/theme';
 
 const PARENT_PADDING = 16;
 
 // Nuqta minimal colors
 const COLORS = {
-  primary: '#ffcd57',
-  navy: '#1a3a52',
-  textPrimary: '#1a3a52',
-  textSecondary: '#666666',
-  white: '#FFFFFF',
-  cardBg: '#FFFFFF',
+  primary: colors.lightMustard,
+  navy: colors.nileBlue,
+  textPrimary: colors.nileBlue,
+  textSecondary: colors.midGray,
+  white: colors.background.primary,
+  cardBg: colors.background.primary,
   border: '#F0F0F0',
 };
 
@@ -297,7 +298,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#EF4444',
+    color: colors.error,
     marginBottom: 12,
   },
   retryButton: {

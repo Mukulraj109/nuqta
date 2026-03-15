@@ -7,6 +7,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 function ProfileSkeleton() {
   return (
@@ -48,7 +49,7 @@ function ProfileSkeleton() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 16,
   },
   header: {
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
     marginBottom: 16,
   },
   statItem: {
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   contentCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 14,
     marginBottom: 12,

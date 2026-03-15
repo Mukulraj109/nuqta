@@ -29,6 +29,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { useRegion } from '@/contexts/RegionContext';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -376,7 +377,7 @@ export default function SubcategoryPage() {
             <Ionicons
               name="storefront-outline"
               size={18}
-              color={activeTab === 'stores' ? '#ffcd57' : '#6B7280'}
+              color={activeTab === 'stores' ? colors.lightMustard : colors.neutral[500]}
             />
             <ThemedText
               style={[styles.tabText, activeTab === 'stores' && styles.activeTabText]}
@@ -391,7 +392,7 @@ export default function SubcategoryPage() {
             <Ionicons
               name="cube-outline"
               size={18}
-              color={activeTab === 'products' ? '#ffcd57' : '#6B7280'}
+              color={activeTab === 'products' ? colors.lightMustard : colors.neutral[500]}
             />
             <ThemedText
               style={[styles.tabText, activeTab === 'products' && styles.activeTabText]}

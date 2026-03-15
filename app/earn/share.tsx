@@ -23,6 +23,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { BRAND } from '@/constants/brand';
 import shareApi, { ShareableItem } from '../../services/shareApi';
 import { platformAlert } from '@/utils/platformAlert';
+import { colors } from '@/constants/theme';
 
 interface ShareableContent {
   id: string;
@@ -231,7 +232,7 @@ export default function ShareToEarnPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Share & Earn</ThemedText>
           <View style={styles.placeholder} />
@@ -364,7 +365,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -384,7 +385,7 @@ const styles = StyleSheet.create({
   },
   statValue: {
     ...Typography.h2,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   statLabel: {
     ...Typography.bodySmall,
@@ -430,7 +431,7 @@ const styles = StyleSheet.create({
   },
   stepNumberText: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   stepText: {
     ...Typography.caption,

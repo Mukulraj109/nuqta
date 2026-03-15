@@ -19,6 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallCategory } from '../../types/mall.types';
 import MallCategoryCard from './cards/MallCategoryCard';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 52) / 2;
@@ -43,18 +44,18 @@ const MallCategoriesGrid: React.FC<MallCategoriesGridProps> = ({
         <View style={styles.header}>
           <View style={styles.titleContainer}>
             <LinearGradient
-              colors={['#1a3a52', '#234b68']}
+              colors={[colors.nileBlue, colors.brand.nileBlueLight]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.iconContainer}
             >
-              <Ionicons name="apps" size={18} color="#FFFFFF" />
+              <Ionicons name="apps" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Shop by Category</Text>
           </View>
         </View>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#1a3a52" />
+          <ActivityIndicator size="small" color={colors.nileBlue} />
           <Text style={styles.loadingText}>Loading categories...</Text>
         </View>
       </View>
@@ -70,12 +71,12 @@ const MallCategoriesGrid: React.FC<MallCategoriesGridProps> = ({
           <View style={styles.titleRow}>
             <View style={styles.titleContainer}>
               <LinearGradient
-                colors={['#1a3a52', '#234b68']}
+                colors={[colors.nileBlue, colors.brand.nileBlueLight]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.iconContainer}
               >
-                <Ionicons name="apps" size={18} color="#FFFFFF" />
+                <Ionicons name="apps" size={18} color={colors.background.primary} />
               </LinearGradient>
               <View>
                 <Text style={styles.title}>Shop by Category</Text>
@@ -89,7 +90,7 @@ const MallCategoriesGrid: React.FC<MallCategoriesGridProps> = ({
 
         {/* Empty State Placeholder */}
         <View style={styles.emptyStateContainer}>
-          <Ionicons name="apps-outline" size={24} color="#9CA3AF" />
+          <Ionicons name="apps-outline" size={24} color={colors.neutral[400]} />
           <Text style={styles.emptyStateText}>Categories being organized</Text>
         </View>
       </View>
@@ -115,12 +116,12 @@ const MallCategoriesGrid: React.FC<MallCategoriesGridProps> = ({
         <View style={styles.titleRow}>
           <View style={styles.titleContainer}>
             <LinearGradient
-              colors={['#1a3a52', '#234b68']}
+              colors={[colors.nileBlue, colors.brand.nileBlueLight]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.iconContainer}
             >
-              <Ionicons name="apps" size={18} color="#FFFFFF" />
+              <Ionicons name="apps" size={18} color={colors.background.primary} />
             </LinearGradient>
             <View>
               <Text style={styles.title}>Shop by Category</Text>
@@ -137,14 +138,14 @@ const MallCategoriesGrid: React.FC<MallCategoriesGridProps> = ({
              
             >
               <LinearGradient
-                colors={['#1a3a52', '#234b68']}
+                colors={[colors.nileBlue, colors.brand.nileBlueLight]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.viewAllGradient}
               >
                 <Text style={styles.viewAllText}>View All</Text>
                 <View style={styles.viewAllArrow}>
-                  <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+                  <Ionicons name="arrow-forward" size={14} color={colors.background.primary} />
                 </View>
               </LinearGradient>
             </Pressable>
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -221,12 +222,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   viewAllButton: {
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   viewAllArrow: {
     width: 24,
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   emptyStateContainer: {
     flexDirection: 'row',
@@ -293,7 +294,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
 });

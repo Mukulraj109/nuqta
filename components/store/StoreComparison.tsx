@@ -13,6 +13,7 @@ import { platformAlertDestructive } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { Store } from '@/services/storeSearchService';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -98,7 +99,7 @@ const StoreComparison: React.FC<StoreComparisonProps> = ({
         <View style={styles.detailedHeader}>
           <Text style={styles.detailedTitle}>Store Details</Text>
           <Pressable onPress={() => setSelectedStore(null)}>
-            <Ionicons name="close" size={24} color="#333" />
+            <Ionicons name="close" size={24} color={colors.darkGray} />
           </Pressable>
         </View>
 
@@ -196,7 +197,7 @@ const StoreComparison: React.FC<StoreComparisonProps> = ({
           <View style={styles.header}>
             <Text style={styles.headerTitle}>Compare Stores</Text>
             <Pressable onPress={onClose}>
-              <Ionicons name="close" size={24} color="#333" />
+              <Ionicons name="close" size={24} color={colors.darkGray} />
             </Pressable>
           </View>
           <View style={styles.emptyState}>
@@ -226,7 +227,7 @@ const StoreComparison: React.FC<StoreComparisonProps> = ({
               <Text style={styles.clearButtonText}>Clear All</Text>
             </Pressable>
             <Pressable onPress={onClose}>
-              <Ionicons name="close" size={24} color="#333" />
+              <Ionicons name="close" size={24} color={colors.darkGray} />
             </Pressable>
           </View>
         </View>
@@ -270,7 +271,7 @@ const StoreComparison: React.FC<StoreComparisonProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.offWhite,
   },
   header: {
     flexDirection: 'row',
@@ -278,14 +279,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
     borderBottomColor: '#e9ecef',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
   },
   headerActions: {
     flexDirection: 'row',
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   clearButtonText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -308,7 +309,7 @@ const styles = StyleSheet.create({
   },
   storesHeader: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
     borderBottomColor: '#e9ecef',
   },
@@ -347,12 +348,12 @@ const styles = StyleSheet.create({
   storeImageText: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.background.primary,
   },
   storeName: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     textAlign: 'center',
     marginBottom: 4,
   },
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
   },
   comparisonRow: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
     borderBottomColor: '#e9ecef',
   },
@@ -372,8 +373,8 @@ const styles = StyleSheet.create({
     padding: 16,
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
-    backgroundColor: '#f8f9fa',
+    color: colors.darkGray,
+    backgroundColor: colors.offWhite,
   },
   comparisonValues: {
     flex: 1,
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
   },
   comparisonValueText: {
     fontSize: 14,
-    color: '#333',
+    color: colors.darkGray,
     textAlign: 'center',
   },
   emptyState: {
@@ -404,12 +405,12 @@ const styles = StyleSheet.create({
   emptyStateTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 8,
   },
   emptyStateSubtitle: {
     fontSize: 16,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'center',
   },
   detailedView: {
@@ -421,21 +422,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
     borderBottomColor: '#e9ecef',
   },
   detailedTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
   },
   detailedContent: {
     flex: 1,
     padding: 16,
   },
   detailSection: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -448,7 +449,7 @@ const styles = StyleSheet.create({
   detailSectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 12,
   },
   detailItem: {
@@ -458,12 +459,12 @@ const styles = StyleSheet.create({
   detailLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666',
+    color: colors.midGray,
     width: 120,
   },
   detailValue: {
     fontSize: 14,
-    color: '#333',
+    color: colors.darkGray,
     flex: 1,
   },
   paymentMethods: {
@@ -479,7 +480,7 @@ const styles = StyleSheet.create({
   },
   paymentMethodText: {
     fontSize: 12,
-    color: '#333',
+    color: colors.darkGray,
     fontWeight: '500',
   },
   features: {
@@ -491,7 +492,7 @@ const styles = StyleSheet.create({
   },
   featureText: {
     fontSize: 14,
-    color: '#333',
+    color: colors.darkGray,
     marginLeft: 8,
   },
 });

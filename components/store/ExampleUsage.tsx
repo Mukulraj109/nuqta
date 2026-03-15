@@ -10,6 +10,7 @@ import { View, Pressable, Text, StyleSheet } from 'react-native';
 import StorePolicies, { StorePolicy, MOCK_POLICIES } from './StorePolicies';
 import StoreContact, { StoreContactInfo, MOCK_CONTACT_INFO } from './StoreContact';
 import StoreInfoModal from './StoreInfoModal';
+import { colors } from '@/constants/theme';
 
 // ============================================================================
 // EXAMPLE 1: Basic Usage with Mock Data
@@ -396,7 +397,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   button: {
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 12,
@@ -424,7 +425,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   activeSectionTab: {
-    borderBottomColor: '#7C3AED',
+    borderBottomColor: colors.brand.purple,
   },
   sectionTabText: {
     fontSize: 14,
@@ -432,7 +433,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   activeSectionTabText: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   bottomSheet: {
     position: 'absolute',

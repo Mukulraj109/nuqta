@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -177,7 +178,7 @@ const StoresNearYou = () => {
                 ))}
                 {store.hasQuickDelivery && (
                   <View style={styles.quickDeliveryTag}>
-                    <Ionicons name="flash" size={10} color="#F97316" />
+                    <Ionicons name="flash" size={10} color={colors.brand.orange} />
                     <Text style={styles.quickDeliveryText}>60min</Text>
                   </View>
                 )}
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
   quickDeliveryText: {
     fontSize: Typography.overline.fontSize,
     fontWeight: '600',
-    color: '#F97316',
+    color: colors.brand.orange,
   },
   detailsRow: {
     flexDirection: 'row',

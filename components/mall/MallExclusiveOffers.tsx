@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallOffer } from '../../types/mall.types';
 import MallOfferCard from './cards/MallOfferCard';
+import { colors } from '@/constants/theme';
 
 interface MallExclusiveOffersProps {
   offers: MallOffer[];
@@ -69,22 +70,22 @@ const MallExclusiveOffers: React.FC<MallExclusiveOffersProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#FFF7ED', '#FFEDD5', '#FFFFFF']}
+          colors={[colors.tint.orange, '#FFEDD5', colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
         >
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#F59E0B', '#D97706']}
+              colors={[colors.warningScale[400], colors.warningScale[700]]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="pricetag" size={18} color="#FFFFFF" />
+              <Ionicons name="pricetag" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Exclusive Offers</Text>
           </View>
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#D97706" />
+            <ActivityIndicator size="small" color={colors.warningScale[700]} />
             <Text style={styles.loadingText}>Loading offers...</Text>
           </View>
         </LinearGradient>
@@ -97,7 +98,7 @@ const MallExclusiveOffers: React.FC<MallExclusiveOffersProps> = ({
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#FFF7ED', '#FFEDD5', '#FFFFFF']}
+          colors={[colors.tint.orange, '#FFEDD5', colors.background.primary]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={styles.gradientBackground}
@@ -105,10 +106,10 @@ const MallExclusiveOffers: React.FC<MallExclusiveOffersProps> = ({
           {/* Section Header */}
           <View style={styles.headerRow}>
             <LinearGradient
-              colors={['#F59E0B', '#D97706']}
+              colors={[colors.warningScale[400], colors.warningScale[700]]}
               style={styles.iconWrapper}
             >
-              <Ionicons name="pricetag" size={18} color="#FFFFFF" />
+              <Ionicons name="pricetag" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Exclusive Offers</Text>
             <View style={styles.headerSpacer} />
@@ -121,7 +122,7 @@ const MallExclusiveOffers: React.FC<MallExclusiveOffersProps> = ({
 
           {/* Empty State Placeholder */}
           <View style={styles.emptyStateContainer}>
-            <Ionicons name="gift-outline" size={24} color="#9CA3AF" />
+            <Ionicons name="gift-outline" size={24} color={colors.neutral[400]} />
             <Text style={styles.emptyStateText}>Exclusive offers loading soon</Text>
           </View>
         </LinearGradient>
@@ -132,7 +133,7 @@ const MallExclusiveOffers: React.FC<MallExclusiveOffersProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#FFF7ED', '#FFEDD5', '#FFFFFF']}
+        colors={[colors.tint.orange, '#FFEDD5', colors.background.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.gradientBackground}
@@ -146,10 +147,10 @@ const MallExclusiveOffers: React.FC<MallExclusiveOffersProps> = ({
         {/* Section Header */}
         <View style={styles.headerRow}>
           <LinearGradient
-            colors={['#F59E0B', '#D97706']}
+            colors={[colors.warningScale[400], colors.warningScale[700]]}
             style={styles.iconWrapper}
           >
-            <Ionicons name="pricetag" size={18} color="#FFFFFF" />
+            <Ionicons name="pricetag" size={18} color={colors.background.primary} />
           </LinearGradient>
           <Text style={styles.title}>Exclusive Offers</Text>
           <View style={styles.liveBadge}>
@@ -164,14 +165,14 @@ const MallExclusiveOffers: React.FC<MallExclusiveOffersProps> = ({
              
             >
               <LinearGradient
-                colors={['#F59E0B', '#D97706']}
+                colors={[colors.warningScale[400], colors.warningScale[700]]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.viewAllGradient}
               >
                 <Text style={styles.viewAllText}>View All</Text>
                 <View style={styles.viewAllArrow}>
-                  <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+                  <Ionicons name="arrow-forward" size={14} color={colors.background.primary} />
                 </View>
               </LinearGradient>
             </Pressable>
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#F59E0B',
+        shadowColor: colors.warningScale[400],
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -264,13 +265,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   liveBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
@@ -282,17 +283,17 @@ const styles = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 3.5,
-    backgroundColor: '#DC2626',
+    backgroundColor: colors.error,
   },
   liveBadgeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     letterSpacing: 0.5,
   },
   subtitle: {
     fontSize: 14,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     paddingHorizontal: 16,
     marginBottom: 14,
   },
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#F59E0B',
+        shadowColor: colors.warningScale[400],
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   viewAllArrow: {
     width: 24,
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     fontWeight: '500',
   },
   emptyStateContainer: {
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
 });

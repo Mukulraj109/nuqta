@@ -12,6 +12,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface DeliveryPickupCardsProps {
   /** Custom style */
@@ -43,11 +44,11 @@ export const DeliveryPickupCards: React.FC<DeliveryPickupCardsProps> = ({
         {/* Delivery Card */}
         <View style={styles.card}>
           <LinearGradient
-            colors={['#F3E8FF', '#E9D5FF']}
+            colors={[colors.tint.pink, '#E9D5FF']}
             style={styles.cardGradient}
           >
             <View style={styles.iconContainer}>
-              <Ionicons name="bicycle" size={26} color="#A855F7" />
+              <Ionicons name="bicycle" size={26} color={colors.brand.purpleMedium} />
             </View>
           </LinearGradient>
 
@@ -56,7 +57,7 @@ export const DeliveryPickupCards: React.FC<DeliveryPickupCardsProps> = ({
           <View style={styles.featuresList}>
             {DELIVERY_FEATURES.map((feature, index) => (
               <View key={index} style={styles.featureItem}>
-                <Ionicons name="checkmark" size={14} color="#10B981" />
+                <Ionicons name="checkmark" size={14} color={colors.successScale[400]} />
                 <Text style={styles.featureText}>{feature}</Text>
               </View>
             ))}
@@ -70,7 +71,7 @@ export const DeliveryPickupCards: React.FC<DeliveryPickupCardsProps> = ({
             style={styles.cardGradient}
           >
             <View style={styles.iconContainer}>
-              <Ionicons name="storefront" size={26} color="#14B8A6" />
+              <Ionicons name="storefront" size={26} color={colors.tealGreen} />
             </View>
           </LinearGradient>
 
@@ -79,7 +80,7 @@ export const DeliveryPickupCards: React.FC<DeliveryPickupCardsProps> = ({
           <View style={styles.featuresList}>
             {PICKUP_FEATURES.map((feature, index) => (
               <View key={index} style={styles.featureItem}>
-                <Ionicons name="checkmark" size={14} color="#10B981" />
+                <Ionicons name="checkmark" size={14} color={colors.successScale[400]} />
                 <Text style={styles.featureText}>{feature}</Text>
               </View>
             ))}
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 14,
   },
 
@@ -110,11 +111,11 @@ const styles = StyleSheet.create({
 
   card: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
 
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
 
   featureText: {
     fontSize: 12,
-    color: '#4B5563',
+    color: colors.neutral[600],
     fontWeight: '500',
   },
 });

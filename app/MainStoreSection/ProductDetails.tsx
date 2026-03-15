@@ -11,6 +11,7 @@ import {
   Typography,
   Gradients,
 } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Enable LayoutAnimation for Android
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -101,7 +102,7 @@ export default memo(function ProductDetails({
   if (!title || !description) {
     return (
       <View style={[styles.container, styles.errorContainer]}>
-        <Ionicons name="alert-circle-outline" size={24} color="#1a3a52" />
+        <Ionicons name="alert-circle-outline" size={24} color={colors.nileBlue} />
         <ThemedText style={styles.errorText}>
           Product information unavailable
         </ThemedText>
@@ -195,8 +196,8 @@ export default memo(function ProductDetails({
             accessibilityLabel={isOpen ? 'Store is open' : 'Store is closed'}
             accessibilityRole="text"
           >
-            <View style={[styles.openDot, { backgroundColor: isOpen ? Colors.primary[600] : '#DC2626' }]} />
-            <ThemedText style={[styles.openText, { color: isOpen ? Colors.primary[700] : '#DC2626' }]}>
+            <View style={[styles.openDot, { backgroundColor: isOpen ? Colors.primary[600] : colors.error }]} />
+            <ThemedText style={[styles.openText, { color: isOpen ? Colors.primary[700] : colors.error }]}>
               {isOpen ? 'Open' : 'Closed'}
             </ThemedText>
           </View>
@@ -219,7 +220,7 @@ export default memo(function ProductDetails({
             end={{ x: 1, y: 0 }}
             style={styles.directionsGradient}
           >
-            <Ionicons name="navigate" size={16} color="#fff" />
+            <Ionicons name="navigate" size={16} color={colors.background.primary} />
             <ThemedText style={styles.directionsText}>Get Directions</ThemedText>
           </LinearGradient>
         </Pressable>
@@ -230,7 +231,7 @@ export default memo(function ProductDetails({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderRadius: 12,
@@ -248,14 +249,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     paddingVertical: 24,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderWidth: 1,
-    borderColor: '#FEE2E2',
+    borderColor: colors.errorScale[100],
   },
   errorText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#DC2626',
+    color: colors.error,
   },
   rowTop: {
     flexDirection: 'row',
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.select({ ios: 8, android: 6 }),
     borderRadius: 999,
     borderWidth: 1,
-    borderColor: '#EEF2FF',
+    borderColor: colors.indigoMist,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.04,
@@ -358,7 +359,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     marginLeft: 8,
-    color: '#374151',
+    color: colors.neutral[700],
     fontSize: 13,
     fontWeight: '600',
     flex: 1,
@@ -400,7 +401,7 @@ const styles = StyleSheet.create({
   },
   directionsText: {
     ...Typography.button,
-    color: '#fff',
+    color: colors.background.primary,
     fontWeight: '700',
   },
 });

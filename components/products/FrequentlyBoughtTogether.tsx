@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { BRAND } from '@/constants/brand';
 import { BundleItem } from '@/services/recommendationApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -84,7 +85,7 @@ function FrequentlyBoughtTogether({
           <Text style={styles.title}>Frequently Bought Together</Text>
         </View>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#ffcd57" />
+          <ActivityIndicator size="large" color={colors.lightMustard} />
         </View>
       </View>
     );
@@ -211,7 +212,7 @@ function BundleCard({ bundle, bundleWidth, onAddToCart, onProductPress }: Bundle
       {/* Frequency Badge */}
       {bundle.frequency > 0 && (
         <View style={styles.frequencyBadge}>
-          <Ionicons name="people" size={12} color="#6B7280" />
+          <Ionicons name="people" size={12} color={colors.neutral[500]} />
           <Text style={styles.frequencyText}>
             {bundle.frequency} bought together
           </Text>
@@ -232,7 +233,7 @@ function BundleCard({ bundle, bundleWidth, onAddToCart, onProductPress }: Bundle
             />
             {index < bundle.products.length - 1 && (
               <View style={styles.plusIcon}>
-                <Ionicons name="add" size={20} color="#ffcd57" />
+                <Ionicons name="add" size={20} color={colors.lightMustard} />
               </View>
             )}
           </React.Fragment>
@@ -255,7 +256,7 @@ function BundleCard({ bundle, bundleWidth, onAddToCart, onProductPress }: Bundle
         {savings > 0 && (
           <View style={styles.savingsRow}>
             <View style={styles.savingsBadge}>
-              <Ionicons name="pricetag" size={14} color="#ffcd57" />
+              <Ionicons name="pricetag" size={14} color={colors.lightMustard} />
               <Text style={styles.savingsText}>
                 Save {currencySymbol}{Math.round(savings)} ({savingsPercentage}%)
               </Text>
@@ -267,7 +268,7 @@ function BundleCard({ bundle, bundleWidth, onAddToCart, onProductPress }: Bundle
         <View style={styles.rewardsContainer}>
           <View style={styles.rewardItem}>
             <View style={styles.rewardIconBg}>
-              <Ionicons name="wallet-outline" size={16} color="#ffcd57" />
+              <Ionicons name="wallet-outline" size={16} color={colors.lightMustard} />
             </View>
             <View>
               <Text style={styles.rewardValue}>{totalRezCoins} coins</Text>
@@ -276,11 +277,11 @@ function BundleCard({ bundle, bundleWidth, onAddToCart, onProductPress }: Bundle
           </View>
           <View style={styles.rewardDivider} />
           <View style={styles.rewardItem}>
-            <View style={[styles.rewardIconBg, { backgroundColor: '#FEF3C7' }]}>
-              <Ionicons name="card-outline" size={16} color="#F59E0B" />
+            <View style={[styles.rewardIconBg, { backgroundColor: colors.tint.amberLight }]}>
+              <Ionicons name="card-outline" size={16} color={colors.warningScale[400]} />
             </View>
             <View>
-              <Text style={[styles.rewardValue, { color: '#F59E0B' }]}>{currencySymbol}{totalCashback}</Text>
+              <Text style={[styles.rewardValue, { color: colors.warningScale[400] }]}>{currencySymbol}{totalCashback}</Text>
               <Text style={styles.rewardLabel}>Cashback</Text>
             </View>
           </View>
@@ -293,7 +294,7 @@ function BundleCard({ bundle, bundleWidth, onAddToCart, onProductPress }: Bundle
             onPress={() => onAddToCart(bundle.products)}
            
           >
-            <Ionicons name="cart" size={20} color="#fff" />
+            <Ionicons name="cart" size={20} color={colors.background.primary} />
             <Text style={styles.addButtonText}>Add All to Cart</Text>
           </Pressable>
         )}
@@ -347,7 +348,7 @@ function BundleProductCard({ product, onPress }: BundleProductCardProps) {
         </View>
         {product.ratings && (
           <View style={styles.productRating}>
-            <Ionicons name="star" size={10} color="#FBBF24" />
+            <Ionicons name="star" size={10} color={colors.warningScale[400]} />
             <Text style={styles.ratingText}>
               {(product.ratings.average || 0).toFixed(1)}
             </Text>
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     marginVertical: 8,
     marginHorizontal: 8,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12
   },
   header: {
@@ -373,12 +374,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontStyle: 'italic'
   },
   loadingContainer: {
@@ -387,13 +388,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   bundleContainer: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     marginRight: 12,
     marginVertical: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -404,7 +405,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
@@ -413,7 +414,7 @@ const styles = StyleSheet.create({
   },
   frequencyText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500'
   },
   productsRow: {
@@ -425,16 +426,16 @@ const styles = StyleSheet.create({
   },
   productCard: {
     width: 130,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#E5E7EB'
+    borderColor: colors.neutral[200]
   },
   productImageContainer: {
     width: '100%',
     height: 100,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     position: 'relative'
   },
   productImage: {
@@ -445,7 +446,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 6,
     left: 6,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#fff'
+    color: colors.background.primary
   },
   productInfo: {
     padding: 10,
@@ -462,7 +463,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     minHeight: 32
   },
   productPriceRow: {
@@ -473,11 +474,11 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#ffcd57'
+    color: colors.lightMustard
   },
   productOriginalPrice: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through'
   },
   productRating: {
@@ -488,19 +489,19 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#1F2937'
+    color: colors.neutral[800]
   },
   plusIcon: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     justifyContent: 'center',
     alignItems: 'center'
   },
   priceSection: {
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     paddingTop: 16,
     gap: 12
   },
@@ -512,7 +513,7 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151'
+    color: colors.neutral[700]
   },
   priceGroup: {
     flexDirection: 'row',
@@ -522,11 +523,11 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#ffcd57'
+    color: colors.lightMustard
   },
   originalPrice: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through'
   },
   savingsRow: {
@@ -537,27 +538,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#faf1e0'
+    borderColor: colors.linen
   },
   savingsText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffcd57'
+    color: colors.lightMustard
   },
   rewardsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB'
+    borderColor: colors.neutral[200]
   },
   rewardItem: {
     flexDirection: 'row',
@@ -570,23 +571,23 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 8,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     alignItems: 'center',
     justifyContent: 'center'
   },
   rewardValue: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#ffcd57'
+    color: colors.lightMustard
   },
   rewardLabel: {
     fontSize: 11,
-    color: '#6B7280'
+    color: colors.neutral[500]
   },
   rewardDivider: {
     width: 1,
     height: 32,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginHorizontal: 8
   },
   addButton: {
@@ -594,11 +595,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: {
       width: 0,
       height: 4
@@ -610,7 +611,7 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff'
+    color: colors.background.primary
   },
   paginationContainer: {
     flexDirection: 'row',
@@ -623,11 +624,11 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#D1D5DB'
+    backgroundColor: colors.neutral[300]
   },
   paginationDotActive: {
     width: 24,
-    backgroundColor: '#ffcd57'
+    backgroundColor: colors.lightMustard
   }
 });
 

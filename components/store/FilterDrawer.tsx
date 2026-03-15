@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -35,9 +36,9 @@ interface FilterDrawerProps {
 }
 
 const STOCK_STATUS_OPTIONS = [
-  { value: 'in_stock', label: 'In Stock', icon: 'checkmark-circle', color: '#10B981' },
-  { value: 'out_of_stock', label: 'Out of Stock', icon: 'close-circle', color: '#EF4444' },
-  { value: 'low_stock', label: 'Low Stock', icon: 'alert-circle', color: '#F59E0B' },
+  { value: 'in_stock', label: 'In Stock', icon: 'checkmark-circle', color: colors.success },
+  { value: 'out_of_stock', label: 'Out of Stock', icon: 'close-circle', color: colors.error },
+  { value: 'low_stock', label: 'Low Stock', icon: 'alert-circle', color: colors.warning },
 ] as const;
 
 const RATING_OPTIONS = [
@@ -159,7 +160,7 @@ function FilterDrawer({
             key={star}
             name={star <= rating ? 'star' : 'star-outline'}
             size={16}
-            color={isSelected ? '#FFFFFF' : '#F59E0B'}
+            color={isSelected ? colors.text.white : colors.warning}
           />
         ))}
       </View>
@@ -212,7 +213,7 @@ function FilterDrawer({
                 style={styles.closeButton}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
-                <Ionicons name="close" size={24} color="#1F2937" />
+                <Ionicons name="close" size={24} color={colors.neutral[800]} />
               </Pressable>
             </View>
 
@@ -235,7 +236,7 @@ function FilterDrawer({
                  
                 >
                   <View style={styles.sectionHeaderLeft}>
-                    <Ionicons name="grid-outline" size={20} color="#7C3AED" />
+                    <Ionicons name="grid-outline" size={20} color={colors.brand.purple} />
                     <Text style={styles.sectionTitle}>Category</Text>
                     {filters.categories.length > 0 && (
                       <View style={styles.sectionBadge}>
@@ -246,7 +247,7 @@ function FilterDrawer({
                   <Ionicons
                     name={expandedSections.categories ? 'chevron-up' : 'chevron-down'}
                     size={20}
-                    color="#9CA3AF"
+                    color={colors.neutral[400]}
                   />
                 </Pressable>
 
@@ -266,7 +267,7 @@ function FilterDrawer({
                           ]}
                         >
                           {filters.categories.includes(category) && (
-                            <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+                            <Ionicons name="checkmark" size={16} color={colors.background.primary} />
                           )}
                         </View>
                         <Text style={styles.checkboxLabel}>{category}</Text>
@@ -284,13 +285,13 @@ function FilterDrawer({
                  
                 >
                   <View style={styles.sectionHeaderLeft}>
-                    <Ionicons name="cash-outline" size={20} color="#7C3AED" />
+                    <Ionicons name="cash-outline" size={20} color={colors.brand.purple} />
                     <Text style={styles.sectionTitle}>Price Range</Text>
                   </View>
                   <Ionicons
                     name={expandedSections.price ? 'chevron-up' : 'chevron-down'}
                     size={20}
-                    color="#9CA3AF"
+                    color={colors.neutral[400]}
                   />
                 </Pressable>
 
@@ -310,7 +311,7 @@ function FilterDrawer({
                             }}
                             keyboardType="numeric"
                             placeholder={priceRange.min.toString()}
-                            placeholderTextColor="#9CA3AF"
+                            placeholderTextColor={colors.neutral[400]}
                           />
                         </View>
                       </View>
@@ -332,7 +333,7 @@ function FilterDrawer({
                             }}
                             keyboardType="numeric"
                             placeholder={priceRange.max.toString()}
-                            placeholderTextColor="#9CA3AF"
+                            placeholderTextColor={colors.neutral[400]}
                           />
                         </View>
                       </View>
@@ -355,7 +356,7 @@ function FilterDrawer({
                  
                 >
                   <View style={styles.sectionHeaderLeft}>
-                    <Ionicons name="cube-outline" size={20} color="#7C3AED" />
+                    <Ionicons name="cube-outline" size={20} color={colors.brand.purple} />
                     <Text style={styles.sectionTitle}>Stock Status</Text>
                     {filters.stockStatus && filters.stockStatus.length > 0 && (
                       <View style={styles.sectionBadge}>
@@ -366,7 +367,7 @@ function FilterDrawer({
                   <Ionicons
                     name={expandedSections.stock ? 'chevron-up' : 'chevron-down'}
                     size={20}
-                    color="#9CA3AF"
+                    color={colors.neutral[400]}
                   />
                 </Pressable>
 
@@ -389,7 +390,7 @@ function FilterDrawer({
                           ]}
                         >
                           {filters.stockStatus?.includes(option.value) && (
-                            <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+                            <Ionicons name="checkmark" size={16} color={colors.background.primary} />
                           )}
                         </View>
                         <Ionicons
@@ -413,13 +414,13 @@ function FilterDrawer({
                  
                 >
                   <View style={styles.sectionHeaderLeft}>
-                    <Ionicons name="star-outline" size={20} color="#7C3AED" />
+                    <Ionicons name="star-outline" size={20} color={colors.brand.purple} />
                     <Text style={styles.sectionTitle}>Minimum Rating</Text>
                   </View>
                   <Ionicons
                     name={expandedSections.rating ? 'chevron-up' : 'chevron-down'}
                     size={20}
-                    color="#9CA3AF"
+                    color={colors.neutral[400]}
                   />
                 </Pressable>
 
@@ -455,7 +456,7 @@ function FilterDrawer({
                             <Ionicons
                               name="checkmark-circle"
                               size={20}
-                              color="#FFFFFF"
+                              color={colors.background.primary}
                               style={styles.ratingCheckmark}
                             />
                           )}
@@ -477,7 +478,7 @@ function FilterDrawer({
                 onPress={handleReset}
                
               >
-                <Ionicons name="refresh-outline" size={18} color="#6B7280" />
+                <Ionicons name="refresh-outline" size={18} color={colors.neutral[500]} />
                 <Text style={styles.resetButtonText}>Reset</Text>
               </Pressable>
 
@@ -519,7 +520,7 @@ const styles = StyleSheet.create({
     maxHeight: '90%',
   },
   drawer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     height: '100%',
@@ -543,7 +544,7 @@ const styles = StyleSheet.create({
   handle: {
     width: 40,
     height: 4,
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
     borderRadius: 2,
   },
   header: {
@@ -554,7 +555,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.gray[100],
   },
   headerLeft: {
     flexDirection: 'row',
@@ -564,10 +565,10 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   filterBadge: {
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 12,
@@ -578,13 +579,13 @@ const styles = StyleSheet.create({
   filterBadgeText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
   closeButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -611,10 +612,10 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   sectionBadge: {
-    backgroundColor: '#EDE9FE',
+    backgroundColor: colors.tint.purple,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
@@ -625,7 +626,7 @@ const styles = StyleSheet.create({
   sectionBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   sectionContent: {
     paddingTop: 8,
@@ -641,19 +642,19 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 6,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
   checkboxActive: {
-    backgroundColor: '#7C3AED',
-    borderColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
+    borderColor: colors.brand.purple,
   },
   checkboxLabel: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   priceInputContainer: {
     flexDirection: 'row',
@@ -667,15 +668,15 @@ const styles = StyleSheet.create({
   priceInputLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   priceInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 1.5,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 14,
@@ -683,14 +684,14 @@ const styles = StyleSheet.create({
   currencySymbolText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     marginRight: 4,
   },
   priceInputField: {
     flex: 1,
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     padding: 0,
   },
   priceInputSeparator: {
@@ -701,10 +702,10 @@ const styles = StyleSheet.create({
   priceInputLine: {
     width: 12,
     height: 2,
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   priceRangeDisplay: {
-    backgroundColor: '#EDE9FE',
+    backgroundColor: colors.tint.purple,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 12,
@@ -713,7 +714,7 @@ const styles = StyleSheet.create({
   priceRangeText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   stockStatusItem: {
     flexDirection: 'row',
@@ -727,22 +728,22 @@ const styles = StyleSheet.create({
   stockStatusLabel: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   ratingOption: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 14,
     paddingHorizontal: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
     borderRadius: 12,
     marginBottom: 10,
   },
   ratingOptionActive: {
-    backgroundColor: '#7C3AED',
-    borderColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
+    borderColor: colors.brand.purple,
   },
   starsContainer: {
     flexDirection: 'row',
@@ -752,11 +753,11 @@ const styles = StyleSheet.create({
   ratingOptionText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     flex: 1,
   },
   ratingOptionTextActive: {
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
   ratingCheckmark: {
     marginLeft: 8,
@@ -766,8 +767,8 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: colors.gray[100],
+    backgroundColor: colors.background.primary,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -786,27 +787,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     paddingVertical: 14,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 1.5,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
     borderRadius: 12,
     gap: 6,
   },
   resetButtonText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   applyButton: {
     flex: 2,
     paddingVertical: 14,
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#7C3AED',
+        shadowColor: colors.brand.purple,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -819,7 +820,7 @@ const styles = StyleSheet.create({
   applyButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
 });
 

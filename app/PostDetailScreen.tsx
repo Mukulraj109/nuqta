@@ -25,6 +25,7 @@ import { realVideosApi } from '@/services/realVideosApi';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -340,7 +341,7 @@ export default function PostDetailScreen() {
               <Ionicons
                 name={isLiked ? "heart" : "heart-outline"}
                 size={28}
-                color={isLiked ? "#EF4444" : Colors.text.primary}
+                color={isLiked ? colors.error : Colors.text.primary}
               />
             </Pressable>
             <Pressable style={styles.actionButton}>
@@ -516,7 +517,7 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.md,
     backgroundColor: Colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerButton: {
     width: 40,
@@ -597,7 +598,7 @@ const styles = StyleSheet.create({
   postImage: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   hiddenImage: {
     opacity: 0,
@@ -686,7 +687,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.lg,
     paddingTop: Spacing.base,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   productsSectionHeader: {
     flexDirection: 'row',

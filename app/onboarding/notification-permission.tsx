@@ -20,6 +20,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import analyticsService from '@/services/analyticsService';
 import { useAuth } from '@/contexts/AuthContext';
+import { colors } from '@/constants/theme';
 
 const BENEFITS = [
   {
@@ -199,10 +200,10 @@ export default function NotificationPermissionPage() {
             style={styles.enableButtonGradient}
           >
             {loading ? (
-              <ActivityIndicator color="#FFF" />
+              <ActivityIndicator color={colors.background.primary} />
             ) : (
               <>
-                <Ionicons name="notifications" size={20} color="#FFF" />
+                <Ionicons name="notifications" size={20} color={colors.background.primary} />
                 <ThemedText style={styles.enableButtonText}>Enable Notifications</ThemedText>
               </>
             )}
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     ...Typography.labelSmall,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   previewCard1: {
     position: 'absolute',
@@ -398,7 +399,7 @@ const styles = StyleSheet.create({
   },
   enableButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   skipButton: {
     paddingVertical: Spacing.md,

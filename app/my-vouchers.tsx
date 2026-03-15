@@ -34,6 +34,7 @@ import logger from '@/utils/logger';
 import { useRegion } from '@/contexts/RegionContext';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 type VoucherStatus = 'all' | 'active' | 'used' | 'expired' | 'partner';
 
@@ -428,7 +429,7 @@ const MyVouchersPage = () => {
         disabled={!isActive}
       >
         <LinearGradient
-          colors={isActive ? [Colors.warning, '#F97316'] : [Colors.border.default, Colors.text.tertiary]}
+          colors={isActive ? [Colors.warning, colors.brand.orange] : [Colors.border.default, Colors.text.tertiary]}
           style={styles.voucherGradient}
         >
           {/* Brand Section */}
@@ -621,7 +622,7 @@ const MyVouchersPage = () => {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor={Colors.warning} />
-        <LinearGradient colors={[Colors.warning, '#F97316']} style={styles.header}>
+        <LinearGradient colors={[Colors.warning, colors.brand.orange]} style={styles.header}>
           <View style={styles.headerContent}>
             <HeaderBackButton
               onPress={handleBackPress}
@@ -642,7 +643,7 @@ const MyVouchersPage = () => {
       <StatusBar barStyle="light-content" backgroundColor={Colors.warning} />
 
       {/* Header */}
-      <LinearGradient colors={[Colors.warning, '#F97316']} style={styles.header}>
+      <LinearGradient colors={[Colors.warning, colors.brand.orange]} style={styles.header}>
         <View style={styles.headerContent}>
           <HeaderBackButton
             onPress={handleBackPress}

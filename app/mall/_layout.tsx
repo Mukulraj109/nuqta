@@ -7,15 +7,16 @@
 import React from 'react';
 import { Stack } from 'expo-router';
 import { Platform } from 'react-native';
+import { colors } from '@/constants/theme';
 
 export default function MallLayout() {
   return (
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#FFFFFF',
+          backgroundColor: colors.background.primary,
         },
-        headerTintColor: '#111827',
+        headerTintColor: colors.neutral[900],
         headerTitleStyle: {
           fontWeight: '600',
           fontSize: 17,
@@ -24,7 +25,7 @@ export default function MallLayout() {
         headerBackTitle: 'Back',
         animation: Platform.OS === 'ios' ? 'default' : 'slide_from_right',
         contentStyle: {
-          backgroundColor: '#F9FAFB',
+          backgroundColor: colors.neutral[50],
         },
       }}
     >

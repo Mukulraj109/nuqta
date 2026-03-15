@@ -17,6 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { loyaltyData } from '@/data/categoryDummyData';
 import CoinIcon from '@/components/ui/CoinIcon';
+import { colors } from '@/constants/theme';
 
 interface WalletReminderBannerProps {
   availableCoins?: number;
@@ -50,7 +51,7 @@ const WalletReminderBanner: React.FC<WalletReminderBannerProps> = ({
       accessibilityRole="button"
     >
       <LinearGradient
-        colors={['#F59E0B', '#D97706']}
+        colors={[colors.warningScale[400], colors.warningScale[700]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.gradient}
@@ -71,14 +72,14 @@ const WalletReminderBanner: React.FC<WalletReminderBannerProps> = ({
           {/* Expiry Warning */}
           {expiringCoins > 0 && (
             <View style={styles.expiryBadge}>
-              <Ionicons name="time-outline" size={12} color="#FFFFFF" />
+              <Ionicons name="time-outline" size={12} color={colors.background.primary} />
               <Text style={styles.expiryText}>{expiringCoins} expiring in {expiryDays} days</Text>
             </View>
           )}
 
           {/* Arrow */}
           <View style={styles.arrowContainer}>
-            <Ionicons name="chevron-forward" size={20} color="#FFFFFF" />
+            <Ionicons name="chevron-forward" size={20} color={colors.background.primary} />
           </View>
         </View>
       </LinearGradient>
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#D97706',
+        shadowColor: colors.warningScale[700],
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
   balanceValue: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 2,
   },
   usageHint: {
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
   expiryText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   arrowContainer: {
     marginLeft: 8,

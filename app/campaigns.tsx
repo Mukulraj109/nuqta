@@ -21,6 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { campaignsApi, Campaign } from '@/services/campaignsApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -38,21 +39,21 @@ const COLORS = {
   amber500: Colors.warning,
   blue500: Colors.info,
   purple500: Colors.brand.purpleLight,
-  pink500: '#EC4899',
+  pink500: colors.brand.pink,
   red500: Colors.error,
-  cyan500: '#06B6D4',
+  cyan500: colors.brand.cyan,
 };
 
 // Campaign type colors
 const TYPE_COLORS: Record<string, { bg: string; text: string; icon: string }> = {
-  cashback: { bg: '#E8F5E9', text: '#2E7D32', icon: 'cash-outline' },
+  cashback: { bg: colors.greenMist, text: '#2E7D32', icon: 'cash-outline' },
   coins: { bg: '#FFF8E1', text: '#F57C00', icon: 'wallet-outline' },
   bank: { bg: '#E3F2FD', text: '#1565C0', icon: 'card-outline' },
   bill: { bg: '#FCE4EC', text: '#C2185B', icon: 'receipt-outline' },
   drop: { bg: '#FFF3E0', text: '#E65100', icon: 'gift-outline' },
   flash: { bg: '#FFEBEE', text: '#C62828', icon: 'flash-outline' },
-  'new-user': { bg: '#E8F5E9', text: '#388E3C', icon: 'person-add-outline' },
-  general: { bg: '#F3F4F6', text: '#374151', icon: 'pricetag-outline' },
+  'new-user': { bg: colors.greenMist, text: '#388E3C', icon: 'person-add-outline' },
+  general: { bg: colors.neutral[100], text: colors.neutral[700], icon: 'pricetag-outline' },
 };
 
 const AllCampaignsPage: React.FC = () => {
@@ -131,7 +132,7 @@ const AllCampaignsPage: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <LinearGradient
-        colors={['#22C55E', '#10B981']}
+        colors={[colors.success, colors.successScale[400]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.header}
@@ -220,7 +221,7 @@ const AllCampaignsPage: React.FC = () => {
                 >
                   {/* Card Header with Gradient */}
                   <LinearGradient
-                    colors={campaign.gradientColors || ['#22C55E', '#14B8A6']}
+                    colors={campaign.gradientColors || [colors.success, colors.tealGreen]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={styles.cardHeader}
@@ -567,10 +568,10 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   urgencyHigh: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
   },
   urgencyMedium: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
   },
   urgencyText: {
     ...Typography.caption,

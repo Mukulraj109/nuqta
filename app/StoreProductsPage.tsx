@@ -46,6 +46,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { showToast } from '@/components/common/ToastManager';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -2147,7 +2148,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.md,
     paddingVertical: 10,
     paddingHorizontal: Spacing.base,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     borderRadius: BorderRadius.sm,
     gap: Spacing.sm,
   },
@@ -2397,7 +2398,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.border.default,
   },
   sortOptionActive: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     borderColor: Colors.nileBlue,
   },
   sortOptionText: {
@@ -2522,7 +2523,7 @@ const styles = StyleSheet.create({
     ...Typography.body,
     fontWeight: '600',
     color: Colors.error,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     borderRadius: Spacing.xs,
@@ -2631,7 +2632,7 @@ const styles = StyleSheet.create({
     ...Typography.bodyLarge,
     fontWeight: '600',
     color: Colors.error,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     paddingHorizontal: 10,
     paddingVertical: Spacing.xs,
     borderRadius: Spacing.xs,

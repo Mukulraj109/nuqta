@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ServiceCard, { ServiceItem } from './ServiceCard';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const isTablet = width >= 768;
@@ -67,7 +68,7 @@ const ServiceGrid: React.FC<ServiceGridProps> = ({
     return (
       <View style={styles.emptyContainer}>
         <View style={styles.emptyIconContainer}>
-          <Ionicons name="calendar-outline" size={64} color="#D1D5DB" />
+          <Ionicons name="calendar-outline" size={64} color={colors.neutral[300]} />
         </View>
         <Text style={styles.emptyTitle}>No Services Found</Text>
         <Text style={styles.emptyMessage}>{emptyMessage}</Text>
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 24,
@@ -147,13 +148,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
     textAlign: 'center',
   },
   emptyMessage: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
   },
   skeletonCard: {
     width: (width - 48) / 2,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     marginBottom: 16,
     overflow: 'hidden',
@@ -187,21 +188,21 @@ const styles = StyleSheet.create({
   skeletonImage: {
     width: '100%',
     height: 140,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   skeletonContent: {
     padding: 12,
   },
   skeletonTitle: {
     height: 16,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 8,
     width: '80%',
   },
   skeletonDescription: {
     height: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 4,
     marginBottom: 6,
     width: '100%',
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
   skeletonTag: {
     height: 12,
     width: 50,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
   },
   skeletonBottom: {
@@ -227,13 +228,13 @@ const styles = StyleSheet.create({
   skeletonPrice: {
     height: 20,
     width: 60,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
   },
   skeletonButton: {
     height: 32,
     width: 70,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 8,
   },
 });

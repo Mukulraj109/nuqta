@@ -17,6 +17,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../../types/mall.types';
+import { colors } from '@/constants/theme';
 
 interface MallTopRatedItemProps {
   brand: MallBrand;
@@ -28,13 +29,13 @@ interface MallTopRatedItemProps {
 const getRankColors = (rank: number): [string, string] => {
   switch (rank) {
     case 1:
-      return ['#0284C7', '#0369A1']; // #1 - Sky Blue
+      return [colors.brand.sky, colors.brand.skyDark]; // #1 - Sky Blue
     case 2:
-      return ['#1a3a52', '#234b68']; // #2 - Nile Blue
+      return [colors.nileBlue, colors.brand.nileBlueLight]; // #2 - Nile Blue
     case 3:
-      return ['#234b68', '#0284C7']; // #3 - Steel Blue
+      return [colors.brand.nileBlueLight, colors.brand.sky]; // #3 - Steel Blue
     default:
-      return ['#E5E7EB', '#D1D5DB']; // Gray
+      return [colors.neutral[200], colors.neutral[300]]; // Gray
   }
 };
 
@@ -79,7 +80,7 @@ const MallTopRatedItem: React.FC<MallTopRatedItemProps> = ({
                 <Ionicons
                   name={rank === 1 ? 'trophy' : 'medal'}
                   size={12}
-                  color="#FFFFFF"
+                  color={colors.background.primary}
                 />
               ) : (
                 <Text style={styles.rankText}>{rank}</Text>
@@ -99,7 +100,7 @@ const MallTopRatedItem: React.FC<MallTopRatedItemProps> = ({
             />
           ) : (
             <LinearGradient
-              colors={['#1a3a52', '#234b68']}
+              colors={[colors.nileBlue, colors.brand.nileBlueLight]}
               style={styles.logoFallback}
             >
               <Text style={styles.logoFallbackText}>{getInitials(brand.name || 'Brand')}</Text>
@@ -116,7 +117,7 @@ const MallTopRatedItem: React.FC<MallTopRatedItemProps> = ({
             </Text>
             {brand.isVerified && (
               <View style={styles.verifiedBadge}>
-                <Ionicons name="checkmark-circle" size={14} color="#0284C7" />
+                <Ionicons name="checkmark-circle" size={14} color={colors.brand.sky} />
               </View>
             )}
           </View>
@@ -124,7 +125,7 @@ const MallTopRatedItem: React.FC<MallTopRatedItemProps> = ({
           {/* Category */}
           {brand.mallCategory && (
             <View style={styles.categoryRow}>
-              <Ionicons name="pricetag-outline" size={11} color="#9CA3AF" />
+              <Ionicons name="pricetag-outline" size={11} color={colors.neutral[400]} />
               <Text style={styles.categoryText} numberOfLines={1}>
                 {brand.mallCategory.name}
               </Text>
@@ -135,7 +136,7 @@ const MallTopRatedItem: React.FC<MallTopRatedItemProps> = ({
           <View style={styles.statsRow}>
             {/* Cashback Badge */}
             <View style={styles.cashbackBadge}>
-              <Ionicons name="wallet-outline" size={12} color="#1a3a52" />
+              <Ionicons name="wallet-outline" size={12} color={colors.nileBlue} />
               <Text style={styles.cashbackText}>
                 {brand.cashback?.percentage || 0}%
               </Text>
@@ -143,7 +144,7 @@ const MallTopRatedItem: React.FC<MallTopRatedItemProps> = ({
 
             {/* Success Rate Badge */}
             <View style={styles.successBadge}>
-              <Ionicons name="trending-up" size={12} color="#6B7280" />
+              <Ionicons name="trending-up" size={12} color={colors.neutral[500]} />
               <Text style={styles.successText}>
                 {brand.ratings?.successRate || 0}%
               </Text>
@@ -154,15 +155,15 @@ const MallTopRatedItem: React.FC<MallTopRatedItemProps> = ({
         {/* Rating Badge */}
         <View style={styles.ratingSection}>
           <LinearGradient
-            colors={['#0284C7', '#0369A1']}
+            colors={[colors.brand.sky, colors.brand.skyDark]}
             style={styles.ratingBadge}
           >
-            <Ionicons name="star" size={12} color="#FFFFFF" />
+            <Ionicons name="star" size={12} color={colors.background.primary} />
             <Text style={styles.ratingText}>
               {(brand.ratings?.average || 0).toFixed(1)}
             </Text>
           </LinearGradient>
-          <Ionicons name="chevron-forward" size={18} color="#D1D5DB" />
+          <Ionicons name="chevron-forward" size={18} color={colors.neutral[300]} />
         </View>
       </View>
     </Pressable>
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 12,
     paddingLeft: 14,
@@ -214,17 +215,17 @@ const styles = StyleSheet.create({
   rankText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   logoContainer: {
     width: 52,
     height: 52,
     borderRadius: 14,
     overflow: 'hidden',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     marginRight: 12,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
   },
   topThreeLogoContainer: {
     borderColor: 'rgba(2, 132, 199, 0.3)',
@@ -243,7 +244,7 @@ const styles = StyleSheet.create({
   logoFallbackText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   infoContainer: {
     flex: 1,
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     flex: 1,
   },
   verifiedBadge: {
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   statsRow: {
     flexDirection: 'row',
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -289,13 +290,13 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   successBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -303,7 +304,7 @@ const styles = StyleSheet.create({
   successText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   ratingSection: {
     alignItems: 'center',
@@ -321,7 +322,7 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

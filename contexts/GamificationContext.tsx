@@ -262,21 +262,27 @@ export function GamificationProvider({ children }: GamificationProviderProps) {
     }
   }, []);
 
-  // Save to cache
+  // Ref captures latest state for cache save — avoids circular dependency
+  // (saveToCache depending on state → new identity → triggers cache effect → repeat)
+  const stateForCacheRef = useRef(state);
+  stateForCacheRef.current = state;
+
+  // Save to cache — stable identity via ref
   const saveToCache = useCallback(async () => {
+    const s = stateForCacheRef.current;
     try {
       await AsyncStorage.multiSet([
-        [STORAGE_KEYS.ACHIEVEMENTS, JSON.stringify(state.achievements || [])],
-        [STORAGE_KEYS.COINS, JSON.stringify(state.coinBalance || { total: 0 })],
-        [STORAGE_KEYS.CHALLENGES, JSON.stringify(state.challenges || [])],
-        [STORAGE_KEYS.STREAK, (state.dailyStreak ?? 0).toString()],
-        [STORAGE_KEYS.LAST_LOGIN, state.lastLoginDate || ''],
+        [STORAGE_KEYS.ACHIEVEMENTS, JSON.stringify(s.achievements || [])],
+        [STORAGE_KEYS.COINS, JSON.stringify(s.coinBalance || { total: 0 })],
+        [STORAGE_KEYS.CHALLENGES, JSON.stringify(s.challenges || [])],
+        [STORAGE_KEYS.STREAK, (s.dailyStreak ?? 0).toString()],
+        [STORAGE_KEYS.LAST_LOGIN, s.lastLoginDate || ''],
         [STORAGE_KEYS.CACHE_TIME, Date.now().toString()],
       ]);
     } catch (error) {
       // silently handle
     }
-  }, [state.achievements, state.coinBalance, state.challenges, state.dailyStreak, state.lastLoginDate]);
+  }, []); // Empty deps — reads from ref
 
   // CRITICAL: Queue processing function for atomic coin operations
   const processCoinQueue = useCallback(async () => {
@@ -638,7 +644,7 @@ export function GamificationProvider({ children }: GamificationProviderProps) {
     return () => {
       if (saveToCacheTimerRef.current) clearTimeout(saveToCacheTimerRef.current);
     };
-  }, [authState.isAuthenticated, authState.user?.isOnboarded, state.achievements, state.coinBalance, state.challenges, state.dailyStreak, saveToCache]);
+  }, [authState.isAuthenticated, authState.user?.isOnboarded, state.achievements, state.coinBalance, state.challenges, state.dailyStreak]); // saveToCache removed — stable identity via ref
 
   // Computed values
   const unlockedCount = state.achievementProgress?.summary.unlocked || 0;

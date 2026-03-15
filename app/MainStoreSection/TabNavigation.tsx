@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { triggerImpact } from "@/utils/haptics";
 import { ThemedText } from "@/components/ThemedText";
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -174,12 +175,12 @@ export default function TabNavigation({
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
     borderBottomColor: Colors.gray[100],
   },
   container: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     position: "relative",
   },
   tabsRow: {
@@ -201,14 +202,14 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
   labelActive: {
-    color: "#ffcd57",
+    color: colors.lightMustard,
     fontWeight: "600",
   },
   underline: {
     position: "absolute",
     bottom: 0,
     height: 3,
-    backgroundColor: "#ffcd57",
+    backgroundColor: colors.lightMustard,
     borderTopLeftRadius: 2,
     borderTopRightRadius: 2,
   },

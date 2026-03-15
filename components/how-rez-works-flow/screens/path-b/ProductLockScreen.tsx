@@ -4,6 +4,7 @@ import FlowScreenLayout from '../../shared/FlowScreenLayout';
 import ActionBtn from '../../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -20,7 +21,7 @@ const ProductLockScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
         >
             <View style={styles.card}>
                 <View style={styles.iconContainer}>
-                    <Ionicons name="lock-closed" size={40} color="#6366F1" />
+                    <Ionicons name="lock-closed" size={40} color={colors.brand.indigo} />
                 </View>
 
                 <View style={styles.content}>
@@ -36,7 +37,7 @@ const ProductLockScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#EEF2FF',
+        backgroundColor: colors.indigoMist,
         borderRadius: 24,
         padding: 32,
         marginTop: 20,
@@ -48,11 +49,11 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 40,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.background.primary,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 24,
-        shadowColor: '#6366F1',
+        shadowColor: colors.brand.indigo,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 12,

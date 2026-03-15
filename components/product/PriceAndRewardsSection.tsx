@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface PriceAndRewardsSectionProps {
   /** Current selling price */
@@ -81,7 +82,7 @@ export const PriceAndRewardsSection: React.FC<PriceAndRewardsSectionProps> = ({
       {/* You Save */}
       {savingsAmount > 0 && (
         <View style={styles.savingsCard}>
-          <Ionicons name="checkmark-circle" size={18} color="#ffcd57" />
+          <Ionicons name="checkmark-circle" size={18} color={colors.lightMustard} />
           <Text style={styles.savingsText}>
             You Save {currencySymbol}{savingsAmount.toLocaleString(locale)}
           </Text>
@@ -90,13 +91,13 @@ export const PriceAndRewardsSection: React.FC<PriceAndRewardsSectionProps> = ({
 
       {/* Earn Nuqta Coins Card */}
       <LinearGradient
-        colors={['#ffcd57', '#1a3a52']}
+        colors={[colors.lightMustard, colors.nileBlue]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.earnCoinsCard}
       >
         <View style={styles.earnCoinsContent}>
-          <Ionicons name="wallet" size={20} color="#FFFFFF" />
+          <Ionicons name="wallet" size={20} color={colors.background.primary} />
           <View style={styles.earnCoinsText}>
             <Text style={styles.earnCoinsTitle}>
               {`Earn ${coins} ${BRAND.COIN_NAME}`}
@@ -111,7 +112,7 @@ export const PriceAndRewardsSection: React.FC<PriceAndRewardsSectionProps> = ({
       {/* Cashback Info */}
       <View style={styles.cashbackRow}>
         <View style={styles.cashbackIcon}>
-          <Ionicons name="card-outline" size={18} color="#6B7280" />
+          <Ionicons name="card-outline" size={18} color={colors.neutral[500]} />
         </View>
         <View style={styles.cashbackText}>
           <Text style={styles.cashbackTitle}>
@@ -125,7 +126,7 @@ export const PriceAndRewardsSection: React.FC<PriceAndRewardsSectionProps> = ({
 
       {/* Bonus Coins for Sharing */}
       <View style={styles.bonusRow}>
-        <Ionicons name="gift-outline" size={18} color="#F59E0B" />
+        <Ionicons name="gift-outline" size={18} color={colors.warningScale[400]} />
         <Text style={styles.bonusText}>
           +{bonusCoins} bonus coins on sharing this product
         </Text>
@@ -136,13 +137,13 @@ export const PriceAndRewardsSection: React.FC<PriceAndRewardsSectionProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     marginVertical: 12,
     padding: 16,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -161,12 +162,12 @@ const styles = StyleSheet.create({
   originalPrice: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
 
   discountBadge: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   discountText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
 
   // Current Price
@@ -189,21 +190,21 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -1,
   },
 
   rezPriceLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // Savings Card
   savingsCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 10,
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
   savingsText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 
   // Earn Coins Card
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
   earnCoinsTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 2,
   },
 
@@ -254,14 +255,14 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
 
   cashbackIcon: {
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -273,13 +274,13 @@ const styles = StyleSheet.create({
   cashbackTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   cashbackSubtitle: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 1,
   },
 
@@ -290,7 +291,7 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingVertical: 12,
     paddingHorizontal: 12,
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     borderRadius: 10,
     marginTop: 8,
   },
@@ -298,7 +299,7 @@ const styles = StyleSheet.create({
   bonusText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     flex: 1,
   },
 });

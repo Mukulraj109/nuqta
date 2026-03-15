@@ -22,6 +22,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { BRAND } from '@/constants/brand';
 import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -768,17 +769,17 @@ const styles = StyleSheet.create({
   },
   detailLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   detailValue: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   detailValueBold: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   methodBadge: {
     flexDirection: 'row',
@@ -801,7 +802,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     marginVertical: 2,
   },
   amountValue: {
@@ -824,7 +825,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -833,7 +834,7 @@ const styles = StyleSheet.create({
   },
   deliveryLabel: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 1,
   },
   deliveryTime: {
@@ -853,7 +854,7 @@ const styles = StyleSheet.create({
   },
   emailText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 
   // --- Action Buttons ---
@@ -880,7 +881,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   homeButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 14,
     paddingVertical: 14,
     flexDirection: 'row',

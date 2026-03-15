@@ -13,6 +13,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 type AvailabilityStatus = 'in-store' | 'online-only' | 'out-of-stock' | 'limited';
 
@@ -32,26 +33,26 @@ const STATUS_CONFIG: Record<
 > = {
   'in-store': {
     label: 'In-Store Available',
-    bgColor: '#10B981',
-    textColor: '#FFFFFF',
+    bgColor: colors.successScale[400],
+    textColor: colors.background.primary,
     icon: 'storefront-outline',
   },
   'online-only': {
     label: 'Online Only',
-    bgColor: '#8B5CF6',
-    textColor: '#FFFFFF',
+    bgColor: colors.brand.purpleLight,
+    textColor: colors.background.primary,
     icon: 'globe-outline',
   },
   'out-of-stock': {
     label: 'Out of Stock',
-    bgColor: '#EF4444',
-    textColor: '#FFFFFF',
+    bgColor: colors.error,
+    textColor: colors.background.primary,
     icon: 'close-circle-outline',
   },
   'limited': {
     label: 'Limited Stock',
-    bgColor: '#F59E0B',
-    textColor: '#FFFFFF',
+    bgColor: colors.warningScale[400],
+    textColor: colors.background.primary,
     icon: 'alert-circle-outline',
   },
 };

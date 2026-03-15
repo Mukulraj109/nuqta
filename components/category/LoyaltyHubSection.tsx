@@ -14,6 +14,7 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface LoyaltyHubSectionProps {
     stats: {
@@ -47,7 +48,7 @@ const LoyaltyHubSection: React.FC<LoyaltyHubSectionProps> = ({
             accessibilityRole="button"
         >
             <LinearGradient
-                colors={['#ffcd57', '#E6B84E']}
+                colors={[colors.lightMustard, colors.brand.goldRich]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.gradient}
@@ -58,7 +59,7 @@ const LoyaltyHubSection: React.FC<LoyaltyHubSectionProps> = ({
                         <Text style={styles.title}>Your Loyalty Hub</Text>
                     </View>
                     <View style={styles.arrowContainer}>
-                        <Ionicons name="chevron-forward" size={20} color="#FFFFFF" />
+                        <Ionicons name="chevron-forward" size={20} color={colors.background.primary} />
                     </View>
                 </View>
 
@@ -73,7 +74,7 @@ const LoyaltyHubSection: React.FC<LoyaltyHubSectionProps> = ({
                     </View>
                     <View style={styles.divider} />
                     <View style={styles.statItem}>
-                        <Text style={[styles.statValue, { color: '#FFD700' }]}>
+                        <Text style={[styles.statValue, { color: colors.brand.goldBright }]}>
                             {stats.brandsCount}
                         </Text>
                         <Text style={styles.statLabel}>Active Brands</Text>
@@ -82,7 +83,7 @@ const LoyaltyHubSection: React.FC<LoyaltyHubSectionProps> = ({
 
                 <View style={styles.ctaRow}>
                     <Text style={styles.ctaText}>View all rewards</Text>
-                    <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
+                    <Ionicons name="arrow-forward" size={16} color={colors.background.primary} />
                 </View>
             </LinearGradient>
         </Pressable>
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         ...Platform.select({
             ios: {
-                shadowColor: '#ffcd57',
+                shadowColor: colors.lightMustard,
                 shadowOffset: { width: 0, height: 4 },
                 shadowOpacity: 0.3,
                 shadowRadius: 12,
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: '700',
-        color: '#FFFFFF',
+        color: colors.background.primary,
         letterSpacing: -0.3,
     },
     arrowContainer: {
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     statValue: {
         fontSize: 28,
         fontWeight: '800',
-        color: '#FFFFFF',
+        color: colors.background.primary,
         marginBottom: 2,
     },
     statLabel: {
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
     ctaText: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#FFFFFF',
+        color: colors.background.primary,
     },
 });
 

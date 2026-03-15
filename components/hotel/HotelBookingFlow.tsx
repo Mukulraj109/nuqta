@@ -19,6 +19,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { LinearGradient } from 'expo-linear-gradient';
 import serviceBookingApi from '@/services/serviceBookingApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface HotelDetails {
   id: string;
@@ -251,7 +252,7 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
           style={styles.dateButton}
           onPress={() => setShowCheckInPicker(true)}
         >
-          <Ionicons name="calendar" size={20} color="#EC4899" />
+          <Ionicons name="calendar" size={20} color={colors.brand.pink} />
           <Text style={styles.dateText}>
             {checkInDate.toLocaleDateString(locale, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
           </Text>
@@ -277,7 +278,7 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
           style={styles.dateButton}
           onPress={() => setShowCheckOutPicker(true)}
         >
-          <Ionicons name="calendar-outline" size={20} color="#EC4899" />
+          <Ionicons name="calendar-outline" size={20} color={colors.brand.pink} />
           <Text style={styles.dateText}>
             {checkOutDate.toLocaleDateString(locale, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
           </Text>
@@ -298,7 +299,7 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
 
       {/* Nights Display */}
       <View style={styles.nightsBadge}>
-        <Ionicons name="moon" size={16} color="#EC4899" />
+        <Ionicons name="moon" size={16} color={colors.brand.pink} />
         <Text style={styles.nightsText}>{calculateNights()} {calculateNights() === 1 ? 'Night' : 'Nights'}</Text>
       </View>
 
@@ -310,14 +311,14 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
             style={styles.counterButton}
             onPress={() => setRooms(Math.max(1, rooms - 1))}
           >
-            <Ionicons name="remove" size={20} color="#EC4899" />
+            <Ionicons name="remove" size={20} color={colors.brand.pink} />
           </Pressable>
           <Text style={styles.counterValue}>{rooms}</Text>
           <Pressable
             style={styles.counterButton}
             onPress={() => setRooms(rooms + 1)}
           >
-            <Ionicons name="add" size={20} color="#EC4899" />
+            <Ionicons name="add" size={20} color={colors.brand.pink} />
           </Pressable>
         </View>
       </View>
@@ -330,14 +331,14 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
             style={styles.counterButton}
             onPress={() => setAdults(Math.max(1, adults - 1))}
           >
-            <Ionicons name="remove" size={20} color="#EC4899" />
+            <Ionicons name="remove" size={20} color={colors.brand.pink} />
           </Pressable>
           <Text style={styles.counterValue}>{adults}</Text>
           <Pressable
             style={styles.counterButton}
             onPress={() => setAdults(adults + 1)}
           >
-            <Ionicons name="add" size={20} color="#EC4899" />
+            <Ionicons name="add" size={20} color={colors.brand.pink} />
           </Pressable>
         </View>
       </View>
@@ -350,14 +351,14 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
             style={styles.counterButton}
             onPress={() => setChildren(Math.max(0, children - 1))}
           >
-            <Ionicons name="remove" size={20} color="#EC4899" />
+            <Ionicons name="remove" size={20} color={colors.brand.pink} />
           </Pressable>
           <Text style={styles.counterValue}>{children}</Text>
           <Pressable
             style={styles.counterButton}
             onPress={() => setChildren(children + 1)}
           >
-            <Ionicons name="add" size={20} color="#EC4899" />
+            <Ionicons name="add" size={20} color={colors.brand.pink} />
           </Pressable>
         </View>
       </View>
@@ -387,7 +388,7 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
                 {type.charAt(0).toUpperCase() + type.slice(1)} Room
               </Text>
               {isSelected && (
-                <Ionicons name="checkmark-circle" size={24} color="#EC4899" />
+                <Ionicons name="checkmark-circle" size={24} color={colors.brand.pink} />
               )}
             </View>
             {room.description && (
@@ -429,7 +430,7 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
               <Text style={styles.extraPrice}>+ {currencySymbol}{extra.price.toLocaleString(locale)}</Text>
             </View>
             <View style={[styles.checkbox, extra.selected && styles.checkboxSelected]}>
-              {extra.selected && <Ionicons name="checkmark" size={16} color="#FFFFFF" />}
+              {extra.selected && <Ionicons name="checkmark" size={16} color={colors.background.primary} />}
             </View>
           </Pressable>
         ))}
@@ -524,11 +525,11 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
       {/* Header */}
       <View style={styles.header}>
         <Pressable onPress={handleBack} style={styles.headerButton}>
-          <Ionicons name="arrow-back" size={24} color="#111827" />
+          <Ionicons name="arrow-back" size={24} color={colors.neutral[900]} />
         </Pressable>
         <Text style={styles.headerTitle}>Book Hotel</Text>
         <Pressable onPress={onClose} style={styles.headerButton}>
-          <Ionicons name="close" size={24} color="#111827" />
+          <Ionicons name="close" size={24} color={colors.neutral[900]} />
         </Pressable>
       </View>
 
@@ -568,10 +569,10 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
           disabled={isSubmitting}
         >
           {isSubmitting ? (
-            <ActivityIndicator color="#FFFFFF" />
+            <ActivityIndicator color={colors.background.primary} />
           ) : (
             <LinearGradient
-              colors={['#EC4899', '#DB2777']}
+              colors={[colors.brand.pink, colors.deepPink]}
               style={styles.nextButtonGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -579,7 +580,7 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
               <Text style={styles.nextButtonText}>
                 {currentStep === 4 ? 'Complete Booking' : 'Next'}
               </Text>
-              <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={20} color={colors.background.primary} />
             </LinearGradient>
           )}
         </Pressable>
@@ -591,7 +592,7 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
@@ -599,7 +600,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   headerButton: {
     padding: 8,
@@ -607,41 +608,41 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   progressContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   progressStep: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
   progressStepActive: {
-    backgroundColor: '#EC4899',
+    backgroundColor: colors.brand.pink,
   },
   progressStepText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   progressStepTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   progressLine: {
     flex: 1,
     height: 2,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginHorizontal: 8,
   },
   progressLineActive: {
-    backgroundColor: '#EC4899',
+    backgroundColor: colors.brand.pink,
   },
   content: {
     flex: 1,
@@ -652,13 +653,13 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 24,
   },
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 12,
   },
   dateSection: {
@@ -669,22 +670,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   dateText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   nightsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     alignSelf: 'flex-start',
-    backgroundColor: '#FCE7F3',
+    backgroundColor: colors.pinkMist,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
@@ -693,7 +694,7 @@ const styles = StyleSheet.create({
   nightsText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#EC4899',
+    color: colors.brand.pink,
   },
   counterSection: {
     marginBottom: 20,
@@ -707,7 +708,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#FCE7F3',
+    backgroundColor: colors.pinkMist,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
@@ -716,21 +717,21 @@ const styles = StyleSheet.create({
   counterValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     minWidth: 40,
     textAlign: 'center',
   },
   roomCard: {
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     marginBottom: 16,
   },
   roomCardSelected: {
-    borderColor: '#EC4899',
-    backgroundColor: '#FCE7F3',
+    borderColor: colors.brand.pink,
+    backgroundColor: colors.pinkMist,
   },
   roomCardHeader: {
     flexDirection: 'row',
@@ -741,37 +742,37 @@ const styles = StyleSheet.create({
   roomTypeName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   roomDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 12,
   },
   roomPrice: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   roomTotalPrice: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#EC4899',
+    color: colors.brand.pink,
   },
   extraCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     marginBottom: 12,
   },
   extraCardSelected: {
-    borderColor: '#EC4899',
-    backgroundColor: '#FCE7F3',
+    borderColor: colors.brand.pink,
+    backgroundColor: colors.pinkMist,
   },
   extraInfo: {
     flex: 1,
@@ -779,33 +780,33 @@ const styles = StyleSheet.create({
   extraLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   extraPrice: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   checkbox: {
     width: 24,
     height: 24,
     borderRadius: 6,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkboxSelected: {
-    backgroundColor: '#EC4899',
-    borderColor: '#EC4899',
+    backgroundColor: colors.brand.pink,
+    borderColor: colors.brand.pink,
   },
   priceSummary: {
     marginTop: 24,
     padding: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   priceRow: {
     flexDirection: 'row',
@@ -814,28 +815,28 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   priceTotal: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   totalLabel: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   totalValue: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#EC4899',
+    color: colors.brand.pink,
   },
   section: {
     marginBottom: 24,
@@ -843,51 +844,51 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   input: {
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     fontSize: 16,
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   guestCard: {
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     marginBottom: 12,
   },
   guestNumber: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#EC4899',
+    color: colors.brand.pink,
     marginBottom: 12,
   },
   footer: {
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
   },
   footerPrice: {
     marginBottom: 16,
   },
   footerPriceLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   footerPriceValue: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#EC4899',
+    color: colors.brand.pink,
   },
   nextButton: {
     borderRadius: 12,
@@ -904,7 +905,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   nextButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: '700',
   },

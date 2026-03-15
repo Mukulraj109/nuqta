@@ -21,6 +21,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { useWalletContext } from '@/contexts/WalletContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -28,15 +29,15 @@ const { width } = Dimensions.get('window');
 const COLORS = {
   primary: Colors.gold,
   primaryLight: '#ffe082',
-  primaryDark: '#E6B84E',
+  primaryDark: colors.brand.goldRich,
   primaryBg: Colors.background.tertiary,
 
-  gold: '#FFC857',
+  gold: colors.brand.goldWarm,
   goldDark: '#F5A623',
-  goldBg: '#FFFBEB',
+  goldBg: colors.tint.amber,
 
-  emerald: '#10B981',
-  emeraldDark: '#059669',
+  emerald: colors.successScale[400],
+  emeraldDark: colors.successScale[700],
   emeraldBg: Colors.successScale[50],
 
   background: Colors.background.secondary,
@@ -340,7 +341,7 @@ const GuessPrice = () => {
                 </View>
                 <View style={styles.heroStatDivider} />
                 <View style={styles.heroStatBox}>
-                  <Ionicons name="game-controller" size={24} color="#FFF" />
+                  <Ionicons name="game-controller" size={24} color={colors.background.primary} />
                   <Text style={styles.heroStatValue}>{maxPlays - todayPlays}/{maxPlays}</Text>
                   <Text style={styles.heroStatLabel}>Plays Left</Text>
                 </View>
@@ -382,16 +383,16 @@ const GuessPrice = () => {
               style={styles.startButtonWrapper}
             >
               <LinearGradient
-                colors={todayPlays >= maxPlays ? ['#9CA3AF', '#6B7280'] : [COLORS.emerald, COLORS.emeraldDark]}
+                colors={todayPlays >= maxPlays ? [colors.neutral[400], colors.neutral[500]] : [COLORS.emerald, COLORS.emeraldDark]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.startButton}
               >
                 {startingGame ? (
-                  <ActivityIndicator size="small" color="#FFF" />
+                  <ActivityIndicator size="small" color={colors.background.primary} />
                 ) : (
                   <>
-                    <Ionicons name={todayPlays >= maxPlays ? "time-outline" : "play"} size={22} color="#FFF" />
+                    <Ionicons name={todayPlays >= maxPlays ? "time-outline" : "play"} size={22} color={colors.background.primary} />
                     <Text style={styles.startButtonText}>
                       {todayPlays >= maxPlays ? 'Come Back Tomorrow' : 'Start Game'}
                     </Text>
@@ -413,7 +414,7 @@ const GuessPrice = () => {
               <Text style={styles.errorText}>{error}</Text>
               <Pressable onPress={retryGame}>
                 <LinearGradient colors={[COLORS.emerald, COLORS.emeraldDark]} style={styles.retryButton}>
-                  <Ionicons name="refresh" size={18} color="#FFF" />
+                  <Ionicons name="refresh" size={18} color={colors.background.primary} />
                   <Text style={styles.retryButtonText}>Try Again</Text>
                 </LinearGradient>
               </Pressable>
@@ -465,10 +466,10 @@ const GuessPrice = () => {
                    
                   >
                     <LinearGradient
-                      colors={!guess || parseInt(guess) <= 0 ? ['#9CA3AF', '#6B7280'] : [COLORS.emerald, COLORS.emeraldDark]}
+                      colors={!guess || parseInt(guess) <= 0 ? [colors.neutral[400], colors.neutral[500]] : [COLORS.emerald, COLORS.emeraldDark]}
                       style={styles.submitButton}
                     >
-                      <Ionicons name="checkmark" size={20} color="#FFF" />
+                      <Ionicons name="checkmark" size={20} color={colors.background.primary} />
                       <Text style={styles.submitButtonText}>Submit Guess</Text>
                     </LinearGradient>
                   </Pressable>
@@ -530,10 +531,10 @@ const GuessPrice = () => {
                   <Ionicons
                     name={score >= 30 ? "trophy" : "thumbs-up"}
                     size={48}
-                    color={score >= 30 ? '#FFF' : COLORS.emerald}
+                    color={score >= 30 ? colors.background.primary : COLORS.emerald}
                   />
                 </View>
-                <Text style={[styles.resultTitle, { color: score >= 30 ? '#FFF' : COLORS.navy }]}>
+                <Text style={[styles.resultTitle, { color: score >= 30 ? colors.background.primary : COLORS.navy }]}>
                   {score >= 40 ? 'Amazing!' : score >= 20 ? 'Good Job!' : 'Nice Try!'}
                 </Text>
                 <Text style={[styles.resultSubtitle, { color: score >= 30 ? 'rgba(255,255,255,0.9)' : COLORS.textMuted }]}>
@@ -542,7 +543,7 @@ const GuessPrice = () => {
                 <View style={[styles.earnedBox, { backgroundColor: score >= 30 ? 'rgba(255,255,255,0.15)' : COLORS.goldBg }]}>
                   <View style={styles.earnedRow}>
                     <CachedImage source={BRAND.COIN_IMAGE} style={styles.earnedCoin} contentFit="contain" />
-                    <Text style={[styles.earnedValue, { color: score >= 30 ? '#FFF' : COLORS.gold }]}>+{score}</Text>
+                    <Text style={[styles.earnedValue, { color: score >= 30 ? colors.background.primary : COLORS.gold }]}>+{score}</Text>
                   </View>
                   <Text style={[styles.earnedLabel, { color: score >= 30 ? 'rgba(255,255,255,0.8)' : COLORS.textMuted }]}>
                     Coins Earned
@@ -559,16 +560,16 @@ const GuessPrice = () => {
                
               >
                 <LinearGradient
-                  colors={todayPlays >= maxPlays ? ['#9CA3AF', '#6B7280'] : [COLORS.emerald, COLORS.emeraldDark]}
+                  colors={todayPlays >= maxPlays ? [colors.neutral[400], colors.neutral[500]] : [COLORS.emerald, COLORS.emeraldDark]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.primaryAction}
                 >
                   {startingGame ? (
-                    <ActivityIndicator size="small" color="#FFF" />
+                    <ActivityIndicator size="small" color={colors.background.primary} />
                   ) : (
                     <>
-                      <Ionicons name={todayPlays >= maxPlays ? "time-outline" : "refresh"} size={20} color="#FFF" />
+                      <Ionicons name={todayPlays >= maxPlays ? "time-outline" : "refresh"} size={20} color={colors.background.primary} />
                       <Text style={styles.primaryActionText}>
                         {todayPlays >= maxPlays
                           ? `No Plays Left (${todayPlays}/${maxPlays})`
@@ -641,12 +642,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center', alignItems: 'center', marginBottom: 16,
   },
   heroIconText: { fontSize: 40 },
-  heroTitle: { fontSize: 28, fontWeight: '800', color: '#FFF', marginBottom: 8 },
+  heroTitle: { fontSize: 28, fontWeight: '800', color: colors.background.primary, marginBottom: 8 },
   heroSubtitle: { fontSize: 15, color: 'rgba(255,255,255,0.9)', textAlign: 'center', marginBottom: 24 },
   heroStatsRow: { flexDirection: 'row', alignItems: 'center', gap: 32 },
   heroStatBox: { alignItems: 'center' },
   heroStatIcon: { width: 28, height: 28, marginBottom: 8 },
-  heroStatValue: { fontSize: 24, fontWeight: '800', color: '#FFF' },
+  heroStatValue: { fontSize: 24, fontWeight: '800', color: colors.background.primary },
   heroStatLabel: { fontSize: 12, color: 'rgba(255,255,255,0.8)', marginTop: 4 },
   heroStatDivider: { width: 1, height: 50, backgroundColor: 'rgba(255,255,255,0.3)' },
   decorCircle: { position: 'absolute', borderRadius: 100, backgroundColor: 'rgba(255,255,255,0.1)' },
@@ -679,7 +680,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     gap: 10, paddingVertical: 18, borderRadius: 16,
   },
-  startButtonText: { fontSize: 17, fontWeight: '700', color: '#FFF' },
+  startButtonText: { fontSize: 17, fontWeight: '700', color: colors.background.primary },
 
   // Error
   errorContainer: { padding: 24, alignItems: 'center', gap: 16 },
@@ -693,7 +694,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: 8,
     paddingVertical: 14, paddingHorizontal: 32, borderRadius: 12,
   },
-  retryButtonText: { fontSize: 14, fontWeight: '600', color: '#FFF' },
+  retryButtonText: { fontSize: 14, fontWeight: '600', color: colors.background.primary },
 
   // Playing
   progressText: { fontSize: 13, color: COLORS.textMuted, textAlign: 'center', marginBottom: 16, fontWeight: '600' },
@@ -728,7 +729,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     gap: 8, paddingVertical: 14, borderRadius: 14,
   },
-  submitButtonText: { fontSize: 15, fontWeight: '700', color: '#FFF' },
+  submitButtonText: { fontSize: 15, fontWeight: '700', color: colors.background.primary },
   feedbackContainer: { width: '100%', gap: 12 },
   feedbackCard: {
     padding: 20, borderRadius: 16, alignItems: 'center', borderWidth: 1, gap: 8,
@@ -773,7 +774,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
     gap: 10, paddingVertical: 18, borderRadius: 16,
   },
-  primaryActionText: { fontSize: 16, fontWeight: '700', color: '#FFF' },
+  primaryActionText: { fontSize: 16, fontWeight: '700', color: colors.background.primary },
   secondaryAction: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
     paddingVertical: 16, borderRadius: 16, backgroundColor: COLORS.surface, borderWidth: 1, borderColor: COLORS.border,

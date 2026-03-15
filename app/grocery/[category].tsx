@@ -23,10 +23,11 @@ import { ProductsGridSkeleton } from '@/components/grocery/GrocerySkeleton';
 import { productsApi } from '@/services/productsApi';
 import { cartApi } from '@/services/cartApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
   white: Colors.background.primary,
-  navy: '#0B2240',
+  navy: colors.brand.navyDark,
   gray50: Colors.background.secondary,
   gray100: Colors.background.secondary,
   gray200: Colors.border.default,
@@ -57,7 +58,7 @@ const categoryConfig: Record<string, {
   veggies: {
     title: 'Vegetables',
     icon: '🥕',
-    gradientColors: ['#4CAF50', '#43A047'],
+    gradientColors: [colors.brand.emerald, '#43A047'],
     description: 'Farm-fresh vegetables',
     tags: ['vegetables', 'veggies', 'fresh', 'organic'],
   },
@@ -93,35 +94,35 @@ const categoryConfig: Record<string, {
   essentials: {
     title: 'Essentials',
     icon: '🧴',
-    gradientColors: ['#22C55E', '#16A34A'],
+    gradientColors: [colors.success, colors.brand.greenDark],
     description: 'Cleaning & personal care',
     tags: ['essentials', 'personal-care', 'cleaning'],
   },
   daily: {
     title: 'Daily Needs',
     icon: '🥛',
-    gradientColors: ['#3B82F6', '#2563EB'],
+    gradientColors: [colors.infoScale[400], colors.brand.blue],
     description: 'Dairy & bread',
     tags: ['daily', 'dairy', 'bread', 'bakery'],
   },
   supermarket: {
     title: 'Supermarket',
     icon: '🛒',
-    gradientColors: ['#F97316', '#EA580C'],
+    gradientColors: [colors.brand.orange, colors.brand.orangeDark],
     description: 'BigBasket, DMart',
     tags: ['supermarket', 'grocery', 'bigbasket', 'dmart'],
   },
   organic: {
     title: 'Organic',
     icon: '🌿',
-    gradientColors: ['#10B981', '#059669'],
+    gradientColors: [colors.successScale[400], colors.successScale[700]],
     description: 'Organic vegetables & fruits',
     tags: ['organic', 'natural', 'farm', 'fresh'],
   },
   deals: {
     title: 'Hot Deals',
     icon: '🏷️',
-    gradientColors: ['#EF4444', '#DC2626'],
+    gradientColors: [colors.error, colors.error],
     description: 'Best deals & offers',
     tags: ['deals', 'offers', 'discount', 'sale'],
   },
@@ -192,7 +193,7 @@ const GroceryCategoryPage: React.FC = () => {
   const config = categoryConfig[categorySlug] || {
     title: categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1),
     icon: '🛒',
-    gradientColors: ['#22C55E', '#16A34A'] as [string, string],
+    gradientColors: [colors.success, colors.brand.greenDark] as [string, string],
     description: 'Grocery items',
     tags: [categorySlug],
   };

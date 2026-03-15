@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 export type FilterType = 'all' | 'featured' | 'new' | 'top-rated' | 'luxury' | 'trending' | 'reward-boosters';
 
@@ -26,13 +27,13 @@ interface FilterOption {
 }
 
 const FILTER_OPTIONS: FilterOption[] = [
-  { key: 'all', label: 'All', icon: 'grid-outline', activeColors: ['#1a3a52', '#234b68'] },
-  { key: 'featured', label: 'Featured', icon: 'star', activeColors: ['#F59E0B', '#1a3a52'] },
-  { key: 'new', label: 'New', icon: 'sparkles', activeColors: ['#F97316', '#D97706'] },
-  { key: 'top-rated', label: 'Top Rated', icon: 'trending-up', activeColors: ['#dfebf7', '#1a3a52'] },
-  { key: 'luxury', label: 'Premium', icon: 'diamond', activeColors: ['#1a3a52', '#234b68'] },
-  { key: 'trending', label: 'Trending', icon: 'flame', activeColors: ['#EF4444', '#DC2626'] },
-  { key: 'reward-boosters', label: 'Rewards', icon: 'gift', activeColors: ['#8B5CF6', '#7C3AED'] },
+  { key: 'all', label: 'All', icon: 'grid-outline', activeColors: [colors.nileBlue, colors.brand.nileBlueLight] },
+  { key: 'featured', label: 'Featured', icon: 'star', activeColors: [colors.warningScale[400], colors.nileBlue] },
+  { key: 'new', label: 'New', icon: 'sparkles', activeColors: [colors.brand.orange, colors.warningScale[700]] },
+  { key: 'top-rated', label: 'Top Rated', icon: 'trending-up', activeColors: [colors.lavenderMist, colors.nileBlue] },
+  { key: 'luxury', label: 'Premium', icon: 'diamond', activeColors: [colors.nileBlue, colors.brand.nileBlueLight] },
+  { key: 'trending', label: 'Trending', icon: 'flame', activeColors: [colors.error, colors.error] },
+  { key: 'reward-boosters', label: 'Rewards', icon: 'gift', activeColors: [colors.brand.purpleLight, colors.brand.purple] },
 ];
 
 interface FilterChipsProps {
@@ -69,7 +70,7 @@ const FilterChips: React.FC<FilterChipsProps> = ({
                 <Ionicons
                   name={option.icon}
                   size={16}
-                  color="#FFFFFF"
+                  color={colors.background.primary}
                 />
                 <Text style={styles.chipTextActive}>
                   {option.label}
@@ -80,7 +81,7 @@ const FilterChips: React.FC<FilterChipsProps> = ({
                 <Ionicons
                   name={option.icon}
                   size={16}
-                  color="#6B7280"
+                  color={colors.neutral[500]}
                 />
                 <Text style={styles.chipText}>
                   {option.label}
@@ -120,13 +121,13 @@ const styles = StyleSheet.create({
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 24,
     gap: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   chipActive: {
     flexDirection: 'row',
@@ -139,12 +140,12 @@ const styles = StyleSheet.create({
   chipText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   chipTextActive: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

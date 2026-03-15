@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { BrandedStoreCardProps } from '@/types/homepage.types';
 import FastImage from '@/components/common/FastImage';
+import { colors } from '@/constants/theme';
 
 // Custom comparison function for React.memo
 const arePropsEqual = (prevProps: BrandedStoreCardProps, nextProps: BrandedStoreCardProps) => {
@@ -80,7 +81,7 @@ function BrandedStoreCard({
     >
       <ThemedView style={[
         styles.card,
-        { backgroundColor: store.backgroundColor || '#F8F9FA' }
+        { backgroundColor: store.backgroundColor || colors.offWhite }
       ]}>
         {/* Discount Badge */}
         <View
@@ -167,14 +168,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -8,
     left: 16,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
     zIndex: 10,
   },
   discountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '700',
   },
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
   },
   cashbackText: {
     fontSize: 12,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -217,10 +218,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   goldPartner: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
   },
   silverPartner: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   bronzePartner: {
     backgroundColor: '#FED7AA',
@@ -230,10 +231,10 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   goldPartnerText: {
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   silverPartnerText: {
-    color: '#374151',
+    color: colors.neutral[700],
   },
   bronzePartnerText: {
     color: '#9A3412',

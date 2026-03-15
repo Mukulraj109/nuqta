@@ -18,6 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import exploreApi, { VerifiedReview } from '@/services/exploreApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -133,7 +134,7 @@ const AllReviewsPage = () => {
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <SafeAreaView style={styles.container} edges={['top']}>
-        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+        <StatusBar barStyle="dark-content" backgroundColor={colors.background.primary} />
 
         {/* Header */}
         <View style={styles.header}>
@@ -296,7 +297,7 @@ const AllReviewsPage = () => {
           {/* Load More Indicator */}
           {loadingMore && (
             <View style={styles.loadMoreContainer}>
-              <ActivityIndicator size="small" color="#ffcd57" />
+              <ActivityIndicator size="small" color={colors.lightMustard} />
             </View>
           )}
 

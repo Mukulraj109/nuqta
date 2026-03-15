@@ -7,6 +7,7 @@ import { View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, BorderRadius, Shadows, Spacing } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface InsightTileProps {
   label: string;
@@ -25,7 +26,7 @@ export const InsightTile: React.FC<InsightTileProps> = ({
   icon,
   iconColor = Colors.nileBlue,
 }) => {
-  const trendColor = trend === 'up' ? '#15803D' : trend === 'down' ? '#DC2626' : Colors.text.tertiary;
+  const trendColor = trend === 'up' ? colors.successScale[700] : trend === 'down' ? colors.error : Colors.text.tertiary;
   const trendIcon = trend === 'up' ? 'trending-up' : trend === 'down' ? 'trending-down' : undefined;
 
   return (

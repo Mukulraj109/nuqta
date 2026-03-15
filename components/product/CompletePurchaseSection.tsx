@@ -17,6 +17,7 @@ import { useRouter } from 'expo-router';
 import { triggerImpact } from '@/utils/haptics';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface StoreInfo {
   name: string;
@@ -99,7 +100,7 @@ export const CompletePurchaseSection: React.FC<CompletePurchaseSectionProps> = (
       <View style={styles.optionCard}>
         <View style={styles.optionHeader}>
           <View style={[styles.iconContainer, styles.iconStore]}>
-            <Ionicons name="storefront" size={22} color="#14B8A6" />
+            <Ionicons name="storefront" size={22} color={colors.tealGreen} />
           </View>
           <View style={styles.optionInfo}>
             <Text style={styles.optionTitle}>Visit Store & Buy</Text>
@@ -110,13 +111,13 @@ export const CompletePurchaseSection: React.FC<CompletePurchaseSectionProps> = (
         {/* Store Details */}
         <View style={styles.storeDetails}>
           <View style={styles.storeDetailRow}>
-            <Ionicons name="location-outline" size={16} color="#6B7280" />
+            <Ionicons name="location-outline" size={16} color={colors.neutral[500]} />
             <Text style={styles.storeDetailText}>
               {storeInfo?.name || 'Store'}, {storeInfo?.city || 'Bangalore'}
             </Text>
           </View>
           <View style={styles.storeDetailRow}>
-            <Ionicons name="time-outline" size={16} color="#6B7280" />
+            <Ionicons name="time-outline" size={16} color={colors.neutral[500]} />
             <Text style={styles.storeDetailText}>Open: {storeHours}</Text>
           </View>
         </View>
@@ -127,7 +128,7 @@ export const CompletePurchaseSection: React.FC<CompletePurchaseSectionProps> = (
           onPress={handleVisitStore}
          
         >
-          <Ionicons name="storefront-outline" size={18} color="#FFFFFF" />
+          <Ionicons name="storefront-outline" size={18} color={colors.background.primary} />
           <Text style={styles.visitStoreButtonText}>Visit Store</Text>
         </Pressable>
 
@@ -144,7 +145,7 @@ export const CompletePurchaseSection: React.FC<CompletePurchaseSectionProps> = (
 
         <View style={styles.optionHeader}>
           <View style={[styles.iconContainer, styles.iconDelivery]}>
-            <Ionicons name="flash" size={22} color="#A855F7" />
+            <Ionicons name="flash" size={22} color={colors.brand.purpleMedium} />
           </View>
           <View style={styles.optionInfo}>
             <View style={styles.titleRow}>
@@ -168,7 +169,7 @@ export const CompletePurchaseSection: React.FC<CompletePurchaseSectionProps> = (
 
         {/* Disabled Button */}
         <View style={styles.disabledButton}>
-          <Ionicons name="bicycle" size={18} color="#9CA3AF" />
+          <Ionicons name="bicycle" size={18} color={colors.neutral[400]} />
           <Text style={styles.disabledButtonText}>Get Delivered in 60 Min</Text>
         </View>
       </View>
@@ -177,7 +178,7 @@ export const CompletePurchaseSection: React.FC<CompletePurchaseSectionProps> = (
       <View style={styles.optionCard}>
         <View style={styles.optionHeader}>
           <View style={[styles.iconContainer, styles.iconOnline]}>
-            <Ionicons name="cart" size={22} color="#374151" />
+            <Ionicons name="cart" size={22} color={colors.neutral[700]} />
           </View>
           <View style={styles.optionInfo}>
             <Text style={styles.optionTitle}>Buy Online</Text>
@@ -191,7 +192,7 @@ export const CompletePurchaseSection: React.FC<CompletePurchaseSectionProps> = (
           onPress={handleBuyOnline}
          
         >
-          <Ionicons name="bag-check" size={18} color="#FFFFFF" />
+          <Ionicons name="bag-check" size={18} color={colors.background.primary} />
           <Text style={styles.buyOnlineButtonText}>Buy Now & Earn Cashback</Text>
         </Pressable>
       </View>
@@ -208,18 +209,18 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 14,
   },
 
   // Option Card
   optionCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: -30,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.warningScale[400],
     paddingHorizontal: 30,
     paddingVertical: 4,
     transform: [{ rotate: '45deg' }],
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
   comingSoonText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   optionHeader: {
@@ -270,11 +271,11 @@ const styles = StyleSheet.create({
   },
 
   iconDelivery: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
   },
 
   iconOnline: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
 
   optionInfo: {
@@ -290,17 +291,17 @@ const styles = StyleSheet.create({
   optionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 2,
   },
 
   optionSubtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   fastBadge: {
-    backgroundColor: '#DBEAFE',
+    backgroundColor: colors.tint.blueLight,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
@@ -309,12 +310,12 @@ const styles = StyleSheet.create({
   fastBadgeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#2563EB',
+    color: colors.brand.blue,
   },
 
   // Store Details
   storeDetails: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 10,
     padding: 12,
     marginBottom: 14,
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
 
   storeDetailText: {
     fontSize: 13,
-    color: '#4B5563',
+    color: colors.neutral[600],
   },
 
   // Visit Store Button
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#14B8A6',
+    backgroundColor: colors.tealGreen,
     borderRadius: 12,
     paddingVertical: 14,
     gap: 8,
@@ -347,12 +348,12 @@ const styles = StyleSheet.create({
   visitStoreButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   storeHint: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
   },
 
@@ -361,7 +362,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 10,
     padding: 12,
     marginBottom: 8,
@@ -369,18 +370,18 @@ const styles = StyleSheet.create({
 
   deliveryFeeLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   deliveryFeeValue: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   deliveryHint: {
     fontSize: 12,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     marginBottom: 14,
   },
 
@@ -389,7 +390,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 12,
     paddingVertical: 14,
     gap: 8,
@@ -398,7 +399,7 @@ const styles = StyleSheet.create({
   disabledButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 
   // Buy Online Button
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#111827',
+    backgroundColor: colors.neutral[900],
     borderRadius: 12,
     paddingVertical: 14,
     gap: 8,
@@ -415,7 +416,7 @@ const styles = StyleSheet.create({
   buyOnlineButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

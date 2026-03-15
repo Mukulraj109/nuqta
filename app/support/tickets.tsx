@@ -18,6 +18,7 @@ import { ThemedText } from '@/components/ThemedText';
 import SkeletonLoader from '@/components/common/SkeletonLoader';
 import supportService, { SupportTicket, GetTicketsFilters } from '@/services/supportApi';
 import { Colors, Spacing, Gradients, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const STATUS_FILTERS = [
   { key: 'all', label: 'All' },
@@ -236,7 +237,7 @@ export default function TicketsPage() {
         style={styles.emptyButton}
         onPress={() => router.push('/support/create-ticket' as any)}
       >
-        <Ionicons name="add-circle-outline" size={20} color="#FFF" />
+        <Ionicons name="add-circle-outline" size={20} color={colors.background.primary} />
         <ThemedText style={styles.emptyButtonText}>Create Ticket</ThemedText>
       </Pressable>
     </View>
@@ -252,14 +253,14 @@ export default function TicketsPage() {
         <LinearGradient colors={Gradients.nileBlue} style={styles.header}>
           <View style={styles.headerContent}>
             <Pressable style={styles.backButton} onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={24} color="#FFF" />
+              <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>My Tickets</ThemedText>
             <Pressable
               style={styles.addButton}
               onPress={() => router.push('/support/create-ticket' as any)}
             >
-              <Ionicons name="add" size={24} color="#FFF" />
+              <Ionicons name="add" size={24} color={colors.background.primary} />
             </Pressable>
           </View>
         </LinearGradient>
@@ -330,14 +331,14 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
   },
   addButton: {
     padding: 8,
   },
   filtersContainer: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
     borderBottomColor: Colors.gray[200],
   },
@@ -362,14 +363,14 @@ const styles = StyleSheet.create({
     color: Colors.gray[600],
   },
   filterChipTextActive: {
-    color: '#FFF',
+    color: colors.background.primary,
   },
   listContent: {
     padding: 16,
     paddingBottom: 120,
   },
   ticketCard: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -412,7 +413,7 @@ const styles = StyleSheet.create({
   ticketSubject: {
     fontSize: 15,
     fontWeight: '600',
-    color: Colors.text?.primary || '#1a1a2e',
+    color: Colors.text?.primary || colors.deepNavy,
   },
   lastMessage: {
     fontSize: 13,
@@ -485,7 +486,7 @@ const styles = StyleSheet.create({
   emptyButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   loadingMore: {
     padding: 16,

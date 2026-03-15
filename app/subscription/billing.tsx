@@ -14,6 +14,7 @@ import BillingHistoryList from '@/components/subscription/BillingHistoryList';
 import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function BillingHistoryPage() {
   const router = useRouter();
@@ -106,7 +107,7 @@ export default function BillingHistoryPage() {
 
   return (
     <ThemedView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#8B5CF6" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.brand.purpleLight} />
 
       {/* Header */}
       <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple]} style={styles.header}>

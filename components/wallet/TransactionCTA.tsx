@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { useRouter } from 'expo-router';
 import { Colors, Spacing, BorderRadius, Shadows } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface TransactionCTAProps {
   onPress?: () => void;
@@ -41,7 +42,7 @@ export const TransactionCTA: React.FC<TransactionCTAProps> = ({ onPress }) => {
         >
           <View style={styles.content}>
             <View style={styles.iconContainer}>
-              <Ionicons name="receipt-outline" size={18} color="#FFFFFF" />
+              <Ionicons name="receipt-outline" size={18} color={colors.background.primary} />
             </View>
             <View style={styles.textContainer}>
               <ThemedText style={styles.title}>View All Transactions</ThemedText>
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text.white,
     marginBottom: 1,
   },
   subtitle: {

@@ -18,6 +18,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 import {
   CashStoreCategoryFilterKey,
   CashStoreCategoryFilter,
@@ -33,8 +34,8 @@ const FALLBACK_CATEGORIES: CashStoreCategoryFilter[] = [
     slug: 'all',
     name: 'All',
     icon: 'grid-outline',
-    color: '#1a3a52',
-    backgroundColor: '#faf1e0',
+    color: colors.nileBlue,
+    backgroundColor: colors.linen,
     maxCashback: 0,
     sortOrder: -2,
     brandCount: 0,
@@ -47,8 +48,8 @@ const FALLBACK_CATEGORIES: CashStoreCategoryFilter[] = [
     slug: 'most-popular',
     name: 'Popular',
     icon: 'star',
-    color: '#E8B896',
-    backgroundColor: '#faf1e0',
+    color: colors.brand.sand,
+    backgroundColor: colors.linen,
     maxCashback: 0,
     sortOrder: -1,
     brandCount: 0,
@@ -61,8 +62,8 @@ const FALLBACK_CATEGORIES: CashStoreCategoryFilter[] = [
     slug: 'high-cashback',
     name: 'High Cashback',
     icon: 'flame',
-    color: '#E8B896',
-    backgroundColor: '#ffd7b5',
+    color: colors.brand.sand,
+    backgroundColor: colors.lightPeach,
     maxCashback: 0,
     sortOrder: 0,
     brandCount: 0,
@@ -75,8 +76,8 @@ const FALLBACK_CATEGORIES: CashStoreCategoryFilter[] = [
     slug: 'fashion',
     name: 'Fashion',
     icon: 'shirt-outline',
-    color: '#1a3a52',
-    backgroundColor: '#ffd7b5',
+    color: colors.nileBlue,
+    backgroundColor: colors.lightPeach,
     maxCashback: 20,
     sortOrder: 1,
     brandCount: 0,
@@ -89,8 +90,8 @@ const FALLBACK_CATEGORIES: CashStoreCategoryFilter[] = [
     slug: 'electronics',
     name: 'Electronics',
     icon: 'laptop-outline',
-    color: '#1a3a52',
-    backgroundColor: '#dfebf7',
+    color: colors.nileBlue,
+    backgroundColor: colors.lavenderMist,
     maxCashback: 15,
     sortOrder: 2,
     brandCount: 0,
@@ -103,8 +104,8 @@ const FALLBACK_CATEGORIES: CashStoreCategoryFilter[] = [
     slug: 'food',
     name: 'Food',
     icon: 'fast-food-outline',
-    color: '#E8B896',
-    backgroundColor: '#faf1e0',
+    color: colors.brand.sand,
+    backgroundColor: colors.linen,
     maxCashback: 10,
     sortOrder: 3,
     brandCount: 0,
@@ -117,8 +118,8 @@ const FALLBACK_CATEGORIES: CashStoreCategoryFilter[] = [
     slug: 'travel',
     name: 'Travel',
     icon: 'airplane-outline',
-    color: '#1a3a52',
-    backgroundColor: '#dfebf7',
+    color: colors.nileBlue,
+    backgroundColor: colors.lavenderMist,
     maxCashback: 12,
     sortOrder: 4,
     brandCount: 0,
@@ -131,8 +132,8 @@ const FALLBACK_CATEGORIES: CashStoreCategoryFilter[] = [
     slug: 'beauty',
     name: 'Beauty',
     icon: 'sparkles-outline',
-    color: '#1a3a52',
-    backgroundColor: '#ffd7b5',
+    color: colors.nileBlue,
+    backgroundColor: colors.lightPeach,
     maxCashback: 18,
     sortOrder: 5,
     brandCount: 0,
@@ -196,8 +197,8 @@ const CategoryItem: React.FC<CategoryItemProps> = memo(
     };
 
     // Use color for icon, backgroundColor for circle background
-    const iconColor = filter.color || '#1a3a52';
-    const bgColor = filter.backgroundColor || '#dfebf7';
+    const iconColor = filter.color || colors.nileBlue;
+    const bgColor = filter.backgroundColor || colors.lavenderMist;
 
     return (
       <Animated.View
@@ -233,7 +234,7 @@ const CategoryItem: React.FC<CategoryItemProps> = memo(
             <Ionicons
               name={filter.icon as any}
               size={24}
-              color={isSelected ? '#1a3a52' : iconColor}
+              color={isSelected ? colors.nileBlue : iconColor}
             />
           </View>
           <Text
@@ -344,7 +345,7 @@ const CategoryFilterRow: React.FC<CategoryFilterRowProps> = ({
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginTop: 8,
     borderRadius: 24,
   },
@@ -355,7 +356,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   scrollView: {
@@ -392,11 +393,11 @@ const styles = StyleSheet.create({
     }),
   },
   iconCircleSelected: {
-    borderColor: '#1a3a52',
+    borderColor: colors.nileBlue,
     borderWidth: 2.5,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.25,
         shadowRadius: 6,
@@ -409,21 +410,21 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     width: '100%',
   },
   labelSelected: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '700',
   },
   skeletonCircle: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   skeletonLabel: {
     width: 48,
     height: 10,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
   },
 });

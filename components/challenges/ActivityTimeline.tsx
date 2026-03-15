@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface Activity {
   id: string;
@@ -55,7 +56,7 @@ function ActivityTimeline({
   if (activities.length === 0) {
     return (
       <View style={styles.emptyContainer}>
-        <Ionicons name="time-outline" size={48} color="#D1D5DB" />
+        <Ionicons name="time-outline" size={48} color={colors.neutral[300]} />
         <Text style={styles.emptyText}>No activity yet</Text>
         <Text style={styles.emptySubtext}>Start the challenge to see your progress here</Text>
       </View>
@@ -65,7 +66,7 @@ function ActivityTimeline({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="time" size={20} color="#8B5CF6" />
+        <Ionicons name="time" size={20} color={colors.brand.purpleLight} />
         <Text style={styles.title}>Activity Timeline</Text>
         <View style={styles.progressBadge}>
           <Text style={styles.progressBadgeText}>
@@ -80,7 +81,7 @@ function ActivityTimeline({
             <View key={activity.id} style={styles.timelineItem}>
               <View style={styles.timelineLeft}>
                 <View style={styles.iconContainer}>
-                  <Ionicons name={getActionIcon(activity.action)} size={16} color="#8B5CF6" />
+                  <Ionicons name={getActionIcon(activity.action)} size={16} color={colors.brand.purpleLight} />
                 </View>
                 {!isLast && <View style={styles.timelineLine} />}
               </View>
@@ -90,7 +91,7 @@ function ActivityTimeline({
                     <Text style={styles.activityDescription}>{activity.description}</Text>
                     {activity.progress && (
                       <View style={styles.progressIndicator}>
-                        <Ionicons name="add-circle" size={16} color="#10B981" />
+                        <Ionicons name="add-circle" size={16} color={colors.successScale[400]} />
                         <Text style={styles.progressText}>+1</Text>
                       </View>
                     )}
@@ -108,7 +109,7 @@ function ActivityTimeline({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     ...Platform.select({
@@ -136,10 +137,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   progressBadge: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
   progressBadgeText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   timeline: {
     maxHeight: 300,
@@ -163,16 +164,16 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: colors.background.primary,
   },
   timelineLine: {
     width: 2,
     flex: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginVertical: 4,
   },
   timelineRight: {
@@ -183,11 +184,11 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
   },
   activityCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
     padding: 12,
     borderLeftWidth: 3,
-    borderLeftColor: '#8B5CF6',
+    borderLeftColor: colors.brand.purpleLight,
   },
   activityHeader: {
     flexDirection: 'row',
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: '500',
-    color: '#1F2937',
+    color: colors.neutral[800],
     lineHeight: 20,
   },
   progressIndicator: {
@@ -211,14 +212,14 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   activityTime: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   emptyContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 32,
     alignItems: 'center',
@@ -240,12 +241,12 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 12,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 4,
     textAlign: 'center',
   },

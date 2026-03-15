@@ -16,6 +16,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { SectionHeader } from '../common';
 import { UploadBillStore } from '@/types/offers.types';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface UploadBillSectionProps {
   stores: UploadBillStore[];
@@ -43,7 +44,7 @@ export const UploadBillSection: React.FC<UploadBillSectionProps> = ({
     },
     card: {
       marginHorizontal: Spacing.base,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 1.5,
       borderColor: isDark ? 'rgba(0, 192, 106, 0.3)' : '#A7F3D0',
@@ -98,10 +99,10 @@ export const UploadBillSection: React.FC<UploadBillSectionProps> = ({
       width: 44,
       height: 44,
       borderRadius: 10,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.background.primary,
       overflow: 'hidden',
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.neutral[200],
       ...Shadows.subtle,
       alignItems: 'center',
       justifyContent: 'center',
@@ -119,7 +120,7 @@ export const UploadBillSection: React.FC<UploadBillSectionProps> = ({
       justifyContent: 'center',
     },
     storeLogoText: {
-      color: '#FFFFFF',
+      color: colors.background.primary,
       fontSize: 18,
       fontWeight: '700',
     },
@@ -160,7 +161,7 @@ export const UploadBillSection: React.FC<UploadBillSectionProps> = ({
     uploadButtonText: {
       fontSize: 11,
       fontWeight: '700',
-      color: '#FFFFFF',
+      color: colors.background.primary,
     },
   });
 
@@ -176,7 +177,7 @@ export const UploadBillSection: React.FC<UploadBillSectionProps> = ({
       <View style={styles.card}>
         <View style={styles.header}>
           <View style={styles.headerIcon}>
-            <Ionicons name="receipt-outline" size={20} color="#FFFFFF" />
+            <Ionicons name="receipt-outline" size={20} color={colors.background.primary} />
           </View>
           <View style={styles.headerText}>
             <Text style={styles.headerTitle}>Shop offline, earn online</Text>

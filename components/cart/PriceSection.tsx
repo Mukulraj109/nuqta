@@ -13,6 +13,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { PriceSectionProps } from '@/types/cart';
 import { useRegion } from '@/contexts/RegionContext';
 import { COLORS, SPACING, BORDER_RADIUS, TYPOGRAPHY } from '@/constants/DesignTokens';
+import { colors } from '@/constants/theme';
 
 function PriceSection({
   totalPrice,
@@ -106,7 +107,7 @@ function PriceSection({
                   <Ionicons
                     name="bag"
                     size={isSmallScreen ? 16 : 18}
-                    color={loading || totalPrice === 0 ? '#FFFFFF' : COLORS.nuqta.nileBlue}
+                    color={loading || totalPrice === 0 ? colors.background.primary : COLORS.nuqta.nileBlue}
                   />
                 </View>
                 <ThemedText style={[
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
     letterSpacing: 0.5,
   },

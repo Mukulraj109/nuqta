@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { colors } from '@/constants/theme';
 
 interface ContactModalProps {
   visible: boolean;
@@ -147,14 +148,14 @@ function ContactModal({
           ]}
         >
           <LinearGradient
-            colors={['#FFFFFF', '#F9FAFB']}
+            colors={[colors.background.primary, colors.neutral[50]]}
             style={styles.gradient}
           >
             {/* Header */}
             <View style={styles.header}>
               <View style={styles.headerContent}>
                 <View style={styles.iconContainer}>
-                  <Ionicons name="call" size={28} color="#8B5CF6" />
+                  <Ionicons name="call" size={28} color={colors.brand.purpleLight} />
                 </View>
                 <View style={styles.headerText}>
                   <ThemedText style={styles.title}>Contact Store</ThemedText>
@@ -170,7 +171,7 @@ function ContactModal({
                 accessibilityLabel="Close contact modal"
                 accessibilityRole="button"
               >
-                <Ionicons name="close" size={24} color="#6B7280" />
+                <Ionicons name="close" size={24} color={colors.neutral[500]} />
               </Pressable>
             </View>
 
@@ -180,7 +181,7 @@ function ContactModal({
               {phone && (
                 <View style={styles.contactItem}>
                   <View style={styles.contactHeader}>
-                    <Ionicons name="call" size={20} color="#8B5CF6" />
+                    <Ionicons name="call" size={20} color={colors.brand.purpleLight} />
                     <ThemedText style={styles.contactLabel}>Phone Number</ThemedText>
                   </View>
                   <Pressable
@@ -196,11 +197,11 @@ function ContactModal({
                     <ThemedText style={styles.contactValue}>{phone}</ThemedText>
                     {copiedField === 'phone' ? (
                       <View style={styles.copiedBadge}>
-                        <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+                        <Ionicons name="checkmark-circle" size={18} color={colors.successScale[400]} />
                         <Text style={styles.copiedText}>Copied</Text>
                       </View>
                     ) : (
-                      <Ionicons name="copy-outline" size={18} color="#6B7280" />
+                      <Ionicons name="copy-outline" size={18} color={colors.neutral[500]} />
                     )}
                   </Pressable>
                   <Pressable
@@ -210,7 +211,7 @@ function ContactModal({
                     accessibilityLabel="Call this number"
                     accessibilityRole="button"
                   >
-                    <Ionicons name="call" size={18} color="#FFFFFF" />
+                    <Ionicons name="call" size={18} color={colors.background.primary} />
                     <Text style={styles.actionButtonText}>Call Now</Text>
                   </Pressable>
                 </View>
@@ -220,7 +221,7 @@ function ContactModal({
               {email && (
                 <View style={[styles.contactItem, !phone && styles.contactItemFirst]}>
                   <View style={styles.contactHeader}>
-                    <Ionicons name="mail" size={20} color="#8B5CF6" />
+                    <Ionicons name="mail" size={20} color={colors.brand.purpleLight} />
                     <ThemedText style={styles.contactLabel}>Email Address</ThemedText>
                   </View>
                   <Pressable
@@ -236,11 +237,11 @@ function ContactModal({
                     <ThemedText style={styles.contactValue}>{email}</ThemedText>
                     {copiedField === 'email' ? (
                       <View style={styles.copiedBadge}>
-                        <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+                        <Ionicons name="checkmark-circle" size={18} color={colors.successScale[400]} />
                         <Text style={styles.copiedText}>Copied</Text>
                       </View>
                     ) : (
-                      <Ionicons name="copy-outline" size={18} color="#6B7280" />
+                      <Ionicons name="copy-outline" size={18} color={colors.neutral[500]} />
                     )}
                   </Pressable>
                   <Pressable
@@ -250,7 +251,7 @@ function ContactModal({
                     accessibilityLabel="Send email"
                     accessibilityRole="button"
                   >
-                    <Ionicons name="mail" size={18} color="#FFFFFF" />
+                    <Ionicons name="mail" size={18} color={colors.background.primary} />
                     <Text style={styles.actionButtonText}>Send Email</Text>
                   </Pressable>
                 </View>
@@ -259,7 +260,7 @@ function ContactModal({
               {/* No contact info message */}
               {!phone && !email && (
                 <View style={styles.emptyState}>
-                  <Ionicons name="information-circle-outline" size={48} color="#9CA3AF" />
+                  <Ionicons name="information-circle-outline" size={48} color={colors.neutral[400]} />
                   <ThemedText style={styles.emptyStateText}>
                     Contact information is not available
                   </ThemedText>
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.gray[200],
   },
   headerContent: {
     flexDirection: 'row',
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -333,19 +334,19 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.gray[900],
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   closeButton: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -367,7 +368,7 @@ const styles = StyleSheet.create({
   contactLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -375,22 +376,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 1.5,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     minHeight: 56,
   },
   contactValueContainerCopied: {
-    borderColor: '#10B981',
-    backgroundColor: '#F0FDF4',
+    borderColor: colors.success,
+    backgroundColor: colors.successScale[50],
   },
   contactValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.gray[900],
     flex: 1,
     marginRight: 12,
   },
@@ -398,7 +399,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#10B981',
+    backgroundColor: colors.success,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
@@ -406,13 +407,13 @@ const styles = StyleSheet.create({
   copiedText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
   actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 12,
     padding: 14,
     gap: 8,
@@ -420,7 +421,7 @@ const styles = StyleSheet.create({
   actionButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text.white,
   },
   emptyState: {
     alignItems: 'center',
@@ -429,7 +430,7 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginTop: 16,
   },

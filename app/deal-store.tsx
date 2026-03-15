@@ -3,6 +3,7 @@
  * 100% production ready - Connected to /api/campaigns
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
@@ -167,7 +168,7 @@ const DealStorePage: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <LinearGradient
-        colors={[Colors.success, '#14B8A6']}
+        colors={[Colors.success, colors.tealGreen]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}
@@ -309,7 +310,7 @@ const DealStorePage: React.FC = () => {
         {/* Bottom CTA */}
         <View style={styles.bottomCTA}>
           <LinearGradient
-            colors={[Colors.brand.purple, '#EC4899']}
+            colors={[Colors.brand.purple, colors.brand.pink]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.ctaGradient}

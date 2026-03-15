@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface CoinType {
   type: string;
@@ -28,53 +29,53 @@ const coinTypes: CoinType[] = [
   {
     type: BRAND.COIN_NAME,
     badge: 'Universal',
-    badgeColor: '#ffcd57',
+    badgeColor: colors.lightMustard,
     icon: 'layers-outline',
-    iconBgColor: '#faf1e0',
-    iconColor: '#1a3a52',
+    iconBgColor: colors.linen,
+    iconColor: colors.nileBlue,
     description: 'Earned on most purchases',
     features: [
-      { icon: 'checkmark', text: `Can be used at any ${BRAND.APP_NAME} store`, color: '#1a3a52' },
-      { icon: 'time-outline', text: 'Short validity (to encourage usage)', color: '#1a3a52' },
+      { icon: 'checkmark', text: `Can be used at any ${BRAND.APP_NAME} store`, color: colors.nileBlue },
+      { icon: 'time-outline', text: 'Short validity (to encourage usage)', color: colors.nileBlue },
     ],
     tip: 'Think of this as your everyday savings currency.',
     tipIcon: 'bulb-outline',
-    cardBgColor: '#faf1e0',
-    borderColor: '#ffcd57',
+    cardBgColor: colors.linen,
+    borderColor: colors.lightMustard,
   },
   {
     type: 'Brand Coins',
     badge: 'Store-specific',
-    badgeColor: '#1a3a52',
+    badgeColor: colors.nileBlue,
     icon: 'storefront-outline',
-    iconBgColor: '#dfebf7',
-    iconColor: '#1a3a52',
+    iconBgColor: colors.lavenderMist,
+    iconColor: colors.nileBlue,
     description: 'Earned at specific brands',
     features: [
-      { icon: 'checkmark', text: 'Can be used only at that brand', color: '#1a3a52' },
-      { icon: 'infinite-outline', text: 'Never expire', color: '#1a3a52' },
+      { icon: 'checkmark', text: 'Can be used only at that brand', color: colors.nileBlue },
+      { icon: 'infinite-outline', text: 'Never expire', color: colors.nileBlue },
     ],
     tip: 'Rewards loyalty to your favorite stores.',
     tipIcon: 'heart-outline',
-    cardBgColor: '#dfebf7',
-    borderColor: '#1a3a52',
+    cardBgColor: colors.lavenderMist,
+    borderColor: colors.nileBlue,
   },
   {
     type: 'Promo Coins',
     badge: 'Limited-time',
-    badgeColor: '#ffcd57',
+    badgeColor: colors.lightMustard,
     icon: 'flame-outline',
-    iconBgColor: '#ffd7b5',
-    iconColor: '#1a3a52',
+    iconBgColor: colors.lightPeach,
+    iconColor: colors.nileBlue,
     description: 'Earned during campaigns',
     features: [
-      { icon: 'checkmark', text: 'Higher value', color: '#1a3a52' },
-      { icon: 'hourglass-outline', text: 'Short expiry', color: '#EF4444' },
+      { icon: 'checkmark', text: 'Higher value', color: colors.nileBlue },
+      { icon: 'hourglass-outline', text: 'Short expiry', color: colors.error },
     ],
     tip: 'Use them fast to maximize savings.',
     tipIcon: 'flash-outline',
-    cardBgColor: '#ffd7b5',
-    borderColor: '#ffcd57',
+    cardBgColor: colors.lightPeach,
+    borderColor: colors.lightMustard,
   },
 ];
 
@@ -84,7 +85,7 @@ const WalletSection: React.FC = () => {
       {/* Section Header */}
       <View style={styles.headerContainer}>
         <View style={styles.iconCircle}>
-          <Ionicons name="wallet" size={28} color="#1a3a52" />
+          <Ionicons name="wallet" size={28} color={colors.nileBlue} />
         </View>
         <Text style={styles.sectionTitle}>Your {BRAND.APP_NAME} Wallet</Text>
         <Text style={styles.sectionSubtitle}>
@@ -143,7 +144,7 @@ const WalletSection: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   headerContainer: {
     alignItems: 'center',
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -161,17 +162,17 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
   },
   sectionSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   boldText: {
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   coinCard: {
     borderRadius: 16,
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
   coinType: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   badge: {
     paddingHorizontal: 10,
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
   },
   coinDescription: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   featuresContainer: {
     gap: 10,
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
   },
   featureText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     flex: 1,
   },
   tipContainer: {

@@ -12,6 +12,7 @@ import {
   UIManager,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 // Enable LayoutAnimation for Android
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -116,7 +117,7 @@ const StorePolicies: React.FC<StorePoliciesProps> = ({
               <Ionicons
                 name={getPolicyIcon(policy.icon, policy.title)}
                 size={20}
-                color="#7C3AED"
+                color={colors.brand.purple}
               />
             </View>
             <Text style={styles.policyTitle}>{policy.title}</Text>
@@ -124,7 +125,7 @@ const StorePolicies: React.FC<StorePoliciesProps> = ({
           <Ionicons
             name={isExpanded ? 'chevron-up' : 'chevron-down'}
             size={20}
-            color="#666"
+            color={colors.midGray}
           />
         </Pressable>
 
@@ -155,7 +156,7 @@ const StorePolicies: React.FC<StorePoliciesProps> = ({
                 onPress={() => handleSharePolicy(policy)}
                 style={styles.shareButton}
               >
-                <Ionicons name="share-social" size={16} color="#7C3AED" />
+                <Ionicons name="share-social" size={16} color={colors.brand.purple} />
                 <Text style={styles.shareText}>Share</Text>
               </Pressable>
             </View>
@@ -177,7 +178,7 @@ const StorePolicies: React.FC<StorePoliciesProps> = ({
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
-        <Ionicons name="shield-checkmark" size={24} color="#7C3AED" />
+        <Ionicons name="shield-checkmark" size={24} color={colors.brand.purple} />
         <Text style={styles.headerTitle}>Store Policies</Text>
       </View>
 
@@ -190,7 +191,7 @@ const StorePolicies: React.FC<StorePoliciesProps> = ({
       </View>
 
       <View style={styles.footer}>
-        <Ionicons name="information-circle" size={16} color="#666" />
+        <Ionicons name="information-circle" size={16} color={colors.midGray} />
         <Text style={styles.footerText}>
           These policies are subject to change. Please check regularly for updates.
         </Text>
@@ -202,7 +203,7 @@ const StorePolicies: React.FC<StorePoliciesProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
   header: {
     flexDirection: 'row',
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#666',
+    color: colors.midGray,
     paddingHorizontal: 16,
     paddingBottom: 16,
   },
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   policyCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     marginBottom: 12,
     borderWidth: 1,
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
   },
   readMoreText: {
     fontSize: 14,
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '600',
   },
   policyFooter: {
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
   },
   shareText: {
     fontSize: 14,
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '600',
     marginLeft: 4,
   },
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     marginLeft: 8,
     flex: 1,
     lineHeight: 18,

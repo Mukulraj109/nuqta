@@ -26,6 +26,7 @@ import EditAddressModal from '@/components/account/EditAddressModal';
 import EditInstructionsModal from '@/components/account/EditInstructionsModal';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import userSettingsApi from '@/services/userSettingsApi';
+import { colors } from '@/constants/theme';
 
 export default function DeliverySettingsScreen() {
   const router = useRouter();
@@ -231,7 +232,7 @@ export default function DeliverySettingsScreen() {
       
       {/* Modern Header */}
       <LinearGradient
-        colors={[ACCOUNT_COLORS.primary, ACCOUNT_COLORS.primaryLight, '#A78BFA']}
+        colors={[ACCOUNT_COLORS.primary, ACCOUNT_COLORS.primaryLight, colors.brand.purpleSoft]}
         style={styles.header}
       >
         <View style={styles.headerContent}>
@@ -570,7 +571,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
     borderWidth: 0.5,
-    borderColor: '#F1F5F9',
+    borderColor: colors.tint.slate,
   },
   addressHeader: {
     flexDirection: 'row',
@@ -673,7 +674,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
     borderWidth: 0.5,
-    borderColor: '#F1F5F9',
+    borderColor: colors.tint.slate,
   },
   settingItem: {
     flexDirection: 'row',
@@ -716,7 +717,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
     borderWidth: 0.5,
-    borderColor: '#F1F5F9',
+    borderColor: colors.tint.slate,
   },
   instructionsContent: {
     marginLeft: 12,
@@ -792,7 +793,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
     borderWidth: 0.5,
-    borderColor: '#F1F5F9',
+    borderColor: colors.tint.slate,
   },
   emptyTitle: {
     fontSize: 18,

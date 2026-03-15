@@ -10,6 +10,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useRouter } from 'expo-router';
 import { HomepageProduct } from '@/services/productApi';
+import { colors } from '@/constants/theme';
 
 interface HomepageProductCardProps {
   product: HomepageProduct;
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     borderWidth: 1,
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   distanceBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '600',
   },
@@ -143,12 +144,12 @@ const styles = StyleSheet.create({
   },
   deliveryTime: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 2,
   },
   deliveryFee: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

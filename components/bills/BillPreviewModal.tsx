@@ -19,6 +19,7 @@ import {
   MerchantMatch,
 } from '@/types/billVerification.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface BillPreviewModalProps {
   visible: boolean;
@@ -59,7 +60,7 @@ function BillPreviewModal({
   };
 
   const confidenceColor = (confidence: number) => {
-    if (confidence >= 90) return '#4CAF50';
+    if (confidence >= 90) return colors.brand.emerald;
     if (confidence >= 70) return '#FF9800';
     return '#F44336';
   };
@@ -70,7 +71,7 @@ function BillPreviewModal({
         {/* Header */}
         <View style={styles.header}>
           <Pressable onPress={onClose}>
-            <Ionicons name="close" size={24} color="#333" />
+            <Ionicons name="close" size={24} color={colors.darkGray} />
           </Pressable>
           <Text style={styles.headerTitle}>Verify Bill Details</Text>
           <Pressable onPress={() => setIsEditing(!isEditing)}>
@@ -126,7 +127,7 @@ function BillPreviewModal({
                   <Text style={styles.dataValue}>{ocrData.merchantName || 'Not detected'}</Text>
                   {selectedMerchant && (
                     <View style={styles.matchBadge}>
-                      <Ionicons name="checkmark-circle" size={16} color="#4CAF50" />
+                      <Ionicons name="checkmark-circle" size={16} color={colors.brand.emerald} />
                       <Text style={styles.matchText}>Matched</Text>
                     </View>
                   )}
@@ -226,7 +227,7 @@ function BillPreviewModal({
                     {selectedMerchant.matchScore}% match confidence
                   </Text>
                   <View style={styles.cashbackBadge}>
-                    <Ionicons name="gift" size={16} color="#4CAF50" />
+                    <Ionicons name="gift" size={16} color={colors.brand.emerald} />
                     <Text style={styles.cashbackText}>
                       {selectedMerchant.cashbackPercentage}% cashback
                     </Text>
@@ -266,21 +267,21 @@ function BillPreviewModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.offWhite,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5E5',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   content: {
     flex: 1,
@@ -291,7 +292,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 12,
   },
   billImage: {
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5E5E5',
   },
   confidenceCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     margin: 16,
     padding: 16,
     borderRadius: 12,
@@ -315,7 +316,7 @@ const styles = StyleSheet.create({
   confidenceTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
   },
   confidenceBar: {
     height: 8,
@@ -330,11 +331,11 @@ const styles = StyleSheet.create({
   },
   confidenceText: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     textAlign: 'right',
   },
   dataRow: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
@@ -348,7 +349,7 @@ const styles = StyleSheet.create({
   },
   dataValue: {
     fontSize: 16,
-    color: '#333',
+    color: colors.darkGray,
     fontWeight: '500',
   },
   dataValueContainer: {
@@ -358,7 +359,7 @@ const styles = StyleSheet.create({
   },
   dataInput: {
     fontSize: 16,
-    color: '#333',
+    color: colors.darkGray,
     fontWeight: '500',
     borderWidth: 1,
     borderColor: '#FF6B35',
@@ -369,7 +370,7 @@ const styles = StyleSheet.create({
   matchBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E8F5E9',
+    backgroundColor: colors.greenMist,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -377,14 +378,14 @@ const styles = StyleSheet.create({
   },
   matchText: {
     fontSize: 12,
-    color: '#4CAF50',
+    color: colors.brand.emerald,
     fontWeight: '500',
   },
   itemRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 12,
     borderRadius: 8,
     marginBottom: 8,
@@ -392,7 +393,7 @@ const styles = StyleSheet.create({
   itemName: {
     flex: 1,
     fontSize: 14,
-    color: '#333',
+    color: colors.darkGray,
   },
   itemDetails: {
     flexDirection: 'row',
@@ -401,7 +402,7 @@ const styles = StyleSheet.create({
   },
   itemQuantity: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
   },
   itemPrice: {
     fontSize: 14,
@@ -409,7 +410,7 @@ const styles = StyleSheet.create({
     color: '#FF6B35',
   },
   merchantCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     margin: 16,
     padding: 16,
     borderRadius: 12,
@@ -442,12 +443,12 @@ const styles = StyleSheet.create({
   merchantName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 4,
   },
   merchantMatch: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     marginBottom: 6,
   },
   cashbackBadge: {
@@ -457,7 +458,7 @@ const styles = StyleSheet.create({
   },
   cashbackText: {
     fontSize: 12,
-    color: '#4CAF50',
+    color: colors.brand.emerald,
     fontWeight: '600',
   },
   helpCard: {
@@ -478,7 +479,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopWidth: 1,
     borderTopColor: '#E5E5E5',
     gap: 12,
@@ -494,7 +495,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#666',
+    color: colors.midGray,
   },
   confirmButton: {
     flex: 2,
@@ -506,7 +507,7 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

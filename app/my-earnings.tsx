@@ -37,6 +37,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import analyticsService from '@/services/analyticsService';
 import { Paths, File } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -50,28 +51,28 @@ const PERIOD_OPTIONS: { label: string; value: EarningsPeriod }[] = [
 
 // Breakdown category config
 const BREAKDOWN_CATEGORIES = [
-  { key: 'videos' as const, label: 'Videos', icon: 'videocam', color: '#EC4899', bgColor: '#EC489920' },
-  { key: 'projects' as const, label: 'Projects', icon: 'briefcase', color: '#8B5CF6', bgColor: '#8B5CF620' },
+  { key: 'videos' as const, label: 'Videos', icon: 'videocam', color: colors.brand.pink, bgColor: '#EC489920' },
+  { key: 'projects' as const, label: 'Projects', icon: 'briefcase', color: colors.brand.purpleLight, bgColor: '#8B5CF620' },
   { key: 'referrals' as const, label: 'Referrals', icon: 'people', color: Colors.success, bgColor: '#10B98120' },
-  { key: 'cashback' as const, label: 'Cashback', icon: 'cash', color: '#F59E0B', bgColor: '#F59E0B20' },
-  { key: 'socialMedia' as const, label: 'Social Media', icon: 'share-social', color: '#3B82F6', bgColor: '#3B82F620' },
+  { key: 'cashback' as const, label: 'Cashback', icon: 'cash', color: colors.warningScale[400], bgColor: '#F59E0B20' },
+  { key: 'socialMedia' as const, label: 'Social Media', icon: 'share-social', color: colors.infoScale[400], bgColor: '#3B82F620' },
   { key: 'games' as const, label: 'Games', icon: 'game-controller', color: Colors.success, bgColor: '#10B98120' },
-  { key: 'dailyCheckIn' as const, label: 'Daily Check-in', icon: 'calendar', color: '#06B6D4', bgColor: '#06B6D420' },
-  { key: 'events' as const, label: 'Events', icon: 'ticket', color: '#7C3AED', bgColor: '#7C3AED20' },
-  { key: 'socialImpact' as const, label: 'Social Impact', icon: 'heart', color: '#EC4899', bgColor: '#EC489920' },
+  { key: 'dailyCheckIn' as const, label: 'Daily Check-in', icon: 'calendar', color: colors.brand.cyan, bgColor: '#06B6D420' },
+  { key: 'events' as const, label: 'Events', icon: 'ticket', color: colors.brand.purple, bgColor: '#7C3AED20' },
+  { key: 'socialImpact' as const, label: 'Social Impact', icon: 'heart', color: colors.brand.pink, bgColor: '#EC489920' },
   { key: 'bonus' as const, label: 'Bonus', icon: 'gift', color: Colors.error, bgColor: '#EF444420' },
 ] as const;
 
 // Transaction source → icon/color mapping
 const SOURCE_DISPLAY: Record<string, { icon: string; color: string }> = {
-  videos: { icon: 'videocam', color: '#EC4899' },
-  projects: { icon: 'briefcase', color: '#8B5CF6' },
+  videos: { icon: 'videocam', color: colors.brand.pink },
+  projects: { icon: 'briefcase', color: colors.brand.purpleLight },
   referrals: { icon: 'people', color: Colors.success },
-  cashback: { icon: 'cash', color: '#F59E0B' },
-  socialMedia: { icon: 'share-social', color: '#3B82F6' },
+  cashback: { icon: 'cash', color: colors.warningScale[400] },
+  socialMedia: { icon: 'share-social', color: colors.infoScale[400] },
   games: { icon: 'game-controller', color: Colors.success },
-  dailyCheckIn: { icon: 'calendar', color: '#06B6D4' },
-  socialImpact: { icon: 'heart', color: '#EC4899' },
+  dailyCheckIn: { icon: 'calendar', color: colors.brand.cyan },
+  socialImpact: { icon: 'heart', color: colors.brand.pink },
   bonus: { icon: 'gift', color: Colors.error },
 };
 
@@ -262,10 +263,10 @@ ${allTransactions.map((t, i) => `${i + 1}. ${new Date(t.createdAt).toLocaleDateS
   if (error && !data) {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor="#EC4899" />
-        <LinearGradient colors={['#EC4899', '#DB2777']} style={styles.header}>
+        <StatusBar barStyle="light-content" backgroundColor={colors.brand.pink} />
+        <LinearGradient colors={[colors.brand.pink, colors.deepPink]} style={styles.header}>
           <View style={styles.headerContent}>
-            <HeaderBackButton onPress={handleBackPress} iconColor="#FFFFFF" style={styles.backButton} />
+            <HeaderBackButton onPress={handleBackPress} iconColor={colors.background.primary} style={styles.backButton} />
             <Text style={styles.headerTitle}>My Earnings</Text>
             <View style={styles.headerRight} />
           </View>
@@ -290,12 +291,12 @@ ${allTransactions.map((t, i) => `${i + 1}. ${new Date(t.createdAt).toLocaleDateS
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#EC4899" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.brand.pink} />
 
       {/* Header */}
-      <LinearGradient colors={['#EC4899', '#DB2777']} style={styles.header}>
+      <LinearGradient colors={[colors.brand.pink, colors.deepPink]} style={styles.header}>
         <View style={styles.headerContent}>
-          <HeaderBackButton onPress={handleBackPress} iconColor="#FFFFFF" style={styles.backButton} />
+          <HeaderBackButton onPress={handleBackPress} iconColor={colors.background.primary} style={styles.backButton} />
           <Text style={styles.headerTitle}>My Earnings</Text>
           <View style={styles.headerActions}>
             <Pressable
@@ -345,7 +346,7 @@ ${allTransactions.map((t, i) => `${i + 1}. ${new Date(t.createdAt).toLocaleDateS
 
         {/* Total Earnings Card */}
         <LinearGradient
-          colors={['#EC4899', '#DB2777']}
+          colors={[colors.brand.pink, colors.deepPink]}
           style={styles.totalCard}
           accessibilityLabel={`Total lifetime earnings: ${currencySymbol}${data.totalEarned}. Available: ${currencySymbol}${data.availableBalance}. Pending: ${currencySymbol}${data.pendingEarnings}`}
           accessibilityRole="summary"
@@ -382,7 +383,7 @@ ${allTransactions.map((t, i) => `${i + 1}. ${new Date(t.createdAt).toLocaleDateS
             accessibilityRole="button"
             accessibilityHint="Navigate to your wallet to manage balance"
           >
-            <Ionicons name="wallet-outline" size={20} color="#EC4899" />
+            <Ionicons name="wallet-outline" size={20} color={colors.brand.pink} />
             <Text style={styles.walletButtonText}>Go to Wallet</Text>
           </Pressable>
         </LinearGradient>
@@ -390,7 +391,7 @@ ${allTransactions.map((t, i) => `${i + 1}. ${new Date(t.createdAt).toLocaleDateS
         {/* Zero state message */}
         {isZeroState && (
           <View style={styles.zeroStateCard}>
-            <Ionicons name="rocket-outline" size={48} color="#EC4899" />
+            <Ionicons name="rocket-outline" size={48} color={colors.brand.pink} />
             <Text style={styles.zeroStateTitle}>Start Earning!</Text>
             <Text style={styles.zeroStateDescription}>
               Complete projects, refer friends, share on social media, play games, and shop to earn coins.
@@ -400,7 +401,7 @@ ${allTransactions.map((t, i) => `${i + 1}. ${new Date(t.createdAt).toLocaleDateS
               onPress={() => router.push('/playandearn' as any)}
             >
               <Text style={styles.zeroStateCtaText}>Explore Earning Opportunities</Text>
-              <Ionicons name="arrow-forward" size={16} color="#EC4899" />
+              <Ionicons name="arrow-forward" size={16} color={colors.brand.pink} />
             </Pressable>
           </View>
         )}
@@ -571,8 +572,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.border.default,
   },
   periodChipActive: {
-    backgroundColor: '#EC4899',
-    borderColor: '#EC4899',
+    backgroundColor: colors.brand.pink,
+    borderColor: colors.brand.pink,
   },
   periodChipText: {
     fontSize: 12,
@@ -642,7 +643,7 @@ const styles = StyleSheet.create({
   walletButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#EC4899',
+    color: colors.brand.pink,
   },
   // Sections
   section: {
@@ -662,12 +663,12 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#EC4899',
+    color: colors.brand.pink,
   },
   breakdownTotal: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#EC4899',
+    color: colors.brand.pink,
   },
   // Breakdown grid
   breakdownGrid: {
@@ -819,7 +820,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#EC4899',
+    backgroundColor: colors.brand.pink,
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.xl,
     borderRadius: BorderRadius.md,
@@ -864,7 +865,7 @@ const styles = StyleSheet.create({
   zeroStateCtaText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#EC4899',
+    color: colors.brand.pink,
   },
   // Empty transactions
   emptyTransactions: {

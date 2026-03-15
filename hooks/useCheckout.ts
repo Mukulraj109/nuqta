@@ -37,6 +37,8 @@ import {
 import analyticsService from '@/services/analyticsService';
 import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
+import storesApi from '@/services/storesApi';
+import discountsApi from '@/services/discountsApi';
 
 const devLog = {
   log: __DEV__ ? console.log.bind(console) : () => {},
@@ -194,7 +196,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
                 state: orderAddr.state,
                 pincode: orderAddr.pincode || (orderAddr as any).postalCode,
                 country: orderAddr.country || 'India',
-                type: orderAddr.addressType,
+                type: orderAddr.addressType ? (orderAddr.addressType.toUpperCase() as 'HOME' | 'OFFICE' | 'OTHER') : undefined,
                 isDefault: false,
               };
             }
@@ -203,7 +205,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
             const totals = order.totals || order.summary;
             const itemTotal = totals?.subtotal || checkoutItems.reduce((t, i) => t + i.price * i.quantity, 0);
             const taxes = totals?.tax || Math.round(itemTotal * TAX_RATE);
-            const deliveryFee = totals?.delivery || totals?.shipping || 0;
+            const deliveryFee = totals?.delivery || (totals as any)?.shipping || 0;
 
             const billSummary: BillSummary = {
               itemTotal,
@@ -493,7 +495,6 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
 
           if (firstItem?.storeId) {
             try {
-              const storesApi = (await import('@/services/storesApi')).default;
               const storeResponse = await storesApi.getStoreById(firstItem.storeId);
               if (storeResponse.success && storeResponse.data) {
                 const storeData = storeResponse.data;
@@ -578,7 +579,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
                 if (lastAddr) {
                   lastUsedAddress = userAddresses.find(addr =>
                     addr.addressLine1 === lastAddr.addressLine1 &&
-                    addr.pincode === (lastAddr.pincode || lastAddr.postalCode)
+                    addr.pincode === (lastAddr.pincode || (lastAddr as any).postalCode)
                   );
                 }
               } catch {} // Non-critical — fallback to default
@@ -1520,7 +1521,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
             setState(prev => ({
               ...prev,
               loading: false,
-              error: 'Order creation failed and refund could not be processed. Please contact support with transaction ID: ' + walletResponse.data.transaction.transactionId,
+              error: 'Order creation failed and refund could not be processed. Please contact support with transaction ID: ' + walletResponse.data!.transaction.transactionId,
               currentStep: 'checkout'
             }));
           }
@@ -1529,7 +1530,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
           setState(prev => ({
             ...prev,
             loading: false,
-            error: 'Order creation failed and refund could not be processed. Please contact support with transaction ID: ' + walletResponse.data.transaction.transactionId,
+            error: 'Order creation failed and refund could not be processed. Please contact support with transaction ID: ' + walletResponse.data!.transaction.transactionId,
             currentStep: 'checkout'
           }));
         }
@@ -1868,10 +1869,9 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
             let appliedCardOffer = null;
             if (paymentResponse.paymentMethod === 'card' || paymentResponse.paymentMethod?.includes('card')) {
               try {
-                const discountsApi = await import('@/services/discountsApi');
                 const storeId = state.store.id;
                 const orderValue = state.billSummary.totalPayable;
-                
+
                 // Get best card offer for this store
                 const cardOffersResponse = await discountsApi.getCardOffers({
                   storeId,
@@ -1879,10 +1879,10 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
                   page: 1,
                   limit: 1,
                 });
-                
+
                 if (cardOffersResponse.success && cardOffersResponse.data?.discounts?.[0]) {
                   const bestOffer = cardOffersResponse.data.discounts[0];
-                  
+
                   // Validate eligibility
                   if (orderValue >= bestOffer.minOrderValue) {
                     // Apply the offer

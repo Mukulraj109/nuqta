@@ -14,6 +14,7 @@ import FlowScreenLayout from '../../shared/FlowScreenLayout';
 import ActionBtn from '../../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -52,10 +53,10 @@ const LocationPin: React.FC = () => {
             <Animated.View style={[styles.pulseDot, pulseStyle]} />
             <Animated.View style={[styles.pinWrapper, pinStyle]}>
                 <LinearGradient
-                    colors={['#EF4444', '#DC2626']}
+                    colors={[colors.error, colors.error]}
                     style={styles.pin}
                 >
-                    <Ionicons name="location" size={20} color="#FFFFFF" />
+                    <Ionicons name="location" size={20} color={colors.background.primary} />
                 </LinearGradient>
                 <View style={styles.pinShadow} />
             </Animated.View>
@@ -70,13 +71,13 @@ const DiscoverStoresScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
             subtitle="Discover stores with rewards nearby"
             onBack={onBack}
             footer={<ActionBtn title="Visit Store" onPress={() => onNavigate('A2')} />}
-            headerAccent="#059669"
+            headerAccent={colors.successScale[700]}
         >
             {/* Map Container */}
             <View style={styles.mapContainer}>
                 {/* Map background pattern */}
                 <LinearGradient
-                    colors={['#E0F2FE', '#DBEAFE', '#EFF6FF']}
+                    colors={['#E0F2FE', colors.tint.blueLight, colors.tint.blue]}
                     style={styles.mapGradient}
                 >
                     {/* Decorative map elements */}
@@ -98,7 +99,7 @@ const DiscoverStoresScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                         entering={FadeInUp.delay(300).springify()}
                         style={styles.distanceBadge}
                     >
-                        <Ionicons name="navigate" size={14} color="#3B82F6" />
+                        <Ionicons name="navigate" size={14} color={colors.infoScale[400]} />
                         <Text style={styles.distanceText}>0.8 km</Text>
                     </Animated.View>
                 </LinearGradient>
@@ -109,20 +110,20 @@ const DiscoverStoresScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                     style={styles.storeCard}
                 >
                     <LinearGradient
-                        colors={['#FFFFFF', '#FAFAFA']}
+                        colors={[colors.background.primary, '#FAFAFA']}
                         style={styles.storeCardGradient}
                     >
                         <View style={styles.storeHeader}>
                             <LinearGradient
-                                colors={['#DC2626', '#B91C1C']}
+                                colors={[colors.error, colors.errorScale[700]]}
                                 style={styles.storeIcon}
                             >
-                                <Ionicons name="cafe" size={24} color="#FFFFFF" />
+                                <Ionicons name="cafe" size={24} color={colors.background.primary} />
                             </LinearGradient>
                             <View style={styles.storeInfo}>
                                 <Text style={styles.storeName}>Cafe Coffee Day</Text>
                                 <View style={styles.storeMetaRow}>
-                                    <Ionicons name="star" size={14} color="#F59E0B" />
+                                    <Ionicons name="star" size={14} color={colors.warningScale[400]} />
                                     <Text style={styles.storeMeta}>4.5 • 0.8 km away</Text>
                                 </View>
                             </View>
@@ -137,20 +138,20 @@ const DiscoverStoresScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                         <View style={styles.offerSection}>
                             <View style={styles.offerTag}>
                                 <LinearGradient
-                                    colors={['#D1FAE5', '#A7F3D0']}
+                                    colors={[colors.tint.green, '#A7F3D0']}
                                     style={styles.offerGradient}
                                 >
-                                    <Ionicons name="gift" size={16} color="#059669" />
+                                    <Ionicons name="gift" size={16} color={colors.successScale[700]} />
                                     <Text style={styles.offerText}>10% Cashback</Text>
                                 </LinearGradient>
                             </View>
                             <View style={styles.offerTag}>
                                 <LinearGradient
-                                    colors={['#FEF3C7', '#FDE68A']}
+                                    colors={[colors.tint.amberLight, colors.warningScale[200]]}
                                     style={styles.offerGradient}
                                 >
-                                    <Ionicons name="layers" size={16} color="#F59E0B" />
-                                    <Text style={[styles.offerText, { color: '#B45309' }]}>+30 Coins</Text>
+                                    <Ionicons name="layers" size={16} color={colors.warningScale[400]} />
+                                    <Text style={[styles.offerText, { color: colors.brand.amberDeep }]}>+30 Coins</Text>
                                 </LinearGradient>
                             </View>
                         </View>
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
     },
     road: {
         position: 'absolute',
-        backgroundColor: '#BFDBFE',
+        backgroundColor: colors.infoScale[200],
     },
     roadH1: {
         top: '30%',
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: '#EF4444',
+        backgroundColor: colors.error,
     },
     pinWrapper: {
         alignItems: 'center',
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 3,
-        borderColor: '#FFFFFF',
+        borderColor: colors.background.primary,
     },
     pinShadow: {
         width: 20,
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 6,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.background.primary,
         paddingHorizontal: 12,
         paddingVertical: 8,
         borderRadius: 12,
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
     distanceText: {
         fontSize: 14,
         fontWeight: '700',
-        color: '#3B82F6',
+        color: colors.infoScale[400],
     },
     storeCard: {
         position: 'absolute',
@@ -343,7 +344,7 @@ const styles = StyleSheet.create({
     storeName: {
         fontSize: 17,
         fontWeight: '700',
-        color: '#1F2937',
+        color: colors.neutral[800],
         marginBottom: 4,
     },
     storeMetaRow: {
@@ -353,13 +354,13 @@ const styles = StyleSheet.create({
     },
     storeMeta: {
         fontSize: 13,
-        color: '#6B7280',
+        color: colors.neutral[500],
     },
     openBadge: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 4,
-        backgroundColor: '#D1FAE5',
+        backgroundColor: colors.tint.green,
         paddingHorizontal: 10,
         paddingVertical: 5,
         borderRadius: 8,
@@ -368,16 +369,16 @@ const styles = StyleSheet.create({
         width: 6,
         height: 6,
         borderRadius: 3,
-        backgroundColor: '#059669',
+        backgroundColor: colors.successScale[700],
     },
     openText: {
         fontSize: 12,
         fontWeight: '600',
-        color: '#059669',
+        color: colors.successScale[700],
     },
     divider: {
         height: 1,
-        backgroundColor: '#F3F4F6',
+        backgroundColor: colors.neutral[100],
         marginVertical: 14,
     },
     offerSection: {
@@ -399,7 +400,7 @@ const styles = StyleSheet.create({
     offerText: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#059669',
+        color: colors.successScale[700],
     },
 });
 

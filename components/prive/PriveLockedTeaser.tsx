@@ -5,6 +5,7 @@
  * Dark premium theme with invite code input.
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState } from 'react';
 import {
   View,
@@ -105,15 +106,15 @@ function PriveLockedTeaser({ onAccessGranted }: PriveLockedTeaserProps) {
       >
         {/* Hero Section */}
         <LinearGradient
-          colors={['#1A1510', '#0A0A0A']}
+          colors={['#1A1510', colors.midGrayAlt]}
           style={styles.heroSection}
         >
           <View style={styles.lockIconContainer}>
             <LinearGradient
-              colors={['#C9A962', '#A88B4A']}
+              colors={[colors.brand.goldAccent, '#A88B4A']}
               style={styles.lockIconGradient}
             >
-              <Ionicons name="lock-closed" size={32} color="#0A0A0A" />
+              <Ionicons name="lock-closed" size={32} color={colors.midGrayAlt} />
             </LinearGradient>
           </View>
 
@@ -210,16 +211,16 @@ function PriveLockedTeaser({ onAccessGranted }: PriveLockedTeaserProps) {
                 disabled={isApplying}
               >
                 <LinearGradient
-                  colors={['#C9A962', '#A88B4A']}
+                  colors={[colors.brand.goldAccent, '#A88B4A']}
                   style={styles.applyButtonGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                 >
                   {isApplying ? (
-                    <ActivityIndicator size="small" color="#0A0A0A" />
+                    <ActivityIndicator size="small" color={colors.midGrayAlt} />
                   ) : (
                     <>
-                      <Ionicons name="key" size={18} color="#0A0A0A" />
+                      <Ionicons name="key" size={18} color={colors.midGrayAlt} />
                       <Text style={styles.applyButtonText}>Unlock Prive</Text>
                     </>
                   )}
@@ -378,7 +379,7 @@ const styles = StyleSheet.create({
   applyButtonText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#0A0A0A',
+    color: colors.midGrayAlt,
   },
   buttonDisabled: {
     opacity: 0.5,

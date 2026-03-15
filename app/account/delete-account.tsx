@@ -20,6 +20,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import apiClient from '@/services/apiClient';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function DeleteAccountPage() {
   const router = useRouter();
@@ -73,10 +74,10 @@ export default function DeleteAccountPage() {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#EF4444" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.error} />
 
       {/* Header */}
-      <LinearGradient colors={['#EF4444', '#DC2626']} style={styles.header}>
+      <LinearGradient colors={[colors.error, colors.error]} style={styles.header}>
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
@@ -140,7 +141,7 @@ export default function DeleteAccountPage() {
             value={confirmationText}
             onChangeText={setConfirmationText}
             placeholder={`Type "${requiredText}" here`}
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             autoCapitalize="characters"
             autoCorrect={false}
             accessibilityLabel="Delete account confirmation"
@@ -256,12 +257,12 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
   warningCard: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     padding: Spacing.base,
     borderRadius: BorderRadius.md,
     marginBottom: Spacing.xl,
     borderLeftWidth: 4,
-    borderLeftColor: '#F59E0B',
+    borderLeftColor: colors.warningScale[400],
   },
   warningHeader: {
     flexDirection: 'row',
@@ -271,12 +272,12 @@ const styles = StyleSheet.create({
   warningTitle: {
     ...Typography.bodyLarge,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     marginLeft: Spacing.md,
   },
   warningText: {
     ...Typography.body,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     lineHeight: 20,
   },
   deletionCard: {

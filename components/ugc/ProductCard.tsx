@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ProductCardProps } from '@/types/product-selector.types';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const PLACEHOLDER_IMAGE = 'https://via.placeholder.com/150x150?text=No+Image';
 
@@ -73,7 +74,7 @@ function ProductCard({
           ]}
         >
           {isSelected && (
-            <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+            <Ionicons name="checkmark" size={16} color={colors.background.primary} />
           )}
         </View>
       </View>
@@ -108,7 +109,7 @@ function ProductCard({
         {/* Low Stock Badge */}
         {isLowStock && !isOutOfStock && (
           <View style={styles.lowStockBadge}>
-            <Ionicons name="alert-circle" size={12} color="#F59E0B" />
+            <Ionicons name="alert-circle" size={12} color={colors.warningScale[400]} />
             <Text style={styles.lowStockText}>Low Stock</Text>
           </View>
         )}
@@ -132,7 +133,7 @@ function ProductCard({
         {/* Store Name */}
         {showStore && product.store && (
           <View style={styles.storeContainer}>
-            <Ionicons name="storefront-outline" size={12} color="#6B7280" />
+            <Ionicons name="storefront-outline" size={12} color={colors.neutral[500]} />
             <Text
               style={[
                 styles.storeName,
@@ -149,7 +150,7 @@ function ProductCard({
         {/* Rating */}
         {showRating && product.rating && product.rating.average > 0 && (
           <View style={styles.ratingContainer}>
-            <Ionicons name="star" size={12} color="#F59E0B" />
+            <Ionicons name="star" size={12} color={colors.warningScale[400]} />
             <Text style={styles.ratingText}>
               {typeof product.rating.average === 'number'
                 ? product.rating.average.toFixed(1)
@@ -191,7 +192,7 @@ function ProductCard({
       {/* Selected Badge */}
       {isSelected && (
         <View style={styles.selectedBadge}>
-          <Ionicons name="checkmark-circle" size={20} color="#6366F1" />
+          <Ionicons name="checkmark-circle" size={20} color={colors.brand.indigo} />
         </View>
       )}
     </Pressable>
@@ -200,11 +201,11 @@ function ProductCard({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     marginBottom: 12,
     ...Platform.select({
       ios: {
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   containerSelected: {
-    borderColor: '#6366F1',
+    borderColor: colors.brand.indigo,
     backgroundColor: '#F5F7FF',
   },
   containerDisabled: {
@@ -239,18 +240,18 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#D1D5DB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[300],
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkboxSelected: {
-    backgroundColor: '#6366F1',
-    borderColor: '#6366F1',
+    backgroundColor: colors.brand.indigo,
+    borderColor: colors.brand.indigo,
   },
   checkboxDisabled: {
-    backgroundColor: '#F3F4F6',
-    borderColor: '#D1D5DB',
+    backgroundColor: colors.neutral[100],
+    borderColor: colors.neutral[300],
   },
   imageContainer: {
     width: '100%',
@@ -268,13 +269,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
   },
   discountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '700',
   },
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   outOfStockText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '700',
     textTransform: 'uppercase',
@@ -297,13 +298,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
   },
   lowStockText: {
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontSize: 10,
     fontWeight: '600',
   },
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 6,
     lineHeight: 18,
   },
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
   },
   storeName: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     flex: 1,
   },
   ratingContainer: {
@@ -341,11 +342,11 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   ratingCount: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   priceContainer: {
     flexDirection: 'row',
@@ -356,16 +357,16 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#6366F1',
+    color: colors.brand.indigo,
   },
   originalPrice: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   categoryTag: {
     alignSelf: 'flex-start',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -373,14 +374,14 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 10,
-    color: '#4B5563',
+    color: colors.neutral[600],
     fontWeight: '500',
   },
   selectedBadge: {
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 2,
     ...Platform.select({
@@ -396,7 +397,7 @@ const styles = StyleSheet.create({
     }),
   },
   textDisabled: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 });
 

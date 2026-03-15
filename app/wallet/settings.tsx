@@ -23,6 +23,7 @@ import walletApi from '@/services/walletApi';
 import { useWalletContext } from '@/contexts/WalletContext';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface WalletSettings {
   autoTopup: boolean;
@@ -108,7 +109,7 @@ export default function WalletSettingsPage() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={[styles.sectionIcon, { backgroundColor: '#10B98120' }]}>
-              <Ionicons name="refresh-circle" size={22} color="#10B981" />
+              <Ionicons name="refresh-circle" size={22} color={colors.successScale[400]} />
             </View>
             <View style={styles.sectionHeaderText}>
               <ThemedText style={styles.sectionTitle}>Auto Top-up</ThemedText>
@@ -146,7 +147,7 @@ export default function WalletSettingsPage() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={[styles.sectionIcon, { backgroundColor: '#F59E0B20' }]}>
-              <Ionicons name="notifications" size={22} color="#F59E0B" />
+              <Ionicons name="notifications" size={22} color={colors.warningScale[400]} />
             </View>
             <View style={styles.sectionHeaderText}>
               <ThemedText style={styles.sectionTitle}>Low Balance Alert</ThemedText>
@@ -188,7 +189,7 @@ export default function WalletSettingsPage() {
         <View style={styles.footer}>
           <Pressable style={styles.saveButton} onPress={handleSave} disabled={saving}>
             {saving ? (
-              <ActivityIndicator color="#FFF" />
+              <ActivityIndicator color={colors.background.primary} />
             ) : (
               <ThemedText style={styles.saveButtonText}>Save Settings</ThemedText>
             )}
@@ -204,7 +205,7 @@ function Header({ onBack }: { onBack: () => void }) {
     <LinearGradient colors={[Colors.primary[600], Colors.secondary[700]]} style={styles.header}>
       <View style={styles.headerContent}>
         <Pressable onPress={onBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#FFF" />
+          <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
         </Pressable>
         <ThemedText style={styles.headerTitle}>Wallet Settings</ThemedText>
         <View style={{ width: 40 }} />
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
   },
   loadingContainer: {
@@ -377,6 +378,6 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     ...Typography.button,
-    color: '#FFF',
+    color: colors.background.primary,
   },
 });

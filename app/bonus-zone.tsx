@@ -16,6 +16,7 @@ import bonusZoneApi, { BonusZoneCampaign, BonusCampaignType } from '@/services/b
 import BonusZoneCard from '@/components/earn/BonusZoneCard';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // ============================================
 // FILTER TABS
@@ -110,12 +111,12 @@ export default function BonusZonePage() {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#F97316" />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.brand.orange} />
         }
       >
         {/* Header */}
         <View style={styles.header}>
-          <Ionicons name="happy" size={28} color="#F97316" />
+          <Ionicons name="happy" size={28} color={colors.brand.orange} />
           <Text style={styles.headerTitle}>Bonus Zone</Text>
           <Text style={styles.headerSubtitle}>
             Earn extra coins with time-limited bonus campaigns
@@ -129,7 +130,7 @@ export default function BonusZonePage() {
             <TextInput
               style={styles.searchInput}
               placeholder="Search campaigns..."
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               value={searchQuery}
               onChangeText={setSearchQuery}
               returnKeyType="search"
@@ -195,7 +196,7 @@ export default function BonusZonePage() {
             <Text style={styles.emptyTitle}>Something went wrong</Text>
             <Text style={styles.emptySubtitle}>{error}</Text>
             <Pressable
-              style={{ marginTop: Spacing.base, paddingHorizontal: Spacing.lg, paddingVertical: 10, backgroundColor: '#F97316', borderRadius: BorderRadius.sm }}
+              style={{ marginTop: Spacing.base, paddingHorizontal: Spacing.lg, paddingVertical: 10, backgroundColor: colors.brand.orange, borderRadius: BorderRadius.sm }}
               onPress={fetchCampaigns}
             >
               <Text style={{ color: Colors.text.inverse, fontWeight: '600', ...Typography.body }}>Retry</Text>
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
     marginRight: Spacing.sm,
   },
   filterTabActive: {
-    backgroundColor: '#F97316',
+    backgroundColor: colors.brand.orange,
   },
   filterTabText: {
     ...Typography.bodySmall,

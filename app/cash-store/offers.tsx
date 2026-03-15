@@ -21,6 +21,7 @@ import cashStoreApi from '../../services/cashStoreApi';
 import couponService from '../../services/couponApi';
 import realVouchersApi from '../../services/realVouchersApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -316,8 +317,8 @@ export default function OffersPage() {
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={handleRefresh}
-            tintColor="#E8B896"
-            colors={['#E8B896']}
+            tintColor={colors.brand.sand}
+            colors={[colors.brand.sand]}
           />
         }
       >
@@ -342,7 +343,7 @@ export default function OffersPage() {
         {/* ─── Inline error banner (partial failure) ─── */}
         {error && hasContent && (
           <View style={styles.errorBanner}>
-            <Ionicons name="warning-outline" size={14} color="#B45309" />
+            <Ionicons name="warning-outline" size={14} color={colors.brand.amberDeep} />
             <Text style={styles.errorBannerText}>Some data may be outdated</Text>
             <Pressable onPress={handleRefresh} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
               <Text style={styles.errorBannerRetry}>Refresh</Text>
@@ -405,7 +406,7 @@ export default function OffersPage() {
               <View style={styles.section}>
                 <View style={styles.sectionHeader}>
                   <View style={styles.sectionIconWrap}>
-                    <Ionicons name="pricetag" size={15} color="#EC4899" />
+                    <Ionicons name="pricetag" size={15} color={colors.brand.pink} />
                   </View>
                   <Text style={styles.sectionTitle}>Featured Coupons</Text>
                   <Pressable
@@ -629,7 +630,7 @@ export default function OffersPage() {
               <View style={styles.section}>
                 <View style={styles.sectionHeader}>
                   <View style={[styles.sectionIconWrap, { backgroundColor: 'rgba(139,92,246,0.12)' }]}>
-                    <Ionicons name="diamond" size={15} color="#8B5CF6" />
+                    <Ionicons name="diamond" size={15} color={colors.brand.purpleLight} />
                   </View>
                   <Text style={styles.sectionTitle}>Top Cashback Brands</Text>
                   <Pressable
@@ -685,8 +686,8 @@ export default function OffersPage() {
             <View style={styles.section}>
               <View style={styles.quickActionsGrid}>
                 {[
-                  { icon: 'gift-outline' as const, label: 'Gift Cards', route: '/cash-store/buy-coupons', color: '#8B5CF6', bg: 'rgba(139,92,246,0.08)' },
-                  { icon: 'pricetag-outline' as const, label: 'My Coupons', route: '/account/coupons', color: '#EC4899', bg: 'rgba(236,72,153,0.08)' },
+                  { icon: 'gift-outline' as const, label: 'Gift Cards', route: '/cash-store/buy-coupons', color: colors.brand.purpleLight, bg: 'rgba(139,92,246,0.08)' },
+                  { icon: 'pricetag-outline' as const, label: 'My Coupons', route: '/account/coupons', color: colors.brand.pink, bg: 'rgba(236,72,153,0.08)' },
                   { icon: 'flash-outline' as const, label: '2X Cashback', route: '/offers/double-cashback', color: Colors.warning, bg: 'rgba(245,158,11,0.08)' },
                   { icon: 'wallet-outline' as const, label: 'My Cashback', route: '/account/cashback', color: Colors.success, bg: 'rgba(16,185,129,0.08)' },
                 ].map((action, i) => (
@@ -816,12 +817,12 @@ const styles = StyleSheet.create({
     flex: 1,
     ...Typography.bodySmall,
     fontWeight: '500',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   errorBannerRetry: {
     ...Typography.bodySmall,
     fontWeight: '700',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
   },
 
   // ── Hero Banner ──
@@ -1191,7 +1192,7 @@ const styles = StyleSheet.create({
   dropBoostedRate: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#E8B896',
+    color: colors.brand.sand,
     letterSpacing: -0.2,
   },
   dropMetaRow: {

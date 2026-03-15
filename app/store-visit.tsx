@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
@@ -758,7 +759,7 @@ function StoreVisitPageInner() {
     return (
       <ThemedView style={styles.container}>
         <LinearGradient
-          colors={[Colors.gold, '#00796B']}
+          colors={[Colors.gold, colors.brand.teal]}
           style={styles.header}
         >
           <Pressable onPress={() => router.back()} style={styles.backButton}>
@@ -783,7 +784,7 @@ function StoreVisitPageInner() {
 
       {/* Header */}
       <LinearGradient
-        colors={[Colors.gold, '#00796B']}
+        colors={[Colors.gold, colors.brand.teal]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.header}

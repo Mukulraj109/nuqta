@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface StepItem {
   icon: keyof typeof Ionicons.glyphMap;
@@ -33,7 +34,7 @@ const steps: Step[] = [
     icon: 'search-outline',
     title: 'Discover',
     description: 'Find stores, services, or products',
-    color: '#3B82F6',
+    color: colors.infoScale[400],
     items: [
       { icon: 'location-outline', text: 'Nearby stores' },
       { icon: 'globe-outline', text: 'Online brands' },
@@ -47,7 +48,7 @@ const steps: Step[] = [
     icon: 'card-outline',
     title: 'Pay / Order',
     description: 'Shop the way you like',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     items: [
       { icon: 'phone-portrait-outline', text: 'Pay in-store by scanning QR' },
       { icon: 'car-outline', text: 'Order online (60-min delivery)' },
@@ -60,7 +61,7 @@ const steps: Step[] = [
     icon: 'wallet-outline',
     title: 'Earn Rewards',
     description: 'Rewards come automatically',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     items: [
       { icon: 'checkmark-circle', text: 'Cashback is credited' },
       { icon: 'checkmark-circle', text: 'Coins are added to your wallet' },
@@ -68,7 +69,7 @@ const steps: Step[] = [
     ],
     highlight: {
       text: 'No coupon codes. No confusion.',
-      bgColor: '#FEF3C7',
+      bgColor: colors.tint.amberLight,
     },
   },
   {
@@ -76,7 +77,7 @@ const steps: Step[] = [
     icon: 'gift-outline',
     title: 'Redeem & Repeat',
     description: 'Use rewards on your next purchase',
-    color: '#10B981',
+    color: colors.successScale[400],
     items: [
       { icon: 'checkmark-circle', text: 'Pay partially with coins' },
       { icon: 'checkmark-circle', text: 'Get extra discounts' },
@@ -84,7 +85,7 @@ const steps: Step[] = [
     ],
     highlight: {
       text: 'The more you use ReZ, the more you save.',
-      bgColor: '#D1FAE5',
+      bgColor: colors.tint.green,
     },
   },
 ];
@@ -156,21 +157,21 @@ const StepsSection: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 20,
   },
   stepCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
   numberText: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   titleContainer: {
     flex: 1,
@@ -213,11 +214,11 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   stepDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   itemsContainer: {
     gap: 12,
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     flex: 1,
   },
   quoteContainer: {
@@ -249,13 +250,13 @@ const styles = StyleSheet.create({
     width: 3,
     height: '100%',
     minHeight: 40,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 2,
     marginRight: 12,
   },
   quoteText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontStyle: 'italic',
     flex: 1,
     lineHeight: 20,

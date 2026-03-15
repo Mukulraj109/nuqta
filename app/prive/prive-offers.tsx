@@ -20,6 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/priveTheme';
 import priveApi, { PriveOffer } from '@/services/priveApi';
 import { CardGridSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 export default function PriveOffersScreen() {
   const router = useRouter();
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
   tierText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#A855F7',
+    color: colors.brand.purpleMedium,
   },
   emptyContainer: {
     alignItems: 'center',
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#000',
+    color: colors.text.primary,
   },
   footer: {
     paddingVertical: PRIVE_SPACING.xl,

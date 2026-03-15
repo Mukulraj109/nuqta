@@ -15,21 +15,22 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#0B2240',
-  gray50: '#F9FAFB',
-  gray100: '#F3F4F6',
-  gray200: '#E5E7EB',
-  gray400: '#9CA3AF',
-  gray600: '#6B7280',
-  green500: '#22C55E',
-  green600: '#16A34A',
-  amber500: '#F59E0B',
-  red500: '#EF4444',
+  white: colors.background.primary,
+  navy: colors.brand.navyDark,
+  gray50: colors.neutral[50],
+  gray100: colors.neutral[100],
+  gray200: colors.neutral[200],
+  gray400: colors.neutral[400],
+  gray600: colors.neutral[500],
+  green500: colors.success,
+  green600: colors.brand.greenDark,
+  amber500: colors.warningScale[400],
+  red500: colors.error,
 };
 
 export interface GroceryProduct {

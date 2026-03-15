@@ -13,6 +13,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 function ReviewCardSkeleton() {
   return (
@@ -95,7 +96,7 @@ function ReviewCardSkeleton() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 3,
     borderWidth: 1,
-    borderColor: '#F1F5F9',
+    borderColor: colors.tint.slate,
   },
   header: {
     flexDirection: 'row',

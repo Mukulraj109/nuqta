@@ -8,6 +8,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface CategoryIconItemProps {
   category: {
@@ -246,8 +247,8 @@ const getCategoryColor = (slug: string, name?: string, metadataColor?: string): 
     'desserts': '#FCE4EC',
 
     // Shopping - Green tones
-    'grocery': '#E8F5E9',
-    'groceries': '#E8F5E9',
+    'grocery': colors.greenMist,
+    'groceries': colors.greenMist,
     'supermarket': '#E0F2F1',
 
     // Health - Blue tones
@@ -286,7 +287,7 @@ const getCategoryColor = (slug: string, name?: string, metadataColor?: string): 
     'skincare': '#E0F7FA',
 
     // Home - Green/Teal tones
-    'home-garden': '#E8F5E9',
+    'home-garden': colors.greenMist,
     'home-decor': '#F1F8E9',
     'furniture': '#EFEBE9',
     'kitchen': '#FFF8E1',
@@ -295,7 +296,7 @@ const getCategoryColor = (slug: string, name?: string, metadataColor?: string): 
     'auto-services': '#ECEFF1',
     'automotive': '#ECEFF1',
     'cars': '#E3F2FD',
-    'bikes': '#E8F5E9',
+    'bikes': colors.greenMist,
     'commercial-vehicles': '#CFD8DC',
     'fleet': '#E3F2FD',
 
@@ -309,7 +310,7 @@ const getCategoryColor = (slug: string, name?: string, metadataColor?: string): 
     // Sports - Cyan/Teal tones
     'sports': '#E0F7FA',
     'sports-outdoors': '#E0F7FA',
-    'fitness': '#E8F5E9',
+    'fitness': colors.greenMist,
 
     // Books - Purple/Lavender tones
     'books': '#EDE7F6',
@@ -322,7 +323,7 @@ const getCategoryColor = (slug: string, name?: string, metadataColor?: string): 
     'flowers': '#FCE4EC',
 
     // Food Items
-    'organic': '#E8F5E9',
+    'organic': colors.greenMist,
     'fruit': '#FFF9C4',
     'fruits': '#FFF9C4',
     'vegetables': '#F1F8E9',
@@ -351,7 +352,7 @@ const getCategoryColor = (slug: string, name?: string, metadataColor?: string): 
       return colorMap[normalizedName];
     }
   }
-  return '#E8F5E9';
+  return colors.greenMist;
 };
 
 // Get icon color based on category
@@ -408,7 +409,7 @@ const getCategoryIconColor = (slug: string, name?: string): string => {
     'skincare': '#00BCD4',
 
     // Home
-    'home-garden': '#4CAF50',
+    'home-garden': colors.brand.emerald,
     'home-decor': '#8BC34A',
     'furniture': '#795548',
     'kitchen': '#FF9800',
@@ -431,7 +432,7 @@ const getCategoryIconColor = (slug: string, name?: string): string => {
     // Sports
     'sports': '#00ACC1',
     'sports-outdoors': '#00ACC1',
-    'fitness': '#4CAF50',
+    'fitness': colors.brand.emerald,
 
     // Books
     'books': '#7E57C2',
@@ -473,7 +474,7 @@ const getCategoryIconColor = (slug: string, name?: string): string => {
       return colorMap[normalizedName];
     }
   }
-  return '#00C06A';
+  return colors.brand.green;
 };
 
 const CategoryIconItem: React.FC<CategoryIconItemProps> = memo(({
@@ -580,7 +581,7 @@ const styles = StyleSheet.create({
   },
   label: {
     textAlign: 'center',
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
     lineHeight: 16,
     paddingHorizontal: 4,

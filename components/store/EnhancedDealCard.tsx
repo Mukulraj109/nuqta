@@ -13,6 +13,7 @@ import { calculateDealDiscount } from '@/utils/deal-validation';
 import DealCountdownTimer from './DealCountdownTimer';
 import { useCountdown, useIsExpiringSoon } from '@/hooks/useCountdown';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 /**
  * Enhanced Deal Card with Countdown Timer and Expiring Soon Badge
@@ -157,13 +158,13 @@ function EnhancedDealCard({
   // Get badge info based on deal state
   const getBadgeInfo = (): { text: string; color: string; bgColor: string } | null => {
     if (countdown.isExpired) {
-      return { text: 'Expired', color: '#6B7280', bgColor: '#F3F4F6' };
+      return { text: 'Expired', color: colors.neutral[500], bgColor: colors.gray[100] };
     }
     if (isExpiringSoon && countdown.totalSeconds <= 3600) { // < 1 hour
-      return { text: 'Ending Soon!', color: '#DC2626', bgColor: '#FEE2E2' };
+      return { text: 'Ending Soon!', color: colors.error, bgColor: colors.errorScale[100] };
     }
     if (isExpiringSoon) { // < 24 hours
-      return { text: 'Expiring Soon', color: '#D97706', bgColor: '#FEF3C7' };
+      return { text: 'Expiring Soon', color: colors.warningScale[700], bgColor: colors.tint.amberLight };
     }
     if (deal.badge) {
       return {
@@ -225,7 +226,7 @@ function EnhancedDealCard({
           <Ionicons
             name={getDealIcon()}
             size={28}
-            color={countdown.isExpired ? '#9CA3AF' : '#7C3AED'}
+            color={countdown.isExpired ? colors.neutral[400] : colors.brand.purple}
           />
         </View>
 
@@ -316,10 +317,10 @@ function EnhancedDealCard({
               size={24}
               color={
                 countdown.isExpired
-                  ? '#9CA3AF'
+                  ? colors.neutral[400]
                   : isAdded
-                  ? '#10B981'
-                  : '#7C3AED'
+                  ? colors.success
+                  : colors.brand.purple
               }
             />
           </Pressable>
@@ -342,7 +343,7 @@ function EnhancedDealCard({
             <Ionicons
               name="chevron-forward"
               size={16}
-              color={countdown.isExpired ? '#9CA3AF' : '#7C3AED'}
+              color={countdown.isExpired ? colors.neutral[400] : colors.brand.purple}
             />
           </Pressable>
         </View>
@@ -360,7 +361,7 @@ const createStyles = (screenWidth: number) => {
       marginBottom: 16,
     },
     card: {
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.background.primary,
       borderRadius: isSmallScreen ? 12 : 16,
       padding: isSmallScreen ? 12 : 16,
       shadowColor: '#000',
@@ -369,14 +370,14 @@ const createStyles = (screenWidth: number) => {
       shadowRadius: 8,
       elevation: 3,
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.gray[200],
     },
     cardDisabled: {
-      backgroundColor: '#F9FAFB',
-      borderColor: '#D1D5DB',
+      backgroundColor: colors.neutral[50],
+      borderColor: colors.neutral[300],
     },
     cardUrgent: {
-      borderColor: '#F59E0B',
+      borderColor: colors.warning,
       borderWidth: 2,
     },
     badge: {
@@ -403,12 +404,12 @@ const createStyles = (screenWidth: number) => {
     title: {
       fontSize: isSmallScreen ? 16 : 18,
       fontWeight: '700',
-      color: '#1F2937',
+      color: colors.neutral[800],
       lineHeight: isSmallScreen ? 22 : 24,
     },
     description: {
       fontSize: 13,
-      color: '#6B7280',
+      color: colors.neutral[500],
       lineHeight: 18,
     },
     discountContainer: {
@@ -420,18 +421,18 @@ const createStyles = (screenWidth: number) => {
     discountValue: {
       fontSize: 20,
       fontWeight: '800',
-      color: '#7C3AED',
+      color: colors.brand.purple,
       letterSpacing: 0.3,
     },
     maxDiscount: {
       fontSize: 12,
       fontWeight: '600',
-      color: '#6B7280',
+      color: colors.neutral[500],
     },
     minimumBill: {
       fontSize: 13,
       fontWeight: '600',
-      color: '#9CA3AF',
+      color: colors.neutral[400],
     },
     countdownContainer: {
       marginTop: 8,
@@ -446,13 +447,13 @@ const createStyles = (screenWidth: number) => {
       marginTop: 16,
       paddingTop: 12,
       borderTopWidth: 1,
-      borderTopColor: '#E5E7EB',
+      borderTopColor: colors.gray[200],
     },
     actionButton: {
       padding: 8,
     },
     actionButtonActive: {
-      backgroundColor: '#D1FAE5',
+      backgroundColor: colors.tint.green,
       borderRadius: 12,
     },
     actionButtonDisabled: {
@@ -464,16 +465,16 @@ const createStyles = (screenWidth: number) => {
       gap: 4,
       paddingVertical: 8,
       paddingHorizontal: 12,
-      backgroundColor: '#F3F4F6',
+      backgroundColor: colors.gray[100],
       borderRadius: 8,
     },
     moreButtonText: {
       fontSize: 14,
       fontWeight: '600',
-      color: '#7C3AED',
+      color: colors.brand.purple,
     },
     textDisabled: {
-      color: '#9CA3AF',
+      color: colors.neutral[400],
     },
   });
 };

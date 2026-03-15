@@ -17,6 +17,7 @@ import { getImagePicker } from '@/utils/lazyImports';
 import { uploadProfileImage } from '@/services/imageUploadService';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive, platformAlertError } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface ProfileFormData {
   name: string;
@@ -254,7 +255,7 @@ export default function ProfileEditPage() {
         value={formData[field] as string}
         onChangeText={readonly ? undefined : (value) => handleInputChange(field, value)}
         placeholder={placeholder}
-        placeholderTextColor="#9CA3AF"
+        placeholderTextColor={colors.neutral[400]}
         multiline={multiline}
         numberOfLines={multiline ? 4 : 1}
         keyboardType={keyboardType}
@@ -456,7 +457,7 @@ export default function ProfileEditPage() {
                 </ThemedText>
               </View>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#D1D5DB" />
+            <Ionicons name="chevron-forward" size={20} color={colors.neutral[300]} />
           </Pressable>
 
           <Pressable
@@ -474,7 +475,7 @@ export default function ProfileEditPage() {
                 </ThemedText>
               </View>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#D1D5DB" />
+            <Ionicons name="chevron-forward" size={20} color={colors.neutral[300]} />
           </Pressable>
 
           <Pressable
@@ -492,7 +493,7 @@ export default function ProfileEditPage() {
                 </ThemedText>
               </View>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#D1D5DB" />
+            <Ionicons name="chevron-forward" size={20} color={colors.neutral[300]} />
           </Pressable>
         </View>
 
@@ -809,7 +810,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.base,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   selectedGenderOption: {
     backgroundColor: Colors.background.secondary,

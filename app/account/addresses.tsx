@@ -23,6 +23,7 @@ import EditAddressModal from '@/components/account/EditAddressModal';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { SectionListSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 // Use same AddressType as API (uppercase)
 type AddressType = 'HOME' | 'OFFICE' | 'OTHER';
@@ -239,7 +240,7 @@ export default function SavedAddressesPage() {
       case 'HOME':
         return Colors.primary[500];
       case 'OFFICE':
-        return '#3B82F6';
+        return colors.infoScale[400];
       default:
         return Colors.text.secondary;
     }

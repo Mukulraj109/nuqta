@@ -15,6 +15,7 @@ import { AppliedCoins } from '@/types/storePayment.types';
 import CoinToggleRow from './CoinToggleRow';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface ApplyCoinsSectionProps {
   appliedCoins: AppliedCoins;
@@ -95,7 +96,7 @@ export const ApplyCoinsSection: React.FC<ApplyCoinsSectionProps> = ({
             <LinearGradient
               colors={isAutoOptimized
                 ? [COLORS.nuqta.mustard, COLORS.nuqta.peach]
-                : [COLORS.nuqta.lavender, '#FFFFFF']
+                : [COLORS.nuqta.lavender, colors.background.primary]
               }
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}

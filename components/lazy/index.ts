@@ -18,6 +18,7 @@
  */
 
 import { lazy } from 'react';
+import { colors } from '@/constants/theme';
 
 // ============================================================================
 // MODALS (Large UI Components - 50-80KB each)

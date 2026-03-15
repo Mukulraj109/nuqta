@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface PaymentMethod {
   type: 'cod' | 'card' | 'upi' | 'netbanking' | 'wallet' | 'emi';
@@ -130,7 +131,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
     return (
       <View style={styles.section} key={type}>
         <View style={styles.sectionHeader}>
-          <Ionicons name={getTypeIcon(type) as any} size={20} color="#7C3AED" />
+          <Ionicons name={getTypeIcon(type) as any} size={20} color={colors.brand.purple} />
           <Text style={styles.sectionTitle}>{getTypeTitle(type)}</Text>
         </View>
         <View style={styles.paymentGrid}>
@@ -144,7 +145,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
               style={styles.emiCalculatorButton}
               onPress={() => setShowEMICalculator(!showEMICalculator)}
             >
-              <Ionicons name="calculator-outline" size={16} color="#7C3AED" />
+              <Ionicons name="calculator-outline" size={16} color={colors.brand.purple} />
               <Text style={styles.emiCalculatorText}>
                 {showEMICalculator ? 'Hide' : 'Show'} EMI Calculator
               </Text>
@@ -161,7 +162,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Payment Methods</Text>
         <View style={styles.securePaymentBadge}>
-          <Ionicons name="shield-checkmark" size={16} color="#10B981" />
+          <Ionicons name="shield-checkmark" size={16} color={colors.successScale[400]} />
           <Text style={styles.securePaymentText}>Secure Payments</Text>
         </View>
       </View>
@@ -208,15 +209,15 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
           <Text style={styles.trustBadgesTitle}>Secured By</Text>
           <View style={styles.trustBadges}>
             <View style={styles.trustBadge}>
-              <Ionicons name="lock-closed" size={20} color="#059669" />
+              <Ionicons name="lock-closed" size={20} color={colors.successScale[700]} />
               <Text style={styles.trustBadgeText}>SSL Encrypted</Text>
             </View>
             <View style={styles.trustBadge}>
-              <Ionicons name="shield-checkmark" size={20} color="#059669" />
+              <Ionicons name="shield-checkmark" size={20} color={colors.successScale[700]} />
               <Text style={styles.trustBadgeText}>PCI Compliant</Text>
             </View>
             <View style={styles.trustBadge}>
-              <Ionicons name="checkmark-circle" size={20} color="#059669" />
+              <Ionicons name="checkmark-circle" size={20} color={colors.successScale[700]} />
               <Text style={styles.trustBadgeText}>100% Safe</Text>
             </View>
           </View>
@@ -238,7 +239,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
@@ -255,17 +256,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.gray[200],
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.gray[900],
   },
   securePaymentBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -274,7 +275,7 @@ const styles = StyleSheet.create({
   securePaymentText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   scrollContent: {
     paddingBottom: 8,
@@ -291,7 +292,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   paymentGrid: {
     flexDirection: 'row',
@@ -301,10 +302,10 @@ const styles = StyleSheet.create({
   paymentIconContainer: {
     width: '30%',
     aspectRatio: 1.2,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
     padding: 8,
     alignItems: 'center',
     justifyContent: 'center',
@@ -320,11 +321,11 @@ const styles = StyleSheet.create({
   paymentName: {
     fontSize: 11,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
   },
   disabledText: {
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   disabledOverlay: {
     position: 'absolute',
@@ -340,24 +341,24 @@ const styles = StyleSheet.create({
   disabledLabel: {
     fontSize: 9,
     fontWeight: '600',
-    color: '#EF4444',
+    color: colors.error,
     textAlign: 'center',
   },
   emiPartnersContainer: {
     marginTop: 12,
     padding: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     borderRadius: 8,
   },
   emiPartnersLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   emiPartners: {
     fontSize: 12,
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
   },
   emiCalculatorButton: {
@@ -367,28 +368,28 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: 8,
     paddingHorizontal: 12,
-    backgroundColor: '#EDE9FE',
+    backgroundColor: colors.tint.purple,
     borderRadius: 6,
     marginTop: 4,
   },
   emiCalculatorText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   emiCalculator: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
     padding: 16,
     marginTop: 8,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
   },
   emiCalculatorTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.gray[900],
     marginBottom: 12,
   },
   emiCalculatorContent: {
@@ -402,16 +403,16 @@ const styles = StyleSheet.create({
   },
   emiLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   emiValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   emiNote: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontStyle: 'italic',
     marginTop: 8,
   },
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
   trustBadgesTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   trustBadges: {
@@ -436,7 +437,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#ECFDF5',
+    backgroundColor: colors.tint.greenLight,
     paddingVertical: 10,
     paddingHorizontal: 8,
     borderRadius: 8,
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
   trustBadgeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   partnersContainer: {
     marginTop: 8,
@@ -454,7 +455,7 @@ const styles = StyleSheet.create({
   partnersTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   partnersLogos: {
@@ -467,13 +468,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
     fontWeight: '600',
-    color: '#7C3AED',
-    backgroundColor: '#F3F4F6',
+    color: colors.brand.purple,
+    backgroundColor: colors.gray[100],
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.gray[200],
   },
 });
 

@@ -20,6 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RecentlyViewedItem } from '@/types/recentlyViewed.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface RecentlyViewedSectionProps {
   items: RecentlyViewedItem[];
@@ -68,7 +69,7 @@ const RecentlyViewedCard = memo(({
             <Ionicons
               name={item.type === 'store' ? 'storefront-outline' : 'cube-outline'}
               size={40}
-              color="#9CA3AF"
+              color={colors.neutral[400]}
             />
           </View>
         )}
@@ -87,7 +88,7 @@ const RecentlyViewedCard = memo(({
           <Ionicons
             name={item.type === 'store' ? 'storefront' : 'pricetag'}
             size={10}
-            color="#FFFFFF"
+            color={colors.background.primary}
           />
           <Text style={styles.typeBadgeText}>
             {item.type === 'store' ? 'Store' : 'Product'}
@@ -105,7 +106,7 @@ const RecentlyViewedCard = memo(({
         {/* Rating Row */}
         <View style={styles.ratingRow}>
           <Text style={styles.ratingValue}>{formattedRating}</Text>
-          <Ionicons name="star" size={12} color="#ffcd57" />
+          <Ionicons name="star" size={12} color={colors.lightMustard} />
           {item.rating.count > 0 && (
             <Text style={styles.ratingCount}>({item.rating.count})</Text>
           )}
@@ -195,7 +196,7 @@ const RecentlyViewedSection: React.FC<RecentlyViewedSectionProps> = ({
       {/* Loading State */}
       {isLoading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#ffcd57" />
+          <ActivityIndicator size="small" color={colors.lightMustard} />
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
       ) : (
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.2,
   },
   viewAllButton: {
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
   },
   viewAllText: {
     fontSize: 14,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
   loadingContainer: {
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   scrollContent: {
     paddingHorizontal: 12,
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: IMAGE_HEIGHT,
     position: 'relative',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   cardImage: {
     width: '100%',
@@ -307,7 +308,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   typeBadge: {
     position: 'absolute',
@@ -321,15 +322,15 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   storeBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   productBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
   },
   typeBadgeText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.2,
   },
   cardContent: {
@@ -339,7 +340,7 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     letterSpacing: -0.2,
   },
   ratingRow: {
@@ -350,11 +351,11 @@ const styles = StyleSheet.create({
   ratingValue: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   ratingCount: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   addressRow: {
     flexDirection: 'row',
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
   },
   addressText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     flex: 1,
     lineHeight: 16,
   },
@@ -379,16 +380,16 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   cashbackBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -397,7 +398,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
 });
 

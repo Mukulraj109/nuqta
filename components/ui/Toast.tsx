@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Animated, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { spacing, borderRadius, typography, zIndex } from '@/constants/theme';
+import { spacing, borderRadius, typography, zIndex , colors } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
 
 interface ToastProps {
@@ -100,7 +100,7 @@ function Toast({
         <Ionicons
           name={ICON_MAP[type]}
           size={24}
-          color="#FFFFFF"
+          color={colors.background.primary}
           style={styles.icon}
           accessible={false}
         />
@@ -118,7 +118,7 @@ function Toast({
             accessibilityRole="button"
             accessibilityLabel="Dismiss notification"
           >
-            <Ionicons name="close" size={20} color="#FFFFFF" />
+            <Ionicons name="close" size={20} color={colors.background.primary} />
           </Pressable>
         )}
       </View>
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   message: {
     flex: 1,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     ...typography.label,
     lineHeight: 20,
   },
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   actionText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     ...typography.label,
   },
   cancelText: {

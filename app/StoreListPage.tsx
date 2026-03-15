@@ -36,6 +36,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const StoreListPage: React.FC = () => {
   const router = useRouter();
@@ -404,7 +405,7 @@ const StoreListPage: React.FC = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.safeArea} edges={['top']}>
-        <StatusBar barStyle="light-content" backgroundColor="#00C06A" />
+        <StatusBar barStyle="light-content" backgroundColor={colors.brand.green} />
 
         {/* Fixed Header with Gradient - DOES NOT SCROLL */}
         <View style={styles.headerContainer}>
@@ -421,7 +422,7 @@ const StoreListPage: React.FC = () => {
                 onPress={() => setShowSortModal(true)}
                
               >
-                <Ionicons name="swap-vertical" size={16} color="#FFFFFF" />
+                <Ionicons name="swap-vertical" size={16} color={colors.background.primary} />
                 <Text style={styles.headerSortButtonText}>
                   {sortBy === 'rating' ? 'Rating' :
                    sortBy === 'distance' ? 'Distance' :
@@ -532,7 +533,7 @@ const StoreListPage: React.FC = () => {
                       return typeof found.name === 'string' ? found.name : 'Subcategory';
                     })()}
               </Text>
-              <Ionicons name="chevron-down" size={16} color="#00C06A" />
+              <Ionicons name="chevron-down" size={16} color={colors.brand.green} />
             </Pressable>
           </View>
         )}
@@ -565,7 +566,7 @@ const StoreListPage: React.FC = () => {
               onPress={() => handleSortChange('distance')}
              
             >
-              <Ionicons name="navigate" size={13} color={sortBy === 'distance' ? '#FFFFFF' : '#00C06A'} style={{ marginRight: 5 }} />
+              <Ionicons name="navigate" size={13} color={sortBy === 'distance' ? colors.background.primary : colors.brand.green} style={{ marginRight: 5 }} />
               <Text style={[styles.quickFilterChipText, sortBy === 'distance' && styles.quickFilterChipTextActive]}>
                 Nearby
               </Text>
@@ -577,7 +578,7 @@ const StoreListPage: React.FC = () => {
               onPress={() => handleSortChange('rating')}
              
             >
-              <Ionicons name="star" size={13} color={sortBy === 'rating' ? '#FFFFFF' : '#FFB800'} style={{ marginRight: 5 }} />
+              <Ionicons name="star" size={13} color={sortBy === 'rating' ? colors.background.primary : '#FFB800'} style={{ marginRight: 5 }} />
               <Text style={[styles.quickFilterChipText, sortBy === 'rating' && styles.quickFilterChipTextActive]}>
                 Top Rated
               </Text>
@@ -589,7 +590,7 @@ const StoreListPage: React.FC = () => {
               onPress={() => handleSortChange('newest')}
              
             >
-              <Ionicons name="sparkles" size={13} color={sortBy === 'newest' ? '#FFFFFF' : '#8B5CF6'} style={{ marginRight: 5 }} />
+              <Ionicons name="sparkles" size={13} color={sortBy === 'newest' ? colors.background.primary : colors.brand.purpleLight} style={{ marginRight: 5 }} />
               <Text style={[styles.quickFilterChipText, sortBy === 'newest' && styles.quickFilterChipTextActive]}>
                 Newest
               </Text>
@@ -607,8 +608,8 @@ const StoreListPage: React.FC = () => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={handleRefresh}
-              tintColor="#00C06A"
-              colors={['#00C06A']}
+              tintColor={colors.brand.green}
+              colors={[colors.brand.green]}
             />
           }
           onEndReached={handleLoadMore}
@@ -655,7 +656,7 @@ const StoreListPage: React.FC = () => {
           ListFooterComponent={
             hasMore && !isLoading ? (
               <View style={styles.loadingMoreContainer}>
-                <ActivityIndicator size="small" color="#00C06A" />
+                <ActivityIndicator size="small" color={colors.brand.green} />
                 <Text style={styles.loadingMoreText}>Loading more stores...</Text>
               </View>
             ) : null
@@ -688,9 +689,9 @@ const StoreListPage: React.FC = () => {
 
             {([
               { key: 'rating' as const, label: 'Rating (High to Low)', icon: 'star' as const, color: '#FFB800' },
-              { key: 'distance' as const, label: 'Distance (Near to Far)', icon: 'navigate' as const, color: '#00C06A' },
-              { key: 'name' as const, label: 'Name (A-Z)', icon: 'text' as const, color: '#6366F1' },
-              { key: 'newest' as const, label: 'Newest First', icon: 'sparkles' as const, color: '#8B5CF6' },
+              { key: 'distance' as const, label: 'Distance (Near to Far)', icon: 'navigate' as const, color: colors.brand.green },
+              { key: 'name' as const, label: 'Name (A-Z)', icon: 'text' as const, color: colors.brand.indigo },
+              { key: 'newest' as const, label: 'Newest First', icon: 'sparkles' as const, color: colors.brand.purpleLight },
             ]).map((option) => (
               <Pressable
                 key={option.key}
@@ -713,7 +714,7 @@ const StoreListPage: React.FC = () => {
                   </Text>
                 </View>
                 {sortBy === option.key && (
-                  <Ionicons name="checkmark-circle" size={22} color="#00C06A" />
+                  <Ionicons name="checkmark-circle" size={22} color={colors.brand.green} />
                 )}
               </Pressable>
             ))}
@@ -759,7 +760,7 @@ const StoreListPage: React.FC = () => {
                 All Subcategories
               </Text>
               {selectedSubcategory === 'all' && (
-                <Ionicons name="checkmark" size={20} color="#00C06A" />
+                <Ionicons name="checkmark" size={20} color={colors.brand.green} />
               )}
             </Pressable>
 
@@ -788,7 +789,7 @@ const StoreListPage: React.FC = () => {
                     {subName}
                   </Text>
                   {selectedSubcategory === subId && (
-                    <Ionicons name="checkmark" size={20} color="#00C06A" />
+                    <Ionicons name="checkmark" size={20} color={colors.brand.green} />
                   )}
                 </Pressable>
               );
@@ -901,7 +902,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
       gap: Spacing.xs,
       borderWidth: 1.5,
       borderColor: 'rgba(0, 192, 106, 0.2)',
-      shadowColor: '#00C06A',
+      shadowColor: colors.brand.green,
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.1,
       shadowRadius: 4,
@@ -911,7 +912,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
       ...Typography.bodySmall,
       fontSize: 13,
       fontWeight: '700',
-      color: '#00C06A',
+      color: colors.brand.green,
       letterSpacing: 0.1,
     },
     headerSortButton: {
@@ -957,9 +958,9 @@ const createStyles = (screenData: { width: number; height: number }) => {
       elevation: 1,
     },
     quickFilterChipActive: {
-      backgroundColor: '#00C06A',
-      borderColor: '#00C06A',
-      shadowColor: '#00C06A',
+      backgroundColor: colors.brand.green,
+      borderColor: colors.brand.green,
+      shadowColor: colors.brand.green,
       shadowOpacity: 0.2,
       shadowRadius: 6,
       elevation: 3,
@@ -1036,7 +1037,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
       color: Colors.text.secondary,
     },
     sortOptionTextActive: {
-      color: '#059669',
+      color: colors.successScale[700],
       fontWeight: '700',
     },
     subcategoryContainer: {
@@ -1094,8 +1095,8 @@ const createStyles = (screenData: { width: number; height: number }) => {
       borderColor: Colors.border.default,
     },
     subSubCategoryChipActive: {
-      backgroundColor: '#00C06A',
-      borderColor: '#00C06A',
+      backgroundColor: colors.brand.green,
+      borderColor: colors.brand.green,
     },
     subSubCategoryChipIcon: {
       marginRight: 6,

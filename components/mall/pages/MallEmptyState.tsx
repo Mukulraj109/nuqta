@@ -12,6 +12,7 @@ import {
   Pressable,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface MallEmptyStateProps {
   title?: string;
@@ -31,7 +32,7 @@ const MallEmptyState: React.FC<MallEmptyStateProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        <Ionicons name={icon} size={48} color="#1a3a52" />
+        <Ionicons name={icon} size={48} color={colors.nileBlue} />
       </View>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.message}>{message}</Text>
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
@@ -64,20 +65,20 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
     marginBottom: 8,
   },
   message: {
     fontSize: 14,
     fontWeight: '400',
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     lineHeight: 20,
   },
   actionButton: {
     marginTop: 24,
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 12,
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   actionButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

@@ -18,6 +18,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import bonusZoneApi, { BonusZoneCampaignDetail } from '@/services/bonusZoneApi';
+import { colors } from '@/constants/theme';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -89,7 +90,7 @@ function BonusCampaignBanner({ campaignSlug }: BonusCampaignBannerProps) {
   if (loading) {
     return (
       <View style={styles.loadingWrapper}>
-        <ActivityIndicator size="small" color="#D97706" />
+        <ActivityIndicator size="small" color={colors.warningScale[700]} />
       </View>
     );
   }
@@ -100,14 +101,14 @@ function BonusCampaignBanner({ campaignSlug }: BonusCampaignBannerProps) {
 
   return (
     <LinearGradient
-      colors={['#FFF7ED', '#FFEDD5', '#FFF7ED']}
+      colors={[colors.tint.orange, '#FFEDD5', colors.tint.orange]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
       style={styles.container}
     >
       {/* Coin icon */}
       <View style={styles.iconContainer}>
-        <Ionicons name="gift" size={20} color="#D97706" />
+        <Ionicons name="gift" size={20} color={colors.warningScale[700]} />
       </View>
 
       {/* Text content */}
@@ -128,7 +129,7 @@ function BonusCampaignBanner({ campaignSlug }: BonusCampaignBannerProps) {
         accessibilityLabel="Dismiss bonus campaign banner"
         accessibilityRole="button"
       >
-        <Ionicons name="close" size={16} color="#92400E" />
+        <Ionicons name="close" size={16} color={colors.brand.amberDark} />
       </Pressable>
     </LinearGradient>
   );
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     maxHeight: 60,
     ...Platform.select({
       ios: {
-        shadowColor: '#D97706',
+        shadowColor: colors.warningScale[700],
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.12,
         shadowRadius: 4,
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#FDE68A',
+    backgroundColor: colors.warningScale[200],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
@@ -189,13 +190,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
     lineHeight: 18,
   },
   reward: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#D97706',
+    color: colors.warningScale[700],
     lineHeight: 16,
     marginTop: 1,
   },

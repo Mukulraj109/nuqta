@@ -6,6 +6,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface CabDetails {
   name: string;
@@ -39,7 +40,7 @@ const CabInfoCard: React.FC<CabInfoCardProps> = ({ cab }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#EAB308', '#CA8A04']}
+        colors={[colors.brand.amber, '#CA8A04']}
         style={styles.gradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -48,7 +49,7 @@ const CabInfoCard: React.FC<CabInfoCardProps> = ({ cab }) => {
         <View style={styles.routeContainer}>
           <View style={styles.routeItem}>
             <View style={styles.locationCode}>
-              <Ionicons name="location" size={20} color="#FFFFFF" />
+              <Ionicons name="location" size={20} color={colors.background.primary} />
             </View>
             <View style={styles.locationInfo}>
               <Text style={styles.locationLabel}>Pickup</Text>
@@ -61,7 +62,7 @@ const CabInfoCard: React.FC<CabInfoCardProps> = ({ cab }) => {
 
           <View style={styles.cabPath}>
             <View style={styles.cabPathLine} />
-            <Ionicons name="car" size={24} color="#FFFFFF" />
+            <Ionicons name="car" size={24} color={colors.background.primary} />
             <Text style={styles.duration}>{formatDuration(cab.duration)}</Text>
             {cab.distance && typeof cab.distance === 'number' && !isNaN(cab.distance) && cab.distance > 0 && (
               <Text style={styles.distance}>{Math.round(cab.distance)} km</Text>
@@ -70,7 +71,7 @@ const CabInfoCard: React.FC<CabInfoCardProps> = ({ cab }) => {
 
           <View style={styles.routeItem}>
             <View style={styles.locationCode}>
-              <Ionicons name="flag" size={20} color="#FFFFFF" />
+              <Ionicons name="flag" size={20} color={colors.background.primary} />
             </View>
             <View style={styles.locationInfo}>
               <Text style={styles.locationLabel}>Dropoff</Text>
@@ -86,13 +87,13 @@ const CabInfoCard: React.FC<CabInfoCardProps> = ({ cab }) => {
         <View style={styles.detailsRow}>
           {cab.cabType && (
             <View style={styles.detailItem}>
-              <Ionicons name="car-outline" size={16} color="#FFFFFF" />
+              <Ionicons name="car-outline" size={16} color={colors.background.primary} />
               <Text style={styles.detailText}>{cab.cabType}</Text>
             </View>
           )}
           {cab.rating > 0 && (
             <View style={styles.detailItem}>
-              <Ionicons name="star" size={16} color="#FFD700" />
+              <Ionicons name="star" size={16} color={colors.brand.goldBright} />
               <Text style={styles.detailText}>{cab.rating.toFixed(1)}</Text>
             </View>
           )}
@@ -151,14 +152,14 @@ const styles = StyleSheet.create({
   locationCity: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 6,
     letterSpacing: 0.3,
   },
   time: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   cabPath: {
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   },
   duration: {
     fontSize: 13,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginTop: 6,
     fontWeight: '600',
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '500',
   },
 });

@@ -22,6 +22,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import apiClient from '@/services/apiClient';
 import CachedImage from '@/components/ui/CachedImage';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -307,7 +308,7 @@ const ElectronicsPage: React.FC = () => {
         {item.image ? (
           <CachedImage source={{ uri: item.image }} style={{ width: 28, height: 28 }} />
         ) : (
-          <Ionicons name="grid-outline" size={24} color="#3B82F6" />
+          <Ionicons name="grid-outline" size={24} color={colors.infoScale[400]} />
         )}
       </View>
       <Text style={styles.categoryTitle} numberOfLines={1}>{item.name}</Text>
@@ -456,7 +457,7 @@ const ElectronicsPage: React.FC = () => {
 
       {/* Promo Banner */}
       <View style={styles.promoBanner}>
-        <LinearGradient colors={['#F59E0B', '#D97706']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.promoGradient}>
+        <LinearGradient colors={[colors.warningScale[400], colors.warningScale[700]]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.promoGradient}>
           <Ionicons name="flash" size={40} color={Colors.text.inverse} style={{ marginBottom: 12 }} />
           <Text style={styles.promoTitle}>Flash Sale</Text>
           <Text style={styles.promoSubtitle}>Up to 50% off on select electronics</Text>
@@ -512,7 +513,7 @@ const ElectronicsPage: React.FC = () => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <LinearGradient colors={['#3B82F6', '#1D4ED8']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
+      <LinearGradient colors={[colors.infoScale[400], '#1D4ED8']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
         <View style={styles.headerTop}>
           <Pressable onPress={() => router.back()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
@@ -628,14 +629,14 @@ const styles = StyleSheet.create({
   ratingContainer: { flexDirection: 'row', alignItems: 'center', gap: Spacing.xs, marginBottom: 8 },
   ratingText: { fontSize: 12, color: Colors.nileBlue, fontWeight: '600' },
   priceRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  productPrice: { fontSize: 15, fontWeight: '700', color: '#111827' },
+  productPrice: { fontSize: 15, fontWeight: '700', color: colors.neutral[900] },
   originalPrice: { fontSize: 12, color: Colors.neutral[500], textDecorationLine: 'line-through' },
   promoBanner: { marginHorizontal: 16, marginTop: 8 },
   promoGradient: { padding: Spacing.xl, borderRadius: BorderRadius.lg, alignItems: 'center' },
   promoTitle: { fontSize: 18, fontWeight: '700', color: Colors.text.inverse, marginBottom: 4 },
   promoSubtitle: { fontSize: 13, color: 'rgba(255,255,255,0.9)', textAlign: 'center', marginBottom: 16 },
   promoButton: { backgroundColor: Colors.background.primary, paddingHorizontal: Spacing.xl, paddingVertical: Spacing.md, borderRadius: 24 },
-  promoButtonText: { fontSize: 14, fontWeight: '700', color: '#F59E0B' },
+  promoButtonText: { fontSize: 14, fontWeight: '700', color: colors.warningScale[400] },
   // Empty states
   emptyState: { alignItems: 'center', paddingVertical: 24 },
   emptyIconWrapper: { width: 72, height: 72, borderRadius: 36, backgroundColor: Colors.neutral[100], justifyContent: 'center', alignItems: 'center', marginBottom: 12 },

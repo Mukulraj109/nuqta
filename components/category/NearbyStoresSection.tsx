@@ -16,6 +16,7 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { getNearbyStoresForCategory, NearbyStore, nearbyStoresData } from '@/data/categoryDummyData';
+import { colors } from '@/constants/theme';
 
 interface NearbyStoresSectionProps {
   categorySlug: string;
@@ -55,7 +56,7 @@ const StoreCard = memo(({
 
     {/* Distance */}
     <View style={styles.distanceRow}>
-      <Ionicons name="location-outline" size={14} color="#6B7280" />
+      <Ionicons name="location-outline" size={14} color={colors.neutral[500]} />
       <Text style={styles.distanceText}>{store.distance}</Text>
     </View>
 
@@ -63,13 +64,13 @@ const StoreCard = memo(({
     <View style={styles.badgesRow}>
       {store.is60Min && (
         <View style={styles.featureBadge}>
-          <Ionicons name="flash" size={10} color="#F59E0B" />
+          <Ionicons name="flash" size={10} color={colors.warningScale[400]} />
           <Text style={styles.featureText}>60 min</Text>
         </View>
       )}
       {store.hasPickup && (
         <View style={styles.featureBadge}>
-          <Ionicons name="storefront-outline" size={10} color="#3B82F6" />
+          <Ionicons name="storefront-outline" size={10} color={colors.infoScale[400]} />
           <Text style={styles.featureText}>Pickup</Text>
         </View>
       )}
@@ -130,7 +131,7 @@ const NearbyStoresSection: React.FC<NearbyStoresSectionProps> = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.titleRow}>
-          <Ionicons name="location" size={20} color="#ffcd57" />
+          <Ionicons name="location" size={20} color={colors.lightMustard} />
           <Text style={styles.sectionTitle}>Nearby Stores</Text>
         </View>
         <Pressable
@@ -163,13 +164,13 @@ const NearbyStoresSection: React.FC<NearbyStoresSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     marginVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginHorizontal: 16,
     borderRadius: 20,
     paddingVertical: 20,
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
@@ -197,19 +198,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: -0.4,
   },
   seeAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 8,
   },
   seeAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   ratingRow: {
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   distanceRow: {
     flexDirection: 'row',
@@ -278,7 +279,7 @@ const styles = StyleSheet.create({
   },
   distanceText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   badgesRow: {
@@ -291,7 +292,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
   featureText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   cashbackRow: {
     marginBottom: 10,
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   categoriesRow: {
     flexDirection: 'row',
@@ -324,7 +325,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   categoryChip: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 4,
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 9,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     textTransform: 'capitalize',
   },
 });

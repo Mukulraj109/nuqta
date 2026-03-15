@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants/DesignTokens';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface AmountToPayCardProps {
   originalAmount: number;
@@ -80,7 +81,7 @@ export const AmountToPayCard: React.FC<AmountToPayCardProps> = ({
           end={{ x: 1, y: 0 }}
           style={styles.freePaymentBanner}
         >
-          <Ionicons name="checkmark-circle" size={20} color="#FFFFFF" />
+          <Ionicons name="checkmark-circle" size={20} color={colors.background.primary} />
           <Text style={styles.freePaymentText}>
             Fully paid with coins! No additional payment needed.
           </Text>
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
   },
   freePaymentText: {
     ...TYPOGRAPHY.body,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     flex: 1,
     fontWeight: '600',
   },

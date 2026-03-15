@@ -18,6 +18,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { apiClient } from '@/utils/apiClient';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 interface OfferFromAPI {
   _id: string;
   title?: string;
@@ -113,7 +114,7 @@ export default function HotspotDetailPage() {
       <LinearGradient colors={[Colors.nileBlue, Colors.nileBlueLight]} style={styles.header}>
         <View style={styles.headerTop}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <View style={styles.headerTitleContainer}>
             <ThemedText style={styles.headerTitle} numberOfLines={1}>{params.name || 'Hotspot'}</ThemedText>
@@ -166,7 +167,7 @@ export default function HotspotDetailPage() {
         </View>
       ) : offers.length === 0 ? (
         <View style={styles.centerContainer}>
-          <Ionicons name="pricetag-outline" size={48} color="#9CA3AF" />
+          <Ionicons name="pricetag-outline" size={48} color={colors.neutral[400]} />
           <ThemedText style={styles.emptyTitle}>No offers yet</ThemedText>
           <ThemedText style={styles.emptyText}>
             There are no active offers in {params.name || 'this area'} right now.
@@ -209,7 +210,7 @@ export default function HotspotDetailPage() {
                   <ThemedText style={styles.discountText}>{formatDiscount(offer)}</ThemedText>
                 </View>
               ) : null}
-              <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
+              <Ionicons name="chevron-forward" size={20} color={colors.neutral[400]} />
             </Pressable>
           ))}
         </ScrollView>
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   headerSubtitle: {
     fontSize: 13,
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
   bannerStatText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   centerContainer: {
     flex: 1,
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.sm,
   },
   retryText: {
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   emptyTitle: {

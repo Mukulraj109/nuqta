@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { colors } from '@/constants/theme';
 import {
   HowCashStoreWorksHeader,
   CashStoreHeroSection,
@@ -28,7 +29,7 @@ export default function HowCashStoreWorksScreen() {
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+        <StatusBar barStyle="dark-content" backgroundColor={colors.background.primary} />
 
         {/* Fixed Header */}
         <HowCashStoreWorksHeader />
@@ -69,7 +70,7 @@ export default function HowCashStoreWorksScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   scrollView: {
     flex: 1,

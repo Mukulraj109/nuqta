@@ -1,17 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, Easing, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 // Nuqta Design System Colors
 const COLORS = {
-  primary: '#ffcd57',        // Light Mustard
-  primaryDark: '#1a3a52',    // Nile Blue
-  deepTeal: '#1a3a52',       // Nile Blue
-  gold: '#ffcd57',           // Light Mustard
-  goldDark: '#ffd7b5',       // Light Peach
-  textPrimary: '#1a3a52',    // Nile Blue
-  textMuted: '#9AA7B2',
-  surface: '#faf1e0',        // Linen
+  primary: colors.lightMustard,        // Light Mustard
+  primaryDark: colors.nileBlue,    // Nile Blue
+  deepTeal: colors.nileBlue,       // Nile Blue
+  gold: colors.lightMustard,           // Light Mustard
+  goldDark: colors.lightPeach,       // Light Peach
+  textPrimary: colors.nileBlue,    // Nile Blue
+  textMuted: colors.gray[400],
+  surface: colors.linen,        // Linen
   glassWhite: 'rgba(255, 255, 255, 0.9)',
   glassBorder: 'rgba(255, 255, 255, 0.5)',
 };

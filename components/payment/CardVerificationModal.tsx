@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { WebView } from 'react-native-webview';
 import paymentVerificationService from '@/services/paymentVerificationService';
 import type { CardVerificationResponse } from '@/types/paymentVerification.types';
+import { colors } from '@/constants/theme';
 
 interface CardVerificationModalProps {
   visible: boolean;
@@ -136,7 +137,7 @@ function CardVerificationModal({
         {/* Header */}
         <View style={styles.header}>
           <Pressable onPress={handleClose} style={styles.closeButton}>
-            <Ionicons name="close" size={24} color="#1F2937" />
+            <Ionicons name="close" size={24} color={colors.neutral[800]} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Card Verification</ThemedText>
           <View style={styles.closeButton} />
@@ -145,7 +146,7 @@ function CardVerificationModal({
         {/* Content */}
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#8B5CF6" />
+            <ActivityIndicator size="large" color={colors.brand.purpleLight} />
             <ThemedText style={styles.loadingText}>Initiating secure verification...</ThemedText>
             <ThemedText style={styles.loadingSubtext}>
               This will verify your card using 3D Secure authentication
@@ -153,7 +154,7 @@ function CardVerificationModal({
           </View>
         ) : error ? (
           <View style={styles.errorContainer}>
-            <Ionicons name="alert-circle" size={64} color="#EF4444" />
+            <Ionicons name="alert-circle" size={64} color={colors.error} />
             <ThemedText style={styles.errorTitle}>Verification Failed</ThemedText>
             <ThemedText style={styles.errorText}>{error}</ThemedText>
             <Pressable style={styles.retryButton} onPress={initiateVerification}>
@@ -167,7 +168,7 @@ function CardVerificationModal({
           (verificationData.authenticationUrl || verificationData.threeDSUrl) ? (
           <>
             <View style={styles.infoContainer}>
-              <Ionicons name="shield-checkmark" size={32} color="#8B5CF6" />
+              <Ionicons name="shield-checkmark" size={32} color={colors.brand.purpleLight} />
               <ThemedText style={styles.infoTitle}>Secure Verification</ThemedText>
               <ThemedText style={styles.infoText}>
                 Complete the verification on the next screen to secure your card
@@ -184,7 +185,7 @@ function CardVerificationModal({
                 startInLoadingState={true}
                 renderLoading={() => (
                   <View style={styles.webViewLoading}>
-                    <ActivityIndicator size="large" color="#8B5CF6" />
+                    <ActivityIndicator size="large" color={colors.brand.purpleLight} />
                   </View>
                 )}
                 javaScriptEnabled={true}
@@ -195,7 +196,7 @@ function CardVerificationModal({
           </>
         ) : (
           <View style={styles.successContainer}>
-            <Ionicons name="checkmark-circle" size={64} color="#10B981" />
+            <Ionicons name="checkmark-circle" size={64} color={colors.successScale[400]} />
             <ThemedText style={styles.successTitle}>Card Verified!</ThemedText>
             <ThemedText style={styles.successText}>
               Your card has been successfully verified and is ready to use
@@ -205,7 +206,7 @@ function CardVerificationModal({
 
         {/* Security Info */}
         <View style={styles.securityInfo}>
-          <Ionicons name="lock-closed" size={16} color="#6B7280" />
+          <Ionicons name="lock-closed" size={16} color={colors.neutral[500]} />
           <ThemedText style={styles.securityText}>
             Your card details are encrypted and secure
           </ThemedText>
@@ -218,7 +219,7 @@ function CardVerificationModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   header: {
     flexDirection: 'row',
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     backgroundColor: 'white',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   closeButton: {
     width: 40,
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
 
   loadingContainer: {
@@ -252,13 +253,13 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 16,
     textAlign: 'center',
   },
   loadingSubtext: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 8,
     textAlign: 'center',
   },
@@ -272,13 +273,13 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 16,
     textAlign: 'center',
   },
   errorText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 8,
     textAlign: 'center',
   },
@@ -286,7 +287,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     paddingHorizontal: 32,
     paddingVertical: 12,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     borderRadius: 8,
   },
   retryButtonText: {
@@ -302,7 +303,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   infoContainer: {
@@ -316,12 +317,12 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 12,
   },
   infoText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 8,
     textAlign: 'center',
   },
@@ -358,13 +359,13 @@ const styles = StyleSheet.create({
   successTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginTop: 16,
     textAlign: 'center',
   },
   successText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 8,
     textAlign: 'center',
   },
@@ -377,11 +378,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: 'white',
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   securityText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 8,
   },
 });

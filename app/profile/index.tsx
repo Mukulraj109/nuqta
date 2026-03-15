@@ -1,6 +1,7 @@
 // Profile Page
 // User profile page with icon grid and menu list
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, Pressable, StatusBar, Platform, SafeAreaView, RefreshControl, ActivityIndicator } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
@@ -1082,7 +1083,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -1108,7 +1109,7 @@ const styles = StyleSheet.create({
   tierBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -1117,7 +1118,7 @@ const styles = StyleSheet.create({
   tierText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
 
   // Partner Program Card

@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { GiftCardBrand } from '../../../types/cash-store.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface BuyCouponSectionProps {
   brands: GiftCardBrand[];
@@ -101,7 +102,7 @@ const GiftCardCard: React.FC<{
   // Generate brand gradient colors
   const brandGradient = brand.backgroundColor
     ? [brand.backgroundColor, adjustColor(brand.backgroundColor, -20)]
-    : ['#1a3a52', '#243f55'];
+    : [colors.nileBlue, '#243f55'];
 
   return (
     <Animated.View
@@ -123,7 +124,7 @@ const GiftCardCard: React.FC<{
         {/* Best Value Badge */}
         {isBestValue && (
           <View style={styles.bestValueBadge}>
-            <Ionicons name="trophy" size={10} color="#FFFFFF" />
+            <Ionicons name="trophy" size={10} color={colors.background.primary} />
             <Text style={styles.bestValueText}>BEST VALUE</Text>
           </View>
         )}
@@ -163,19 +164,19 @@ const GiftCardCard: React.FC<{
 
           {/* Cashback Highlight */}
           <LinearGradient
-            colors={['#ffd7b5', '#E8B896']}
+            colors={[colors.lightPeach, colors.brand.sand]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.cashbackBadge}
           >
-            <Ionicons name="gift" size={12} color="#FFFFFF" />
+            <Ionicons name="gift" size={12} color={colors.background.primary} />
             <Text style={styles.cashbackText}>{brand.cashbackRate}% Cashback</Text>
           </LinearGradient>
 
           {/* Potential Savings Preview */}
           {potentialSavings > 0 && (
             <View style={styles.savingsRow}>
-              <Ionicons name="wallet-outline" size={12} color="#1a3a52" />
+              <Ionicons name="wallet-outline" size={12} color={colors.nileBlue} />
               <Text style={styles.savingsText}>Save up to {currencySymbol}{potentialSavings.toLocaleString()}</Text>
             </View>
           )}
@@ -184,14 +185,14 @@ const GiftCardCard: React.FC<{
           <View style={styles.badgeRow}>
             {brand.isNewlyAdded && (
               <View style={[styles.badge, styles.newBadge]}>
-                <Ionicons name="sparkles" size={8} color="#1a3a52" />
-                <Text style={[styles.badgeText, { color: '#1a3a52' }]}>NEW</Text>
+                <Ionicons name="sparkles" size={8} color={colors.nileBlue} />
+                <Text style={[styles.badgeText, { color: colors.nileBlue }]}>NEW</Text>
               </View>
             )}
             {brand.isFeatured && (
               <View style={[styles.badge, styles.featuredBadge]}>
-                <Ionicons name="star" size={8} color="#ffcd57" />
-                <Text style={[styles.badgeText, { color: '#ffcd57' }]}>Featured</Text>
+                <Ionicons name="star" size={8} color={colors.lightMustard} />
+                <Text style={[styles.badgeText, { color: colors.lightMustard }]}>Featured</Text>
               </View>
             )}
           </View>
@@ -199,7 +200,7 @@ const GiftCardCard: React.FC<{
           {/* Rating */}
           {brand.rating && (
             <View style={styles.ratingRow}>
-              <Ionicons name="star" size={12} color="#ffcd57" />
+              <Ionicons name="star" size={12} color={colors.lightMustard} />
               <Text style={styles.ratingText}>{brand.rating.toFixed(1)}</Text>
               <Text style={styles.reviewCount}>({brand.reviewCount || 0})</Text>
             </View>
@@ -209,13 +210,13 @@ const GiftCardCard: React.FC<{
         {/* Buy Button */}
         <Pressable style={styles.buyButton} onPress={onPress}>
           <LinearGradient
-            colors={['#ffd7b5', '#E8B896']}
+            colors={[colors.lightPeach, colors.brand.sand]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.buyButtonGradient}
           >
             <Text style={styles.buyButtonText}>Buy Now</Text>
-            <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+            <Ionicons name="arrow-forward" size={14} color={colors.background.primary} />
           </LinearGradient>
         </Pressable>
       </Pressable>
@@ -337,14 +338,14 @@ const BuyCouponSection: React.FC<BuyCouponSectionProps> = ({
         <View style={styles.headerLeft}>
           <View style={styles.titleRow}>
             <LinearGradient
-              colors={['#E8B896', '#D4A07A']}
+              colors={[colors.brand.sand, colors.brand.caramel]}
               style={styles.headerIconContainer}
             >
-              <Ionicons name="card" size={18} color="#FFFFFF" />
+              <Ionicons name="card" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>Buy Coupon & Save</Text>
             <Animated.View style={{ transform: [{ translateY: giftBounceAnim }] }}>
-              <Ionicons name="gift" size={20} color="#1a3a52" />
+              <Ionicons name="gift" size={20} color={colors.nileBlue} />
             </Animated.View>
           </View>
           <Text style={styles.subtitle}>Get extra cashback on gift cards</Text>
@@ -356,7 +357,7 @@ const BuyCouponSection: React.FC<BuyCouponSectionProps> = ({
         >
           <Text style={styles.viewAllText}>View All</Text>
           <View style={styles.viewAllArrow}>
-            <Ionicons name="chevron-forward" size={14} color="#FFFFFF" />
+            <Ionicons name="chevron-forward" size={14} color={colors.background.primary} />
           </View>
         </Pressable>
       </Animated.View>
@@ -387,7 +388,7 @@ const BuyCouponSection: React.FC<BuyCouponSectionProps> = ({
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginTop: 8,
     marginHorizontal: 16,
     borderRadius: 24,
@@ -429,18 +430,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   viewAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingLeft: 14,
     paddingRight: 6,
     paddingVertical: 8,
@@ -450,7 +451,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   viewAllArrow: {
     width: 24,
@@ -468,14 +469,14 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 175,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(26, 58, 82, 0.1)',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.12,
         shadowRadius: 8,
@@ -491,7 +492,7 @@ const styles = StyleSheet.create({
     right: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -501,7 +502,7 @@ const styles = StyleSheet.create({
   bestValueText: {
     fontSize: 8,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.5,
   },
   cardHeader: {
@@ -555,7 +556,7 @@ const styles = StyleSheet.create({
   logoInitial: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   cardContent: {
     padding: 14,
@@ -563,12 +564,12 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
   },
   denominationsText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 10,
   },
   cashbackBadge: {
@@ -584,14 +585,14 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   savingsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
     marginBottom: 10,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -599,7 +600,7 @@ const styles = StyleSheet.create({
   savingsText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   badgeRow: {
     flexDirection: 'row',
@@ -615,10 +616,10 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   newBadge: {
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
   },
   featuredBadge: {
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
   },
   badgeText: {
     fontSize: 9,
@@ -632,11 +633,11 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   reviewCount: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   buyButton: {
     borderRadius: 0,
@@ -653,28 +654,28 @@ const styles = StyleSheet.create({
   buyButtonText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // Skeleton
   skeleton: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   skeletonText: {
     height: 14,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 8,
   },
   skeletonBadge: {
     width: 100,
     height: 28,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 10,
     marginBottom: 8,
   },
   skeletonButton: {
     height: 44,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
 });
 

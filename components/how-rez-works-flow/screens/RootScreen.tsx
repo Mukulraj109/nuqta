@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import FlowScreenLayout from '../shared/FlowScreenLayout';
 import OptionCard from '../shared/OptionCard';
 import { NavigationAction } from '../types';
+import { colors } from '@/constants/theme';
 
 interface RootScreenProps {
     onNavigate: NavigationAction;
@@ -18,32 +19,32 @@ const options = [
         title: 'Visit a nearby store',
         subtitle: 'Find stores & pay via QR',
         icon: 'storefront' as const,
-        iconColor: '#1a3a52',
-        colors: ['#faf1e0', '#faf1e0'] as [string, string],
+        iconColor: colors.nileBlue,
+        colors: [colors.linen, colors.linen] as [string, string],
         screen: 'A1' as const,
     },
     {
         title: 'Order online / delivery',
         subtitle: `${BRAND.APP_NAME} Mall & Cash Store`,
         icon: 'cart' as const,
-        iconColor: '#3B82F6',
-        colors: ['#EFF6FF', '#DBEAFE'] as [string, string],
+        iconColor: colors.infoScale[400],
+        colors: [colors.tint.blue, colors.tint.blueLight] as [string, string],
         screen: 'B1' as const,
     },
     {
         title: 'Browse offers & deals',
         subtitle: 'Nearby offers & Today\'s deals',
         icon: 'pricetag' as const,
-        iconColor: '#7C3AED',
-        colors: ['#F5F3FF', '#EDE9FE'] as [string, string],
+        iconColor: colors.brand.purple,
+        colors: [colors.tint.purpleLight, colors.tint.purple] as [string, string],
         screen: 'C1' as const,
     },
     {
         title: `Understand ${BRAND.APP_NAME} Wallet`,
         subtitle: 'Coins, rewards & transparency',
         icon: 'wallet' as const,
-        iconColor: '#F59E0B',
-        colors: ['#FFFBEB', '#FEF3C7'] as [string, string],
+        iconColor: colors.warningScale[400],
+        colors: [colors.tint.amber, colors.tint.amberLight] as [string, string],
         screen: 'D1' as const,
     },
 ];
@@ -56,7 +57,7 @@ const RootScreen: React.FC<RootScreenProps> = ({ onNavigate }) => {
             title="How do you want to shop today?"
             subtitle={`Choose your path. ${BRAND.APP_NAME} adapts to you.`}
             onBack={() => router.back()}
-            headerAccent="#1a3a52"
+            headerAccent={colors.nileBlue}
         >
             {/* Welcome banner */}
             <Animated.View
@@ -64,13 +65,13 @@ const RootScreen: React.FC<RootScreenProps> = ({ onNavigate }) => {
                 style={styles.welcomeBanner}
             >
                 <LinearGradient
-                    colors={['#1a3a52', '#14303f']}
+                    colors={[colors.nileBlue, '#14303f']}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={styles.bannerGradient}
                 >
                     <View style={styles.bannerIcon}>
-                        <Ionicons name="sparkles" size={20} color="#FFFFFF" />
+                        <Ionicons name="sparkles" size={20} color={colors.background.primary} />
                     </View>
                     <Text style={styles.bannerText}>
                         {`Discover how ${BRAND.APP_NAME} saves you money on every purchase`}
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         ...Platform.select({
             ios: {
-                shadowColor: '#1a3a52',
+                shadowColor: colors.nileBlue,
                 shadowOffset: { width: 0, height: 6 },
                 shadowOpacity: 0.25,
                 shadowRadius: 12,
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 14,
         fontWeight: '600',
-        color: '#FFFFFF',
+        color: colors.background.primary,
         lineHeight: 20,
     },
 });

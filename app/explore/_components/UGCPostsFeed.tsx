@@ -17,6 +17,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -320,7 +321,7 @@ const UGCPostsFeed = () => {
                 <Ionicons
                   name={post.isLiked ? "thumbs-up" : "thumbs-up-outline"}
                   size={18}
-                  color={post.isLiked ? "#ffcd57" : "#6B7280"}
+                  color={post.isLiked ? colors.lightMustard : colors.neutral[500]}
                 />
                 <Text style={[
                   styles.actionText,
@@ -375,7 +376,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.md,
     marginHorizontal: Spacing.base,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     borderRadius: BorderRadius.lg,
   },
   errorText: {
@@ -466,7 +467,7 @@ const styles = StyleSheet.create({
   },
   viewStoreButton: {
     borderWidth: 1.5,
-    borderColor: '#ffcd57',
+    borderColor: colors.lightMustard,
     borderRadius: BorderRadius.xl,
     paddingHorizontal: 14,
     paddingVertical: Spacing.sm,
@@ -541,7 +542,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: Spacing.md,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
     gap: Spacing.xl,
   },
   actionButton: {

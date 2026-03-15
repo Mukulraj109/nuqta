@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import partnerApi, { PartnerStats } from '@/services/partnerApi';
+import { colors } from '@/constants/theme';
 
 interface PartnerStatsDashboardProps {
   compact?: boolean;
@@ -17,15 +18,15 @@ interface PartnerStatsDashboardProps {
 }
 
 const COLORS = {
-  primary: '#00C06A',
-  primaryDark: '#00796B',
-  gold: '#FFC857',
-  navy: '#0B2240',
+  primary: colors.brand.green,
+  primaryDark: colors.brand.teal,
+  gold: colors.brand.goldWarm,
+  navy: colors.brand.navyDark,
   surface: '#F7FAFC',
-  white: '#FFFFFF',
-  textPrimary: '#1F2937',
-  textSecondary: '#6B7280',
-  success: '#10B981',
+  white: colors.background.primary,
+  textPrimary: colors.neutral[800],
+  textSecondary: colors.neutral[500],
+  success: colors.successScale[400],
 };
 
 function PartnerStatsDashboard({
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerLeft: {
     flexDirection: 'row',
@@ -365,7 +366,7 @@ const styles = StyleSheet.create({
   },
   statDivider: {
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginVertical: 4,
   },
   top3Section: {
@@ -418,7 +419,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 14,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
     gap: 6,
   },
   ctaText: {

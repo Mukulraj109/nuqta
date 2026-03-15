@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface PremiumStoreCardProps {
     store: any;
@@ -47,14 +48,14 @@ const PremiumStoreCard: React.FC<PremiumStoreCardProps> = ({ store, onPress }) =
                         </View>
                     ) : <View />}
                     <Pressable style={styles.favoriteButton}>
-                        <Ionicons name="heart-outline" size={16} color="#FFF" />
+                        <Ionicons name="heart-outline" size={16} color={colors.background.primary} />
                     </Pressable>
                 </View>
 
                 {storeRating && storeRating > 0 && (
                     <View style={styles.bottomInfo}>
                         <View style={styles.ratingContainer}>
-                            <Ionicons name="star" size={14} color="#F59E0B" />
+                            <Ionicons name="star" size={14} color={colors.warningScale[400]} />
                             <Text style={styles.ratingText}>{storeRating.toFixed(1)}</Text>
                             {reviewCount > 0 && (
                                 <Text style={styles.reviewCount}>({reviewCount})</Text>
@@ -77,12 +78,12 @@ const PremiumStoreCard: React.FC<PremiumStoreCardProps> = ({ store, onPress }) =
                         <View style={styles.divider} />
                         <View style={styles.footerRow}>
                             <View style={styles.offerBadge}>
-                                <Ionicons name="ticket-outline" size={14} color="#8B5CF6" />
+                                <Ionicons name="ticket-outline" size={14} color={colors.brand.purpleLight} />
                                 <Text style={styles.offerText} numberOfLines={1}>{storeOffer}</Text>
                             </View>
                             <Pressable style={styles.visitLink}>
                                 <Text style={styles.visitText}>Visit</Text>
-                                <Ionicons name="arrow-forward-circle" size={20} color="#10B981" />
+                                <Ionicons name="arrow-forward-circle" size={20} color={colors.successScale[400]} />
                             </Pressable>
                         </View>
                     </>
@@ -92,7 +93,7 @@ const PremiumStoreCard: React.FC<PremiumStoreCardProps> = ({ store, onPress }) =
                     <View style={styles.footerRowSimple}>
                         <Pressable style={styles.visitLink}>
                             <Text style={styles.visitText}>Visit Store</Text>
-                            <Ionicons name="arrow-forward-circle" size={20} color="#10B981" />
+                            <Ionicons name="arrow-forward-circle" size={20} color={colors.successScale[400]} />
                         </Pressable>
                     </View>
                 )}
@@ -103,23 +104,23 @@ const PremiumStoreCard: React.FC<PremiumStoreCardProps> = ({ store, onPress }) =
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.background.primary,
         borderRadius: 16,
         marginBottom: 12,
-        shadowColor: '#64748B',
+        shadowColor: colors.slateGray,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.06,
         shadowRadius: 12,
         elevation: 3,
         overflow: 'hidden',
         borderWidth: 1,
-        borderColor: '#F1F5F9',
+        borderColor: colors.tint.slate,
     },
     imageContainer: {
         height: 130,
         width: '100%',
         position: 'relative',
-        backgroundColor: '#F1F5F9',
+        backgroundColor: colors.tint.slate,
     },
     image: {
         width: '100%',
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     imagePlaceholder: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#E2E8F0',
+        backgroundColor: colors.slateLight,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     ratingContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#FFF',
+        backgroundColor: colors.background.primary,
         paddingHorizontal: 8,
         paddingVertical: 4,
         borderRadius: 8,
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
     },
     reviewCount: {
         fontSize: 11,
-        color: '#64748B',
+        color: colors.slateGray,
         marginLeft: 2,
     },
     contentContainer: {
@@ -216,12 +217,12 @@ const styles = StyleSheet.create({
     },
     category: {
         fontSize: 12,
-        color: '#64748B',
+        color: colors.slateGray,
         fontWeight: '500',
     },
     divider: {
         height: 1,
-        backgroundColor: '#F1F5F9',
+        backgroundColor: colors.tint.slate,
         marginVertical: 8,
     },
     footerRow: {
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
     offerBadge: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#F3E8FF',
+        backgroundColor: colors.tint.pink,
         paddingHorizontal: 10,
         paddingVertical: 6,
         borderRadius: 8,
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
     offerText: {
         fontSize: 12,
         fontWeight: '600',
-        color: '#7C3AED',
+        color: colors.brand.purple,
         flex: 1,
     },
     visitLink: {
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
     visitText: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#10B981',
+        color: colors.successScale[400],
     },
 });
 

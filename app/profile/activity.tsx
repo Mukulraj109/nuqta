@@ -22,6 +22,7 @@ import { Activity, ActivityType } from '@/services/activityApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const ACTIVITY_TYPE_FILTERS: { label: string; value: ActivityType | 'all' }[] = [
   { label: 'All', value: 'all' },
@@ -140,7 +141,7 @@ export default function ActivityFeedPage() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerShown: false }} />
-      <StatusBar barStyle="light-content" backgroundColor="#ffcd57" />
+      <StatusBar barStyle="light-content" backgroundColor={colors.lightMustard} />
 
       {/* Header */}
       <LinearGradient colors={[Colors.gold, Colors.nileBlue]} style={styles.header}>
@@ -242,7 +243,7 @@ export default function ActivityFeedPage() {
           <RefreshControl
             refreshing={isLoading && activities.length > 0}
             onRefresh={refresh}
-            tintColor="#ffcd57"
+            tintColor={colors.lightMustard}
           />
         }
         onEndReached={loadMore}

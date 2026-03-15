@@ -10,13 +10,14 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { WalletBalanceCardProps } from '@/types/wallet';
+import { colors } from '@/constants/theme';
 
 // Coin type color mapping for expiry indicators
 const COIN_TYPE_COLORS: Record<string, { color: string; label: string }> = {
-  rez: { color: '#16A34A', label: 'Never expires' },
-  nuqta: { color: '#16A34A', label: 'Never expires' },
-  promo: { color: '#D97706', label: '' }, // dynamic based on campaign
-  branded: { color: '#2563EB', label: '' }, // dynamic per brand
+  rez: { color: colors.brand.greenDark, label: 'Never expires' },
+  nuqta: { color: colors.brand.greenDark, label: 'Never expires' },
+  promo: { color: colors.warningScale[700], label: '' }, // dynamic based on campaign
+  branded: { color: colors.brand.blue, label: '' }, // dynamic per brand
 };
 
 /**
@@ -100,7 +101,7 @@ const WalletBalanceCardComponent: React.FC<WalletBalanceCardProps> = ({
     if (imageError) {
       // Icon based on coin type
       const iconName = coin.type === 'rez' ? 'diamond' : coin.type === 'promo' ? 'gift' : 'star';
-      const iconColor = coin.color || '#ffcd57';
+      const iconColor = coin.color || colors.lightMustard;
       return (
         <View style={[styles.iconWrap, { backgroundColor: coin.backgroundColor }]}>
           <Ionicons
@@ -129,7 +130,7 @@ const WalletBalanceCardComponent: React.FC<WalletBalanceCardProps> = ({
   // Determine expiry state
   const expiringSoon = isExpiringSoon(coin.expiryDate, 7);
   const expiryLabel = getExpiryLabel(coin.expiryDate, coin.type);
-  const coinTypeColor = COIN_TYPE_COLORS[coin.type]?.color || coin.color || '#ffcd57';
+  const coinTypeColor = COIN_TYPE_COLORS[coin.type]?.color || coin.color || colors.lightMustard;
 
   // Check if this coin has a pending status (from restrictions or description hints)
   const isPending = coin.restrictions?.includes('pending') ||
@@ -150,14 +151,14 @@ const WalletBalanceCardComponent: React.FC<WalletBalanceCardProps> = ({
               {/* Expiring Soon Warning Badge */}
               {expiringSoon && (
                 <View style={styles.expiringSoonBadge}>
-                  <Ionicons name="warning" size={10} color="#DC2626" />
+                  <Ionicons name="warning" size={10} color={colors.error} />
                   <Text style={styles.expiringSoonText}>Expiring Soon</Text>
                 </View>
               )}
               {/* Pending Badge */}
               {isPending && (
                 <View style={styles.pendingBadge}>
-                  <Ionicons name="hourglass-outline" size={10} color="#D97706" />
+                  <Ionicons name="hourglass-outline" size={10} color={colors.warningScale[700]} />
                   <Text style={styles.pendingBadgeText}>Pending</Text>
                 </View>
               )}
@@ -171,7 +172,7 @@ const WalletBalanceCardComponent: React.FC<WalletBalanceCardProps> = ({
             </View>
           </View>
 
-          <Text style={[styles.amount, { color: coin.color || '#B45309' }]}>{coin.formattedAmount}</Text>
+          <Text style={[styles.amount, { color: coin.color || colors.brand.amberDeep }]}>{coin.formattedAmount}</Text>
 
           {coin.description && (
             <Text style={styles.desc} numberOfLines={2}>
@@ -184,14 +185,14 @@ const WalletBalanceCardComponent: React.FC<WalletBalanceCardProps> = ({
             <View style={[styles.coinTypeDot, { backgroundColor: coinTypeColor }]} />
             {expiringSoon ? (
               <>
-                <Ionicons name="time-outline" size={12} color="#DC2626" />
+                <Ionicons name="time-outline" size={12} color={colors.error} />
                 <Text style={[styles.expiryText, styles.expiryTextWarning]}>
                   {expiryLabel}
                 </Text>
               </>
             ) : (
               <>
-                <Ionicons name="time-outline" size={12} color="#9CA3AF" />
+                <Ionicons name="time-outline" size={12} color={colors.neutral[400]} />
                 <Text style={styles.expiryText}>
                   {expiryLabel}
                 </Text>
@@ -202,7 +203,7 @@ const WalletBalanceCardComponent: React.FC<WalletBalanceCardProps> = ({
 
         {showChevron && (
           <View style={styles.chevronContainer}>
-            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
+            <Ionicons name="chevron-forward" size={18} color={colors.neutral[400]} />
           </View>
         )}
       </View>
@@ -266,11 +267,11 @@ const createStyles = (screenWidth: number) => {
 
   return StyleSheet.create({
     cardWrap: {
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.background.primary,
       borderRadius: 14,
       padding: isTablet ? 16 : isSmallScreen ? 10 : 12,
       marginBottom: isTablet ? 12 : 8,
-      shadowColor: '#7C3AED',
+      shadowColor: colors.brand.purple,
       shadowOffset: { width: 0, height: 3 },
       shadowOpacity: 0.06,
       shadowRadius: 8,
@@ -310,7 +311,7 @@ const createStyles = (screenWidth: number) => {
       marginBottom: 2,
     },
     label: {
-      color: '#111827',
+      color: colors.neutral[900],
       fontWeight: '700',
       fontSize: isTablet ? 15 : isSmallScreen ? 13 : 14,
       letterSpacing: 0.2,
@@ -331,7 +332,7 @@ const createStyles = (screenWidth: number) => {
       borderRadius: 8,
     },
     activeBadgeText: {
-      color: '#16A34A',
+      color: colors.brand.greenDark,
       fontSize: 9,
       fontWeight: '600',
       marginLeft: 2,
@@ -339,15 +340,15 @@ const createStyles = (screenWidth: number) => {
     expiringSoonBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FEF2F2',
+      backgroundColor: colors.errorScale[50],
       paddingHorizontal: 6,
       paddingVertical: 2,
       borderRadius: 8,
       borderWidth: 1,
-      borderColor: '#FECACA',
+      borderColor: colors.errorScale[200],
     },
     expiringSoonText: {
-      color: '#DC2626',
+      color: colors.error,
       fontSize: 9,
       fontWeight: '700',
       marginLeft: 3,
@@ -355,28 +356,28 @@ const createStyles = (screenWidth: number) => {
     pendingBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FEF3C7',
+      backgroundColor: colors.tint.amberLight,
       paddingHorizontal: 6,
       paddingVertical: 2,
       borderRadius: 8,
       borderWidth: 1,
-      borderColor: '#FDE68A',
+      borderColor: colors.warningScale[200],
     },
     pendingBadgeText: {
-      color: '#D97706',
+      color: colors.warningScale[700],
       fontSize: 9,
       fontWeight: '600',
       marginLeft: 3,
     },
     amount: {
-      color: '#7C3AED',
+      color: colors.brand.purple,
       fontWeight: '800',
       fontSize: isTablet ? 17 : isSmallScreen ? 14 : 15,
       marginBottom: 2,
       letterSpacing: 0.3,
     },
     desc: {
-      color: '#6B7280',
+      color: colors.neutral[500],
       fontSize: isTablet ? 13 : isSmallScreen ? 11 : 12,
       lineHeight: isTablet ? 17 : 16,
       fontWeight: '500',
@@ -393,13 +394,13 @@ const createStyles = (screenWidth: number) => {
       borderRadius: 3,
     },
     expiryText: {
-      color: '#6B7280',
+      color: colors.neutral[500],
       fontSize: 11,
       fontWeight: '500',
       marginLeft: 2,
     },
     expiryTextWarning: {
-      color: '#DC2626',
+      color: colors.error,
       fontWeight: '600',
     },
     chevronContainer: {
@@ -422,8 +423,8 @@ const createStyles = (screenWidth: number) => {
       height: 24,
       borderRadius: 12,
       borderWidth: 2,
-      borderColor: '#E5E7EB',
-      borderTopColor: '#7C3AED',
+      borderColor: colors.neutral[200],
+      borderTopColor: colors.brand.purple,
     },
   });
 };

@@ -11,6 +11,7 @@ import supportService, { SupportTicket, FAQ } from '@/services/supportApi';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, Gradients } from '@/constants/DesignSystem';
 import { SectionListSkeleton } from '@/components/skeletons';
+import { colors } from '@/constants/theme';
 
 export default function SupportHubPage() {
   const router = useRouter();
@@ -236,7 +237,7 @@ export default function SupportHubPage() {
         <LinearGradient colors={Gradients.nileBlue} style={styles.header}>
         <View style={styles.headerContent}>
           <Pressable onPress={handleBackPress} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Support</ThemedText>
           <View style={styles.placeholder} />
@@ -336,7 +337,7 @@ export default function SupportHubPage() {
             colors={Gradients.nileBlue}
             style={styles.createTicketGradient}
           >
-            <Ionicons name="add-circle" size={24} color="#FFF" />
+            <Ionicons name="add-circle" size={24} color={colors.background.primary} />
             <ThemedText style={styles.createTicketText}>Create New Ticket</ThemedText>
           </LinearGradient>
         </Pressable>
@@ -411,7 +412,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -420,7 +421,7 @@ const styles = StyleSheet.create({
   },
   headerSubtitle: {
     fontSize: 16,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     opacity: 0.9,
   },
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
   },
   quickActionCard: {
     width: '48%',
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -482,7 +483,7 @@ const styles = StyleSheet.create({
   },
   helpOptionCard: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 14,
     alignItems: 'center',
@@ -518,7 +519,7 @@ const styles = StyleSheet.create({
   },
   summaryCard: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -539,7 +540,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   ticketCard: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -630,11 +631,11 @@ const styles = StyleSheet.create({
   createTicketText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   faqCard: {
     flexDirection: 'row',
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -668,7 +669,7 @@ const styles = StyleSheet.create({
   },
   contactCard: {
     flexDirection: 'row',
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,

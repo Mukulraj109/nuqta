@@ -4,6 +4,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 /**
  * SellerInformation Component
@@ -82,13 +83,13 @@ export const SellerInformation: React.FC<SellerInformationProps> = ({
       id: 'verified',
       icon: 'shield-checkmark',
       label: 'Verified Seller',
-      color: '#ffcd57',
+      color: colors.lightMustard,
     },
     {
       id: 'top-rated',
       icon: 'star',
       label: 'Top Rated',
-      color: '#F59E0B',
+      color: colors.warningScale[400],
     },
   ];
 
@@ -143,12 +144,12 @@ export const SellerInformation: React.FC<SellerInformationProps> = ({
               <CachedImage source={storeLogo} style={styles.logo} contentFit="cover" />
             ) : (
               <View style={[styles.logo, styles.logoPlaceholder]}>
-                <Ionicons name="storefront" size={24} color="#8B5CF6" />
+                <Ionicons name="storefront" size={24} color={colors.brand.purpleLight} />
               </View>
             )}
             {isVerified && (
               <View style={styles.verifiedBadge}>
-                <Ionicons name="checkmark-circle" size={16} color="#ffcd57" />
+                <Ionicons name="checkmark-circle" size={16} color={colors.lightMustard} />
               </View>
             )}
           </View>
@@ -162,13 +163,13 @@ export const SellerInformation: React.FC<SellerInformationProps> = ({
               <Ionicons
                 name={isExpanded ? 'chevron-up' : 'chevron-down'}
                 size={20}
-                color="#6B7280"
+                color={colors.neutral[500]}
               />
             </View>
 
             {/* Rating */}
             <View style={styles.ratingRow}>
-              <Ionicons name="star" size={14} color="#FFD700" />
+              <Ionicons name="star" size={14} color={colors.brand.goldBright} />
               <ThemedText style={styles.ratingText}>{storeRating.toFixed(1)}</ThemedText>
               {storeReviewCount > 0 && (
                 <ThemedText style={styles.reviewCount}>
@@ -180,7 +181,7 @@ export const SellerInformation: React.FC<SellerInformationProps> = ({
             {/* Location */}
             {location && (
               <View style={styles.locationRow}>
-                <Ionicons name="location" size={12} color="#6B7280" />
+                <Ionicons name="location" size={12} color={colors.neutral[500]} />
                 <ThemedText style={styles.locationText} numberOfLines={1}>
                   {location}
                 </ThemedText>
@@ -197,7 +198,7 @@ export const SellerInformation: React.FC<SellerInformationProps> = ({
           onPress={handleVisitStore}
          
         >
-          <Ionicons name="storefront-outline" size={18} color="#8B5CF6" />
+          <Ionicons name="storefront-outline" size={18} color={colors.brand.purpleLight} />
           <ThemedText style={styles.quickActionText}>Visit Store</ThemedText>
         </Pressable>
 
@@ -206,7 +207,7 @@ export const SellerInformation: React.FC<SellerInformationProps> = ({
           onPress={handleViewProducts}
          
         >
-          <Ionicons name="grid-outline" size={18} color="#8B5CF6" />
+          <Ionicons name="grid-outline" size={18} color={colors.brand.purpleLight} />
           <ThemedText style={styles.quickActionText}>Products</ThemedText>
         </Pressable>
 
@@ -215,7 +216,7 @@ export const SellerInformation: React.FC<SellerInformationProps> = ({
           onPress={handleContact}
          
         >
-          <Ionicons name="chatbubble-outline" size={18} color="#8B5CF6" />
+          <Ionicons name="chatbubble-outline" size={18} color={colors.brand.purpleLight} />
           <ThemedText style={styles.quickActionText}>Contact</ThemedText>
         </Pressable>
       </View>
@@ -282,7 +283,7 @@ export const SellerInformation: React.FC<SellerInformationProps> = ({
           {/* Performance Metrics */}
           <View style={styles.metricsSection}>
             <View style={styles.metricRow}>
-              <Ionicons name="time-outline" size={18} color="#ffcd57" />
+              <Ionicons name="time-outline" size={18} color={colors.lightMustard} />
               <View style={styles.metricContent}>
                 <ThemedText style={styles.metricLabel}>Response Time</ThemedText>
                 <ThemedText style={styles.metricValue}>{sellerStats.responseTime}</ThemedText>
@@ -290,7 +291,7 @@ export const SellerInformation: React.FC<SellerInformationProps> = ({
             </View>
 
             <View style={styles.metricRow}>
-              <Ionicons name="ribbon-outline" size={18} color="#8B5CF6" />
+              <Ionicons name="ribbon-outline" size={18} color={colors.brand.purpleLight} />
               <View style={styles.metricContent}>
                 <ThemedText style={styles.metricLabel}>Seller Rating</ThemedText>
                 <ThemedText style={styles.metricValue}>
@@ -308,7 +309,7 @@ export const SellerInformation: React.FC<SellerInformationProps> = ({
               // TODO: Implement follow functionality
             }}
           >
-            <Ionicons name="add-circle-outline" size={20} color="#8B5CF6" />
+            <Ionicons name="add-circle-outline" size={20} color={colors.brand.purpleLight} />
             <ThemedText style={styles.followButtonText}>Follow Store</ThemedText>
           </Pressable>
         </View>
@@ -319,11 +320,11 @@ export const SellerInformation: React.FC<SellerInformationProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     marginBottom: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
 
   // Header
@@ -345,10 +346,10 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 28,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   logoPlaceholder: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -356,7 +357,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -2,
     right: -2,
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 10,
   },
 
@@ -373,7 +374,7 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     flex: 1,
   },
   ratingRow: {
@@ -384,11 +385,11 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   reviewCount: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   locationRow: {
     flexDirection: 'row',
@@ -397,7 +398,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // Quick Actions
@@ -410,18 +411,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
     gap: 6,
   },
   quickActionText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 
   // Expanded Content
@@ -430,7 +431,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginBottom: 16,
   },
 
@@ -438,7 +439,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
 
@@ -454,7 +455,7 @@ const styles = StyleSheet.create({
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 8,
@@ -470,7 +471,7 @@ const styles = StyleSheet.create({
   badgeLabel: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
   },
 
   // Statistics
@@ -486,18 +487,18 @@ const styles = StyleSheet.create({
     width: '23%',
     alignItems: 'center',
     paddingVertical: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
   },
   statValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // Metrics
@@ -515,13 +516,13 @@ const styles = StyleSheet.create({
   },
   metricLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 2,
   },
   metricValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   // Follow Button
@@ -529,17 +530,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 12,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
     gap: 8,
   },
   followButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 });
 

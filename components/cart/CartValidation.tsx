@@ -23,6 +23,7 @@ import {
   VALIDATION_ISSUE_COLORS,
 } from '@/types/validation.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -112,7 +113,7 @@ function CartValidation({
                 <ThemedText style={styles.priceOld}>
                   {currencySymbol}{issue.previousPrice}
                 </ThemedText>
-                <Ionicons name="arrow-forward" size={14} color="#6B7280" />
+                <Ionicons name="arrow-forward" size={14} color={colors.neutral[500]} />
                 <ThemedText style={styles.priceNew}>
                   {currencySymbol}{issue.currentPrice}
                 </ThemedText>
@@ -142,7 +143,7 @@ function CartValidation({
         <View style={styles.modalContainer}>
           {/* Header */}
           <LinearGradient
-            colors={hasErrors ? ['#DC2626', '#B91C1C'] : ['#8B5CF6', '#7C3AED']}
+            colors={hasErrors ? [colors.error, colors.errorScale[700]] : [colors.brand.purpleLight, colors.brand.purple]}
             style={styles.header}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -184,7 +185,7 @@ function CartValidation({
           >
             {loading ? (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#8B5CF6" />
+                <ActivityIndicator size="large" color={colors.brand.purpleLight} />
                 <ThemedText style={styles.loadingText}>Validating cart items...</ThemedText>
               </View>
             ) : validationResult ? (
@@ -193,8 +194,8 @@ function CartValidation({
                 {errorIssues.length > 0 && (
                   <View style={styles.section}>
                     <View style={styles.sectionHeader}>
-                      <Ionicons name="close-circle" size={20} color="#DC2626" />
-                      <ThemedText style={[styles.sectionTitle, { color: '#DC2626' }]}>
+                      <Ionicons name="close-circle" size={20} color={colors.error} />
+                      <ThemedText style={[styles.sectionTitle, { color: colors.error }]}>
                         Items Unavailable ({errorIssues.length})
                       </ThemedText>
                     </View>
@@ -206,8 +207,8 @@ function CartValidation({
                 {warningIssues.length > 0 && (
                   <View style={styles.section}>
                     <View style={styles.sectionHeader}>
-                      <Ionicons name="alert-circle" size={20} color="#D97706" />
-                      <ThemedText style={[styles.sectionTitle, { color: '#D97706' }]}>
+                      <Ionicons name="alert-circle" size={20} color={colors.warningScale[700]} />
+                      <ThemedText style={[styles.sectionTitle, { color: colors.warningScale[700] }]}>
                         Low Stock Warnings ({warningIssues.length})
                       </ThemedText>
                     </View>
@@ -219,8 +220,8 @@ function CartValidation({
                 {infoIssues.length > 0 && (
                   <View style={styles.section}>
                     <View style={styles.sectionHeader}>
-                      <Ionicons name="information-circle" size={20} color="#2563EB" />
-                      <ThemedText style={[styles.sectionTitle, { color: '#2563EB' }]}>
+                      <Ionicons name="information-circle" size={20} color={colors.brand.blue} />
+                      <ThemedText style={[styles.sectionTitle, { color: colors.brand.blue }]}>
                         Price Changes ({infoIssues.length})
                       </ThemedText>
                     </View>
@@ -232,8 +233,8 @@ function CartValidation({
                 {validationResult.validItems.length > 0 && (
                   <View style={[styles.section, styles.validSection]}>
                     <View style={styles.sectionHeader}>
-                      <Ionicons name="checkmark-circle" size={20} color="#22C55E" />
-                      <ThemedText style={[styles.sectionTitle, { color: '#22C55E' }]}>
+                      <Ionicons name="checkmark-circle" size={20} color={colors.success} />
+                      <ThemedText style={[styles.sectionTitle, { color: colors.success }]}>
                         Available Items ({validationResult.validItems.length})
                       </ThemedText>
                     </View>
@@ -245,7 +246,7 @@ function CartValidation({
               </>
             ) : (
               <View style={styles.emptyContainer}>
-                <Ionicons name="cart-outline" size={64} color="#9CA3AF" />
+                <Ionicons name="cart-outline" size={64} color={colors.neutral[400]} />
                 <ThemedText style={styles.emptyText}>No validation data available</ThemedText>
               </View>
             )}
@@ -281,8 +282,8 @@ function CartValidation({
                 onPress={onRefresh}
                
               >
-                <Ionicons name="refresh" size={18} color="#8B5CF6" />
-                <ThemedText style={[styles.buttonText, { color: '#8B5CF6' }]}>
+                <Ionicons name="refresh" size={18} color={colors.brand.purpleLight} />
+                <ThemedText style={[styles.buttonText, { color: colors.brand.purpleLight }]}>
                   Refresh
                 </ThemedText>
               </Pressable>
@@ -314,7 +315,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   issueCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 12,
     marginBottom: 8,
@@ -403,7 +404,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   issueInfo: {
     flex: 1,
@@ -412,7 +413,7 @@ const styles = StyleSheet.create({
   issueProductName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   issueMessage: {
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
   },
   issueDetail: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceChangeContainer: {
     flexDirection: 'row',
@@ -432,13 +433,13 @@ const styles = StyleSheet.create({
   },
   priceOld: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   priceNew: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   priceChangeBadge: {
     fontSize: 11,
@@ -448,19 +449,19 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   priceIncrease: {
-    backgroundColor: '#FEE2E2',
-    color: '#DC2626',
+    backgroundColor: colors.errorScale[100],
+    color: colors.error,
   },
   priceDecrease: {
-    backgroundColor: '#D1FAE5',
-    color: '#059669',
+    backgroundColor: colors.tint.green,
+    color: colors.successScale[700],
   },
   validSection: {
-    backgroundColor: '#F0FDF4',
+    backgroundColor: colors.successScale[50],
   },
   validText: {
     fontSize: 14,
-    color: '#16A34A',
+    color: colors.brand.greenDark,
   },
   loadingContainer: {
     paddingVertical: 60,
@@ -469,7 +470,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 16,
     fontSize: 15,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   emptyContainer: {
     paddingVertical: 60,
@@ -478,14 +479,14 @@ const styles = StyleSheet.create({
   emptyText: {
     marginTop: 16,
     fontSize: 15,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   footer: {
     paddingHorizontal: 20,
     paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
     gap: 10,
   },
   button: {
@@ -497,15 +498,15 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   buttonPrimary: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   buttonSecondary: {
     backgroundColor: 'white',
     borderWidth: 1.5,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
   },
   buttonDanger: {
-    backgroundColor: '#DC2626',
+    backgroundColor: colors.error,
   },
   buttonText: {
     fontSize: 15,

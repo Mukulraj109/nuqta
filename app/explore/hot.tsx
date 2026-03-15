@@ -22,6 +22,7 @@ import exploreApi, { HotProduct } from '@/services/exploreApi';
 import { useRegion } from '@/contexts/RegionContext';
 import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -324,18 +325,18 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   headerSubtitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   filterButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -351,19 +352,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     marginRight: 8,
   },
   sortChipActive: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
   },
   sortLabel: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   sortLabelActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   itemsScroll: {
     flex: 1,
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   errorContainer: {
     flex: 1,
@@ -393,7 +394,7 @@ const styles = StyleSheet.create({
   errorText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#EF4444',
+    color: colors.error,
     textAlign: 'center',
     paddingHorizontal: 20,
   },
@@ -401,11 +402,11 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingHorizontal: 24,
     paddingVertical: 10,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 20,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -419,23 +420,23 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   emptySubtext: {
     marginTop: 4,
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   grid: {
     justifyContent: 'space-between',
   },
   itemCard: {
     width: (width - 44) / 2,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     overflow: 'hidden',
   },
   imageContainer: {
@@ -445,13 +446,13 @@ const styles = StyleSheet.create({
   itemImage: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   offerBadge: {
     position: 'absolute',
     top: 10,
     left: 10,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -459,7 +460,7 @@ const styles = StyleSheet.create({
   offerText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   hotBadge: {
     position: 'absolute',
@@ -467,7 +468,7 @@ const styles = StyleSheet.create({
     left: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -476,7 +477,7 @@ const styles = StyleSheet.create({
   hotText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   wishlistButton: {
     position: 'absolute',
@@ -495,7 +496,7 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   storeRow: {
     flexDirection: 'row',
@@ -505,7 +506,7 @@ const styles = StyleSheet.create({
   },
   storeName: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceRow: {
     flexDirection: 'row',
@@ -516,11 +517,11 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   originalPrice: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   bottomRow: {
@@ -537,11 +538,11 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   reviewsText: {
     fontSize: 10,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   distanceBadge: {
     flexDirection: 'row',
@@ -550,7 +551,7 @@ const styles = StyleSheet.create({
   },
   distanceText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

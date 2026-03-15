@@ -14,6 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { useRegion } from '@/contexts/RegionContext';
 import { COLORS, SPACING, BORDER_RADIUS } from '@/constants/DesignTokens';
+import { colors } from '@/constants/theme';
 
 interface LockedItemProps {
   item: {
@@ -167,10 +168,10 @@ function LockedItem({
 
   // Get timer color based on urgency
   const getTimerColor = () => {
-    if (isExpired) return { bg: '#FEE2E2', text: '#DC2626', icon: '#EF4444' };
-    if (timeLeft.isCritical) return { bg: '#FEE2E2', text: '#DC2626', icon: '#EF4444' };
-    if (timeLeft.isUrgent) return { bg: '#FEF3C7', text: '#D97706', icon: '#F59E0B' };
-    return { bg: '#faf1e0', text: '#1a3a52', icon: '#ffcd57' };
+    if (isExpired) return { bg: colors.errorScale[100], text: colors.error, icon: colors.error };
+    if (timeLeft.isCritical) return { bg: colors.errorScale[100], text: colors.error, icon: colors.error };
+    if (timeLeft.isUrgent) return { bg: colors.tint.amberLight, text: colors.warningScale[700], icon: colors.warningScale[400] };
+    return { bg: colors.linen, text: colors.nileBlue, icon: colors.lightMustard };
   };
 
   const timerColors = getTimerColor();
@@ -215,14 +216,14 @@ function LockedItem({
     >
       {/* Price Locked Header Banner */}
       <LinearGradient
-        colors={isExpired ? ['#EF4444', '#DC2626'] : [COLORS.nuqta.mustard, COLORS.nuqta.peach]}
+        colors={isExpired ? [colors.error, colors.error] : [COLORS.nuqta.mustard, COLORS.nuqta.peach]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.headerBanner}
       >
         <View style={styles.headerBannerContent}>
           <View style={styles.lockIconWrapper}>
-            <Ionicons name="lock-closed" size={14} color={isExpired ? '#fff' : COLORS.nuqta.nileBlue} />
+            <Ionicons name="lock-closed" size={14} color={isExpired ? colors.background.primary : COLORS.nuqta.nileBlue} />
           </View>
           <ThemedText style={[styles.headerBannerText, !isExpired && { color: COLORS.nuqta.nileBlue }]}>
             {isExpired ? 'LOCK EXPIRED' : 'PRICE LOCKED'}
@@ -247,7 +248,7 @@ function LockedItem({
             />
           ) : (
             <View style={[styles.productImage, styles.placeholderImage]}>
-              <Ionicons name="image-outline" size={32} color="#9CA3AF" />
+              <Ionicons name="image-outline" size={32} color={colors.neutral[400]} />
             </View>
           )}
           {/* Quantity Badge on Image */}
@@ -305,7 +306,7 @@ function LockedItem({
           {/* Paid Lock Deposit Info */}
           {item.isPaidLock && item.lockFee && (
             <View style={styles.depositContainer}>
-              <Ionicons name="checkmark-circle" size={14} color="#1a3a52" />
+              <Ionicons name="checkmark-circle" size={14} color={colors.nileBlue} />
               <ThemedText style={styles.depositText}>
                 {currencySymbol}{item.lockFee} already paid ({item.lockFeePercentage}% deposit)
               </ThemedText>
@@ -335,7 +336,7 @@ function LockedItem({
         </View>
         {!isExpired && item.isPaidLock && (
           <View style={styles.securedBadge}>
-            <Ionicons name="shield-checkmark" size={14} color="#1a3a52" />
+            <Ionicons name="shield-checkmark" size={14} color={colors.nileBlue} />
             <ThemedText style={styles.securedText}>Price Secured</ThemedText>
           </View>
         )}
@@ -350,7 +351,7 @@ function LockedItem({
               style={styles.cancelButton}
              
             >
-              <Ionicons name="close" size={18} color="#6B7280" />
+              <Ionicons name="close" size={18} color={colors.neutral[500]} />
               <ThemedText style={styles.cancelButtonText}>Cancel Lock</ThemedText>
             </Pressable>
 
@@ -378,7 +379,7 @@ function LockedItem({
             style={styles.removeExpiredButton}
            
           >
-            <Ionicons name="trash" size={18} color="#DC2626" />
+            <Ionicons name="trash" size={18} color={colors.error} />
             <ThemedText style={styles.removeExpiredText}>Remove Expired Lock</ThemedText>
           </Pressable>
         )}
@@ -393,7 +394,7 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 10,
     borderRadius: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.12,
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerBannerText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 13,
     fontWeight: '700',
     letterSpacing: 0.5,
@@ -456,7 +457,7 @@ const styles = StyleSheet.create({
     width: 85,
     height: 85,
     borderRadius: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   placeholderImage: {
     justifyContent: 'center',
@@ -472,7 +473,7 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
   },
   quantityOverlayText: {
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '600',
   },
@@ -486,16 +487,16 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     lineHeight: 20,
   },
   storeName: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 6,
   },
   variantContainer: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -504,7 +505,7 @@ const styles = StyleSheet.create({
   },
   variantText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceRow: {
     flexDirection: 'row',
@@ -515,18 +516,18 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   originalPrice: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
   },
   depositContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 8,
@@ -534,7 +535,7 @@ const styles = StyleSheet.create({
   },
   depositText: {
     fontSize: 12,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
   },
   timerSection: {
@@ -577,7 +578,7 @@ const styles = StyleSheet.create({
   },
   securedText: {
     fontSize: 11,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '600',
   },
   actionButtons: {
@@ -597,13 +598,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#F9FAFB',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.neutral[50],
     flex: 0.4,
   },
   cancelButtonText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '600',
   },
   purchaseButtonWrapper: {
@@ -632,12 +633,12 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 10,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     flex: 1,
   },
   removeExpiredText: {
     fontSize: 14,
-    color: '#DC2626',
+    color: colors.error,
     fontWeight: '600',
   },
 });

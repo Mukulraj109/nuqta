@@ -15,6 +15,7 @@ import gamificationApi from '@/services/gamificationApi';
 import exploreApi from '@/services/exploreApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -112,7 +113,7 @@ const EarnCTA = () => {
         onPress={() => navigateTo('/referral')}
       >
         <LinearGradient
-          colors={['#ffcd57', '#1a3a52']}
+          colors={[colors.lightMustard, colors.nileBlue]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.ctaGradient}
@@ -189,7 +190,7 @@ const EarnCTA = () => {
 
           {stats.earnedToday > 0 && (
             <View style={styles.statCard}>
-              <View style={[styles.statIcon, { backgroundColor: '#FEF3C7' }]}>
+              <View style={[styles.statIcon, { backgroundColor: colors.tint.amberLight }]}>
                 <Ionicons name="wallet" size={20} color={Colors.warning} />
               </View>
               <Text style={styles.statValue}>{formatCurrency(stats.earnedToday)}</Text>
@@ -199,7 +200,7 @@ const EarnCTA = () => {
 
           {stats.avgEarnings > 0 && (
             <View style={styles.statCard}>
-              <View style={[styles.statIcon, { backgroundColor: '#F0FDF4' }]}>
+              <View style={[styles.statIcon, { backgroundColor: colors.successScale[50] }]}>
                 <Ionicons name="trending-up" size={20} color={Colors.gold} />
               </View>
               <Text style={styles.statValue}>{formatCurrency(stats.avgEarnings)}</Text>
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
   ctaCard: {
     borderRadius: BorderRadius.xl,
     overflow: 'hidden',
-    shadowColor: '#ffcd57',
+    shadowColor: colors.lightMustard,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 12,
@@ -306,7 +307,7 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: BorderRadius['2xl'],
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
   },
   rankBadge: {
     position: 'absolute',
@@ -318,17 +319,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FFFFFF',
-    backgroundColor: '#6B7280',
+    borderColor: colors.background.primary,
+    backgroundColor: colors.neutral[500],
   },
   rankGold: {
     backgroundColor: Colors.warning,
   },
   rankSilver: {
-    backgroundColor: '#9CA3AF',
+    backgroundColor: colors.neutral[400],
   },
   rankBronze: {
-    backgroundColor: '#B45309',
+    backgroundColor: colors.brand.amberDeep,
   },
   rankText: {
     ...Typography.caption,

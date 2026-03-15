@@ -17,6 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { GroupBuyingProduct, CreateGroupRequest } from '@/types/groupBuying.types';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface GroupCreationModalProps {
   visible: boolean;
@@ -81,7 +82,7 @@ function GroupCreationModal({
           <View style={styles.header}>
             <Text style={styles.headerTitle}>Create Group</Text>
             <Pressable onPress={handleClose} style={styles.closeButton}>
-              <Ionicons name="close" size={24} color="#111827" />
+              <Ionicons name="close" size={24} color={colors.neutral[900]} />
             </Pressable>
           </View>
 
@@ -104,7 +105,7 @@ function GroupCreationModal({
                 <View style={styles.priceRow}>
                   <Text style={styles.basePrice}>{currencySymbol}{product.basePrice}</Text>
                   <LinearGradient
-                    colors={['#10B981', '#059669']}
+                    colors={[colors.successScale[400], colors.successScale[700]]}
                     style={styles.discountBadge}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
@@ -124,7 +125,7 @@ function GroupCreationModal({
                 <View key={index} style={styles.tierCard}>
                   <View style={styles.tierHeader}>
                     <View style={styles.tierMembers}>
-                      <Ionicons name="people" size={16} color="#8B5CF6" />
+                      <Ionicons name="people" size={16} color={colors.brand.purpleLight} />
                       <Text style={styles.tierMembersText}>
                         {tier.minMembers}
                         {tier.maxMembers ? `-${tier.maxMembers}` : '+'} members
@@ -154,7 +155,7 @@ function GroupCreationModal({
                     if (qty > 1) setQuantity(String(qty - 1));
                   }}
                 >
-                  <Ionicons name="remove" size={20} color="#8B5CF6" />
+                  <Ionicons name="remove" size={20} color={colors.brand.purpleLight} />
                 </Pressable>
                 <TextInput
                   style={styles.quantityInput}
@@ -170,7 +171,7 @@ function GroupCreationModal({
                     setQuantity(String(qty + 1));
                   }}
                 >
-                  <Ionicons name="add" size={20} color="#8B5CF6" />
+                  <Ionicons name="add" size={20} color={colors.brand.purpleLight} />
                 </Pressable>
               </View>
             </View>
@@ -183,7 +184,7 @@ function GroupCreationModal({
               <TextInput
                 style={styles.messageInput}
                 placeholder="e.g., Let's save together on this amazing product!"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={message}
                 onChangeText={setMessage}
                 multiline
@@ -199,25 +200,25 @@ function GroupCreationModal({
             <View style={styles.rulesSection}>
               <Text style={styles.rulesTitle}>Group Buying Rules:</Text>
               <View style={styles.ruleItem}>
-                <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
                 <Text style={styles.ruleText}>
                   Minimum {product.minMembers} members required
                 </Text>
               </View>
               <View style={styles.ruleItem}>
-                <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
                 <Text style={styles.ruleText}>
                   Maximum {product.maxMembers} members allowed
                 </Text>
               </View>
               <View style={styles.ruleItem}>
-                <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
                 <Text style={styles.ruleText}>
                   Group expires in {product.expiryDuration} hours
                 </Text>
               </View>
               <View style={styles.ruleItem}>
-                <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+                <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
                 <Text style={styles.ruleText}>
                   Refund if minimum not met before expiry
                 </Text>
@@ -268,12 +269,12 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   closeButton: {
     padding: 4,
@@ -286,7 +287,7 @@ const styles = StyleSheet.create({
     gap: 12,
     marginBottom: 24,
     padding: 16,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
   },
   productImage: {
@@ -300,12 +301,12 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   storeName: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   priceRow: {
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
   basePrice: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   discountBadge: {
     paddingHorizontal: 8,
@@ -334,16 +335,16 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   tierCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     padding: 12,
     borderRadius: 8,
     marginBottom: 8,
     borderLeftWidth: 3,
-    borderLeftColor: '#8B5CF6',
+    borderLeftColor: colors.brand.purpleLight,
   },
   tierHeader: {
     flexDirection: 'row',
@@ -359,10 +360,10 @@ const styles = StyleSheet.create({
   tierMembersText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   tierDiscount: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -375,7 +376,7 @@ const styles = StyleSheet.create({
   tierPrice: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   quantityContainer: {
     flexDirection: 'row',
@@ -386,7 +387,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: '#EDE9FE',
+    backgroundColor: colors.tint.purple,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -394,32 +395,32 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 44,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     borderRadius: 12,
     paddingHorizontal: 16,
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     textAlign: 'center',
   },
   messageInput: {
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: colors.neutral[300],
     borderRadius: 12,
     padding: 12,
     fontSize: 14,
-    color: '#111827',
+    color: colors.neutral[900],
     minHeight: 80,
     textAlignVertical: 'top',
   },
   characterCount: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 6,
     textAlign: 'right',
   },
   rulesSection: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.tint.blue,
     padding: 16,
     borderRadius: 12,
     marginBottom: 16,
@@ -427,7 +428,7 @@ const styles = StyleSheet.create({
   rulesTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   ruleItem: {
@@ -439,19 +440,19 @@ const styles = StyleSheet.create({
   ruleText: {
     flex: 1,
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 18,
   },
   footer: {
     padding: 20,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   createButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingVertical: 16,
     borderRadius: 12,
     gap: 8,

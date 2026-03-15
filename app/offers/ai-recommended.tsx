@@ -22,6 +22,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { CardGridSkeleton } from '@/components/skeletons';
 import { CachedImage } from '@/components/ui/CachedImage';
 import apiClient from '@/services/apiClient';
+import { colors } from '@/constants/theme';
 
 interface BackendOffer {
   _id: string;
@@ -236,7 +237,7 @@ export default function AIRecommendedPage() {
     >
       <View style={styles.headerContent}>
         <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#FFF" />
+          <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
         </Pressable>
         <ThemedText style={styles.headerTitle}>For You</ThemedText>
         <View style={styles.placeholder} />
@@ -286,7 +287,7 @@ export default function AIRecommendedPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>For You</ThemedText>
           <View style={styles.placeholder} />
@@ -379,7 +380,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -549,7 +550,7 @@ const styles = StyleSheet.create({
   },
   retryText: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   emptyContainer: {
     alignItems: 'center',

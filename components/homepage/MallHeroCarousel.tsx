@@ -20,6 +20,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const HORIZONTAL_PADDING = 2;
@@ -47,7 +48,7 @@ const DEFAULT_BANNERS: CarouselItem[] = [
     subtitle: 'Up to 50% off on top brands',
     ctaText: 'Shop Fashion',
     ctaUrl: '/mall/category/fashion',
-    gradientColors: ['#1a3a52', '#234b68', '#2d5c7e'],
+    gradientColors: [colors.nileBlue, colors.brand.nileBlueLight, '#2d5c7e'],
     image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800',
   },
   {
@@ -57,7 +58,7 @@ const DEFAULT_BANNERS: CarouselItem[] = [
     subtitle: 'Latest gadgets at best prices',
     ctaText: 'Shop Electronics',
     ctaUrl: '/mall/category/electronics',
-    gradientColors: ['#ffcd57', '#ffd7b5', '#faf1e0'],
+    gradientColors: [colors.lightMustard, colors.lightPeach, colors.linen],
     image: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800',
   },
   {
@@ -67,7 +68,7 @@ const DEFAULT_BANNERS: CarouselItem[] = [
     subtitle: 'Transform your space with style',
     ctaText: 'Shop Home',
     ctaUrl: '/mall/category/home',
-    gradientColors: ['#1a3a52', '#234b68', '#2d5c7e'],
+    gradientColors: [colors.nileBlue, colors.brand.nileBlueLight, '#2d5c7e'],
     image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800',
   },
   {
@@ -77,7 +78,7 @@ const DEFAULT_BANNERS: CarouselItem[] = [
     subtitle: 'Premium products, amazing prices',
     ctaText: 'Shop Beauty',
     ctaUrl: '/mall/category/beauty',
-    gradientColors: ['#dfebf7', '#1a3a52', '#234b68'],
+    gradientColors: [colors.lavenderMist, colors.nileBlue, colors.brand.nileBlueLight],
     image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800',
   },
 ];
@@ -185,7 +186,7 @@ function MallHeroCarousel({ banners = DEFAULT_BANNERS }: MallHeroCarouselProps) 
                 onPress={() => handleBannerPress(item)}
               >
                 <Text style={styles.ctaButtonText}>{item.ctaText}</Text>
-                <Ionicons name="arrow-forward" size={14} color="#ffcd57" />
+                <Ionicons name="arrow-forward" size={14} color={colors.lightMustard} />
               </Pressable>
             )}
           </View>
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.2,
         shadowRadius: 8,
@@ -292,14 +293,14 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
   bannerTitle: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 4,
     textShadowColor: 'rgba(0, 0, 0, 0.5)',
     textShadowOffset: { width: 0, height: 2 },
@@ -318,7 +319,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 22,
@@ -327,7 +328,7 @@ const styles = StyleSheet.create({
   ctaButtonText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   pagination: {
     flexDirection: 'row',
@@ -344,7 +345,7 @@ const styles = StyleSheet.create({
   },
   paginationDotActive: {
     width: 20,
-    backgroundColor: '#1a3a52', // Nile Blue for active dot (Nuqta Mall theme)
+    backgroundColor: colors.nileBlue, // Nile Blue for active dot (Nuqta Mall theme)
   },
 });
 

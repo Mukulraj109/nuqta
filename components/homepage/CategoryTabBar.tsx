@@ -17,19 +17,20 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, usePathname } from 'expo-router';
 import { BlurView } from 'expo-blur';
+import { colors } from '@/constants/theme';
 
 // Module-level variable to persist scroll position across re-renders
 let persistedScrollPosition = 0;
 
 // Nuqta Brand Colors
 const COLORS = {
-  primary: '#ffcd57',
+  primary: colors.lightMustard,
   primaryLight: 'rgba(255, 205, 87, 0.1)',
-  deepTeal: '#1a3a52',
+  deepTeal: colors.nileBlue,
   slate: '#1F2D3D',
-  coolGray: '#9AA7B2',
+  coolGray: colors.gray[400],
   mutedGray: '#8E99A4',
-  white: '#FFFFFF',
+  white: colors.background.primary,
 };
 
 // Category images - using local assets (cached at module level to prevent reloading)

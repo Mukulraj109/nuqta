@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, Spacing, BorderRadius, Shadows } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const SHIMMER_DURATION = 1500;
 
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: BorderRadius.lg,
     overflow: 'hidden',
     borderWidth: 1,

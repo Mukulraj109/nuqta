@@ -20,6 +20,7 @@ import {
   SUBSCRIPTION_BORDER_RADIUS,
   SUBSCRIPTION_SHADOW,
 } from '@/styles/subscriptionStyles';
+import { colors } from '@/constants/theme';
 
 interface BenefitsModalProps {
   visible: boolean;
@@ -139,7 +140,7 @@ function BenefitsModal({
   onUpgrade,
 }: BenefitsModalProps) {
   const tierColor = tier ? TIER_COLORS[tier] : SUBSCRIPTION_COLORS.purple;
-  const tierGradient = tier ? TIER_GRADIENTS[tier] : ['#8B5CF6', '#A78BFA'];
+  const tierGradient = tier ? TIER_GRADIENTS[tier] : [colors.brand.purpleLight, colors.brand.purpleSoft];
 
   const renderBenefitRow = (benefit: BenefitItem) => (
     <View key={benefit.title} style={styles.benefitRow}>

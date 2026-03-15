@@ -44,6 +44,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const CARD_GAP = 14;
@@ -67,60 +68,60 @@ const FALLBACK_STORES: Store[] = [
   {
     id: 'fastDelivery',
     title: '30 min delivery',
-    accent: '#ffcd57',
+    accent: colors.lightMustard,
     icon: 'flash',
     image: storeImages.fastDelivery,
-    gradient: ['#ffcd57', '#E6B84E'] as const,
+    gradient: [colors.lightMustard, colors.brand.goldRich] as const,
     badge: '30 min',
     description: 'Lightning fast delivery'
   },
   {
     id: 'budgetFriendly',
     title: '1 rupees store',
-    accent: '#ffcd57',
+    accent: colors.lightMustard,
     icon: 'cash',
     image: storeImages.budgetFriendly,
-    gradient: ['#ffcd57', '#ffd7b5'] as const,
+    gradient: [colors.lightMustard, colors.lightPeach] as const,
     badge: '1',
     description: 'Everything at 1'
   },
   {
     id: 'ninetyNineStore',
     title: '99 Rupees store',
-    accent: '#1a3a52',
+    accent: colors.nileBlue,
     icon: 'wallet',
     image: storeImages.ninetyNineStore,
-    gradient: ['#1a3a52', '#2A5577'] as const,
+    gradient: [colors.nileBlue, '#2A5577'] as const,
     badge: '99',
     description: 'Budget friendly shopping'
   },
   {
     id: 'premium',
     title: 'Luxury store',
-    accent: '#ffcd57',
+    accent: colors.lightMustard,
     icon: 'diamond',
     image: storeImages.premium,
-    gradient: ['#ffcd57', '#ffd7b5'] as const,
+    gradient: [colors.lightMustard, colors.lightPeach] as const,
     badge: 'Premium',
     description: 'Luxury & premium brands'
   },
   {
     id: 'alliance',
     title: 'Alliance Store',
-    accent: '#ffcd57',
+    accent: colors.lightMustard,
     icon: 'people',
     image: storeImages.alliance,
-    gradient: ['#ffcd57', '#E6B84E'] as const,
+    gradient: [colors.lightMustard, colors.brand.goldRich] as const,
     badge: 'Partner',
     description: 'Partner stores network'
   },
   {
     id: 'organic',
     title: 'Organic Store',
-    accent: '#34D399',
+    accent: colors.successScale[400],
     icon: 'leaf',
     image: storeImages.organic,
-    gradient: ['#34D399', '#ffcd57'] as const,
+    gradient: [colors.successScale[400], colors.lightMustard] as const,
     badge: 'Organic',
     description: 'Natural & organic products'
   },
@@ -130,27 +131,27 @@ const FALLBACK_STORES: Store[] = [
     accent: '#22D3EE',
     icon: 'trending-down',
     image: storeImages.lowestPrice,
-    gradient: ['#22D3EE', '#06B6D4'] as const,
+    gradient: ['#22D3EE', colors.brand.cyan] as const,
     badge: 'Best Price',
     description: 'Guaranteed lowest prices'
   },
   {
     id: 'mall',
     title: `${BRAND.APP_NAME} Mall`,
-    accent: '#1a3a52',
+    accent: colors.nileBlue,
     icon: 'storefront',
     image: storeImages.rezMall,
-    gradient: ['#1a3a52', '#2A5577'] as const,
+    gradient: [colors.nileBlue, '#2A5577'] as const,
     badge: 'Mall',
     description: 'Complete shopping experience'
   },
   {
     id: 'cashStore',
     title: 'Cash Store',
-    accent: '#ffcd57',
+    accent: colors.lightMustard,
     icon: 'card',
     image: storeImages.cashStore,
-    gradient: ['#ffcd57', '#E6B84E'] as const,
+    gradient: [colors.lightMustard, colors.brand.goldRich] as const,
     badge: 'Cash',
     description: 'Cashback & rewards'
   },
@@ -222,7 +223,7 @@ const mapCategoryToStore = (category: StoreCategory): Store => {
 function ModernCardIllustration({
   icon,
   image,
-  gradient = ['#ffcd57', '#1a3a52'] as const,
+  gradient = [colors.lightMustard, colors.nileBlue] as const,
   badge,
   count,
 }: {
@@ -344,7 +345,7 @@ function StoreCard({ item, index }: { item: Store; index: number }) {
           )}
           {/* Arrow indicator */}
           <View style={styles.cardArrow}>
-            <Ionicons name="arrow-forward" size={14} color="#9CA3AF" />
+            <Ionicons name="arrow-forward" size={14} color={colors.neutral[400]} />
           </View>
         </View>
       </Pressable>
@@ -436,7 +437,7 @@ export default function App() {
     <SafeAreaView style={styles.safe} edges={['left', 'right']}>
       {/* Header with gradient - Fixed at top */}
       <LinearGradient
-        colors={['#ffcd57', '#E6A817', '#1a3a52'] as const}
+        colors={[colors.lightMustard, '#E6A817', colors.nileBlue] as const}
         locations={[0, 0.5, 1]}
         style={styles.header}
       >
@@ -482,7 +483,7 @@ export default function App() {
               accessibilityRole="button"
               accessibilityHint="Double tap to view your loyalty points and rewards"
             >
-              <Ionicons name="star" size={16} color="#FFD700" />
+              <Ionicons name="star" size={16} color={colors.brand.goldBright} />
               <ThemedText allowFontScaling={false} style={styles.coinsText}>
                 {/* ✅ FIX: Add type check for userPoints before formatting */}
                 {isLoadingPoints ? '...' : (typeof userPoints === 'number' ? userPoints.toLocaleString() : '0')}
@@ -538,7 +539,7 @@ export default function App() {
             accessibilityRole="button"
             accessibilityHint="Double tap to go back to the previous screen"
           >
-            <Ionicons name="chevron-back" size={18} color="#ffcd57" />
+            <Ionicons name="chevron-back" size={18} color={colors.lightMustard} />
           </Pressable>
 
           <View style={styles.searchContainer}>
@@ -546,7 +547,7 @@ export default function App() {
             <TextInput
               style={styles.searchInput}
               placeholder="Search for the service"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.neutral[400]}
               returnKeyType="search"
               allowFontScaling={false}
               value={searchQuery}
@@ -579,10 +580,10 @@ export default function App() {
               <CategoryGridSkeleton itemCount={6} />
             ) : categoriesError ? (
               <View style={styles.errorContainer}>
-                <Ionicons name="warning-outline" size={20} color="#92400E" style={{ marginBottom: 4 }} />
+                <Ionicons name="warning-outline" size={20} color={colors.brand.amberDark} style={{ marginBottom: 4 }} />
                 <Text style={styles.errorText}>{categoriesError}</Text>
                 <Pressable style={styles.retryButton} onPress={fetchCategories}>
-                  <Ionicons name="refresh" size={16} color="#FFFFFF" />
+                  <Ionicons name="refresh" size={16} color={colors.background.primary} />
                   <Text style={styles.retryButtonText}>Retry</Text>
                 </Pressable>
                 <Text style={styles.errorSubtext}>Showing default categories</Text>
@@ -670,7 +671,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: '#FFD700',
+    backgroundColor: colors.brand.goldBright,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
@@ -927,11 +928,11 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.base,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#FDE68A',
+    borderColor: colors.warningScale[200],
   },
   errorText: {
     ...Typography.body,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     fontWeight: '600',
     marginBottom: Spacing.xs,
   },

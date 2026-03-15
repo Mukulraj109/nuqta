@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { GroupedProductResult } from '@/types/search.types';
+import { colors } from '@/constants/theme';
 
 interface ProductGroupHeaderProps {
   product: GroupedProductResult;
@@ -34,9 +35,9 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   headerRow: {
     flexDirection: 'row',
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 8,
     marginRight: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   textContainer: {
     flex: 1,
@@ -56,17 +57,17 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 2,
   },
   sellerCount: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   subtitle: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginTop: 4,
   },
 });

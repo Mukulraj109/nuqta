@@ -8,6 +8,7 @@ import { View, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { PointExpiryNotification, RewardItem } from '@/types/loyaltyRedemption.types';
+import { colors } from '@/constants/theme';
 
 interface PointsExpiryBannerProps {
   notification: PointExpiryNotification;
@@ -23,13 +24,13 @@ function PointsExpiryBanner({
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
       case 'high':
-        return '#EF4444';
+        return colors.error;
       case 'medium':
-        return '#F59E0B';
+        return colors.warningScale[400];
       case 'low':
-        return '#10B981';
+        return colors.successScale[400];
       default:
-        return '#6B7280';
+        return colors.neutral[500];
     }
   };
 
@@ -61,18 +62,18 @@ function PointsExpiryBanner({
             style={[styles.actionButton, { backgroundColor: urgencyColor }]}
             onPress={onViewRecommendations}
           >
-            <Ionicons name="gift" size={16} color="#FFFFFF" />
+            <Ionicons name="gift" size={16} color={colors.background.primary} />
             <ThemedText style={styles.actionText}>
               View {notification.suggestedRewards.length} Recommended Rewards
             </ThemedText>
-            <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
+            <Ionicons name="arrow-forward" size={16} color={colors.background.primary} />
           </Pressable>
         )}
       </View>
 
       {onDismiss && (
         <Pressable style={styles.dismissButton} onPress={onDismiss}>
-          <Ionicons name="close" size={20} color="#9CA3AF" />
+          <Ionicons name="close" size={20} color={colors.neutral[400]} />
         </Pressable>
       )}
     </View>
@@ -82,7 +83,7 @@ function PointsExpiryBanner({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -107,12 +108,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   message: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
     lineHeight: 20,
   },
@@ -121,11 +122,11 @@ const styles = StyleSheet.create({
   },
   daysText: {
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   date: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginBottom: 12,
   },
   actionButton: {
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
   actionText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     flex: 1,
   },
   dismissButton: {

@@ -19,6 +19,7 @@ import * as FileSystem from 'expo-file-system';
 import ViewShot from 'react-native-view-shot';
 import { ThemedText } from '@/components/ThemedText';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface ReferralQRModalProps {
   visible: boolean;
@@ -248,7 +249,7 @@ function ReferralQRModal({
     {
       name: 'SMS',
       icon: 'chatbox',
-      color: '#10b981',
+      color: colors.successScale[400],
       action: handleSMSShare,
     },
     {
@@ -303,7 +304,7 @@ function ReferralQRModal({
           ]}
         >
           {/* Header */}
-          <LinearGradient colors={['#8B5CF6', '#7C3AED']} style={styles.header}>
+          <LinearGradient colors={[colors.brand.purpleLight, colors.brand.purple]} style={styles.header}>
             <ThemedText style={styles.headerTitle}>Share QR Code</ThemedText>
             <Pressable
               onPress={onClose}
@@ -311,7 +312,7 @@ function ReferralQRModal({
               accessibilityLabel="Close"
               accessibilityHint="Close the QR code modal"
             >
-              <Ionicons name="close" size={24} color="#FFFFFF" />
+              <Ionicons name="close" size={24} color={colors.background.primary} />
             </Pressable>
           </LinearGradient>
 
@@ -330,11 +331,11 @@ function ReferralQRModal({
                   <QRCode
                     value={referralLink}
                     size={200}
-                    color="#111827"
-                    backgroundColor="#FFFFFF"
+                    color={colors.neutral[900]}
+                    backgroundColor={colors.background.primary}
                     logo={require('@/assets/images/icon.png')}
                     logoSize={40}
-                    logoBackgroundColor="#FFFFFF"
+                    logoBackgroundColor={colors.background.primary}
                     logoBorderRadius={20}
                   />
 
@@ -360,14 +361,14 @@ function ReferralQRModal({
               accessibilityHint="Save the QR code as an image to your device"
             >
               <LinearGradient
-                colors={['#8B5CF6', '#7C3AED']}
+                colors={[colors.brand.purpleLight, colors.brand.purple]}
                 style={styles.downloadButtonGradient}
               >
                 {isDownloading ? (
                   <ThemedText style={styles.downloadButtonText}>Downloading...</ThemedText>
                 ) : (
                   <>
-                    <Ionicons name="download-outline" size={20} color="#FFFFFF" />
+                    <Ionicons name="download-outline" size={20} color={colors.background.primary} />
                     <ThemedText style={styles.downloadButtonText}>Download QR Code</ThemedText>
                   </>
                 )}
@@ -387,7 +388,7 @@ function ReferralQRModal({
                     accessibilityHint={`Opens ${platform.name} to share your referral`}
                   >
                     <View style={[styles.platformIcon, { backgroundColor: platform.color }]}>
-                      <Ionicons name={platform.icon} size={24} color="#FFFFFF" />
+                      <Ionicons name={platform.icon} size={24} color={colors.background.primary} />
                     </View>
                     <ThemedText style={styles.platformText}>{platform.name}</ThemedText>
                   </Pressable>
@@ -398,7 +399,7 @@ function ReferralQRModal({
             {/* Info Card */}
             <View style={styles.infoCard}>
               <View style={styles.infoRow}>
-                <Ionicons name="information-circle" size={20} color="#8B5CF6" />
+                <Ionicons name="information-circle" size={20} color={colors.brand.purpleLight} />
                 <ThemedText style={styles.infoText}>
                   Your friends get {currencySymbol}30 off and you earn {currencySymbol}50 when they complete their first order
                 </ThemedText>
@@ -425,7 +426,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   modalContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -438,7 +439,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   headerTitle: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 20,
     fontWeight: 'bold',
   },
@@ -456,18 +457,18 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 16,
   },
   qrWrapper: {
     backgroundColor: 'transparent',
   },
   qrContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 24,
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -478,7 +479,7 @@ const styles = StyleSheet.create({
   codeBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
@@ -487,18 +488,18 @@ const styles = StyleSheet.create({
   },
   codeLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   codeValue: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     letterSpacing: 1.5,
   },
   qrSubtext: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginTop: 16,
     paddingHorizontal: 20,
@@ -508,7 +509,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     borderRadius: 12,
     overflow: 'hidden',
-    shadowColor: '#8B5CF6',
+    shadowColor: colors.brand.purpleLight,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -524,7 +525,7 @@ const styles = StyleSheet.create({
   downloadButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   platformsSection: {
     marginBottom: 20,
@@ -555,16 +556,16 @@ const styles = StyleSheet.create({
   },
   platformText: {
     fontSize: 11,
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
     fontWeight: '500',
   },
   infoCard: {
-    backgroundColor: '#F5F3FF',
+    backgroundColor: colors.tint.purpleLight,
     borderRadius: 12,
     padding: 16,
     borderLeftWidth: 4,
-    borderLeftColor: '#8B5CF6',
+    borderLeftColor: colors.brand.purpleLight,
   },
   infoRow: {
     flexDirection: 'row',
@@ -574,7 +575,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 20,
   },
 });

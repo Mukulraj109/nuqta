@@ -31,6 +31,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { showToast } from '@/components/common/ToastManager';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -508,18 +509,18 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     marginBottom: Spacing.base,
     borderWidth: 1,
-    borderColor: '#FFC857',
+    borderColor: colors.brand.goldWarm,
   },
   distanceText: {
     ...Typography.body,
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   distanceBold: {
     fontWeight: '700',
   },
   distanceSubtext: {
     ...Typography.caption,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     marginTop: 2,
   },
   scrollView: {
@@ -666,7 +667,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     gap: 10,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: colors.errorScale[200],
   },
   storeErrorTitle: {
     ...Typography.body,

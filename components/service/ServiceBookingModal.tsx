@@ -19,6 +19,7 @@ import serviceBookingApi, {
   CreateBookingData,
   AvailableSlotsResponse,
 } from '@/services/serviceBookingApi';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -146,7 +147,7 @@ const TimeSlotPicker = memo(({
   if (loading) {
     return (
       <View style={styles.slotLoadingContainer}>
-        <ActivityIndicator size="small" color="#7C3AED" />
+        <ActivityIndicator size="small" color={colors.brand.purple} />
         <ThemedText style={styles.slotLoadingText}>Loading available slots...</ThemedText>
       </View>
     );
@@ -155,7 +156,7 @@ const TimeSlotPicker = memo(({
   if (slots.length === 0) {
     return (
       <View style={styles.noSlotsContainer}>
-        <Ionicons name="time-outline" size={32} color="#9CA3AF" />
+        <Ionicons name="time-outline" size={32} color={colors.neutral[400]} />
         <ThemedText style={styles.noSlotsText}>No slots available for this date</ThemedText>
         <ThemedText style={styles.noSlotsSubtext}>Please select another date</ThemedText>
       </View>
@@ -208,7 +209,7 @@ const AddressForm = memo(({
             value={address.street}
             onChangeText={(text) => onChange('street', text)}
             placeholder="Enter street address"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
           />
         </View>
       </View>
@@ -221,7 +222,7 @@ const AddressForm = memo(({
             value={address.apartment || ''}
             onChangeText={(text) => onChange('apartment', text)}
             placeholder="Apt, Floor, Building"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
           />
         </View>
       </View>
@@ -234,7 +235,7 @@ const AddressForm = memo(({
             value={address.city}
             onChangeText={(text) => onChange('city', text)}
             placeholder="City"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
           />
         </View>
         <View style={[styles.inputContainer, styles.inputHalf]}>
@@ -244,7 +245,7 @@ const AddressForm = memo(({
             value={address.state}
             onChangeText={(text) => onChange('state', text)}
             placeholder="State"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
           />
         </View>
       </View>
@@ -257,7 +258,7 @@ const AddressForm = memo(({
             value={address.pincode}
             onChangeText={(text) => onChange('pincode', text)}
             placeholder="Pincode"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             keyboardType="numeric"
             maxLength={6}
           />
@@ -269,7 +270,7 @@ const AddressForm = memo(({
             value={address.landmark || ''}
             onChangeText={(text) => onChange('landmark', text)}
             placeholder="Nearby landmark"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
           />
         </View>
       </View>
@@ -453,7 +454,7 @@ function ServiceBookingModal({
               onPress={onClose}
              
             >
-              <Ionicons name="close" size={24} color="#374151" />
+              <Ionicons name="close" size={24} color={colors.neutral[700]} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Book Service</ThemedText>
             <View style={styles.headerSpacer} />
@@ -486,14 +487,14 @@ function ServiceBookingModal({
             )}
             <View style={styles.serviceDetails}>
               <View style={styles.detailItem}>
-                <Ionicons name="time-outline" size={16} color="#6B7280" />
+                <Ionicons name="time-outline" size={16} color={colors.neutral[500]} />
                 <ThemedText style={styles.detailText}>{service.duration} min</ThemedText>
               </View>
               <View style={styles.detailItem}>
                 <Ionicons
                   name={service.serviceType === 'home' ? 'home-outline' : 'storefront-outline'}
                   size={16}
-                  color="#6B7280"
+                  color={colors.neutral[500]}
                 />
                 <ThemedText style={styles.detailText}>
                   {service.serviceType === 'home' ? 'At your location' : 'At store'}
@@ -535,7 +536,7 @@ function ServiceBookingModal({
                     value={customerNotes}
                     onChangeText={setCustomerNotes}
                     placeholder="Any special requests or notes..."
-                    placeholderTextColor="#9CA3AF"
+                    placeholderTextColor={colors.neutral[400]}
                     multiline
                     numberOfLines={3}
                     textAlignVertical="top"
@@ -616,7 +617,7 @@ function ServiceBookingModal({
                   {cashbackAmount > 0 && (
                     <View style={styles.cashbackRow}>
                       <View style={styles.cashbackInfo}>
-                        <Ionicons name="gift-outline" size={16} color="#7C3AED" />
+                        <Ionicons name="gift-outline" size={16} color={colors.brand.purple} />
                         <ThemedText style={styles.cashbackLabel}>
                           Cashback ({service.cashbackPercentage}%)
                         </ThemedText>
@@ -645,7 +646,7 @@ function ServiceBookingModal({
                 onPress={handleBack}
                
               >
-                <Ionicons name="arrow-back" size={20} color="#7C3AED" />
+                <Ionicons name="arrow-back" size={20} color={colors.brand.purple} />
                 <ThemedText style={styles.backButtonText}>Back</ThemedText>
               </Pressable>
             )}
@@ -661,7 +662,7 @@ function ServiceBookingModal({
              
             >
               {booking ? (
-                <ActivityIndicator size="small" color="#FFFFFF" />
+                <ActivityIndicator size="small" color={colors.background.primary} />
               ) : (
                 <ThemedText style={styles.nextButtonText}>
                   {step === 'confirm' ? 'Confirm Booking' : 'Continue'}
@@ -682,7 +683,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -693,20 +694,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   closeButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   headerSpacer: {
     width: 40,
@@ -721,38 +722,38 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   stepDotActive: {
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
   },
   stepDotCompleted: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
   },
   stepLine: {
     width: 40,
     height: 2,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginHorizontal: 4,
   },
   stepLineCompleted: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
   },
   serviceInfo: {
     paddingHorizontal: 20,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   serviceName: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   storeName: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   serviceDetails: {
@@ -766,7 +767,7 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   scrollContent: {
     flex: 1,
@@ -777,12 +778,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
   },
   sectionSubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 16,
     marginTop: -8,
   },
@@ -793,35 +794,35 @@ const styles = StyleSheet.create({
   dateCard: {
     width: 64,
     height: 80,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     marginRight: 8,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   dateCardSelected: {
-    backgroundColor: '#7C3AED',
-    borderColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
+    borderColor: colors.brand.purple,
   },
   dateDayText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   dateNumberText: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginVertical: 2,
   },
   dateMonthText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   dateTextSelected: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   todayIndicator: {
     position: 'absolute',
@@ -829,10 +830,10 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
   },
   todayIndicatorSelected: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   slotLoadingContainer: {
     alignItems: 'center',
@@ -841,7 +842,7 @@ const styles = StyleSheet.create({
   slotLoadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   noSlotsContainer: {
     alignItems: 'center',
@@ -851,12 +852,12 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   noSlotsSubtext: {
     marginTop: 4,
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   slotsGrid: {
     flexDirection: 'row',
@@ -866,36 +867,36 @@ const styles = StyleSheet.create({
   slotCard: {
     paddingHorizontal: 16,
     paddingVertical: 10,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
     marginRight: 8,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   slotCardSelected: {
-    backgroundColor: '#7C3AED',
-    borderColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
+    borderColor: colors.brand.purple,
   },
   slotText: {
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
   },
   slotTextSelected: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   notesSection: {
     marginTop: 8,
   },
   notesInput: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     padding: 12,
     fontSize: 14,
-    color: '#1F2937',
+    color: colors.neutral[800],
     minHeight: 80,
   },
   addressForm: {
@@ -916,22 +917,22 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
     fontWeight: '500',
     marginBottom: 6,
   },
   input: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   summaryCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -943,18 +944,18 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   summaryValue: {
     fontSize: 14,
-    color: '#1F2937',
+    color: colors.neutral[800],
     fontWeight: '500',
     flex: 1,
     textAlign: 'right',
     marginLeft: 16,
   },
   pricingCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     padding: 16,
   },
@@ -965,22 +966,22 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   priceValue: {
     fontSize: 14,
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   discountValue: {
     fontSize: 14,
-    color: '#10B981',
+    color: colors.successScale[400],
     fontWeight: '500',
   },
   cashbackRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     marginHorizontal: -16,
     marginTop: 8,
     marginBottom: 8,
@@ -994,12 +995,12 @@ const styles = StyleSheet.create({
   },
   cashbackLabel: {
     fontSize: 14,
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '500',
   },
   cashbackValue: {
     fontSize: 14,
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '600',
   },
   totalRow: {
@@ -1008,25 +1009,25 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: colors.neutral[200],
   },
   totalLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   totalValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   footer: {
     flexDirection: 'row',
     padding: 16,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
   },
   backButton: {
     flexDirection: 'row',
@@ -1036,13 +1037,13 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#7C3AED',
+    borderColor: colors.brand.purple,
     gap: 6,
   },
   backButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   nextButton: {
     flex: 1,
@@ -1050,7 +1051,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
   },
   nextButtonFull: {
     flex: 1,
@@ -1061,7 +1062,7 @@ const styles = StyleSheet.create({
   nextButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

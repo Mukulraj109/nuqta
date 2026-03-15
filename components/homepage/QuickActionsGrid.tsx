@@ -11,6 +11,7 @@ import React from 'react';
 import { View, Pressable, Platform, StyleSheet, InteractionManager } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 /**
  * Quick Action Item Interface
@@ -80,7 +81,7 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({ actions, sty
               accessibilityHint={action.accessibilityHint}
             >
               <View style={styles.actionIcon}>
-                <Ionicons name={action.icon} size={24} color="#333" />
+                <Ionicons name={action.icon} size={24} color={colors.darkGray} />
               </View>
               <ThemedText style={styles.actionLabel}>{action.label}</ThemedText>
               <ThemedText style={styles.actionValue}>{action.value}</ThemedText>
@@ -101,7 +102,7 @@ export const QuickActionsGrid: React.FC<QuickActionsGridProps> = ({ actions, sty
               accessibilityHint={action.accessibilityHint}
             >
               <View style={styles.actionIcon}>
-                <Ionicons name={action.icon} size={24} color="#333" />
+                <Ionicons name={action.icon} size={24} color={colors.darkGray} />
               </View>
               <ThemedText style={styles.actionLabel}>{action.label}</ThemedText>
               <ThemedText style={styles.actionValue}>{action.value}</ThemedText>
@@ -150,19 +151,19 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
   actionLabel: {
     fontSize: 12,
-    color: '#333',
+    color: colors.darkGray,
     fontWeight: '500',
     marginTop: 8,
   },
   actionValue: {
     fontSize: 12,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
     fontFamily: 'Inter-SemiBold',
   },

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { colors } from '@/constants/theme';
 
 interface ProductsErrorStateProps {
   message?: string;
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 60,
     paddingHorizontal: 32,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     marginHorizontal: 16,
     marginTop: 16,
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.errorScale[50],
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
@@ -60,30 +61,30 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
     textAlign: 'center',
   },
   message: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     marginBottom: 24,
     lineHeight: 20,
   },
   retryButton: {
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     paddingHorizontal: 32,
     paddingVertical: 12,
     borderRadius: 10,
-    shadowColor: '#7C3AED',
+    shadowColor: colors.brand.purple,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 4,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontSize: 16,
     fontWeight: '600',
   },

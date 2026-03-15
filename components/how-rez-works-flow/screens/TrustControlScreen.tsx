@@ -15,6 +15,7 @@ import ActionBtn from '../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../types';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -72,15 +73,15 @@ const TrustControlScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                 {/* Shield Hero */}
                 <Animated.View style={[styles.shieldContainer, shieldStyle]}>
                     <LinearGradient
-                        colors={['#059669', '#047857']}
+                        colors={[colors.successScale[700], '#047857']}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                         style={styles.shieldGradient}
                     >
-                        <Ionicons name="shield-checkmark" size={56} color="#FFFFFF" />
+                        <Ionicons name="shield-checkmark" size={56} color={colors.background.primary} />
                     </LinearGradient>
                     <View style={styles.shieldBadge}>
-                        <Ionicons name="checkmark" size={18} color="#FFFFFF" />
+                        <Ionicons name="checkmark" size={18} color={colors.background.primary} />
                     </View>
                 </Animated.View>
 
@@ -93,16 +94,16 @@ const TrustControlScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                             style={styles.promiseCard}
                         >
                             <LinearGradient
-                                colors={['#FFFFFF', '#F9FAFB']}
+                                colors={[colors.background.primary, colors.neutral[50]]}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 0, y: 1 }}
                                 style={styles.promiseGradient}
                             >
                                 <View style={styles.checkCircle}>
-                                    <Ionicons name="checkmark" size={14} color="#FFFFFF" />
+                                    <Ionicons name="checkmark" size={14} color={colors.background.primary} />
                                 </View>
                                 <View style={styles.promiseIcon}>
-                                    <Ionicons name={promise.icon as any} size={22} color="#059669" />
+                                    <Ionicons name={promise.icon as any} size={22} color={colors.successScale[700]} />
                                 </View>
                                 <View style={styles.promiseContent}>
                                     <Text style={styles.promiseTitle}>{promise.title}</Text>
@@ -119,13 +120,13 @@ const TrustControlScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                     style={styles.trustBadge}
                 >
                     <LinearGradient
-                        colors={['#F0FDF4', '#DCFCE7']}
+                        colors={[colors.successScale[50], colors.successScale[100]]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                         style={styles.trustGradient}
                     >
                         <View style={styles.trustContent}>
-                            <Ionicons name="heart" size={20} color="#059669" />
+                            <Ionicons name="heart" size={20} color={colors.successScale[700]} />
                             <Text style={styles.trustText}>
                                 Trusted by 10,000+ users across India
                             </Text>
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         ...Platform.select({
             ios: {
-                shadowColor: '#059669',
+                shadowColor: colors.successScale[700],
                 shadowOffset: { width: 0, height: 12 },
                 shadowOpacity: 0.35,
                 shadowRadius: 20,
@@ -171,11 +172,11 @@ const styles = StyleSheet.create({
         width: 32,
         height: 32,
         borderRadius: 16,
-        backgroundColor: '#10B981',
+        backgroundColor: colors.successScale[400],
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 3,
-        borderColor: '#FFFFFF',
+        borderColor: colors.background.primary,
     },
     promisesContainer: {
         width: '100%',
@@ -202,13 +203,13 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 16,
         borderWidth: 1,
-        borderColor: '#E5E7EB',
+        borderColor: colors.neutral[200],
     },
     checkCircle: {
         width: 24,
         height: 24,
         borderRadius: 12,
-        backgroundColor: '#10B981',
+        backgroundColor: colors.successScale[400],
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 12,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
         width: 44,
         height: 44,
         borderRadius: 12,
-        backgroundColor: '#ECFDF5',
+        backgroundColor: colors.tint.greenLight,
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 14,
@@ -228,12 +229,12 @@ const styles = StyleSheet.create({
     promiseTitle: {
         fontSize: 16,
         fontWeight: '700',
-        color: '#1F2937',
+        color: colors.neutral[800],
         marginBottom: 2,
     },
     promiseSubtitle: {
         fontSize: 13,
-        color: '#6B7280',
+        color: colors.neutral[500],
     },
     trustBadge: {
         marginTop: 28,
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 16,
         borderWidth: 1,
-        borderColor: '#BBF7D0',
+        borderColor: colors.successScale[200],
     },
     trustContent: {
         flexDirection: 'row',

@@ -12,6 +12,7 @@ import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { triggerImpact } from "@/utils/haptics";
 import { ThemedText } from "@/components/ThemedText";
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -93,7 +94,7 @@ export default function StoreBottomActionBar({
             accessibilityRole="button"
             accessibilityLabel="Scan Pay and Earn"
           >
-            <Ionicons name="qr-code-outline" size={20} color="#FFFFFF" />
+            <Ionicons name="qr-code-outline" size={20} color={colors.background.primary} />
             <ThemedText style={styles.mainButtonText}>Scan & Pay & Earn</ThemedText>
           </Pressable>
         </Animated.View>
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     borderTopWidth: 1,
     borderTopColor: Colors.gray[100],
     ...Platform.select({
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#ffcd57",
+    backgroundColor: colors.lightMustard,
     paddingVertical: 14,
     borderRadius: BorderRadius.md,
     gap: 8,
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
   mainButtonText: {
     fontSize: 15,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: colors.background.primary,
   },
   iconButton: {
     width: 50,
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     borderWidth: 1,
     borderColor: Colors.gray[200],
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.background.primary,
     justifyContent: "center",
     alignItems: "center",
   },

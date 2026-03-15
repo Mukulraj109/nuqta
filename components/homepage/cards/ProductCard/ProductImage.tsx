@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import StockBadge from '@/components/common/StockBadge';
 import FastImage from '@/components/common/FastImage';
+import { colors } from '@/constants/theme';
 
 export interface ProductImageProps {
   product: any;
@@ -106,7 +107,7 @@ const ProductImage: React.FC<ProductImageProps> = ({
         <Ionicons
           name={isInWishlist ? 'heart' : 'heart-outline'}
           size={20}
-          color={isInWishlist ? '#EF4444' : '#FFFFFF'}
+          color={isInWishlist ? colors.error : colors.background.primary}
         />
       </Pressable>
     </View>
@@ -160,18 +161,18 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   newBadge: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
   },
   newBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '700',
   },
   discountBadge: {
-    backgroundColor: '#ffd7b5',
+    backgroundColor: colors.lightPeach,
   },
   discountBadgeText: {
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontSize: 10,
     fontWeight: '700',
   },

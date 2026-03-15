@@ -22,6 +22,7 @@ import gamificationApi from '@/services/gamificationApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface ScheduledDrop {
   id: string;
@@ -184,7 +185,7 @@ export default function ScheduledDropsPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Scheduled Drops</ThemedText>
           <View style={styles.placeholder} />
@@ -287,7 +288,7 @@ export default function ScheduledDropsPage() {
                     {drop.claimable && (
                       <View style={[styles.claimableBadge, claimingId === drop.id && styles.claimableBadgeDisabled]}>
                         {claimingId === drop.id ? (
-                          <ActivityIndicator size="small" color="#FFF" />
+                          <ActivityIndicator size="small" color={colors.background.primary} />
                         ) : (
                           <ThemedText style={styles.claimableText}>Claim</ThemedText>
                         )}
@@ -338,7 +339,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   },
   totalAmount: {
     ...Typography.priceLarge,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   totalSubtext: {
     ...Typography.caption,
@@ -415,7 +416,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xs,
   },
   dayTextToday: {
-    color: '#FFF',
+    color: colors.background.primary,
   },
   dropIndicator: {
     backgroundColor: Colors.gold,
@@ -517,7 +518,7 @@ const styles = StyleSheet.create({
   },
   claimableText: {
     ...Typography.caption,
-    color: '#FFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   infoCard: {

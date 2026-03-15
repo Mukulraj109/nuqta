@@ -11,6 +11,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import ReferralHandler from '@/utils/referralHandler';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 // Nuqta Design System Colors
 export default function RegistrationScreen() {
   const router = useRouter();
@@ -128,7 +129,7 @@ export default function RegistrationScreen() {
     <View style={styles.container}>
       {/* Background */}
       <LinearGradient
-        colors={['#faf1e0', '#EDF2F7', '#faf1e0']}
+        colors={[colors.linen, '#EDF2F7', colors.linen]}
         style={StyleSheet.absoluteFill}
       />
 
@@ -203,7 +204,7 @@ export default function RegistrationScreen() {
 
               <View style={styles.underlineContainer}>
                 <LinearGradient
-                  colors={[Colors.gold, '#ffd7b5']}
+                  colors={[Colors.gold, colors.lightPeach]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.underline}
@@ -226,7 +227,7 @@ export default function RegistrationScreen() {
                     <TextInput
                       style={styles.phoneTextInput}
                       placeholder="Mobile number"
-                      placeholderTextColor={'#9AA7B2'}
+                      placeholderTextColor={colors.gray[400]}
                       value={formData.phoneNumber}
                       onChangeText={(value) => handleInputChange('phoneNumber', value)}
                       keyboardType="phone-pad"
@@ -384,7 +385,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: Typography.body.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
     textAlign: 'center',
     marginBottom: Spacing.base,
   },
@@ -483,7 +484,7 @@ const styles = StyleSheet.create({
   },
   secondaryButtonText: {
     fontSize: Typography.body.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
     fontWeight: '600',
   },
   signInLink: {
@@ -493,7 +494,7 @@ const styles = StyleSheet.create({
   },
   signInText: {
     fontSize: Typography.body.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
   },
   signInHighlight: {
     color: Colors.gold,        // Light Mustard,
@@ -529,7 +530,7 @@ const styles = StyleSheet.create({
   },
   existingUserMessage: {
     fontSize: Typography.body.fontSize,
-    color: '#9AA7B2',
+    color: colors.gray[400],
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: 28,

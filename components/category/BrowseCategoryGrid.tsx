@@ -10,6 +10,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { CategoryGridItem, BrowseCategoryGridProps } from '@/types/categoryTypes';
+import { colors } from '@/constants/theme';
 
 // Map category IDs to local asset images
 const CATEGORY_IMAGES: Record<string, ImageSourcePropType> = {
@@ -133,106 +134,106 @@ const CATEGORY_IMAGES: Record<string, ImageSourcePropType> = {
 
 // Fallback Ionicons for categories without PNG assets
 const CATEGORY_ICON_FALLBACK: Record<string, { name: keyof typeof Ionicons.glyphMap; color: string }> = {
-  'meat-fish': { name: 'fish-outline', color: '#EF4444' },
-  'packaged-goods': { name: 'cube-outline', color: '#F59E0B' },
-  'organic': { name: 'leaf-outline', color: '#22C55E' },
-  'beverages': { name: 'beer-outline', color: '#8B5CF6' },
-  'snacks': { name: 'fast-food-outline', color: '#F97316' },
-  'frozen': { name: 'snow-outline', color: '#3B82F6' },
-  'baby-care': { name: 'happy-outline', color: '#EC4899' },
-  'pet-supplies': { name: 'paw-outline', color: '#A855F7' },
-  'cleaning': { name: 'sparkles-outline', color: '#14B8A6' },
+  'meat-fish': { name: 'fish-outline', color: colors.error },
+  'packaged-goods': { name: 'cube-outline', color: colors.warningScale[400] },
+  'organic': { name: 'leaf-outline', color: colors.success },
+  'beverages': { name: 'beer-outline', color: colors.brand.purpleLight },
+  'snacks': { name: 'fast-food-outline', color: colors.brand.orange },
+  'frozen': { name: 'snow-outline', color: colors.infoScale[400] },
+  'baby-care': { name: 'happy-outline', color: colors.brand.pink },
+  'pet-supplies': { name: 'paw-outline', color: colors.brand.purpleMedium },
+  'cleaning': { name: 'sparkles-outline', color: colors.tealGreen },
   // Beauty & Wellness fallbacks
-  'skincare': { name: 'sparkles-outline', color: '#F59E0B' },
-  'skincare-cosmetics': { name: 'flask-outline', color: '#EC4899' },
-  'makeup': { name: 'color-palette-outline', color: '#EF4444' },
-  'haircare': { name: 'cut-outline', color: '#3B82F6' },
-  'hair-care': { name: 'cut-outline', color: '#3B82F6' },
+  'skincare': { name: 'sparkles-outline', color: colors.warningScale[400] },
+  'skincare-cosmetics': { name: 'flask-outline', color: colors.brand.pink },
+  'makeup': { name: 'color-palette-outline', color: colors.error },
+  'haircare': { name: 'cut-outline', color: colors.infoScale[400] },
+  'hair-care': { name: 'cut-outline', color: colors.infoScale[400] },
   'bridal': { name: 'heart-outline', color: '#F43F5E' },
   'bridal-services': { name: 'heart-outline', color: '#F43F5E' },
-  'wellness': { name: 'leaf-outline', color: '#10B981' },
-  'ayurveda': { name: 'leaf-outline', color: '#22C55E' },
-  'perfumes': { name: 'flower-outline', color: '#A855F7' },
+  'wellness': { name: 'leaf-outline', color: colors.successScale[400] },
+  'ayurveda': { name: 'leaf-outline', color: colors.success },
+  'perfumes': { name: 'flower-outline', color: colors.brand.purpleMedium },
   // Fitness & Sports fallbacks
-  'gyms': { name: 'barbell-outline', color: '#F97316' },
-  'crossfit': { name: 'flame-outline', color: '#EF4444' },
-  'yoga': { name: 'body-outline', color: '#8B5CF6' },
-  'zumba': { name: 'musical-notes-outline', color: '#EC4899' },
-  'martial-arts': { name: 'hand-right-outline', color: '#64748B' },
-  'sports-academies': { name: 'trophy-outline', color: '#22C55E' },
-  'sportswear': { name: 'shirt-outline', color: '#3B82F6' },
+  'gyms': { name: 'barbell-outline', color: colors.brand.orange },
+  'crossfit': { name: 'flame-outline', color: colors.error },
+  'yoga': { name: 'body-outline', color: colors.brand.purpleLight },
+  'zumba': { name: 'musical-notes-outline', color: colors.brand.pink },
+  'martial-arts': { name: 'hand-right-outline', color: colors.slateGray },
+  'sports-academies': { name: 'trophy-outline', color: colors.success },
+  'sportswear': { name: 'shirt-outline', color: colors.infoScale[400] },
   // Healthcare fallbacks
   'pharmacy': { name: 'medkit-outline', color: '#0EA5E9' },
-  'clinics': { name: 'fitness-outline', color: '#0284C7' },
+  'clinics': { name: 'fitness-outline', color: colors.brand.sky },
   'diagnostics': { name: 'pulse-outline', color: '#0EA5E9' },
   'dental': { name: 'happy-outline', color: '#38BDF8' },
-  'physiotherapy': { name: 'body-outline', color: '#0284C7' },
+  'physiotherapy': { name: 'body-outline', color: colors.brand.sky },
   'home-nursing': { name: 'home-outline', color: '#0EA5E9' },
   'vision-eyewear': { name: 'eye-outline', color: '#38BDF8' },
   // Fashion fallbacks
-  'footwear': { name: 'footsteps-outline', color: '#A855F7' },
+  'footwear': { name: 'footsteps-outline', color: colors.brand.purpleMedium },
   'bags-accessories': { name: 'bag-outline', color: '#C084FC' },
-  'mobile-accessories': { name: 'headset-outline', color: '#7C3AED' },
-  'watches': { name: 'watch-outline', color: '#A855F7' },
+  'mobile-accessories': { name: 'headset-outline', color: colors.brand.purple },
+  'watches': { name: 'watch-outline', color: colors.brand.purpleMedium },
   'jewelry': { name: 'diamond-outline', color: '#C084FC' },
-  'local-brands': { name: 'storefront-outline', color: '#7C3AED' },
+  'local-brands': { name: 'storefront-outline', color: colors.brand.purple },
   // Education fallbacks
-  'coaching-centers': { name: 'book-outline', color: '#6366F1' },
+  'coaching-centers': { name: 'book-outline', color: colors.brand.indigo },
   'skill-development': { name: 'bulb-outline', color: '#818CF8' },
-  'music-dance-classes': { name: 'musical-notes-outline', color: '#6366F1' },
+  'music-dance-classes': { name: 'musical-notes-outline', color: colors.brand.indigo },
   'art-craft': { name: 'color-palette-outline', color: '#818CF8' },
   'vocational': { name: 'construct-outline', color: '#4F46E5' },
-  'language-training': { name: 'language-outline', color: '#6366F1' },
+  'language-training': { name: 'language-outline', color: colors.brand.indigo },
   // Home Services fallbacks
-  'ac-repair': { name: 'snow-outline', color: '#F59E0B' },
-  'plumbing': { name: 'water-outline', color: '#D97706' },
-  'electrical': { name: 'flash-outline', color: '#F59E0B' },
-  'house-shifting': { name: 'cube-outline', color: '#FBBF24' },
-  'laundry-dry-cleaning': { name: 'shirt-outline', color: '#D97706' },
-  'home-tutors': { name: 'school-outline', color: '#F59E0B' },
-  'pest-control': { name: 'bug-outline', color: '#D97706' },
+  'ac-repair': { name: 'snow-outline', color: colors.warningScale[400] },
+  'plumbing': { name: 'water-outline', color: colors.warningScale[700] },
+  'electrical': { name: 'flash-outline', color: colors.warningScale[400] },
+  'house-shifting': { name: 'cube-outline', color: colors.warningScale[400] },
+  'laundry-dry-cleaning': { name: 'shirt-outline', color: colors.warningScale[700] },
+  'home-tutors': { name: 'school-outline', color: colors.warningScale[400] },
+  'pest-control': { name: 'bug-outline', color: colors.warningScale[700] },
   // Travel fallbacks
-  'hotels': { name: 'bed-outline', color: '#06B6D4' },
-  'intercity-travel': { name: 'bus-outline', color: '#0891B2' },
-  'taxis': { name: 'car-outline', color: '#06B6D4' },
+  'hotels': { name: 'bed-outline', color: colors.brand.cyan },
+  'intercity-travel': { name: 'bus-outline', color: colors.cyanDark },
+  'taxis': { name: 'car-outline', color: colors.brand.cyan },
   'bike-rentals': { name: 'bicycle-outline', color: '#22D3EE' },
-  'weekend-getaways': { name: 'sunny-outline', color: '#06B6D4' },
-  'tours': { name: 'map-outline', color: '#0891B2' },
-  'activities': { name: 'rocket-outline', color: '#06B6D4' },
-  'airport-services': { name: 'airplane-outline', color: '#0891B2' },
+  'weekend-getaways': { name: 'sunny-outline', color: colors.brand.cyan },
+  'tours': { name: 'map-outline', color: colors.cyanDark },
+  'activities': { name: 'rocket-outline', color: colors.brand.cyan },
+  'airport-services': { name: 'airplane-outline', color: colors.cyanDark },
   // Entertainment fallbacks
-  'movies': { name: 'film-outline', color: '#8B5CF6' },
-  'live-events': { name: 'mic-outline', color: '#7C3AED' },
-  'festivals': { name: 'balloon-outline', color: '#8B5CF6' },
-  'amusement-parks': { name: 'happy-outline', color: '#A78BFA' },
-  'gaming-cafes': { name: 'game-controller-outline', color: '#7C3AED' },
-  'vr-ar-experiences': { name: 'glasses-outline', color: '#8B5CF6' },
-  'workshops': { name: 'build-outline', color: '#7C3AED' },
+  'movies': { name: 'film-outline', color: colors.brand.purpleLight },
+  'live-events': { name: 'mic-outline', color: colors.brand.purple },
+  'festivals': { name: 'balloon-outline', color: colors.brand.purpleLight },
+  'amusement-parks': { name: 'happy-outline', color: colors.brand.purpleSoft },
+  'gaming-cafes': { name: 'game-controller-outline', color: colors.brand.purple },
+  'vr-ar-experiences': { name: 'glasses-outline', color: colors.brand.purpleLight },
+  'workshops': { name: 'build-outline', color: colors.brand.purple },
   // Financial fallbacks
-  'bill-payments': { name: 'receipt-outline', color: '#14B8A6' },
+  'bill-payments': { name: 'receipt-outline', color: colors.tealGreen },
   'mobile-recharge': { name: 'phone-portrait-outline', color: '#0D9488' },
-  'broadband': { name: 'wifi-outline', color: '#14B8A6' },
+  'broadband': { name: 'wifi-outline', color: colors.tealGreen },
   'cable-ott': { name: 'tv-outline', color: '#2DD4BF' },
   'gold-savings': { name: 'diamond-outline', color: '#0D9488' },
-  'donations': { name: 'heart-outline', color: '#14B8A6' },
+  'donations': { name: 'heart-outline', color: colors.tealGreen },
   // Electronics fallbacks
-  'mobile-phones': { name: 'phone-portrait-outline', color: '#3B82F6' },
-  'laptops': { name: 'laptop-outline', color: '#2563EB' },
-  'televisions': { name: 'tv-outline', color: '#3B82F6' },
-  'cameras': { name: 'camera-outline', color: '#60A5FA' },
-  'audio-headphones': { name: 'headset-outline', color: '#2563EB' },
-  'gaming': { name: 'game-controller-outline', color: '#3B82F6' },
-  'accessories': { name: 'hardware-chip-outline', color: '#60A5FA' },
-  'smartwatches': { name: 'watch-outline', color: '#2563EB' },
+  'mobile-phones': { name: 'phone-portrait-outline', color: colors.infoScale[400] },
+  'laptops': { name: 'laptop-outline', color: colors.brand.blue },
+  'televisions': { name: 'tv-outline', color: colors.infoScale[400] },
+  'cameras': { name: 'camera-outline', color: colors.infoScale[400] },
+  'audio-headphones': { name: 'headset-outline', color: colors.brand.blue },
+  'gaming': { name: 'game-controller-outline', color: colors.infoScale[400] },
+  'accessories': { name: 'hardware-chip-outline', color: colors.infoScale[400] },
+  'smartwatches': { name: 'watch-outline', color: colors.brand.blue },
 };
 
 // Rez Brand Colors
 const COLORS = {
-  primaryGold: '#F59E0B',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  background: '#FFFFFF',
-  border: '#F3F4F6',
+  primaryGold: colors.warningScale[400],
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  background: colors.background.primary,
+  border: colors.neutral[100],
 };
 
 interface CategoryIconProps {
@@ -243,7 +244,7 @@ interface CategoryIconProps {
 
 const CategoryIcon: React.FC<CategoryIconProps> = ({ category, onPress, countLabel = 'items' }) => {
   const icon = category.icon || '🍽️';
-  const color = category.color || '#6B7280';
+  const color = category.color || colors.neutral[500];
   // Priority: 1) Backend image URL (admin-uploaded), 2) Hardcoded local asset, 3) Emoji fallback
   const backendImage = category.image
     ? { uri: category.image }

@@ -18,6 +18,7 @@ import { useGamification } from '@/contexts/GamificationContext';
 import { useWalletContext } from '@/contexts/WalletContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -406,7 +407,7 @@ const MemoryMatch = () => {
 
         {gameState === 'playing' ? (
           <View style={[styles.timerBadge, timeLeft <= 10 && styles.timerBadgeWarning]}>
-            <Ionicons name="time-outline" size={16} color={timeLeft <= 10 ? '#EF4444' : COLORS.primary} />
+            <Ionicons name="time-outline" size={16} color={timeLeft <= 10 ? colors.error : COLORS.primary} />
             <Text style={[styles.timerText, timeLeft <= 10 && styles.timerTextWarning]}>{timeLeft}s</Text>
           </View>
         ) : (
@@ -612,7 +613,7 @@ const MemoryMatch = () => {
                   <ConfettiParticle
                     key={i}
                     delay={i * 150}
-                    color={[COLORS.primary, COLORS.gold, Colors.brand.purple, '#EC4899'][i % 4]}
+                    color={[COLORS.primary, COLORS.gold, Colors.brand.purple, colors.brand.pink][i % 4]}
                   />
                 ))}
               </View>
@@ -630,11 +631,11 @@ const MemoryMatch = () => {
                   <Ionicons
                     name={getPerformanceRating().icon}
                     size={48}
-                    color={matched.length === cardEmojis.length ? '#FFF' : getPerformanceRating().color}
+                    color={matched.length === cardEmojis.length ? colors.background.primary : getPerformanceRating().color}
                   />
                 </View>
 
-                <Text style={[styles.resultTitle, { color: matched.length === cardEmojis.length ? '#FFF' : COLORS.navy }]}>
+                <Text style={[styles.resultTitle, { color: matched.length === cardEmojis.length ? colors.background.primary : COLORS.navy }]}>
                   {getPerformanceRating().text}
                 </Text>
                 <Text style={[styles.resultSubtitle, { color: matched.length === cardEmojis.length ? 'rgba(255,255,255,0.9)' : COLORS.textMuted }]}>
@@ -644,7 +645,7 @@ const MemoryMatch = () => {
                 <View style={[styles.earnedBox, { backgroundColor: matched.length === cardEmojis.length ? 'rgba(255,255,255,0.15)' : COLORS.goldBg }]}>
                   <View style={styles.earnedRow}>
                     <CachedImage source={BRAND.COIN_IMAGE} style={styles.earnedCoin} contentFit="contain" />
-                    <Text style={[styles.earnedValue, { color: matched.length === cardEmojis.length ? '#FFF' : COLORS.gold }]}>+{score}</Text>
+                    <Text style={[styles.earnedValue, { color: matched.length === cardEmojis.length ? colors.background.primary : COLORS.gold }]}>+{score}</Text>
                   </View>
                   <Text style={[styles.earnedLabel, { color: matched.length === cardEmojis.length ? 'rgba(255,255,255,0.8)' : COLORS.textMuted }]}>
                     Coins Earned

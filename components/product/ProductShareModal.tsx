@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import * as Clipboard from 'expo-clipboard';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 /**
  * ProductShareModal Component
@@ -261,7 +262,7 @@ export const ProductShareModal: React.FC<ProductShareModalProps> = ({
               onPress={onClose}
              
             >
-              <Ionicons name="close" size={24} color="#6B7280" />
+              <Ionicons name="close" size={24} color={colors.neutral[500]} />
             </Pressable>
           </View>
 
@@ -279,7 +280,7 @@ export const ProductShareModal: React.FC<ProductShareModalProps> = ({
           {/* Rewards Banner */}
           {referralCode && (
             <View style={styles.rewardsBanner}>
-              <Ionicons name="gift" size={20} color="#8B5CF6" />
+              <Ionicons name="gift" size={20} color={colors.brand.purpleLight} />
               <ThemedText style={styles.rewardsBannerText}>
                 Earn rewards when friends buy using your link!
               </ThemedText>
@@ -298,7 +299,7 @@ export const ProductShareModal: React.FC<ProductShareModalProps> = ({
                  
                 >
                   <View style={[styles.optionIcon, { backgroundColor: option.color }]}>
-                    <Ionicons name={option.icon} size={28} color="#FFF" />
+                    <Ionicons name={option.icon} size={28} color={colors.background.primary} />
                   </View>
                   <ThemedText style={styles.optionLabel}>{option.label}</ThemedText>
                 </Pressable>
@@ -317,7 +318,7 @@ export const ProductShareModal: React.FC<ProductShareModalProps> = ({
               <Ionicons
                 name={isCopied ? 'checkmark-circle' : 'copy-outline'}
                 size={20}
-                color={isCopied ? '#ffcd57' : '#8B5CF6'}
+                color={isCopied ? colors.lightMustard : colors.brand.purpleLight}
               />
               <ThemedText style={styles.quickActionText}>
                 {isCopied ? 'Link Copied!' : 'Copy Link'}
@@ -330,7 +331,7 @@ export const ProductShareModal: React.FC<ProductShareModalProps> = ({
               onPress={handleNativeShare}
              
             >
-              <Ionicons name="share-outline" size={20} color="#8B5CF6" />
+              <Ionicons name="share-outline" size={20} color={colors.brand.purpleLight} />
               <ThemedText style={styles.quickActionText}>More Options</ThemedText>
             </Pressable>
           </View>
@@ -360,7 +361,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   modalContent: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingBottom: Platform.OS === 'ios' ? 34 : 20,
@@ -371,7 +372,7 @@ const styles = StyleSheet.create({
   handleBar: {
     width: 40,
     height: 4,
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
     borderRadius: 2,
     alignSelf: 'center',
     marginTop: 12,
@@ -389,13 +390,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -404,7 +405,7 @@ const styles = StyleSheet.create({
   productPreview: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     marginHorizontal: 20,
     marginBottom: 20,
     padding: 12,
@@ -415,7 +416,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   productInfo: {
     flex: 1,
@@ -424,20 +425,20 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     lineHeight: 20,
   },
   productPrice: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 
   // Rewards Banner
   rewardsBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     marginHorizontal: 20,
     marginBottom: 20,
     padding: 12,
@@ -448,7 +449,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 13,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     lineHeight: 18,
   },
 
@@ -460,7 +461,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 16,
   },
   optionsGrid: {
@@ -488,7 +489,7 @@ const styles = StyleSheet.create({
   optionLabel: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
   },
 
@@ -504,17 +505,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
     gap: 8,
   },
   quickActionText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 
   // Referral Code
@@ -524,22 +525,22 @@ const styles = StyleSheet.create({
   },
   referralCodeLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   referralCode: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderStyle: 'dashed',
   },
   referralCodeText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     letterSpacing: 2,
   },
 });

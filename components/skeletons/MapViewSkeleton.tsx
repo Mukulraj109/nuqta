@@ -7,6 +7,7 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -45,11 +46,11 @@ function MapViewSkeleton() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   bottomSheet: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     marginTop: -20,
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   itemText: {
     flex: 1,

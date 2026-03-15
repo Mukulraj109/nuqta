@@ -4,6 +4,7 @@
  * Enhanced with comprehensive details and premium UI
  */
 
+import { colors } from '@/constants/theme';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -54,13 +55,13 @@ const COLORS = {
   blue100: Colors.infoScale[100],
   blue500: Colors.info,
   purple50: '#FAF5FF',
-  purple100: '#F3E8FF',
+  purple100: colors.tint.pink,
   purple500: Colors.brand.purpleLight,
-  pink500: '#EC4899',
+  pink500: colors.brand.pink,
   red50: Colors.errorScale[50],
   red100: Colors.errorScale[100],
   red500: Colors.error,
-  cyan500: '#06B6D4',
+  cyan500: colors.brand.cyan,
   gold: Colors.gold,
   goldDark: '#B8860B',
 };
@@ -853,7 +854,7 @@ const DealDetailPage: React.FC = () => {
                     : (isRedeeming || isPurchasing)
                     ? [COLORS.gray400, COLORS.gray400]
                     : alreadyRedeemed
-                    ? [COLORS.blue500, '#2563EB']
+                    ? [COLORS.blue500, colors.brand.blue]
                     : isPaidDeal
                     ? [COLORS.amber500, COLORS.amber600]
                     : [COLORS.green500, COLORS.emerald500]

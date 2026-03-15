@@ -15,6 +15,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import type { Achievement } from '@/types/gamification.types';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -27,7 +28,7 @@ interface AchievementUnlockModalProps {
 const TIER_COLORS = {
   bronze: ['#CD7F32', '#B87333'],
   silver: ['#C0C0C0', '#A8A8A8'],
-  gold: ['#FFD700', '#FFA500'],
+  gold: [colors.brand.goldBright, '#FFA500'],
   platinum: ['#E5E4E2', '#C0C0C0'],
   diamond: ['#B9F2FF', '#81D4FA'],
 } as const;
@@ -137,7 +138,7 @@ function AchievementUnlockModal({
                   styles.confetti,
                   {
                     left: `${Math.random() * 100}%`,
-                    backgroundColor: ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6'][
+                    backgroundColor: [colors.error, colors.warningScale[400], colors.successScale[400], colors.infoScale[400], colors.brand.purpleLight][
                       Math.floor(Math.random() * 5)
                     ],
                     transform: [
@@ -157,7 +158,7 @@ function AchievementUnlockModal({
           <LinearGradient colors={tierGradient} style={styles.gradient}>
             {/* Close Button */}
             <Pressable style={styles.closeButton} onPress={onClose}>
-              <Ionicons name="close" size={24} color="#FFFFFF" />
+              <Ionicons name="close" size={24} color={colors.background.primary} />
             </Pressable>
 
             {/* Achievement Icon */}
@@ -176,7 +177,7 @@ function AchievementUnlockModal({
                 },
               ]}
             >
-              <LinearGradient colors={['#FFFFFF', '#F3F4F6']} style={styles.iconCircle}>
+              <LinearGradient colors={[colors.background.primary, colors.neutral[100]]} style={styles.iconCircle}>
                 <Ionicons name={achievement.icon as any} size={64} color={tierGradient[0]} />
               </LinearGradient>
             </Animated.View>
@@ -204,19 +205,19 @@ function AchievementUnlockModal({
                 },
               ]}
             >
-              <Ionicons name="diamond" size={32} color="#FFD700" />
+              <Ionicons name="diamond" size={32} color={colors.brand.goldBright} />
               <ThemedText style={styles.coinsText}>+{achievement.coinReward}</ThemedText>
             </Animated.View>
 
             {/* Actions */}
             <View style={styles.actions}>
               <Pressable style={styles.shareButton} onPress={handleShare}>
-                <Ionicons name="share-social" size={20} color="#8B5CF6" />
+                <Ionicons name="share-social" size={20} color={colors.brand.purpleLight} />
                 <ThemedText style={styles.shareButtonText}>Share Achievement</ThemedText>
               </Pressable>
 
               <Pressable style={styles.doneButton} onPress={onClose}>
-                <LinearGradient colors={['#10B981', '#059669']} style={styles.doneButtonGradient}>
+                <LinearGradient colors={[colors.successScale[400], colors.successScale[700]]} style={styles.doneButtonGradient}>
                   <ThemedText style={styles.doneButtonText}>Awesome!</ThemedText>
                 </LinearGradient>
               </Pressable>
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 4,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
@@ -302,21 +303,21 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   unlockText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: 'bold',
     letterSpacing: 2,
     marginBottom: 8,
   },
   achievementTitle: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
   },
   achievementDescription: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     textAlign: 'center',
     opacity: 0.9,
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   tierText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: 'bold',
   },
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   coinsText: {
-    color: '#111827',
+    color: colors.neutral[900],
     fontSize: 28,
     fontWeight: 'bold',
   },
@@ -358,13 +359,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingVertical: 14,
     borderRadius: 12,
     gap: 8,
   },
   shareButtonText: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontSize: 15,
     fontWeight: 'bold',
   },
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   doneButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: 'bold',
   },

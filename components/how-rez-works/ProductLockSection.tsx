@@ -6,6 +6,7 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface LockFeature {
   icon: keyof typeof Ionicons.glyphMap;
@@ -20,20 +21,20 @@ const lockFeatures: LockFeature[] = [
     icon: 'pricetag-outline',
     text: 'Pay ',
     highlight: 'only 10%',
-    iconBgColor: '#FEF3C7',
-    iconColor: '#D97706',
+    iconBgColor: colors.tint.amberLight,
+    iconColor: colors.warningScale[700],
   },
   {
     icon: 'time-outline',
     text: 'Lock the price for a few hours',
     iconBgColor: '#FFEDD5',
-    iconColor: '#EA580C',
+    iconColor: colors.brand.orangeDark,
   },
   {
     icon: 'car-outline',
     text: 'Visit store or get delivery later',
-    iconBgColor: '#FEE2E2',
-    iconColor: '#DC2626',
+    iconBgColor: colors.errorScale[100],
+    iconColor: colors.error,
   },
 ];
 
@@ -54,7 +55,7 @@ const ProductLockSection: React.FC = () => {
       {/* Section Header */}
       <View style={styles.headerContainer}>
         <View style={styles.iconCircle}>
-          <Ionicons name="lock-closed" size={28} color="#F97316" />
+          <Ionicons name="lock-closed" size={28} color={colors.brand.orange} />
         </View>
         <Text style={styles.sectionTitle}>Lock products before you decide</Text>
       </View>
@@ -85,7 +86,7 @@ const ProductLockSection: React.FC = () => {
           <View style={styles.chipsContainer}>
             {categoryChips.map((chip, index) => (
               <View key={index} style={styles.chip}>
-                <Ionicons name={chip.icon} size={16} color="#6B7280" />
+                <Ionicons name={chip.icon} size={16} color={colors.neutral[500]} />
                 <Text style={styles.chipText}>{chip.label}</Text>
               </View>
             ))}
@@ -99,7 +100,7 @@ const ProductLockSection: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   headerContainer: {
     alignItems: 'center',
@@ -117,18 +118,18 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     textAlign: 'center',
   },
   infoCard: {
-    backgroundColor: '#FFF7ED',
+    backgroundColor: colors.tint.orange,
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
     borderColor: '#FED7AA',
     ...Platform.select({
       ios: {
-        shadowColor: '#F97316',
+        shadowColor: colors.brand.orange,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 8,
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
   },
   cardSubtitle: {
     fontSize: 14,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     marginBottom: 16,
     fontWeight: '500',
   },
@@ -162,12 +163,12 @@ const styles = StyleSheet.create({
   },
   featureText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     flex: 1,
   },
   highlightText: {
     fontWeight: '700',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   chipsSection: {
     borderTopWidth: 1,
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
   chipsLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 12,
   },
   chipsContainer: {
@@ -188,18 +189,18 @@ const styles = StyleSheet.create({
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
     gap: 6,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   chipText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#374151',
+    color: colors.neutral[700],
   },
 });
 

@@ -24,19 +24,20 @@ import storesApi from '@/services/storesApi';
 import productsApi from '@/services/productsApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#0B2240',
+  white: colors.background.primary,
+  navy: colors.brand.navyDark,
   gray50: Colors.background.secondary,
   gray100: Colors.background.secondary,
   gray200: Colors.border.default,
   gray600: Colors.text.tertiary,
   green500: Colors.success,
   primaryGreen: Colors.gold,
-  pink500: '#EC4899',
+  pink500: colors.brand.pink,
   purple500: Colors.brand.purpleLight,
   amber500: Colors.warning,
   background: Colors.background.secondary,
@@ -44,7 +45,7 @@ const COLORS = {
 
 // Beauty categories
 const BEAUTY_CATEGORIES = [
-  { id: 'salon', title: 'Salon', icon: '💇‍♀️', color: '#EC4899', route: '/beauty/salon' },
+  { id: 'salon', title: 'Salon', icon: '💇‍♀️', color: colors.brand.pink, route: '/beauty/salon' },
   { id: 'spa', title: 'Spa & Massage', icon: '💆‍♀️', color: Colors.brand.purpleLight, route: '/beauty/spa' },
   { id: 'products', title: 'Products', icon: '💄', color: '#F43F5E', route: '/beauty/products' },
   { id: 'wellness', title: 'Wellness', icon: '🧘‍♀️', color: Colors.success, route: '/beauty/wellness' },
@@ -203,7 +204,7 @@ const BeautyPage: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <LinearGradient
-        colors={['#EC4899', '#F43F5E']}
+        colors={[colors.brand.pink, '#F43F5E']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.header}
@@ -389,7 +390,7 @@ const BeautyPage: React.FC = () => {
         {/* Promo Banner */}
         <View style={styles.promoBanner}>
           <LinearGradient
-            colors={[Colors.brand.purpleLight, '#EC4899']}
+            colors={[Colors.brand.purpleLight, colors.brand.pink]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.promoGradient}
@@ -417,7 +418,7 @@ const BeautyPage: React.FC = () => {
               onPress={() => router.push('/stores?category=beauty-wellness&filter=verified' as any)}
             >
               <View style={[styles.quickActionIcon, { backgroundColor: '#E0F2FE' }]}>
-                <Ionicons name="shield-checkmark" size={24} color="#0284C7" />
+                <Ionicons name="shield-checkmark" size={24} color={colors.brand.sky} />
               </View>
               <Text style={styles.quickActionLabel}>Verified{'\n'}Clinics</Text>
             </Pressable>
@@ -434,7 +435,7 @@ const BeautyPage: React.FC = () => {
               style={styles.quickActionCard}
               onPress={() => router.push('/offers?type=cashback' as any)}
             >
-              <View style={[styles.quickActionIcon, { backgroundColor: '#D1FAE5' }]}>
+              <View style={[styles.quickActionIcon, { backgroundColor: colors.tint.green }]}>
                 <Ionicons name="wallet" size={24} color={Colors.success} />
               </View>
               <Text style={styles.quickActionLabel}>Best{'\n'}Cashback</Text>
@@ -443,8 +444,8 @@ const BeautyPage: React.FC = () => {
               style={styles.quickActionCard}
               onPress={() => router.push('/stores?category=beauty-wellness&filter=try-buy' as any)}
             >
-              <View style={[styles.quickActionIcon, { backgroundColor: '#FCE7F3' }]}>
-                <Ionicons name="flash" size={24} color="#DB2777" />
+              <View style={[styles.quickActionIcon, { backgroundColor: colors.pinkMist }]}>
+                <Ionicons name="flash" size={24} color={colors.deepPink} />
               </View>
               <Text style={styles.quickActionLabel}>60 Min{'\n'}Service</Text>
             </Pressable>

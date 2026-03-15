@@ -13,19 +13,20 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 const CashStoreHeroSection: React.FC = () => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#00C06A', '#00796B']}
+        colors={[colors.brand.green, colors.brand.teal]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
       >
         {/* Icon */}
         <View style={styles.iconContainer}>
-          <Ionicons name="wallet" size={48} color="#FFFFFF" />
+          <Ionicons name="wallet" size={48} color={colors.background.primary} />
         </View>
 
         {/* Title */}
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#00796B',
+        shadowColor: colors.brand.teal,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginBottom: 12,
     lineHeight: 30,
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 4,
   },
   statLabel: {

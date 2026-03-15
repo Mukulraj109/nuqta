@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, Platform } from 'react-native';
+import { colors } from '@/constants/theme';
 
 function StoreProductCardSkeleton() {
   const shimmerAnim = useRef(new Animated.Value(0)).current;
@@ -52,7 +53,7 @@ function StoreProductCardSkeleton() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     overflow: 'hidden',
     marginBottom: 16,
@@ -71,35 +72,35 @@ const styles = StyleSheet.create({
   imageSkeleton: {
     width: '100%',
     height: 180,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.gray[200],
   },
   infoContainer: {
     padding: 12,
   },
   titleSkeleton: {
     height: 16,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.gray[200],
     borderRadius: 4,
     marginBottom: 6,
   },
   titleSkeletonShort: {
     height: 16,
     width: '70%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.gray[200],
     borderRadius: 4,
     marginBottom: 8,
   },
   ratingSkeleton: {
     height: 14,
     width: '40%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.gray[200],
     borderRadius: 4,
     marginBottom: 8,
   },
   priceSkeleton: {
     height: 18,
     width: '50%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.gray[200],
     borderRadius: 4,
   },
 });

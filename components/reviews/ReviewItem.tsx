@@ -14,6 +14,7 @@ import RatingStars from './RatingStars';
 import { Review } from '@/types/review.types';
 import reviewService from '@/services/reviewApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface ReviewItemProps {
   review: Review;
@@ -150,7 +151,7 @@ function ReviewItem({
               <ThemedText style={styles.userName}>{userName}</ThemedText>
               {review.verified && (
                 <View style={styles.verifiedBadge}>
-                  <Ionicons name="checkmark-circle" size={14} color="#ffcd57" />
+                  <Ionicons name="checkmark-circle" size={14} color={colors.lightMustard} />
                   <ThemedText style={styles.verifiedText}>Verified</ThemedText>
                 </View>
               )}
@@ -171,14 +172,14 @@ function ReviewItem({
               onPress={() => onEditPress?.(review)}
              
             >
-              <Ionicons name="create-outline" size={20} color="#8B5CF6" />
+              <Ionicons name="create-outline" size={20} color={colors.brand.purpleLight} />
             </Pressable>
             <Pressable
               style={styles.iconButton}
               onPress={handleDeletePress}
              
             >
-              <Ionicons name="trash-outline" size={20} color="#EF4444" />
+              <Ionicons name="trash-outline" size={20} color={colors.error} />
             </Pressable>
           </View>
         )}
@@ -232,7 +233,7 @@ function ReviewItem({
             <Ionicons
               name={isHelpful ? 'thumbs-up' : 'thumbs-up-outline'}
               size={16}
-              color={isHelpful ? '#8B5CF6' : '#6B7280'}
+              color={isHelpful ? colors.brand.purpleLight : colors.neutral[500]}
             />
             <ThemedText style={[styles.actionText, isHelpful && styles.actionTextActive]}>
               Helpful ({helpfulCount})
@@ -245,7 +246,7 @@ function ReviewItem({
               onPress={handleReportPress}
              
             >
-              <Ionicons name="flag-outline" size={16} color="#6B7280" />
+              <Ionicons name="flag-outline" size={16} color={colors.neutral[500]} />
               <ThemedText style={styles.actionText}>Report</ThemedText>
             </Pressable>
           )}
@@ -255,7 +256,7 @@ function ReviewItem({
       {/* Cashback Earned Badge */}
       {cashbackEarned && cashbackEarned > 0 && (
         <View style={styles.cashbackBadge}>
-          <Ionicons name="wallet" size={14} color="#ffcd57" />
+          <Ionicons name="wallet" size={14} color={colors.lightMustard} />
           <ThemedText style={styles.cashbackText}>
             Earned {currency}{cashbackEarned} cashback
           </ThemedText>
@@ -267,7 +268,7 @@ function ReviewItem({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     marginBottom: 12,
     borderRadius: 12,
@@ -302,12 +303,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     justifyContent: 'center',
     alignItems: 'center',
   },
   avatarText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: '700',
   },
@@ -323,20 +324,20 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   verifiedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
   },
   verifiedText: {
     fontSize: 10,
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
   ratingRow: {
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   actionButtons: {
     flexDirection: 'row',
@@ -358,18 +359,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   comment: {
     fontSize: 14,
     lineHeight: 20,
-    color: '#374151',
+    color: colors.neutral[700],
     marginBottom: 8,
   },
   readMore: {
     fontSize: 13,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
     marginBottom: 12,
   },
@@ -389,7 +390,7 @@ const styles = StyleSheet.create({
     gap: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   actionButton: {
     flexDirection: 'row',
@@ -400,21 +401,21 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   actionButtonActive: {
-    backgroundColor: '#EEF2FF',
+    backgroundColor: colors.indigoMist,
   },
   actionText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   actionTextActive: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   // Cashback earned badge
   cashbackBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
@@ -425,7 +426,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 });
 

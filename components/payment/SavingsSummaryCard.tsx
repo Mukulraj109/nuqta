@@ -13,6 +13,7 @@ import { COLORS, SPACING, TYPOGRAPHY, BORDER_RADIUS, SHADOWS } from '@/constants
 import { SavingsSummary } from '@/types/storePayment.types';
 import { useRegion } from '@/contexts/RegionContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 interface SavingsSummaryCardProps {
   savings: SavingsSummary;
@@ -54,7 +55,7 @@ export const SavingsSummaryCard: React.FC<SavingsSummaryCardProps> = ({
   return (
     <View style={styles.cardWrapper}>
       <LinearGradient
-        colors={[COLORS.nuqta.lavender, COLORS.nuqta.linen, '#FFFFFF']}
+        colors={[COLORS.nuqta.lavender, COLORS.nuqta.linen, colors.background.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.container}
@@ -106,7 +107,7 @@ export const SavingsSummaryCard: React.FC<SavingsSummaryCardProps> = ({
                   colors={item.gradient as [string, string]}
                   style={styles.breakdownIcon}
                 >
-                  <Ionicons name={item.icon as any} size={14} color="#FFFFFF" />
+                  <Ionicons name={item.icon as any} size={14} color={colors.background.primary} />
                 </LinearGradient>
                 <Text style={styles.breakdownLabel}>{item.label}</Text>
                 <Text style={styles.breakdownValue}>{currencySymbol}{item.value}</Text>

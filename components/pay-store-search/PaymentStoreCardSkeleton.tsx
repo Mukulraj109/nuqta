@@ -15,6 +15,7 @@ import Animated, {
   interpolate,
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 import {
   PaymentStoreCardSkeletonProps,
   PAYMENT_SEARCH_COLORS,
@@ -58,7 +59,7 @@ const Shimmer: React.FC<ShimmerProps> = ({ width, height, borderRadius = 8, styl
           width,
           height,
           borderRadius,
-          backgroundColor: '#E5E7EB',
+          backgroundColor: colors.neutral[200],
           overflow: 'hidden',
         },
         style,

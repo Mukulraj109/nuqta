@@ -3,6 +3,7 @@
  * Shows score, trend, weight, and progress for each pillar
  */
 
+import { colors } from '@/constants/theme';
 import React from 'react';
 import {
   View,
@@ -40,7 +41,7 @@ export const PrivePillarGrid: React.FC<PrivePillarGridProps> = ({
   const getTrendInfo = (trend: string) => {
     switch (trend) {
       case 'up':
-        return { icon: '↑', color: '#4CAF50' };
+        return { icon: '↑', color: colors.brand.emerald };
       case 'down':
         return { icon: '↓', color: '#F44336' };
       default:
@@ -51,7 +52,7 @@ export const PrivePillarGrid: React.FC<PrivePillarGridProps> = ({
   const getAccessStateColor = () => {
     switch (accessState) {
       case 'active':
-        return '#4CAF50';
+        return colors.brand.emerald;
       case 'paused':
         return '#FFC107';
       case 'none':

@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { useWalletContext } from '@/contexts/WalletContext';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 // Overlapping coins icon component
 const OverlappingCoinsIcon: React.FC<{ color: string }> = ({ color }) => (
@@ -128,7 +129,7 @@ const WalletSnapshotCard: React.FC = () => {
           {/* Header */}
           <View style={styles.headerRow}>
             <View style={styles.walletTitleContainer}>
-              <Ionicons name="wallet" size={18} color="#1a3a52" />
+              <Ionicons name="wallet" size={18} color={colors.nileBlue} />
               <Text style={styles.walletTitle}>{BRAND.APP_NAME} Wallet</Text>
             </View>
             <Pressable 
@@ -137,7 +138,7 @@ const WalletSnapshotCard: React.FC = () => {
              
             >
               <Text style={styles.viewAllText}>View all</Text>
-              <Ionicons name="chevron-forward" size={12} color="#B45309" />
+              <Ionicons name="chevron-forward" size={12} color={colors.brand.amberDeep} />
             </Pressable>
           </View>
 
@@ -159,7 +160,7 @@ const WalletSnapshotCard: React.FC = () => {
             {/* Branded */}
             <View style={styles.coinCard}>
               <View style={styles.brandedCoinIconContainer}>
-                <OverlappingCoinsIcon color="#1a3a52" />
+                <OverlappingCoinsIcon color={colors.nileBlue} />
               </View>
               <Text style={styles.coinAmount}>{totalBrandedCoins.toLocaleString()}</Text>
               <Text style={styles.coinLabel}>Branded</Text>
@@ -168,7 +169,7 @@ const WalletSnapshotCard: React.FC = () => {
             {/* Promo */}
             <View style={styles.coinCard}>
               <View style={styles.promoCoinIconContainer}>
-                <OverlappingCoinsIcon color="#ffd7b5" />
+                <OverlappingCoinsIcon color={colors.lightPeach} />
               </View>
               <Text style={styles.coinAmount}>{promoCoins.toLocaleString()}</Text>
               <Text style={styles.coinLabel}>Promo</Text>
@@ -183,7 +184,7 @@ const WalletSnapshotCard: React.FC = () => {
              
             >
               <View style={styles.alertIconContainer}>
-                <Ionicons name="alert-circle" size={16} color="#FFFFFF" />
+                <Ionicons name="alert-circle" size={16} color={colors.background.primary} />
               </View>
               <Text style={styles.expiryText}>
                 <Text style={styles.expiryAmount}>{expiringCoins} coins</Text> expiring in {expiryDays} days
@@ -205,7 +206,7 @@ const WalletSnapshotCard: React.FC = () => {
               onPress={handleUseCoins}
              
             >
-              <Ionicons name="arrow-forward" size={16} color="#1a3a52" />
+              <Ionicons name="arrow-forward" size={16} color={colors.nileBlue} />
               <Text style={[styles.actionButtonText, styles.useCoinsButtonText]}>Use Coins</Text>
             </Pressable>
             <Pressable
@@ -220,7 +221,7 @@ const WalletSnapshotCard: React.FC = () => {
               onPress={handleEarnMore}
              
             >
-              <Ionicons name="add" size={16} color="#B45309" />
+              <Ionicons name="add" size={16} color={colors.brand.amberDeep} />
               <Text style={[styles.actionButtonText, styles.earnMoreButtonText]}>Earn More</Text>
             </Pressable>
           </View>
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffcd57',
+        shadowColor: colors.lightMustard,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
         shadowRadius: 12,
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
     }),
   },
   card: {
-    backgroundColor: '#dfebf7', // Lavender background
+    backgroundColor: colors.lavenderMist, // Lavender background
     borderRadius: 16,
     padding: 12, // Reduced padding significantly
   },
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
   walletTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52', // Nile blue
+    color: colors.nileBlue, // Nile blue
     letterSpacing: 0.2,
   },
   viewAllButton: {
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
   },
   viewAllText: {
     fontSize: 13,
-    color: '#B45309', // Dark amber for better contrast
+    color: colors.brand.amberDeep, // Dark amber for better contrast
     fontWeight: '600',
   },
   coinsGrid: {
@@ -315,13 +316,13 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#FDE68A', // Brighter amber/yellow
+    backgroundColor: colors.warningScale[200], // Brighter amber/yellow
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 6, // Reduced
     ...Platform.select({
       ios: {
-        shadowColor: '#F59E0B',
+        shadowColor: colors.warningScale[400],
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
   coinAmount: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#1a3a52', // Nile blue for better readability
+    color: colors.nileBlue, // Nile blue for better readability
     marginBottom: 3, // Reduced
     letterSpacing: -0.3,
   },
@@ -394,20 +395,20 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#FBBF24', // Solid yellow background
+    backgroundColor: colors.warningScale[400], // Solid yellow background
     alignItems: 'center',
     justifyContent: 'center',
   },
   expiryText: {
     flex: 1,
     fontSize: 13,
-    color: '#FFFFFF', // Pure white for better visibility
+    color: colors.background.primary, // Pure white for better visibility
     fontWeight: '600',
     letterSpacing: 0.1,
   },
   expiryAmount: {
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   useNowButton: {
     paddingHorizontal: 16,
@@ -417,7 +418,7 @@ const styles = StyleSheet.create({
   },
   useNowText: {
     fontSize: 12,
-    color: '#FFFFFF', // White text for better visibility
+    color: colors.background.primary, // White text for better visibility
     fontWeight: '700',
   },
   actionsContainer: {
@@ -445,7 +446,7 @@ const styles = StyleSheet.create({
     }),
   },
   useCoinsButton: {
-    backgroundColor: '#ffcd57', // Mustard accent
+    backgroundColor: colors.lightMustard, // Mustard accent
   },
   viewWalletButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.7)', // More opaque white/grey
@@ -463,13 +464,13 @@ const styles = StyleSheet.create({
     letterSpacing: 0.1,
   },
   useCoinsButtonText: {
-    color: '#1a3a52', // Nile blue for contrast on mustard
+    color: colors.nileBlue, // Nile blue for contrast on mustard
   },
   viewWalletButtonText: {
-    color: '#1a3a52', // Nile blue for better contrast
+    color: colors.nileBlue, // Nile blue for better contrast
   },
   earnMoreButtonText: {
-    color: '#B45309', // Darker amber for better visibility
+    color: colors.brand.amberDeep, // Darker amber for better visibility
   },
   // Skeleton styles
   skeletonBox: {
@@ -481,7 +482,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   skeletonCard: {
-    backgroundColor: '#dfebf7',
+    backgroundColor: colors.lavenderMist,
     borderRadius: 16,
     padding: 12,
   },

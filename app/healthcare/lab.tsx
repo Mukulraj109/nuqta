@@ -26,6 +26,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { useRegion } from '@/contexts/RegionContext';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 interface LabTest {
   _id: string;
@@ -77,7 +78,7 @@ const testCategories = [
   { id: 'blood', name: 'Blood', icon: '🩸', color: Colors.error },
   { id: 'thyroid', name: 'Thyroid', icon: '🦋', color: Colors.info },
   { id: 'diabetes', name: 'Diabetes', icon: '💉', color: Colors.warning },
-  { id: 'liver', name: 'Liver', icon: '🫀', color: '#14B8A6' },
+  { id: 'liver', name: 'Liver', icon: '🫀', color: colors.tealGreen },
   { id: 'kidney', name: 'Kidney', icon: '🫘', color: Colors.success },
   { id: 'package', name: 'Packages', icon: '📦', color: Colors.brand.purple },
 ];

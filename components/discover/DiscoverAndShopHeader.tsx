@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { CategoryCard } from '@/types/discover.types';
+import { colors } from '@/constants/theme';
 
 // Category icon images
 const CATEGORY_IMAGES = {
@@ -33,21 +34,21 @@ const CARD_HEIGHT = 165;
 // Nuqta Brand Color Palette - Nile Blue/Mustard with different shades
 const NUQTA_COLORS = {
   // Primary Nile Blues
-  nileBlue: '#1a3a52',
+  nileBlue: colors.nileBlue,
   nileBlueLight: '#2a4a62',
   nileBlueDeep: '#0f2a3f',
   nileBlueAccent: '#3a5a72',
 
   // Accent Mustards/Golds
-  mustard: '#ffcd57',
-  primaryGold: '#FFC857',
+  mustard: colors.lightMustard,
+  primaryGold: colors.brand.goldWarm,
   darkGold: '#D4A843',
   lightGold: '#FFD98C',
-  amber: '#F59E0B',
+  amber: colors.warningScale[400],
 
   // Neutrals
-  navy: '#0B2240',
-  gray: '#6B7280',
+  navy: colors.brand.navyDark,
+  gray: colors.neutral[500],
 };
 
 // Default category cards with Nuqta Nile Blue/Mustard gradients
@@ -58,7 +59,7 @@ const DEFAULT_CATEGORIES: CategoryCard[] = [
     icon: 'shirt-outline',
     productName: 'Summer Collection',
     cashback: '20%',
-    gradient: ['#1a3a52', '#2a4a62'], // Primary nile blue gradient
+    gradient: [colors.nileBlue, '#2a4a62'], // Primary nile blue gradient
     categoryId: 'fashion',
   },
   {
@@ -67,7 +68,7 @@ const DEFAULT_CATEGORIES: CategoryCard[] = [
     icon: 'phone-portrait-outline',
     productName: 'Latest Gadgets',
     cashback: '15%',
-    gradient: ['#ffcd57', '#F59E0B'], // Mustard gradient
+    gradient: [colors.lightMustard, colors.warningScale[400]], // Mustard gradient
     categoryId: 'electronics',
   },
   {
@@ -76,7 +77,7 @@ const DEFAULT_CATEGORIES: CategoryCard[] = [
     icon: 'sparkles-outline',
     productName: 'Skincare Essentials',
     cashback: '18%',
-    gradient: ['#0f2a3f', '#1a3a52'], // Deep to light nile blue
+    gradient: ['#0f2a3f', colors.nileBlue], // Deep to light nile blue
     categoryId: 'beauty',
   },
   {
@@ -94,7 +95,7 @@ const DEFAULT_CATEGORIES: CategoryCard[] = [
     icon: 'restaurant-outline',
     productName: 'Gourmet Delights',
     cashback: '25%',
-    gradient: ['#D4A843', '#ffcd57'], // Dark gold to mustard
+    gradient: ['#D4A843', colors.lightMustard], // Dark gold to mustard
     categoryId: 'food',
   },
 ];
@@ -122,12 +123,12 @@ function DiscoverAndShopHeader({
       <View style={styles.titleRow}>
         <View style={styles.titleLeft}>
           <View style={styles.iconContainer}>
-            <Ionicons name="bag-handle" size={18} color="#FFFFFF" />
+            <Ionicons name="bag-handle" size={18} color={colors.background.primary} />
           </View>
           <Text style={styles.title}>Discover & Shop</Text>
         </View>
         <Pressable style={styles.reelsButton} onPress={handleFullReels}>
-          <Ionicons name="play-circle" size={16} color="#FFFFFF" />
+          <Ionicons name="play-circle" size={16} color={colors.background.primary} />
           <Text style={styles.reelsButtonText}>Reels</Text>
         </Pressable>
       </View>
@@ -179,7 +180,7 @@ function DiscoverAndShopHeader({
                       <Ionicons
                         name={category.icon as any}
                         size={28}
-                        color="#FFFFFF"
+                        color={colors.background.primary}
                       />
                     )}
                   </View>
@@ -195,7 +196,7 @@ function DiscoverAndShopHeader({
 
                 {/* Cashback Badge - Glassy pill */}
                 <View style={styles.cashbackBadge}>
-                  <Ionicons name="trending-up" size={10} color="#FFFFFF" />
+                  <Ionicons name="trending-up" size={10} color={colors.background.primary} />
                   <Text style={styles.cashbackText}>{category.cashback} Cashback</Text>
                 </View>
               </LinearGradient>
@@ -210,7 +211,7 @@ function DiscoverAndShopHeader({
 const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
   },
   titleRow: {
     flexDirection: 'row',
@@ -272,7 +273,7 @@ const styles = StyleSheet.create({
   reelsButtonText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   subtitle: {
     fontSize: 14,
@@ -366,7 +367,7 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 15,
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '700',
     letterSpacing: -0.2,
   },
@@ -385,7 +386,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

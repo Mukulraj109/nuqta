@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, Text, ScrollView, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 // New Color Palette
 const PALETTE = {
-  nileBlue: '#1a3a52',
-  lightMustard: '#ffcd57',
-  linen: '#faf1e0',
-  lightPeach: '#ffd7b5',
-  lavenderMist: '#dfebf7',
+  nileBlue: colors.nileBlue,
+  lightMustard: colors.lightMustard,
+  linen: colors.linen,
+  lightPeach: colors.lightPeach,
+  lavenderMist: colors.lavenderMist,
 };
 
 interface FilterChipsProps {
@@ -60,7 +61,7 @@ const FilterChips: React.FC<FilterChipsProps> = ({ filters, onFilterChange }) =>
             <Ionicons
               name={chip.icon}
               size={16}
-              color={isActive ? '#FFFFFF' : '#6B7280'}
+              color={isActive ? colors.background.primary : colors.neutral[500]}
               style={styles.icon}
             />
             <Text style={[
@@ -99,9 +100,9 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   chipInactive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   chipPressed: {
     opacity: 0.7,
@@ -114,10 +115,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   chipTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   chipTextInactive: {
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

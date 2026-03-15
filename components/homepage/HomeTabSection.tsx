@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
 import CategoryCashbackGrid from './CategoryCashbackGrid';
+import { colors } from '@/constants/theme';
 
 // Updated to 4 tabs
 export type TabId = 'near-u' | 'mall' | 'cash' | 'prive';
@@ -54,36 +55,36 @@ const TAB_THEMES: Record<TabId, {
   containerBg: string;
 }> = {
   'near-u': {
-    heroGradient: ['#fff0c4', '#ffe8a8', '#ffcd57'],
-    tabActiveColor: '#1a3a52',
-    tabActiveTextColor: '#FFFFFF',
-    tabInactiveTextColor: '#1a3a52',
-    categoryIconColor: '#ffcd57',
-    containerBg: '#faf1e0',
+    heroGradient: ['#fff0c4', '#ffe8a8', colors.lightMustard],
+    tabActiveColor: colors.nileBlue,
+    tabActiveTextColor: colors.background.primary,
+    tabInactiveTextColor: colors.nileBlue,
+    categoryIconColor: colors.lightMustard,
+    containerBg: colors.linen,
   },
   'mall': {
-    heroGradient: ['#dfebf7', '#e0edf7', '#dfebf7'],
-    tabActiveColor: '#0284C7',
-    tabActiveTextColor: '#FFFFFF',
-    tabInactiveTextColor: '#0284C7',
-    categoryIconColor: '#0284C7',
-    containerBg: '#dfebf7',
+    heroGradient: [colors.lavenderMist, '#e0edf7', colors.lavenderMist],
+    tabActiveColor: colors.brand.sky,
+    tabActiveTextColor: colors.background.primary,
+    tabInactiveTextColor: colors.brand.sky,
+    categoryIconColor: colors.brand.sky,
+    containerBg: colors.lavenderMist,
   },
   'cash': {
-    heroGradient: ['#FFF5EE', '#FFE5D0', '#ffd7b5'], // Soft Peach gradient
-    tabActiveColor: '#ffd7b5', // Light Peach
-    tabActiveTextColor: '#1a3a52', // Nile Blue for contrast
-    tabInactiveTextColor: '#D4A07A', // Peach Dark
-    categoryIconColor: '#D4A07A', // Peach Dark
-    containerBg: '#ffd7b5', // Match hero gradient bottom for seamless transition
+    heroGradient: ['#FFF5EE', '#FFE5D0', colors.lightPeach], // Soft Peach gradient
+    tabActiveColor: colors.lightPeach, // Light Peach
+    tabActiveTextColor: colors.nileBlue, // Nile Blue for contrast
+    tabInactiveTextColor: colors.brand.caramel, // Peach Dark
+    categoryIconColor: colors.brand.caramel, // Peach Dark
+    containerBg: colors.lightPeach, // Match hero gradient bottom for seamless transition
   },
   'prive': {
-    heroGradient: ['#1F2937', '#374151', '#4B5563'],
-    tabActiveColor: '#C9A962',
-    tabActiveTextColor: '#C9A962',
-    tabInactiveTextColor: '#C9A962',
-    categoryIconColor: '#C9A962',
-    containerBg: '#111827',
+    heroGradient: [colors.neutral[800], colors.neutral[700], colors.neutral[600]],
+    tabActiveColor: colors.brand.goldAccent,
+    tabActiveTextColor: colors.brand.goldAccent,
+    tabInactiveTextColor: colors.brand.goldAccent,
+    categoryIconColor: colors.brand.goldAccent,
+    containerBg: colors.neutral[900],
   },
 };
 
@@ -182,12 +183,12 @@ const HomeTabSection: React.FC<HomeTabSectionProps> = ({
 
   // Get container background based on mode
   const containerBg = isPriveMode
-    ? '#111827'
+    ? colors.neutral[900]
     : activeTab === 'mall'
-      ? '#dfebf7'
+      ? colors.lavenderMist
       : activeTab === 'cash'
-        ? '#ffd7b5'
-        : '#faf1e0';
+        ? colors.lightPeach
+        : colors.linen;
 
   return (
     <View style={[styles.container, { backgroundColor: containerBg }]} onLayout={handleContainerLayout}>
@@ -223,7 +224,7 @@ const HomeTabSection: React.FC<HomeTabSectionProps> = ({
               name={TAB_CONFIG['near-u'].iconName}
               size={18}
               color={activeTab === 'near-u'
-                ? '#1a3a52'
+                ? colors.nileBlue
                 : TAB_THEMES[activeTab].tabInactiveTextColor
               }
               style={styles.tabIcon}
@@ -235,7 +236,7 @@ const HomeTabSection: React.FC<HomeTabSectionProps> = ({
               style={[
                 styles.tabText,
                 { color: activeTab === 'near-u'
-                  ? '#1a3a52'
+                  ? colors.nileBlue
                   : TAB_THEMES[activeTab].tabInactiveTextColor
                 }
               ]}>{TAB_CONFIG['near-u'].label}</Text>
@@ -260,7 +261,7 @@ const HomeTabSection: React.FC<HomeTabSectionProps> = ({
               name={TAB_CONFIG['mall'].iconName}
               size={18}
               color={activeTab === 'mall'
-                ? '#0284C7'
+                ? colors.brand.sky
                 : TAB_THEMES[activeTab].tabInactiveTextColor
               }
               style={styles.tabIcon}
@@ -272,7 +273,7 @@ const HomeTabSection: React.FC<HomeTabSectionProps> = ({
               style={[
                 styles.tabText,
                 { color: activeTab === 'mall'
-                  ? '#0284C7'
+                  ? colors.brand.sky
                   : TAB_THEMES[activeTab].tabInactiveTextColor
                 }
               ]}>{TAB_CONFIG['mall'].label}</Text>
@@ -297,7 +298,7 @@ const HomeTabSection: React.FC<HomeTabSectionProps> = ({
               name={TAB_CONFIG['cash'].iconName}
               size={18}
               color={activeTab === 'cash'
-                ? '#D4A07A' // Nuqta Peach Dark
+                ? colors.brand.caramel // Nuqta Peach Dark
                 : TAB_THEMES[activeTab].tabInactiveTextColor
               }
               style={styles.tabIcon}
@@ -309,7 +310,7 @@ const HomeTabSection: React.FC<HomeTabSectionProps> = ({
               style={[
                 styles.tabText,
                 { color: activeTab === 'cash'
-                  ? '#D4A07A' // Nuqta Peach Dark
+                  ? colors.brand.caramel // Nuqta Peach Dark
                   : TAB_THEMES[activeTab].tabInactiveTextColor
                 }
               ]}>{TAB_CONFIG['cash'].label}</Text>
@@ -346,7 +347,7 @@ const HomeTabSection: React.FC<HomeTabSectionProps> = ({
                 style={[
                   styles.tabText,
                   { color: activeTab === 'prive'
-                    ? '#C9A962'
+                    ? colors.brand.goldAccent
                     : TAB_THEMES[activeTab].tabInactiveTextColor
                   }
                 ]}>{TAB_CONFIG['prive'].label}</Text>
@@ -368,12 +369,12 @@ const HomeTabSection: React.FC<HomeTabSectionProps> = ({
             styles.descriptionText,
             {
               color: isPriveMode
-                ? '#C9A962'
+                ? colors.brand.goldAccent
                 : activeTab === 'mall'
-                  ? '#0284C7'
+                  ? colors.brand.sky
                   : activeTab === 'cash'
-                    ? '#D4A07A' // Nuqta Peach Dark
-                    : '#1a3a52'
+                    ? colors.brand.caramel // Nuqta Peach Dark
+                    : colors.nileBlue
             }
           ]}>
             {TAB_CONFIG[activeTab].description}
@@ -395,7 +396,7 @@ const HomeTabSection: React.FC<HomeTabSectionProps> = ({
               <Ionicons
                 name="search"
                 size={18}
-                color={isPriveMode ? '#A0A0A0' : '#9CA3AF'}
+                color={isPriveMode ? '#A0A0A0' : colors.neutral[400]}
                 style={styles.searchIcon}
               />
               <Text style={[
@@ -426,17 +427,17 @@ const HomeTabSection: React.FC<HomeTabSectionProps> = ({
                     <Text style={styles.promoBannerSubtitlePrive}>ACCESS</Text>
                   </View>
                   <View style={styles.promoBannerIconWrapperPrive}>
-                    <Ionicons name="diamond" size={18} color="#C9A962" />
+                    <Ionicons name="diamond" size={18} color={colors.brand.goldAccent} />
                   </View>
                 </LinearGradient>
               ) : (
                 <LinearGradient
-                  colors={activeTab === 'mall' ? ['#0284C7', '#0369A1'] : ['#ffcd57', '#E6B84E', '#d4a645']}
+                  colors={activeTab === 'mall' ? [colors.brand.sky, colors.brand.skyDark] : [colors.lightMustard, colors.brand.goldRich, '#d4a645']}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.promoBannerGradientDeals}
                 >
-                  <Ionicons name="flash" size={18} color="#FFFFFF" style={styles.dealsIcon} />
+                  <Ionicons name="flash" size={18} color={colors.background.primary} style={styles.dealsIcon} />
                   <Text style={styles.dealsText}>Deals</Text>
                 </LinearGradient>
               )}
@@ -531,7 +532,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   tabInactive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.06)',
     ...Platform.select({
@@ -579,12 +580,12 @@ const styles = StyleSheet.create({
   descriptionText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     textAlign: 'center',
     letterSpacing: 0.2,
   },
   descriptionTextPrive: {
-    color: '#C9A962',
+    color: colors.brand.goldAccent,
   },
   // Search
   searchRow: {
@@ -597,7 +598,7 @@ const styles = StyleSheet.create({
   },
   searchContainerCompact: {
     flex: 2,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 12,
@@ -628,11 +629,11 @@ const styles = StyleSheet.create({
   },
   searchPlaceholderCompact: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     flex: 1,
   },
   searchPlaceholderPrive: {
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   // Promotional Banner
   promoBannerContainer: {
@@ -674,11 +675,11 @@ const styles = StyleSheet.create({
   promoBannerTitle: {
     fontSize: 10,
     fontWeight: '900',
-    color: '#DC2626',
+    color: colors.error,
     letterSpacing: 0.5,
   },
   promoBannerTitlePrive: {
-    color: '#C9A962',
+    color: colors.brand.goldAccent,
     fontSize: 10,
     fontWeight: '900',
     letterSpacing: 0.5,
@@ -720,7 +721,7 @@ const styles = StyleSheet.create({
   dealsText: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.3,
   },
   // Category Cashback Grid Container
@@ -739,12 +740,12 @@ const styles = StyleSheet.create({
   },
   priveTeaserIcon: {
     fontSize: 16,
-    color: '#C9A962',
+    color: colors.brand.goldAccent,
   },
   priveTeaserText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#C9A962',
+    color: colors.brand.goldAccent,
     letterSpacing: 0.3,
   },
 });

@@ -19,6 +19,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { HighCashbackDeal, getBadgeColor } from '../../../types/cash-store.types';
+import { colors } from '@/constants/theme';
 
 interface HighCashbackDealsProps {
   deals: HighCashbackDeal[];
@@ -125,7 +126,7 @@ const DealCard: React.FC<{
             <Ionicons
               name={deal.badge === 'hot' ? 'flame' : 'star'}
               size={10}
-              color="#FFFFFF"
+              color={colors.background.primary}
             />
             <Text style={styles.badgeText}>{deal.badge.toUpperCase()}</Text>
           </LinearGradient>
@@ -134,7 +135,7 @@ const DealCard: React.FC<{
         {/* Limited Stock Indicator */}
         {isLimitedStock && (
           <View style={styles.limitedStock}>
-            <Ionicons name="warning" size={10} color="#D4A07A" />
+            <Ionicons name="warning" size={10} color={colors.brand.caramel} />
             <Text style={styles.limitedStockText}>Limited</Text>
           </View>
         )}
@@ -152,7 +153,7 @@ const DealCard: React.FC<{
               <Text style={{ fontSize: 28 }}>{deal.brand.logo}</Text>
             ) : (
               <LinearGradient
-                colors={['#ffd7b5', '#E8B896']}
+                colors={[colors.lightPeach, colors.brand.sand]}
                 style={styles.logoPlaceholder}
               >
                 <Text style={styles.logoInitial}>{deal.brand.name.charAt(0)}</Text>
@@ -179,7 +180,7 @@ const DealCard: React.FC<{
           ]}
         >
           <LinearGradient
-            colors={['#E8B896', '#D4A07A']}
+            colors={[colors.brand.sand, colors.brand.caramel]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.cashbackGradient}
@@ -192,7 +193,7 @@ const DealCard: React.FC<{
         {/* Bonus Coins */}
         {deal.bonusCoins && (
           <View style={styles.bonusRow}>
-            <Ionicons name="flash" size={14} color="#ffcd57" />
+            <Ionicons name="flash" size={14} color={colors.lightMustard} />
             <Text style={styles.bonusText}>+{deal.bonusCoins} bonus coins</Text>
           </View>
         )}
@@ -200,14 +201,14 @@ const DealCard: React.FC<{
         {/* Shop Now Button */}
         <Pressable style={styles.shopButton} onPress={onPress}>
           <LinearGradient
-            colors={['#E8B896', '#D4A07A']}
+            colors={[colors.brand.sand, colors.brand.caramel]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.shopButtonGradient}
           >
             <Text style={styles.shopButtonText}>Shop Now</Text>
             <Animated.View style={{ transform: [{ translateX: arrowAnim }] }}>
-              <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={16} color={colors.background.primary} />
             </Animated.View>
           </LinearGradient>
         </Pressable>
@@ -312,14 +313,14 @@ const HighCashbackDeals: React.FC<HighCashbackDealsProps> = ({
         <View style={styles.headerLeft}>
           <View style={styles.titleRow}>
             <LinearGradient
-              colors={['#E8B896', '#D4A07A']}
+              colors={[colors.brand.sand, colors.brand.caramel]}
               style={styles.headerIconContainer}
             >
-              <Ionicons name="rocket" size={18} color="#FFFFFF" />
+              <Ionicons name="rocket" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.headerTitle}>High Cashback Deals</Text>
             <Animated.View style={{ transform: [{ translateY: rocketAnim }] }}>
-              <Ionicons name="rocket" size={20} color="#E8B896" />
+              <Ionicons name="rocket" size={20} color={colors.brand.sand} />
             </Animated.View>
           </View>
           <Text style={styles.subtitle}>10%+ cashback on these brands</Text>
@@ -331,7 +332,7 @@ const HighCashbackDeals: React.FC<HighCashbackDealsProps> = ({
         >
           <Text style={styles.viewAllText}>View All</Text>
           <View style={styles.viewAllArrow}>
-            <Ionicons name="chevron-forward" size={14} color="#FFFFFF" />
+            <Ionicons name="chevron-forward" size={14} color={colors.background.primary} />
           </View>
         </Pressable>
       </Animated.View>
@@ -364,7 +365,7 @@ const HighCashbackDeals: React.FC<HighCashbackDealsProps> = ({
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginTop: 8,
     marginHorizontal: 16,
     borderRadius: 24,
@@ -406,18 +407,18 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   viewAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E8B896',
+    backgroundColor: colors.brand.sand,
     paddingLeft: 14,
     paddingRight: 6,
     paddingVertical: 8,
@@ -427,7 +428,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   viewAllArrow: {
     width: 24,
@@ -445,7 +446,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 190,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     padding: 16,
     borderWidth: 2,
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffd7b5',
+        shadowColor: colors.lightPeach,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.12,
         shadowRadius: 8,
@@ -478,7 +479,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: 0.3,
   },
   limitedStock: {
@@ -487,7 +488,7 @@ const styles = StyleSheet.create({
     left: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -497,7 +498,7 @@ const styles = StyleSheet.create({
   limitedStockText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#D4A07A',
+    color: colors.brand.caramel,
   },
   brandSection: {
     flexDirection: 'row',
@@ -509,13 +510,13 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 14,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
   },
   brandLogo: {
     width: 34,
@@ -530,7 +531,7 @@ const styles = StyleSheet.create({
   logoInitial: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   brandInfo: {
     flex: 1,
@@ -538,12 +539,12 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 2,
   },
   dealTitle: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   cashbackHighlight: {
@@ -559,7 +560,7 @@ const styles = StyleSheet.create({
   cashbackRate: {
     fontSize: 36,
     fontWeight: '900',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: -1,
     textShadowColor: 'rgba(0,0,0,0.1)',
     textShadowOffset: { width: 0, height: 2 },
@@ -577,7 +578,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     marginBottom: 14,
-    backgroundColor: '#faf1e0',
+    backgroundColor: colors.linen,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 10,
@@ -585,7 +586,7 @@ const styles = StyleSheet.create({
   bonusText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#D4A07A',
+    color: colors.brand.caramel,
   },
   shopButton: {
     borderRadius: 14,
@@ -602,27 +603,27 @@ const styles = StyleSheet.create({
   shopButtonText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   // Skeleton
   skeleton: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
   skeletonText: {
     height: 14,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     marginBottom: 6,
   },
   skeletonCashback: {
     height: 80,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 16,
     marginBottom: 12,
   },
   skeletonButton: {
     height: 44,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 14,
   },
 });

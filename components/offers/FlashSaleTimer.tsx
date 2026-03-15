@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 interface FlashSaleTimerProps {
   endTime: Date | string;
@@ -128,7 +129,7 @@ const FlashSaleTimer: React.FC<FlashSaleTimerProps> = ({
           <View style={styles.progressBarContainer}>
             <View style={styles.progressBarBg}>
               <LinearGradient
-                colors={progress >= 80 ? ['#EF4444', '#DC2626'] : ['#10B981', '#059669']}
+                colors={progress >= 80 ? [colors.error, colors.error] : [colors.successScale[400], colors.successScale[700]]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={[styles.progressBarFill, { width: `${Math.min(progress, 100)}%` }]}
@@ -144,11 +145,11 @@ const FlashSaleTimer: React.FC<FlashSaleTimerProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 12,
     padding: 12,
     borderWidth: 2,
-    borderColor: '#F59E0B',
+    borderColor: colors.warningScale[400],
   },
   containerCompact: {
     padding: 8,
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     marginBottom: 8,
     letterSpacing: 0.5,
   },
@@ -174,23 +175,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   timeBox: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 12,
     minWidth: 56,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#F59E0B',
+    borderColor: colors.warningScale[400],
   },
   timeBoxCritical: {
-    backgroundColor: '#FEE2E2',
-    borderColor: '#EF4444',
+    backgroundColor: colors.errorScale[100],
+    borderColor: colors.error,
   },
   timeNumber: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   timeNumberCompact: {
     fontSize: 18,
@@ -198,13 +199,13 @@ const styles = StyleSheet.create({
   timeUnit: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   separator: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     marginHorizontal: 4,
   },
   separatorCompact: {
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
   expiredText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#EF4444',
+    color: colors.error,
     textAlign: 'center',
   },
   progressContainer: {
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
   stockText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
   progressBarBg: {
     flex: 1,
     height: 8,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     minWidth: 52,
     textAlign: 'right',
   },

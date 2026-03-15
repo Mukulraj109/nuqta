@@ -14,16 +14,17 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import apiClient from '@/services/apiClient';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_GAP = 10;
 
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#1a3a52',
-  gray600: '#6B7280',
-  mustard: '#ffcd57',
-  green500: '#ffcd57', // Migrated to mustard
+  white: colors.background.primary,
+  navy: colors.nileBlue,
+  gray600: colors.neutral[500],
+  mustard: colors.lightMustard,
+  green500: colors.lightMustard, // Migrated to mustard
 };
 
 interface FitnessStats {
@@ -84,7 +85,7 @@ const FitnessSportsSection: React.FC = () => {
          
         >
           <LinearGradient
-            colors={['#ffd7b5', '#E8B896', '#D4A07A']}
+            colors={[colors.lightPeach, colors.brand.sand, colors.brand.caramel]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.gymsGradient}
@@ -109,7 +110,7 @@ const FitnessSportsSection: React.FC = () => {
          
         >
           <LinearGradient
-            colors={['#1a3a52', '#243f55', '#2d4a5f']}
+            colors={[colors.nileBlue, '#243f55', '#2d4a5f']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.studiosGradient}
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
   },
   discountBadge: {
-    backgroundColor: '#1a3a52',
+    backgroundColor: colors.nileBlue,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
@@ -307,10 +308,10 @@ const styles = StyleSheet.create({
   },
   smallCard: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     overflow: 'hidden',
   },
   smallCardContent: {

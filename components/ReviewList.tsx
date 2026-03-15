@@ -9,6 +9,7 @@ import {
 import { ThemedText } from '@/components/ThemedText';
 import ReviewCard from '@/components/ReviewCard';
 import { Review } from '@/types/reviews';
+import { colors } from '@/constants/theme';
 
 interface ReviewListProps {
   reviews: Review[];
@@ -84,8 +85,8 @@ const ReviewList: React.FC<ReviewListProps> = ({
           <RefreshControl
             refreshing={refreshingState}
             onRefresh={handleRefresh}
-            tintColor="#7C3AED"
-            colors={['#7C3AED']}
+            tintColor={colors.brand.purple}
+            colors={[colors.brand.purple]}
           />
         ) : undefined
       }
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
 });

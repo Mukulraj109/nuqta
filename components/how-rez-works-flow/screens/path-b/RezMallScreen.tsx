@@ -5,6 +5,7 @@ import FlowScreenLayout from '../../shared/FlowScreenLayout';
 import ActionBtn from '../../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -13,8 +14,8 @@ interface Props {
 
 const features = [
     { icon: 'star', text: 'Curated premium brands', color: '#D946EF' },
-    { icon: 'pricetag', text: `Exclusive ${BRAND.APP_NAME} offers`, color: '#EC4899' },
-    { icon: 'wallet', text: 'Extra cashback on top', color: '#1a3a52' },
+    { icon: 'pricetag', text: `Exclusive ${BRAND.APP_NAME} offers`, color: colors.brand.pink },
+    { icon: 'wallet', text: 'Extra cashback on top', color: colors.nileBlue },
 ];
 
 const RezMallScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
@@ -26,7 +27,7 @@ const RezMallScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
         >
             <View style={styles.card}>
                 <View style={styles.iconContainer}>
-                    <Ionicons name="storefront" size={40} color="#EC4899" />
+                    <Ionicons name="storefront" size={40} color={colors.brand.pink} />
                 </View>
                 <Text style={styles.cardTitle}>{BRAND.APP_NAME} Mall Experience</Text>
 
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
         width: 64,
         height: 64,
         borderRadius: 32,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.background.primary,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 16,
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
     },
     featureText: {
         fontSize: 16,
-        color: '#374151',
+        color: colors.neutral[700],
         fontWeight: '500',
     },
 });

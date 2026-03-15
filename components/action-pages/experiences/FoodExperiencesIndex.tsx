@@ -15,14 +15,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { experiencesApi, StoreExperience } from '@/services/experiencesApi';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  primaryGold: '#F59E0B',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  border: '#E5E7EB',
+  primaryGold: colors.warningScale[400],
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  border: colors.neutral[200],
 };
 
 const TYPE_ICONS: Record<string, string> = {
@@ -70,7 +71,7 @@ function ExperiencesPage() {
       <LinearGradient
         colors={(item.backgroundColor && /^#[0-9A-Fa-f]{6}$/.test(item.backgroundColor)
           ? [item.backgroundColor, item.backgroundColor + '80']
-          : ['#F9FAFB', '#F3F4F6']) as any}
+          : [colors.neutral[50], colors.neutral[100]]) as any}
         style={styles.expGradient}
       >
         <View style={styles.expHeader}>
@@ -100,7 +101,7 @@ function ExperiencesPage() {
           <View style={styles.benefitsRow}>
             {item.benefits.slice(0, 3).map((b, i) => (
               <View key={i} style={styles.benefitChip}>
-                <Ionicons name="checkmark" size={12} color="#22C55E" />
+                <Ionicons name="checkmark" size={12} color={colors.success} />
                 <Text style={styles.benefitText}>{b}</Text>
               </View>
             ))}
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
   metaItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   metaText: { fontSize: 12, color: COLORS.textSecondary },
   benefitsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  benefitChip: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: '#F0FDF4', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
+  benefitChip: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.successScale[50], paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
   benefitText: { fontSize: 11, color: '#166534' },
   emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40, marginTop: 60 },
   emptyTitle: { fontSize: 16, fontWeight: '600', color: COLORS.textPrimary, marginTop: 16 },

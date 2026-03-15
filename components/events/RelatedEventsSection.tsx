@@ -19,6 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { EventItem } from '@/types/homepage.types';
 import eventAnalytics from '@/services/eventAnalytics';
+import { colors } from '@/constants/theme';
 
 interface RelatedEventsSectionProps {
   events: EventItem[];
@@ -59,7 +60,7 @@ function RelatedEventsSection({
       <View style={styles.container}>
         <Text style={styles.sectionTitle}>You Might Also Like</Text>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#8B5CF6" />
+          <ActivityIndicator size="large" color={colors.brand.purpleLight} />
           <Text style={styles.loadingText}>Loading related events...</Text>
         </View>
       </View>
@@ -89,7 +90,7 @@ function RelatedEventsSection({
           }}
         >
           <Text style={styles.viewAllText}>View All</Text>
-          <Ionicons name="chevron-forward" size={16} color="#8B5CF6" />
+          <Ionicons name="chevron-forward" size={16} color={colors.brand.purpleLight} />
         </Pressable>
       </View>
 
@@ -132,13 +133,13 @@ function RelatedEventsSection({
 
                 <View style={styles.eventMeta}>
                   <View style={styles.metaItem}>
-                    <Ionicons name="calendar-outline" size={14} color="#FFFFFF" />
+                    <Ionicons name="calendar-outline" size={14} color={colors.background.primary} />
                     <Text style={styles.metaText}>{event.date}</Text>
                   </View>
                   
                   {event.location && (
                     <View style={styles.metaItem}>
-                      <Ionicons name="location-outline" size={14} color="#FFFFFF" />
+                      <Ionicons name="location-outline" size={14} color={colors.background.primary} />
                       <Text style={styles.metaText} numberOfLines={1}>
                         {event.location}
                       </Text>
@@ -158,7 +159,7 @@ function RelatedEventsSection({
                   
                   {event.isOnline && (
                     <View style={styles.onlineBadge}>
-                      <Ionicons name="videocam" size={12} color="#FFFFFF" />
+                      <Ionicons name="videocam" size={12} color={colors.background.primary} />
                       <Text style={styles.onlineText}>Online</Text>
                     </View>
                   )}
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   viewAllButton: {
     flexDirection: 'row',
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   scrollContent: {
     paddingHorizontal: 20,
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     marginRight: CARD_MARGIN,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
@@ -239,14 +240,14 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   eventTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     lineHeight: 24,
   },
   eventSubtitle: {
@@ -281,12 +282,12 @@ const styles = StyleSheet.create({
   priceText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   freeText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   onlineBadge: {
     flexDirection: 'row',
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
   onlineText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textTransform: 'uppercase',
   },
   loadingContainer: {
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
 });

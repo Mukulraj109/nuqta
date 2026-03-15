@@ -11,6 +11,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, FoodRestaurant } from './constants';
+import { colors } from '@/constants/theme';
 
 export interface FoodStoreCardProps {
   store: FoodRestaurant;
@@ -59,12 +60,12 @@ function FoodStoreCard({ store, currencySymbol, variant = 'default' }: FoodStore
           />
         ) : (
           <View style={[styles.storeImage, styles.storeImagePlaceholder,
-            variant === 'delivery-focused' && { backgroundColor: '#FEF3C7' }
+            variant === 'delivery-focused' && { backgroundColor: colors.tint.amberLight }
           ]}>
             <Ionicons
               name={variant === 'delivery-focused' ? 'flash' : 'restaurant'}
               size={32}
-              color={variant === 'delivery-focused' ? COLORS.primaryGold : '#6B7280'}
+              color={variant === 'delivery-focused' ? COLORS.primaryGold : colors.neutral[500]}
             />
           </View>
         )}
@@ -75,7 +76,7 @@ function FoodStoreCard({ store, currencySymbol, variant = 'default' }: FoodStore
           // Delivery-focused: delivery time badge only
           store.operationalInfo?.deliveryTime ? (
             <View style={styles.deliveryTimeBadge}>
-              <Ionicons name="flash" size={12} color="#000" />
+              <Ionicons name="flash" size={12} color={colors.text.primary} />
               <Text style={styles.deliveryTimeText}>{store.operationalInfo.deliveryTime}</Text>
             </View>
           ) : null
@@ -88,12 +89,12 @@ function FoodStoreCard({ store, currencySymbol, variant = 'default' }: FoodStore
               </View>
             )}
             {isPureVeg && (
-              <View style={[styles.badgeTag, { backgroundColor: '#22C55E' }]}>
+              <View style={[styles.badgeTag, { backgroundColor: colors.success }]}>
                 <Text style={styles.badgeTagText}>Pure Veg</Text>
               </View>
             )}
             {cashbackPercent > 0 && (
-              <View style={[styles.badgeTag, { backgroundColor: '#8B5CF6' }]}>
+              <View style={[styles.badgeTag, { backgroundColor: colors.brand.purpleLight }]}>
                 <Text style={styles.badgeTagText}>{cashbackPercent}% cashback</Text>
               </View>
             )}
@@ -103,7 +104,7 @@ function FoodStoreCard({ store, currencySymbol, variant = 'default' }: FoodStore
           <View style={styles.storeBadges}>
             {store.deliveryCategories?.fastDelivery && (
               <View style={styles.badge60Min}>
-                <Ionicons name="flash" size={10} color="#000" />
+                <Ionicons name="flash" size={10} color={colors.text.primary} />
                 <Text style={styles.badge60MinText}>60 min</Text>
               </View>
             )}
@@ -113,12 +114,12 @@ function FoodStoreCard({ store, currencySymbol, variant = 'default' }: FoodStore
               </View>
             )}
             {isPureVeg && (
-              <View style={[styles.badgeTag, { backgroundColor: '#22C55E' }]}>
+              <View style={[styles.badgeTag, { backgroundColor: colors.success }]}>
                 <Text style={styles.badgeTagText}>Pure Veg</Text>
               </View>
             )}
             {cashbackPercent > 0 && (
-              <View style={[styles.badgeTag, { backgroundColor: '#8B5CF6' }]}>
+              <View style={[styles.badgeTag, { backgroundColor: colors.brand.purpleLight }]}>
                 <Text style={styles.badgeTagText}>{cashbackPercent}% cashback</Text>
               </View>
             )}
@@ -149,12 +150,12 @@ function FoodStoreCard({ store, currencySymbol, variant = 'default' }: FoodStore
 
         <View style={styles.storeMeta}>
           <View style={styles.storeMetaItem}>
-            <Ionicons name="location-outline" size={12} color="#6B7280" />
+            <Ionicons name="location-outline" size={12} color={colors.neutral[500]} />
             <Text style={styles.storeMetaText}>{store.location?.city || 'Nearby'}</Text>
           </View>
           {variant !== 'delivery-focused' && store.operationalInfo?.deliveryTime ? (
             <View style={styles.storeMetaItem}>
-              <Ionicons name="time-outline" size={12} color="#6B7280" />
+              <Ionicons name="time-outline" size={12} color={colors.neutral[500]} />
               <Text style={styles.storeMetaText}>{store.operationalInfo.deliveryTime}</Text>
             </View>
           ) : null}
@@ -184,7 +185,7 @@ export default React.memo(FoodStoreCard);
 const styles = StyleSheet.create({
   storeCard: {
     borderRadius: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     overflow: 'hidden',
     marginBottom: 16,
     elevation: 2,
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   storeImagePlaceholder: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
   badge60MinText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#000',
+    color: colors.text.primary,
   },
   badgeTag: {
     paddingHorizontal: 8,
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
   badgeTagText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   deliveryTimeBadge: {
     position: 'absolute',
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
   deliveryTimeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#000',
+    color: colors.text.primary,
   },
   storeRating: {
     position: 'absolute',
@@ -276,11 +277,11 @@ const styles = StyleSheet.create({
   storeRatingText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   storeRatingCount: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   ratingBadgeLarge: {
     position: 'absolute',
@@ -297,11 +298,11 @@ const styles = StyleSheet.create({
   ratingValueLarge: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   ratingCountLarge: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   storeContent: {
     padding: 12,
@@ -309,12 +310,12 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 2,
   },
   storeCuisine: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   storeMeta: {
@@ -329,22 +330,22 @@ const styles = StyleSheet.create({
   },
   storeMetaText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   storePriceForTwo: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   cashbackTag: {
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
   },
   cashbackTagText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   storeRewardsRow: {
     flexDirection: 'row',
@@ -352,7 +353,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
     gap: 4,
   },
   storeCoinsText: {

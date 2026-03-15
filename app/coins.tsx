@@ -13,6 +13,7 @@ import CardImg4 from '@/assets/images/card4.png';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 const { width } = Dimensions.get('window');
 
 const coinCardImages = [
@@ -71,7 +72,7 @@ export default function CoinPage() {
               onPress={() => router.push('/wallet/transfer')}
             >
               <View style={[styles.quickActionIcon, { backgroundColor: '#E0F2FE' }]}>
-                <Ionicons name="swap-horizontal" size={24} color="#0284C7" />
+                <Ionicons name="swap-horizontal" size={24} color={colors.brand.sky} />
               </View>
               <Text style={styles.quickActionLabel}>Transfer</Text>
             </Pressable>
@@ -80,8 +81,8 @@ export default function CoinPage() {
               style={styles.quickActionItem}
               onPress={() => router.push('/wallet/gift')}
             >
-              <View style={[styles.quickActionIcon, { backgroundColor: '#FCE7F3' }]}>
-                <Ionicons name="gift" size={24} color="#DB2777" />
+              <View style={[styles.quickActionIcon, { backgroundColor: colors.pinkMist }]}>
+                <Ionicons name="gift" size={24} color={colors.deepPink} />
               </View>
               <Text style={styles.quickActionLabel}>Gift Coins</Text>
             </Pressable>
@@ -100,7 +101,7 @@ export default function CoinPage() {
               style={styles.quickActionItem}
               onPress={() => router.push('/wallet/gift-cards')}
             >
-              <View style={[styles.quickActionIcon, { backgroundColor: '#faf1e0' }]}>
+              <View style={[styles.quickActionIcon, { backgroundColor: colors.linen }]}>
                 <Ionicons name="card" size={24} color={Colors.nileBlue} />
               </View>
               <Text style={styles.quickActionLabel}>Gift Cards</Text>
@@ -110,7 +111,7 @@ export default function CoinPage() {
               style={styles.quickActionItem}
               onPress={() => router.push('/wallet/scheduled-drops')}
             >
-              <View style={[styles.quickActionIcon, { backgroundColor: '#EDE9FE' }]}>
+              <View style={[styles.quickActionIcon, { backgroundColor: colors.tint.purple }]}>
                 <Ionicons name="calendar" size={24} color={Colors.brand.purple} />
               </View>
               <Text style={styles.quickActionLabel}>Drops</Text>
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
   quickActionLabel: {
     fontSize: Typography.caption.fontSize,
     fontWeight: '600',
-    color: '#6b7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
 });

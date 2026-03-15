@@ -27,6 +27,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import Svg, { Circle } from 'react-native-svg';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -35,11 +36,11 @@ const REZ_COIN_IMAGE = BRAND.COIN_IMAGE;
 
 // Theme colors
 const THEME = {
-  purple500: '#8B5CF6',
-  purple600: '#7C3AED',
-  indigo500: '#6366F1',
+  purple500: colors.brand.purpleLight,
+  purple600: colors.brand.purple,
+  indigo500: colors.brand.indigo,
   indigo600: '#4F46E5',
-  amber400: '#FBBF24',
+  amber400: colors.warningScale[400],
   orange400: '#FB923C',
 };
 
@@ -809,7 +810,7 @@ const styles = StyleSheet.create({
     marginRight: SPACING.sm,
   },
   rankGold: {
-    backgroundColor: '#FFD700',
+    backgroundColor: colors.brand.goldBright,
   },
   rankSilver: {
     backgroundColor: '#C0C0C0',

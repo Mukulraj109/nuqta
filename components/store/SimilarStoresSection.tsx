@@ -13,6 +13,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import StoreCard from '@/components/homepage/cards/StoreCard';
 import storesApi from '@/services/storesApi';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const isWeb = Platform.OS === 'web';
@@ -135,7 +136,7 @@ const SimilarStoresSection: React.FC<SimilarStoresSectionProps> = ({
           <ThemedText style={styles.title}>Explore Similar Stores</ThemedText>
         </View>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#ffcd57" />
+          <ActivityIndicator size="large" color={colors.lightMustard} />
           <ThemedText style={styles.loadingText}>Loading stores...</ThemedText>
         </View>
       </View>
@@ -150,10 +151,10 @@ const SimilarStoresSection: React.FC<SimilarStoresSectionProps> = ({
           <ThemedText style={styles.title}>Explore Similar Stores</ThemedText>
         </View>
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle-outline" size={48} color="#EF4444" />
+          <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
           <ThemedText style={styles.errorText}>{error}</ThemedText>
           <Pressable style={styles.retryButton} onPress={handleRetry}>
-            <Ionicons name="refresh" size={20} color="#FFFFFF" />
+            <Ionicons name="refresh" size={20} color={colors.background.primary} />
             <ThemedText style={styles.retryButtonText}>Retry</ThemedText>
           </Pressable>
         </View>
@@ -169,7 +170,7 @@ const SimilarStoresSection: React.FC<SimilarStoresSectionProps> = ({
           <ThemedText style={styles.title}>Explore Similar Stores</ThemedText>
         </View>
         <View style={styles.emptyContainer}>
-          <Ionicons name="storefront-outline" size={48} color="#9CA3AF" />
+          <Ionicons name="storefront-outline" size={48} color={colors.neutral[400]} />
           <ThemedText style={styles.emptyText}>No similar stores found</ThemedText>
           <Pressable style={styles.viewAllButton} onPress={handleViewAll}>
             <ThemedText style={styles.viewAllButtonText}>Browse All Stores</ThemedText>
@@ -184,7 +185,7 @@ const SimilarStoresSection: React.FC<SimilarStoresSectionProps> = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Ionicons name="storefront" size={22} color="#ffcd57" />
+          <Ionicons name="storefront" size={22} color={colors.lightMustard} />
           <ThemedText style={styles.title}>Similar Stores</ThemedText>
         </View>
         <Pressable
@@ -194,7 +195,7 @@ const SimilarStoresSection: React.FC<SimilarStoresSectionProps> = ({
           accessibilityRole="button"
         >
           <ThemedText style={styles.viewAllText}>View All</ThemedText>
-          <Ionicons name="chevron-forward" size={14} color="#ffcd57" />
+          <Ionicons name="chevron-forward" size={14} color={colors.lightMustard} />
         </Pressable>
       </View>
 
@@ -230,7 +231,7 @@ const SimilarStoresSection: React.FC<SimilarStoresSectionProps> = ({
         accessibilityRole="button"
       >
         <ThemedText style={styles.bottomViewAllText}>View All Stores</ThemedText>
-        <Ionicons name="arrow-forward" size={20} color="#ffcd57" />
+        <Ionicons name="arrow-forward" size={20} color={colors.lightMustard} />
       </Pressable>
     </View>
   );
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   viewAllLink: {
     flexDirection: 'row',
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   listContent: {
     paddingVertical: 4,
@@ -290,7 +291,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   errorContainer: {
     alignItems: 'center',
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
   errorText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#EF4444',
+    color: colors.error,
     textAlign: 'center',
   },
   retryButton: {
@@ -308,13 +309,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -326,18 +327,18 @@ const styles = StyleSheet.create({
   emptyText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   viewAllButton: {
     marginTop: 16,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
   },
   viewAllButtonText: {
-    color: '#FFFFFF',
+    color: colors.text.white,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -354,7 +355,7 @@ const styles = StyleSheet.create({
   bottomViewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
 });
 

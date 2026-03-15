@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -125,7 +126,7 @@ function ClaimRewardModal({
     }
   }, [visible]);
 
-  const confettiColors = ['#8B5CF6', '#10B981', '#F59E0B', '#EF4444', '#3B82F6', '#EC4899'];
+  const confettiColors = [colors.brand.purpleLight, colors.successScale[400], colors.warningScale[400], colors.error, colors.infoScale[400], colors.brand.pink];
 
   return (
     <Modal visible={visible} transparent animationType="none" onRequestClose={onClose}>
@@ -163,10 +164,10 @@ function ClaimRewardModal({
             />
           ))}
 
-          <LinearGradient colors={['#8B5CF6', '#7C3AED', '#6D28D9']} style={styles.modalContent}>
+          <LinearGradient colors={[colors.brand.purpleLight, colors.brand.purple, colors.brand.purpleDeep]} style={styles.modalContent}>
             {/* Trophy Icon */}
             <View style={styles.iconContainer}>
-              <Ionicons name="trophy" size={80} color="#FFD700" />
+              <Ionicons name="trophy" size={80} color={colors.brand.goldBright} />
             </View>
 
             {/* Title */}
@@ -179,7 +180,7 @@ function ClaimRewardModal({
 
               {/* Coins */}
               <View style={styles.rewardItem}>
-                <Ionicons name="diamond" size={40} color="#FFD700" />
+                <Ionicons name="diamond" size={40} color={colors.brand.goldBright} />
                 <Animated.Text style={styles.rewardAmount}>
                   +
                   {coinCountAnim.interpolate({
@@ -196,7 +197,7 @@ function ClaimRewardModal({
                 <View style={styles.badgesContainer}>
                   {reward.badges.map((badge, index) => (
                     <View key={index} style={styles.badgeItem}>
-                      <Ionicons name="ribbon" size={32} color="#FFD700" />
+                      <Ionicons name="ribbon" size={32} color={colors.brand.goldBright} />
                       <Text style={styles.badgeText}>{badge}</Text>
                     </View>
                   ))}
@@ -206,7 +207,7 @@ function ClaimRewardModal({
               {/* Multiplier */}
               {reward.multiplier && (
                 <View style={styles.multiplierContainer}>
-                  <Ionicons name="flash" size={32} color="#FFD700" />
+                  <Ionicons name="flash" size={32} color={colors.brand.goldBright} />
                   <Text style={styles.multiplierText}>{reward.multiplier}x Multiplier</Text>
                 </View>
               )}
@@ -223,7 +224,7 @@ function ClaimRewardModal({
                       <Text style={styles.statValue}>{beforeStats.coins}</Text>
                       <Ionicons name="arrow-forward" size={16} color="rgba(255,255,255,0.6)" />
                       <Text style={[styles.statValue, styles.statValueAfter]}>{afterStats.coins}</Text>
-                      <Ionicons name="trending-up" size={16} color="#10B981" />
+                      <Ionicons name="trending-up" size={16} color={colors.successScale[400]} />
                     </View>
                   </View>
                   {beforeStats.level && afterStats.level && (
@@ -234,7 +235,7 @@ function ClaimRewardModal({
                         <Ionicons name="arrow-forward" size={16} color="rgba(255,255,255,0.6)" />
                         <Text style={[styles.statValue, styles.statValueAfter]}>{afterStats.level}</Text>
                         {afterStats.level > beforeStats.level && (
-                          <Ionicons name="trending-up" size={16} color="#10B981" />
+                          <Ionicons name="trending-up" size={16} color={colors.successScale[400]} />
                         )}
                       </View>
                     </View>
@@ -247,7 +248,7 @@ function ClaimRewardModal({
             <View style={styles.buttonContainer}>
               {onShare && (
                 <Pressable style={styles.shareButton} onPress={onShare}>
-                  <Ionicons name="share-social" size={20} color="#8B5CF6" />
+                  <Ionicons name="share-social" size={20} color={colors.brand.purpleLight} />
                   <Text style={styles.shareButtonText}>Share Success</Text>
                 </Pressable>
               )}
@@ -305,7 +306,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.background.primary,
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
   rewardAmount: {
     fontSize: 48,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.background.primary,
   },
   rewardLabel: {
     fontSize: 16,
@@ -368,7 +369,7 @@ const styles = StyleSheet.create({
   multiplierText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.background.primary,
   },
   statsContainer: {
     width: '100%',
@@ -408,7 +409,7 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.6)',
   },
   statValueAfter: {
-    color: '#fff',
+    color: colors.background.primary,
   },
   buttonContainer: {
     width: '100%',
@@ -421,24 +422,24 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
   },
   shareButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   continueButton: {
     paddingVertical: 16,
     borderRadius: 12,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: colors.background.primary,
   },
   continueButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.background.primary,
     textAlign: 'center',
   },
 });

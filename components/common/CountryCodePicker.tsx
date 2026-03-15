@@ -9,6 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 export interface CountryCode {
   code: string;
@@ -64,7 +65,7 @@ function CountryCodePicker({
         <Text style={styles.countryDialCode}>{item.dialCode}</Text>
       </View>
       {item.code === selectedCountry.code && (
-        <Ionicons name="checkmark-circle" size={20} color="#ffcd57" />
+        <Ionicons name="checkmark-circle" size={20} color={colors.lightMustard} />
       )}
     </Pressable>
   );
@@ -78,7 +79,7 @@ function CountryCodePicker({
       >
         <Text style={styles.selectorFlag}>{selectedCountry.flag}</Text>
         <Text style={styles.selectorDialCode}>{selectedCountry.dialCode}</Text>
-        <Ionicons name="chevron-down" size={14} color="#9AA7B2" />
+        <Ionicons name="chevron-down" size={14} color={colors.gray[400]} />
       </Pressable>
 
       <Modal
@@ -99,7 +100,7 @@ function CountryCodePicker({
                 style={styles.closeButton}
                 onPress={() => setModalVisible(false)}
               >
-                <Ionicons name="close" size={24} color="#1a3a52" />
+                <Ionicons name="close" size={24} color={colors.nileBlue} />
               </Pressable>
             </View>
 
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
   selectorDialCode: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   modalOverlay: {
     flex: 1,
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 20,
     width: '100%',
     maxWidth: 340,
@@ -171,18 +172,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.gray[100],
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   closeButton: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.gray[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -209,12 +210,12 @@ const styles = StyleSheet.create({
   countryName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 2,
   },
   countryDialCode: {
     fontSize: 13,
-    color: '#9AA7B2',
+    color: colors.gray[400],
   },
 });
 

@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { InsightTile } from './InsightTile';
 import { WalletData } from '@/types/wallet';
 import { Colors, Spacing } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface InsightSectionProps {
   walletData: WalletData;
@@ -36,7 +37,7 @@ export const InsightSection: React.FC<InsightSectionProps> = ({ walletData }) =>
             label="Earned This Month"
             value={earned.toLocaleString()}
             icon="arrow-down-circle"
-            iconColor="#15803D"
+            iconColor={colors.successScale[700]}
             trend={earned > 0 ? 'up' : 'neutral'}
           />
           <InsightTile
@@ -49,7 +50,7 @@ export const InsightSection: React.FC<InsightSectionProps> = ({ walletData }) =>
             label="Avg Per Visit"
             value={avgPerVisit.toLocaleString()}
             icon="analytics"
-            iconColor="#6366F1"
+            iconColor={colors.brand.indigo}
           />
         </View>
       )}
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   emptyRow: {
-    backgroundColor: Colors.background?.secondary || '#F9FAFB',
+    backgroundColor: Colors.background?.secondary || colors.neutral[50],
     borderRadius: 12,
     paddingVertical: 20,
     paddingHorizontal: 16,

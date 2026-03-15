@@ -21,15 +21,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { storesApi } from '@/services/storesApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  primaryGold: '#F59E0B',
-  dark: '#1a3a52',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  border: '#E5E7EB',
+  primaryGold: colors.warningScale[400],
+  dark: colors.nileBlue,
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  border: colors.neutral[200],
 };
 
 function StoreCard({ store, currencySymbol }: { store: any; currencySymbol: string }) {
@@ -62,7 +63,7 @@ function StoreCard({ store, currencySymbol }: { store: any; currencySymbol: stri
 
         {/* Delivery time badge */}
         <View style={styles.deliveryTimeBadge}>
-          <Ionicons name="flash" size={12} color="#000" />
+          <Ionicons name="flash" size={12} color={colors.text.primary} />
           <Text style={styles.deliveryTimeText}>{store.operationalInfo?.deliveryTime || '30-45 min'}</Text>
         </View>
 
@@ -213,13 +214,13 @@ const styles = StyleSheet.create({
   },
   storeImageContainer: { height: 150, position: 'relative' },
   storeImage: { width: '100%', height: '100%' },
-  storeImagePlaceholder: { backgroundColor: '#FEF3C7', justifyContent: 'center', alignItems: 'center' },
+  storeImagePlaceholder: { backgroundColor: colors.tint.amberLight, justifyContent: 'center', alignItems: 'center' },
   storeImageGradient: { position: 'absolute', bottom: 0, left: 0, right: 0, height: '50%' },
   deliveryTimeBadge: {
     position: 'absolute', top: 8, left: 8, flexDirection: 'row', alignItems: 'center',
     paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, backgroundColor: COLORS.primaryGold, gap: 4,
   },
-  deliveryTimeText: { fontSize: 11, fontWeight: '700', color: '#000' },
+  deliveryTimeText: { fontSize: 11, fontWeight: '700', color: colors.text.primary },
   storeRating: {
     position: 'absolute', bottom: 8, left: 8, flexDirection: 'row', alignItems: 'center',
     paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.9)', gap: 4,
@@ -231,8 +232,8 @@ const styles = StyleSheet.create({
   storeMeta: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   storeMetaItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   storeMetaText: { fontSize: 11, color: COLORS.textSecondary },
-  cashbackTag: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 10, backgroundColor: '#F3E8FF' },
-  cashbackTagText: { fontSize: 11, fontWeight: '600', color: '#8B5CF6' },
+  cashbackTag: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 10, backgroundColor: colors.tint.pink },
+  cashbackTagText: { fontSize: 11, fontWeight: '600', color: colors.brand.purpleLight },
   emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40, marginTop: 60 },
   emptyTitle: { fontSize: 16, fontWeight: '600', color: COLORS.textPrimary, marginTop: 16 },
   emptySubtitle: { fontSize: 13, color: COLORS.textSecondary, marginTop: 4 },

@@ -5,6 +5,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface CabAmenitiesProps {
   amenities: string[];
@@ -32,7 +33,7 @@ const CabAmenities: React.FC<CabAmenitiesProps> = ({ amenities }) => {
         {amenities.map((amenity, index) => (
           <View key={index} style={styles.amenityItem}>
             <View style={styles.iconContainer}>
-              <Ionicons name={getIcon(amenity) as any} size={20} color="#EAB308" />
+              <Ionicons name={getIcon(amenity) as any} size={20} color={colors.brand.amber} />
             </View>
             <Text style={styles.amenityText}>{amenity}</Text>
           </View>
@@ -57,16 +58,16 @@ const styles = StyleSheet.create({
     gap: 10,
     width: '48%',
     padding: 12,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   iconContainer: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
 });
 

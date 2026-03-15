@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { ThemedText } from '@/components/ThemedText';
 import { CategoryTabsProps } from '@/types/going-out.types';
+import { colors } from '@/constants/theme';
 
 function _CategoryTabsInner({
   categories,
@@ -70,7 +71,7 @@ function _CategoryTabsInner({
             >
               {isActive ? (
                 <LinearGradient
-                  colors={['#8B5CF6', '#7C3AED']}
+                  colors={[colors.brand.purpleLight, colors.brand.purple]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={[styles.categoryTab, styles.categoryTabActive]}
@@ -90,7 +91,7 @@ function _CategoryTabsInner({
                       <Ionicons
                         name={getIconForCategory(category.slug) as any}
                         size={23}
-                        color="#FFFFFF"
+                        color={colors.background.primary}
                       />
                     </View>
                     
@@ -116,7 +117,7 @@ function _CategoryTabsInner({
                       <Ionicons
                         name={getIconForCategory(category.slug) as any}
                         size={23}
-                        color="#8B5CF6"
+                        color={colors.brand.purpleLight}
                       />
                     </View>
                     
@@ -136,7 +137,7 @@ function _CategoryTabsInner({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     paddingVertical: 4,
   },
   scrollView: {
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     minWidth: 110,
     position: 'relative',
     ...Platform.select({
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   categoryTabActive: {
     ...Platform.select({
       ios: {
-        shadowColor: '#8B5CF6',
+        shadowColor: colors.brand.purpleLight,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.25,
         shadowRadius: 12,
@@ -196,11 +197,11 @@ const styles = StyleSheet.create({
     width: 54,
     height: 54,
     borderRadius: 27,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   iconContainerActive: {
     width: 54,
@@ -215,14 +216,14 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
     textAlign: 'center',
     lineHeight: 16,
   },
   categoryTextActive: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
     lineHeight: 16,
   },
@@ -233,16 +234,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 10,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     minWidth: 22,
     minHeight: 22,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
     ...Platform.select({
       ios: {
-        shadowColor: '#8B5CF6',
+        shadowColor: colors.brand.purpleLight,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     minWidth: 22,
     minHeight: 22,
     justifyContent: 'center',
@@ -287,13 +288,13 @@ const styles = StyleSheet.create({
   countText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     textAlign: 'center',
   },
   countTextActive: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     textAlign: 'center',
   },
 });

@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { useProductQuestions } from '@/hooks/useProductQuestions';
 import { ProductQuestion } from '@/services/questionsApi';
+import { colors } from '@/constants/theme';
 
 /**
  * ProductQASection Component
@@ -126,7 +127,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
          
         >
           <View style={styles.questionIcon}>
-            <Ionicons name="help-circle" size={24} color="#8B5CF6" />
+            <Ionicons name="help-circle" size={24} color={colors.brand.purpleLight} />
           </View>
 
           <View style={styles.questionContent}>
@@ -134,7 +135,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
               <ThemedText style={styles.userName}>{question.question.userName}</ThemedText>
               {question.question.isVerifiedPurchase && (
                 <View style={styles.verifiedBadge}>
-                  <Ionicons name="checkmark-circle" size={14} color="#10B981" />
+                  <Ionicons name="checkmark-circle" size={14} color={colors.successScale[400]} />
                   <ThemedText style={styles.verifiedText}>Verified Purchase</ThemedText>
                 </View>
               )}
@@ -155,7 +156,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
           <Ionicons
             name={isExpanded ? 'chevron-up' : 'chevron-down'}
             size={20}
-            color="#6B7280"
+            color={colors.neutral[500]}
           />
         </Pressable>
 
@@ -169,14 +170,14 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
                     <ThemedText style={styles.answerUserName}>{answer.userName}</ThemedText>
                     {answer.isStoreRepresentative && (
                       <View style={[styles.badge, styles.storeBadge]}>
-                        <Ionicons name="storefront" size={12} color="#8B5CF6" />
+                        <Ionicons name="storefront" size={12} color={colors.brand.purpleLight} />
                         <ThemedText style={styles.badgeText}>Store</ThemedText>
                       </View>
                     )}
                     {answer.isVerifiedPurchase && (
                       <View style={[styles.badge, styles.verifiedAnswerBadge]}>
-                        <Ionicons name="checkmark-circle" size={12} color="#10B981" />
-                        <ThemedText style={[styles.badgeText, { color: '#10B981' }]}>
+                        <Ionicons name="checkmark-circle" size={12} color={colors.successScale[400]} />
+                        <ThemedText style={[styles.badgeText, { color: colors.successScale[400] }]}>
                           Verified
                         </ThemedText>
                       </View>
@@ -195,7 +196,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
                       onPress={() => markAnswerHelpful(question._id, answer._id)}
                      
                     >
-                      <Ionicons name="thumbs-up" size={16} color="#6B7280" />
+                      <Ionicons name="thumbs-up" size={16} color={colors.neutral[500]} />
                       <ThemedText style={styles.helpfulText}>
                         Helpful ({answer.helpful.count})
                       </ThemedText>
@@ -212,7 +213,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
               <TextInput
                 style={styles.answerInput}
                 placeholder="Write your answer..."
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.neutral[400]}
                 value={answerText[question._id] || ''}
                 onChangeText={text =>
                   setAnswerText(prev => ({ ...prev, [question._id]: text }))
@@ -237,7 +238,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
     return (
       <View style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#8B5CF6" />
+          <ActivityIndicator size="large" color={colors.brand.purpleLight} />
           <ThemedText style={styles.loadingText}>Loading questions...</ThemedText>
         </View>
       </View>
@@ -260,7 +261,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
           onPress={() => setShowAskQuestion(!showAskQuestion)}
          
         >
-          <Ionicons name="add-circle" size={20} color="#8B5CF6" />
+          <Ionicons name="add-circle" size={20} color={colors.brand.purpleLight} />
           <ThemedText style={styles.askButtonText}>Ask</ThemedText>
         </Pressable>
       </View>
@@ -271,7 +272,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
           <TextInput
             style={styles.questionInput}
             placeholder={`Ask a question about ${productName}...`}
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.neutral[400]}
             value={questionText}
             onChangeText={setQuestionText}
             multiline
@@ -334,7 +335,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
         initialNumToRender={8}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Ionicons name="chatbubble-ellipses-outline" size={64} color="#D1D5DB" />
+            <Ionicons name="chatbubble-ellipses-outline" size={64} color={colors.neutral[300]} />
             <ThemedText style={styles.emptyText}>No questions yet</ThemedText>
             <ThemedText style={styles.emptySubtext}>
               Be the first to ask about this product!
@@ -348,7 +349,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     marginBottom: 8,
   },
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // Header
@@ -375,47 +376,47 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   statsText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   askButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
     gap: 6,
   },
   askButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 
   // Ask Question Form
   askQuestionForm: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     padding: 16,
     borderRadius: 12,
     marginBottom: 16,
     gap: 12,
   },
   questionInput: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
-    color: '#111827',
+    color: colors.neutral[900],
     minHeight: 80,
     textAlignVertical: 'top',
   },
@@ -426,7 +427,7 @@ const styles = StyleSheet.create({
   },
   charCount: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   askQuestionButtons: {
     flexDirection: 'row',
@@ -440,10 +441,10 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   submitButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 6,
@@ -451,7 +452,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
 
   // Sort
@@ -464,21 +465,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   sortButtonActive: {
-    backgroundColor: '#F3E8FF',
-    borderColor: '#8B5CF6',
+    backgroundColor: colors.tint.pink,
+    borderColor: colors.brand.purpleLight,
   },
   sortText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   sortTextActive: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 
   // Questions List
@@ -488,11 +489,11 @@ const styles = StyleSheet.create({
 
   // Question Card
   questionCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 12,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   questionHeader: {
     flexDirection: 'row',
@@ -504,7 +505,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -520,7 +521,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   verifiedBadge: {
     flexDirection: 'row',
@@ -530,11 +531,11 @@ const styles = StyleSheet.create({
   verifiedText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   questionText: {
     fontSize: 15,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 22,
   },
   questionFooter: {
@@ -544,24 +545,24 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   answerCount: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 
   // Answers
   answersContainer: {
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    backgroundColor: '#FFF',
+    borderTopColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     padding: 16,
     gap: 12,
   },
   answerCard: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     padding: 12,
     borderRadius: 8,
     gap: 8,
@@ -574,7 +575,7 @@ const styles = StyleSheet.create({
   answerUserName: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   badge: {
     flexDirection: 'row',
@@ -585,19 +586,19 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   storeBadge: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
   },
   verifiedAnswerBadge: {
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
   },
   badgeText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
   answerText: {
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 20,
   },
   answerFooter: {
@@ -612,11 +613,11 @@ const styles = StyleSheet.create({
   },
   helpfulText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   noAnswersText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textAlign: 'center',
     paddingVertical: 16,
   },
@@ -627,19 +628,19 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   answerInput: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
-    color: '#111827',
+    color: colors.neutral[900],
     minHeight: 60,
     textAlignVertical: 'top',
   },
   postAnswerButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
@@ -647,7 +648,7 @@ const styles = StyleSheet.create({
   postAnswerText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.background.primary,
   },
 
   // Empty State
@@ -659,11 +660,11 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 });
 

@@ -10,6 +10,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2; // 2 columns with padding
@@ -61,13 +62,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   const getAvailabilityColor = () => {
     switch (service.availability) {
       case 'available':
-        return '#ffcd57';
+        return colors.lightMustard;
       case 'limited':
-        return '#F59E0B';
+        return colors.warningScale[400];
       case 'unavailable':
-        return '#EF4444';
+        return colors.error;
       default:
-        return '#ffcd57';
+        return colors.lightMustard;
     }
   };
 
@@ -96,7 +97,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           <CachedImage source={service.image} style={styles.image} />
         ) : (
           <View style={[styles.image, styles.imagePlaceholder]}>
-            <Ionicons name="cut-outline" size={32} color="#7C3AED" />
+            <Ionicons name="cut-outline" size={32} color={colors.brand.purple} />
           </View>
         )}
 
@@ -136,7 +137,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         <View style={styles.metaRow}>
           {service.rating !== undefined && (
             <View style={styles.ratingContainer}>
-              <Ionicons name="star" size={14} color="#F59E0B" />
+              <Ionicons name="star" size={14} color={colors.warningScale[400]} />
               <Text style={styles.rating}>{service.rating.toFixed(1)}</Text>
               {service.reviewCount !== undefined && (
                 <Text style={styles.reviewCount}>({service.reviewCount})</Text>
@@ -145,7 +146,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           )}
 
           <View style={styles.durationContainer}>
-            <Ionicons name="time-outline" size={14} color="#6B7280" />
+            <Ionicons name="time-outline" size={14} color={colors.neutral[500]} />
             <Text style={styles.duration}>
               {formatDuration(service.duration)}
             </Text>
@@ -162,7 +163,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
               />
             ) : (
               <View style={[styles.staffImage, styles.staffImagePlaceholder]}>
-                <Ionicons name="person" size={12} color="#7C3AED" />
+                <Ionicons name="person" size={12} color={colors.brand.purple} />
               </View>
             )}
             <Text style={styles.staffName} numberOfLines={1}>
@@ -200,7 +201,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     marginBottom: 16,
     overflow: 'hidden',
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   imagePlaceholder: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   availabilityText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '600',
   },
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   categoryText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 10,
     fontWeight: '600',
   },
@@ -264,12 +265,12 @@ const styles = StyleSheet.create({
   serviceName: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   description: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 16,
     marginBottom: 8,
   },
@@ -287,11 +288,11 @@ const styles = StyleSheet.create({
   rating: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   reviewCount: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   durationContainer: {
     flexDirection: 'row',
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
   },
   duration: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   staffContainer: {
@@ -310,7 +311,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   staffImage: {
     width: 20,
@@ -318,13 +319,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   staffImagePlaceholder: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
   },
   staffName: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     flex: 1,
   },
@@ -339,16 +340,16 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: 9,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginBottom: 2,
   },
   price: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   bookButton: {
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
@@ -356,10 +357,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bookButtonDisabled: {
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
   },
   bookButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 13,
     fontWeight: '700',
   },

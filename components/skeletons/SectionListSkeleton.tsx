@@ -7,6 +7,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 function SectionBlock() {
   return (
@@ -47,7 +48,7 @@ export default function SectionListSkeleton({ sections = 5 }: { sections?: numbe
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 16,
     paddingTop: 16,
   },
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
     paddingBottom: 12,
   },
   sectionHeader: {

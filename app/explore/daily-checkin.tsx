@@ -33,6 +33,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -474,7 +475,7 @@ export default function DailyCheckInPage() {
         {/* Stats */}
         <View style={styles.statsContainer}>
           <View style={[styles.statCard, { backgroundColor: 'rgba(249, 115, 22, 0.1)', borderColor: 'rgba(249, 115, 22, 0.2)' }]}>
-            <Ionicons name="flame" size={20} color="#F97316" />
+            <Ionicons name="flame" size={20} color={colors.brand.orange} />
             <Text style={styles.statValue}>{currentStreak}</Text>
             <Text style={styles.statLabel}>Day streak</Text>
           </View>
@@ -484,7 +485,7 @@ export default function DailyCheckInPage() {
             <Text style={styles.statLabel}>Total earned</Text>
           </View>
           <View style={[styles.statCard, { backgroundColor: 'rgba(139, 92, 246, 0.1)', borderColor: 'rgba(139, 92, 246, 0.2)' }]}>
-            <Ionicons name="trending-up" size={20} color="#8B5CF6" />
+            <Ionicons name="trending-up" size={20} color={colors.brand.purpleLight} />
             <Text style={styles.statValue}>{bestStreak}</Text>
             <Text style={styles.statLabel}>Best streak</Text>
           </View>
@@ -530,7 +531,7 @@ export default function DailyCheckInPage() {
         {!loading && <View style={styles.infoBannerContainer}>
           {checkInStarted ? (
             <LinearGradient
-              colors={[Colors.warning, '#F97316']}
+              colors={[Colors.warning, colors.brand.orange]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.infoBanner}
@@ -651,8 +652,8 @@ export default function DailyCheckInPage() {
                 (hasCheckedInToday || todayReward?.claimed)
                   ? [Colors.gold, Colors.nileBlue]
                   : checkInStarted
-                    ? [Colors.warning, '#D97706']
-                    : [Colors.success, '#16A34A']
+                    ? [Colors.warning, colors.warningScale[700]]
+                    : [Colors.success, colors.brand.greenDark]
               }
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -681,14 +682,14 @@ export default function DailyCheckInPage() {
           {hasCheckedInToday && countdown ? (
             <View style={{ marginTop: Spacing.sm, alignItems: 'center' }}>
               <Text style={{ fontSize: 13, color: Colors.text.tertiary }}>
-                Next check-in in <Text style={{ fontWeight: '700', color: '#F97316' }}>{countdown}</Text>
+                Next check-in in <Text style={{ fontWeight: '700', color: colors.brand.orange }}>{countdown}</Text>
               </Text>
             </View>
           ) : null}
 
           {/* Streak reset notification */}
           {streakWasReset && currentStreak === 1 ? (
-            <View style={{ marginTop: 10, backgroundColor: '#FEF2F2', borderRadius: BorderRadius.sm, padding: 10, flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ marginTop: 10, backgroundColor: colors.errorScale[50], borderRadius: BorderRadius.sm, padding: 10, flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="alert-circle" size={16} color={Colors.error} />
               <Text style={{ flex: 1, marginLeft: Spacing.sm, ...Typography.bodySmall, color: '#991B1B' }}>
                 Your streak was reset because you missed a day. Start building it back!
@@ -876,7 +877,7 @@ export default function DailyCheckInPage() {
                   <View style={styles.submissionStatus}>
                     {submission.status === 'pending' && (
                       <View style={styles.statusBadgePending}>
-                        <Ionicons name="time" size={12} color="#D97706" />
+                        <Ionicons name="time" size={12} color={colors.warningScale[700]} />
                         <Text style={styles.statusTextPending}>Pending</Text>
                       </View>
                     )}
@@ -939,7 +940,7 @@ export default function DailyCheckInPage() {
               const colors = [
                 { bg: 'rgba(59, 130, 246, 0.2)', icon: Colors.info },
                 { bg: 'rgba(139, 92, 246, 0.2)', icon: Colors.nileBlue },
-                { bg: 'rgba(236, 72, 153, 0.2)', icon: '#EC4899' },
+                { bg: 'rgba(236, 72, 153, 0.2)', icon: colors.brand.pink },
               ];
               const colorSet = colors[index % colors.length];
 
@@ -1004,7 +1005,7 @@ export default function DailyCheckInPage() {
         <View style={styles.rewardOverlay}>
           <Animated.View style={{ transform: [{ scale: rewardScaleAnim }], opacity: rewardOpacityAnim }}>
             <LinearGradient
-              colors={[Colors.gold, '#14B8A6']}
+              colors={[Colors.gold, colors.tealGreen]}
               style={styles.rewardCard}
             >
               <CachedImage source={BRAND.COIN_IMAGE} style={{ width: 64, height: 64 }} contentFit="contain" />
@@ -1417,7 +1418,7 @@ const styles = StyleSheet.create({
   },
   affiliateTipText: {
     ...Typography.bodySmall,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     lineHeight: 18,
   },
   affiliateTipBold: {
@@ -1433,7 +1434,7 @@ const styles = StyleSheet.create({
   requiredBadgeText: {
     ...Typography.caption,
     fontWeight: '600',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   postersGrid: {
     flexDirection: 'row',
@@ -1547,7 +1548,7 @@ const styles = StyleSheet.create({
   statusTextPending: {
     ...Typography.caption,
     fontWeight: '600',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   statusBadgeApproved: {
     flexDirection: 'row',
@@ -1607,7 +1608,7 @@ const styles = StyleSheet.create({
   },
   submissionFooterPendingText: {
     ...Typography.caption,
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   streakList: {
     gap: Spacing.sm,
@@ -1881,7 +1882,7 @@ const styles = StyleSheet.create({
   },
   submitInfoText: {
     ...Typography.bodySmall,
-    color: '#B45309',
+    color: colors.brand.amberDeep,
     textAlign: 'center',
   },
   submitButtons: {

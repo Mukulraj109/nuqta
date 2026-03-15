@@ -16,6 +16,7 @@ import { productApi, HomepageProduct } from '@/services/productApi';
 import { Ionicons } from '@expo/vector-icons';
 import { useCurrentRegion, useRegion } from '@/contexts/RegionContext';
 import { formatPrice } from '@/utils/priceFormatter';
+import { colors } from '@/constants/theme';
 
 interface PopularProductsSectionProps {
   title?: string;
@@ -134,7 +135,7 @@ function PopularProductsSection({
             {/* Nuqta Coins Info - Below */}
             <View style={styles.rewardRow}>
               <View style={styles.coinsBadge}>
-                <Ionicons name="star-outline" size={10} color="#ffcd57" />
+                <Ionicons name="star-outline" size={10} color={colors.lightMustard} />
                 <ThemedText style={styles.coinsText}>
                   {`Earn ${nuqtaCoins} ${BRAND.COIN_NAME}`}
                 </ThemedText>
@@ -164,14 +165,14 @@ function PopularProductsSection({
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Ionicons name="heart-outline" size={20} color="#ffcd57" style={styles.heartIcon} />
+        <Ionicons name="heart-outline" size={20} color={colors.lightMustard} style={styles.heartIcon} />
         <ThemedText style={styles.title}>{title}</ThemedText>
       </View>
 
       {/* Content */}
       {loading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#ffcd57" />
+          <ActivityIndicator size="small" color={colors.lightMustard} />
         </View>
       ) : error ? (
         <View style={styles.errorContainer}>
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   listContent: {
     paddingHorizontal: 16,
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 8,
     overflow: 'hidden',
     borderWidth: 1,
@@ -250,7 +251,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: 50,
     height: 50,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 6,
     overflow: 'hidden',
     marginRight: 10,
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 3,
     lineHeight: 18,
   },
@@ -278,16 +279,16 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   metaSeparator: {
     fontSize: 11,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginHorizontal: 2,
   },
   deliveryFee: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   rewardRow: {
     marginTop: 1,
@@ -295,7 +296,7 @@ const styles = StyleSheet.create({
   coinsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFBEB',
+    backgroundColor: colors.tint.amber,
     paddingHorizontal: 5,
     paddingVertical: 2,
     borderRadius: 4,
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
   coinsText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     marginLeft: 3,
   },
   cashbackContainer: {
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
   cashbackPercentage: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   loadingContainer: {
     height: 200,
@@ -332,12 +333,12 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#EF4444',
+    color: colors.error,
     marginBottom: 8,
     textAlign: 'center',
   },
   retryButton: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
   retryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

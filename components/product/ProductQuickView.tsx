@@ -22,6 +22,7 @@ import { useToast } from '@/hooks/useToast';
 import productsApi from '@/services/productsApi';
 import { VariantSelection } from '@/components/cart/ProductVariantModal';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -291,7 +292,7 @@ function ProductQuickView({
             <Ionicons
               name={isInWishlist(product.id) ? 'heart' : 'heart-outline'}
               size={24}
-              color={isInWishlist(product.id) ? '#EF4444' : '#1F2937'}
+              color={isInWishlist(product.id) ? colors.error : colors.neutral[800]}
             />
           </Pressable>
 
@@ -300,7 +301,7 @@ function ProductQuickView({
             onPress={handleShare}
            
           >
-            <Ionicons name="share-social-outline" size={24} color="#1F2937" />
+            <Ionicons name="share-social-outline" size={24} color={colors.neutral[800]} />
           </Pressable>
         </View>
       </View>
@@ -412,7 +413,7 @@ function ProductQuickView({
     if (loading) {
       return (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#7C3AED" />
+          <ActivityIndicator size="large" color={colors.brand.purple} />
           <Text style={styles.loadingText}>Loading product...</Text>
         </View>
       );
@@ -421,7 +422,7 @@ function ProductQuickView({
     if (error || !product) {
       return (
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle-outline" size={48} color="#EF4444" />
+          <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
           <Text style={styles.errorText}>{error || 'Product not found'}</Text>
           <Pressable style={styles.retryButton} onPress={loadProductDetails}>
             <Text style={styles.retryButtonText}>Retry</Text>
@@ -453,7 +454,7 @@ function ProductQuickView({
             {/* Rating */}
             {product.rating && (
               <View style={styles.ratingContainer}>
-                <Ionicons name="star" size={16} color="#FBBF24" />
+                <Ionicons name="star" size={16} color={colors.warningScale[400]} />
                 <Text style={styles.ratingText}>
                   {typeof product.rating.value === 'string'
                     ? product.rating.value
@@ -504,7 +505,7 @@ function ProductQuickView({
                   <Ionicons
                     name="remove"
                     size={20}
-                    color={quantity <= 1 ? '#D1D5DB' : '#1F2937'}
+                    color={quantity <= 1 ? colors.neutral[300] : colors.neutral[800]}
                   />
                 </Pressable>
                 <Text style={styles.quantityText}>{quantity}</Text>
@@ -516,7 +517,7 @@ function ProductQuickView({
                   <Ionicons
                     name="add"
                     size={20}
-                    color={quantity >= 10 ? '#D1D5DB' : '#1F2937'}
+                    color={quantity >= 10 ? colors.neutral[300] : colors.neutral[800]}
                   />
                 </Pressable>
               </View>
@@ -553,7 +554,7 @@ function ProductQuickView({
                
               >
                 <Text style={styles.viewDetailsText}>View Full Details</Text>
-                <Ionicons name="arrow-forward" size={16} color="#7C3AED" />
+                <Ionicons name="arrow-forward" size={16} color={colors.brand.purple} />
               </Pressable>
             )}
           </View>
@@ -572,10 +573,10 @@ function ProductQuickView({
            
           >
             {addingToCart ? (
-              <ActivityIndicator size="small" color="#FFFFFF" />
+              <ActivityIndicator size="small" color={colors.background.primary} />
             ) : (
               <>
-                <Ionicons name="cart-outline" size={20} color="#FFFFFF" />
+                <Ionicons name="cart-outline" size={20} color={colors.background.primary} />
                 <Text style={styles.addToCartText}>
                   {product.availabilityStatus === 'out_of_stock'
                     ? 'Out of Stock'
@@ -630,7 +631,7 @@ function ProductQuickView({
               onPress={handleClose}
              
             >
-              <Ionicons name="close" size={28} color="#1F2937" />
+              <Ionicons name="close" size={28} color={colors.neutral[800]} />
             </Pressable>
           </View>
 
@@ -655,7 +656,7 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     width: SCREEN_WIDTH,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -675,9 +676,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === 'ios' ? 60 : 20,
     paddingBottom: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   closeButton: {
     padding: 8,
@@ -691,7 +692,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   errorContainer: {
     flex: 1,
@@ -702,24 +703,24 @@ const styles = StyleSheet.create({
   errorText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
   },
   retryButton: {
     marginTop: 24,
     paddingHorizontal: 24,
     paddingVertical: 12,
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     borderRadius: 8,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: '600',
   },
   imageCarousel: {
     height: 300,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   productImage: {
     width: SCREEN_WIDTH,
@@ -742,7 +743,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 3,
   },
   activeIndicator: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     width: 20,
   },
   imageActions: {
@@ -756,7 +757,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     ...Platform.select({
@@ -779,7 +780,7 @@ const styles = StyleSheet.create({
   },
   brandName: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     marginBottom: 4,
     textTransform: 'uppercase',
@@ -788,7 +789,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 12,
     lineHeight: 28,
   },
@@ -800,12 +801,12 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginLeft: 4,
   },
   ratingCount: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginLeft: 4,
   },
   priceSection: {
@@ -817,23 +818,23 @@ const styles = StyleSheet.create({
   currentPrice: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     marginRight: 12,
   },
   originalPrice: {
     fontSize: 18,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     textDecorationLine: 'line-through',
     marginRight: 8,
   },
   discountBadge: {
-    backgroundColor: '#EF4444',
+    backgroundColor: colors.error,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
   },
   discountText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 12,
     fontWeight: '700',
   },
@@ -845,18 +846,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inStock: {
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
   },
   lowStock: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
   },
   outOfStock: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
   },
   stockBadgeText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   variantSection: {
     marginBottom: 20,
@@ -867,7 +868,7 @@ const styles = StyleSheet.create({
   variantLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 10,
   },
   variantOptions: {
@@ -880,34 +881,34 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     borderWidth: 1.5,
-    borderColor: '#E5E7EB',
-    backgroundColor: '#FFFFFF',
+    borderColor: colors.neutral[200],
+    backgroundColor: colors.background.primary,
     minWidth: 50,
     alignItems: 'center',
   },
   selectedSizeOption: {
-    borderColor: '#7C3AED',
-    backgroundColor: '#F3E8FF',
+    borderColor: colors.brand.purple,
+    backgroundColor: colors.tint.pink,
   },
   sizeText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   selectedSizeText: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
   colorOption: {
     width: 44,
     height: 44,
     borderRadius: 22,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     justifyContent: 'center',
     alignItems: 'center',
   },
   selectedColorOption: {
-    borderColor: '#7C3AED',
+    borderColor: colors.brand.purple,
     borderWidth: 3,
   },
   colorSwatch: {
@@ -918,7 +919,7 @@ const styles = StyleSheet.create({
   colorText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   quantitySection: {
     flexDirection: 'row',
@@ -928,17 +929,17 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
   },
   quantityLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   quantityControls: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderRadius: 8,
     padding: 4,
   },
@@ -946,14 +947,14 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   quantityText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginHorizontal: 20,
     minWidth: 30,
     textAlign: 'center',
@@ -964,17 +965,17 @@ const styles = StyleSheet.create({
   descriptionLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 8,
   },
   descriptionText: {
     fontSize: 14,
     lineHeight: 22,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   readMoreText: {
     fontSize: 14,
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '600',
     marginTop: 8,
   },
@@ -985,14 +986,14 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 8,
     borderWidth: 1.5,
-    borderColor: '#7C3AED',
+    borderColor: colors.brand.purple,
     marginTop: 12,
     marginBottom: 100,
   },
   viewDetailsText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     marginRight: 6,
   },
   bottomBar: {
@@ -1001,9 +1002,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -1020,13 +1021,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     paddingVertical: 16,
     borderRadius: 12,
     gap: 8,
     ...Platform.select({
       ios: {
-        shadowColor: '#7C3AED',
+        shadowColor: colors.brand.purple,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -1037,11 +1038,11 @@ const styles = StyleSheet.create({
     }),
   },
   addToCartButtonDisabled: {
-    backgroundColor: '#9CA3AF',
+    backgroundColor: colors.neutral[400],
     opacity: 0.6,
   },
   addToCartText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 16,
     fontWeight: '700',
     letterSpacing: 0.5,

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { colors } from '@/constants/theme';
 
 export interface CountdownResult {
   days: number;
@@ -202,13 +203,13 @@ export function getUrgencyColor(urgencyLevel: CountdownResult['urgencyLevel']): 
     case 'expired':
       return '#9CA3AF'; // Gray
     case 'critical':
-      return '#EF4444'; // Red
+      return colors.error; // Red
     case 'warning':
       return '#F59E0B'; // Orange
     case 'normal':
       return '#10B981'; // Green
     default:
-      return '#6B7280'; // Default gray
+      return colors.neutral[500]; // Default gray
   }
 }
 

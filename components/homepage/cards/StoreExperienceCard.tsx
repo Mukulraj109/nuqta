@@ -20,6 +20,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { colors } from '@/constants/theme';
 
 const AnimatedTouchable = Animated.createAnimatedComponent(Pressable);
 
@@ -42,7 +43,7 @@ const StoreExperienceCard: React.FC<StoreExperienceCardProps> = memo(({
   buttonText,
   gradientColors,
   storeType,
-  buttonTextColor = '#000',
+  buttonTextColor = colors.text.primary,
 }) => {
   const router = useRouter();
   const scale = useSharedValue(1);
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   subtitle: {
     fontSize: 14,
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: 'flex-start',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,

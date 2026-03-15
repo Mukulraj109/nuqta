@@ -18,6 +18,7 @@ import { useOffersTheme } from '@/contexts/OffersThemeContext';
 import { useRegion } from '@/contexts/RegionContext';
 import { DiscountBadge } from '../common/DiscountBadge';
 import { Typography, Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface OfferCardDefaultProps {
   id: string;
@@ -61,10 +62,10 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
   const styles = StyleSheet.create({
     container: {
       width: 220,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 1,
-      borderColor: isDark ? theme.colors.border.light : '#E5E7EB',
+      borderColor: isDark ? theme.colors.border.light : colors.neutral[200],
       overflow: 'hidden',
       ...(isDark ? {} : Shadows.medium),
     },
@@ -95,13 +96,13 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
     newBadgeText: {
       fontSize: 10,
       fontWeight: '700',
-      color: '#FFFFFF',
+      color: colors.background.primary,
       marginLeft: 3,
     },
     trendingBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#EF4444',
+      backgroundColor: colors.error,
       paddingHorizontal: 8,
       paddingVertical: 4,
       borderRadius: 6,
@@ -109,7 +110,7 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
     trendingBadgeText: {
       fontSize: 10,
       fontWeight: '700',
-      color: '#FFFFFF',
+      color: colors.background.primary,
       marginLeft: 3,
     },
     cashbackBadge: {
@@ -126,7 +127,7 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
     cashbackText: {
       fontSize: 10,
       fontWeight: '700',
-      color: '#FFFFFF',
+      color: colors.background.primary,
     },
     storeLogoContainer: {
       position: 'absolute',
@@ -135,9 +136,9 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
       width: 44,
       height: 44,
       borderRadius: 10,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.background.primary,
       borderWidth: 2,
-      borderColor: '#FFFFFF',
+      borderColor: colors.background.primary,
       overflow: 'hidden',
       ...Shadows.subtle,
       alignItems: 'center',
@@ -155,7 +156,7 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
       justifyContent: 'center',
     },
     storeLogoText: {
-      color: '#FFFFFF',
+      color: colors.background.primary,
       fontSize: 18,
       fontWeight: '700',
     },
@@ -195,7 +196,7 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
       flex: 1,
     },
     freeDeliveryBadge: {
-      backgroundColor: '#faf1e0',
+      backgroundColor: colors.linen,
       paddingHorizontal: 6,
       paddingVertical: 3,
       borderRadius: 4,
@@ -204,7 +205,7 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
     freeDeliveryText: {
       fontSize: 9,
       fontWeight: '700',
-      color: '#1a3a52',
+      color: colors.nileBlue,
     },
     deliveryText: {
       fontSize: 11,
@@ -214,7 +215,7 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
     ratingContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FEF3C7',
+      backgroundColor: colors.tint.amberLight,
       paddingHorizontal: 6,
       paddingVertical: 3,
       borderRadius: 4,
@@ -222,7 +223,7 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
     ratingText: {
       fontSize: 11,
       fontWeight: '700',
-      color: '#D97706',
+      color: colors.warningScale[700],
       marginLeft: 2,
     },
   });
@@ -244,13 +245,13 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
         <View style={styles.badgeContainer}>
           {isNew && (
             <View style={styles.newBadge}>
-              <Ionicons name="sparkles" size={10} color="#FFFFFF" />
+              <Ionicons name="sparkles" size={10} color={colors.background.primary} />
               <Text style={styles.newBadgeText}>NEW</Text>
             </View>
           )}
           {isTrending && !isNew && (
             <View style={styles.trendingBadge}>
-              <Ionicons name="trending-up" size={10} color="#FFFFFF" />
+              <Ionicons name="trending-up" size={10} color={colors.background.primary} />
               <Text style={styles.trendingBadgeText}>HOT</Text>
             </View>
           )}
@@ -316,7 +317,7 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
 
           {rating && (
             <View style={styles.ratingContainer}>
-              <Ionicons name="star" size={10} color="#D97706" />
+              <Ionicons name="star" size={10} color={colors.warningScale[700]} />
               <Text style={styles.ratingText}>{rating.toFixed(1)}</Text>
             </View>
           )}

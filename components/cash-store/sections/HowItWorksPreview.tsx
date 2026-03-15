@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface HowItWorksPreviewProps {
   onLearnMore: () => void;
@@ -27,36 +28,36 @@ const STEPS = [
     icon: 'search',
     title: 'Browse',
     description: 'Find your favorite brand',
-    color: '#1a3a52',
-    gradient: ['#1a3a52', '#243f55'],
-    iconColor: '#FFFFFF',
+    color: colors.nileBlue,
+    gradient: [colors.nileBlue, '#243f55'],
+    iconColor: colors.background.primary,
   },
   {
     id: 2,
     icon: 'cart',
     title: 'Shop',
     description: 'Click through to shop',
-    color: '#E8B896',
-    gradient: ['#ffd7b5', '#E8B896'],
-    iconColor: '#1a3a52',
+    color: colors.brand.sand,
+    gradient: [colors.lightPeach, colors.brand.sand],
+    iconColor: colors.nileBlue,
   },
   {
     id: 3,
     icon: 'bag-check',
     title: 'Purchase',
     description: 'Complete your order',
-    color: '#E8B896',
-    gradient: ['#E8B896', '#D4A07A'],
-    iconColor: '#FFFFFF',
+    color: colors.brand.sand,
+    gradient: [colors.brand.sand, colors.brand.caramel],
+    iconColor: colors.background.primary,
   },
   {
     id: 4,
     icon: 'wallet',
     title: 'Earn',
     description: 'Get cashback credited',
-    color: '#1a3a52',
-    gradient: ['#243f55', '#1a3a52'],
-    iconColor: '#FFFFFF',
+    color: colors.nileBlue,
+    gradient: ['#243f55', colors.nileBlue],
+    iconColor: colors.background.primary,
   },
 ];
 
@@ -120,7 +121,7 @@ const StepItem: React.FC<{
       {/* Step Icon with Gradient */}
       <Animated.View style={{ transform: [{ translateY: iconBounceAnim }] }}>
         <LinearGradient colors={step.gradient} style={styles.stepIconContainer}>
-          <Ionicons name={step.icon as any} size={22} color={step.iconColor || '#FFFFFF'} />
+          <Ionicons name={step.icon as any} size={22} color={step.iconColor || colors.background.primary} />
         </LinearGradient>
       </Animated.View>
 
@@ -187,7 +188,7 @@ const HowItWorksPreview: React.FC<HowItWorksPreviewProps> = ({ onLearnMore }) =>
   return (
     <Animated.View style={[styles.container, { opacity: containerFadeAnim }]}>
       <LinearGradient
-        colors={['#faf1e0', '#faf1e0', '#FFFFFF']}
+        colors={[colors.linen, colors.linen, colors.background.primary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.gradient}
@@ -200,16 +201,16 @@ const HowItWorksPreview: React.FC<HowItWorksPreviewProps> = ({ onLearnMore }) =>
         <View style={styles.header}>
           <View style={styles.titleRow}>
             <LinearGradient
-              colors={['#ffd7b5', '#E8B896']}
+              colors={[colors.lightPeach, colors.brand.sand]}
               style={styles.headerIconContainer}
             >
-              <Ionicons name="help-circle" size={18} color="#FFFFFF" />
+              <Ionicons name="help-circle" size={18} color={colors.background.primary} />
             </LinearGradient>
             <Text style={styles.title}>How It Works</Text>
           </View>
           <Pressable onPress={onLearnMore} style={styles.learnMoreButton}>
             <Text style={styles.learnMoreText}>Learn More</Text>
-            <Ionicons name="chevron-forward" size={14} color="#E8B896" />
+            <Ionicons name="chevron-forward" size={14} color={colors.brand.sand} />
           </Pressable>
         </View>
 
@@ -227,7 +228,7 @@ const HowItWorksPreview: React.FC<HowItWorksPreviewProps> = ({ onLearnMore }) =>
 
         {/* Info Box */}
         <View style={styles.infoBox}>
-          <Ionicons name="information-circle" size={16} color="#E8B896" />
+          <Ionicons name="information-circle" size={16} color={colors.brand.sand} />
           <Text style={styles.infoText}>
             Cashback is typically credited within 24-72 hours after delivery
           </Text>
@@ -236,14 +237,14 @@ const HowItWorksPreview: React.FC<HowItWorksPreviewProps> = ({ onLearnMore }) =>
         {/* CTA Button */}
         <Pressable style={styles.ctaButton} onPress={onLearnMore}>
           <LinearGradient
-            colors={['#1a3a52', '#234b68']}
+            colors={[colors.nileBlue, colors.brand.nileBlueLight]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.ctaGradient}
           >
             <Text style={styles.ctaText}>See Detailed Guide</Text>
             <Animated.View style={{ transform: [{ translateX: arrowAnim }] }}>
-              <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={18} color={colors.background.primary} />
             </Animated.View>
           </LinearGradient>
         </Pressable>
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     marginTop: 8,
     marginHorizontal: 16,
     borderRadius: 24,
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffd7b5',
+        shadowColor: colors.lightPeach,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
         shadowRadius: 12,
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: -0.3,
   },
   learnMoreButton: {
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
   learnMoreText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#E8B896',
+    color: colors.brand.sand,
   },
   stepsContainer: {
     flexDirection: 'row',
@@ -386,7 +387,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: colors.background.primary,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -402,18 +403,18 @@ const styles = StyleSheet.create({
   stepNumberText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   stepTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     marginBottom: 4,
     textAlign: 'center',
   },
   stepDescription: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
     textAlign: 'center',
     lineHeight: 14,
     fontWeight: '500',
@@ -429,7 +430,7 @@ const styles = StyleSheet.create({
   },
   connector: {
     height: 3,
-    backgroundColor: '#ffd7b5',
+    backgroundColor: colors.lightPeach,
     borderRadius: 2,
   },
   connectorDot: {
@@ -438,7 +439,7 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#ffd7b5',
+    backgroundColor: colors.lightPeach,
   },
   infoBox: {
     flexDirection: 'row',
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 12,
-    color: '#1a3a52',
+    color: colors.nileBlue,
     fontWeight: '500',
     lineHeight: 16,
   },
@@ -462,7 +463,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#ffd7b5',
+        shadowColor: colors.lightPeach,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -483,7 +484,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     letterSpacing: -0.2,
   },
 });

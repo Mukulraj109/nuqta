@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRegion } from '@/contexts/RegionContext';
 import { experiencesApi, StoreExperience } from '@/services/experiencesApi';
+import { colors } from '@/constants/theme';
 
 interface ExperiencesSectionProps {
   categorySlug: string;
@@ -27,12 +28,12 @@ const DEFAULT_EXPERIENCE_BENEFITS = [
 ];
 
 const COLORS = {
-  primaryGreen: '#ffcd57',
-  primaryGold: '#F59E0B',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
+  primaryGreen: colors.lightMustard,
+  primaryGold: colors.warningScale[400],
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
 };
 
 const EXPERIENCE_TYPE_ICONS: Record<string, string> = {
@@ -135,7 +136,7 @@ function ExperiencesSection({ categorySlug, pageConfig }: ExperiencesSectionProp
       {/* Experience Types Carousel */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Ionicons name="sparkles" size={20} color="#F59E0B" />
+          <Ionicons name="sparkles" size={20} color={colors.warningScale[400]} />
           <Text style={styles.sectionTitle}>Explore Experiences</Text>
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.typesList}>
@@ -179,7 +180,7 @@ function ExperiencesSection({ categorySlug, pageConfig }: ExperiencesSectionProp
               onPress={() => handleExperiencePress(experience)}
             >
               <LinearGradient
-                colors={(experience.backgroundColor ? [experience.backgroundColor, experience.backgroundColor + '80'] : ['#F59E0B20', '#F97316'] ) as any}
+                colors={(experience.backgroundColor ? [experience.backgroundColor, experience.backgroundColor + '80'] : ['#F59E0B20', colors.brand.orange] ) as any}
                 style={styles.experienceCardGradient}
               >
                 <View style={styles.experienceCardContent}>
@@ -203,7 +204,7 @@ function ExperiencesSection({ categorySlug, pageConfig }: ExperiencesSectionProp
                   <View style={styles.benefitsList}>
                     {experience.benefits.slice(0, 2).map((benefit, i) => (
                       <View key={i} style={styles.benefitItem}>
-                        <Ionicons name="checkmark-circle" size={14} color="#22C55E" />
+                        <Ionicons name="checkmark-circle" size={14} color={colors.success} />
                         <Text style={styles.benefitText}>{benefit}</Text>
                       </View>
                     ))}

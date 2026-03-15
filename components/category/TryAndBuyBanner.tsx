@@ -15,6 +15,7 @@ import {
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface TryAndBuyBannerProps {
   categorySlug?: string;
@@ -45,7 +46,7 @@ const TryAndBuyBanner: React.FC<TryAndBuyBannerProps> = ({
      
     >
       <LinearGradient
-        colors={['#F59E0B', '#D97706']}
+        colors={[colors.warningScale[400], colors.warningScale[700]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.gradient}
@@ -53,7 +54,7 @@ const TryAndBuyBanner: React.FC<TryAndBuyBannerProps> = ({
         <View style={styles.content}>
           {/* Icon */}
           <View style={styles.iconContainer}>
-            <Ionicons name="flash" size={28} color="#FFFFFF" />
+            <Ionicons name="flash" size={28} color={colors.background.primary} />
           </View>
 
           {/* Text */}
@@ -67,7 +68,7 @@ const TryAndBuyBanner: React.FC<TryAndBuyBannerProps> = ({
           {/* Button */}
           <View style={styles.ctaButton}>
             <Text style={styles.ctaText}>Explore</Text>
-            <Ionicons name="arrow-forward" size={14} color="#D97706" />
+            <Ionicons name="arrow-forward" size={14} color={colors.warningScale[700]} />
           </View>
         </View>
       </LinearGradient>
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#F59E0B',
+        shadowColor: colors.warningScale[400],
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 3,
   },
   description: {
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 10,
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
 });
 

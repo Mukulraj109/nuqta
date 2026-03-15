@@ -21,6 +21,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { colors } from '@/constants/theme';
 
 const CashStorePromoBanner: React.FC = () => {
   const router = useRouter();
@@ -102,7 +103,7 @@ const CashStorePromoBanner: React.FC = () => {
         ]}
       >
         <LinearGradient
-          colors={['#1a3a52', '#1f3d56', '#234b68']}
+          colors={[colors.nileBlue, '#1f3d56', colors.brand.nileBlueLight]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.banner}
@@ -121,12 +122,12 @@ const CashStorePromoBanner: React.FC = () => {
             ]}
           >
             <LinearGradient
-              colors={['#ffcd57', '#E8B896']}
+              colors={[colors.lightMustard, colors.brand.sand]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.hotDealGradient}
             >
-              <Ionicons name="flash" size={11} color="#1a3a52" />
+              <Ionicons name="flash" size={11} color={colors.nileBlue} />
               <Text style={styles.hotDealText}>HOT DEAL</Text>
             </LinearGradient>
           </Animated.View>
@@ -148,7 +149,7 @@ const CashStorePromoBanner: React.FC = () => {
                
               >
                 <LinearGradient
-                  colors={['#ffcd57', '#E8B896']}
+                  colors={[colors.lightMustard, colors.brand.sand]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.ctaGradient}
@@ -156,7 +157,7 @@ const CashStorePromoBanner: React.FC = () => {
                   <Text style={styles.ctaText}>Start Shopping</Text>
                   <Animated.View style={{ transform: [{ translateX: arrowAnim }] }}>
                     <View style={styles.ctaArrow}>
-                      <Ionicons name="arrow-forward" size={14} color="#1a3a52" />
+                      <Ionicons name="arrow-forward" size={14} color={colors.nileBlue} />
                     </View>
                   </Animated.View>
                 </LinearGradient>
@@ -169,7 +170,7 @@ const CashStorePromoBanner: React.FC = () => {
                 colors={['rgba(255,205,87,0.2)', 'rgba(255,205,87,0.08)']}
                 style={styles.iconBackground}
               >
-                <Ionicons name="cart" size={36} color="#ffcd57" />
+                <Ionicons name="cart" size={36} color={colors.lightMustard} />
               </LinearGradient>
             </View>
           </View>
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowColor: '#1a3a52',
+        shadowColor: colors.nileBlue,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.35,
         shadowRadius: 16,
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
   hotDealText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     letterSpacing: 0.5,
   },
   contentContainer: {
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 21,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: colors.background.primary,
     marginBottom: 8,
     lineHeight: 27,
     letterSpacing: -0.3,
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   ctaArrow: {
     width: 28,

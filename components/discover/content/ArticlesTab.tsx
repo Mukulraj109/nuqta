@@ -16,16 +16,17 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { DiscoverArticle } from '@/types/discover.types';
+import { colors } from '@/constants/theme';
 
 // Nuqta Brand Colors
 const NUQTA_COLORS = {
-  nileBlue: '#1a3a52',
+  nileBlue: colors.nileBlue,
   nileBlueLight: '#2a4a62',
-  mustard: '#ffcd57',
-  primaryGold: '#FFC857',
-  navy: '#0B2240',
-  gray: '#6B7280',
-  lightGray: '#F3F4F6',
+  mustard: colors.lightMustard,
+  primaryGold: colors.brand.goldWarm,
+  navy: colors.brand.navyDark,
+  gray: colors.neutral[500],
+  lightGray: colors.neutral[100],
 };
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -107,7 +108,7 @@ function ArticlesTab({
           {/* Product count badge */}
           {productCount > 0 && (
             <View style={styles.productBadge}>
-              <Ionicons name="bag-handle" size={12} color="#FFFFFF" />
+              <Ionicons name="bag-handle" size={12} color={colors.background.primary} />
               <Text style={styles.productBadgeText}>{productCount} Products</Text>
             </View>
           )}
@@ -142,7 +143,7 @@ function ArticlesTab({
 
             {/* Read time */}
             <View style={styles.readTime}>
-              <Ionicons name="time-outline" size={12} color="#9CA3AF" />
+              <Ionicons name="time-outline" size={12} color={colors.neutral[400]} />
               <Text style={styles.readTimeText}>{item.readTime || 5} min</Text>
             </View>
           </View>
@@ -150,15 +151,15 @@ function ArticlesTab({
           {/* Stats */}
           <View style={styles.stats}>
             <View style={styles.statItem}>
-              <Ionicons name="eye-outline" size={14} color="#9CA3AF" />
+              <Ionicons name="eye-outline" size={14} color={colors.neutral[400]} />
               <Text style={styles.statText}>{formatCount(item.engagement?.views || 0)}</Text>
             </View>
             <View style={styles.statItem}>
-              <Ionicons name="heart-outline" size={14} color="#9CA3AF" />
+              <Ionicons name="heart-outline" size={14} color={colors.neutral[400]} />
               <Text style={styles.statText}>{formatCount(item.engagement?.likes || 0)}</Text>
             </View>
             <View style={styles.statItem}>
-              <Ionicons name="bookmark-outline" size={14} color="#9CA3AF" />
+              <Ionicons name="bookmark-outline" size={14} color={colors.neutral[400]} />
               <Text style={styles.statText}>{formatCount(item.engagement?.bookmarks || 0)}</Text>
             </View>
             {item.publishedAt && (
@@ -189,7 +190,7 @@ function ArticlesTab({
     if (!loading || data.length === 0) return null;
     return (
       <View style={styles.footerLoader}>
-        <ActivityIndicator size="small" color="#1a3a52" />
+        <ActivityIndicator size="small" color={colors.nileBlue} />
       </View>
     );
   }, [loading, data.length]);
@@ -213,7 +214,7 @@ function ArticlesTab({
           colors={[NUQTA_COLORS.nileBlue, NUQTA_COLORS.nileBlueLight]}
           style={styles.emptyIconContainer}
         >
-          <Ionicons name="document-text" size={40} color="#FFFFFF" />
+          <Ionicons name="document-text" size={40} color={colors.background.primary} />
         </LinearGradient>
         <Text style={styles.emptyTitle}>No Articles Yet</Text>
         <Text style={styles.emptyText}>
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     marginBottom: 16,
     shadowColor: '#000',
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     height: 180,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     position: 'relative',
   },
   image: {
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   categoryText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '600',
     textTransform: 'capitalize',
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   productBadgeText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 11,
     fontWeight: '600',
   },
@@ -309,13 +310,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     lineHeight: 22,
     marginBottom: 8,
   },
   excerpt: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 20,
     marginBottom: 12,
   },
@@ -338,7 +339,7 @@ const styles = StyleSheet.create({
   },
   authorName: {
     fontSize: 13,
-    color: '#4B5563',
+    color: colors.neutral[600],
     fontWeight: '500',
     maxWidth: 120,
   },
@@ -349,7 +350,7 @@ const styles = StyleSheet.create({
   },
   readTimeText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   stats: {
     flexDirection: 'row',
@@ -357,7 +358,7 @@ const styles = StyleSheet.create({
     gap: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   statItem: {
     flexDirection: 'row',
@@ -366,11 +367,11 @@ const styles = StyleSheet.create({
   },
   statText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
   dateText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginLeft: 'auto',
   },
   tagsContainer: {
@@ -380,14 +381,14 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   tag: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
   },
   tagText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   footerLoader: {
     paddingVertical: 20,

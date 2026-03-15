@@ -16,6 +16,7 @@ import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -68,64 +69,64 @@ const SaveAndEarnScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
                 {/* Discount Applied */}
                 <Animated.View style={[styles.card, discountStyle]}>
                     <LinearGradient
-                        colors={['#FEF3C7', '#FDE68A']}
+                        colors={[colors.tint.amberLight, colors.warningScale[200]]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                         style={styles.cardGradient}
                     >
                         <View style={styles.cardIcon}>
-                            <Ionicons name="pricetag" size={28} color="#F59E0B" />
+                            <Ionicons name="pricetag" size={28} color={colors.warningScale[400]} />
                         </View>
                         <View style={styles.cardContent}>
                             <Text style={styles.cardLabel}>Discount Applied</Text>
-                            <Text style={[styles.cardValue, { color: '#B45309' }]}>- {currencySymbol}75 OFF</Text>
+                            <Text style={[styles.cardValue, { color: colors.brand.amberDeep }]}>- {currencySymbol}75 OFF</Text>
                         </View>
-                        <Ionicons name="checkmark-circle" size={24} color="#F59E0B" />
+                        <Ionicons name="checkmark-circle" size={24} color={colors.warningScale[400]} />
                     </LinearGradient>
                 </Animated.View>
 
                 {/* Cashback Earned */}
                 <Animated.View style={[styles.card, cashbackStyle]}>
                     <LinearGradient
-                        colors={['#faf1e0', '#ffd7b5']}
+                        colors={[colors.linen, colors.lightPeach]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                         style={styles.cardGradient}
                     >
                         <View style={styles.cardIcon}>
-                            <Ionicons name="cash" size={28} color="#1a3a52" />
+                            <Ionicons name="cash" size={28} color={colors.nileBlue} />
                         </View>
                         <View style={styles.cardContent}>
                             <Text style={styles.cardLabel}>Cashback Earned</Text>
                             <Text style={[styles.cardValue, { color: '#047857' }]}>+ {currencySymbol}50</Text>
                         </View>
-                        <Ionicons name="checkmark-circle" size={24} color="#1a3a52" />
+                        <Ionicons name="checkmark-circle" size={24} color={colors.nileBlue} />
                     </LinearGradient>
                 </Animated.View>
 
                 {/* Coins Added */}
                 <Animated.View style={[styles.card, coinsStyle]}>
                     <LinearGradient
-                        colors={['#EDE9FE', '#DDD6FE']}
+                        colors={[colors.tint.purple, '#DDD6FE']}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                         style={styles.cardGradient}
                     >
                         <View style={styles.cardIcon}>
-                            <Ionicons name="layers" size={28} color="#7C3AED" />
+                            <Ionicons name="layers" size={28} color={colors.brand.purple} />
                         </View>
                         <View style={styles.cardContent}>
                             <Text style={styles.cardLabel}>{BRAND.COIN_NAME} Added</Text>
-                            <Text style={[styles.cardValue, { color: '#6D28D9' }]}>+ 35 Coins</Text>
+                            <Text style={[styles.cardValue, { color: colors.brand.purpleDeep }]}>+ 35 Coins</Text>
                         </View>
-                        <Ionicons name="checkmark-circle" size={24} color="#7C3AED" />
+                        <Ionicons name="checkmark-circle" size={24} color={colors.brand.purple} />
                     </LinearGradient>
                 </Animated.View>
 
                 {/* Total Savings */}
                 <Animated.View style={[styles.totalCard, totalStyle]}>
                     <LinearGradient
-                        colors={['#1F2937', '#374151']}
+                        colors={[colors.neutral[800], colors.neutral[700]]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                         style={styles.totalGradient}
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
     },
     cardLabel: {
         fontSize: 14,
-        color: '#4B5563',
+        color: colors.neutral[600],
         marginBottom: 4,
     },
     cardValue: {
@@ -220,18 +221,18 @@ const styles = StyleSheet.create({
     totalLabel: {
         fontSize: 13,
         fontWeight: '700',
-        color: '#9CA3AF',
+        color: colors.neutral[400],
         letterSpacing: 2,
     },
     totalValue: {
         fontSize: 48,
         fontWeight: '900',
-        color: '#FFFFFF',
+        color: colors.background.primary,
         marginBottom: 8,
     },
     totalSubtext: {
         fontSize: 15,
-        color: '#9CA3AF',
+        color: colors.neutral[400],
     },
 });
 

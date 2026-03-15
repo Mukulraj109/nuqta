@@ -4,6 +4,7 @@ import FlowScreenLayout from '../../shared/FlowScreenLayout';
 import ActionBtn from '../../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 interface Props {
     onNavigate: NavigationAction;
@@ -26,13 +27,13 @@ const TransparencyScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
         >
             <View style={styles.card}>
                 <View style={styles.header}>
-                    <Ionicons name="shield-checkmark" size={48} color="#059669" />
+                    <Ionicons name="shield-checkmark" size={48} color={colors.successScale[700]} />
                 </View>
 
                 <View style={styles.list}>
                     {items.map((item, index) => (
                         <View key={index} style={styles.item}>
-                            <Ionicons name={item.icon as any} size={24} color="#059669" />
+                            <Ionicons name={item.icon as any} size={24} color={colors.successScale[700]} />
                             <Text style={styles.itemText}>{item.label}</Text>
                         </View>
                     ))}
@@ -44,13 +45,13 @@ const TransparencyScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#F0FDF4',
+        backgroundColor: colors.successScale[50],
         borderRadius: 24,
         padding: 32,
         marginTop: 20,
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: '#BBF7D0',
+        borderColor: colors.successScale[200],
     },
     header: {
         marginBottom: 32,

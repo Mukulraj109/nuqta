@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 interface TaskCardProps {
   title: string;
@@ -39,7 +40,7 @@ function TaskCard({
           <Ionicons 
             name={isCompleted ? "checkmark-circle" : icon} 
             size={24} 
-            color={isCompleted ? "#10B981" : iconColor} 
+            color={isCompleted ? colors.successScale[400] : iconColor} 
           />
         </View>
         <View style={styles.taskDetails}>
@@ -55,18 +56,18 @@ function TaskCard({
       <View style={styles.taskReward}>
         {isCompleted ? (
           <View style={styles.completedBadge}>
-            <Ionicons name="checkmark" size={16} color="#10B981" />
+            <Ionicons name="checkmark" size={16} color={colors.successScale[400]} />
             <ThemedText style={styles.completedText}>Done</ThemedText>
           </View>
         ) : isPending ? (
           <View style={styles.pendingBadge}>
-            <Ionicons name="time" size={16} color="#F59E0B" />
+            <Ionicons name="time" size={16} color={colors.warningScale[400]} />
             <ThemedText style={styles.pendingText}>Pending</ThemedText>
           </View>
         ) : (
           <View style={styles.rewardContainer}>
             <ThemedText style={styles.rewardAmount}>+{reward}</ThemedText>
-            <Ionicons name="star" size={16} color="#FFD700" />
+            <Ionicons name="star" size={16} color={colors.brand.goldBright} />
           </View>
         )}
       </View>
@@ -90,13 +91,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   completedCard: {
-    backgroundColor: '#F0FDF4',
-    borderColor: '#10B981',
+    backgroundColor: colors.successScale[50],
+    borderColor: colors.successScale[400],
     borderWidth: 1,
   },
   pendingCard: {
-    backgroundColor: '#FFFBEB',
-    borderColor: '#F59E0B',
+    backgroundColor: colors.tint.amber,
+    borderColor: colors.warningScale[400],
     borderWidth: 1,
   },
   taskInfo: {
@@ -116,19 +117,19 @@ const styles = StyleSheet.create({
   taskTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colors.darkGray,
     marginBottom: 2,
   },
   taskDescription: {
     fontSize: 12,
-    color: '#666',
+    color: colors.midGray,
     lineHeight: 16,
   },
   completedText: {
-    color: '#10B981',
+    color: colors.successScale[400],
   },
   completedDescription: {
-    color: '#059669',
+    color: colors.successScale[700],
   },
   taskReward: {
     alignItems: 'flex-end',
@@ -141,14 +142,14 @@ const styles = StyleSheet.create({
   },
   rewardAmount: {
     fontSize: 14,
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
     fontWeight: '600',
   },
   completedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -157,14 +158,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
   pendingText: {
     fontSize: 11,
-    color: '#D97706',
+    color: colors.warningScale[700],
     fontWeight: '500',
   },
 });

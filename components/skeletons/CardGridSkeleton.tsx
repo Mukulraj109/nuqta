@@ -7,6 +7,7 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions, Platform } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
@@ -42,7 +43,7 @@ function CardGridSkeleton({ count = 6 }: { count?: number }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 16,
     paddingTop: 16,
   },
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 14,
     overflow: 'hidden',
     ...Platform.select({

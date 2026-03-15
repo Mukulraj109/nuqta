@@ -24,6 +24,7 @@ import DealList from '@/components/DealList';
 import realOffersApi from '@/services/realOffersApi';
 import DealsListSkeleton from '@/components/skeletons/DealsListSkeleton';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 // Premium Glass Design Tokens - Green & Gold Theme
 const GLASS = {
@@ -38,16 +39,16 @@ const GLASS = {
 };
 
 const COLORS = {
-  primary: '#ffcd57',
-  primaryDark: '#1a3a52',
-  gold: '#FFC857',
+  primary: colors.lightMustard,
+  primaryDark: colors.nileBlue,
+  gold: colors.brand.goldWarm,
   goldDark: '#E5A500',
-  navy: '#0B2240',
-  textPrimary: '#1F2937',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
+  navy: colors.brand.navyDark,
+  textPrimary: colors.neutral[800],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
   surface: '#F7FAFC',
-  error: '#EF4444',
+  error: colors.error,
 };
 
 function WalkInDealsModal({ visible, onClose, deals = [], storeId }: DealModalProps) {

@@ -7,6 +7,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
+import { colors } from '@/constants/theme';
 import {
   Colors,
   Spacing,
@@ -39,12 +40,12 @@ export default memo(function AIReviewSummary({
       <View style={styles.header}>
         <View style={styles.aiBadge}>
           <LinearGradient
-            colors={["#1a3a52", "#243f55"]}
+            colors={[colors.nileBlue, "#243f55"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.aiBadgeGradient}
           >
-            <Ionicons name="sparkles" size={14} color="#fff" />
+            <Ionicons name="sparkles" size={14} color={colors.background.primary} />
             <ThemedText style={styles.aiBadgeText}>AI Summary</ThemedText>
           </LinearGradient>
         </View>
@@ -88,7 +89,7 @@ export default memo(function AIReviewSummary({
         {negativeHighlights && negativeHighlights.length > 0 && (
           <View style={styles.highlightSection}>
             <View style={styles.highlightHeader}>
-              <Ionicons name="alert-circle" size={14} color="#ffcd57" />
+              <Ionicons name="alert-circle" size={14} color={colors.lightMustard} />
               <ThemedText style={styles.highlightTitle}>Areas for improvement</ThemedText>
             </View>
             <View style={styles.tagsContainer}>
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
   aiBadgeText: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#fff",
+    color: colors.background.primary,
   },
   basedOnText: {
     ...Typography.caption,
@@ -207,16 +208,16 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   negativeTag: {
-    backgroundColor: "#faf1e0",
+    backgroundColor: colors.linen,
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     borderRadius: BorderRadius.full,
     borderWidth: 1,
-    borderColor: "#ffcd57",
+    borderColor: colors.lightMustard,
   },
   negativeTagText: {
     ...Typography.caption,
-    color: "#1a3a52",
+    color: colors.nileBlue,
     fontWeight: "600",
   },
 

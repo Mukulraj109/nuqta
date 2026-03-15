@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 /**
  * ReturnPolicyCard Component
@@ -74,25 +75,25 @@ export const ReturnPolicyCard: React.FC<ReturnPolicyCardProps> = ({
     if (policy.isReturnable && policy.isExchangeable) {
       return {
         icon: 'checkmark-circle' as const,
-        color: '#10B981',
+        color: colors.successScale[400],
         text: 'Returns & Exchanges Available',
       };
     } else if (policy.isReturnable) {
       return {
         icon: 'checkmark-circle' as const,
-        color: '#10B981',
+        color: colors.successScale[400],
         text: 'Returns Available',
       };
     } else if (policy.isExchangeable) {
       return {
         icon: 'swap-horizontal' as const,
-        color: '#F59E0B',
+        color: colors.warningScale[400],
         text: 'Exchanges Only',
       };
     } else {
       return {
         icon: 'close-circle' as const,
-        color: '#EF4444',
+        color: colors.error,
         text: 'No Returns or Exchanges',
       };
     }
@@ -109,14 +110,14 @@ export const ReturnPolicyCard: React.FC<ReturnPolicyCardProps> = ({
        
       >
         <View style={styles.headerLeft}>
-          <Ionicons name="refresh" size={20} color="#8B5CF6" />
+          <Ionicons name="refresh" size={20} color={colors.brand.purpleLight} />
           <ThemedText style={styles.title}>Return & Exchange Policy</ThemedText>
         </View>
 
         <Ionicons
           name={isExpanded ? 'chevron-up' : 'chevron-down'}
           size={20}
-          color="#6B7280"
+          color={colors.neutral[500]}
         />
       </Pressable>
 
@@ -132,7 +133,7 @@ export const ReturnPolicyCard: React.FC<ReturnPolicyCardProps> = ({
       <View style={styles.quickInfo}>
         {policy.isReturnable && (
           <View style={styles.quickInfoItem}>
-            <Ionicons name="time-outline" size={16} color="#6B7280" />
+            <Ionicons name="time-outline" size={16} color={colors.neutral[500]} />
             <ThemedText style={styles.quickInfoText}>
               {policy.returnWindow}-day returns
             </ThemedText>
@@ -140,7 +141,7 @@ export const ReturnPolicyCard: React.FC<ReturnPolicyCardProps> = ({
         )}
         {policy.isExchangeable && (
           <View style={styles.quickInfoItem}>
-            <Ionicons name="swap-horizontal-outline" size={16} color="#6B7280" />
+            <Ionicons name="swap-horizontal-outline" size={16} color={colors.neutral[500]} />
             <ThemedText style={styles.quickInfoText}>
               {policy.exchangeWindow}-day exchange
             </ThemedText>
@@ -158,7 +159,7 @@ export const ReturnPolicyCard: React.FC<ReturnPolicyCardProps> = ({
           {policy.isReturnable && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Ionicons name="arrow-undo" size={18} color="#8B5CF6" />
+                <Ionicons name="arrow-undo" size={18} color={colors.brand.purpleLight} />
                 <ThemedText style={styles.sectionTitle}>Return Policy</ThemedText>
               </View>
               <ThemedText style={styles.sectionDescription}>
@@ -172,7 +173,7 @@ export const ReturnPolicyCard: React.FC<ReturnPolicyCardProps> = ({
           {policy.isExchangeable && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Ionicons name="swap-horizontal" size={18} color="#8B5CF6" />
+                <Ionicons name="swap-horizontal" size={18} color={colors.brand.purpleLight} />
                 <ThemedText style={styles.sectionTitle}>Exchange Policy</ThemedText>
               </View>
               <ThemedText style={styles.sectionDescription}>
@@ -186,7 +187,7 @@ export const ReturnPolicyCard: React.FC<ReturnPolicyCardProps> = ({
           {policy.conditions.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Ionicons name="list" size={18} color="#8B5CF6" />
+                <Ionicons name="list" size={18} color={colors.brand.purpleLight} />
                 <ThemedText style={styles.sectionTitle}>Conditions</ThemedText>
               </View>
               <View style={styles.conditionsList}>
@@ -204,13 +205,13 @@ export const ReturnPolicyCard: React.FC<ReturnPolicyCardProps> = ({
           {policy.nonReturnableReasons && policy.nonReturnableReasons.length > 0 && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Ionicons name="alert-circle" size={18} color="#F59E0B" />
+                <Ionicons name="alert-circle" size={18} color={colors.warningScale[400]} />
                 <ThemedText style={styles.sectionTitle}>Non-Returnable If</ThemedText>
               </View>
               <View style={styles.conditionsList}>
                 {policy.nonReturnableReasons.map((reason, index) => (
                   <View key={index} style={styles.conditionItem}>
-                    <Ionicons name="close-circle" size={12} color="#EF4444" />
+                    <Ionicons name="close-circle" size={12} color={colors.error} />
                     <ThemedText style={styles.conditionText}>{reason}</ThemedText>
                   </View>
                 ))}
@@ -221,7 +222,7 @@ export const ReturnPolicyCard: React.FC<ReturnPolicyCardProps> = ({
           {/* Contact Info */}
           {policy.contactInfo && (
             <View style={styles.contactContainer}>
-              <Ionicons name="chatbubble-ellipses-outline" size={16} color="#8B5CF6" />
+              <Ionicons name="chatbubble-ellipses-outline" size={16} color={colors.brand.purpleLight} />
               <ThemedText style={styles.contactText}>{policy.contactInfo}</ThemedText>
             </View>
           )}
@@ -229,13 +230,13 @@ export const ReturnPolicyCard: React.FC<ReturnPolicyCardProps> = ({
           {/* Action Buttons */}
           <View style={styles.actions}>
             <Pressable style={styles.actionButton}>
-              <Ionicons name="document-text-outline" size={18} color="#8B5CF6" />
+              <Ionicons name="document-text-outline" size={18} color={colors.brand.purpleLight} />
               <ThemedText style={styles.actionButtonText}>View Full Policy</ThemedText>
             </Pressable>
 
             {(policy.isReturnable || policy.isExchangeable) && (
               <Pressable style={styles.actionButton}>
-                <Ionicons name="arrow-undo-outline" size={18} color="#8B5CF6" />
+                <Ionicons name="arrow-undo-outline" size={18} color={colors.brand.purpleLight} />
                 <ThemedText style={styles.actionButtonText}>Initiate Return</ThemedText>
               </Pressable>
             )}
@@ -248,11 +249,11 @@ export const ReturnPolicyCard: React.FC<ReturnPolicyCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     padding: 16,
     marginBottom: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
 
   // Header
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   // Status Row
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
   },
   quickInfoText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // Details Container
@@ -310,7 +311,7 @@ const styles = StyleSheet.create({
   // Divider
   divider: {
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginBottom: 16,
   },
 
@@ -327,11 +328,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   sectionDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 20,
   },
 
@@ -348,12 +349,12 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     marginTop: 6,
   },
   conditionText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     flex: 1,
     lineHeight: 18,
   },
@@ -362,7 +363,7 @@ const styles = StyleSheet.create({
   contactContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     padding: 12,
     borderRadius: 8,
     gap: 8,
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
   },
   contactText: {
     fontSize: 13,
-    color: '#7C3AED',
+    color: colors.brand.purple,
     flex: 1,
   },
 
@@ -384,18 +385,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#8B5CF6',
+    borderColor: colors.brand.purpleLight,
     gap: 6,
   },
   actionButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 });
 

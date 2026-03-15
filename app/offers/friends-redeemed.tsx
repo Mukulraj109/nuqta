@@ -19,6 +19,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { useRegion } from '@/contexts/RegionContext';
 import { useAuth } from '@/contexts/AuthContext';
 import apiClient from '@/services/apiClient';
+import { colors } from '@/constants/theme';
 
 interface FriendOffer {
   id: string;
@@ -244,7 +245,7 @@ export default function FriendsRedeemedPage() {
       >
         <View style={styles.headerContent}>
           <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
+            <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Friends' Deals</ThemedText>
           <View style={styles.placeholder} />
@@ -352,7 +353,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     ...Typography.h3,
-    color: '#FFF',
+    color: colors.background.primary,
     textAlign: 'center',
     marginRight: 40,
   },
@@ -372,7 +373,7 @@ const styles = StyleSheet.create({
   },
   statValue: {
     ...Typography.h2,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   statLabel: {
     ...Typography.bodySmall,
@@ -520,7 +521,7 @@ const styles = StyleSheet.create({
   },
   useButtonText: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   loadingContainer: {
     flex: 1,
@@ -542,7 +543,7 @@ const styles = StyleSheet.create({
   },
   retryText: {
     ...Typography.label,
-    color: '#FFF',
+    color: colors.background.primary,
   },
   footerLoader: {
     paddingVertical: Spacing.lg,

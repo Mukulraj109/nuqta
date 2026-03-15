@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Animated, Pressable, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 
 export interface ReportToastProps {
   visible: boolean;
@@ -87,11 +88,11 @@ function ReportToast({
   };
 
   const getBackgroundColor = () => {
-    return type === 'success' ? '#10b981' : '#ef4444';
+    return type === 'success' ? colors.success : colors.error;
   };
 
   const getIconColor = () => {
-    return '#ffffff';
+    return colors.text.white;
   };
 
   if (!visible) {
@@ -136,7 +137,7 @@ function ReportToast({
           accessibilityRole="button"
           accessibilityHint="Double tap to close this report notification"
         >
-          <Ionicons name="close" size={20} color="#fff" />
+          <Ionicons name="close" size={20} color={colors.background.primary} />
         </Pressable>
       </View>
     </Animated.View>
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
   },
   message: {
     flex: 1,
-    color: '#fff',
+    color: colors.background.primary,
     fontSize: 15,
     fontWeight: '600',
     lineHeight: 20,

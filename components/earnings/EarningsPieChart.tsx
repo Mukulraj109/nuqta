@@ -6,6 +6,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Circle, G } from 'react-native-svg';
 import { EarningsBreakdown } from '@/services/earningsApi';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface EarningsPieChartProps {
   breakdown: EarningsBreakdown;
@@ -32,27 +33,27 @@ const EarningsPieChart: React.FC<EarningsPieChartProps> = ({
 
   // Create chart segments from breakdown (items have .amount and .count)
   const segments: ChartSegment[] = [
-    { label: 'Videos', value: breakdown.videos.amount, color: '#EC4899',
+    { label: 'Videos', value: breakdown.videos.amount, color: colors.brand.pink,
       percentage: breakdown.total > 0 ? (breakdown.videos.amount / breakdown.total) * 100 : 0 },
-    { label: 'Projects', value: breakdown.projects.amount, color: '#8B5CF6',
+    { label: 'Projects', value: breakdown.projects.amount, color: colors.brand.purpleLight,
       percentage: breakdown.total > 0 ? (breakdown.projects.amount / breakdown.total) * 100 : 0 },
-    { label: 'Referrals', value: breakdown.referrals.amount, color: '#B45309',
+    { label: 'Referrals', value: breakdown.referrals.amount, color: colors.brand.amberDeep,
       percentage: breakdown.total > 0 ? (breakdown.referrals.amount / breakdown.total) * 100 : 0 },
-    { label: 'Cashback', value: breakdown.cashback.amount, color: '#F59E0B',
+    { label: 'Cashback', value: breakdown.cashback.amount, color: colors.warningScale[400],
       percentage: breakdown.total > 0 ? (breakdown.cashback.amount / breakdown.total) * 100 : 0 },
-    { label: 'Social Media', value: breakdown.socialMedia.amount, color: '#3B82F6',
+    { label: 'Social Media', value: breakdown.socialMedia.amount, color: colors.infoScale[400],
       percentage: breakdown.total > 0 ? (breakdown.socialMedia.amount / breakdown.total) * 100 : 0 },
-    { label: 'Games', value: breakdown.games.amount, color: '#10B981',
+    { label: 'Games', value: breakdown.games.amount, color: colors.successScale[400],
       percentage: breakdown.total > 0 ? (breakdown.games.amount / breakdown.total) * 100 : 0 },
-    { label: 'Daily Check-in', value: breakdown.dailyCheckIn.amount, color: '#06B6D4',
+    { label: 'Daily Check-in', value: breakdown.dailyCheckIn.amount, color: colors.brand.cyan,
       percentage: breakdown.total > 0 ? (breakdown.dailyCheckIn.amount / breakdown.total) * 100 : 0 },
-    { label: 'Social Impact', value: breakdown.socialImpact?.amount || 0, color: '#EC4899',
+    { label: 'Social Impact', value: breakdown.socialImpact?.amount || 0, color: colors.brand.pink,
       percentage: breakdown.total > 0 ? ((breakdown.socialImpact?.amount || 0) / breakdown.total) * 100 : 0 },
-    { label: 'Programs', value: breakdown.programs?.amount || 0, color: '#7C3AED',
+    { label: 'Programs', value: breakdown.programs?.amount || 0, color: colors.brand.purple,
       percentage: breakdown.total > 0 ? ((breakdown.programs?.amount || 0) / breakdown.total) * 100 : 0 },
-    { label: 'Events', value: breakdown.events?.amount || 0, color: '#A855F7',
+    { label: 'Events', value: breakdown.events?.amount || 0, color: colors.brand.purpleMedium,
       percentage: breakdown.total > 0 ? ((breakdown.events?.amount || 0) / breakdown.total) * 100 : 0 },
-    { label: 'Bonus', value: breakdown.bonus.amount, color: '#EF4444',
+    { label: 'Bonus', value: breakdown.bonus.amount, color: colors.error,
       percentage: breakdown.total > 0 ? (breakdown.bonus.amount / breakdown.total) * 100 : 0 },
   ].filter((segment) => segment.value > 0); // Only show segments with values
 
@@ -139,13 +140,13 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   totalValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   legend: {
     width: '100%',
@@ -165,12 +166,12 @@ const styles = StyleSheet.create({
   legendLabel: {
     flex: 1,
     fontSize: 13,
-    color: '#4B5563',
+    color: colors.neutral[600],
   },
   legendValue: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   emptyContainer: {
     alignItems: 'center',
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 });
 

@@ -18,6 +18,7 @@ import * as Linking from 'expo-linking';
 import { ThemedText } from '@/components/ThemedText';
 import logger from '@/utils/logger';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -208,7 +209,7 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
         >
           {/* Header */}
           <LinearGradient
-            colors={['#9333EA', '#7C3AED']}
+            colors={['#9333EA', colors.brand.purple]}
             style={styles.header}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -232,12 +233,12 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
             <View style={styles.brandSection}>
               <LinearGradient
                 colors={[
-                  voucher.brand.backgroundColor || '#F3F4F6',
-                  (voucher.brand.backgroundColor || '#F3F4F6') + 'DD',
+                  voucher.brand.backgroundColor || colors.neutral[100],
+                  (voucher.brand.backgroundColor || colors.neutral[100]) + 'DD',
                 ]}
                 style={[
                   styles.brandLogo,
-                  { backgroundColor: voucher.brand.backgroundColor || '#F3F4F6' },
+                  { backgroundColor: voucher.brand.backgroundColor || colors.neutral[100] },
                 ]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -245,7 +246,7 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
                 <ThemedText
                   style={[
                     styles.brandLogoText,
-                    { color: voucher.brand.logoColor || '#000' },
+                    { color: voucher.brand.logoColor || colors.text.primary },
                   ]}
                 >
                   {voucher.brand.logo}
@@ -272,7 +273,7 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
                
               >
                 <LinearGradient
-                  colors={copySuccess ? ['#ffcd57', '#1a3a52'] : ['#3B82F6', '#2563EB']}
+                  colors={copySuccess ? [colors.lightMustard, colors.nileBlue] : [colors.infoScale[400], colors.brand.blue]}
                   style={styles.copyButtonGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
@@ -323,7 +324,7 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
             {/* Expiry Warning */}
             {daysUntilExpiry <= 7 && (
               <View style={styles.expiryWarning}>
-                <Ionicons name="time" size={20} color="#F59E0B" />
+                <Ionicons name="time" size={20} color={colors.warningScale[400]} />
                 <ThemedText style={styles.expiryText}>
                   {daysUntilExpiry <= 0
                     ? 'Expired'
@@ -361,7 +362,7 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
                
               >
                 <LinearGradient
-                  colors={['#3B82F6', '#2563EB']}
+                  colors={[colors.infoScale[400], colors.brand.blue]}
                   style={styles.websiteButtonGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
@@ -381,7 +382,7 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
              
             >
               <LinearGradient
-                colors={['#EF4444', '#DC2626']}
+                colors={[colors.error, colors.error]}
                 style={styles.markUsedButtonGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -467,7 +468,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 24,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   brandLogo: {
     width: 80,
@@ -483,7 +484,7 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   denominationText: {
@@ -497,23 +498,23 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 12,
   },
   codeCard: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
     marginBottom: 12,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderStyle: 'dashed',
   },
   codeText: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     letterSpacing: 2,
   },
   copyButton: {
@@ -560,14 +561,14 @@ const styles = StyleSheet.create({
   stepText: {
     flex: 1,
     fontSize: 14,
-    color: '#374151',
+    color: colors.neutral[700],
     lineHeight: 20,
     paddingTop: 4,
   },
   expiryWarning: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     margin: 20,
     marginTop: 0,
     padding: 12,
@@ -577,10 +578,10 @@ const styles = StyleSheet.create({
   expiryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#F59E0B',
+    color: colors.warningScale[400],
   },
   termsSection: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     margin: 20,
     marginTop: 0,
     padding: 16,
@@ -590,19 +591,19 @@ const styles = StyleSheet.create({
   termsTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   termsText: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
   footer: {
     padding: 20,
     gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: colors.neutral[100],
   },
   websiteButton: {
     borderRadius: 12,

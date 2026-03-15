@@ -27,22 +27,23 @@ import apiClient from '@/services/apiClient';
 import { storesApi } from '@/services/storesApi';
 import { useAuth } from '@/contexts/AuthContext';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  violet: '#8B5CF6',
-  violetDark: '#7C3AED',
-  violetLight: '#F5F3FF',
-  dark: '#1a3a52',
+  violet: colors.brand.purpleLight,
+  violetDark: colors.brand.purple,
+  violetLight: colors.tint.purpleLight,
+  dark: colors.nileBlue,
   darkDeep: '#0f2638',
-  gold: '#FBBF24',
-  goldDark: '#F59E0B',
-  green: '#22C55E',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F8F9FA',
-  border: '#E5E7EB',
-  unavailable: '#E5E7EB',
+  gold: colors.warningScale[400],
+  goldDark: colors.warningScale[400],
+  green: colors.success,
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.offWhite,
+  border: colors.neutral[200],
+  unavailable: colors.neutral[200],
 };
 
 const EVENT_TYPES = [
@@ -337,7 +338,7 @@ function BookTicketsPage() {
       <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={styles.confirmContent}>
           <View style={styles.confirmIconWrap}>
-            <LinearGradient colors={[COLORS.violetLight, '#EDE9FE']} style={styles.confirmIconGradient}>
+            <LinearGradient colors={[COLORS.violetLight, colors.tint.purple]} style={styles.confirmIconGradient}>
               <Ionicons name="checkmark-circle" size={64} color={COLORS.violet} />
             </LinearGradient>
           </View>
@@ -359,21 +360,21 @@ function BookTicketsPage() {
             <View style={styles.confirmDivider} />
             <View style={styles.confirmRow}>
               <View style={[styles.confirmRowIcon, { backgroundColor: 'rgba(236,72,153,0.1)' }]}>
-                <Ionicons name="ticket" size={16} color="#EC4899" />
+                <Ionicons name="ticket" size={16} color={colors.brand.pink} />
               </View>
               <View><Text style={styles.confirmRowLabel}>Event</Text><Text style={styles.confirmRowValue}>{serviceName}</Text></View>
             </View>
             <View style={styles.confirmDivider} />
             <View style={styles.confirmRow}>
               <View style={[styles.confirmRowIcon, { backgroundColor: 'rgba(59,130,246,0.1)' }]}>
-                <Ionicons name="calendar" size={16} color="#3B82F6" />
+                <Ionicons name="calendar" size={16} color={colors.infoScale[400]} />
               </View>
               <View><Text style={styles.confirmRowLabel}>Date & Time</Text><Text style={styles.confirmRowValue}>{formatDate(selectedDate)} at {selectedTime}</Text></View>
             </View>
             <View style={styles.confirmDivider} />
             <View style={styles.confirmRow}>
               <View style={[styles.confirmRowIcon, { backgroundColor: 'rgba(245,158,11,0.1)' }]}>
-                <Ionicons name="people" size={16} color="#F59E0B" />
+                <Ionicons name="people" size={16} color={colors.warningScale[400]} />
               </View>
               <View><Text style={styles.confirmRowLabel}>Seats</Text><Text style={styles.confirmRowValue}>{ticketCount}x {seatName}</Text></View>
             </View>
@@ -574,7 +575,7 @@ const styles = StyleSheet.create({
   },
   storeImgWrap: { position: 'relative' },
   storeImg: { width: 64, height: 64, borderRadius: 14 },
-  storeImgPlaceholder: { backgroundColor: '#F3F4F6', justifyContent: 'center', alignItems: 'center' },
+  storeImgPlaceholder: { backgroundColor: colors.neutral[100], justifyContent: 'center', alignItems: 'center' },
   storeCashbackBadge: { position: 'absolute', bottom: -4, right: -4, backgroundColor: COLORS.violet, borderRadius: 8, paddingHorizontal: 5, paddingVertical: 2 },
   storeCashbackText: { fontSize: 9, fontWeight: '700', color: COLORS.white },
   storeInfo: { flex: 1 },
@@ -621,11 +622,11 @@ const styles = StyleSheet.create({
   timeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   timeChip: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: 12, backgroundColor: COLORS.white, minWidth: 70, alignItems: 'center', borderWidth: 1, borderColor: 'transparent' },
   timeChipActive: { backgroundColor: COLORS.violet, borderColor: COLORS.violet },
-  timeChipUnavailable: { backgroundColor: '#F3F4F6', borderColor: '#E5E7EB' },
+  timeChipUnavailable: { backgroundColor: colors.neutral[100], borderColor: colors.neutral[200] },
   timeText: { fontSize: 13, fontWeight: '500', color: COLORS.textPrimary },
   timeTextActive: { color: COLORS.white },
-  timeTextUnavailable: { color: '#D1D5DB' },
-  timeFullText: { fontSize: 9, color: '#D1D5DB', marginTop: 1, fontWeight: '500' },
+  timeTextUnavailable: { color: colors.neutral[300] },
+  timeFullText: { fontSize: 9, color: colors.neutral[300], marginTop: 1, fontWeight: '500' },
   seatGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   seatChip: { width: '48%', alignItems: 'center', padding: 14, borderRadius: 12, backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.border },
   seatChipActive: { backgroundColor: COLORS.violetLight, borderColor: COLORS.violet },
@@ -671,7 +672,7 @@ const styles = StyleSheet.create({
   confirmRowIcon: { width: 36, height: 36, borderRadius: 10, justifyContent: 'center', alignItems: 'center' },
   confirmRowLabel: { fontSize: 11, color: COLORS.textSecondary },
   confirmRowValue: { fontSize: 15, fontWeight: '600', color: COLORS.textPrimary, marginTop: 1 },
-  confirmDivider: { height: 1, backgroundColor: '#F3F4F6', marginVertical: 10, marginLeft: 50 },
+  confirmDivider: { height: 1, backgroundColor: colors.neutral[100], marginVertical: 10, marginLeft: 50 },
   confirmNote: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, padding: 16, backgroundColor: COLORS.violetLight, borderRadius: 14, marginBottom: 24, width: '100%' },
   confirmNoteText: { flex: 1, fontSize: 13, color: COLORS.violetDark, lineHeight: 18 },
   doneBtn: { width: '100%', paddingVertical: 16, backgroundColor: COLORS.violet, borderRadius: 16, alignItems: 'center' },

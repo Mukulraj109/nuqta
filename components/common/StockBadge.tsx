@@ -3,6 +3,7 @@ import { View, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { useStockStatus } from '@/hooks/useStockStatus';
+import { colors } from '@/constants/theme';
 
 interface StockBadgeProps {
   stock: number;
@@ -90,11 +91,11 @@ function StockBadge({
 
   const getIconColor = () => {
     if (isOutOfStock) {
-      return '#DC2626';
+      return colors.error;
     } else if (isLowStock) {
-      return '#D97706';
+      return colors.warningScale[700];
     } else {
-      return '#059669';
+      return colors.successScale[700];
     }
   };
 
@@ -153,34 +154,34 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   outOfStockBadge: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: colors.errorScale[100],
     borderWidth: 1,
     borderColor: '#FCA5A5',
   },
   lowStockBadge: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderWidth: 1,
     borderColor: '#FCD34D',
   },
   inStockBadge: {
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     borderWidth: 1,
     borderColor: '#6EE7B7',
   },
   outOfStockText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#DC2626',
+    color: colors.error,
   },
   lowStockText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D97706',
+    color: colors.warningScale[700],
   },
   inStockText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#059669',
+    color: colors.successScale[700],
   },
   compactText: {
     fontSize: 10,

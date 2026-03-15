@@ -9,6 +9,7 @@ import ReorderButton from '@/components/orders/ReorderButton';
 import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 export default function OrderDetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -95,7 +96,7 @@ export default function OrderDetailsScreen() {
       case 'shipped':
       case 'dispatched':
       case 'out_for_delivery':
-        return '#3b82f6';
+        return colors.infoScale[400];
       case 'processing':
       case 'preparing':
       case 'ready':
@@ -162,7 +163,7 @@ export default function OrderDetailsScreen() {
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                 {(order as any).fulfillmentType && (order as any).fulfillmentType !== 'delivery' && (
                   <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f6fa', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, gap: 4 }}>
-                    <Text style={{ fontSize: 11, fontWeight: '600', color: '#1a3a52' }}>
+                    <Text style={{ fontSize: 11, fontWeight: '600', color: colors.nileBlue }}>
                       {(order as any).fulfillmentType === 'pickup' ? '🛍 Pickup' :
                        (order as any).fulfillmentType === 'drive_thru' ? '🚗 Drive-Thru' :
                        (order as any).fulfillmentType === 'dine_in' ? '🍽 Dine-In' : ''}
@@ -236,16 +237,16 @@ export default function OrderDetailsScreen() {
                 // Free delivery - show crossed out original price + FREE
                 return (
                   <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                    <Text style={[styles.summaryValue, { textDecorationLine: 'line-through', color: '#9CA3AF', fontSize: 12 }]}>
+                    <Text style={[styles.summaryValue, { textDecorationLine: 'line-through', color: colors.neutral[400], fontSize: 12 }]}>
                       {currencySymbol}{wouldBeDeliveryFee}
                     </Text>
-                    <Text style={[styles.summaryValue, { color: '#22C55E', fontWeight: '600' }]}>FREE</Text>
+                    <Text style={[styles.summaryValue, { color: colors.success, fontWeight: '600' }]}>FREE</Text>
                   </View>
                 );
               } else if (deliveryFee > 0) {
                 return <Text style={styles.summaryValue}>{currencySymbol}{deliveryFee.toFixed(2)}</Text>;
               } else {
-                return <Text style={[styles.summaryValue, { color: '#22C55E' }]}>FREE</Text>;
+                return <Text style={[styles.summaryValue, { color: colors.success }]}>FREE</Text>;
               }
             })()}
           </View>
@@ -266,8 +267,8 @@ export default function OrderDetailsScreen() {
           {/* Lock Fee Discount from order totals */}
           {(order.totals?.lockFeeDiscount || 0) > 0 && (
             <View style={styles.summaryRow}>
-              <Text style={[styles.summaryLabel, { color: '#1a3a52' }]}>Lock Fee Already Paid</Text>
-              <Text style={[styles.summaryValue, { color: '#1a3a52' }]}>
+              <Text style={[styles.summaryLabel, { color: colors.nileBlue }]}>Lock Fee Already Paid</Text>
+              <Text style={[styles.summaryValue, { color: colors.nileBlue }]}>
                 -{currencySymbol}{(order.totals.lockFeeDiscount).toFixed(2)}
               </Text>
             </View>
@@ -290,8 +291,8 @@ export default function OrderDetailsScreen() {
             if (totalCoins <= 0) return null;
             return (
               <View style={styles.summaryRow}>
-                <Text style={[styles.summaryLabel, { color: '#7C3AED' }]}>Coins Used</Text>
-                <Text style={[styles.summaryValue, { color: '#7C3AED' }]}>
+                <Text style={[styles.summaryLabel, { color: colors.brand.purple }]}>Coins Used</Text>
+                <Text style={[styles.summaryValue, { color: colors.brand.purple }]}>
                   -{currencySymbol}{totalCoins.toFixed(2)}
                 </Text>
               </View>
@@ -300,10 +301,10 @@ export default function OrderDetailsScreen() {
           {/* Cashback - show "after delivery" if not yet delivered */}
           {(order.totals?.cashback || 0) > 0 && (
             <View style={styles.summaryRow}>
-              <Text style={[styles.summaryLabel, { color: '#D97706' }]}>
+              <Text style={[styles.summaryLabel, { color: colors.warningScale[700] }]}>
                 {order.status === 'delivered' ? 'Cashback Earned' : 'Cashback (after delivery)'}
               </Text>
-              <Text style={[styles.summaryValue, { color: '#D97706' }]}>
+              <Text style={[styles.summaryValue, { color: colors.warningScale[700] }]}>
                 +{currencySymbol}{(order.totals.cashback).toFixed(2)}
               </Text>
             </View>
@@ -355,10 +356,10 @@ export default function OrderDetailsScreen() {
               {
                 color:
                   (order.payment?.status || order.paymentStatus) === 'paid'
-                    ? '#ffcd57'
+                    ? colors.lightMustard
                     : (order.payment?.status || order.paymentStatus) === 'failed'
                     ? '#ef4444'
-                    : '#f59e0b',
+                    : colors.warningScale[400],
               },
             ]}
           >
@@ -473,7 +474,7 @@ export default function OrderDetailsScreen() {
             disabled={cancelling}
           >
             {cancelling ? (
-              <ActivityIndicator color="#fff" />
+              <ActivityIndicator color={colors.background.primary} />
             ) : (
               <Text style={styles.cancelButtonText}>Cancel Order</Text>
             )}
@@ -481,7 +482,7 @@ export default function OrderDetailsScreen() {
         )}
         {order.status === 'delivered' && (
           <Pressable
-            style={[styles.actionButton, { backgroundColor: '#f59e0b' }]}
+            style={[styles.actionButton, { backgroundColor: colors.warningScale[400] }]}
             onPress={() => router.push({
               pathname: '/support/create-ticket' as any,
               params: {
@@ -507,7 +508,7 @@ export default function OrderDetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9fafb',
+    backgroundColor: colors.neutral[50],
   },
   customHeader: {
     flexDirection: 'row',
@@ -515,21 +516,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: colors.neutral[200],
   },
   backButton: {
     padding: 8,
   },
   backButtonText: {
     fontSize: 24,
-    color: '#111827',
+    color: colors.neutral[900],
   },
   customHeaderTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   headerSpacer: {
     width: 40,
@@ -544,7 +545,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   header: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -563,7 +564,7 @@ const styles = StyleSheet.create({
   orderNumber: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   statusBadge: {
     paddingHorizontal: 12,
@@ -573,11 +574,11 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.background.primary,
   },
   orderDate: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
   },
   section: {
     marginBottom: 16,
@@ -585,12 +586,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 12,
   },
   itemCard: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 12,
     marginBottom: 8,
@@ -604,7 +605,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 8,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: colors.neutral[100],
   },
   itemInfo: {
     flex: 1,
@@ -613,17 +614,17 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   storeName: {
     fontSize: 12,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   variantText: {
     fontSize: 12,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 8,
   },
   itemFooter: {
@@ -632,20 +633,20 @@ const styles = StyleSheet.create({
   },
   itemQuantity: {
     fontSize: 12,
-    color: '#6b7280',
+    color: colors.neutral[500],
   },
   itemPrice: {
     fontSize: 12,
-    color: '#6b7280',
+    color: colors.neutral[500],
   },
   itemTotal: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginLeft: 8,
   },
   summaryCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -661,23 +662,23 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
   },
   summaryValue: {
     fontSize: 14,
-    color: '#111827',
+    color: colors.neutral[900],
     fontWeight: '500',
   },
   discountLabel: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   discountValue: {
-    color: '#ffcd57',
+    color: colors.lightMustard,
     fontWeight: '600',
   },
   totalRow: {
     borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
+    borderTopColor: colors.neutral[200],
     paddingTop: 12,
     marginTop: 4,
     marginBottom: 0,
@@ -685,15 +686,15 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   totalValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   addressCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -705,21 +706,21 @@ const styles = StyleSheet.create({
   addressName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 8,
   },
   addressText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
     lineHeight: 20,
   },
   addressPhone: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginTop: 8,
   },
   paymentCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -735,10 +736,10 @@ const styles = StyleSheet.create({
   },
   paymentMethod: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
   },
   timelineCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -765,7 +766,7 @@ const styles = StyleSheet.create({
     top: 16,
     bottom: -16,
     width: 1,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: colors.neutral[200],
   },
   timelineContent: {
     flex: 1,
@@ -774,20 +775,20 @@ const styles = StyleSheet.create({
   timelineStatus: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 4,
   },
   timelineMessage: {
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   timelineDate: {
     fontSize: 12,
-    color: '#9ca3af',
+    color: colors.neutral[400],
   },
   trackingCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     shadowColor: '#000',
@@ -801,13 +802,13 @@ const styles = StyleSheet.create({
   },
   trackingLabel: {
     fontSize: 12,
-    color: '#6b7280',
+    color: colors.neutral[500],
     marginBottom: 4,
   },
   trackingValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   trackButton: {
     backgroundColor: '#6366f1',
@@ -819,7 +820,7 @@ const styles = StyleSheet.create({
   trackButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.background.primary,
   },
   actions: {
     marginTop: 8,
@@ -835,7 +836,7 @@ const styles = StyleSheet.create({
   actionButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.background.primary,
   },
   cancelButton: {
     backgroundColor: '#ef4444',
@@ -843,12 +844,12 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.background.primary,
   },
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6b7280',
+    color: colors.neutral[500],
   },
   errorText: {
     fontSize: 16,
@@ -865,7 +866,7 @@ const styles = StyleSheet.create({
   retryButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.background.primary,
   },
   reorderContainer: {
     marginBottom: 12,

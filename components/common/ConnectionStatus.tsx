@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSocket } from '@/contexts/SocketContext';
+import { colors } from '@/constants/theme';
 
 function ConnectionStatus() {
   const { state, connect } = useSocket();
@@ -32,7 +33,7 @@ function ConnectionStatus() {
     if (state.reconnecting) {
       return {
         icon: 'sync',
-        color: '#F59E0B',
+        color: colors.warning,
         text: `Reconnecting... (${state.reconnectAttempts})`,
         actionText: null,
       };
@@ -40,14 +41,14 @@ function ConnectionStatus() {
     if (state.error) {
       return {
         icon: 'cloud-offline',
-        color: '#EF4444',
+        color: colors.error,
         text: 'Connection failed',
         actionText: 'Retry',
       };
     }
     return {
       icon: 'cloud-offline',
-      color: '#6B7280',
+      color: colors.neutral[500],
       text: 'Disconnected',
       actionText: 'Connect',
     };

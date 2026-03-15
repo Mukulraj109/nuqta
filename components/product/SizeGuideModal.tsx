@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
+import { colors } from '@/constants/theme';
 
 /**
  * SizeGuideModal Component
@@ -264,7 +265,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
                 <Ionicons
                   name={fitType === fit ? 'checkmark-circle' : 'ellipse-outline'}
                   size={20}
-                  color={fitType === fit ? '#8B5CF6' : '#9CA3AF'}
+                  color={fitType === fit ? colors.brand.purpleLight : colors.neutral[400]}
                 />
                 <ThemedText
                   style={[styles.fitOptionText, fitType === fit && styles.fitOptionTextActive]}
@@ -332,7 +333,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
     return (
       <View style={styles.measureContainer}>
         <View style={styles.measureHeader}>
-          <Ionicons name="information-circle" size={24} color="#8B5CF6" />
+          <Ionicons name="information-circle" size={24} color={colors.brand.purpleLight} />
           <ThemedText style={styles.measureHeaderText}>
             Follow these steps for accurate measurements
           </ThemedText>
@@ -341,7 +342,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
         {categoryInstructions.map((instruction, index) => (
           <View key={index} style={styles.instructionCard}>
             <View style={styles.instructionIcon}>
-              <Ionicons name={instruction.icon} size={32} color="#8B5CF6" />
+              <Ionicons name={instruction.icon} size={32} color={colors.brand.purpleLight} />
             </View>
             <View style={styles.instructionContent}>
               <ThemedText style={styles.instructionTitle}>{instruction.title}</ThemedText>
@@ -385,7 +386,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
     return (
       <View style={styles.finderContainer}>
         <View style={styles.finderHeader}>
-          <Ionicons name="calculator" size={24} color="#8B5CF6" />
+          <Ionicons name="calculator" size={24} color={colors.brand.purpleLight} />
           <ThemedText style={styles.finderHeaderText}>
             Enter your measurements to find your perfect size
           </ThemedText>
@@ -402,7 +403,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
                 <TextInput
                   style={styles.input}
                   placeholder="e.g., 38"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.neutral[400]}
                   keyboardType="numeric"
                   value={measurements.chest}
                   onChangeText={text => setMeasurements({ ...measurements, chest: text })}
@@ -416,7 +417,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
                 <TextInput
                   style={styles.input}
                   placeholder="e.g., 32"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.neutral[400]}
                   keyboardType="numeric"
                   value={measurements.waist}
                   onChangeText={text => setMeasurements({ ...measurements, waist: text })}
@@ -430,7 +431,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
                 <TextInput
                   style={styles.input}
                   placeholder="e.g., 40"
-                  placeholderTextColor="#9CA3AF"
+                  placeholderTextColor={colors.neutral[400]}
                   keyboardType="numeric"
                   value={measurements.hips}
                   onChangeText={text => setMeasurements({ ...measurements, hips: text })}
@@ -446,14 +447,14 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
           onPress={findRecommendedSize}
          
         >
-          <Ionicons name="search" size={20} color="#FFF" />
+          <Ionicons name="search" size={20} color={colors.background.primary} />
           <ThemedText style={styles.findButtonText}>Find My Size</ThemedText>
         </Pressable>
 
         {/* Recommended Size Result */}
         {recommendedSize && (
           <View style={styles.resultContainer}>
-            <Ionicons name="checkmark-circle" size={32} color="#10B981" />
+            <Ionicons name="checkmark-circle" size={32} color={colors.successScale[400]} />
             <ThemedText style={styles.resultTitle}>Your Recommended Size</ThemedText>
             <View style={styles.resultSizeBadge}>
               <ThemedText style={styles.resultSizeText}>{recommendedSize}</ThemedText>
@@ -479,7 +480,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.headerLeft}>
-              <Ionicons name="shirt" size={24} color="#8B5CF6" />
+              <Ionicons name="shirt" size={24} color={colors.brand.purpleLight} />
               <View style={styles.headerTextContainer}>
                 <ThemedText style={styles.title}>Size Guide</ThemedText>
                 {productName && (
@@ -490,7 +491,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
               </View>
             </View>
             <Pressable style={styles.closeButton} onPress={onClose}>
-              <Ionicons name="close" size={24} color="#6B7280" />
+              <Ionicons name="close" size={24} color={colors.neutral[500]} />
             </Pressable>
           </View>
 
@@ -504,7 +505,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
               <Ionicons
                 name="list"
                 size={18}
-                color={activeTab === 'chart' ? '#8B5CF6' : '#6B7280'}
+                color={activeTab === 'chart' ? colors.brand.purpleLight : colors.neutral[500]}
               />
               <ThemedText style={[styles.tabText, activeTab === 'chart' && styles.tabTextActive]}>
                 Size Chart
@@ -519,7 +520,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
               <Ionicons
                 name="ruler"
                 size={18}
-                color={activeTab === 'measure' ? '#8B5CF6' : '#6B7280'}
+                color={activeTab === 'measure' ? colors.brand.purpleLight : colors.neutral[500]}
               />
               <ThemedText
                 style={[styles.tabText, activeTab === 'measure' && styles.tabTextActive]}
@@ -536,7 +537,7 @@ export const SizeGuideModal: React.FC<SizeGuideModalProps> = ({
               <Ionicons
                 name="calculator"
                 size={18}
-                color={activeTab === 'finder' ? '#8B5CF6' : '#6B7280'}
+                color={activeTab === 'finder' ? colors.brand.purpleLight : colors.neutral[500]}
               />
               <ThemedText style={[styles.tabText, activeTab === 'finder' && styles.tabTextActive]}>
                 Size Finder
@@ -568,7 +569,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   modalContent: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingBottom: Platform.OS === 'ios' ? 34 : 20,
@@ -579,7 +580,7 @@ const styles = StyleSheet.create({
   handleBar: {
     width: 40,
     height: 4,
-    backgroundColor: '#D1D5DB',
+    backgroundColor: colors.neutral[300],
     borderRadius: 2,
     alignSelf: 'center',
     marginTop: 12,
@@ -606,18 +607,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   subtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 2,
   },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -637,19 +638,19 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderRadius: 10,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     gap: 6,
   },
   tabActive: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
   },
   tabText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   tabTextActive: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 
   // Content
@@ -665,24 +666,24 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     overflow: 'hidden',
   },
   unitButton: {
     paddingVertical: 6,
     paddingHorizontal: 16,
-    backgroundColor: '#FFF',
+    backgroundColor: colors.background.primary,
   },
   unitButtonActive: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
   },
   unitButtonText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   unitButtonTextActive: {
-    color: '#FFF',
+    color: colors.background.primary,
   },
 
   // Table
@@ -691,22 +692,22 @@ const styles = StyleSheet.create({
   },
   table: {
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderRadius: 8,
     overflow: 'hidden',
   },
   tableRow: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   tableRowEven: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
   },
   tableHeaderCell: {
     width: 100,
     padding: 12,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -716,7 +717,7 @@ const styles = StyleSheet.create({
   tableHeaderText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   tableHeaderSubtext: {
     fontSize: 11,
@@ -731,12 +732,12 @@ const styles = StyleSheet.create({
   },
   tableCellText: {
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   tableCellTextBold: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
 
   // Conversions
@@ -746,30 +747,30 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   conversionTable: {
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderRadius: 8,
     overflow: 'hidden',
   },
   conversionRow: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: colors.neutral[200],
   },
   conversionHeaderCell: {
     width: 80,
     padding: 10,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
   conversionHeaderText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   conversionCell: {
     width: 80,
@@ -779,7 +780,7 @@ const styles = StyleSheet.create({
   },
   conversionCellText: {
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
   },
 
   // Fit Guide
@@ -796,22 +797,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
     borderRadius: 10,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 2,
     borderColor: 'transparent',
     gap: 8,
   },
   fitOptionActive: {
-    backgroundColor: '#F3E8FF',
-    borderColor: '#8B5CF6',
+    backgroundColor: colors.tint.pink,
+    borderColor: colors.brand.purpleLight,
   },
   fitOptionText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   fitOptionTextActive: {
-    color: '#8B5CF6',
+    color: colors.brand.purpleLight,
   },
 
   // How to Measure
@@ -821,7 +822,7 @@ const styles = StyleSheet.create({
   measureHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     padding: 16,
     borderRadius: 12,
     gap: 12,
@@ -830,12 +831,12 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     lineHeight: 20,
   },
   instructionCard: {
     flexDirection: 'row',
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     padding: 16,
     borderRadius: 12,
     gap: 16,
@@ -844,7 +845,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -855,17 +856,17 @@ const styles = StyleSheet.create({
   instructionTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
   },
   instructionDescription: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     lineHeight: 18,
   },
 
   // Tips
   tipsSection: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     padding: 16,
     borderRadius: 12,
     gap: 12,
@@ -873,7 +874,7 @@ const styles = StyleSheet.create({
   tipsTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   tipItem: {
     flexDirection: 'row',
@@ -884,13 +885,13 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#92400E',
+    backgroundColor: colors.brand.amberDark,
     marginTop: 6,
   },
   tipText: {
     flex: 1,
     fontSize: 13,
-    color: '#92400E',
+    color: colors.brand.amberDark,
     lineHeight: 18,
   },
 
@@ -901,7 +902,7 @@ const styles = StyleSheet.create({
   finderHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3E8FF',
+    backgroundColor: colors.tint.pink,
     padding: 16,
     borderRadius: 12,
     gap: 12,
@@ -910,7 +911,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: '600',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     lineHeight: 20,
   },
   inputsContainer: {
@@ -922,23 +923,23 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   input: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: colors.neutral[50],
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderRadius: 10,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 15,
-    color: '#111827',
+    color: colors.neutral[900],
   },
   findButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: colors.brand.purpleLight,
     paddingVertical: 16,
     borderRadius: 12,
     gap: 10,
@@ -946,13 +947,13 @@ const styles = StyleSheet.create({
   findButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
   },
 
   // Result
   resultContainer: {
     alignItems: 'center',
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     padding: 24,
     borderRadius: 16,
     gap: 12,
@@ -963,7 +964,7 @@ const styles = StyleSheet.create({
     color: '#065F46',
   },
   resultSizeBadge: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
     paddingHorizontal: 32,
     paddingVertical: 12,
     borderRadius: 12,
@@ -972,7 +973,7 @@ const styles = StyleSheet.create({
   resultSizeText: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.background.primary,
   },
   resultNote: {
     fontSize: 13,

@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocationHistory } from '@/hooks/useLocation';
 import { locationService } from '@/services/locationService';
 import { LocationStats } from '@/types/location.types';
+import { colors } from '@/constants/theme';
 
 interface LocationAnalyticsProps {
   onViewHistory?: () => void;
@@ -134,7 +135,7 @@ function LocationAnalytics({
   if (isLoading) {
     return (
       <View style={[styles.container, style]}>
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ActivityIndicator size="large" color={colors.brand.ios} />
         <Text style={styles.loadingText}>Loading analytics...</Text>
       </View>
     );
@@ -170,7 +171,7 @@ function LocationAnalytics({
           stats?.totalLocations || 0,
           'All time',
           'location',
-          '#007AFF'
+          colors.brand.ios
         )}
         {renderStatCard(
           'Cities Visited',
@@ -200,7 +201,7 @@ function LocationAnalytics({
         <Text style={styles.sectionTitle}>Location Frequency</Text>
         <View style={styles.frequencyCard}>
           <View style={styles.frequencyContent}>
-            <Ionicons name="pulse" size={24} color="#007AFF" />
+            <Ionicons name="pulse" size={24} color={colors.brand.ios} />
             <View style={styles.frequencyText}>
               <Text style={styles.frequencyTitle}>Recent Activity</Text>
               <Text style={styles.frequencySubtitle}>{getLocationFrequency()}</Text>
@@ -246,7 +247,7 @@ function LocationAnalytics({
           onPress={onViewHistory}
         >
           <View style={styles.actionContent}>
-            <Ionicons name="time" size={20} color="#007AFF" />
+            <Ionicons name="time" size={20} color={colors.brand.ios} />
             <Text style={styles.actionText}>View History</Text>
           </View>
           <Ionicons name="chevron-forward" size={20} color="#C7C7CC" />
@@ -257,7 +258,7 @@ function LocationAnalytics({
           onPress={onViewStats}
         >
           <View style={styles.actionContent}>
-            <Ionicons name="analytics" size={20} color="#007AFF" />
+            <Ionicons name="analytics" size={20} color={colors.brand.ios} />
             <Text style={styles.actionText}>Detailed Stats</Text>
           </View>
           <Ionicons name="chevron-forward" size={20} color="#C7C7CC" />
@@ -270,7 +271,7 @@ function LocationAnalytics({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: colors.tint.warmGray,
   },
   header: {
     padding: 20,
@@ -281,12 +282,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666666',
+    color: colors.midGray,
   },
   statsGrid: {
     flexDirection: 'row',
@@ -323,13 +324,13 @@ const styles = StyleSheet.create({
   },
   statTitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     fontWeight: '500',
   },
   statValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 4,
   },
   statSubtitle: {
@@ -342,7 +343,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 12,
   },
   frequencyCard: {
@@ -369,12 +370,12 @@ const styles = StyleSheet.create({
   frequencyTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 2,
   },
   frequencySubtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
   },
   citiesCard: {
     backgroundColor: 'white',
@@ -408,7 +409,7 @@ const styles = StyleSheet.create({
   cityRankText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666666',
+    color: colors.midGray,
   },
   cityInfo: {
     flex: 1,
@@ -416,12 +417,12 @@ const styles = StyleSheet.create({
   cityName: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 2,
   },
   cityCount: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
   },
   currentLocationCard: {
     backgroundColor: 'white',
@@ -447,12 +448,12 @@ const styles = StyleSheet.create({
   currentLocationTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333333',
+    color: colors.darkGray,
     marginBottom: 2,
   },
   currentLocationSubtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
   },
   actionsSection: {
     padding: 16,
@@ -483,12 +484,12 @@ const styles = StyleSheet.create({
   actionText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333333',
+    color: colors.darkGray,
     marginLeft: 12,
   },
   loadingText: {
     fontSize: 16,
-    color: '#666666',
+    color: colors.midGray,
     marginTop: 12,
     textAlign: 'center',
   },
@@ -502,12 +503,12 @@ const styles = StyleSheet.create({
   },
   errorSubtitle: {
     fontSize: 14,
-    color: '#666666',
+    color: colors.midGray,
     textAlign: 'center',
     marginBottom: 20,
   },
   retryButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.brand.ios,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,

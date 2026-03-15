@@ -18,6 +18,7 @@ import realOffersApi from '@/services/realOffersApi';
 import logger from '@/utils/logger';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -182,7 +183,7 @@ export default function BankOffersListScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor="#3B82F6" />
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={colors.infoScale[400]} />
         }
       >
         {offers.map((offer) => {
@@ -241,7 +242,7 @@ export default function BankOffersListScreen() {
 
                 {/* Chips Row */}
                 <View style={styles.chipRow}>
-                  <View style={[styles.chip, { backgroundColor: '#EFF6FF' }]}>
+                  <View style={[styles.chip, { backgroundColor: colors.tint.blue }]}>
                     <Ionicons name="card-outline" size={12} color={Colors.info} />
                     <ThemedText style={[styles.chipText, { color: Colors.info }]}>
                       {formatCardType(offer.cardType)}

@@ -10,6 +10,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { OrderMilestone } from '@/types/partner.types';
+import { colors } from '@/constants/theme';
 
 interface MilestoneTrackerProps {
   milestones: OrderMilestone[];
@@ -86,13 +87,13 @@ function MilestoneTracker({
         <View style={styles.statusContainer}>
           {milestone.isLocked ? (
             <View style={styles.lockedContainer}>
-              <Ionicons name="lock-closed" size={20} color="#9CA3AF" />
+              <Ionicons name="lock-closed" size={20} color={colors.neutral[400]} />
               <Text style={styles.lockedText}>Locked</Text>
             </View>
           ) : isCompleted ? (
             <View style={styles.completedContainer}>
               <LinearGradient
-                colors={['#10B981', '#059669'] as const}
+                colors={[colors.successScale[400], colors.successScale[700]] as const}
                 style={styles.completedIcon}
               >
                 <Ionicons name="checkmark" size={16} color="white" />
@@ -152,7 +153,7 @@ function MilestoneTracker({
             </View>
           ) : isClaimed ? (
             <View style={styles.claimedButton}>
-              <Ionicons name="checkmark-circle" size={16} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={16} color={colors.successScale[400]} />
               <Text style={styles.claimedButtonText}>Claimed</Text>
             </View>
           ) : canClaim ? (
@@ -161,7 +162,7 @@ function MilestoneTracker({
               onPress={() => handleClaimPress(milestone)}
             >
               <LinearGradient
-                colors={['#00C06A', '#00796B'] as const}
+                colors={[colors.brand.green, colors.brand.teal] as const}
                 style={styles.claimButtonGradient}
               >
                 <Text style={styles.claimButtonText}>Claim Now</Text>
@@ -191,7 +192,7 @@ function MilestoneTracker({
       <View style={styles.header}>
         <View style={styles.headerIcon}>
           <LinearGradient
-            colors={['#00C06A', '#00796B'] as const}
+            colors={[colors.brand.green, colors.brand.teal] as const}
             style={styles.headerIconGradient}
           >
             <Ionicons name="ribbon" size={20} color="white" />
@@ -208,7 +209,7 @@ function MilestoneTracker({
         <View style={styles.completedMilestonesContainer}>
           {sortedMilestones.filter(m => m.isCompleted).map((milestone) => (
             <View key={milestone.id} style={styles.completedMilestoneChip}>
-              <Ionicons name="checkmark-circle" size={14} color="#10B981" />
+              <Ionicons name="checkmark-circle" size={14} color={colors.successScale[400]} />
               <Text style={styles.completedMilestoneChipText}>
                 {milestone.orderNumber}th order reward
               </Text>
@@ -255,22 +256,22 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   summaryContainer: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.tint.coolGray,
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
   },
   summaryText: {
     fontSize: 14,
-    color: '#4B5563',
+    color: colors.neutral[600],
     marginBottom: 12,
   },
   summaryHighlight: {
     fontWeight: '700',
-    color: '#00C06A',
+    color: colors.brand.green,
   },
   completedMilestonesContainer: {
     flexDirection: 'row',
@@ -280,14 +281,14 @@ const styles = StyleSheet.create({
   completedMilestoneChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
   },
   completedMilestoneChipText: {
     fontSize: 12,
-    color: '#059669',
+    color: colors.successScale[700],
     fontWeight: '500',
     marginLeft: 4,
   },
@@ -297,29 +298,29 @@ const styles = StyleSheet.create({
   milestoneCard: {
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     padding: 16,
     position: 'relative',
     backgroundColor: '#FAFAFA',
   },
   completedMilestoneCard: {
-    borderColor: '#10B981',
-    backgroundColor: '#F0FDF4',
+    borderColor: colors.successScale[400],
+    backgroundColor: colors.successScale[50],
   },
   nextMilestoneCard: {
-    borderColor: '#00C06A',
-    backgroundColor: '#F0FDF4',
+    borderColor: colors.brand.green,
+    backgroundColor: colors.successScale[50],
   },
   lockedMilestoneCard: {
-    borderColor: '#D1D5DB',
-    backgroundColor: '#F9FAFB',
+    borderColor: colors.neutral[300],
+    backgroundColor: colors.neutral[50],
     opacity: 0.6,
   },
   orderBadge: {
     position: 'absolute',
     top: -12,
     left: 16,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 16,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -327,15 +328,15 @@ const styles = StyleSheet.create({
     minWidth: 60,
   },
   completedOrderBadge: {
-    backgroundColor: '#10B981',
+    backgroundColor: colors.successScale[400],
   },
   nextOrderBadge: {
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
   },
   orderBadgeText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
   },
   completedOrderBadgeText: {
     color: 'white',
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
   },
   orderBadgeLabel: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
   },
   completedOrderBadgeLabel: {
@@ -364,7 +365,7 @@ const styles = StyleSheet.create({
   },
   lockedText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     marginLeft: 8,
     fontWeight: '500',
   },
@@ -381,7 +382,7 @@ const styles = StyleSheet.create({
   },
   completedText: {
     fontSize: 14,
-    color: '#10B981',
+    color: colors.successScale[400],
     marginLeft: 8,
     fontWeight: '600',
   },
@@ -390,19 +391,19 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontSize: 14,
-    color: '#00C06A',
+    color: colors.brand.green,
     fontWeight: '600',
     marginBottom: 6,
   },
   progressBar: {
     width: 100,
     height: 4,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     borderRadius: 2,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#00C06A',
+    backgroundColor: colors.brand.green,
     borderRadius: 2,
   },
   rewardContainer: {
@@ -421,48 +422,48 @@ const styles = StyleSheet.create({
   rewardTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1F2937',
+    color: colors.neutral[800],
     marginBottom: 4,
   },
   completedRewardTitle: {
-    color: '#059669',
+    color: colors.successScale[700],
   },
   rewardDescription: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginBottom: 4,
     lineHeight: 18,
   },
   rewardValidity: {
     fontSize: 12,
-    color: '#F59E0B',
+    color: colors.warningScale[400],
     fontWeight: '500',
   },
   actionContainer: {
     alignItems: 'flex-start',
   },
   lockedButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
   lockedButtonText: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
     fontWeight: '500',
   },
   claimedButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#D1FAE5',
+    backgroundColor: colors.tint.green,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
   claimedButtonText: {
     fontSize: 14,
-    color: '#10B981',
+    color: colors.successScale[400],
     fontWeight: '600',
     marginLeft: 6,
   },
@@ -483,14 +484,14 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   pendingButton: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
   pendingButtonText: {
     fontSize: 12,
-    color: '#D97706',
+    color: colors.warningScale[700],
     fontWeight: '500',
   },
   connectionLine: {
@@ -499,7 +500,7 @@ const styles = StyleSheet.create({
     left: '50%',
     width: 2,
     height: 16,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginLeft: -1,
   },
 });

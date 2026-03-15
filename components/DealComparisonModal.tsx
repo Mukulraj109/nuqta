@@ -16,6 +16,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Deal } from '@/types/deals';
 import { calculateDealDiscount } from '@/utils/deal-validation';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 interface DealComparisonModalProps {
   visible: boolean;
@@ -204,20 +205,20 @@ function DealComparisonModal({
 
   // Get metric value color
   const getMetricValueColor = (metric: ComparisonMetric, deal: Deal, isComparison: boolean = false) => {
-    if (!isComparison) return '#374151';
+    if (!isComparison) return colors.neutral[700];
     
     if (metric.label === 'Your Savings' && bestDeal?.deal.id === deal.id) {
-      return '#10B981'; // Green for best savings
+      return colors.successScale[400]; // Green for best savings
     }
     if (metric.label === 'Discount' && deal.discountValue >= 25) {
-      return '#8B5CF6'; // Purple for high discounts
+      return colors.brand.purpleLight; // Purple for high discounts
     }
     if (metric.label === 'Valid Until') {
       const days = Math.ceil((deal.validUntil.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
-      if (days <= 3) return '#EF4444'; // Red for expiring soon
-      if (days <= 7) return '#F59E0B'; // Orange for expiring this week
+      if (days <= 3) return colors.error; // Red for expiring soon
+      if (days <= 7) return colors.warningScale[400]; // Orange for expiring this week
     }
-    return '#374151';
+    return colors.neutral[700];
   };
 
   const toggleMetric = (metricKey: string) => {
@@ -277,7 +278,7 @@ function DealComparisonModal({
                   <View style={styles.billAmountSection}>
                     <ThemedText style={styles.sectionTitle}>Your Bill Amount</ThemedText>
                     <View style={styles.billAmountContainer}>
-                      <Ionicons name="wallet-outline" size={20} color="#8B5CF6" style={styles.billAmountIcon} />
+                      <Ionicons name="wallet-outline" size={20} color={colors.brand.purpleLight} style={styles.billAmountIcon} />
                       <TextInput
                         style={styles.billAmountInput}
                         value={billAmount.toString()}
@@ -296,7 +297,7 @@ function DealComparisonModal({
                   {bestDeal && (
                     <View style={styles.bestDealSection}>
                       <View style={styles.bestDealHeader}>
-                        <Ionicons name="trophy" size={20} color="#F59E0B" />
+                        <Ionicons name="trophy" size={20} color={colors.warningScale[400]} />
                         <ThemedText style={styles.bestDealTitle}>Best Deal for You</ThemedText>
                       </View>
                       <View style={styles.bestDealCard}>
@@ -342,7 +343,7 @@ function DealComparisonModal({
                           <Ionicons
                             name={metric.icon as any}
                             size={14}
-                            color={selectedMetrics.includes(key) ? '#fff' : '#8B5CF6'}
+                            color={selectedMetrics.includes(key) ? colors.background.primary : colors.brand.purpleLight}
                           />
                           <ThemedText style={[
                             styles.metricTagText,
@@ -380,7 +381,7 @@ function DealComparisonModal({
                         <View key={metricKey} style={styles.tableRow}>
                           <View style={styles.tableCell}>
                             <View style={styles.metricLabelContainer}>
-                              <Ionicons name={metric.icon as any} size={16} color="#8B5CF6" />
+                              <Ionicons name={metric.icon as any} size={16} color={colors.brand.purpleLight} />
                               <ThemedText style={styles.metricLabel}>{metric.label}</ThemedText>
                             </View>
                           </View>
@@ -443,7 +444,7 @@ function DealComparisonModal({
                                 </ThemedText>
                                 {isBest && (
                                   <View style={styles.bestBadge}>
-                                    <Ionicons name="trophy" size={12} color="#F59E0B" />
+                                    <Ionicons name="trophy" size={12} color={colors.warningScale[400]} />
                                     <ThemedText style={styles.bestBadgeText}>Best</ThemedText>
                                   </View>
                                 )}
@@ -461,7 +462,7 @@ function DealComparisonModal({
                             <Ionicons 
                               name={isValid ? "chevron-forward" : "lock-closed"} 
                               size={20} 
-                              color={isValid ? "#8B5CF6" : "#9CA3AF"} 
+                              color={isValid ? colors.brand.purpleLight : colors.neutral[400]} 
                             />
                           </Pressable>
                         );
@@ -519,7 +520,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
       paddingBottom: 16,
     },
     modal: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.background.primary,
       borderRadius: 20,
       width: '100%',
       maxHeight: '95%',
@@ -533,7 +534,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
       alignItems: 'center',
       padding: 20,
       borderBottomWidth: 1,
-      borderBottomColor: '#F1F5F9',
+      borderBottomColor: colors.tint.slate,
       position: 'relative',
     },
     closeButton: {
@@ -551,12 +552,12 @@ const createStyles = (screenData: { width: number; height: number }) => {
     title: {
       fontSize: 20,
       fontWeight: '700',
-      color: '#111827',
+      color: colors.neutral[900],
       marginBottom: 4,
     },
     subtitle: {
       fontSize: 14,
-      color: '#6B7280',
+      color: colors.neutral[500],
     },
     content: {
       flex: 1,
@@ -568,16 +569,16 @@ const createStyles = (screenData: { width: number; height: number }) => {
     sectionTitle: {
       fontSize: 16,
       fontWeight: '600',
-      color: '#374151',
+      color: colors.neutral[700],
       marginBottom: 12,
     },
     billAmountContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#F9FAFB',
+      backgroundColor: colors.neutral[50],
       borderRadius: 12,
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.neutral[200],
       paddingHorizontal: 16,
       paddingVertical: 12,
     },
@@ -587,13 +588,13 @@ const createStyles = (screenData: { width: number; height: number }) => {
     billAmountInput: {
       flex: 1,
       fontSize: 16,
-      color: '#374151',
+      color: colors.neutral[700],
       textAlign: 'right',
     },
     currencySymbol: {
       fontSize: 16,
       fontWeight: '600',
-      color: '#8B5CF6',
+      color: colors.brand.purpleLight,
       marginLeft: 8,
     },
     bestDealSection: {
@@ -607,29 +608,29 @@ const createStyles = (screenData: { width: number; height: number }) => {
     bestDealTitle: {
       fontSize: 16,
       fontWeight: '600',
-      color: '#F59E0B',
+      color: colors.warningScale[400],
       marginLeft: 8,
     },
     bestDealCard: {
-      backgroundColor: '#FFFBEB',
+      backgroundColor: colors.tint.amber,
       borderRadius: 12,
       padding: 16,
       borderWidth: 1,
-      borderColor: '#FDE68A',
+      borderColor: colors.warningScale[200],
     },
     bestDealName: {
       fontSize: 16,
       fontWeight: '600',
-      color: '#92400E',
+      color: colors.brand.amberDark,
       marginBottom: 4,
     },
     bestDealSavings: {
       fontSize: 14,
-      color: '#D97706',
+      color: colors.warningScale[700],
       marginBottom: 12,
     },
     selectBestButton: {
-      backgroundColor: '#F59E0B',
+      backgroundColor: colors.warningScale[400],
       borderRadius: 8,
       paddingVertical: 10,
       alignItems: 'center',
@@ -637,7 +638,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
     selectBestButtonText: {
       fontSize: 14,
       fontWeight: '600',
-      color: '#fff',
+      color: colors.background.primary,
     },
     metricSelectionSection: {
       marginBottom: 24,
@@ -650,32 +651,32 @@ const createStyles = (screenData: { width: number; height: number }) => {
     metricTag: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#F3F4F6',
+      backgroundColor: colors.neutral[100],
       borderRadius: 16,
       paddingHorizontal: 12,
       paddingVertical: 6,
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.neutral[200],
     },
     metricTagSelected: {
-      backgroundColor: '#8B5CF6',
-      borderColor: '#8B5CF6',
+      backgroundColor: colors.brand.purpleLight,
+      borderColor: colors.brand.purpleLight,
     },
     metricTagText: {
       fontSize: 12,
       fontWeight: '500',
-      color: '#8B5CF6',
+      color: colors.brand.purpleLight,
       marginLeft: 4,
     },
     metricTagTextSelected: {
-      color: '#fff',
+      color: colors.background.primary,
     },
     comparisonSection: {
       marginBottom: 24,
     },
     tableHeader: {
       flexDirection: 'row',
-      backgroundColor: '#F8FAFC',
+      backgroundColor: colors.tint.coolGray,
       borderRadius: 8,
       marginBottom: 2,
     },
@@ -687,13 +688,13 @@ const createStyles = (screenData: { width: number; height: number }) => {
     tableHeaderText: {
       fontSize: 12,
       fontWeight: '600',
-      color: '#374151',
+      color: colors.neutral[700],
       textAlign: 'center',
     },
     tableRow: {
       flexDirection: 'row',
       borderBottomWidth: 1,
-      borderBottomColor: '#F1F5F9',
+      borderBottomColor: colors.tint.slate,
       marginBottom: 2,
     },
     tableCell: {
@@ -709,7 +710,7 @@ const createStyles = (screenData: { width: number; height: number }) => {
     metricLabel: {
       fontSize: 12,
       fontWeight: '500',
-      color: '#374151',
+      color: colors.neutral[700],
       marginLeft: 6,
     },
     metricValue: {
@@ -723,20 +724,20 @@ const createStyles = (screenData: { width: number; height: number }) => {
     dealSelectionButton: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#F9FAFB',
+      backgroundColor: colors.neutral[50],
       borderRadius: 12,
       padding: 16,
       marginBottom: 8,
       borderWidth: 1,
-      borderColor: '#E5E7EB',
+      borderColor: colors.neutral[200],
     },
     dealSelectionButtonBest: {
-      backgroundColor: '#FFFBEB',
-      borderColor: '#FDE68A',
+      backgroundColor: colors.tint.amber,
+      borderColor: colors.warningScale[200],
     },
     dealSelectionButtonDisabled: {
-      backgroundColor: '#F3F4F6',
-      borderColor: '#E5E7EB',
+      backgroundColor: colors.neutral[100],
+      borderColor: colors.neutral[200],
       opacity: 0.6,
     },
     dealSelectionContent: {
@@ -750,19 +751,19 @@ const createStyles = (screenData: { width: number; height: number }) => {
     dealSelectionTitle: {
       fontSize: 14,
       fontWeight: '600',
-      color: '#374151',
+      color: colors.neutral[700],
       flex: 1,
     },
     dealSelectionTitleBest: {
-      color: '#92400E',
+      color: colors.brand.amberDark,
     },
     dealSelectionTitleDisabled: {
-      color: '#9CA3AF',
+      color: colors.neutral[400],
     },
     bestBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FDE68A',
+      backgroundColor: colors.warningScale[200],
       borderRadius: 12,
       paddingHorizontal: 6,
       paddingVertical: 2,
@@ -770,16 +771,16 @@ const createStyles = (screenData: { width: number; height: number }) => {
     bestBadgeText: {
       fontSize: 10,
       fontWeight: '600',
-      color: '#92400E',
+      color: colors.brand.amberDark,
       marginLeft: 2,
     },
     dealSelectionSavings: {
       fontSize: 12,
-      color: '#10B981',
+      color: colors.successScale[400],
       fontWeight: '500',
     },
     dealSelectionSavingsDisabled: {
-      color: '#9CA3AF',
+      color: colors.neutral[400],
     },
   });
 };

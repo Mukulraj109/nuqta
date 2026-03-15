@@ -48,6 +48,7 @@ import {
 } from '@/components/food-dining';
 import storeComparisonApi from '@/services/storeComparisonApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
+import { colors } from '@/constants/theme';
 
 function FoodDiningCategoryPage() {
   const router = useRouter();
@@ -678,7 +679,7 @@ function FoodDiningCategoryPage() {
                   accessibilityLabel={`4.0+ rating filter${activeFilters.minRating ? ', active' : ''}`}
                   accessibilityRole="button"
                 >
-                  <Ionicons name="star" size={12} color={activeFilters.minRating ? '#FFFFFF' : COLORS.primaryGold} />
+                  <Ionicons name="star" size={12} color={activeFilters.minRating ? colors.background.primary : COLORS.primaryGold} />
                   <Text style={[styles.filterChipText, activeFilters.minRating && styles.filterChipTextActive]}>4.0+</Text>
                 </Pressable>
                 <Pressable
@@ -687,7 +688,7 @@ function FoodDiningCategoryPage() {
                   accessibilityLabel={`Open now filter${activeFilters.openNow ? ', active' : ''}`}
                   accessibilityRole="button"
                 >
-                  <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: activeFilters.openNow ? '#FFFFFF' : '#22C55E' }} />
+                  <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: activeFilters.openNow ? colors.background.primary : colors.success }} />
                   <Text style={[styles.filterChipText, activeFilters.openNow && styles.filterChipTextActive]}>Open Now</Text>
                 </Pressable>
               </ScrollView>
@@ -730,7 +731,7 @@ function FoodDiningCategoryPage() {
                       accessibilityRole="button"
                     >
                       <Text style={styles.dietaryIcon}>{opt.icon}</Text>
-                      <Text style={[styles.dietaryLabel, isActive && { color: '#FFFFFF', fontWeight: '600' }]}>{opt.label}</Text>
+                      <Text style={[styles.dietaryLabel, isActive && { color: colors.background.primary, fontWeight: '600' }]}>{opt.label}</Text>
                     </Pressable>
                   );
                 })}
@@ -743,7 +744,7 @@ function FoodDiningCategoryPage() {
                 <Ionicons name="funnel-outline" size={14} color={COLORS.primaryGold} />
                 <Text style={styles.clearFiltersText}>Filters active</Text>
                 <Pressable onPress={clearAllFilters} style={styles.clearFiltersBtn} accessibilityLabel="Clear all filters" accessibilityRole="button">
-                  <Ionicons name="close-circle" size={14} color="#EF4444" />
+                  <Ionicons name="close-circle" size={14} color={colors.error} />
                   <Text style={styles.clearFiltersBtnText}>Clear All</Text>
                 </Pressable>
               </View>
@@ -947,11 +948,11 @@ function FoodDiningCategoryPage() {
               accessibilityLabel="Book a table. Reserve and earn cashback on dine-in."
               accessibilityRole="button"
             >
-              <LinearGradient colors={['#1a3a52', '#0f2638']} style={styles.bookTableGradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+              <LinearGradient colors={[colors.nileBlue, '#0f2638']} style={styles.bookTableGradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
                 <View style={styles.bookTableRow}>
                   <View style={styles.bookTableLeft}>
                     <View style={styles.bookTableIconWrap}>
-                      <Ionicons name="restaurant-outline" size={20} color="#FBBF24" />
+                      <Ionicons name="restaurant-outline" size={20} color={colors.warningScale[400]} />
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={styles.bookTableTitle}>Book a Table</Text>
@@ -959,20 +960,20 @@ function FoodDiningCategoryPage() {
                     </View>
                   </View>
                   <View style={styles.bookTableCTA}>
-                    <Ionicons name="chevron-forward" size={18} color="#1a3a52" />
+                    <Ionicons name="chevron-forward" size={18} color={colors.nileBlue} />
                   </View>
                 </View>
                 <View style={styles.bookTablePerks}>
                   <View style={styles.bookTablePerk}>
-                    <Ionicons name="checkmark-circle" size={14} color="#34D399" />
+                    <Ionicons name="checkmark-circle" size={14} color={colors.successScale[400]} />
                     <Text style={styles.bookTablePerkText}>No pre-payment</Text>
                   </View>
                   <View style={styles.bookTablePerk}>
-                    <Ionicons name="wallet-outline" size={14} color="#FBBF24" />
+                    <Ionicons name="wallet-outline" size={14} color={colors.warningScale[400]} />
                     <Text style={styles.bookTablePerkText}>Bonus coins on check-in</Text>
                   </View>
                   <View style={styles.bookTablePerk}>
-                    <Ionicons name="time-outline" size={14} color="#60A5FA" />
+                    <Ionicons name="time-outline" size={14} color={colors.infoScale[400]} />
                     <Text style={styles.bookTablePerkText}>Instant confirmation</Text>
                   </View>
                 </View>
@@ -988,8 +989,8 @@ function FoodDiningCategoryPage() {
                 </View>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.restaurantsList}>
                   {myBookings.map((booking: any) => {
-                    const statusColors: Record<string, string> = { confirmed: '#22C55E', pending: '#F59E0B', completed: '#3B82F6', cancelled: '#EF4444', no_show: '#6B7280' };
-                    const statusColor = statusColors[booking.status] || '#6B7280';
+                    const statusColors: Record<string, string> = { confirmed: colors.success, pending: colors.warningScale[400], completed: colors.infoScale[400], cancelled: colors.error, no_show: colors.neutral[500] };
+                    const statusColor = statusColors[booking.status] || colors.neutral[500];
                     return (
                       <View key={booking._id} style={styles.bookingCard}>
                         <View style={styles.bookingCardHeader}>
@@ -1086,15 +1087,15 @@ function FoodDiningCategoryPage() {
 
         {/* Value Proposition + Savings */}
         <View style={styles.valuePropCard}>
-          <LinearGradient colors={['#1a3a52', '#0f2638']} style={styles.valuePropGradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
+          <LinearGradient colors={[colors.nileBlue, '#0f2638']} style={styles.valuePropGradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
             <Text style={styles.valuePropTitle}>
               Every meal is rewarding with <Text style={styles.valuePropBrand}>{BRAND.APP_NAME}</Text>
             </Text>
             <View style={styles.valuePropGrid}>
               {[
-                { icon: 'cash-outline' as const, text: 'Cashback on every order', color: '#34D399' },
-                { icon: 'wallet-outline' as const, text: 'Earn coins to reuse', color: '#FBBF24' },
-                { icon: 'phone-portrait-outline' as const, text: 'Pay at restaurant', color: '#60A5FA' },
+                { icon: 'cash-outline' as const, text: 'Cashback on every order', color: colors.successScale[400] },
+                { icon: 'wallet-outline' as const, text: 'Earn coins to reuse', color: colors.warningScale[400] },
+                { icon: 'phone-portrait-outline' as const, text: 'Pay at restaurant', color: colors.infoScale[400] },
                 { icon: 'gift-outline' as const, text: 'Loyalty rewards', color: '#F472B6' },
               ].map((item, i) => (
                 <View key={i} style={styles.valuePropItem}>
@@ -1118,7 +1119,7 @@ function FoodDiningCategoryPage() {
                 accessibilityRole="button"
               >
                 <Text style={styles.savingsButtonText}>View Details</Text>
-                <Ionicons name="chevron-forward" size={14} color="#1a3a52" />
+                <Ionicons name="chevron-forward" size={14} color={colors.nileBlue} />
               </Pressable>
             </View>
           </LinearGradient>
@@ -1163,7 +1164,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     gap: 8,
   },
   socialProofEmoji: {
@@ -1172,7 +1173,7 @@ const styles = StyleSheet.create({
   socialProofText: {
     flex: 1,
     fontSize: 13,
-    color: '#374151',
+    color: colors.neutral[700],
   },
   socialProofUser: {
     fontWeight: '600',
@@ -1233,7 +1234,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 8,
     borderRadius: 8,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
   },
   loyaltyHubStatLabel: {
     fontSize: 11,
@@ -1351,7 +1352,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   sortFilterContent: {
     paddingHorizontal: 16,
@@ -1363,7 +1364,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     gap: 6,
   },
   sortButtonText: {
@@ -1377,7 +1378,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     gap: 4,
   },
   filterChipActive: {
@@ -1389,7 +1390,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   filterChipTextActive: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontWeight: '600',
   },
   modalOverlay: {
@@ -1416,7 +1417,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     gap: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: colors.neutral[100],
   },
   modalOptionActive: {
     backgroundColor: 'rgba(245, 158, 11, 0.08)',
@@ -1447,7 +1448,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     gap: 6,
   },
   dietaryIcon: {
@@ -1477,7 +1478,7 @@ const styles = StyleSheet.create({
   curatedTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   curatedSubtitle: {
     fontSize: 11,
@@ -1489,7 +1490,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1535,7 +1536,7 @@ const styles = StyleSheet.create({
   bookTableTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   bookTableSubtitle: {
     fontSize: 12,
@@ -1546,7 +1547,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 10,
-    backgroundColor: '#FBBF24',
+    backgroundColor: colors.warningScale[400],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -1583,7 +1584,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   valuePropBrand: {
-    color: '#FBBF24',
+    color: colors.warningScale[400],
     fontWeight: '800',
   },
   valuePropGrid: {
@@ -1632,7 +1633,7 @@ const styles = StyleSheet.create({
   savingsAmount: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#FBBF24',
+    color: colors.warningScale[400],
   },
   savingsButton: {
     flexDirection: 'row',
@@ -1641,12 +1642,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 10,
-    backgroundColor: '#FBBF24',
+    backgroundColor: colors.warningScale[400],
   },
   savingsButtonText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   // Clear All Filters bar
   clearFiltersBar: {
@@ -1656,7 +1657,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 10,
     gap: 6,
   },
@@ -1664,7 +1665,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 12,
     fontWeight: '500',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   clearFiltersBtn: {
     flexDirection: 'row',
@@ -1673,12 +1674,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
-    backgroundColor: '#FDE68A',
+    backgroundColor: colors.warningScale[200],
   },
   clearFiltersBtnText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   // Dine-In fallback banner
   dineInFallbackBanner: {
@@ -1688,7 +1689,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.tint.amberLight,
     borderRadius: 10,
     gap: 8,
   },
@@ -1696,17 +1697,17 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 12,
     fontWeight: '500',
-    color: '#92400E',
+    color: colors.brand.amberDark,
   },
   // Booking cards
   bookingCard: {
     width: 160,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 12,
     marginRight: 12,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
   },
   bookingCardHeader: {
     flexDirection: 'row',
@@ -1727,7 +1728,7 @@ const styles = StyleSheet.create({
   bookingStoreName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111827',
+    color: colors.neutral[900],
     marginBottom: 6,
   },
   bookingDetailRow: {
@@ -1738,7 +1739,7 @@ const styles = StyleSheet.create({
   },
   bookingDetailText: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 });
 

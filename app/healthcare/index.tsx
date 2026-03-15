@@ -24,11 +24,12 @@ import apiClient from '@/services/apiClient';
 import emergencyApi from '@/services/emergencyApi';
 import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const COLORS = {
-  white: '#FFFFFF',
-  navy: '#0B2240',
+  white: colors.background.primary,
+  navy: colors.brand.navyDark,
   gray50: Colors.background.secondary,
   gray100: Colors.background.secondary,
   gray200: Colors.border.default,
@@ -36,7 +37,7 @@ const COLORS = {
   green500: Colors.success,
   red500: Colors.error,
   amber500: Colors.warning,
-  cyan500: '#06B6D4',
+  cyan500: colors.brand.cyan,
 };
 
 // Category definitions with routes
@@ -44,9 +45,9 @@ const categoryConfig = [
   { id: 'doctors', title: 'Doctors', icon: 'medical', color: Colors.info, route: '/healthcare/doctors' },
   { id: 'pharmacy', title: 'Pharmacy', icon: 'medkit', color: Colors.success, route: '/healthcare/pharmacy' },
   { id: 'lab', title: 'Lab Tests', icon: 'flask', color: Colors.brand.purpleLight, route: '/healthcare/lab' },
-  { id: 'dental', title: 'Dental Care', icon: 'happy', color: '#EC4899', route: '/healthcare/dental' },
+  { id: 'dental', title: 'Dental Care', icon: 'happy', color: colors.brand.pink, route: '/healthcare/dental' },
   { id: 'emergency', title: 'Emergency', icon: 'warning', color: Colors.error, route: '/healthcare/emergency' },
-  { id: 'records', title: 'Health Records', icon: 'document-text', color: '#06B6D4', route: '/healthcare/records' },
+  { id: 'records', title: 'Health Records', icon: 'document-text', color: colors.brand.cyan, route: '/healthcare/records' },
 ];
 
 // Quick actions for emergency
@@ -325,7 +326,7 @@ const HealthcarePage: React.FC = () => {
           onPress={() => router.push('/healthcare/records' as any)}
         >
           <LinearGradient
-            colors={['#06B6D4', '#0891B2']}
+            colors={[colors.brand.cyan, colors.cyanDark]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.recordsGradient}

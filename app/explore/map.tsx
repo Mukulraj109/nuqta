@@ -20,6 +20,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { MapViewSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -33,12 +34,12 @@ const categories = [
 
 // Store marker colors based on index
 const markerColors = [
-  { bg: '#ffcd57', shadow: 'rgba(0, 192, 106, 0.4)' },
-  { bg: '#3B82F6', shadow: 'rgba(59, 130, 246, 0.4)' },
-  { bg: '#F59E0B', shadow: 'rgba(245, 158, 11, 0.4)' },
-  { bg: '#EC4899', shadow: 'rgba(236, 72, 153, 0.4)' },
-  { bg: '#8B5CF6', shadow: 'rgba(139, 92, 246, 0.4)' },
-  { bg: '#EF4444', shadow: 'rgba(239, 68, 68, 0.4)' },
+  { bg: colors.lightMustard, shadow: 'rgba(0, 192, 106, 0.4)' },
+  { bg: colors.infoScale[400], shadow: 'rgba(59, 130, 246, 0.4)' },
+  { bg: colors.warningScale[400], shadow: 'rgba(245, 158, 11, 0.4)' },
+  { bg: colors.brand.pink, shadow: 'rgba(236, 72, 153, 0.4)' },
+  { bg: colors.brand.purpleLight, shadow: 'rgba(139, 92, 246, 0.4)' },
+  { bg: colors.error, shadow: 'rgba(239, 68, 68, 0.4)' },
 ];
 
 const ExploreMapPage = () => {
@@ -139,16 +140,16 @@ const ExploreMapPage = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background.primary} />
 
       {/* Header */}
       <View style={styles.header}>
         <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#1a3a52" />
+          <Ionicons name="arrow-back" size={24} color={colors.nileBlue} />
         </Pressable>
         <Text style={styles.headerTitle}>Stores in {regionName}</Text>
         <Pressable style={styles.searchButton} onPress={() => navigateTo('/explore/search')}>
-          <Ionicons name="search" size={24} color="#1a3a52" />
+          <Ionicons name="search" size={24} color={colors.nileBlue} />
         </Pressable>
       </View>
 
@@ -171,7 +172,7 @@ const ExploreMapPage = () => {
             <Ionicons
               name={cat.icon as any}
               size={16}
-              color={selectedCategory === cat.id ? '#FFFFFF' : '#6B7280'}
+              color={selectedCategory === cat.id ? colors.background.primary : colors.neutral[500]}
             />
             <Text
               style={[
@@ -191,7 +192,7 @@ const ExploreMapPage = () => {
         <View style={styles.mapBackground}>
           {/* Base gradient */}
           <LinearGradient
-            colors={['#E8F4F8', '#D1E7DD', '#E2E8F0']}
+            colors={['#E8F4F8', '#D1E7DD', colors.slateLight]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={StyleSheet.absoluteFill}
@@ -266,12 +267,12 @@ const ExploreMapPage = () => {
           {/* Floating Info Card */}
           <View style={styles.infoCardContainer}>
             <LinearGradient
-              colors={['#FFFFFF', '#F8FAFC']}
+              colors={[colors.background.primary, colors.tint.coolGray]}
               style={styles.infoCard}
             >
               <View style={styles.infoCardLeft}>
                 <View style={styles.locationIconContainer}>
-                  <Ionicons name="navigate" size={16} color="#FFFFFF" />
+                  <Ionicons name="navigate" size={16} color={colors.background.primary} />
                 </View>
                 <View>
                   <Text style={styles.infoCardTitle}>{regionName}</Text>
@@ -295,18 +296,18 @@ const ExploreMapPage = () => {
           {/* Zoom Controls */}
           <View style={styles.zoomControls}>
             <Pressable style={styles.zoomBtn}>
-              <Ionicons name="add" size={20} color="#374151" />
+              <Ionicons name="add" size={20} color={colors.neutral[700]} />
             </Pressable>
             <View style={styles.zoomDivider} />
             <Pressable style={styles.zoomBtn}>
-              <Ionicons name="remove" size={20} color="#374151" />
+              <Ionicons name="remove" size={20} color={colors.neutral[700]} />
             </Pressable>
           </View>
 
           {/* Compass */}
           <View style={styles.compass}>
             <Text style={styles.compassText}>N</Text>
-            <Ionicons name="navigate" size={14} color="#EF4444" style={{ transform: [{ rotate: '-45deg' }] }} />
+            <Ionicons name="navigate" size={14} color={colors.error} style={{ transform: [{ rotate: '-45deg' }] }} />
           </View>
         </View>
       </View>
@@ -316,7 +317,7 @@ const ExploreMapPage = () => {
         <Text style={styles.storeListTitle}>Nearby Stores</Text>
         <Pressable style={styles.viewAllBtn} onPress={() => navigateTo('/explore/stores')}>
           <Text style={styles.viewAllText}>View All</Text>
-          <Ionicons name="chevron-forward" size={16} color="#ffcd57" />
+          <Ionicons name="chevron-forward" size={16} color={colors.lightMustard} />
         </Pressable>
       </View>
 
@@ -325,7 +326,7 @@ const ExploreMapPage = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.storeListContent}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#ffcd57']} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.lightMustard]} />
         }
       >
         {/* Loading State */}
@@ -336,7 +337,7 @@ const ExploreMapPage = () => {
         {/* Error State */}
         {error && !loading && (
           <View style={styles.errorContainer}>
-            <Ionicons name="alert-circle" size={48} color="#EF4444" />
+            <Ionicons name="alert-circle" size={48} color={colors.error} />
             <Text style={styles.errorText}>{error}</Text>
             <Pressable style={styles.retryButton} onPress={() => fetchNearbyStores()}>
               <Text style={styles.retryButtonText}>Try Again</Text>
@@ -347,7 +348,7 @@ const ExploreMapPage = () => {
         {/* Empty State */}
         {!loading && !error && stores.length === 0 && (
           <View style={styles.emptyContainer}>
-            <Ionicons name="storefront-outline" size={48} color="#9CA3AF" />
+            <Ionicons name="storefront-outline" size={48} color={colors.neutral[400]} />
             <Text style={styles.emptyText}>No stores in {regionName}</Text>
             <Text style={styles.emptySubtext}>We're expanding to {regionName} soon!</Text>
           </View>
@@ -381,18 +382,18 @@ const ExploreMapPage = () => {
               <View style={styles.storeInfo}>
                 <View style={styles.storeNameRow}>
                   <Text style={styles.storeName} numberOfLines={1}>{store.name}</Text>
-                  <View style={[styles.statusDot, { backgroundColor: isOpen ? '#ffcd57' : '#EF4444' }]} />
+                  <View style={[styles.statusDot, { backgroundColor: isOpen ? colors.lightMustard : colors.error }]} />
                 </View>
                 <View style={styles.storeMetaRow}>
                   {store.distance && (
                     <View style={styles.metaItem}>
-                      <Ionicons name="location-outline" size={12} color="#6B7280" />
+                      <Ionicons name="location-outline" size={12} color={colors.neutral[500]} />
                       <Text style={styles.metaText}>{store.distance}</Text>
                     </View>
                   )}
                   {store.waitTime && (
                     <View style={styles.metaItem}>
-                      <Ionicons name="time-outline" size={12} color="#6B7280" />
+                      <Ionicons name="time-outline" size={12} color={colors.neutral[500]} />
                       <Text style={styles.metaText}>{store.waitTime}</Text>
                     </View>
                   )}
@@ -419,10 +420,10 @@ const ExploreMapPage = () => {
        
       >
         <LinearGradient
-          colors={['#1a3a52', '#1E3A5F']}
+          colors={[colors.nileBlue, '#1E3A5F']}
           style={styles.listViewGradient}
         >
-          <Ionicons name="list" size={18} color="#FFFFFF" />
+          <Ionicons name="list" size={18} color={colors.background.primary} />
           <Text style={styles.listViewText}>List View</Text>
         </LinearGradient>
       </Pressable>
@@ -675,7 +676,7 @@ const styles = StyleSheet.create({
     marginTop: -2,
   },
   markerLabelContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -689,7 +690,7 @@ const styles = StyleSheet.create({
   markerLabel: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#374151',
+    color: colors.neutral[700],
     maxWidth: 60,
     textAlign: 'center',
   },
@@ -721,10 +722,10 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: '#3B82F6',
+    backgroundColor: colors.infoScale[400],
     borderWidth: 3,
-    borderColor: '#FFFFFF',
-    shadowColor: '#3B82F6',
+    borderColor: colors.background.primary,
+    shadowColor: colors.infoScale[400],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.5,
     shadowRadius: 4,
@@ -759,18 +760,18 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     justifyContent: 'center',
     alignItems: 'center',
   },
   infoCardTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   infoCardSubtitle: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.neutral[500],
     marginTop: 1,
   },
   infoCardRight: {
@@ -784,18 +785,18 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   statLabel: {
     fontSize: 10,
-    color: '#6B7280',
+    color: colors.neutral[500],
     fontWeight: '500',
     marginTop: 1,
   },
   statDivider: {
     width: 1,
     height: 28,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
 
   // Zoom Controls
@@ -803,7 +804,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 12,
     right: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -820,7 +821,7 @@ const styles = StyleSheet.create({
   },
   zoomDivider: {
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
   },
 
   // Compass
@@ -831,7 +832,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
@@ -845,7 +846,7 @@ const styles = StyleSheet.create({
     top: 4,
     fontSize: 8,
     fontWeight: '700',
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
 
   // Store List
@@ -859,7 +860,7 @@ const styles = StyleSheet.create({
   storeListTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
   },
   viewAllBtn: {
     flexDirection: 'row',
@@ -869,7 +870,7 @@ const styles = StyleSheet.create({
   viewAllText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#ffcd57',
+    color: colors.lightMustard,
   },
   storeList: {
     flex: 1,
@@ -887,7 +888,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   errorContainer: {
     flex: 1,
@@ -898,18 +899,18 @@ const styles = StyleSheet.create({
   errorText: {
     marginTop: 12,
     fontSize: 14,
-    color: '#EF4444',
+    color: colors.error,
     textAlign: 'center',
   },
   retryButton: {
     marginTop: 16,
     paddingHorizontal: 24,
     paddingVertical: 10,
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     borderRadius: 20,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: colors.background.primary,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -923,24 +924,24 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.neutral[700],
   },
   emptySubtext: {
     marginTop: 4,
     fontSize: 14,
-    color: '#9CA3AF',
+    color: colors.neutral[400],
   },
 
   // Store Card
   storeCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 12,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#F3F4F6',
+    borderColor: colors.neutral[100],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
@@ -948,8 +949,8 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   storeCardSelected: {
-    borderColor: '#ffcd57',
-    backgroundColor: '#F0FDF4',
+    borderColor: colors.lightMustard,
+    backgroundColor: colors.successScale[50],
   },
   storeIcon: {
     width: 48,
@@ -961,7 +962,7 @@ const styles = StyleSheet.create({
   storeIconText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
   storeInfo: {
     flex: 1,
@@ -975,7 +976,7 @@ const styles = StyleSheet.create({
   storeName: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.nileBlue,
     flex: 1,
   },
   statusDot: {
@@ -996,10 +997,10 @@ const styles = StyleSheet.create({
   },
   metaText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: colors.neutral[500],
   },
   cashbackBadge: {
-    backgroundColor: '#ffcd57',
+    backgroundColor: colors.lightMustard,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 8,
@@ -1007,7 +1008,7 @@ const styles = StyleSheet.create({
   cashbackText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 
   // Floating Button
@@ -1017,7 +1018,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#1a3a52',
+    shadowColor: colors.nileBlue,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -1033,7 +1034,7 @@ const styles = StyleSheet.create({
   listViewText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.background.primary,
   },
 });
 

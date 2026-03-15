@@ -20,6 +20,7 @@ import {
 } from '@/constants/search-constants';
 import { useRegion } from '@/contexts/RegionContext';
 import CachedImage from '@/components/ui/CachedImage';
+import { colors } from '@/constants/theme';
 
 const ProductCard: React.FC<ProductCardProps> = memo(({
   product,
@@ -198,7 +199,7 @@ const createStyles = (
     imageContainer: {
       position: 'relative',
       height: imageHeight,
-      backgroundColor: '#F8F9FA',
+      backgroundColor: colors.offWhite,
       margin: SPACING.SM,
       borderRadius: 10,
       overflow: 'hidden',
@@ -293,7 +294,7 @@ const createStyles = (
     },
     ratingText: {
       fontSize: TYPOGRAPHY.FONT_SIZE_XS,
-      color: '#D97706',
+      color: colors.warningScale[700],
       fontWeight: '600',
     },
     paymentIndicatorContainer: {

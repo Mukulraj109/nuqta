@@ -38,17 +38,18 @@ import EmptyState from '@/components/common/EmptyState';
 import { LoadingState } from '@/components/common/LoadingState';
 import { entertainmentCategoryData, entertainmentServiceFilters, entertainmentModeFilters, entertainmentQuickActions, ALL_ENTERTAINMENT_SERVICES } from '@/data/category/entertainmentCategoryData';
 import { useRegion } from '@/contexts/RegionContext';
+import { colors } from '@/constants/theme';
 
 const COLORS = {
-  primary: '#8B5CF6',
-  primaryDark: '#7C3AED',
-  primaryLight: '#F5F3FF',
-  primaryGold: '#F59E0B',
-  textPrimary: '#111827',
-  textSecondary: '#6B7280',
-  white: '#FFFFFF',
-  background: '#F5F5F5',
-  border: '#E5E7EB',
+  primary: colors.brand.purpleLight,
+  primaryDark: colors.brand.purple,
+  primaryLight: colors.tint.purpleLight,
+  primaryGold: colors.warningScale[400],
+  textPrimary: colors.neutral[900],
+  textSecondary: colors.neutral[500],
+  white: colors.background.primary,
+  background: colors.tint.warmGray,
+  border: colors.neutral[200],
 };
 
 // Trending entertainment data
@@ -87,9 +88,9 @@ function storeMatchesFilter(store: any, filterId: string): boolean {
 
 function getPriceTier(priceForTwo?: number): { label: string; color: string } {
   if (!priceForTwo) return { label: '', color: '' };
-  if (priceForTwo < 500) return { label: '$', color: '#22C55E' };
-  if (priceForTwo < 1500) return { label: '$$', color: '#F59E0B' };
-  return { label: '$$$', color: '#8B5CF6' };
+  if (priceForTwo < 500) return { label: '$', color: colors.success };
+  if (priceForTwo < 1500) return { label: '$$', color: colors.warningScale[400] };
+  return { label: '$$$', color: colors.brand.purpleLight };
 }
 
 function EntertainmentCategoryPage() {
@@ -329,7 +330,7 @@ function EntertainmentCategoryPage() {
                   <Text style={styles.trendingName} numberOfLines={1}>{show.name}</Text>
                   {show.rating && (
                     <View style={styles.trendingRating}>
-                      <Ionicons name="star" size={10} color="#F59E0B" />
+                      <Ionicons name="star" size={10} color={colors.warningScale[400]} />
                       <Text style={styles.trendingRatingText}>{show.rating}</Text>
                     </View>
                   )}
@@ -490,9 +491,9 @@ const styles = StyleSheet.create({
   trendingCard: { width: 140, height: 100, borderRadius: 12, overflow: 'hidden' },
   trendingImage: { width: '100%', height: '100%' },
   trendingGradient: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 8, borderBottomLeftRadius: 12, borderBottomRightRadius: 12 },
-  trendingName: { color: '#FFFFFF', fontSize: 12, fontWeight: '600' },
+  trendingName: { color: colors.background.primary, fontSize: 12, fontWeight: '600' },
   trendingRating: { flexDirection: 'row', alignItems: 'center', gap: 2, marginTop: 2 },
-  trendingRatingText: { color: '#FFFFFF', fontSize: 10 },
+  trendingRatingText: { color: colors.background.primary, fontSize: 10 },
   challengeBanner: { borderRadius: 16, overflow: 'hidden' },
   challengeGradient: { padding: 16 },
   challengeContent: { flexDirection: 'row', alignItems: 'center', gap: 12 },

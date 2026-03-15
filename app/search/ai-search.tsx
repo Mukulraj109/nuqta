@@ -21,6 +21,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useRegion } from '@/contexts/RegionContext';
 import { apiClient } from '@/utils/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 // Nuqta Design System
 const NUQTA = {
@@ -28,8 +29,8 @@ const NUQTA = {
   nileBlueLight: '#243f55',
   lightMustard: Colors.gold,
   mustardDark: '#e5b84d',
-  linen: '#faf1e0',
-  lavenderMist: '#dfebf7',
+  linen: colors.linen,
+  lavenderMist: colors.lavenderMist,
 };
 
 interface AIResult {

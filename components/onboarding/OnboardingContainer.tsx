@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, StatusBar, SafeAreaView } from 'react-native';
 import PurpleGradientBg from './PurpleGradientBg';
+import { colors } from '@/constants/theme';
 
 interface OnboardingContainerProps {
   children: React.ReactNode;
@@ -34,7 +35,7 @@ export default function OnboardingContainer({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.offWhite,
   },
   safeArea: {
     flex: 1,

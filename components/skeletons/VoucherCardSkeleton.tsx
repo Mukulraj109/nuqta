@@ -12,6 +12,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import SkeletonLoader from './SkeletonLoader';
+import { colors } from '@/constants/theme';
 
 function VoucherCardSkeleton() {
   return (
@@ -104,7 +105,7 @@ function VoucherCardSkeleton() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 16,
     padding: 16,
     marginRight: 16,
@@ -115,12 +116,12 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 6,
     borderWidth: 1,
-    borderColor: '#F1F5F9',
+    borderColor: colors.tint.slate,
   },
   discountBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: colors.neutral[100],
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 12,
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
   },
   codeDashed: {
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: colors.neutral[200],
     borderStyle: 'dashed',
     borderRadius: 10,
     padding: 12,

@@ -21,6 +21,7 @@ import Animated, {
   FadeIn,
 } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '@/constants/theme';
 import {
   CategoryChipsProps,
   PaymentSearchCategory,
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: 36,
     borderRadius: 20,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.neutral[200],
     marginRight: 8,
   },
 });

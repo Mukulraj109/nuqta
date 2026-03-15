@@ -1,3 +1,4 @@
+import { colors } from '@/constants/theme';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
@@ -95,7 +96,7 @@ const SocialProofStrip = () => {
             id: 3,
             icon: 'flame',
             text: `${stats.dealsLive} deals live right now`,
-            color: '#F97316',
+            color: colors.brand.orange,
           });
         }
 
@@ -104,7 +105,7 @@ const SocialProofStrip = () => {
             id: 4,
             icon: 'flash',
             text: `${formatNumber(stats.activeUsers)} users active now`,
-            color: '#A855F7',
+            color: colors.brand.purpleMedium,
           });
         }
 

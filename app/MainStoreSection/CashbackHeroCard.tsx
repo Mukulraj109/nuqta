@@ -10,6 +10,7 @@ import {
   BorderRadius,
 } from "@/constants/DesignSystem";
 import { BRAND } from '@/constants/brand';
+import { colors } from '@/constants/theme';
 
 export interface CashbackHeroCardProps {
   cashbackPercentage?: number;
@@ -23,7 +24,7 @@ export default function CashbackHeroCard({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["#ffcd57", "#E6B84E"]}
+        colors={[colors.lightMustard, colors.brand.goldRich]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
   percentage: {
     fontSize: 32,
     fontWeight: "800",
-    color: "#FFFFFF",
+    color: colors.background.primary,
     letterSpacing: -0.5,
   },
   coinsRow: {
@@ -115,6 +116,6 @@ const styles = StyleSheet.create({
   coinsText: {
     fontSize: 15,
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: colors.background.primary,
   },
 });

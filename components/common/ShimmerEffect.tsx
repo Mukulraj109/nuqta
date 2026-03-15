@@ -1,6 +1,7 @@
 // Shimmer loading effect component
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, StyleSheet, ViewStyle } from 'react-native';
+import { colors } from '@/constants/theme';
 
 interface ShimmerEffectProps {
   width?: number | string;
@@ -14,7 +15,7 @@ function ShimmerEffect({
   width = '100%',
   height = 20,
   style,
-  shimmerColors = ['#E5E7EB', '#F3F4F6', '#E5E7EB'],
+  shimmerColors = [colors.gray[200], colors.gray[100], colors.gray[200]],
   duration = 1500,
 }: ShimmerEffectProps) {
   const animatedValue = useRef(new Animated.Value(0)).current;
@@ -62,7 +63,7 @@ function ShimmerEffect({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.gray[200],
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   shimmer: {
     width: '30%',
     height: '100%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     opacity: 0.7,
     position: 'absolute',
     top: 0,

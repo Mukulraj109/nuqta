@@ -15,6 +15,7 @@ import { useRegion } from '@/contexts/RegionContext';
 import { SectionHeader, HorizontalScrollSection } from '../common';
 import { SaleOffer } from '@/types/offers.types';
 import { Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 
 interface SalesClearanceSectionProps {
   offers: SaleOffer[];
@@ -39,11 +40,11 @@ export const SalesClearanceSection: React.FC<SalesClearanceSectionProps> = ({
   const getTagStyle = (tag: string) => {
     switch (tag) {
       case 'clearance':
-        return { bg: '#FEE2E2', text: '#DC2626', label: 'CLEARANCE' };
+        return { bg: colors.errorScale[100], text: colors.error, label: 'CLEARANCE' };
       case 'last_pieces':
-        return { bg: '#FEF3C7', text: '#D97706', label: 'LAST PIECES' };
+        return { bg: colors.tint.amberLight, text: colors.warningScale[700], label: 'LAST PIECES' };
       default:
-        return { bg: '#DBEAFE', text: '#2563EB', label: 'SALE' };
+        return { bg: colors.tint.blueLight, text: colors.brand.blue, label: 'SALE' };
     }
   };
 
@@ -53,10 +54,10 @@ export const SalesClearanceSection: React.FC<SalesClearanceSectionProps> = ({
     },
     card: {
       width: 200,
-      backgroundColor: isDark ? theme.colors.background.card : '#FFFFFF',
+      backgroundColor: isDark ? theme.colors.background.card : colors.background.primary,
       borderRadius: BorderRadius.lg,
       borderWidth: 1.5,
-      borderColor: isDark ? 'rgba(239, 68, 68, 0.3)' : '#FECACA',
+      borderColor: isDark ? 'rgba(239, 68, 68, 0.3)' : colors.errorScale[200],
       overflow: 'hidden',
       ...(isDark ? {} : Shadows.medium),
     },
@@ -86,7 +87,7 @@ export const SalesClearanceSection: React.FC<SalesClearanceSectionProps> = ({
       position: 'absolute',
       top: 8,
       right: 8,
-      backgroundColor: '#DC2626',
+      backgroundColor: colors.error,
       paddingHorizontal: 8,
       paddingVertical: 4,
       borderRadius: 6,
@@ -94,7 +95,7 @@ export const SalesClearanceSection: React.FC<SalesClearanceSectionProps> = ({
     discountText: {
       fontSize: 12,
       fontWeight: '800',
-      color: '#FFFFFF',
+      color: colors.background.primary,
     },
     storeLogoContainer: {
       position: 'absolute',
@@ -103,9 +104,9 @@ export const SalesClearanceSection: React.FC<SalesClearanceSectionProps> = ({
       width: 32,
       height: 32,
       borderRadius: 8,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.background.primary,
       borderWidth: 2,
-      borderColor: '#FFFFFF',
+      borderColor: colors.background.primary,
       overflow: 'hidden',
       ...Shadows.subtle,
       alignItems: 'center',
@@ -118,12 +119,12 @@ export const SalesClearanceSection: React.FC<SalesClearanceSectionProps> = ({
     storeLogoPlaceholder: {
       width: '100%',
       height: '100%',
-      backgroundColor: '#DC2626',
+      backgroundColor: colors.error,
       alignItems: 'center',
       justifyContent: 'center',
     },
     storeLogoText: {
-      color: '#FFFFFF',
+      color: colors.background.primary,
       fontSize: 14,
       fontWeight: '700',
     },
@@ -153,7 +154,7 @@ export const SalesClearanceSection: React.FC<SalesClearanceSectionProps> = ({
     salePrice: {
       fontSize: 16,
       fontWeight: '800',
-      color: '#DC2626',
+      color: colors.error,
     },
     originalPrice: {
       fontSize: 12,
@@ -186,7 +187,7 @@ export const SalesClearanceSection: React.FC<SalesClearanceSectionProps> = ({
         title="Sales & Clearance"
         subtitle="Up to 70% OFF"
         icon="pricetags"
-        iconColor="#DC2626"
+        iconColor={colors.error}
         showViewAll={offers.length > 3}
         onViewAll={onViewAll}
       />
