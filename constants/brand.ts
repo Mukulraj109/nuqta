@@ -28,6 +28,9 @@ export const BRAND = {
   HOW_IT_WORKS_ROUTE: '/how-rez-works' as const,
   HOW_CASH_STORE_WORKS_ROUTE: '/how-cash-store-works' as const,
 
+  // Deep link scheme (must match app.config.js `scheme` field)
+  DEEP_LINK_SCHEME: 'nuqta',
+
   // Contact & links
   SUPPORT_EMAIL: 'support@rezapp.com',
   WEBSITE: 'https://www.rezapp.com',

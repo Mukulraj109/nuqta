@@ -1,20 +1,26 @@
 /**
  * Hook for Category Page Data - Production Ready
- * Fetches all category page data from backend APIs
- * Falls back to dummy data if API fails
+ * Uses react-query internally via useCategoryPageQuery / useCategoryStoresQuery / useCategoryProductsQuery.
+ * Preserves the exact same return shape as the original manual-fetch version.
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import categoriesApi, {
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/lib/queryKeys';
+import {
+  useCategoryPageQuery,
+  useCategoryStoresQuery,
+  useCategoryProductsQuery,
+} from '@/hooks/queries/useCategoryData';
+import type {
   Category,
   CategoryVibe,
   CategoryOccasion,
   CategoryHashtag,
-  CategoryPageConfig
+  CategoryPageConfig,
 } from '@/services/categoriesApi';
-import { storesApi } from '@/services/storesApi';
-import productsApi from '@/services/productsApi';
 import apiClient from '@/services/apiClient';
+import { colors } from '@/constants/theme';
 
 // Import dummy data as fallback
 import { fashionCategoryData } from '@/data/category/fashionCategoryData';
@@ -28,7 +34,6 @@ import { homeServicesCategoryData } from '@/data/category/homeServicesCategoryDa
 import { travelCategoryData } from '@/data/category/travelCategoryData';
 import { entertainmentCategoryData } from '@/data/category/entertainmentCategoryData';
 import { financialCategoryData } from '@/data/category/financialCategoryData';
-import { colors } from '@/constants/theme';
 
 // Subcategory interface for grid display
 export interface SubcategoryItem {
@@ -137,16 +142,6 @@ interface UseCategoryPageDataResult {
   refetch: () => Promise<void>;
 }
 
-// Module-level data cache to avoid loading flash on remount (from DeferredProviders)
-const _dataCache: Record<string, {
-  stores: CategoryStoreItem[];
-  subcategories: SubcategoryItem[];
-  ugcPosts: UGCPostItem[];
-  aiPlaceholders: string[];
-  timestamp: number;
-}> = {};
-const DATA_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-
 // Map slug to dummy data
 const getDummyData = (slug: string): any => {
   const dataMap: Record<string, any> = {
@@ -165,326 +160,277 @@ const getDummyData = (slug: string): any => {
   return dataMap[slug] || fashionCategoryData;
 };
 
-export const useCategoryPageData = (slug: string, options?: { storesPerPage?: number }): UseCategoryPageDataResult => {
-  const storesPerPage = options?.storesPerPage || 10;
+// Cuisine icon/color map for food-dining subcategories
+const cuisineIconMap: Record<string, { icon: string; color: string }> = {
+  'pizza': { icon: '\uD83C\uDF55', color: colors.error },
+  'biryani': { icon: '\uD83C\uDF57', color: '#D946EF' },
+  'burgers': { icon: '\uD83C\uDF54', color: colors.brand.orange },
+  'chinese': { icon: '\uD83E\uDD61', color: '#3B82F6' },
+  'desserts': { icon: '\uD83C\uDF66', color: '#10B981' },
+  'healthy': { icon: '\uD83E\uDD57', color: '#22C55E' },
+  'indian': { icon: '\uD83C\uDF5B', color: '#F59E0B' },
+  'italian': { icon: '\uD83C\uDF5D', color: colors.error },
+  'thai': { icon: '\uD83C\uDF5C', color: colors.brand.pink },
+  'mexican': { icon: '\uD83C\uDF2E', color: colors.brand.orange },
+  'south indian': { icon: '\uD83E\uDD58', color: colors.brand.purpleLight },
+  'north indian': { icon: '\uD83C\uDF5B', color: '#F59E0B' },
+  'continental': { icon: '\uD83E\uDD69', color: colors.brand.indigo },
+  'japanese': { icon: '\uD83C\uDF63', color: '#3B82F6' },
+  'street': { icon: '\uD83C\uDF2E', color: '#F59E0B' },
+  'chaat': { icon: '\uD83E\uDD58', color: '#F59E0B' },
+  'cafe': { icon: '\u2615', color: '#78350F' },
+  'thali': { icon: '\uD83C\uDF71', color: '#F59E0B' },
+  'ice-cream': { icon: '\uD83C\uDF66', color: colors.brand.pink },
+  'healthy-food': { icon: '\uD83E\uDD57', color: '#22C55E' },
+};
 
-  // Check module-level cache for instant init on remount
-  const cached = slug ? _dataCache[slug] : undefined;
-  const hasFreshCache = cached && Date.now() - cached.timestamp < DATA_CACHE_TTL;
+export const useCategoryPageData = (slug: string, _options?: { storesPerPage?: number }): UseCategoryPageDataResult => {
+  const queryClient = useQueryClient();
 
-  // Category state
-  const [category, setCategory] = useState<Category | null>(null);
-  const [subcategories, setSubcategories] = useState<SubcategoryItem[]>(() => hasFreshCache ? cached!.subcategories : []);
-  const [vibes, setVibes] = useState<CategoryVibe[]>([]);
-  const [occasions, setOccasions] = useState<CategoryOccasion[]>([]);
-  const [hashtags, setHashtags] = useState<CategoryHashtag[]>([]);
+  // ---- React-Query hooks ----
+  const categoryQuery = useCategoryPageQuery(slug);
+  const storesQuery = useCategoryStoresQuery(slug);
+  const productsQuery = useCategoryProductsQuery(slug);
 
-  // Stores & Products
-  const [stores, setStores] = useState<CategoryStoreItem[]>(() => hasFreshCache ? cached!.stores : []);
-  const [products, setProducts] = useState<CategoryProductItem[]>([]);
-
-  // Dynamic Page Config (admin-driven)
+  // ---- Side-loaded state (not part of the 3 main queries) ----
   const [pageConfig, setPageConfig] = useState<CategoryPageConfig | null>(null);
-
-  // UGC & Offers (from dummy data for now)
-  const [ugcPosts, setUgcPosts] = useState<UGCPostItem[]>(() => hasFreshCache ? cached!.ugcPosts : []);
+  const [ugcPosts, setUgcPosts] = useState<UGCPostItem[]>([]);
   const [exclusiveOffers, setExclusiveOffers] = useState<ExclusiveOfferItem[]>([]);
-  const [aiSuggestions, setAiSuggestions] = useState<any[]>([]);
-  const [aiFilterChips, setAiFilterChips] = useState<any[]>([]);
-  const [aiPlaceholders, setAiPlaceholders] = useState<string[]>(() => hasFreshCache ? cached!.aiPlaceholders : []);
+  const [cuisineCounts, setCuisineCounts] = useState<any[]>([]);
 
-  // Loading states — start as false if we have cached data
-  const [isLoadingCategory, setIsLoadingCategory] = useState(() => !hasFreshCache);
-  const [isLoadingStores, setIsLoadingStores] = useState(() => !hasFreshCache);
-  const [isLoadingProducts, setIsLoadingProducts] = useState(() => !hasFreshCache);
-  const [error, setError] = useState<string | null>(null);
-
-  /**
-   * Fetch category data with vibes, occasions, hashtags
-   */
-  const fetchCategoryData = useCallback(async () => {
+  // ---- Fetch page config ----
+  useEffect(() => {
     if (!slug) return;
-
-    try {
-      setIsLoadingCategory(true);
-      setError(null);
-
-      // Fetch category data and page config in parallel
-      const [response, configResponse] = await Promise.all([
-        categoriesApi.getCategoryPageData(slug),
-        categoriesApi.getPageConfig(slug).catch(() => null),
-      ]);
-
-      // Set page config if available
-      if (configResponse?.success && configResponse.data) {
-        setPageConfig(configResponse.data);
-      }
-
-      if (response.success && response.data) {
-        const categoryData = response.data;
-        setCategory(categoryData);
-
-        // Extract subcategories from childCategories
-        if (categoryData.childCategories && Array.isArray(categoryData.childCategories)) {
-          // Fetch real counts for food-dining
-          let cuisineCounts: any[] = [];
-          if (slug === 'food-dining') {
-            try {
-              const countResponse = await storesApi.getCuisineCounts();
-              if (countResponse.success && countResponse.data?.cuisines) {
-                cuisineCounts = countResponse.data.cuisines;
-              }
-            } catch (_e) {
-              // silently handle
-            }
-          }
-
-          // Map cuisine names to icons and colors for fallback
-          const cuisineIconMap: Record<string, { icon: string; color: string }> = {
-            'pizza': { icon: '🍕', color: colors.error },
-            'biryani': { icon: '🍗', color: '#D946EF' },
-            'burgers': { icon: '🍔', color: colors.brand.orange },
-            'chinese': { icon: '🥡', color: '#3B82F6' },
-            'desserts': { icon: '🍦', color: '#10B981' },
-            'healthy': { icon: '🥗', color: '#22C55E' },
-            'indian': { icon: '🍛', color: '#F59E0B' },
-            'italian': { icon: '🍝', color: colors.error },
-            'thai': { icon: '🍜', color: colors.brand.pink },
-            'mexican': { icon: '🌮', color: colors.brand.orange },
-            'south indian': { icon: '🥘', color: colors.brand.purpleLight },
-            'north indian': { icon: '🍛', color: '#F59E0B' },
-            'continental': { icon: '🥩', color: colors.brand.indigo },
-            'japanese': { icon: '🍣', color: '#3B82F6' },
-            'street': { icon: '🌮', color: '#F59E0B' },
-            'chaat': { icon: '🥘', color: '#F59E0B' },
-            'cafe': { icon: '☕', color: '#78350F' },
-            'thali': { icon: '🍱', color: '#F59E0B' },
-            'ice-cream': { icon: '🍦', color: colors.brand.pink },
-            'healthy-food': { icon: '🥗', color: '#22C55E' },
-          };
-
-          const subs = categoryData.childCategories.map((child: any) => {
-            const nameLower = (child.name || '').toLowerCase();
-            const slugLower = (child.slug || '').toLowerCase();
-
-            // Find matching cuisine icon/color
-            let fallbackIcon = '🍽️';
-            let fallbackColor = colors.neutral[500];
-            let matchedCount = 0;
-
-            for (const [key, value] of Object.entries(cuisineIconMap)) {
-              if (nameLower.includes(key) || slugLower.includes(key)) {
-                fallbackIcon = value.icon;
-                fallbackColor = value.color;
-                break;
-              }
-            }
-
-            // Find matching real count if available
-            if (cuisineCounts.length > 0) {
-              const matchedCuisine = cuisineCounts.find(c =>
-                nameLower.includes(c.id) || slugLower.includes(c.id) ||
-                c.id.includes(slugLower) || c.name.toLowerCase() === nameLower
-              );
-              if (matchedCuisine) {
-                matchedCount = matchedCuisine.count;
-              }
-            }
-
-            // Use real count if we found one (and it's greater than 0), otherwise fall back to DB count
-            const finalCount = matchedCount > 0 ? matchedCount : (child.productCount || child.storeCount);
-
-            return {
-              id: child._id || child.id,
-              name: child.name,
-              slug: child.slug,
-              icon: child.icon || fallbackIcon || '🍽️',
-              color: child.metadata?.color || fallbackColor,
-              cashback: child.maxCashback,
-              itemCount: finalCount,
-              image: child.image,
-            };
-          });
-          setSubcategories(subs);
+    let cancelled = false;
+    (async () => {
+      try {
+        const categoriesApi = (await import('@/services/categoriesApi')).default;
+        const configResponse = await categoriesApi.getPageConfig(slug);
+        if (!cancelled && configResponse?.success && configResponse.data) {
+          setPageConfig(configResponse.data);
         }
-
-        // Extract vibes, occasions, hashtags from category
-        setVibes(categoryData.vibes || []);
-        setOccasions(categoryData.occasions || []);
-        setHashtags(categoryData.trendingHashtags || []);
-
-      } else {
-        // Fallback to dummy data
-        loadDummyData();
+      } catch {
+        // silently handle
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to load category');
-      loadDummyData();
-    } finally {
-      setIsLoadingCategory(false);
-    }
+    })();
+    return () => { cancelled = true; };
   }, [slug]);
 
-  /**
-   * Fetch stores by category
-   */
-  const fetchStores = useCallback(async () => {
-    if (!slug) return;
-
-    try {
-      setIsLoadingStores(true);
-
-      const response = await storesApi.getStoresBySubcategorySlug(slug, storesPerPage);
-
-      if (response.success && response.data) {
-        const storesData = Array.isArray(response.data) ? response.data : [];
-        const formattedStores = storesData.map((store: any) => ({
-          // Basic fields
-          id: store._id || store.id,
-          _id: store._id || store.id, // Some components use _id
-          name: store.name,
-          slug: store.slug,
-          logo: store.logo,
-          banner: store.banner,
-          rating: store.ratings?.average || store.rating || 0,
-          ratings: store.ratings, // Full ratings object with count
-          cashback: store.offers?.cashback || store.cashback,
-          distance: store.distance || '',
-          is60Min: store.deliveryCategories?.fastDelivery || (store.operationalInfo?.deliveryTime ? parseInt(store.operationalInfo.deliveryTime) <= 60 : false),
-          hasPickup: store.hasStorePickup || false,
-          categories: store.category ? [store.category.name] : [],
-          category: store.category, // Full category object
-          // Enhanced card fields
-          tags: store.tags || [],
-          rewardRules: store.rewardRules,
-          priceForTwo: store.priceForTwo,
-          offers: store.offers,
-          operationalInfo: store.operationalInfo,
-          deliveryCategories: store.deliveryCategories,
-          location: store.location,
-          isFeatured: store.isFeatured,
-          // Dine-in fields
-          bookingType: store.bookingType,
-          bookingConfig: store.bookingConfig,
-          storeVisitConfig: store.storeVisitConfig,
-          isDineIn: store.bookingType === 'RESTAURANT' || store.bookingConfig?.enabled || store.storeVisitConfig?.enabled || false,
-          isOpen: store.isOpen ?? store.operationalInfo?.isCurrentlyOpen,
-          type: store.type,
-        }));
-        setStores(formattedStores);
+  // ---- Fetch cuisine counts for food-dining ----
+  useEffect(() => {
+    if (slug !== 'food-dining') return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { storesApi } = await import('@/services/storesApi');
+        const countResponse = await storesApi.getCuisineCounts();
+        if (!cancelled && countResponse.success && countResponse.data?.cuisines) {
+          setCuisineCounts(countResponse.data.cuisines);
+        }
+      } catch {
+        // silently handle
       }
-    } catch (err: any) {
-      setError('Unable to load stores. Pull to refresh.');
-    } finally {
-      setIsLoadingStores(false);
-    }
-  }, [slug, storesPerPage]);
-
-  /**
-   * Fetch products by category
-   */
-  const fetchProducts = useCallback(async () => {
-    if (!slug) return;
-
-    try {
-      setIsLoadingProducts(true);
-
-      const response = await productsApi.getProductsByCategory(slug, { limit: storesPerPage });
-
-      if (response.success && response.data) {
-        const productsData = response.data.products || [];
-        const formattedProducts = productsData.map((product: any) => ({
-          id: product._id || product.id,
-          _id: product._id || product.id,
-          name: product.name,
-          image: product.images?.[0]?.url || product.image,
-          images: product.images?.map((img: any) => img?.url || img) || [],
-          price: product.pricing?.selling || product.pricing?.original || product.price,
-          originalPrice: product.pricing?.original,
-          pricing: product.pricing, // Full pricing object (bulkPrice for wholesale filter)
-          discount: product.pricing?.selling && product.pricing?.original && product.pricing.original > product.pricing.selling
-            ? Math.round((1 - product.pricing.selling / product.pricing.original) * 100)
-            : undefined,
-          rating: product.ratings?.average || product.rating,
-          cashback: product.cashback?.percentage,
-          cashbackCoins: product.cashback?.coins || product.cashbackCoins || 0,
-          storeName: product.store?.name || (typeof product.store === 'string' ? undefined : undefined),
-          storeId: product.store?._id || product.store?.id || (typeof product.store === 'string' ? product.store : undefined),
-          store: typeof product.store === 'object' ? {
-            _id: product.store?._id || product.store?.id,
-            id: product.store?._id || product.store?.id,
-            name: product.store?.name,
-            tags: product.store?.tags || [],
-            type: product.store?.type,
-            deliveryCategories: product.store?.deliveryCategories,
-            operationalInfo: product.store?.operationalInfo,
-            logo: product.store?.logo,
-          } : product.store,
-          tags: product.tags || [],
-          brand: product.brand,
-          unit: product.unit,
-          deliveryCategories: product.deliveryCategories,
-        }));
-        setProducts(formattedProducts);
-      }
-    } catch (err: any) {
-    } finally {
-      setIsLoadingProducts(false);
-    }
-  }, [slug, storesPerPage]);
-
-  /**
-   * Load dummy data as fallback
-   */
-  const loadDummyData = useCallback(() => {
-    const dummyData = getDummyData(slug);
-
-    // Map dummy categories to subcategories
-    if (dummyData.categories) {
-      const subs = dummyData.categories.map((cat: any) => ({
-        id: cat.id,
-        name: cat.name,
-        slug: cat.id,
-        icon: cat.icon,
-        color: cat.color,
-        cashback: cat.cashback,
-        itemCount: cat.itemCount,
-      }));
-      setSubcategories(subs);
-    }
-
-    // Set vibes, occasions, hashtags from dummy data
-    if (dummyData.vibes) setVibes(dummyData.vibes);
-    if (dummyData.occasions) setOccasions(dummyData.occasions);
-    if (dummyData.trendingHashtags) setHashtags(dummyData.trendingHashtags);
-
-    // Don't set dummy UGC posts — only show real user content or nothing
-    // UGC data is fetched from real APIs in loadUGCAndOffers()
-
-    // Set exclusive offers
-    if (dummyData.exclusiveOffers) {
-      setExclusiveOffers(dummyData.exclusiveOffers);
-    }
-
-    // Set AI search data
-    if (dummyData.aiSuggestions) setAiSuggestions(dummyData.aiSuggestions);
-    if (dummyData.aiFilterChips) setAiFilterChips(dummyData.aiFilterChips);
-    if (dummyData.aiPlaceholders) setAiPlaceholders(dummyData.aiPlaceholders);
-
-    // Set stores from dummy
-    if (dummyData.stores) {
-      setStores(dummyData.stores);
-    }
-
+    })();
+    return () => { cancelled = true; };
   }, [slug]);
 
-  /**
-   * Generate AI suggestions from category data (vibes, occasions, hashtags)
-   */
-  const generateAISuggestions = useCallback(() => {
+  // ---- Derive category data from query result ----
+  const categoryData = categoryQuery.data;
+  const categorySuccess = categoryData?.success && categoryData?.data;
+  const category: Category | null = categorySuccess ? categoryData!.data! : null;
+
+  // ---- Derive subcategories ----
+  const subcategories = useMemo<SubcategoryItem[]>(() => {
+    if (!category?.childCategories || !Array.isArray(category.childCategories)) {
+      // Fallback to dummy data
+      if (categoryQuery.isError || (categoryQuery.isSuccess && !categorySuccess)) {
+        const dummyData = getDummyData(slug);
+        if (dummyData.categories) {
+          return dummyData.categories.map((cat: any) => ({
+            id: cat.id,
+            name: cat.name,
+            slug: cat.id,
+            icon: cat.icon,
+            color: cat.color,
+            cashback: cat.cashback,
+            itemCount: cat.itemCount,
+          }));
+        }
+      }
+      return [];
+    }
+
+    return category.childCategories.map((child: any) => {
+      const nameLower = (child.name || '').toLowerCase();
+      const slugLower = (child.slug || '').toLowerCase();
+
+      let fallbackIcon = '\uD83C\uDF7D\uFE0F';
+      let fallbackColor = colors.neutral[500];
+      let matchedCount = 0;
+
+      for (const [key, value] of Object.entries(cuisineIconMap)) {
+        if (nameLower.includes(key) || slugLower.includes(key)) {
+          fallbackIcon = value.icon;
+          fallbackColor = value.color;
+          break;
+        }
+      }
+
+      if (cuisineCounts.length > 0) {
+        const matchedCuisine = cuisineCounts.find((c: any) =>
+          nameLower.includes(c.id) || slugLower.includes(c.id) ||
+          c.id.includes(slugLower) || c.name.toLowerCase() === nameLower
+        );
+        if (matchedCuisine) {
+          matchedCount = matchedCuisine.count;
+        }
+      }
+
+      const finalCount = matchedCount > 0 ? matchedCount : (child.productCount || child.storeCount);
+
+      return {
+        id: child._id || child.id,
+        name: child.name,
+        slug: child.slug,
+        icon: child.icon || fallbackIcon || '\uD83C\uDF7D\uFE0F',
+        color: child.metadata?.color || fallbackColor,
+        cashback: child.maxCashback,
+        itemCount: finalCount,
+        image: child.image,
+      };
+    });
+  }, [category, categoryQuery.isError, categoryQuery.isSuccess, categorySuccess, cuisineCounts, slug]);
+
+  // ---- Derive vibes, occasions, hashtags ----
+  const vibes = useMemo<CategoryVibe[]>(() => {
+    if (category) return category.vibes || [];
+    if (categoryQuery.isError || (categoryQuery.isSuccess && !categorySuccess)) {
+      const dummyData = getDummyData(slug);
+      return dummyData.vibes || [];
+    }
+    return [];
+  }, [category, categoryQuery.isError, categoryQuery.isSuccess, categorySuccess, slug]);
+
+  const occasions = useMemo<CategoryOccasion[]>(() => {
+    if (category) return category.occasions || [];
+    if (categoryQuery.isError || (categoryQuery.isSuccess && !categorySuccess)) {
+      const dummyData = getDummyData(slug);
+      return dummyData.occasions || [];
+    }
+    return [];
+  }, [category, categoryQuery.isError, categoryQuery.isSuccess, categorySuccess, slug]);
+
+  const hashtags = useMemo<CategoryHashtag[]>(() => {
+    if (category) return (category as any).trendingHashtags || [];
+    if (categoryQuery.isError || (categoryQuery.isSuccess && !categorySuccess)) {
+      const dummyData = getDummyData(slug);
+      return dummyData.trendingHashtags || [];
+    }
+    return [];
+  }, [category, categoryQuery.isError, categoryQuery.isSuccess, categorySuccess, slug]);
+
+  // ---- Derive stores from query result ----
+  const stores = useMemo<CategoryStoreItem[]>(() => {
+    const storesData = storesQuery.data;
+    if (!storesData?.success || !storesData?.data) {
+      // Fallback to dummy
+      if (storesQuery.isError) {
+        const dummyData = getDummyData(slug);
+        return dummyData.stores || [];
+      }
+      return [];
+    }
+    const rawStores = Array.isArray(storesData.data) ? storesData.data : [];
+    return rawStores.map((store: any) => ({
+      id: store._id || store.id,
+      _id: store._id || store.id,
+      name: store.name,
+      slug: store.slug,
+      logo: store.logo,
+      banner: store.banner,
+      rating: store.ratings?.average || store.rating || 0,
+      ratings: store.ratings,
+      cashback: store.offers?.cashback || store.cashback,
+      distance: store.distance || '',
+      is60Min: store.deliveryCategories?.fastDelivery || (store.operationalInfo?.deliveryTime ? parseInt(store.operationalInfo.deliveryTime) <= 60 : false),
+      hasPickup: store.hasStorePickup || false,
+      categories: store.category ? [store.category.name] : [],
+      category: store.category,
+      tags: store.tags || [],
+      rewardRules: store.rewardRules,
+      priceForTwo: store.priceForTwo,
+      offers: store.offers,
+      operationalInfo: store.operationalInfo,
+      deliveryCategories: store.deliveryCategories,
+      location: store.location,
+      isFeatured: store.isFeatured,
+      bookingType: store.bookingType,
+      bookingConfig: store.bookingConfig,
+      storeVisitConfig: store.storeVisitConfig,
+      isDineIn: store.bookingType === 'RESTAURANT' || store.bookingConfig?.enabled || store.storeVisitConfig?.enabled || false,
+      isOpen: store.isOpen ?? store.operationalInfo?.isCurrentlyOpen,
+      type: store.type,
+    }));
+  }, [storesQuery.data, storesQuery.isError, slug]);
+
+  // ---- Derive products from query result ----
+  const products = useMemo<CategoryProductItem[]>(() => {
+    const productsData = productsQuery.data;
+    if (!productsData?.success || !productsData?.data) return [];
+    const productsArr = productsData.data.products || [];
+    return productsArr.map((product: any) => ({
+      id: product._id || product.id,
+      _id: product._id || product.id,
+      name: product.name,
+      image: product.images?.[0]?.url || product.image,
+      images: product.images?.map((img: any) => img?.url || img) || [],
+      price: product.pricing?.selling || product.pricing?.original || product.price,
+      originalPrice: product.pricing?.original,
+      pricing: product.pricing,
+      discount: product.pricing?.selling && product.pricing?.original && product.pricing.original > product.pricing.selling
+        ? Math.round((1 - product.pricing.selling / product.pricing.original) * 100)
+        : undefined,
+      rating: product.ratings?.average || product.rating,
+      cashback: product.cashback?.percentage,
+      cashbackCoins: product.cashback?.coins || product.cashbackCoins || 0,
+      storeName: product.store?.name || undefined,
+      storeId: product.store?._id || product.store?.id || (typeof product.store === 'string' ? product.store : undefined),
+      store: typeof product.store === 'object' ? {
+        _id: product.store?._id || product.store?.id,
+        id: product.store?._id || product.store?.id,
+        name: product.store?.name,
+        tags: product.store?.tags || [],
+        type: product.store?.type,
+        deliveryCategories: product.store?.deliveryCategories,
+        operationalInfo: product.store?.operationalInfo,
+        logo: product.store?.logo,
+      } : product.store,
+      tags: product.tags || [],
+      brand: product.brand,
+      unit: product.unit,
+      deliveryCategories: product.deliveryCategories,
+    }));
+  }, [productsQuery.data]);
+
+  // ---- AI suggestions derived from vibes/occasions/hashtags ----
+  const { aiSuggestions, aiFilterChips, aiPlaceholders } = useMemo(() => {
     const suggestions: any[] = [];
     const filterChips: any[] = [];
     const placeholders: string[] = [];
+
+    const hasData = vibes.length > 0 || occasions.length > 0 || hashtags.length > 0;
+    if (!hasData) {
+      // Fallback: check dummy data for AI fields
+      if (categoryQuery.isError || (categoryQuery.isSuccess && !categorySuccess)) {
+        const dummyData = getDummyData(slug);
+        return {
+          aiSuggestions: dummyData.aiSuggestions || [],
+          aiFilterChips: dummyData.aiFilterChips || [],
+          aiPlaceholders: dummyData.aiPlaceholders || [],
+        };
+      }
+      return { aiSuggestions: [], aiFilterChips: [], aiPlaceholders: [] };
+    }
 
     // Generate suggestions from vibes
     vibes.slice(0, 3).forEach((vibe) => {
@@ -521,152 +467,123 @@ export const useCategoryPageData = (slug: string, options?: { storesPerPage?: nu
     });
 
     // Generate search placeholders
-    const categoryName = category?.name || slug.replace(/-/g, ' ');
+    const catName = category?.name || slug.replace(/-/g, ' ');
     placeholders.push(
-      `Search in ${categoryName}...`,
-      `Find deals on ${categoryName.toLowerCase()}...`,
-      vibes.length > 0 ? `Explore ${vibes[0].name.toLowerCase()} options...` : `Discover popular ${categoryName.toLowerCase()}...`,
+      `Search in ${catName}...`,
+      `Find deals on ${catName.toLowerCase()}...`,
+      vibes.length > 0 ? `Explore ${vibes[0].name.toLowerCase()} options...` : `Discover popular ${catName.toLowerCase()}...`,
     );
 
-    setAiSuggestions(suggestions);
-    setAiFilterChips(filterChips);
-    setAiPlaceholders(placeholders);
-  }, [vibes, occasions, hashtags, category, slug]);
+    return { aiSuggestions: suggestions, aiFilterChips: filterChips, aiPlaceholders: placeholders };
+  }, [vibes, occasions, hashtags, category, slug, categoryQuery.isError, categoryQuery.isSuccess, categorySuccess]);
 
-  /**
-   * Load real UGC data from videos + reviews APIs, fallback to dummy
-   */
-  const loadUGCAndOffers = useCallback(async () => {
-    try {
-      const [videosRes, reviewsRes] = await Promise.all([
-        apiClient.get<any>('/videos', { category: slug, limit: 6, status: 'approved' }).catch(() => null),
-        apiClient.get<any>('/reviews/featured', { category: slug, limit: 6 }).catch(() => null),
-      ]);
+  // ---- Load UGC (videos + reviews) and exclusive offers ----
+  useEffect(() => {
+    if (!slug) return;
+    let cancelled = false;
 
-      const combined: UGCPostItem[] = [];
+    (async () => {
+      try {
+        const [videosRes, reviewsRes] = await Promise.all([
+          apiClient.get<any>('/videos', { category: slug, limit: 6, status: 'approved' }).catch(() => null),
+          apiClient.get<any>('/reviews/featured', { category: slug, limit: 6 }).catch(() => null),
+        ]);
 
-      if (videosRes?.success && videosRes.data) {
-        const videos = Array.isArray(videosRes.data) ? videosRes.data : (videosRes.data?.videos || []);
-        videos.forEach((v: any) => {
-          const creator = v.creator || v.user;
-          combined.push({
-            id: v._id,
-            userId: creator?._id || '',
-            userName: creator?.profile
-              ? `${creator.profile.firstName || ''} ${creator.profile.lastName || ''}`.trim() || 'Foodie'
-              : 'Foodie',
-            userAvatar: creator?.profile?.avatar || '',
-            image: v.thumbnail || v.videoUrl || '',
-            hashtag: v.tags?.[0] ? `#${v.tags[0]}` : '#FoodieLife',
-            likes: v.engagement?.likes?.length || 0,
-            comments: v.engagement?.comments || v.comments?.length || 0,
-            coinsEarned: v.coinsEarned || 0,
-            isVerified: creator?.isVerified || false,
-          });
-        });
-      }
+        if (cancelled) return;
 
-      if (reviewsRes?.success && reviewsRes.data) {
-        const reviews = Array.isArray(reviewsRes.data) ? reviewsRes.data : (reviewsRes.data?.reviews || []);
-        reviews.forEach((r: any) => {
-          if (r.images && r.images.length > 0) {
+        const combined: UGCPostItem[] = [];
+
+        if (videosRes?.success && videosRes.data) {
+          const videos = Array.isArray(videosRes.data) ? videosRes.data : (videosRes.data?.videos || []);
+          videos.forEach((v: any) => {
+            const creator = v.creator || v.user;
             combined.push({
-              id: r._id,
-              userId: r.user?._id || '',
-              userName: r.user?.profile
-                ? `${r.user.profile.firstName || ''} ${r.user.profile.lastName || ''}`.trim() || 'Reviewer'
-                : 'Reviewer',
-              userAvatar: r.user?.profile?.avatar || '',
-              image: r.images[0],
-              hashtag: r.store?.name ? `#${r.store.name.replace(/\s+/g, '')}` : '#FoodReview',
-              likes: r.helpful || 0,
-              comments: 0,
-              coinsEarned: r.coinsEarned || 0,
-              isVerified: r.user?.isVerified || false,
+              id: v._id,
+              userId: creator?._id || '',
+              userName: creator?.profile
+                ? `${creator.profile.firstName || ''} ${creator.profile.lastName || ''}`.trim() || 'Foodie'
+                : 'Foodie',
+              userAvatar: creator?.profile?.avatar || '',
+              image: v.thumbnail || v.videoUrl || '',
+              hashtag: v.tags?.[0] ? `#${v.tags[0]}` : '#FoodieLife',
+              likes: v.engagement?.likes?.length || 0,
+              comments: v.engagement?.comments || v.comments?.length || 0,
+              coinsEarned: v.coinsEarned || 0,
+              isVerified: creator?.isVerified || false,
             });
-          }
-        });
+          });
+        }
+
+        if (reviewsRes?.success && reviewsRes.data) {
+          const reviews = Array.isArray(reviewsRes.data) ? reviewsRes.data : (reviewsRes.data?.reviews || []);
+          reviews.forEach((r: any) => {
+            if (r.images && r.images.length > 0) {
+              combined.push({
+                id: r._id,
+                userId: r.user?._id || '',
+                userName: r.user?.profile
+                  ? `${r.user.profile.firstName || ''} ${r.user.profile.lastName || ''}`.trim() || 'Reviewer'
+                  : 'Reviewer',
+                userAvatar: r.user?.profile?.avatar || '',
+                image: r.images[0],
+                hashtag: r.store?.name ? `#${r.store.name.replace(/\s+/g, '')}` : '#FoodReview',
+                likes: r.helpful || 0,
+                comments: 0,
+                coinsEarned: r.coinsEarned || 0,
+                isVerified: r.user?.isVerified || false,
+              });
+            }
+          });
+        }
+
+        if (!cancelled) {
+          setUgcPosts(combined);
+        }
+      } catch {
+        if (!cancelled) setUgcPosts([]);
       }
 
-      if (combined.length > 0) {
-        setUgcPosts(combined);
-      } else {
-        // No real UGC data - section will be hidden (component returns null for empty posts)
-        setUgcPosts([]);
+      // Exclusive offers - from dummy for now
+      if (!cancelled) {
+        const dummyData = getDummyData(slug);
+        if (dummyData.exclusiveOffers) {
+          setExclusiveOffers(dummyData.exclusiveOffers);
+        }
       }
-    } catch (err) {
-      setUgcPosts([]);
-    }
+    })();
 
-    // Exclusive offers - from dummy for now (offers section handles its own real API)
-    const dummyData = getDummyData(slug);
-    if (dummyData.exclusiveOffers) {
-      setExclusiveOffers(dummyData.exclusiveOffers);
-    }
+    return () => { cancelled = true; };
   }, [slug]);
 
-  /**
-   * Refetch all data
-   */
+  // ---- Refetch all data ----
   const refetch = useCallback(async () => {
-    // Clear data cache for this slug
-    delete _dataCache[slug];
     await Promise.all([
-      fetchCategoryData(),
-      fetchStores(),
-      fetchProducts(),
+      queryClient.invalidateQueries({ queryKey: queryKeys.categoryPage.data(slug) }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.categoryPage.stores(slug) }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.categoryPage.products(slug) }),
     ]);
-    loadUGCAndOffers();
-  }, [slug, fetchCategoryData, fetchStores, fetchProducts, loadUGCAndOffers]);
+  }, [slug, queryClient]);
 
-  // Track latest callback refs so the effect only depends on slug
-  const fetchCategoryDataRef = useRef(fetchCategoryData);
-  const fetchStoresRef = useRef(fetchStores);
-  const fetchProductsRef = useRef(fetchProducts);
-  const loadUGCAndOffersRef = useRef(loadUGCAndOffers);
-  fetchCategoryDataRef.current = fetchCategoryData;
-  fetchStoresRef.current = fetchStores;
-  fetchProductsRef.current = fetchProducts;
-  loadUGCAndOffersRef.current = loadUGCAndOffers;
-
-  // Initial fetch — only depends on slug to prevent refetch on remount/callback recreation
-  useEffect(() => {
-    if (slug) {
-      fetchCategoryDataRef.current();
-      fetchStoresRef.current();
-      fetchProductsRef.current();
-      loadUGCAndOffersRef.current();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
-
-  // Generate AI suggestions when category data changes
-  useEffect(() => {
-    if (vibes.length > 0 || occasions.length > 0 || hashtags.length > 0) {
-      generateAISuggestions();
-    }
-  }, [vibes, occasions, hashtags, generateAISuggestions]);
-
-  // Update module-level cache when data loads (for instant init on remount)
-  useEffect(() => {
-    if (slug && stores.length > 0) {
-      _dataCache[slug] = {
-        stores,
-        subcategories,
-        ugcPosts,
-        aiPlaceholders,
-        timestamp: Date.now(),
-      };
-    }
-  }, [slug, stores, subcategories, ugcPosts, aiPlaceholders]);
-
-  // Computed loading state
+  // ---- Derive loading states ----
+  const isLoadingCategory = categoryQuery.isLoading;
+  const isLoadingStores = storesQuery.isLoading;
+  const isLoadingProducts = productsQuery.isLoading;
   const isLoading = isLoadingCategory || isLoadingStores || isLoadingProducts;
+
+  // ---- Derive error ----
+  const error = useMemo<string | null>(() => {
+    if (categoryQuery.error) return (categoryQuery.error as Error).message || 'Failed to load category';
+    if (storesQuery.error) return 'Unable to load stores. Pull to refresh.';
+    return null;
+  }, [categoryQuery.error, storesQuery.error]);
+
+  // ---- Derived category name ----
+  const categoryName = category?.name || slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
   return {
     // Category Info
     category,
-    categoryName: category?.name || slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+    categoryName,
     categorySlug: slug,
 
     // Dynamic Page Config (admin-driven)

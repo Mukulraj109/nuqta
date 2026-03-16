@@ -88,7 +88,7 @@ export default function GiftsPage() {
     fetchGifts();
   }, [fetchGifts]);
 
-  const handleClaim = async (gift: Gift) => {
+  const handleClaim = useCallback(async (gift: Gift) => {
     const confirmed = await platformAlertConfirm(
       'Claim Gift',
       `Claim ${gift.amount} ${BRAND.CURRENCY_CODE} from ${gift.sender?.fullName || gift.sender?.phoneNumber || 'someone'}?`
@@ -110,7 +110,7 @@ export default function GiftsPage() {
     } finally {
       setClaimingId(null);
     }
-  };
+  }, []);
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
@@ -126,7 +126,7 @@ export default function GiftsPage() {
     return `${hours}h left`;
   };
 
-  const renderReceivedGift = ({ item }: { item: Gift }) => {
+  const renderReceivedGift = useCallback(({ item }: { item: Gift }) => {
     const status = STATUS_CONFIG[item.status] || STATUS_CONFIG.pending;
     const emoji = THEME_EMOJIS[item.theme] || '🎁';
     const senderName = item.sender?.fullName || item.sender?.phoneNumber || 'Someone';
@@ -177,9 +177,9 @@ export default function GiftsPage() {
         </View>
       </View>
     );
-  };
+  }, [claimingId, handleClaim]);
 
-  const renderSentGift = ({ item }: { item: Gift }) => {
+  const renderSentGift = useCallback(({ item }: { item: Gift }) => {
     const status = STATUS_CONFIG[item.status] || STATUS_CONFIG.pending;
     const emoji = THEME_EMOJIS[item.theme] || '🎁';
     const recipientName = item.recipient?.fullName || item.recipient?.phoneNumber || 'Someone';
@@ -213,7 +213,7 @@ export default function GiftsPage() {
         </View>
       </View>
     );
-  };
+  }, []);
 
   const gifts = activeTab === 'received' ? receivedGifts : sentGifts;
 

@@ -28,6 +28,12 @@ export default function Root({ children }: { children: React.ReactNode }) {
         <meta name="twitter:image" content="/assets/og-image.png" />
         <meta name="theme-color" content={colors.brand.purple} />
 
+        {/* PWA support */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+
         {/* Minimal reset - only body margin */}
         <style dangerouslySetInnerHTML={{ __html: `
           body {

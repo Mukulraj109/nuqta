@@ -6,7 +6,6 @@ import {
   Pressable,
   Dimensions,
   ScrollView,
-  Image,
   StatusBar,
   ActivityIndicator,
   RefreshControl,

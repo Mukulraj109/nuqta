@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { View, ScrollView, StyleSheet, RefreshControl, Pressable, Animated, Platform } from 'react-native';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { useRouter } from 'expo-router';
@@ -16,11 +16,13 @@ import LoadingState from '@/components/common/LoadingState';
 import ErrorState from '@/components/common/ErrorState';
 import articlesService from '@/services/articlesApi';
 
-// New Play Page Components
+// CategoryHeader stays eager — used in error/loading states before content renders
 import CategoryHeader from '@/components/playPage/CategoryHeader';
-import MerchantVideoSection from '@/components/playPage/MerchantVideoSection';
-import ArticleSection from '@/components/playPage/ArticleSection';
-import UGCVideoSection from '@/components/playPage/UGCVideoSection';
+
+// Lazy-loaded content sections (play tab is never the initial screen)
+const MerchantVideoSection = React.lazy(() => import('@/components/playPage/MerchantVideoSection'));
+const ArticleSection = React.lazy(() => import('@/components/playPage/ArticleSection'));
+const UGCVideoSection = React.lazy(() => import('@/components/playPage/UGCVideoSection'));
 import logger from '@/utils/logger';
 import { colors } from '@/constants/theme';
 
@@ -274,21 +276,23 @@ export default function PlayScreen() {
           </Pressable>
         )}
 
-        {/* Merchant Videos Section */}
+        {/* Merchant Videos Section — lazy-loaded */}
         {state.loading && state.merchantVideos.length === 0 ? (
           <View style={styles.sectionLoading}>
             <LoadingState message="Loading product videos..." size="small" />
           </View>
         ) : state.merchantVideos.length > 0 ? (
-          <MerchantVideoSection
-            videos={state.merchantVideos}
-            onVideoPress={handleVideoPress}
-            onViewAllPress={handleViewAllPress}
-            loading={state.loading}
-          />
+          <Suspense fallback={null}>
+            <MerchantVideoSection
+              videos={state.merchantVideos}
+              onVideoPress={handleVideoPress}
+              onViewAllPress={handleViewAllPress}
+              loading={state.loading}
+            />
+          </Suspense>
         ) : null}
 
-        {/* Article Section */}
+        {/* Article Section — lazy-loaded */}
         {articlesLoading && articles.length === 0 ? (
           <View style={styles.sectionLoading}>
             <LoadingState message="Loading articles..." size="small" />
@@ -298,7 +302,7 @@ export default function PlayScreen() {
             <Pressable
               style={styles.sectionErrorButton}
               onPress={handleRetryArticles}
-             
+
             >
               <Ionicons name="refresh-circle" size={24} color={Colors.error} />
               <ThemedText style={styles.sectionErrorText}>
@@ -307,28 +311,32 @@ export default function PlayScreen() {
             </Pressable>
           </View>
         ) : articles.length > 0 ? (
-          <ArticleSection
-            articles={articles}
-            onArticlePress={handleArticlePress}
-            onViewAllPress={handleArticlesViewAllPress}
-            loading={articlesLoading}
-          />
+          <Suspense fallback={null}>
+            <ArticleSection
+              articles={articles}
+              onArticlePress={handleArticlePress}
+              onViewAllPress={handleArticlesViewAllPress}
+              loading={articlesLoading}
+            />
+          </Suspense>
         ) : null}
 
-        {/* UGC Videos Section */}
+        {/* UGC Videos Section — lazy-loaded */}
         {state.loading && state.ugcVideos.length === 0 ? (
           <View style={styles.sectionLoading}>
             <LoadingState message="Loading UGC videos..." size="small" />
           </View>
         ) : state.ugcVideos.length > 0 ? (
-          <UGCVideoSection
-            videos={state.ugcVideos}
-            onVideoPress={handleVideoPress}
-            onViewAllPress={handleViewAllPress}
-            onLoadMore={handleLoadMore}
-            loading={state.loading}
-            hasMore={state.hasMoreVideos}
-          />
+          <Suspense fallback={null}>
+            <UGCVideoSection
+              videos={state.ugcVideos}
+              onVideoPress={handleVideoPress}
+              onViewAllPress={handleViewAllPress}
+              onLoadMore={handleLoadMore}
+              loading={state.loading}
+              hasMore={state.hasMoreVideos}
+            />
+          </Suspense>
         ) : null}
 
         {/* Empty state when no content */}

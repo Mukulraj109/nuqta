@@ -30,12 +30,14 @@ import {
 } from '@/services/referralApi';
 import { anonymizeEmail } from '@/utils/privacy';
 import ShareModal from '@/components/referral/ShareModal';
+import TierUpCelebration from '@/components/referral/TierUpCelebration';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { REFERRAL_TIERS } from '@/types/referral.types';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import analyticsService from '@/services/analyticsService';
 import { ProfileSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Helper to get next tier info based on current referrals
 const getNextTierInfo = (currentReferrals: number) => {
@@ -73,6 +75,9 @@ const ReferralPageContent = () => {
   const [loadingError, setLoadingError] = useState<string | null>(null);
   const [stats, setStats] = useState<ReferralStats | null>(null);
   const [shareModalVisible, setShareModalVisible] = useState(false);
+  const [tierUpVisible, setTierUpVisible] = useState(false);
+  const [tierUpName, setTierUpName] = useState('');
+  const [tierUpBonus, setTierUpBonus] = useState(0);
   const [history, setHistory] = useState<ReferralHistoryItem[]>([]);
   const [codeInfo, setCodeInfo] = useState<{
     referralCode: string;
@@ -140,6 +145,34 @@ const ReferralPageContent = () => {
       const statsData = await getReferralStats();
       if (isMountedRef.current) {
         setStats(statsData);
+
+        // Tier-up detection: compare current tier with stored tier
+        if (statsData?.totalReferrals != null) {
+          const currentTierInfo = getNextTierInfo(statsData.totalReferrals);
+          // Find current tier (one before next)
+          const tiers = Object.entries(REFERRAL_TIERS).sort(
+            (a, b) => a[1].referralsRequired - b[1].referralsRequired
+          );
+          let currentTierKey = '';
+          for (const [key, data] of tiers) {
+            if (statsData.totalReferrals >= data.referralsRequired) currentTierKey = key;
+          }
+          if (currentTierKey) {
+            const storedTier = await AsyncStorage.getItem('referral_last_tier');
+            if (storedTier && storedTier !== currentTierKey) {
+              // Tier changed — check if it's an upgrade
+              const storedIdx = tiers.findIndex(([k]) => k === storedTier);
+              const currentIdx = tiers.findIndex(([k]) => k === currentTierKey);
+              if (currentIdx > storedIdx) {
+                const tierData = REFERRAL_TIERS[currentTierKey as keyof typeof REFERRAL_TIERS];
+                setTierUpName(tierData?.name || currentTierKey);
+                setTierUpBonus(tierData?.rewards?.tierBonus || 0);
+                setTierUpVisible(true);
+              }
+            }
+            await AsyncStorage.setItem('referral_last_tier', currentTierKey);
+          }
+        }
       }
     } catch (error) {
       hasError = true;
@@ -572,6 +605,14 @@ const ReferralPageContent = () => {
               })()
             : undefined
         }
+      />
+
+      {/* Tier-up celebration modal */}
+      <TierUpCelebration
+        visible={tierUpVisible}
+        tierName={tierUpName}
+        bonusCoins={tierUpBonus}
+        onDismiss={() => setTierUpVisible(false)}
       />
     </View>
   );

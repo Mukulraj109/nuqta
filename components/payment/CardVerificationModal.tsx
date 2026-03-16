@@ -50,7 +50,7 @@ function CardVerificationModal({
 
       const response = await paymentVerificationService.initiateCardVerification({
         paymentMethodId,
-        returnUrl: 'rezapp://payment-verification/callback',
+        returnUrl: 'nuqta://payment-verification/callback',
       });
 
       if (response.success && response.data) {

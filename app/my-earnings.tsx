@@ -100,7 +100,7 @@ const MyEarningsPage = () => {
 
       if (authLoading) return;
 
-      if (!isAuthenticated || !null /* TODO: token not available via selectors */) {
+      if (!isAuthenticated) {
         setData(null);
         setLoading(false);
         return;
@@ -126,7 +126,7 @@ const MyEarningsPage = () => {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [authLoading, isAuthenticated, null /* TODO: token not available via selectors */, selectedPeriod, refreshing]);
+  }, [authLoading, isAuthenticated, selectedPeriod, refreshing]);
 
   useEffect(() => {
     if (!authLoading && isAuthenticated) {

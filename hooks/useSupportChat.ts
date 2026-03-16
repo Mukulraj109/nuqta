@@ -1,13 +1,17 @@
 // Use Support Chat Hook
 // Complete state management and real-time functionality for live chat support
+// READ operations use react-query; WebSocket logic and mutations remain imperative.
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Platform } from 'react-native';
-import { platformAlert } from '@/utils/platformAlert';
+import { useQueryClient } from '@tanstack/react-query';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSocket } from '@/contexts/SocketContext';
 import supportChatApi from '@/services/supportChatApi';
+import { queryKeys } from '@/lib/queryKeys';
+import { useTicketHistory, useChatMessages } from '@/hooks/queries/useSupportData';
+import { useCreateTicket, useSendMessage } from '@/hooks/mutations/useSupportMutations';
 import type {
   SupportTicket,
   ChatMessage,
@@ -20,8 +24,6 @@ import type {
   ConversationRating,
   OfflineMessage,
   UseSupportChatReturn,
-  CallRequest,
-  MessageDeliveryStatus,
 } from '@/types/supportChat.types';
 
 const devLog = {
@@ -38,18 +40,69 @@ const STORAGE_KEYS = {
 };
 
 export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
+  const queryClient = useQueryClient();
+
   // Use the app's existing SocketContext socket (already connected & proven to work)
   const { socket: contextSocket } = useSocket();
 
-  // State
+  // ==================== React-Query: READ operations ====================
+
+  // Ticket history — react-query driven
+  const {
+    data: historyData,
+    isLoading: historyLoading,
+    error: historyQueryError,
+  } = useTicketHistory(1, 20);
+
+  const ticketHistory: SupportTicket[] = historyData?.tickets ?? [];
+  const historyError: string | null = historyQueryError
+    ? 'Failed to load ticket history'
+    : null;
+
+  // Current ticket state (managed locally — may come from storage, creation, or URL param)
   const [currentTicket, setCurrentTicket] = useState<SupportTicket | null>(null);
+
+  // Messages for the active ticket — react-query driven (initial load only)
+  const {
+    data: messagesQueryData,
+    isLoading: messagesQueryLoading,
+    error: messagesQueryError,
+  } = useChatMessages(currentTicket?.id);
+
+  // Local messages state — seeded from react-query, then updated by WebSocket / optimistic sends
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [messagesError, setMessagesError] = useState<string | null>(null);
 
-  const [ticketHistory, setTicketHistory] = useState<SupportTicket[]>([]);
-  const [historyLoading, setHistoryLoading] = useState(false);
-  const [historyError, setHistoryError] = useState<string | null>(null);
+  // Seed local messages from react-query when the query delivers data
+  const lastSyncedTicketId = useRef<string | null>(null);
+  useEffect(() => {
+    if (
+      messagesQueryData?.messages &&
+      currentTicket?.id &&
+      lastSyncedTicketId.current !== currentTicket.id
+    ) {
+      setMessages(messagesQueryData.messages);
+      lastSyncedTicketId.current = currentTicket.id;
+    }
+  }, [messagesQueryData, currentTicket?.id]);
+
+  // Derive messagesLoading / messagesError from the query when no local override
+  useEffect(() => {
+    if (messagesQueryLoading) setMessagesLoading(true);
+    else setMessagesLoading(false);
+  }, [messagesQueryLoading]);
+
+  useEffect(() => {
+    if (messagesQueryError) setMessagesError('Failed to load messages');
+    else setMessagesError(null);
+  }, [messagesQueryError]);
+
+  // Mutations
+  const createTicketMutation = useCreateTicket();
+  const sendMessageMutation = useSendMessage();
+
+  // ==================== Local UI State ====================
 
   const [assignedAgent, setAssignedAgent] = useState<SupportAgent | null>(null);
   const [isAgentTyping, setIsAgentTyping] = useState(false);
@@ -268,12 +321,13 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
 
   const createTicket = async (request: CreateTicketRequest): Promise<SupportTicket | null> => {
     try {
-      const response = await supportChatApi.createTicket(request);
+      const response = await createTicketMutation.mutateAsync(request);
 
       if (response && response.ticket) {
         setCurrentTicket(response.ticket);
         setMessages(response.ticket.messages || []);
         activeTicketIdRef.current = response.ticket.id;
+        lastSyncedTicketId.current = response.ticket.id;
 
         // Set assigned agent from response (auto-assignment happens during creation)
         if ((response.ticket as any).assignedAgent) {
@@ -314,6 +368,8 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
         setShowRating(true);
         // Clear stored ticket so next visit starts fresh
         await AsyncStorage.removeItem(STORAGE_KEYS.CURRENT_TICKET);
+        // Invalidate ticket list so history reflects the closure
+        queryClient.invalidateQueries({ queryKey: queryKeys.support.tickets() });
       }
 
       return success;
@@ -332,6 +388,7 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
           ...currentTicket,
           status: 'open',
         });
+        queryClient.invalidateQueries({ queryKey: queryKeys.support.tickets() });
       }
 
       return success;
@@ -371,26 +428,25 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
       return queueOfflineMessage(messageRequest);
     }
 
+    // Optimistically add message to UI
+    const optimisticMessage: ChatMessage = {
+      id: `temp_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      ticketId: currentTicket.id,
+      content: messageRequest.content,
+      sender: 'user',
+      type: messageRequest.type || 'text',
+      timestamp: new Date().toISOString(),
+      read: false,
+      delivered: false,
+      attachments: messageRequest.attachments,
+    };
+
+    setMessages((prev) => [...prev, optimisticMessage]);
+    setInputText('');
+    setAttachments([]);
+
     try {
-      // Optimistically add message to UI
-      const optimisticMessage: ChatMessage = {
-        id: `temp_${Date.now()}_${Math.random().toString(36).slice(2)}`,
-        ticketId: currentTicket.id,
-        content: messageRequest.content,
-        sender: 'user',
-        type: messageRequest.type || 'text',
-        timestamp: new Date().toISOString(),
-        read: false,
-        delivered: false,
-        attachments: messageRequest.attachments,
-      };
-
-      setMessages((prev) => [...prev, optimisticMessage]);
-      setInputText('');
-      setAttachments([]);
-
-      // Send to backend
-      const response = await supportChatApi.sendMessage(messageRequest);
+      const response = await sendMessageMutation.mutateAsync(messageRequest);
 
       if (response && response.message) {
         // Replace optimistic message with real one
@@ -419,6 +475,10 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
       }
     } catch (error) {
       devLog.error('Error sending message:', error);
+      // Remove optimistic message on error
+      setMessages((prev) =>
+        prev.filter((msg) => msg.id !== optimisticMessage.id)
+      );
       setMessagesError('Failed to send message');
       return false;
     }
@@ -642,34 +702,34 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
 
   // ==================== History ====================
 
-  const loadTicketHistory = async (page: number = 1): Promise<void> => {
-    try {
-      setHistoryLoading(true);
-      setHistoryError(null);
-
-      const response = await supportChatApi.getTicketHistory(page, 20);
-
-      if (response && response.tickets) {
-        setTicketHistory(response.tickets);
-
-        // Cache to storage
-        await AsyncStorage.setItem(
-          STORAGE_KEYS.TICKET_HISTORY,
-          JSON.stringify(response.tickets)
-        );
-      }
-    } catch (error) {
-      devLog.error('Error loading ticket history:', error);
-      setHistoryError('Failed to load ticket history');
-    } finally {
-      setHistoryLoading(false);
-    }
+  /**
+   * loadTicketHistory now simply tells react-query to refetch.
+   * The `page` param is accepted for API compatibility but the primary
+   * page is controlled by the useTicketHistory hook above.
+   */
+  const loadTicketHistory = async (_page: number = 1): Promise<void> => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.support.tickets() });
   };
 
+  /**
+   * loadMessages fetches older messages (pagination via `before` cursor)
+   * and prepends them to the local messages list.
+   * The initial load is handled by useChatMessages react-query hook.
+   */
   const loadMessages = async (
     ticketId: string,
     before?: string
   ): Promise<void> => {
+    if (!before) {
+      // Initial load — just invalidate the react-query cache so it refetches
+      queryClient.invalidateQueries({ queryKey: queryKeys.support.messages(ticketId) });
+      // Reset the sync tracker so the effect will seed local state again
+      lastSyncedTicketId.current = null;
+      return;
+    }
+
+    // Paginated "load older" — still manual because react-query manages
+    // only the initial page; prepending older messages is a cursor operation.
     try {
       setMessagesLoading(true);
       setMessagesError(null);
@@ -677,13 +737,8 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
       const response = await supportChatApi.getMessages(ticketId, before, 50);
 
       if (response && response.messages) {
-        if (before) {
-          // Prepend older messages
-          setMessages((prev) => [...response.messages, ...prev]);
-        } else {
-          // Set initial messages
-          setMessages(response.messages);
-        }
+        // Prepend older messages
+        setMessages((prev) => [...response.messages, ...prev]);
       }
     } catch (error) {
       devLog.error('Error loading messages:', error);
@@ -830,12 +885,15 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
             setAssignedAgent(ticket.assignedAgent);
           }
 
-          // Fetch fresh messages from the API (storage messages may be stale)
+          // Fetch fresh ticket data from the API (storage data may be stale)
           try {
             const freshTicket = await supportChatApi.getTicket(ticket.id);
             if (freshTicket) {
               setCurrentTicket(freshTicket);
+              // Messages will be loaded by react-query via useChatMessages
+              // but set them from freshTicket as a fast path
               setMessages(freshTicket.messages || []);
+              lastSyncedTicketId.current = freshTicket.id || ticket.id;
               if ((freshTicket as any).assignedAgent) {
                 setAssignedAgent((freshTicket as any).assignedAgent);
               }
@@ -848,12 +906,14 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
               // Ticket might have been deleted, use stored messages as fallback
               if (ticket.messages) {
                 setMessages(ticket.messages);
+                lastSyncedTicketId.current = ticket.id;
               }
             }
           } catch {
             // API unavailable, use stored messages
             if (ticket.messages) {
               setMessages(ticket.messages);
+              lastSyncedTicketId.current = ticket.id;
             }
           }
         } else {
@@ -934,6 +994,7 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
         if (ticket) {
           setCurrentTicket(ticket);
           setMessages(ticket.messages || []);
+          lastSyncedTicketId.current = ticket.id || initialTicketId;
 
           if ((ticket as any).assignedAgent) {
             setAssignedAgent((ticket as any).assignedAgent);

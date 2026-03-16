@@ -15,9 +15,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { CATEGORY_CONFIGS, SubcategoryItem } from '@/config/categoryConfig';
 import { getSubcategoryIcon } from '@/config/categoryIcons';
-import { useProfileMenu } from '@/contexts/ProfileContext';
+import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
 import { profileMenuSections } from '@/data/profileData';
-import { useProfileStore } from '@/stores/profileStore';
 import { useAuthUser, useIsAuthenticated } from '@/stores';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
@@ -47,10 +46,7 @@ const CATEGORY_SECTIONS: CategorySection[] = Object.values(CATEGORY_CONFIGS).map
 // ============ MAIN COMPONENT ============
 export default function CategoriesScreen() {
   const router = useRouter();
-  const user = useProfileStore((s) => s.user);
-  const isModalVisible = useProfileStore((s) => s.isModalVisible);
-  const showModal = useProfileStore((s) => s.showModal);
-  const hideModal = useProfileStore((s) => s.hideModal);
+  const { user: profileUser, isModalVisible, showModal, hideModal } = useProfile();
   const { handleMenuItemPress } = useProfileMenu();
   const authUser = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -132,7 +128,7 @@ export default function CategoriesScreen() {
              
             >
               <ThemedText style={styles.profileText}>
-                {user?.initials ||
+                {profileUser?.initials ||
                   (authUser?.profile?.firstName ? authUser.profile.firstName.charAt(0).toUpperCase() :
                     (isAuthenticated ? 'U' : '?')
                   )}
@@ -168,13 +164,15 @@ export default function CategoriesScreen() {
       </ScrollView>
 
       {/* Profile Menu Modal */}
-      <ProfileMenuModal
-        visible={isModalVisible}
-        onClose={hideModal}
-        user={user!}
-        menuSections={profileMenuSections}
-        onMenuItemPress={handleMenuItemPress}
-      />
+      {profileUser && (
+        <ProfileMenuModal
+          visible={isModalVisible}
+          onClose={hideModal}
+          user={profileUser}
+          menuSections={profileMenuSections}
+          onMenuItemPress={handleMenuItemPress}
+        />
+      )}
     </View>
   );
 }

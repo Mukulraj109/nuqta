@@ -14,6 +14,7 @@ import { ThemedText } from '@/components/ThemedText';
 import type { SpinWheelResult } from '@/types/gamification.types';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import CoinRainOverlay from '@/components/ui/CoinRainOverlay';
 
 interface CelebrationModalProps {
   visible: boolean;
@@ -130,9 +131,10 @@ function CelebrationModal({
       onRequestClose={onClose}
     >
       <View style={styles.modalOverlay}>
+        <CoinRainOverlay visible={visible && (result?.prize?.type === 'coins' || result?.prize?.type === 'cashback')} />
         <Pressable
           style={StyleSheet.absoluteFill}
-         
+
           onPress={onClose}
         />
 

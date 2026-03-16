@@ -5,6 +5,27 @@ import { Platform } from 'react-native';
 import { parseConnectionError, formatConnectionError, isConnectionError } from '@/utils/connectionUtils';
 import { globalDeduplicator, createRequestKey } from '@/utils/requestDeduplicator';
 import { globalConcurrencyLimiter } from '@/utils/concurrencyLimiter';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Cached device fingerprint (loaded once, reused for all requests)
+let _cachedDeviceFingerprint: string | null = null;
+let _fingerprintLoadPromise: Promise<string | null> | null = null;
+
+async function getDeviceFingerprintHeader(): Promise<string | null> {
+  if (_cachedDeviceFingerprint) return _cachedDeviceFingerprint;
+  if (_fingerprintLoadPromise) return _fingerprintLoadPromise;
+  _fingerprintLoadPromise = (async () => {
+    try {
+      const stored = await AsyncStorage.getItem('@security_device_fingerprint');
+      if (stored) {
+        const fp = JSON.parse(stored);
+        _cachedDeviceFingerprint = fp.hash || fp.id || null;
+      }
+    } catch { /* non-critical */ }
+    return _cachedDeviceFingerprint;
+  })();
+  return _fingerprintLoadPromise;
+}
 
 // Emulators can't reach host's localhost directly
 // BlueStacks uses Hyper-V network, host is reachable at 172.19.128.1
@@ -187,18 +208,27 @@ class ApiClient {
 
     // Get current region dynamically (in case it changed since constructor)
     const currentRegion = getRegionFn ? getRegionFn() : this.currentRegion;
-    const requestHeaders = {
+    const requestHeaders: Record<string, string> = {
       ...this.defaultHeaders,
       'X-Rez-Region': currentRegion,
       ...headers
     };
+
+    // Inject device fingerprint header for security tracking
+    const fingerprint = await getDeviceFingerprintHeader();
+    if (fingerprint) {
+      requestHeaders['X-Device-Fingerprint'] = fingerprint;
+      requestHeaders['X-Device-OS'] = `${Platform.OS} ${Platform.Version || ''}`.trim();
+    }
+
+    // Declared outside try so catch block can clear the timer
+    let slowWarningId: ReturnType<typeof setTimeout> | null = null;
 
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeout);
 
       // Show "taking longer than usual" warning at 4s
-      let slowWarningId: ReturnType<typeof setTimeout> | null = null;
       if (this.slowRequestCallback && timeout >= 5000) {
         slowWarningId = setTimeout(() => {
           this.slowRequestCallback?.(endpoint);

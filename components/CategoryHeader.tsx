@@ -411,11 +411,11 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({
       </LinearGradient>
 
       {/* Profile Menu Modal */}
-      {user && (
+      {profileUser && (
         <ProfileMenuModal
           visible={isModalVisible}
           onClose={hideModal}
-          user={user}
+          user={profileUser}
           menuSections={profileMenuSections}
           onMenuItemPress={handleMenuItemPress}
         />

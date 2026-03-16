@@ -210,10 +210,9 @@ export default function GiftPage() {
       });
 
       if (response.data) {
-        setIdempotencyKey(generateIdempotencyKey('gift'));
-        // Refresh wallet balance via context
+        // Refresh wallet balance via context FIRST, then regenerate idempotency key
         await refreshWallet();
-        const newBalance = walletBalance - Number(amount);
+        const newBalance = response.data.newBalance ?? (walletBalance - Number(amount));
         setSuccessData({
           giftId: response.data.giftId,
           recipientName: response.data.recipientName || recipientInfo?.name || recipient,
@@ -222,8 +221,11 @@ export default function GiftPage() {
           message: message || undefined,
           newBalance,
         });
+        // Regenerate AFTER success is confirmed and balance refreshed
+        setIdempotencyKey(generateIdempotencyKey('gift'));
       }
     } catch (error: any) {
+      // Only regenerate on non-retriable errors (not network failures)
       setIdempotencyKey(generateIdempotencyKey('gift'));
       const parsed = parseWalletError(error);
       if (parsed.code === 'REAUTH_REQUIRED') {

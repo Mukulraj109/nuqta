@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useFocusEffect } from 'expo-router';
 import RechargeWalletCard from "../components/RechargeWalletCard";
 import ProfileCompletionCard from "@/components/ProfileCompletionCard";
 import ScratchCardOffer from "@/components/ScratchCardOffer";
@@ -35,9 +36,11 @@ import { CoinDetailCard } from '@/components/wallet/CoinDetailCard';
 import { InsightSection } from '@/components/wallet/InsightSection';
 import { TransactionCTA } from '@/components/wallet/TransactionCTA';
 import { MoreForYouSection } from '@/components/wallet/MoreForYouSection';
+import CoinEducationOverlay from '@/components/wallet/CoinEducationOverlay';
 import { platformAlert } from '@/utils/platformAlert';
 import { ThemedText } from '@/components/ThemedText';
 import { BRAND } from '@/constants/brand';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors, Spacing, BorderRadius, Typography, Gradients } from '@/constants/DesignSystem';
 import walletApi from '@/services/walletApi';
 import { colors } from '@/constants/theme';
@@ -54,6 +57,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
   const { goBack } = useSafeNavigation();
   const getCurrency = useGetCurrency();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
+  const [coinEducationVisible, setCoinEducationVisible] = useState(false);
 
   const walletData = useWalletData();
   const walletLoading = useWalletLoading();
@@ -82,7 +86,21 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
 
   useEffect(() => {
     trackWalletViewed();
+    // Auto-show coin education on first wallet visit
+    AsyncStorage.getItem('wallet_education_seen').then(seen => {
+      if (!seen) {
+        setCoinEducationVisible(true);
+        AsyncStorage.setItem('wallet_education_seen', '1').catch(() => {});
+      }
+    }).catch(() => {});
   }, [trackWalletViewed]);
+
+  // Refresh wallet data when screen regains focus (e.g., after a transaction)
+  useFocusEffect(
+    useCallback(() => {
+      refreshWallet();
+    }, [refreshWallet])
+  );
 
   // Expiring coins warning
   const [expiringAmount, setExpiringAmount] = useState(0);
@@ -396,6 +414,12 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
           {/* Quick Actions Bar */}
           {!walletData.isFrozen && <StickyQuickActions />}
           {/* Coin Detail Cards */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, marginBottom: 4 }}>
+            <Text style={{ fontSize: 15, fontWeight: '700', color: '#111827' }}>Your Coins</Text>
+            <Pressable onPress={() => setCoinEducationVisible(true)} hitSlop={8}>
+              <Ionicons name="help-circle-outline" size={20} color={colors.neutral[400]} />
+            </Pressable>
+          </View>
           {walletData.coins.map((coin) => (
             <CoinDetailCard key={coin.id} coin={coin} onPress={handleCoinPress} />
           ))}
@@ -471,6 +495,12 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
         </ScrollView>
 
       </View>
+
+      {/* Coin Education Overlay */}
+      <CoinEducationOverlay
+        visible={coinEducationVisible}
+        onDismiss={() => setCoinEducationVisible(false)}
+      />
     </FeatureErrorBoundary>
   );
 };

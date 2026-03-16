@@ -2,6 +2,7 @@
 // Enhanced expiry tracking with timeline
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import {
   View,
   ScrollView,
@@ -58,6 +59,8 @@ function mapCoin(raw: any, index: number): ExpiringCoin {
 
 export default function ExpiryTrackerPage() {
   const router = useRouter();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -91,6 +94,7 @@ export default function ExpiryTrackerPage() {
   }, []);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchExpiringCoins().finally(() => setLoading(false));
   }, [fetchExpiringCoins]);
 

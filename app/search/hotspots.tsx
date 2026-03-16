@@ -1,7 +1,7 @@
 // Nearby Hotspots Page
 // Location-based popular areas - connected to real API
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   ScrollView,
@@ -98,7 +98,7 @@ export default function HotspotsPage() {
     return `${(distance / 1000).toFixed(1)} km`;
   };
 
-  const navigateToDetail = (hotspot: HotspotFromAPI) => {
+  const navigateToDetail = useCallback((hotspot: HotspotFromAPI) => {
     router.push({
       pathname: '/search/hotspot-detail',
       params: {
@@ -111,9 +111,9 @@ export default function HotspotsPage() {
         city: hotspot.city || '',
       },
     } as any);
-  };
+  }, [router]);
 
-  const openDirections = (hotspot: HotspotFromAPI) => {
+  const openDirections = useCallback((hotspot: HotspotFromAPI) => {
     if (!hotspot.coordinates?.lat || !hotspot.coordinates?.lng) return;
     const { lat, lng } = hotspot.coordinates;
     const url = Platform.select({
@@ -122,13 +122,13 @@ export default function HotspotsPage() {
       default: `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`,
     });
     if (url) Linking.openURL(url).catch(() => {});
-  };
+  }, []);
 
   const locationText = currentLocation?.coordinates
     ? (currentLocation as any).city || 'Your Location'
     : 'Location unavailable';
 
-  const renderHotspot = ({ item }: { item: HotspotFromAPI }) => (
+  const renderHotspot = useCallback(({ item }: { item: HotspotFromAPI }) => (
     <Pressable
       style={styles.hotspotCard}
       onPress={() => navigateToDetail(item)}
@@ -178,7 +178,7 @@ export default function HotspotsPage() {
         <Ionicons name="navigate-circle" size={32} color={NUQTA.nileBlue} />
       </Pressable>
     </Pressable>
-  );
+  ), [navigateToDetail, openDirections]);
 
   const renderMapView = () => (
     <View style={styles.mapContainer}>

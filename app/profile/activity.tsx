@@ -1,7 +1,7 @@
 // Activity Feed Screen
 // Displays user activity timeline with pagination and filtering
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   ScrollView,
@@ -84,7 +84,7 @@ export default function ActivityFeedPage() {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  const renderActivityItem = ({ item }: { item: Activity }) => (
+  const renderActivityItem = useCallback(({ item }: { item: Activity }) => (
     <Pressable style={styles.activityCard}>
       <View style={[styles.activityIcon, { backgroundColor: `${item.color}20` }]}>
         <Ionicons name={item.icon as any} size={24} color={item.color} />
@@ -115,7 +115,7 @@ export default function ActivityFeedPage() {
         )}
       </View>
     </Pressable>
-  );
+  ), [currencySymbol]);
 
   const renderFooter = () => {
     if (!hasMore) return null;

@@ -69,7 +69,7 @@ export default function PriveOffersScreen() {
     fetchOffers(nextPage);
   }, [hasMore, isLoading, page, fetchOffers]);
 
-  const renderOffer = ({ item }: { item: PriveOffer }) => (
+  const renderOffer = useCallback(({ item }: { item: PriveOffer }) => (
     <Pressable style={styles.offerCard} onPress={() => router.push(`/prive-offers/${item.id}` as any)}>
       <View style={styles.offerHeader}>
         <View style={styles.brandBadge}>
@@ -94,7 +94,7 @@ export default function PriveOffersScreen() {
         </View>
       )}
     </Pressable>
-  );
+  ), [router]);
 
   if (isLoading && offers.length === 0) {
     return (

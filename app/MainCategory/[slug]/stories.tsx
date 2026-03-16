@@ -170,7 +170,7 @@ export default function CategoryStoriesPage() {
     return `${Math.floor(days / 7)}w ago`;
   };
 
-  const renderItem = ({ item }: { item: UGCItem }) => (
+  const renderItem = useCallback(({ item }: { item: UGCItem }) => (
     <Pressable
       style={styles.card}
       onPress={() => {
@@ -233,7 +233,7 @@ export default function CategoryStoriesPage() {
         </View>
       </View>
     </Pressable>
-  );
+  ), [router, categoryName]);
 
   return (
     <SafeAreaView style={styles.container}>

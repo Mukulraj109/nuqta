@@ -21,7 +21,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import apiClient from '@/services/apiClient';
-import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
+import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -54,6 +54,7 @@ export default function AdminSocialMediaPosts() {
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [loading, setLoading] = useState(true);
@@ -75,13 +76,9 @@ export default function AdminSocialMediaPosts() {
   const [rejectionReason, setRejectionReason] = useState('');
 
   useEffect(() => {
-    if (!null /* TODO: token not available via selectors */) {
-      router.replace('/sign-in');
-      return;
-    }
-    apiClient.setAuthToken(null /* TODO: token not available via selectors */);
+    if (!isAuthenticated || authLoading) return;
     loadPosts(1);
-  }, [null /* TODO: token not available via selectors */, selectedStatus]);
+  }, [isAuthenticated, authLoading, selectedStatus]);
 
   const loadPosts = async (pageNum = 1) => {
     if (pageNum === 1) {

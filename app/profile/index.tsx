@@ -2,7 +2,8 @@
 // User profile page with icon grid and menu list
 
 import { colors } from '@/constants/theme';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
 import { View, ScrollView, StyleSheet, Pressable, StatusBar, Platform, SafeAreaView, RefreshControl, ActivityIndicator } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -62,8 +63,6 @@ export default function ProfilePage() {
     });
     return () => { cancelled = true; };
   }, [isAuthenticated, authLoading]);
-
-
 
   // Removed - using SafeBackButton component instead
 
@@ -183,6 +182,14 @@ export default function ProfilePage() {
       setRefreshing(false);
     }
   }, [authActions, refetchStats, refreshWallet, refreshCompletionStatus]);
+
+  // Refresh profile data when screen regains focus (e.g., after editing profile)
+  useFocusEffect(
+    useCallback(() => {
+      if (!isAuthenticated || authLoading) return;
+      onRefresh();
+    }, [isAuthenticated, authLoading, onRefresh])
+  );
 
   // Handle profile image upload
   const handleImageUpload = async () => {

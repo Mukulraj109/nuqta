@@ -234,7 +234,7 @@ const CreatorPickDetail = () => {
   // RELATED PICK CARD
   // ============================================
 
-  const renderRelatedPick = ({ item }: { item: CreatorPick }) => {
+  const renderRelatedPick = useCallback(({ item }: { item: CreatorPick }) => {
     const coins = item.estimatedCoins || (item.commissionRate
       ? Math.max(Math.round(item.productPrice * item.commissionRate / 100), 1)
       : Math.max(Math.round(item.productPrice * 0.05), 1));
@@ -261,7 +261,7 @@ const CreatorPickDetail = () => {
         </View>
       </Pressable>
     );
-  };
+  }, [router]);
 
   // ============================================
   // MAIN CONTENT

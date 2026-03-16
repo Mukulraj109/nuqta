@@ -201,7 +201,7 @@ export default function OrdersListScreen() {
     });
   };
 
-  const renderOrderItem = ({ item }: { item: Order }) => (
+  const renderOrderItem = useCallback(({ item }: { item: Order }) => (
     <Pressable
       style={styles.orderCard}
       onPress={() => handleOrderPress(item.id)}
@@ -262,7 +262,7 @@ export default function OrdersListScreen() {
         </Pressable>
       </View>
     </Pressable>
-  );
+  ), [currencySymbol, handleOrderPress]);
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>

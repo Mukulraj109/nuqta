@@ -29,7 +29,7 @@ import {
   useSetActiveTab,
 } from '@/stores';
 import { useHomeTabStore } from '@/stores/homeTabStore';
-import { useProfileStore } from '@/stores/profileStore';
+import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
 import { useCartStore } from '@/stores/cartStore';
 import { useWalletStore } from '@/stores/walletStore';
 
@@ -37,8 +37,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors, spacing, borderRadius, shadows, typography } from '@/constants/theme';
 import StickySearchHeader from '@/components/homepage/StickySearchHeader';
 import HeroBanner from '@/components/homepage/HeroBanner';
-import HomeTabSection, { TabId } from '@/components/homepage/HomeTabSection';
-import NearUTabContent from '@/components/homepage/NearUTabContent';
+import type { TabId } from '@/components/homepage/HomeTabSection';
 import { useHomepage, useHomepageNavigation } from '@/hooks/useHomepage';
 import { useLoyaltySection } from '@/hooks/useLoyaltySection';
 
@@ -55,7 +54,7 @@ import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 // Profile now from Zustand store (imported above)
 import { profileMenuSections } from '@/data/profileData';
 import LocationDisplay from '@/components/location/LocationDisplay';
-import LocationPickerModal from '@/components/location/LocationPickerModal';
+// LocationPickerModal lazy-loaded below (modal — only needed on tap)
 import { useCurrentLocation, useLocationPermission } from '@/hooks/useLocation';
 import { AddressSearchResult } from '@/types/location.types';
 // Cart & Auth now from Zustand selectors (imported above)
@@ -70,7 +69,10 @@ import { BRAND } from '@/constants/brand';
 // ProfileMenuModal eagerly loaded — React.lazy + Suspense(null) causes modal to not appear on Android
 import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
 
-// Lazy-loaded components (below-the-fold)
+// Lazy-loaded components (below-the-fold / modals / secondary content)
+const HomeTabSection = React.lazy(() => import('@/components/homepage/HomeTabSection'));
+const NearUTabContent = React.lazy(() => import('@/components/homepage/NearUTabContent'));
+const LocationPickerModal = React.lazy(() => import('@/components/location/LocationPickerModal'));
 const QuickAccessFAB = React.lazy(() => import('@/components/navigation/QuickAccessFAB'));
 const PushNotificationInitializer = React.lazy(() => import('@/components/common/PushNotificationInitializer'));
 
@@ -91,10 +93,15 @@ function prefetchOtherTabs() {
   prefetchTabsRef.done = true;
 
   // Prefetch JS chunks (import() caches the module — next React.lazy render is instant)
+  import('@/components/homepage/HomeTabSection').catch(() => {});
+  import('@/components/homepage/NearUTabContent').catch(() => {});
   import('@/components/mall/MallSectionContainer').catch(() => {});
   import('@/components/mall/MallHeaderWrapper').catch(() => {});
   import('@/components/cash-store/CashStoreHeaderWrapper').catch(() => {});
   import('@/components/cash-store/CashStoreSectionContainer').catch(() => {});
+  // Prefetch play tab chunks
+  import('@/components/playPage/CategoryHeader').catch(() => {});
+  import('@/components/playPage/MerchantVideoSection').catch(() => {});
 
   // Prefetch API data (backend caches in Redis — first call warms it)
   import('@/services/mallApi').then(m => m.mallApi.getMallHomepageBatch().catch(() => {})).catch(() => {});
@@ -189,11 +196,8 @@ function HomeScreen() {
   const currencySymbol = getCurrencySymbol();
   const { state, actions, getUserContext: getHomepageUserContext } = useHomepage();
   const { handleItemPress, handleAddToCart } = useHomepageNavigation();
-  const user = useProfileStore((s) => s.user);
-  const isModalVisible = useProfileStore((s) => s.isModalVisible);
-  const showModal = useProfileStore((s) => s.showModal);
-  const hideModal = useProfileStore((s) => s.hideModal);
-  const handleMenuItemPress = useProfileStore((s) => s.handleMenuItemPress);
+  const { user: profileUser, isModalVisible, showModal, hideModal } = useProfile();
+  const { handleMenuItemPress } = useProfileMenu();
   const cartItems = useCartItems();
   const cartState = { items: cartItems, itemCount: cartItems?.length ?? 0 } as any;
   const cartActions = useCartActions();
@@ -773,17 +777,19 @@ function HomeScreen() {
         </LinearGradient>
 
       {/* Home Tab Section with 4 Tabs - Outside gradient */}
-      <HomeTabSection
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-        isPriveEligible={isPriveEligible}
-        onPriveLockedPress={handlePriveLockedPress}
-        onSearchPress={handleSearchPress}
-        coinBalance={userPoints}
-        onCoinPress={handleCoinPress}
-        selectedCategory={selectedCategory}
-        onCategoryChange={setSelectedCategory}
-      />
+      <Suspense fallback={<View style={{ height: 44 }} />}>
+        <HomeTabSection
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+          isPriveEligible={isPriveEligible}
+          onPriveLockedPress={handlePriveLockedPress}
+          onSearchPress={handleSearchPress}
+          coinBalance={userPoints}
+          onCoinPress={handleCoinPress}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+        />
+      </Suspense>
 
       {/* Deferred location permission banner */}
       {!locationBannerDismissed && permissionStatus !== 'granted' && permissionStatus !== 'denied' && (
@@ -823,22 +829,24 @@ function HomeScreen() {
       ]}>
         {/* Near-U Tab Content - All sections with viewport-based lazy loading */}
         {activeTab === 'near-u' && (
-          <NearUTabContent
-            state={state}
-            actions={actions}
-            handleItemPress={handleItemPress}
-            handleAddToCart={handleAddToCart}
-            voucherCount={voucherCount}
-            userPoints={userPoints}
-            newOffersCount={newOffersCount}
-            recentlyViewedItems={recentlyViewedItems}
-            isLoadingRecentlyViewed={isLoadingRecentlyViewed}
-            loyaltyHub={loyaltyHub}
-            featuredLockProduct={featuredLockProduct}
-            trendingService={trendingService}
-            isLoyaltySectionLoading={isLoyaltySectionLoading}
-            scrollY={scrollY}
-          />
+          <Suspense fallback={<TabContentFallback />}>
+            <NearUTabContent
+              state={state}
+              actions={actions}
+              handleItemPress={handleItemPress}
+              handleAddToCart={handleAddToCart}
+              voucherCount={voucherCount}
+              userPoints={userPoints}
+              newOffersCount={newOffersCount}
+              recentlyViewedItems={recentlyViewedItems}
+              isLoadingRecentlyViewed={isLoadingRecentlyViewed}
+              loyaltyHub={loyaltyHub}
+              featuredLockProduct={featuredLockProduct}
+              trendingService={trendingService}
+              isLoyaltySectionLoading={isLoyaltySectionLoading}
+              scrollY={scrollY}
+            />
+          </Suspense>
         )}
 
 
@@ -866,17 +874,19 @@ function HomeScreen() {
       </View>
 
       {/* Profile Menu Modal */}
-      {user && (
-        <ProfileMenuModal visible={isModalVisible} onClose={hideModal} user={user} menuSections={profileMenuSections} onMenuItemPress={handleMenuItemPress} />
+      {(profileUser || authUser) && (
+        <ProfileMenuModal visible={isModalVisible} onClose={hideModal} user={profileUser || authUser} menuSections={profileMenuSections} onMenuItemPress={handleMenuItemPress} />
       )}
 
-      {/* Location Picker Modal */}
-      <LocationPickerModal
-        visible={isLocationModalVisible}
-        onClose={() => setIsLocationModalVisible(false)}
-        onLocationSelect={handleLocationSelect}
-        currentLocation={currentLocation}
-      />
+      {/* Location Picker Modal — lazy-loaded (only needed on tap) */}
+      <Suspense fallback={null}>
+        <LocationPickerModal
+          visible={isLocationModalVisible}
+          onClose={() => setIsLocationModalVisible(false)}
+          onLocationSelect={handleLocationSelect}
+          currentLocation={currentLocation}
+        />
+      </Suspense>
 
       {/* Quick Access FAB - Lazy Loaded */}
       <Suspense fallback={<FABFallback />}>

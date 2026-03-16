@@ -95,13 +95,13 @@ export const DeferredWallet: React.FC<{ children: React.ReactNode }> = ({ childr
 );
 
 export const DeferredGamification: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <DeferredProvider cacheKey="gamification" load={() => import('@/contexts/GamificationContext').then(m => m.GamificationProvider)} delayMs={1500}>
+  <DeferredProvider cacheKey="gamification" load={() => import('@/contexts/GamificationContext').then(m => m.GamificationProvider)} delayMs={500}>
     {children}
   </DeferredProvider>
 );
 
 export const DeferredCart: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <DeferredProvider cacheKey="cart" load={() => import('@/contexts/CartContext').then(m => m.CartProvider)} delayMs={500}>
+  <DeferredProvider cacheKey="cart" load={() => import('@/contexts/CartContext').then(m => m.CartProvider)}>
     {children}
   </DeferredProvider>
 );

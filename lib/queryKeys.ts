@@ -122,11 +122,89 @@ export const queryKeys = {
     habits: () => ['prive', 'habits'] as const,
   },
 
+  // Homepage
+  homepage: {
+    all: ['homepage'] as const,
+    batch: (regionId?: string) => ['homepage', 'batch', regionId] as const,
+    section: (sectionId: string) => ['homepage', 'section', sectionId] as const,
+  },
+
+  // Category Page
+  categoryPage: {
+    all: ['categoryPage'] as const,
+    data: (slug: string) => ['categoryPage', 'data', slug] as const,
+    stores: (slug: string) => ['categoryPage', 'stores', slug] as const,
+    products: (slug: string) => ['categoryPage', 'products', slug] as const,
+  },
+
+  // Going Out
+  goingOut: {
+    all: ['goingOut'] as const,
+    categories: () => ['goingOut', 'categories'] as const,
+    products: (page: number, category?: string) => ['goingOut', 'products', page, category] as const,
+  },
+
+  // Home Delivery
+  homeDelivery: {
+    all: ['homeDelivery'] as const,
+    categories: () => ['homeDelivery', 'categories'] as const,
+    products: (page: number, category?: string) => ['homeDelivery', 'products', page, category] as const,
+  },
+
+  // Cash Store
+  cashStore: {
+    all: ['cashStore'] as const,
+    homepage: () => ['cashStore', 'homepage'] as const,
+    summary: () => ['cashStore', 'summary'] as const,
+    coupons: () => ['cashStore', 'coupons'] as const,
+    giftCards: () => ['cashStore', 'giftCards'] as const,
+    activity: () => ['cashStore', 'activity'] as const,
+    brands: (category?: string) => ['cashStore', 'brands', category] as const,
+  },
+
   // Subscription
   subscription: {
     all: ['subscription'] as const,
     plans: () => ['subscription', 'plans'] as const,
     current: () => ['subscription', 'current'] as const,
     benefits: (tier?: string) => ['subscription', 'benefits', tier] as const,
+  },
+
+  // Support
+  support: {
+    all: ['support'] as const,
+    tickets: () => ['support', 'tickets'] as const,
+    messages: (ticketId: string) => ['support', 'messages', ticketId] as const,
+    faqs: () => ['support', 'faqs'] as const,
+  },
+
+  // Play & Earn
+  playAndEarn: {
+    all: ['playAndEarn'] as const,
+    games: () => ['playAndEarn', 'games'] as const,
+    challenges: () => ['playAndEarn', 'challenges'] as const,
+    achievements: () => ['playAndEarn', 'achievements'] as const,
+    streak: () => ['playAndEarn', 'streak'] as const,
+    creators: () => ['playAndEarn', 'creators'] as const,
+    programs: () => ['playAndEarn', 'programs'] as const,
+    bonus: () => ['playAndEarn', 'bonus'] as const,
+    quickActions: () => ['playAndEarn', 'quickActions'] as const,
+  },
+
+  // Checkout
+  checkout: {
+    all: ['checkout'] as const,
+    addresses: () => ['checkout', 'addresses'] as const,
+    coupons: (storeId?: string) => ['checkout', 'coupons', storeId] as const,
+    store: (storeId: string) => ['checkout', 'store', storeId] as const,
+  },
+
+  // Payment Store
+  paymentStore: {
+    all: ['paymentStore'] as const,
+    nearby: (lat: number, lon: number) => ['paymentStore', 'nearby', lat, lon] as const,
+    recent: () => ['paymentStore', 'recent'] as const,
+    popular: () => ['paymentStore', 'popular'] as const,
+    search: (query: string) => ['paymentStore', 'search', query] as const,
   },
 };

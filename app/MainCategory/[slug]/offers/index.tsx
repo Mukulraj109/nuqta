@@ -220,11 +220,11 @@ export default function OffersIndexPage() {
     );
   };
 
-  const renderItem = ({ item }: { item: any }) => {
+  const renderItem = useCallback(({ item }: { item: any }) => {
     if (item.bankName || item.cardType) return renderBankOffer(item);
     if (item.couponCode || item.code) return renderCoupon(item);
     return renderDeal(item);
-  };
+  }, [currencySymbol, router, slug]);
 
   return (
     <SafeAreaView style={styles.container}>

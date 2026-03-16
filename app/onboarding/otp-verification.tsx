@@ -28,7 +28,11 @@ export default function OTPVerificationScreen() {
     analyticsService.track('otp_verification_started');
   }, []);
 
+  // Timer interval — restarts cleanly when timer is reset (e.g., on resend OTP)
+  const timerKeyRef = React.useRef(0);
+  const [timerKey, setTimerKey] = React.useState(0);
   useEffect(() => {
+    if (timer <= 0) return;
     const interval = setInterval(() => {
       setTimer(prev => {
         if (prev <= 1) {
@@ -39,9 +43,8 @@ export default function OTPVerificationScreen() {
         return prev - 1;
       });
     }, 1000);
-
     return () => clearInterval(interval);
-  }, []);
+  }, [timerKey]);
 
   const handleOTPChange = (value: string, index: number) => {
     // Handle paste: if a 6-digit code is pasted, auto-fill all boxes
@@ -89,12 +92,7 @@ export default function OTPVerificationScreen() {
     }
 
     try {
-      if (otpString.length === 6 && /^\d{6}$/.test(otpString)) {
-        await actions.verifyOTP(phoneNumber, otpString);
-      } else {
-        platformAlertSimple('Error', 'Please enter a valid 6-digit code');
-        return;
-      }
+      await actions.verifyOTP(phoneNumber, otpString);
 
       analyticsService.track('otp_verified');
 
@@ -121,6 +119,7 @@ export default function OTPVerificationScreen() {
       await actions.sendOTP(phoneNumber);
       setTimer(30);
       setCanResend(false);
+      setTimerKey(k => k + 1); // Restart interval cleanly
       platformAlertSimple('Success', 'OTP has been resent to your phone number');
     } catch (error: any) {
       const errorMessage = error?.message || authError || 'Failed to resend OTP. Please try again.';

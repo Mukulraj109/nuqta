@@ -38,7 +38,7 @@ const DailyStreakSection = React.memo(function DailyStreakSection({
           </View>
           {hasCheckedInToday && (
             <View style={{ backgroundColor: colors.tint.greenLight, paddingHorizontal: Spacing.sm, paddingVertical: Spacing.xs, borderRadius: BorderRadius.md }}>
-              <Text style={{ fontSize: 10, color: Colors.success, fontWeight: '600' }}>Done Today</Text>
+              <Text style={{ fontSize: 10, color: Colors.success, fontWeight: '600' }}>You're on fire!</Text>
             </View>
           )}
         </View>

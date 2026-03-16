@@ -9,6 +9,7 @@ import { useOnboarding } from '@/hooks/useOnboarding';
 import { navigationDebugger } from '@/utils/navigationDebug';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { platformAlertSimple } from '@/utils/platformAlert';
 
 // Nuqta Design System Colors
 
@@ -52,6 +53,10 @@ export default function CategorySelectionScreen() {
   };
 
   const handleNext = () => {
+    if (selectedCategories.length === 0) {
+      platformAlertSimple('Select Categories', 'Please select at least one category to personalize your experience.');
+      return;
+    }
     analyticsService.track('categories_selected', { count: selectedCategories.length });
     updateUserData({ selectedCategories });
     navigationDebugger.logNavigation('category-selection', 'rewards-intro', 'categories-selected');

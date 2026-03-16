@@ -105,7 +105,7 @@ const MyVouchersPage = () => {
         return;
       }
 
-      if (!isAuthenticated || !null /* TODO: token not available via selectors */) {
+      if (!isAuthenticated) {
         setVouchers([]);
         setLoading(false);
         return;
@@ -220,7 +220,7 @@ const MyVouchersPage = () => {
       setRefreshing(false);
       setLoadingMore(false);
     }
-  }, [activeTab, authLoading, isAuthenticated, null /* TODO: token not available via selectors */]);
+  }, [activeTab, authLoading, isAuthenticated]);
 
   useEffect(() => {
     if (!authLoading && isAuthenticated) {

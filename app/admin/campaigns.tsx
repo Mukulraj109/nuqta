@@ -20,7 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import apiClient from '@/services/apiClient';
-import { useAuthUser, useCurrentRegionId, useIsAuthenticated } from '@/stores/selectors';
+import { useAuthUser, useCurrentRegionId, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -73,6 +73,7 @@ export default function AdminCampaigns() {
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const currentRegion = useCurrentRegionId();
   const [loading, setLoading] = useState(true);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -85,13 +86,9 @@ export default function AdminCampaigns() {
   const [expandedCampaign, setExpandedCampaign] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!null /* TODO: token not available via selectors */) {
-      router.replace('/sign-in');
-      return;
-    }
-    apiClient.setAuthToken(null /* TODO: token not available via selectors */);
+    if (!isAuthenticated || authLoading) return;
     loadData();
-  }, [null /* TODO: token not available via selectors */]);
+  }, [isAuthenticated, authLoading]);
 
   const loadData = async () => {
     setLoading(true);

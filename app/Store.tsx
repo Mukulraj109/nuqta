@@ -15,8 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHomepage, useHomepageNavigation } from '@/hooks/useHomepage';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useProfileMenu } from '@/contexts/ProfileContext';
-import { useProfileStore } from '@/stores/profileStore';
+import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
 import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
 import { profileMenuSections } from '@/data/profileData';
 import { useRouter } from 'expo-router';
@@ -356,10 +355,7 @@ function StoreCard({ item, index }: { item: Store; index: number }) {
 
 export default function App() {
   const router = useRouter();
-  const user = useProfileStore((s) => s.user);
-  const isModalVisible = useProfileStore((s) => s.isModalVisible);
-  const showModal = useProfileStore((s) => s.showModal);
-  const hideModal = useProfileStore((s) => s.hideModal);
+  const { user: profileUser, isModalVisible, showModal, hideModal } = useProfile();
   const { handleMenuItemPress } = useProfileMenu();
   const userPoints = useRezBalance();
   const isLoadingPoints = useWalletLoading();
@@ -527,7 +523,7 @@ export default function App() {
                         accessibilityHint="Double tap to open profile menu and account settings"
                       >
                         <ThemedText style={styles.profileText}>
-                          {user?.initials || 'R'}
+                          {profileUser?.initials || 'R'}
                         </ThemedText>
                       </Pressable>
           </View>
@@ -601,6 +597,17 @@ export default function App() {
           </>
         }
       />
+
+      {/* Profile Menu Modal */}
+      {profileUser && (
+        <ProfileMenuModal
+          visible={isModalVisible}
+          onClose={hideModal}
+          user={profileUser}
+          menuSections={profileMenuSections}
+          onMenuItemPress={handleMenuItemPress}
+        />
+      )}
     </SafeAreaView>
   );
 }

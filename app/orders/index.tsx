@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
+import { useFocusEffect } from 'expo-router';
 import {
   View,
   Text,
@@ -331,6 +332,13 @@ export default function OrdersListScreen() {
   useEffect(() => {
     loadOrders(1, false);
   }, [activeFilter, sortOrder]);
+
+  // Refresh orders when screen regains focus (e.g., order status changed on detail page)
+  useFocusEffect(
+    useCallback(() => {
+      loadOrders(1, false);
+    }, [activeFilter, sortOrder, searchQuery])
+  );
 
   // Debounced search
   useEffect(() => {

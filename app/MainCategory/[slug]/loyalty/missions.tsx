@@ -58,7 +58,7 @@ export default function ElectronicsMissionsPage() {
     setRefreshing(false);
   };
 
-  const handleClaimMission = async (missionId: string) => {
+  const handleClaimMission = useCallback(async (missionId: string) => {
     try {
       setClaiming(missionId);
       const res = await userLoyaltyApi.completeMission(missionId);
@@ -89,13 +89,13 @@ export default function ElectronicsMissionsPage() {
     } finally {
       setClaiming(null);
     }
-  };
+  }, [currencySymbol, fetchMissions]);
 
   const activeMissions = missions.filter(m => !m.completedAt);
   const completedMissions = missions.filter(m => m.completedAt);
   const currentData = activeTab === 'active' ? activeMissions : completedMissions;
 
-  const renderMission = ({ item }: { item: Mission }) => {
+  const renderMission = useCallback(({ item }: { item: Mission }) => {
     const isCompleted = !!item.completedAt;
     const progressPercent = Math.min((item.progress / item.target) * 100, 100);
     const canClaim = !isCompleted && item.progress >= item.target;
@@ -165,7 +165,7 @@ export default function ElectronicsMissionsPage() {
         )}
       </View>
     );
-  };
+  }, [theme.primaryColor, currencySymbol, claiming, handleClaimMission]);
 
   if (isLoading) {
     return (

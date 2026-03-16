@@ -17,7 +17,7 @@ interface ShareResult {
 }
 
 export class ShareService {
-  private static readonly APP_DEEP_LINK = 'rezapp://profile/';
+  private static readonly APP_DEEP_LINK = 'nuqta://profile/';
   private static readonly WEB_BASE_URL = 'https://www.rezapp.com/profile/';
 
   /**

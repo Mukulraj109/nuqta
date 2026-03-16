@@ -1,7 +1,7 @@
 // AI Search Page
 // Natural language product search - connected to real API
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import {
   View,
   ScrollView,
@@ -93,7 +93,7 @@ export default function AISearchPage() {
     handleSearch(prompt);
   };
 
-  const handleResultPress = (item: AIResult) => {
+  const handleResultPress = useCallback((item: AIResult) => {
     if (item.type === 'store' && item.storeId) {
       router.push(`/MainStorePage?storeId=${item.storeId}`);
     } else if (item.type === 'product' && item.id) {
@@ -102,7 +102,7 @@ export default function AISearchPage() {
         params: { cardId: item.id, cardType: 'product' },
       });
     }
-  };
+  }, [router]);
 
   const getTypeColor = (type: string) => {
     switch (type) {
@@ -118,7 +118,7 @@ export default function AISearchPage() {
     return `${currencySymbol}${price.toLocaleString()}`;
   };
 
-  const renderResult = ({ item }: { item: AIResult }) => (
+  const renderResult = useCallback(({ item }: { item: AIResult }) => (
     <Pressable
       style={styles.resultCard}
       onPress={() => handleResultPress(item)}
@@ -156,7 +156,7 @@ export default function AISearchPage() {
 
       <Ionicons name="chevron-forward" size={20} color={Colors.text.tertiary} />
     </Pressable>
-  );
+  ), [currencySymbol, handleResultPress]);
 
   return (
     <View style={styles.container}>

@@ -170,7 +170,7 @@ export default function GiftCardsPage() {
     }
   };
 
-  const renderGiftCard = ({ item }: { item: GiftCard }) => {
+  const renderGiftCard = useCallback(({ item }: { item: GiftCard }) => {
     const denoms = item.denominations || [];
     const minD = denoms.length > 0 ? Math.min(...denoms) : 0;
     const maxD = denoms.length > 0 ? Math.max(...denoms) : 0;
@@ -198,9 +198,9 @@ export default function GiftCardsPage() {
         </View>
       </Pressable>
     );
-  };
+  }, [currencySymbol]);
 
-  const renderMyGiftCard = ({ item }: { item: MyGiftCard }) => {
+  const renderMyGiftCard = useCallback(({ item }: { item: MyGiftCard }) => {
     const isUsed = item.status === 'fully_used' || item.status === 'expired';
     const brandName = item.giftCard?.name || 'Gift Card';
     const statusLabel = item.status === 'partially_used' ? 'Partial' : item.status === 'fully_used' ? 'Used' : item.status === 'expired' ? 'Expired' : '';
@@ -254,7 +254,7 @@ export default function GiftCardsPage() {
         </ThemedText>
       </View>
     );
-  };
+  }, [currencySymbol]);
 
   return (
     <View style={styles.container}>

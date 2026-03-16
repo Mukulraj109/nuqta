@@ -23,8 +23,6 @@ import CardOffersSection from '@/components/cart/CardOffersSection';
 import { ThemedText } from '@/components/ThemedText';
 import { CartItem as CartItemType, LockedProduct, LOCK_CONFIG } from '@/types/cart';
 import {
-  mockServicesData,
-  mockLockedProductsData,
   calculateTotal,
   getItemCount,
   calculateLockedTotal,

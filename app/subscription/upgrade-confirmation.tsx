@@ -120,12 +120,15 @@ export default function UpgradeConfirmationPage() {
     }
   };
 
+  const [isConfirming, setIsConfirming] = React.useState(false);
+
   const handlePaymentSuccess = async () => {
     setShowStripeModal(false);
 
-    if (upgradeId) {
+    if (upgradeId && !isConfirming) {
+      setIsConfirming(true);
       try {
-        // Phase 2: Confirm upgrade after payment
+        // Phase 2: Confirm upgrade after payment (idempotent on backend via SubscriptionUpgrade unique index)
         await subscriptionAPI.confirmUpgrade(upgradeId);
         await actions.loadSubscription(true);
 
@@ -135,6 +138,8 @@ export default function UpgradeConfirmationPage() {
         platformAlertSimple('Upgrade Complete', `You are now a ${TIER_NAMES[newTier]} member!`);
       } catch (error: any) {
         platformAlertSimple('Activation Failed', 'Payment received but upgrade activation failed. Please contact support.');
+      } finally {
+        setIsConfirming(false);
       }
     }
   };

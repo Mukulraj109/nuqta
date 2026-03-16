@@ -152,6 +152,25 @@ class StoreVisitService {
   async rescheduleVisit(visitId: string, visitDate: string, visitTime: string): Promise<ApiResponse<any>> {
     return apiClient.put(`/store-visits/${visitId}/reschedule`, { visitDate, visitTime });
   }
+
+  /**
+   * Offline-aware store visit scheduling.
+   * Queues the action if offline, sends immediately if online.
+   */
+  async scheduleStoreVisitOffline(
+    request: ScheduleVisitRequest
+  ): Promise<ApiResponse<ScheduleVisitResponse> | { queued: true; actionId: string }> {
+    const NetInfo = (await import('@react-native-community/netinfo')).default;
+    const netState = await NetInfo.fetch();
+
+    if (!netState.isConnected) {
+      const offlineSyncService = (await import('./offlineSyncService')).default;
+      const actionId = await offlineSyncService.enqueue('visit_submission', request as any);
+      return { queued: true, actionId };
+    }
+
+    return this.scheduleStoreVisit(request);
+  }
 }
 
 // Create singleton instance

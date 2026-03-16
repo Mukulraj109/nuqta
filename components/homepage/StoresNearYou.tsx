@@ -6,7 +6,7 @@ import {
   Pressable,
   Platform,
   ScrollView,
-  ActivityIndicator,
+  Share,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -14,6 +14,8 @@ import { useRouter } from 'expo-router';
 import { useNearbyStores, NearbyStore } from '@/hooks/useNearbyStores';
 import { useRegionState } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import CoinLoader from '@/components/ui/CoinLoader';
+import { BRAND } from '@/constants/brand';
 
 interface StoresNearYouProps {
   onMapViewPress?: () => void;
@@ -65,8 +67,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
           </View>
         </View>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.lightMustard} />
-          <Text style={styles.loadingText}>Finding stores in {regionName}...</Text>
+          <CoinLoader size={40} message={`Finding the best deals in ${regionName}...`} />
         </View>
       </View>
     );
@@ -142,6 +143,15 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
     );
   }
 
+  // Invite merchant share handler
+  const handleInviteMerchant = async () => {
+    try {
+      await Share.share({
+        message: `Join ${BRAND.APP_NAME} and reach more customers with smart cashback rewards! Download now: ${BRAND.WEBSITE}`,
+      });
+    } catch { /* user cancelled */ }
+  };
+
   // Empty state - no stores found
   if (stores.length === 0) {
     return (
@@ -159,14 +169,29 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
         </View>
         <View style={styles.emptyContainer}>
           <Ionicons name="storefront-outline" size={48} color={colors.neutral[400]} />
-          <Text style={styles.emptyTitle}>No Stores in {regionName}</Text>
+          <Text style={styles.emptyTitle}>We're coming to {regionName}!</Text>
           <Text style={styles.emptyText}>
-            We're expanding to {regionName} soon! Check back later for partner stores.
+            Great news — amazing savings are on their way to your area. Meanwhile, explore online deals or help us grow faster!
           </Text>
+          <View style={styles.emptyActionsRow}>
+            <Pressable
+              style={styles.emptyActionCard}
+              onPress={() => router.push('/mall/offers' as any)}
+            >
+              <Ionicons name="globe-outline" size={20} color={colors.lightMustard} />
+              <Text style={styles.emptyActionText}>Browse Online Deals</Text>
+            </Pressable>
+            <Pressable
+              style={styles.emptyActionCard}
+              onPress={handleInviteMerchant}
+            >
+              <Ionicons name="person-add-outline" size={20} color={colors.lightMustard} />
+              <Text style={styles.emptyActionText}>Invite a Store</Text>
+            </Pressable>
+          </View>
           <Pressable
             style={styles.refreshButton}
             onPress={refetch}
-           
           >
             <Ionicons name="refresh" size={16} color={colors.lightMustard} style={{ marginRight: 6 }} />
             <Text style={styles.refreshButtonText}>Refresh</Text>
@@ -568,6 +593,29 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: colors.lightMustard,
+  },
+  emptyActionsRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 14,
+    width: '100%',
+  },
+  emptyActionCard: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 14,
+    paddingHorizontal: 8,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 205, 87, 0.06)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 205, 87, 0.15)',
+  },
+  emptyActionText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.lightMustard,
+    textAlign: 'center',
   },
 });
 

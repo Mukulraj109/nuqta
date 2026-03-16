@@ -61,7 +61,7 @@ export const FinancialServiceShareModal: React.FC<FinancialServiceShareModalProp
   const generateShareUrl = (): string => {
     const baseUrl = Platform.OS === 'web' && typeof window !== 'undefined'
       ? `${window.location.origin}/financial/service/${serviceId}`
-      : `rezapp://financial/service/${serviceId}`;
+      : `nuqta://financial/service/${serviceId}`;
     return baseUrl;
   };
 

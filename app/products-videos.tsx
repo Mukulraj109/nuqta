@@ -51,7 +51,7 @@ export default function ProductsVideosPage() {
     actions.navigateToDetail(video);
   }, [actions]);
 
-  const renderVideoCard = ({ item }: { item: UGCVideoItem }) => (
+  const renderVideoCard = useCallback(({ item }: { item: UGCVideoItem }) => (
     <View style={{ width: CARD_WIDTH }}>
       <ThumbnailVideoCard
         item={item}
@@ -59,7 +59,7 @@ export default function ProductsVideosPage() {
         showHashtags={true}
       />
     </View>
-  );
+  ), [handleVideoPress]);
 
   return (
     <View style={styles.container}>

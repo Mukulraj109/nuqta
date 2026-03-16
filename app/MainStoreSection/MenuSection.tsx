@@ -1,5 +1,5 @@
 // MenuSection.tsx - Menu list with coin earnings
-import React from "react";
+import React, { useCallback } from "react";
 import {
   View,
   Pressable,
@@ -50,7 +50,7 @@ export default function MenuSection({
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
-  const handleItemPress = (item: MenuItem) => {
+  const handleItemPress = useCallback((item: MenuItem) => {
     triggerImpact('Light');
     if (onItemPress) {
       onItemPress(item);
@@ -58,9 +58,9 @@ export default function MenuSection({
       // Navigate to product page
       router.push(`/product-page?productId=${item.id}` as any);
     }
-  };
+  }, [onItemPress, router]);
 
-  const renderItem = ({ item }: { item: MenuItem }) => (
+  const renderItem = useCallback(({ item }: { item: MenuItem }) => (
     <Pressable
       style={styles.menuItem}
      
@@ -98,7 +98,7 @@ export default function MenuSection({
         <ThemedText style={styles.coinsText}>+{item.coinsToEarn} coins</ThemedText>
       </View>
     </Pressable>
-  );
+  ), [handleItemPress, currencySymbol]);
 
   // Don't render section if no menu items are available
   if (!items || items.length === 0) {

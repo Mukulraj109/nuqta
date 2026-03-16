@@ -61,8 +61,8 @@ class BrandApiService {
         { params: { limit } }
       );
 
-      if (response.data?.success && response.data.data) {
-        return response.data.data;
+      if (response.success && response.data) {
+        return response.data;
       }
 
       return [];
@@ -81,8 +81,8 @@ class BrandApiService {
         `${this.BASE_PATH}/${slug}`
       );
 
-      if (response.data?.success && response.data.data) {
-        return response.data.data;
+      if (response.success && response.data) {
+        return response.data;
       }
 
       return null;
@@ -127,8 +127,8 @@ class BrandApiService {
         { params: { limit } }
       );
 
-      if (response.data?.success && response.data.data) {
-        return response.data.data;
+      if (response.success && response.data) {
+        return response.data;
       }
 
       return [];
@@ -149,8 +149,8 @@ class BrandApiService {
         { params: { q: query, limit } }
       );
 
-      if (response.data?.success && response.data.data) {
-        return response.data.data;
+      if (response.success && response.data) {
+        return response.data;
       }
 
       return [];

@@ -2,6 +2,7 @@
 // Page for managing user's wishlists with saved deals support
 
 import React, { useState, useCallback, useEffect } from 'react';
+import { useFocusEffect } from 'expo-router';
 import {
   View,
   StyleSheet,
@@ -345,6 +346,13 @@ export default function WishlistPage() {
   useEffect(() => {
     fetchWishlists();
   }, [fetchWishlists]);
+
+  // Refresh wishlist data when screen regains focus (e.g., after removing item on detail page)
+  useFocusEffect(
+    useCallback(() => {
+      fetchWishlists();
+    }, [fetchWishlists])
+  );
 
   const handleRefresh = useCallback(() => {
     setIsRefreshing(true);

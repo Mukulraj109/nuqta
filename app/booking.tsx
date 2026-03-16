@@ -30,6 +30,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
 import { colors } from '@/constants/theme';
+import BookingRewardBanner from '@/components/booking/BookingRewardBanner';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -512,6 +513,15 @@ export default function BookingPage() {
             </View>
           </View>
         </LinearGradient>
+
+        {/* Reward Banner — prominent cashback/coins display */}
+        {validatedDeal && !dealValidationError && (
+          <BookingRewardBanner
+            cashback={validatedDeal.cashback ? parseFloat(validatedDeal.cashback) : undefined}
+            coins={validatedDeal.coins ? parseFloat(validatedDeal.coins) : undefined}
+            storeName={store?.name}
+          />
+        )}
 
         {/* Deal Validation Error Banner */}
         {dealValidationError && (

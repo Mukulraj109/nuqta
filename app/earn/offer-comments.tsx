@@ -124,7 +124,7 @@ export default function OfferCommentsPage() {
     }
   };
 
-  const renderOfferCard = ({ item }: { item: CommentableOffer }) => (
+  const renderOfferCard = useCallback(({ item }: { item: CommentableOffer }) => (
     <Pressable
       style={[styles.offerCard, selectedOffer?.id === item.id && styles.offerCardSelected]}
       onPress={() => setSelectedOffer(selectedOffer?.id === item.id ? null : item)}
@@ -157,9 +157,9 @@ export default function OfferCommentsPage() {
         )}
       </View>
     </Pressable>
-  );
+  ), [selectedOffer]);
 
-  const renderMyCommentItem = ({ item }: { item: MyCommentItem }) => {
+  const renderMyCommentItem = useCallback(({ item }: { item: MyCommentItem }) => {
     const badge = getModerationBadge(item.moderationStatus);
     return (
       <View style={styles.myCommentCard}>
@@ -188,7 +188,7 @@ export default function OfferCommentsPage() {
         </View>
       </View>
     );
-  };
+  }, []);
 
   return (
     <View style={styles.container}>

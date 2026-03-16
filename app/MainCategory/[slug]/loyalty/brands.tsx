@@ -75,7 +75,7 @@ export default function ElectronicsBrandsPage() {
     setRefreshing(false);
   };
 
-  const renderBrand = ({ item }: { item: BrandLoyalty }) => {
+  const renderBrand = useCallback(({ item }: { item: BrandLoyalty }) => {
     const config = TIER_CONFIG[item.tier] || TIER_CONFIG.Bronze;
     const progressPercent = Math.min(item.progress, 100);
     const purchasesToNext = item.nextTierAt > 0 ? item.nextTierAt - item.purchaseCount : 0;
@@ -139,7 +139,7 @@ export default function ElectronicsBrandsPage() {
         </LinearGradient>
       </Pressable>
     );
-  };
+  }, [router]);
 
   if (isLoading) {
     return (

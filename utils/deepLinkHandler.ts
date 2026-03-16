@@ -32,7 +32,7 @@ export class DeepLinkHandler {
         };
       }
 
-      // Handle product links: rez://product/123
+      // Handle product links: nuqta://product/123
       if (hostname === 'product' || path?.includes('/product/')) {
         const productId = path?.split('/product/')[1] || hostname;
         return {
@@ -41,7 +41,7 @@ export class DeepLinkHandler {
         };
       }
 
-      // Handle store links: rez://store/456
+      // Handle store links: nuqta://store/456
       if (hostname === 'store' || path?.includes('/store/')) {
         const storeId = path?.split('/store/')[1] || hostname;
         return {
@@ -50,7 +50,7 @@ export class DeepLinkHandler {
         };
       }
 
-      // Handle offer links: rez://offer/789
+      // Handle offer links: nuqta://offer/789
       if (hostname === 'offer' || path?.includes('/offer/')) {
         const offerId = path?.split('/offer/')[1] || hostname;
         return {

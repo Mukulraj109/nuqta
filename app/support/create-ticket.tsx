@@ -22,15 +22,28 @@ import { Colors, Spacing, Gradients, BorderRadius, Shadows, Typography } from '@
 import { colors } from '@/constants/theme';
 
 const CATEGORIES = [
-  { id: 'order', label: 'Order', icon: 'cube-outline' },
-  { id: 'payment', label: 'Payment', icon: 'card-outline' },
-  { id: 'product', label: 'Product', icon: 'pricetag-outline' },
-  { id: 'account', label: 'Account', icon: 'person-outline' },
-  { id: 'technical', label: 'Technical', icon: 'code-outline' },
-  { id: 'delivery', label: 'Delivery', icon: 'bicycle-outline' },
-  { id: 'refund', label: 'Refund', icon: 'return-down-back-outline' },
+  { id: 'payment', label: 'Cashback Not Received', icon: 'wallet-outline' },
+  { id: 'payment', label: 'Wrong Cashback Amount', icon: 'calculator-outline', subject: 'Wrong cashback amount' },
+  { id: 'order', label: 'Visit Not Counted', icon: 'location-outline', subject: 'Visit not counted' },
+  { id: 'product', label: 'Merchant Denied Offer', icon: 'storefront-outline', subject: 'Merchant denied offer' },
+  { id: 'refund', label: 'Refund Not Processed', icon: 'return-down-back-outline' },
+  { id: 'account', label: 'Wallet Balance Issue', icon: 'cash-outline', subject: 'Wallet balance issue' },
+  { id: 'account', label: 'Referral Reward Missing', icon: 'people-outline', subject: 'Referral reward missing' },
+  { id: 'technical', label: 'App Technical Problem', icon: 'bug-outline' },
+  { id: 'delivery', label: 'Delivery Issue', icon: 'bicycle-outline' },
   { id: 'other', label: 'Other', icon: 'help-circle-outline' },
 ] as const;
+
+/** Self-resolution tips shown before ticket creation — reduces ticket volume */
+const SELF_RESOLUTION_TIPS: Record<string, string> = {
+  'Cashback Not Received': 'Cashback is credited within 2 hours after bill verification. If your transaction was recent, please wait a bit longer.',
+  'Wrong Cashback Amount': 'Cashback is calculated based on the eligible bill amount after excluding taxes and delivery charges. Check your transaction details.',
+  'Visit Not Counted': 'Visit rewards are updated after cashback verification. This usually takes up to 4 hours.',
+  'Refund Not Processed': 'Refunds are processed within 24 hours. Your wallet balance will be updated automatically.',
+  'Referral Reward Missing': 'Referral rewards are credited once your friend completes their first verified transaction.',
+  'Wallet Balance Issue': 'Your wallet balance syncs every few minutes. Try pulling down to refresh your wallet screen.',
+  'App Technical Problem': 'Try closing and reopening the app, or updating to the latest version from the app store.',
+};
 
 const PRIORITIES = [
   { id: 'low', label: 'Low', color: Colors.success, icon: 'arrow-down' },
@@ -56,10 +69,15 @@ export default function CreateTicketPage() {
 
   const [subject, setSubject] = useState(params.subject || '');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(params.category || null);
+  const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
   const [selectedPriority, setSelectedPriority] = useState('medium');
   const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [selfResolutionDismissed, setSelfResolutionDismissed] = useState(false);
   const [idempotencyKey] = useState(() => generateIdempotencyKey());
+
+  const selfResolutionTip = selectedLabel ? SELF_RESOLUTION_TIPS[selectedLabel] : null;
+  const showSelfResolution = selfResolutionTip && !selfResolutionDismissed;
 
   const isValid = subject.trim().length >= 5 && selectedCategory && message.trim().length >= 10;
 
@@ -140,7 +158,16 @@ export default function CreateTicketPage() {
                     styles.categoryCard,
                     selectedCategory === cat.id && styles.categoryCardSelected,
                   ]}
-                  onPress={() => setSelectedCategory(cat.id)}
+                  onPress={() => {
+                    setSelectedCategory(cat.id);
+                    setSelectedLabel(cat.label);
+                    setSelfResolutionDismissed(false);
+                    if ('subject' in cat && cat.subject) {
+                      setSubject(cat.subject as string);
+                    } else if (!subject) {
+                      setSubject(cat.label);
+                    }
+                  }}
                 >
                   <Ionicons
                     name={cat.icon as any}
@@ -159,6 +186,25 @@ export default function CreateTicketPage() {
               ))}
             </View>
           </View>
+
+          {/* Self-Resolution Tip — reduces ticket volume */}
+          {showSelfResolution && (
+            <View style={styles.selfResolutionCard}>
+              <View style={styles.selfResolutionHeader}>
+                <Ionicons name="information-circle" size={20} color="#2563EB" />
+                <ThemedText style={styles.selfResolutionTitle}>Before you create a ticket</ThemedText>
+              </View>
+              <ThemedText style={styles.selfResolutionText}>{selfResolutionTip}</ThemedText>
+              <View style={styles.selfResolutionActions}>
+                <Pressable style={styles.selfResWaitBtn} onPress={() => router.back()}>
+                  <ThemedText style={styles.selfResWaitText}>Wait</ThemedText>
+                </Pressable>
+                <Pressable style={styles.selfResRaiseBtn} onPress={() => setSelfResolutionDismissed(true)}>
+                  <ThemedText style={styles.selfResRaiseText}>Raise Ticket</ThemedText>
+                </Pressable>
+              </View>
+            </View>
+          )}
 
           {/* Priority */}
           <View style={styles.section}>
@@ -240,6 +286,62 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.gray[50],
+  },
+  selfResolutionCard: {
+    backgroundColor: '#EFF6FF',
+    borderRadius: 12,
+    padding: 16,
+    marginHorizontal: 16,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: '#BFDBFE',
+  },
+  selfResolutionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 8,
+  },
+  selfResolutionTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#1E40AF',
+  },
+  selfResolutionText: {
+    fontSize: 13,
+    color: '#1E3A5F',
+    lineHeight: 20,
+    marginBottom: 14,
+  },
+  selfResolutionActions: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  selfResWaitBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#93C5FD',
+  },
+  selfResWaitText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#2563EB',
+  },
+  selfResRaiseBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    backgroundColor: '#2563EB',
+  },
+  selfResRaiseText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#fff',
   },
   header: {
     paddingTop: Platform.OS === 'ios' ? 50 : StatusBar.currentHeight || 40,

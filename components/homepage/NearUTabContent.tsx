@@ -450,6 +450,8 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
         renderSection={() => <PlayAndEarnSectionV2 />} />
       <LazySection sectionId="bonus-zone" scrollY={scrollY} height={200}
         renderSection={() => <BonusZoneHighlight />} />
+      <LazySection sectionId="streaks" scrollY={scrollY} height={200}
+        renderSection={() => <Suspense fallback={<SuspensePlaceholder height={200} />}><StreaksGamification /></Suspense>} />
       <LazySection sectionId="new-on-rez" scrollY={scrollY} height={300}
         renderSection={() => <NewOnRezSection />} />
       <LazySection sectionId="events-experiences" scrollY={scrollY} height={300}
@@ -604,9 +606,6 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
             />
           </Suspense>
         )} />
-
-      <LazySection sectionId="streaks" scrollY={scrollY} height={200}
-        renderSection={() => <Suspense fallback={<SuspensePlaceholder height={200} />}><StreaksGamification /></Suspense>} />
 
       <LazySection sectionId="zero-emi" scrollY={scrollY} height={200}
         renderSection={() => <Suspense fallback={<SuspensePlaceholder height={200} />}><ZeroEMICard /></Suspense>} />

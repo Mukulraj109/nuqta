@@ -236,7 +236,7 @@ export default function PollsPage() {
     );
   };
 
-  const renderVoteHistoryItem = ({ item }: { item: PollVoteHistory }) => {
+  const renderVoteHistoryItem = useCallback(({ item }: { item: PollVoteHistory }) => {
     if (!item.poll) return null;
     const selectedOption = item.poll.options.find(o => o.id === item.optionId);
 
@@ -259,7 +259,7 @@ export default function PollsPage() {
         </ThemedText>
       </View>
     );
-  };
+  }, []);
 
   return (
     <View style={styles.container}>

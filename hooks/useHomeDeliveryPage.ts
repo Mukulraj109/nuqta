@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'expo-router';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -10,7 +10,7 @@ import {
   HomeDeliveryCategory,
 } from '@/types/home-delivery.types';
 import productsApi from '@/services/productsApi';
-import categoriesApi from '@/services/categoriesApi';
+import { usePageCategories, usePageProductsQuery } from '@/hooks/queries/usePageProducts';
 
 // Helper function to map backend product to HomeDeliveryProduct
 const mapBackendProductToHomeDelivery = (product: any): HomeDeliveryProduct => {
@@ -114,8 +114,6 @@ const mapBackendProductToHomeDelivery = (product: any): HomeDeliveryProduct => {
     },
   };
 
-  // Debug category mapping
-
   return mappedProduct;
 };
 
@@ -124,52 +122,52 @@ const mapBackendCategories = (categories: any[]): HomeDeliveryCategory[] => {
   // Icon mapping based on category name
   const getIconForCategory = (name: string): string => {
     const lowerName = name.toLowerCase();
-    
+
     // Fashion & Beauty
     if (lowerName.includes('fashion') || lowerName.includes('beauty') || lowerName.includes('clothing') || lowerName.includes('apparel')) {
       return 'shirt-outline';
     }
-    
+
     // Food & Dining
     if (lowerName.includes('food') || lowerName.includes('dining') || lowerName.includes('restaurant') || lowerName.includes('kitchen') || lowerName.includes('grocery')) {
       return 'restaurant-outline';
     }
-    
+
     // Entertainment
     if (lowerName.includes('entertainment') || lowerName.includes('movie') || lowerName.includes('music') || lowerName.includes('game')) {
       return 'play-circle-outline';
     }
-    
+
     // Electronics
     if (lowerName.includes('electronic') || lowerName.includes('tech') || lowerName.includes('phone') || lowerName.includes('computer')) {
       return 'phone-portrait-outline';
     }
-    
+
     // Books
     if (lowerName.includes('book') || lowerName.includes('education') || lowerName.includes('learning')) {
       return 'book-outline';
     }
-    
+
     // Sports
     if (lowerName.includes('sport') || lowerName.includes('fitness') || lowerName.includes('gym')) {
       return 'basketball-outline';
     }
-    
+
     // Home & Garden
     if (lowerName.includes('home') || lowerName.includes('garden') || lowerName.includes('furniture')) {
       return 'home-outline';
     }
-    
+
     // Health & Beauty
     if (lowerName.includes('health') || lowerName.includes('medical') || lowerName.includes('pharmacy')) {
       return 'medical-outline';
     }
-    
+
     // Automotive
     if (lowerName.includes('auto') || lowerName.includes('car') || lowerName.includes('vehicle')) {
       return 'car-outline';
     }
-    
+
     // Default fallback
     return 'cube-outline';
   };
@@ -197,7 +195,7 @@ const mapBackendCategories = (categories: any[]): HomeDeliveryCategory[] => {
         icon: 'shirt-outline',
         productCount: 0,
         isActive: false,
-        backendId: undefined, // No backend ID for default categories
+        backendId: undefined,
       },
       {
         id: 'food-dining',
@@ -224,7 +222,7 @@ const mapBackendCategories = (categories: any[]): HomeDeliveryCategory[] => {
         backendId: undefined,
       },
     ];
-    
+
     return [
       {
         id: 'all',
@@ -246,274 +244,194 @@ const mapBackendCategories = (categories: any[]): HomeDeliveryCategory[] => {
       icon: 'apps',
       productCount: categories.reduce((sum, cat) => sum + (cat.productCount || 0), 0),
       isActive: true,
-      backendId: undefined, // "All" category doesn't have a backend ID
+      backendId: undefined,
     },
     ...mapped,
   ];
 };
 
-// Initial state
-const initialState: HomeDeliveryPageState = {
-  categories: [],
-  products: [],
-  filteredProducts: [],
-  sections: [],
-  activeCategory: 'all',
-  searchQuery: '',
-  sortBy: 'default',
-  filters: {
-    shipping: [],
-    ratings: [],
-    deliveryTime: [],
-    priceRange: { min: 0, max: Infinity },
-    brands: [],
-    availability: [],
-  },
-  loading: false,
-  error: null,
-  page: 1,
-  hasMore: true,
-  showSearchBar: false,
+const initialFilters: HomeDeliveryFilters = {
+  shipping: [],
+  ratings: [],
+  deliveryTime: [],
+  priceRange: { min: 0, max: Infinity },
+  brands: [],
+  availability: [],
 };
 
 export function useHomeDeliveryPage(): UseHomeDeliveryPageReturn {
   const router = useRouter();
-  const [state, setState] = useState<HomeDeliveryPageState>(initialState);
 
-  // Load initial data on mount
-  useEffect(() => {
-    loadInitialData();
-  }, []);
+  // --- CLIENT-ONLY UI STATE ---
+  const [activeCategory, setActiveCategoryState] = useState('all');
+  const [searchQuery, setSearchQueryState] = useState('');
+  const [showSearchBar, setShowSearchBar] = useState(false);
+  const [filters, setFiltersState] = useState<HomeDeliveryFilters>(initialFilters);
+  const [sortBy, setSortByState] = useState<HomeDeliveryPageState['sortBy']>('default');
+  const [page, setPage] = useState(1);
 
-  const loadInitialData = async () => {
+  // For accumulated products across pages
+  const [accumulatedProducts, setAccumulatedProducts] = useState<HomeDeliveryProduct[]>([]);
 
-    setState(prev => ({ ...prev, loading: true, error: null }));
+  // For search results overlay
+  const [searchResults, setSearchResults] = useState<HomeDeliveryProduct[] | null>(null);
+  const [searchLoading, setSearchLoading] = useState(false);
 
-    try {
-      // Fetch categories and products in parallel
-      const [categoriesResponse, productsResponse] = await Promise.all([
-        categoriesApi.getCategories(),
-        productsApi.getProducts({ page: 1, limit: 20 }),
-      ]);
-
-      // Map categories from backend
-
-      const backendCategories = categoriesResponse.success && categoriesResponse.data
-        ? (Array.isArray(categoriesResponse.data) ? categoriesResponse.data : [])
-        : [];
-      const categories = mapBackendCategories(backendCategories);
-
-      // Map products - handle both data structures: data[] or data.products[]
-      const rawProducts = productsResponse.success && productsResponse.data
-        ? (Array.isArray(productsResponse.data) ? productsResponse.data : productsResponse.data.products || [])
-        : [];
-
-      const products = rawProducts.map(mapBackendProductToHomeDelivery);
-
-      // Create sections from products
-      const featuredProducts = products.filter(p => p.isFeatured);
-      const newProducts = products.filter(p => p.isNew);
-
-      const sections = [
-        {
-          id: 'featured',
-          title: 'Featured Products',
-          subtitle: 'Handpicked for you',
-          products: featuredProducts.slice(0, 10),
-          showViewAll: true,
-          maxProducts: 10,
-        },
-        {
-          id: 'new-arrivals',
-          title: 'New Arrivals',
-          subtitle: 'Latest additions',
-          products: newProducts.slice(0, 10),
-          showViewAll: true,
-          maxProducts: 10,
-        },
-      ];
-
-      const hasMore = (productsResponse.data?.pagination?.pages || 1) > 1;
-
-      setState(prev => ({
-        ...prev,
-        products,
-        filteredProducts: products,
-        categories,
-        sections,
-        loading: false,
-        error: null,
-        hasMore,
-      }));
-
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        error: 'Failed to load products. Please try again.',
-      }));
-    }
-  };
-
-  // Actions
-  const setActiveCategory = useCallback((categoryId: string) => {
-
-    setState(prev => {
-      let filteredProducts = prev.products;
-      
-      if (categoryId === 'all') {
-        // Show all products
-        filteredProducts = prev.products;
-      } else {
-        // Filter products by category
-        filteredProducts = prev.products.filter(product => {
-          // Check if product category matches the selected category
-          const productCategoryName = product.category?.toLowerCase() || '';
-          const productCategoryId = product.categoryId || '';
-          
-          // Map category ID to category name for comparison
-          const categoryNameMap: { [key: string]: string } = {
-            'fashion-beauty': 'fashion & beauty',
-            'food-dining': 'food & dining',
-            'entertainment': 'entertainment',
-            'grocery-essentials': 'grocery & essentials',
-          };
-          
-          const selectedCategoryName = categoryNameMap[categoryId] || categoryId.toLowerCase();
-
-          // Multiple matching strategies
-          const matches = 
-            productCategoryName.includes(selectedCategoryName) || 
-            productCategoryId === categoryId ||
-            product.categoryId === categoryId ||
-            productCategoryName === selectedCategoryName;
-
-          return matches;
-        });
-      }
-
-      return {
-        ...prev,
-        activeCategory: categoryId,
-        filteredProducts,
-        loading: false,
-      };
-    });
-  }, []);
-
-  // Helper function to get products by category
-  const getProductsByCategory = useCallback((categoryId: string) => {
-    return state.products.filter(product => product.categoryId === categoryId);
-  }, [state.products]);
-
-  // Debounced API search (300ms delay for faster response)
-  const debouncedApiSearch = useDebouncedCallback(
-    async (query: string, activeCategory: string, categories: HomeDeliveryCategory[]) => {
-      if (!query.trim() || query.trim().length < 2) {
-        setState(prev => ({ ...prev, loading: false }));
-        return;
-      }
-
-      try {
-        // Find the actual category ID (MongoDB ObjectID) if a category is selected
-        let categoryId: string | undefined = undefined;
-        if (activeCategory !== 'all') {
-          const selectedCategory = categories.find(cat => cat.id === activeCategory);
-
-          // Only include category if we have a valid MongoDB ObjectID (24 hex characters)
-          if (selectedCategory?.backendId && /^[0-9a-fA-F]{24}$/.test(selectedCategory.backendId)) {
-            categoryId = selectedCategory.backendId;
-
-          } else {
-
-          }
-        }
-
-        const searchQuery = {
-          q: query,
-          ...(categoryId && { category: categoryId }), // Only include category if defined
-          page: 1,
-          limit: 20,
-        };
-
-        const response = await productsApi.searchProducts(searchQuery);
-
-        if (response.success && response.data?.products) {
-          const products = response.data.products.map(mapBackendProductToHomeDelivery);
-          
-          setState(prev => ({
-            ...prev,
-            filteredProducts: products,
-            loading: false,
-          }));
-
-        } else {
-          setState(prev => ({
-            ...prev,
-            loading: false,
-          }));
-        }
-      } catch (error) {
-        // Keep showing current products on error, just clear loading
-        setState(prev => ({
-          ...prev,
-          loading: false,
-        }));
-      }
-    },
-    300 // 300ms delay for fast response
+  // --- SERVER DATA via react-query ---
+  const categoriesQuery = usePageCategories('home_delivery');
+  const productsQuery = usePageProductsQuery(
+    'home_delivery',
+    page,
+    activeCategory !== 'all' ? activeCategory : undefined,
   );
 
-  const setSearchQuery = useCallback((query: string) => {
+  // --- DERIVE mapped data from query results ---
+  const mappedCategories = useMemo(() => {
+    const backendCategories = categoriesQuery.data?.success && categoriesQuery.data?.data
+      ? (Array.isArray(categoriesQuery.data.data) ? categoriesQuery.data.data : [])
+      : [];
+    return mapBackendCategories(backendCategories);
+  }, [categoriesQuery.data]);
 
-    // INSTANT LOCAL FILTERING - Show results immediately
-    setState(prev => {
-      let filteredProducts = prev.products;
-      
-      // Apply category filter first
-      if (prev.activeCategory !== 'all') {
-        const selectedCategory = prev.categories.find(c => c.id === prev.activeCategory);
-        filteredProducts = prev.products.filter(p => {
-          return p.categoryId === prev.activeCategory || 
-                 p.category.toLowerCase().includes(selectedCategory?.name.toLowerCase() || '');
+  const currentPageProducts = useMemo(() => {
+    if (!productsQuery.data?.success || !productsQuery.data?.data) return [];
+    const rawProducts = Array.isArray(productsQuery.data.data)
+      ? productsQuery.data.data
+      : (productsQuery.data.data as any).products || [];
+    return rawProducts.map(mapBackendProductToHomeDelivery);
+  }, [productsQuery.data]);
+
+  const hasMore = useMemo(() => {
+    if (!productsQuery.data?.data) return false;
+    const pagination = (productsQuery.data.data as any)?.pagination;
+    return pagination ? pagination.current < pagination.pages : false;
+  }, [productsQuery.data]);
+
+  // Accumulate products across pages
+  useEffect(() => {
+    if (currentPageProducts.length > 0) {
+      if (page === 1) {
+        setAccumulatedProducts(currentPageProducts);
+      } else {
+        setAccumulatedProducts(prev => {
+          // Deduplicate by id
+          const existingIds = new Set(prev.map(p => p.id));
+          const newProducts = currentPageProducts.filter(p => !existingIds.has(p.id));
+          return [...prev, ...newProducts];
         });
       }
-      
-      // Apply search filter instantly for immediate feedback
-      if (query.trim().length > 0) {
-        const searchTerm = query.toLowerCase().trim();
-        filteredProducts = filteredProducts.filter(product =>
-          product.name.toLowerCase().includes(searchTerm) ||
-          product.brand?.toLowerCase().includes(searchTerm) ||
-          product.description?.toLowerCase().includes(searchTerm) ||
-          product.category?.toLowerCase().includes(searchTerm) ||
-          product.tags?.some(tag => tag.toLowerCase().includes(searchTerm))
-        );
-      }
-      
-      return {
-        ...prev,
-        searchQuery: query,
-        filteredProducts,
-        loading: query.trim().length >= 2, // Show loading indicator for API search
-      };
-    });
-
-    // DEBOUNCED API SEARCH - Enhance with comprehensive backend results (300ms delay)
-    if (query.trim().length >= 2) {
-      debouncedApiSearch(query, state.activeCategory, state.categories);
-    } else if (query.trim().length === 0) {
-      // Clear loading state when search is empty
-      setState(prev => ({
-        ...prev,
-        loading: false,
-      }));
     }
-  }, [debouncedApiSearch, state.activeCategory, state.categories]);
+  }, [currentPageProducts, page]);
 
-  const setSortBy = useCallback((sortBy: HomeDeliveryPageState['sortBy']) => {
-    setState(prev => {
-      const sortedProducts = [...prev.filteredProducts].sort((a, b) => {
+  // Reset accumulated products when category changes
+  useEffect(() => {
+    setPage(1);
+    setAccumulatedProducts([]);
+    setSearchResults(null);
+  }, [activeCategory]);
+
+  // Derive sections from products
+  const sections = useMemo(() => {
+    const products = accumulatedProducts;
+    const featuredProducts = products.filter(p => p.isFeatured);
+    const newProducts = products.filter(p => p.isNew);
+
+    return [
+      {
+        id: 'featured',
+        title: 'Featured Products',
+        subtitle: 'Handpicked for you',
+        products: featuredProducts.slice(0, 10),
+        showViewAll: true,
+        maxProducts: 10,
+      },
+      {
+        id: 'new-arrivals',
+        title: 'New Arrivals',
+        subtitle: 'Latest additions',
+        products: newProducts.slice(0, 10),
+        showViewAll: true,
+        maxProducts: 10,
+      },
+    ];
+  }, [accumulatedProducts]);
+
+  // Derive filteredProducts from accumulated products + local filters/search/sort
+  const filteredProducts = useMemo(() => {
+    // If there are search results from API, use those
+    if (searchResults !== null) return searchResults;
+
+    let result = accumulatedProducts;
+
+    // Apply category filter locally
+    if (activeCategory !== 'all') {
+      const categoryNameMap: { [key: string]: string } = {
+        'fashion-beauty': 'fashion & beauty',
+        'food-dining': 'food & dining',
+        'entertainment': 'entertainment',
+        'grocery-essentials': 'grocery & essentials',
+      };
+      const selectedCategoryName = categoryNameMap[activeCategory] || activeCategory.toLowerCase();
+
+      result = result.filter(product => {
+        const productCategoryName = product.category?.toLowerCase() || '';
+        const productCategoryId = product.categoryId || '';
+        return (
+          productCategoryName.includes(selectedCategoryName) ||
+          productCategoryId === activeCategory ||
+          productCategoryName === selectedCategoryName
+        );
+      });
+    }
+
+    // Apply search filter locally for instant feedback
+    if (searchQuery.trim().length > 0) {
+      const searchTerm = searchQuery.toLowerCase().trim();
+      result = result.filter(product =>
+        product.name.toLowerCase().includes(searchTerm) ||
+        product.brand?.toLowerCase().includes(searchTerm) ||
+        product.description?.toLowerCase().includes(searchTerm) ||
+        product.category?.toLowerCase().includes(searchTerm) ||
+        product.tags?.some(tag => tag.toLowerCase().includes(searchTerm))
+      );
+    }
+
+    // Apply filters
+    if (filters.shipping.length > 0) {
+      result = result.filter(product =>
+        filters.shipping.includes(product.shipping.type)
+      );
+    }
+    if (filters.priceRange.min > 0 || filters.priceRange.max < Infinity) {
+      result = result.filter(product =>
+        product.price.current >= filters.priceRange.min &&
+        product.price.current <= filters.priceRange.max
+      );
+    }
+    if (filters.ratings.length > 0) {
+      result = result.filter(product =>
+        product.rating && filters.ratings.some(rating => product.rating!.value >= rating)
+      );
+    }
+    if (filters.deliveryTime.length > 0) {
+      result = result.filter(product =>
+        filters.deliveryTime.includes(product.deliveryTime)
+      );
+    }
+    if (filters.brands.length > 0) {
+      result = result.filter(product =>
+        product.brand && filters.brands.includes(product.brand)
+      );
+    }
+    if (filters.availability.length > 0) {
+      result = result.filter(product =>
+        filters.availability.includes(product.availabilityStatus)
+      );
+    }
+
+    // Apply sort
+    if (sortBy !== 'default') {
+      result = [...result].sort((a, b) => {
         switch (sortBy) {
           case 'price_low':
             return a.price.current - b.price.current;
@@ -523,218 +441,176 @@ export function useHomeDeliveryPage(): UseHomeDeliveryPageReturn {
             return b.cashback.percentage - a.cashback.percentage;
           case 'rating':
             return (b.rating?.value || 0) - (a.rating?.value || 0);
-          case 'delivery_time':
-            // Sort by delivery time (Under 30min first)
+          case 'delivery_time': {
             const timeOrder = { 'Under 30min': 0, '1-2 days': 1, '2-3 days': 2, '3-5 days': 3 };
             const aTime = timeOrder[a.deliveryTime as keyof typeof timeOrder] ?? 999;
             const bTime = timeOrder[b.deliveryTime as keyof typeof timeOrder] ?? 999;
             return aTime - bTime;
+          }
           default:
             return 0;
         }
       });
+    }
 
-      return {
-        ...prev,
-        sortBy,
-        filteredProducts: sortedProducts,
-      };
-    });
+    return result;
+  }, [accumulatedProducts, activeCategory, searchQuery, filters, sortBy, searchResults]);
+
+  // Compose state object to match original shape
+  const loading = (categoriesQuery.isLoading && !categoriesQuery.data) ||
+    (productsQuery.isLoading && !productsQuery.data) ||
+    searchLoading;
+  const error = categoriesQuery.error
+    ? 'Failed to load categories. Please try again.'
+    : productsQuery.error
+      ? 'Failed to load products. Please try again.'
+      : null;
+
+  const state: HomeDeliveryPageState = {
+    categories: mappedCategories,
+    products: accumulatedProducts,
+    filteredProducts,
+    sections,
+    activeCategory,
+    searchQuery,
+    showSearchBar,
+    filters,
+    loading,
+    error,
+    hasMore,
+    page,
+    sortBy,
+  };
+
+  // --- ACTIONS ---
+
+  const setActiveCategory = useCallback((categoryId: string) => {
+    setActiveCategoryState(categoryId);
   }, []);
 
-  const setFilters = useCallback((filters: HomeDeliveryFilters) => {
-    setState(prev => ({ ...prev, filters }));
+  // Debounced API search (300ms delay)
+  const debouncedApiSearch = useDebouncedCallback(
+    async (query: string, activeCat: string, categories: HomeDeliveryCategory[]) => {
+      if (!query.trim() || query.trim().length < 2) {
+        setSearchLoading(false);
+        return;
+      }
+
+      try {
+        // Find the actual category ID (MongoDB ObjectID) if a category is selected
+        let categoryId: string | undefined = undefined;
+        if (activeCat !== 'all') {
+          const selectedCategory = categories.find(cat => cat.id === activeCat);
+          // Only include category if we have a valid MongoDB ObjectID (24 hex characters)
+          if (selectedCategory?.backendId && /^[0-9a-fA-F]{24}$/.test(selectedCategory.backendId)) {
+            categoryId = selectedCategory.backendId;
+          }
+        }
+
+        const searchQueryParams = {
+          q: query,
+          ...(categoryId && { category: categoryId }),
+          page: 1,
+          limit: 20,
+        };
+
+        const response = await productsApi.searchProducts(searchQueryParams);
+
+        if (response.success && response.data?.products) {
+          const products = response.data.products.map(mapBackendProductToHomeDelivery);
+          setSearchResults(products);
+        }
+      } catch (_error) {
+        // Keep showing current products on error
+      } finally {
+        setSearchLoading(false);
+      }
+    },
+    300
+  );
+
+  const setSearchQuery = useCallback((query: string) => {
+    setSearchQueryState(query);
+
+    if (query.trim().length >= 2) {
+      setSearchLoading(true);
+      debouncedApiSearch(query, activeCategory, mappedCategories);
+    } else if (query.trim().length === 0) {
+      setSearchResults(null);
+      setSearchLoading(false);
+    }
+  }, [debouncedApiSearch, activeCategory, mappedCategories]);
+
+  const setSortBy = useCallback((newSortBy: HomeDeliveryPageState['sortBy']) => {
+    setSortByState(newSortBy);
+  }, []);
+
+  const setFilters = useCallback((newFilters: HomeDeliveryFilters) => {
+    setFiltersState(newFilters);
   }, []);
 
   const loadProducts = useCallback(async () => {
-
-    setState(prev => ({ ...prev, loading: true, error: null }));
-
-    try {
-      const query = state.activeCategory === 'all'
-        ? { page: 1, limit: 20 }
-        : { page: 1, limit: 20, category: state.activeCategory };
-
-      const response = await productsApi.getProducts(query);
-
-      if (response.success && response.data) {
-        const rawProducts = Array.isArray(response.data) ? response.data : (response.data.products || []);
-        const products = rawProducts.map(mapBackendProductToHomeDelivery);
-        const hasMore = (response.data?.pagination?.pages || 1) > 1;
-
-        setState(prev => ({
-          ...prev,
-          products,
-          filteredProducts: products,
-          loading: false,
-          hasMore,
-          page: 1,
-        }));
-      }
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        error: 'Failed to load products.',
-      }));
-    }
-  }, [state.activeCategory]);
+    setPage(1);
+    setAccumulatedProducts([]);
+    setSearchResults(null);
+    await productsQuery.refetch();
+  }, [productsQuery]);
 
   const loadMoreProducts = useCallback(async () => {
-    if (state.loading || !state.hasMore) return;
-
-    setState(prev => ({ ...prev, loading: true }));
-
-    try {
-      const query = state.activeCategory === 'all'
-        ? { page: state.page + 1, limit: 20 }
-        : { page: state.page + 1, limit: 20, category: state.activeCategory };
-
-      const response = await productsApi.getProducts(query);
-
-      if (response.success && response.data) {
-        const rawProducts = Array.isArray(response.data) ? response.data : (response.data.products || []);
-        const newProducts = rawProducts.map(mapBackendProductToHomeDelivery);
-        const pagination = response.data?.pagination;
-        const hasMore = pagination ? pagination.current < pagination.pages : false;
-
-        setState(prev => ({
-          ...prev,
-          products: [...prev.products, ...newProducts],
-          filteredProducts: [...prev.filteredProducts, ...newProducts],
-          hasMore,
-          page: prev.page + 1,
-          loading: false,
-        }));
-
-      }
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        error: 'Failed to load more products.',
-      }));
-    }
-  }, [state.activeCategory, state.page, state.loading, state.hasMore]);
+    if (loading || !hasMore) return;
+    setPage(prev => prev + 1);
+  }, [loading, hasMore]);
 
   const searchProductsAction = useCallback(async (query: string) => {
     if (!query.trim()) {
-      // If empty, reload products
-      loadProducts();
+      setSearchResults(null);
       return;
     }
 
-    setState(prev => ({ ...prev, loading: true, error: null }));
+    setSearchLoading(true);
 
     try {
-      const searchQuery = {
+      const searchQueryParams = {
         q: query,
-        category: state.activeCategory !== 'all' ? state.activeCategory : undefined,
+        category: activeCategory !== 'all' ? activeCategory : undefined,
         page: 1,
         limit: 20,
       };
 
-      const response = await productsApi.searchProducts(searchQuery);
+      const response = await productsApi.searchProducts(searchQueryParams);
 
       if (response.success && response.data?.products) {
         const products = response.data.products.map(mapBackendProductToHomeDelivery);
-
-        setState(prev => ({
-          ...prev,
-          filteredProducts: products,
-          loading: false,
-        }));
-
+        setSearchResults(products);
       }
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        error: 'Search failed. Please try again.',
-      }));
+    } catch (_error) {
+      // Keep current products on error
+    } finally {
+      setSearchLoading(false);
     }
-  }, [state.activeCategory, loadProducts]);
+  }, [activeCategory]);
 
   const refreshProducts = useCallback(async () => {
-    await loadProducts();
-  }, [loadProducts]);
+    setPage(1);
+    setAccumulatedProducts([]);
+    setSearchResults(null);
+    await Promise.all([
+      categoriesQuery.refetch(),
+      productsQuery.refetch(),
+    ]);
+  }, [categoriesQuery, productsQuery]);
 
-  const applyFilters = useCallback(async (filters: HomeDeliveryFilters) => {
-
-    setState(prev => ({ ...prev, loading: true, filters }));
-
-    try {
-      // Apply filters to existing products
-      let filteredProducts = state.products;
-      
-      // Shipping filter
-      if (filters.shipping.length > 0) {
-        filteredProducts = filteredProducts.filter(product => 
-          filters.shipping.includes(product.shipping.type)
-        );
-      }
-      
-      // Price range filter
-      if (filters.priceRange.min > 0 || filters.priceRange.max < Infinity) {
-        filteredProducts = filteredProducts.filter(product => 
-          product.price.current >= filters.priceRange.min && 
-          product.price.current <= filters.priceRange.max
-        );
-      }
-      
-      // Ratings filter
-      if (filters.ratings.length > 0) {
-        filteredProducts = filteredProducts.filter(product => 
-          product.rating && filters.ratings.some(rating => product.rating!.value >= rating)
-        );
-      }
-      
-      // Delivery time filter
-      if (filters.deliveryTime.length > 0) {
-        filteredProducts = filteredProducts.filter(product => 
-          filters.deliveryTime.includes(product.deliveryTime)
-        );
-      }
-      
-      // Brand filter
-      if (filters.brands.length > 0) {
-        filteredProducts = filteredProducts.filter(product => 
-          product.brand && filters.brands.includes(product.brand)
-        );
-      }
-      
-      // Availability filter
-      if (filters.availability.length > 0) {
-        filteredProducts = filteredProducts.filter(product => 
-          filters.availability.includes(product.availabilityStatus)
-        );
-      }
-
-      setState(prev => ({
-        ...prev,
-        filteredProducts,
-        loading: false,
-      }));
-
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        error: 'Failed to apply filters.',
-      }));
-    }
-  }, [state.products]);
-
-  const resetFilters = useCallback(async () => {
-
-    setState(prev => ({
-      ...prev,
-      filters: initialState.filters,
-      filteredProducts: prev.products, // Show all loaded products
-    }));
+  const applyFilters = useCallback(async (newFilters: HomeDeliveryFilters) => {
+    setFiltersState(newFilters);
+    // Filtering is handled reactively via the filteredProducts memo
   }, []);
 
-  // Handlers
+  const resetFilters = useCallback(async () => {
+    setFiltersState(initialFilters);
+  }, []);
+
+  // --- HANDLERS ---
+
   const handleCategoryChange = useCallback((categoryId: string) => {
     setActiveCategory(categoryId);
   }, [setActiveCategory]);
@@ -748,7 +624,6 @@ export function useHomeDeliveryPage(): UseHomeDeliveryPageReturn {
   }, [searchProductsAction]);
 
   const handleProductPress = useCallback((product: HomeDeliveryProduct) => {
-    // Navigate to ProductPage (comprehensive product page)
     router.push({
       pathname: '/product-page',
       params: {
@@ -759,12 +634,12 @@ export function useHomeDeliveryPage(): UseHomeDeliveryPageReturn {
     } as any);
   }, [router]);
 
-  const handleSortChange = useCallback((sortBy: HomeDeliveryPageState['sortBy']) => {
-    setSortBy(sortBy);
+  const handleSortChange = useCallback((newSortBy: HomeDeliveryPageState['sortBy']) => {
+    setSortBy(newSortBy);
   }, [setSortBy]);
 
-  const handleFilterChange = useCallback((filters: HomeDeliveryFilters) => {
-    applyFilters(filters);
+  const handleFilterChange = useCallback((newFilters: HomeDeliveryFilters) => {
+    applyFilters(newFilters);
   }, [applyFilters]);
 
   const handleLoadMore = useCallback(() => {
@@ -776,11 +651,11 @@ export function useHomeDeliveryPage(): UseHomeDeliveryPageReturn {
   }, [refreshProducts]);
 
   const handleHideSearch = useCallback(() => {
-    setState(prev => ({ ...prev, showSearchBar: false }));
+    setShowSearchBar(false);
   }, []);
 
   const handleShowSearch = useCallback(() => {
-    setState(prev => ({ ...prev, showSearchBar: true }));
+    setShowSearchBar(true);
   }, []);
 
   return {

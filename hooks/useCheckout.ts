@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { errorReporter } from '@/utils/errorReporter';
 import {
   CheckoutPageState,
@@ -21,6 +22,7 @@ import ordersService from '@/services/ordersApi';
 import walletApi, { BackendBrandedCoin } from '@/services/walletApi';
 import couponService from '@/services/couponApi';
 import addressApi from '@/services/addressApi';
+import storesApi from '@/services/storesApi';
 import { createRazorpayPayment } from '@/services/razorpayApi';
 import { mapBackendCartToFrontend, mapFrontendCheckoutToBackendOrder } from '@/utils/dataMappers';
 import { showToast } from '@/components/common/ToastManager';
@@ -36,8 +38,8 @@ import {
 import analyticsService from '@/services/analyticsService';
 import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
-import storesApi from '@/services/storesApi';
 import discountsApi from '@/services/discountsApi';
+import { queryKeys } from '@/lib/queryKeys';
 
 const devLog = {
   log: __DEV__ ? console.log.bind(console) : () => {},
@@ -106,6 +108,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
   const walletData = useWalletData();
   const walletRawData = useRawWalletData();
   const refreshSharedWallet = useRefreshWallet();
+  const queryClient = useQueryClient();
   // Refs to access latest wallet data inside async callbacks (avoids stale closure)
   const walletDataRef = useRef(walletData);
   const walletRawDataRef = useRef(walletRawData);
@@ -116,11 +119,22 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
 
   // Initialize checkout data with mounted guard
   const isMountedRef = useRef(true);
+  const hasInitializedRef = useRef(false);
   useEffect(() => {
     isMountedRef.current = true;
-    initializeCheckout();
+    initializeCheckout().then(() => { hasInitializedRef.current = true; });
     return () => { isMountedRef.current = false; };
   }, []);
+
+  // Refresh wallet data when user returns to checkout (e.g., after failed payment or back from address screen)
+  useFocusEffect(
+    useCallback(() => {
+      // Skip on initial mount — initializeCheckout already handles it
+      if (!hasInitializedRef.current) return;
+      // Refresh wallet in background so coin balances are fresh
+      refreshSharedWallet().catch(() => {});
+    }, [refreshSharedWallet])
+  );
 
   // Apply card offer from cart context if one was pre-selected
   useEffect(() => {
@@ -378,12 +392,64 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
             }
           };
 
+          // Build real store data from cart items
+          const firstItem = checkoutItems[0];
+          let realStore: any = {
+            id: firstItem?.storeId || '',
+            name: firstItem?.storeName || 'Store',
+            distance: '', // Will be fetched from store API
+            deliveryFee: deliveryFee,
+            minimumOrder: 0,
+            estimatedDelivery: '30-45 min',
+            categorySlug: '', // Root MainCategory slug for category-specific coins
+          };
+
+          let fulfillmentState: FulfillmentState = {
+            selectedType: 'delivery',
+            availableTypes: [
+              { type: 'delivery', label: 'Delivery', icon: 'bicycle-outline', description: 'Deliver to your address', enabled: true, estimatedTime: '30-45 min' },
+            ],
+          };
+
+          // Fire all independent API calls in parallel for faster checkout initialization.
+          // Uses queryClient.fetchQuery for addresses, coupons, and store so results
+          // are cached and deduplicated across re-renders / re-mounts.
+          const [
+            walletRefreshResult,
+            couponsResult,
+            storeResult,
+            mockDataResult,
+            addressResult,
+          ] = await Promise.allSettled([
+            // 1. Refresh wallet context
+            refreshSharedWallet(),
+            // 2. Fetch available coupons (cached via react-query)
+            queryClient.fetchQuery({
+              queryKey: queryKeys.checkout.coupons(),
+              queryFn: () => couponService.getAvailableCoupons(),
+            }),
+            // 3. Fetch store details (cached via react-query, only if storeId exists)
+            firstItem?.storeId
+              ? queryClient.fetchQuery({
+                  queryKey: queryKeys.checkout.store(firstItem.storeId),
+                  queryFn: () => storesApi.getStoreById(firstItem.storeId),
+                  staleTime: 2 * 60_000,
+                })
+              : Promise.resolve(null),
+            // 4. Fetch mock payment methods
+            CheckoutData.api.initializeCheckout(),
+            // 5. Fetch user addresses (cached via react-query, 5min staleTime)
+            queryClient.fetchQuery({
+              queryKey: queryKeys.checkout.addresses(),
+              queryFn: () => addressApi.getUserAddresses(),
+              staleTime: 5 * 60_000,
+            }),
+          ]);
+
+          // Process wallet refresh result
           let walletCategoryBalances: Record<string, any> | null = null;
-          try {
-            // Refresh shared wallet context to ensure fresh data for checkout
-            await refreshSharedWallet();
-          } catch (walletError) {
-            devLog.error('💳 [Checkout] Failed to refresh wallet, using cached balance:', walletError);
+          if (walletRefreshResult.status === 'rejected') {
+            devLog.error('💳 [Checkout] Failed to refresh wallet, using cached balance:', walletRefreshResult.reason);
           }
 
           // Read wallet data from shared WalletContext (via refs for fresh values after refresh)
@@ -449,12 +515,10 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
             devLog.error('💳 [Checkout] Failed to read wallet context, using 0 balance:', walletError);
           }
 
-          // Fetch real coupons from API - GET ALL AVAILABLE COUPONS, not just user's claimed ones
+          // Process coupons result
           let realAvailableCoupons: PromoCode[] = [];
-          try {
-
-            const couponsResponse = await couponService.getAvailableCoupons();
-
+          if (couponsResult.status === 'fulfilled' && couponsResult.value) {
+            const couponsResponse = couponsResult.value;
             if (couponsResponse.success && couponsResponse.data) {
               realAvailableCoupons = couponsResponse.data.coupons.map((coupon: any) => ({
                 id: coupon._id,
@@ -469,73 +533,51 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
                 validUntil: coupon.validTo,
                 termsAndConditions: coupon.termsAndConditions || [],
               }));
-
             }
-          } catch (couponError) {
-            devLog.error('💳 [Checkout] Failed to load coupons:', couponError);
+          } else if (couponsResult.status === 'rejected') {
+            devLog.error('💳 [Checkout] Failed to load coupons:', couponsResult.reason);
           }
 
-          // Build real store data from cart items
-          const firstItem = checkoutItems[0];
-          let realStore: any = {
-            id: firstItem?.storeId || '',
-            name: firstItem?.storeName || 'Store',
-            distance: '', // Will be fetched from store API
-            deliveryFee: deliveryFee,
-            minimumOrder: 0,
-            estimatedDelivery: '30-45 min',
-            categorySlug: '', // Root MainCategory slug for category-specific coins
-          };
+          // Process store details result
+          if (storeResult.status === 'fulfilled' && storeResult.value) {
+            const storeResponse = storeResult.value;
+            if (storeResponse.success && storeResponse.data) {
+              const storeData = storeResponse.data;
+              realStore = {
+                ...realStore,
+                name: storeData.name || realStore.name,
+                minimumOrder: (storeData as any).minimumOrder || (storeData as any).settings?.minimumOrder || 0,
+                estimatedDelivery: (storeData as any).estimatedDelivery || (storeData as any).deliveryTime || '30-45 min',
+                distance: (storeData as any).distance || '',
+                categorySlug: (storeData as any).mainCategorySlug || '',
+              };
 
-          // Fetch actual store details and build fulfillment options
-          let fulfillmentState: FulfillmentState = {
-            selectedType: 'delivery',
-            availableTypes: [
-              { type: 'delivery', label: 'Delivery', icon: 'bicycle-outline', description: 'Deliver to your address', enabled: true, estimatedTime: '30-45 min' },
-            ],
-          };
-
-          if (firstItem?.storeId) {
-            try {
-              const storeResponse = await storesApi.getStoreById(firstItem.storeId);
-              if (storeResponse.success && storeResponse.data) {
-                const storeData = storeResponse.data;
-                realStore = {
-                  ...realStore,
-                  name: storeData.name || realStore.name,
-                  minimumOrder: (storeData as any).minimumOrder || (storeData as any).settings?.minimumOrder || 0,
-                  estimatedDelivery: (storeData as any).estimatedDelivery || (storeData as any).deliveryTime || '30-45 min',
-                  distance: (storeData as any).distance || '',
-                  categorySlug: (storeData as any).mainCategorySlug || '',
-                };
-
-                // Build fulfillment options from serviceCapabilities
-                const caps = (storeData as any).serviceCapabilities;
-                if (caps) {
-                  const types: FulfillmentOption[] = [];
-                  if (caps.homeDelivery?.enabled) {
-                    types.push({ type: 'delivery', label: 'Delivery', icon: 'bicycle-outline', description: 'Deliver to your address', enabled: true, estimatedTime: caps.homeDelivery.estimatedTime || '30-45 min' });
-                  }
-                  if (caps.storePickup?.enabled) {
-                    types.push({ type: 'pickup', label: 'Pickup', icon: 'bag-handle-outline', description: 'Pick up at store', enabled: true, estimatedTime: caps.storePickup.estimatedTime || '15-20 min' });
-                  }
-                  if (caps.driveThru?.enabled) {
-                    types.push({ type: 'drive_thru', label: 'Drive-Thru', icon: 'car-outline', description: 'Order from your car', enabled: true, estimatedTime: caps.driveThru.estimatedTime || '5-10 min' });
-                  }
-                  if (caps.dineIn?.enabled) {
-                    types.push({ type: 'dine_in', label: 'Dine-In', icon: 'restaurant-outline', description: 'Eat at the restaurant', enabled: true });
-                  }
-                  if (types.length > 0) {
-                    fulfillmentState = {
-                      selectedType: types[0].type,
-                      availableTypes: types,
-                    };
-                  }
+              // Build fulfillment options from serviceCapabilities
+              const caps = (storeData as any).serviceCapabilities;
+              if (caps) {
+                const types: FulfillmentOption[] = [];
+                if (caps.homeDelivery?.enabled) {
+                  types.push({ type: 'delivery', label: 'Delivery', icon: 'bicycle-outline', description: 'Deliver to your address', enabled: true, estimatedTime: caps.homeDelivery.estimatedTime || '30-45 min' });
+                }
+                if (caps.storePickup?.enabled) {
+                  types.push({ type: 'pickup', label: 'Pickup', icon: 'bag-handle-outline', description: 'Pick up at store', enabled: true, estimatedTime: caps.storePickup.estimatedTime || '15-20 min' });
+                }
+                if (caps.driveThru?.enabled) {
+                  types.push({ type: 'drive_thru', label: 'Drive-Thru', icon: 'car-outline', description: 'Order from your car', enabled: true, estimatedTime: caps.driveThru.estimatedTime || '5-10 min' });
+                }
+                if (caps.dineIn?.enabled) {
+                  types.push({ type: 'dine_in', label: 'Dine-In', icon: 'restaurant-outline', description: 'Eat at the restaurant', enabled: true });
+                }
+                if (types.length > 0) {
+                  fulfillmentState = {
+                    selectedType: types[0].type,
+                    availableTypes: types,
+                  };
                 }
               }
-            } catch (storeError) {
-              devLog.warn('Failed to fetch store details, using defaults:', storeError);
             }
+          } else if (storeResult.status === 'rejected') {
+            devLog.warn('Failed to fetch store details, using defaults:', storeResult.reason);
           }
 
           // Override nuqta coin balance with category-specific amount if available
@@ -547,15 +589,14 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
             }
           }
 
-          // Use mock data for payment methods only
-          const mockData = await CheckoutData.api.initializeCheckout();
+          // Process mock data result (payment methods)
+          const mockData = mockDataResult.status === 'fulfilled' ? mockDataResult.value : await CheckoutData.api.initializeCheckout();
 
-          // Fetch user's delivery addresses
+          // Process address result
           let userAddresses: CheckoutDeliveryAddress[] = [];
           let defaultAddress: CheckoutDeliveryAddress | undefined;
-          try {
-            devLog.log('📍 [Checkout] Fetching user addresses...');
-            const addressResponse = await addressApi.getUserAddresses();
+          if (addressResult.status === 'fulfilled' && addressResult.value) {
+            const addressResponse = addressResult.value;
             devLog.log('📍 [Checkout] Address response:', addressResponse);
 
             if (addressResponse.success && addressResponse.data) {
@@ -574,6 +615,7 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
                 instructions: addr.instructions,
               }));
               // Priority: last-used from recent order > isDefault > first
+              // Note: This call depends on userAddresses so it stays sequential
               let lastUsedAddress: CheckoutDeliveryAddress | undefined;
               try {
                 const recentOrder = await ordersService.getOrders({ page: 1, limit: 1, status: 'delivered' });
@@ -598,8 +640,8 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
                 lastUsedMatch: !!lastUsedAddress,
               });
             }
-          } catch (addressError) {
-            devLog.error('📍 [Checkout] Failed to load addresses:', addressError);
+          } else if (addressResult.status === 'rejected') {
+            devLog.error('📍 [Checkout] Failed to load addresses:', addressResult.reason);
           }
 
           // Adjust delivery fee for non-delivery fulfillment
@@ -715,12 +757,18 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
         devLog.error('💎 [Checkout] Failed to load store promo coins (fallback):', storeCoinsError);
       }
 
-      // Fetch real coupons from API (fallback) - GET ALL AVAILABLE COUPONS
-      let realAvailableCoupons: PromoCode[] = [];
-      try {
-        devLog.log('💳 [Checkout] Loading available coupons (fallback)...');
-        const couponsResponse = await couponService.getAvailableCoupons();
+      // Fire independent fallback API calls in parallel (coupons cached via react-query)
+      const [fallbackCouponsResult, fallbackMockResult] = await Promise.allSettled([
+        queryClient.fetchQuery({
+          queryKey: queryKeys.checkout.coupons(),
+          queryFn: () => couponService.getAvailableCoupons(),
+        }),
+        CheckoutData.api.initializeCheckout(),
+      ]);
 
+      let realAvailableCoupons: PromoCode[] = [];
+      if (fallbackCouponsResult.status === 'fulfilled' && fallbackCouponsResult.value) {
+        const couponsResponse = fallbackCouponsResult.value;
         if (couponsResponse.success && couponsResponse.data) {
           realAvailableCoupons = couponsResponse.data.coupons.map((coupon: any) => ({
             id: coupon._id,
@@ -737,11 +785,11 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
           }));
           devLog.log('💳 [Checkout] Loaded coupons (fallback)');
         }
-      } catch (couponError) {
-        devLog.error('💳 [Checkout] Failed to load coupons (fallback):', couponError);
+      } else if (fallbackCouponsResult.status === 'rejected') {
+        devLog.error('💳 [Checkout] Failed to load coupons (fallback):', fallbackCouponsResult.reason);
       }
 
-      const data = await CheckoutData.api.initializeCheckout();
+      const data = fallbackMockResult.status === 'fulfilled' ? fallbackMockResult.value : await CheckoutData.api.initializeCheckout();
       if (!isMountedRef.current) return;
       setState(prev => ({
         ...prev,

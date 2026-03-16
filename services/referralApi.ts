@@ -141,6 +141,41 @@ class ReferralService {
 
     return apiClient.get('/referral/leaderboard', { period });
   }
+  /**
+   * Offline-aware referral share tracking.
+   * Queues the action if offline, sends immediately if online.
+   */
+  async shareReferralLinkOffline(
+    platform: 'whatsapp' | 'telegram' | 'email' | 'sms'
+  ): Promise<ApiResponse<{ success: boolean }> | { queued: true; actionId: string }> {
+    const NetInfo = (await import('@react-native-community/netinfo')).default;
+    const netState = await NetInfo.fetch();
+
+    if (!netState.isConnected) {
+      const offlineSyncService = (await import('./offlineSyncService')).default;
+      const actionId = await offlineSyncService.enqueue('referral_share', { platform });
+      return { queued: true, actionId };
+    }
+
+    return this.shareReferralLink(platform);
+  }
+
+  /**
+   * Offline-aware reward claim.
+   * Queues the action if offline, sends immediately if online.
+   */
+  async claimReferralRewardsOffline(): Promise<any> {
+    const NetInfo = (await import('@react-native-community/netinfo')).default;
+    const netState = await NetInfo.fetch();
+
+    if (!netState.isConnected) {
+      const offlineSyncService = (await import('./offlineSyncService')).default;
+      const actionId = await offlineSyncService.enqueue('reward_claim', {});
+      return { queued: true, actionId };
+    }
+
+    return this.claimReferralRewards();
+  }
 }
 
 // Export singleton instance

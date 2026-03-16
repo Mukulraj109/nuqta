@@ -226,21 +226,21 @@ export default function SubcategoryPage() {
   /**
    * Navigate to store
    */
-  const handleStorePress = (store: StoreItem) => {
+  const handleStorePress = useCallback((store: StoreItem) => {
     router.push(`/MainStorePage?storeId=${store.id}` as any);
-  };
+  }, [router]);
 
   /**
    * Navigate to product
    */
-  const handleProductPress = (product: ProductItem) => {
+  const handleProductPress = useCallback((product: ProductItem) => {
     router.push(`/product-page?cardId=${product.id}&cardType=product` as any);
-  };
+  }, [router]);
 
   /**
    * Render store card
    */
-  const renderStoreCard = ({ item }: { item: StoreItem }) => (
+  const renderStoreCard = useCallback(({ item }: { item: StoreItem }) => (
     <Pressable
       style={[styles.storeCard, isDark && styles.storeCardDark]}
       onPress={() => handleStorePress(item)}
@@ -284,12 +284,12 @@ export default function SubcategoryPage() {
         </View>
       </View>
     </Pressable>
-  );
+  ), [isDark, handleStorePress]);
 
   /**
    * Render product card
    */
-  const renderProductCard = ({ item }: { item: ProductItem }) => (
+  const renderProductCard = useCallback(({ item }: { item: ProductItem }) => (
     <Pressable
       style={[styles.productCard, isDark && styles.productCardDark]}
       onPress={() => handleProductPress(item)}
@@ -329,7 +329,7 @@ export default function SubcategoryPage() {
         )}
       </View>
     </Pressable>
-  );
+  ), [isDark, handleProductPress, currencySymbol]);
 
   const isLoading = activeTab === 'stores' ? isLoadingStores : isLoadingProducts;
   const currentData = activeTab === 'stores' ? stores : products;

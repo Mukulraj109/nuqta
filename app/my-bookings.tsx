@@ -55,7 +55,7 @@ const MyBookingsPage = () => {
       setLoading(true);
       setErrorMessage(null);
 
-      if (!isAuthenticated || !null /* TODO: token not available via selectors */) {
+      if (!isAuthenticated) {
         setErrorMessage('Please login to view your bookings');
         setLoading(false);
         return;
@@ -102,7 +102,7 @@ const MyBookingsPage = () => {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [isAuthenticated, null /* TODO: token not available via selectors */, activeTab]);
+  }, [isAuthenticated, activeTab]);
 
   useFocusEffect(
     useCallback(() => {

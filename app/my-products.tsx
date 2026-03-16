@@ -105,7 +105,7 @@ const MyProductsPage = () => {
         return;
       }
 
-      if (!isAuthenticated || !null /* TODO: token not available via selectors */) {
+      if (!isAuthenticated) {
         setProducts([]);
         setLoading(false);
         return;
@@ -161,7 +161,7 @@ const MyProductsPage = () => {
       setRefreshing(false);
       setLoadingMore(false);
     }
-  }, [activeTab, authLoading, isAuthenticated, null /* TODO: token not available via selectors */]);
+  }, [activeTab, authLoading, isAuthenticated]);
 
   useEffect(() => {
     // Only fetch when auth is ready

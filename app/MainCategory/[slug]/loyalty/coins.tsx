@@ -119,7 +119,7 @@ export default function ElectronicsCoinsPage() {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  const renderTransaction = ({ item }: { item: CoinTransaction }) => {
+  const renderTransaction = useCallback(({ item }: { item: CoinTransaction }) => {
     const config = TYPE_CONFIG[item.type] || TYPE_CONFIG.earned;
     return (
       <View style={styles.txCard}>
@@ -133,7 +133,7 @@ export default function ElectronicsCoinsPage() {
         </Text>
       </View>
     );
-  };
+  }, [currencySymbol]);
 
   if (isLoading) {
     return (

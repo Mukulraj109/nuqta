@@ -129,7 +129,7 @@ export default function LowestPricePage() {
     return sum + (maxPrice - minPrice);
   }, 0);
 
-  const renderProduct = ({ item }: { item: GroupedProduct }) => {
+  const renderProduct = useCallback(({ item }: { item: GroupedProduct }) => {
     const bestSeller = item.sellers[0]; // Already sorted by best value
     const otherSellers = item.sellers.slice(1);
     const maxSaving = item.sellers.length >= 2
@@ -230,7 +230,7 @@ export default function LowestPricePage() {
         </View>
       </Pressable>
     );
-  };
+  }, [router, currencySymbol]);
 
   return (
     <View style={styles.container}>

@@ -82,7 +82,7 @@ export default function MyParticipationsScreen() {
     });
   };
 
-  const renderEnrollmentCard = ({ item }: { item: UserEnrollment }) => {
+  const renderEnrollmentCard = useCallback(({ item }: { item: UserEnrollment }) => {
     const event = item.event;
     const statusCfg = STATUS_CONFIG[item.status] || STATUS_CONFIG.registered;
 
@@ -145,7 +145,7 @@ export default function MyParticipationsScreen() {
         )}
       </Pressable>
     );
-  };
+  }, [router]);
 
   const renderTabItem = useCallback(({ item: tab }: { item: typeof TABS[number] }) => {
     const isActive = activeTab === tab.id;

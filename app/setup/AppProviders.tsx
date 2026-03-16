@@ -113,9 +113,11 @@ const ScreenTrackerInner = React.memo(function ScreenTrackerInner() {
 function ThemedNavigation() {
   const { isDark } = useTheme();
 
-  // Initialize analytics once (fire-and-forget)
+  // Initialize analytics, remote feature flags, and offline sync queue (fire-and-forget)
   useEffect(() => {
     analytics.initialize().catch(() => {});
+    import('@/services/remoteFeatureConfig').then(m => m.remoteFeatureConfig.initialize()).catch(() => {});
+    import('@/services/offlineSyncService').then(m => m.default.initialize()).catch(() => {});
   }, []);
 
   return (

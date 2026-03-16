@@ -20,15 +20,34 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import walletApi, { TransactionResponse, TransactionFilters } from '@/services/walletApi';
 import { TransactionListSkeleton } from '@/components/skeletons';
+import CashbackTimeline, { TimelineStep } from '@/components/wallet/CashbackTimeline';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
 interface TransactionItemProps {
   transaction: TransactionResponse;
   onPress: (transaction: TransactionResponse) => void;
+  isExpanded?: boolean;
+  onToggleExpand?: () => void;
 }
 
-const TransactionItem: React.FC<TransactionItemProps> = ({ transaction, onPress }) => {
+// Build timeline steps from transaction status
+function buildTimelineSteps(tx: TransactionResponse): TimelineStep[] {
+  const status = tx.status?.current || 'completed';
+  const isCashback = tx.category === 'cashback' || tx.category === 'bonus';
+  if (!isCashback) return [];
+
+  const isCompleted = status === 'completed';
+  const isPending = status === 'pending';
+
+  return [
+    { label: 'Transaction Recorded', isComplete: true, isCurrent: false, timestamp: tx.createdAt },
+    { label: 'Verification', isComplete: isCompleted, isCurrent: isPending, estimate: isPending ? '~1-2 hours' : undefined, timestamp: isCompleted ? tx.createdAt : undefined },
+    { label: 'Credited to Wallet', isComplete: isCompleted, isCurrent: false, timestamp: isCompleted ? tx.createdAt : undefined, estimate: !isCompleted ? '~24 hours' : undefined },
+  ];
+}
+
+const TransactionItem: React.FC<TransactionItemProps> = ({ transaction, onPress, isExpanded, onToggleExpand }) => {
   const getTransactionIcon = (category: string, type: string) => {
     if (type === 'credit') {
       switch (category) {
@@ -71,10 +90,17 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction, onPress 
   };
 
   return (
-    <Pressable 
+    <>
+    <Pressable
       style={styles.transactionItem}
-      onPress={() => onPress(transaction)}
-     
+      onPress={() => {
+        const steps = buildTimelineSteps(transaction);
+        if (steps.length > 0 && onToggleExpand) {
+          onToggleExpand();
+        } else {
+          onPress(transaction);
+        }
+      }}
     >
       <View style={styles.transactionIcon}>
         <Ionicons 
@@ -118,8 +144,17 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction, onPress 
         </Text>
       </View>
       
-      <Ionicons name="chevron-forward" size={20} color={Colors.border.default} />
+      <Ionicons name={isExpanded ? "chevron-down" : "chevron-forward"} size={20} color={Colors.border.default} />
     </Pressable>
+    {isExpanded && (() => {
+      const steps = buildTimelineSteps(transaction);
+      return steps.length > 0 ? (
+        <View style={{ paddingHorizontal: 16, paddingBottom: 12, backgroundColor: colors.neutral[50], borderBottomLeftRadius: 12, borderBottomRightRadius: 12 }}>
+          <CashbackTimeline steps={steps} />
+        </View>
+      ) : null;
+    })()}
+    </>
   );
 };
 
@@ -130,6 +165,7 @@ export default function TransactionsPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedTransaction, setSelectedTransaction] = useState<TransactionResponse | null>(null);
+  const [expandedTxId, setExpandedTxId] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<TransactionFilters>({
     page: 1,
@@ -203,12 +239,14 @@ export default function TransactionsPage() {
     loadTransactions();
   }, [loadTransactions]);
 
-  const renderTransactionItem = ({ item }: { item: TransactionResponse }) => (
-    <TransactionItem 
-      transaction={item} 
+  const renderTransactionItem = useCallback(({ item }: { item: TransactionResponse }) => (
+    <TransactionItem
+      transaction={item}
       onPress={handleTransactionPress}
+      isExpanded={expandedTxId === item.id}
+      onToggleExpand={() => setExpandedTxId(prev => prev === item.id ? null : item.id)}
     />
-  );
+  ), [handleTransactionPress, expandedTxId]);
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>

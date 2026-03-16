@@ -98,7 +98,7 @@ export default function PriveReviewEarnPage() {
     filter === 'all' ? true : item.type === filter
   );
 
-  const handleItemPress = (item: PriveReviewableItem) => {
+  const handleItemPress = useCallback((item: PriveReviewableItem) => {
     try { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {}); } catch (e) {}
     router.push({
       pathname: '/ReviewPage',
@@ -111,7 +111,7 @@ export default function PriveReviewEarnPage() {
         fromPrive: 'true',
       },
     });
-  };
+  }, [router]);
 
   const renderMetricCard = (label: string, value: string | number, icon: string) => (
     <View style={styles.metricCard}>
@@ -163,7 +163,7 @@ export default function PriveReviewEarnPage() {
     </View>
   );
 
-  const renderItem = ({ item }: { item: PriveReviewableItem }) => (
+  const renderItem = useCallback(({ item }: { item: PriveReviewableItem }) => (
     <Pressable
       style={styles.itemCard}
       onPress={() => handleItemPress(item)}
@@ -208,7 +208,7 @@ export default function PriveReviewEarnPage() {
       </View>
       <Ionicons name="chevron-forward" size={18} color={PRIVE_COLORS.text.tertiary} />
     </Pressable>
-  );
+  ), [handleItemPress]);
 
   const renderEmpty = () => (
     <View style={styles.emptyContainer}>

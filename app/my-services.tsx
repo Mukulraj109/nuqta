@@ -144,7 +144,7 @@ const MyServicesPage = () => {
     }
   };
 
-  const renderProject = ({ item }: { item: ServiceProject }) => (
+  const renderProject = useCallback(({ item }: { item: ServiceProject }) => (
     <Pressable
       style={styles.projectCard}
       onPress={() => {
@@ -190,7 +190,7 @@ const MyServicesPage = () => {
 
       <Ionicons name="chevron-forward" size={20} color={Colors.text.tertiary} />
     </Pressable>
-  );
+  ), [currencySymbol]);
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>

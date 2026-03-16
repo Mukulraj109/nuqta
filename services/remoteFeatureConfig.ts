@@ -102,7 +102,7 @@ class RemoteFeatureConfig {
    */
   async refresh(): Promise<void> {
     try {
-      const response = await apiClient.get<FlagResponse>('config/feature-flags');
+      const response = await apiClient.get<FlagResponse>('/config/feature-flags');
       if (response.success && response.data?.flags) {
         this.flags = response.data.flags;
         this.loaded = true;
