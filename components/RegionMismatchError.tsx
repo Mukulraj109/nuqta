@@ -13,7 +13,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useRegion, RegionId } from '@/contexts/RegionContext';
+import { useRegionState, useSetRegion } from '@/stores/selectors';
+import type { RegionId } from '@/stores/regionStore';
 import { colors } from '@/constants/theme';
 
 // Region data with flags
@@ -39,7 +40,8 @@ export function RegionMismatchError({
   onGoBack
 }: RegionMismatchErrorProps) {
   const router = useRouter();
-  const { state, setRegion } = useRegion();
+  const state = useRegionState();
+  const setRegion = useSetRegion();
 
   const currentRegionData = REGION_DATA[state.currentRegion];
   const suggestedRegionData = suggestedRegion ? REGION_DATA[suggestedRegion] : null;
@@ -168,7 +170,8 @@ export function RegionMismatchBanner({
   onSwitchRegion,
   onDismiss
 }: RegionMismatchBannerProps) {
-  const { setRegion } = useRegion();
+  const state = useRegionState();
+  const setRegion = useSetRegion();
   const suggestedRegionData = suggestedRegion ? REGION_DATA[suggestedRegion] : null;
 
   const handleSwitch = async () => {

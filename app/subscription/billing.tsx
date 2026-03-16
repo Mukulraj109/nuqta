@@ -11,14 +11,14 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import subscriptionAPI, { BillingTransaction } from '@/services/subscriptionApi';
 import BillingHistoryList from '@/components/subscription/BillingHistoryList';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
 export default function BillingHistoryPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [transactions, setTransactions] = useState<BillingTransaction[]>([]);
   const [summary, setSummary] = useState<any>(null);

@@ -24,8 +24,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { storesApi } from '@/services/storesApi';
 import tableBookingApi from '@/services/tableBookingApi';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthUser, useGetCurrencySymbol } from '@/stores/selectors';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
@@ -56,9 +55,8 @@ interface TimeSlot {
 function BookTablePage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string }>();
-  const { state: authState } = useAuth();
-  const user = authState.user;
-  const { getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [step, setStep] = useState<'restaurant' | 'details' | 'confirm'>(

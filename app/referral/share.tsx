@@ -17,7 +17,7 @@ import * as Clipboard from 'expo-clipboard';
 import QRCode from 'react-native-qrcode-svg';
 import { ThemedText } from '@/components/ThemedText';
 import referralTierApi from '@/services/referralTierApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { REFERRAL_TIERS, SHARE_TEMPLATES, type ShareTemplate } from '@/types/referral.types';
 import { CardGridSkeleton } from '@/components/skeletons';
@@ -27,7 +27,7 @@ import { colors } from '@/constants/theme';
 
 export default function ReferralSharePage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [loading, setLoading] = useState(true);

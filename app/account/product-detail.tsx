@@ -12,7 +12,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import userProductService, { UserProduct } from '../../services/userProductApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -20,7 +20,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 export default function ProductDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [product, setProduct] = useState<UserProduct | null>(null);
   const [loading, setLoading] = useState(true);

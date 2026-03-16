@@ -3,8 +3,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { InteractionManager, Share, Dimensions } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { useGamification } from '@/contexts/GamificationContext';
 import { useStoreData } from '@/hooks/useStoreData';
 import { useStoreReviews } from '@/hooks/useStoreReviews';
@@ -72,11 +71,11 @@ export interface DynamicStoreData {
 export function useMainStorePageData({ productId, initialProduct }: MainStorePageProps = {}) {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const { state: gamificationState } = useGamification();
-  const isAuthenticated = authState?.isAuthenticated && !!authState?.user;
   const userCoins = gamificationState?.coinBalance?.total || 0;
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [screenData, setScreenData] = useState(Dimensions.get("window"));

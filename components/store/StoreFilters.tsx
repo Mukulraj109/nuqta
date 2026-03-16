@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@/components/common/CrossPlatformSlider';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 export interface FilterOptions {
@@ -47,7 +47,7 @@ const StoreFilters: React.FC<StoreFiltersProps> = ({
   onApplyFilters,
   initialFilters,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [filters, setFilters] = useState<FilterOptions>({
     deliveryTime: { min: 15, max: 90 },

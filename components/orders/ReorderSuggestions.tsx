@@ -13,8 +13,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { useReorderSuggestions } from '@/hooks/useReorder';
 import { router } from 'expo-router';
-import { useRegion } from '@/contexts/RegionContext';
-import { useCart } from '@/contexts/CartContext';
+import { useCartActions, useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlert } from '@/utils/platformAlert';
 import SkeletonLoader from '@/components/common/SkeletonLoader';
 import { colors } from '@/constants/theme';
@@ -25,9 +24,9 @@ interface ReorderSuggestionsProps {
 
 function ReorderSuggestions({ onAddToCart }: ReorderSuggestionsProps) {
   const { suggestions, loading, error, refresh } = useReorderSuggestions();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { actions } = useCart();
+  const actions = useCartActions();
   const [addedItems, setAddedItems] = useState<Set<string>>(new Set());
 
   useEffect(() => {

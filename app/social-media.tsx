@@ -22,8 +22,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, Stack, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import * as socialMediaApi from '@/services/socialMediaApi';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthLoading, useAuthUser, useGetCurrencySymbol } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import ordersApi, { Order } from '@/services/ordersApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
@@ -52,8 +51,9 @@ interface EarningsData {
 export default function SocialMediaPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ orderId?: string }>();
-  const { state: authState } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const authLoading = useAuthLoading();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [activeTab, setActiveTab] = useState<'earn' | 'history'>('earn');
   const [selectedPlatform, setSelectedPlatform] = useState<'instagram' | 'facebook' | 'twitter' | 'tiktok'>('instagram');
@@ -74,23 +74,23 @@ export default function SocialMediaPage() {
 
   useEffect(() => {
     // Wait for auth to finish loading
-    if (authState.isLoading) {
+    if (authLoading) {
 
       return;
     }
 
     // Check if user is authenticated
-    if (!authState.token || !authState.user) {
+    if (!null /* TODO: token not available via selectors */ || !user) {
 
       router.replace('/sign-in');
       return;
     }
 
     // Token is available, set it and load data
-    apiClient.setAuthToken(authState.token);
+    apiClient.setAuthToken(null /* TODO: token not available via selectors */);
     loadData();
     loadCompletedOrders();
-  }, [authState.token, authState.user, authState.isLoading]);
+  }, [null /* TODO: token not available via selectors */, user, authLoading]);
 
   const loadCompletedOrders = async () => {
     setLoadingOrders(true);
@@ -117,8 +117,8 @@ export default function SocialMediaPage() {
       const currentToken = apiClient.getAuthToken();
 
       if (!currentToken) {
-        if (authState.token) {
-          apiClient.setAuthToken(authState.token);
+        if (null /* TODO: token not available via selectors */) {
+          apiClient.setAuthToken(null /* TODO: token not available via selectors */);
         } else {
           throw new Error('No authentication token available');
         }

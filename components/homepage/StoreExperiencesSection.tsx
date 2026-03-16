@@ -13,7 +13,7 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { StoreExperienceCard, StoreExperienceCardProps } from './cards/StoreExperienceCard';
 import { experiencesApi } from '@/services/experiencesApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Fallback store experience configurations generator - Nuqta palette
@@ -73,7 +73,7 @@ interface StoreExperiencesSectionProps {
 const StoreExperiencesSection: React.FC<StoreExperiencesSectionProps> = memo(({
   showTitle = true,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const fallbackExperiences = getFallbackStoreExperiences(currencySymbol);
   const [isLoading, setIsLoading] = useState(true);

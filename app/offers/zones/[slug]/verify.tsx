@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FormPageSkeleton } from '@/components/skeletons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -111,8 +111,8 @@ const ZONE_CONFIG: Record<string, {
 export default function ZoneVerifyScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const isAuthenticated = !!authState?.user;
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);

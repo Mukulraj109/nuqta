@@ -37,7 +37,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import EmptyState from '@/components/common/EmptyState';
 import { LoadingState } from '@/components/common/LoadingState';
 import { electronicsCategoryData, electronicsServiceFilters, electronicsModeFilters, electronicsQuickActions } from '@/data/category/electronicsCategoryData';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const COLORS = {
@@ -109,7 +109,7 @@ function ElectronicsCategoryPage() {
   const router = useRouter();
   const slug = 'electronics';
   const categoryConfig = getCategoryConfig(slug);
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const {

@@ -15,8 +15,7 @@ import { router, Stack, useLocalSearchParams, useFocusEffect } from 'expo-router
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import apiClient from '@/services/apiClient';
-import { useAuth } from '@/contexts/AuthContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useIsAuthenticated, useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import ClaimRewardModal from '@/components/challenges/ClaimRewardModal';
 import ChallengeTips from '@/components/challenges/ChallengeTips';
@@ -78,17 +77,18 @@ export default function ChallengeDetailPage() {
     beforeBalance: number;
     afterBalance: number;
   } | null>(null);
-  const { state: authState } = useAuth();
-  const { rezBalance, refreshWallet } = useWalletContext();
+  const isAuthenticated = useIsAuthenticated();
+  const rezBalance = useRezBalance();
+  const refreshWallet = useRefreshWallet();
 
   // Pulse animation for Claim Reward button
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    if (authState.isAuthenticated && id) {
+    if (isAuthenticated && id) {
       loadChallengeDetail();
     }
-  }, [authState.isAuthenticated, id]);
+  }, [isAuthenticated, id]);
 
   // Refresh data when navigating back to this screen
   const isFirstFocus = useRef(true);
@@ -98,10 +98,10 @@ export default function ChallengeDetailPage() {
         isFirstFocus.current = false;
         return;
       }
-      if (authState.isAuthenticated && id) {
+      if (isAuthenticated && id) {
         loadChallengeDetail();
       }
-    }, [authState.isAuthenticated, id])
+    }, [isAuthenticated, id])
   );
 
   // Start pulse animation when challenge is completed and ready to claim

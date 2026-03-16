@@ -19,7 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import reelApi, { Reel } from '@/services/reelApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
 const { width } = Dimensions.get('window');
@@ -34,7 +34,7 @@ const tabs = [
 
 const ExploreReelsPage = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [activeTab, setActiveTab] = useState('trending');
   const flatListRef = useRef<FlashList<Reel>>(null);

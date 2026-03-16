@@ -14,8 +14,7 @@ import stripeApi from '@/services/stripeApi';
 import type { SubscriptionTier as TierType, BillingCycle } from '@/types/subscription.types';
 import PaymentSuccessModal from '@/components/subscription/PaymentSuccessModal';
 import StripePaymentModal from '@/components/subscription/StripePaymentModal';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { showToast } from '@/components/common/ToastManager';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 
@@ -27,8 +26,9 @@ export default function SubscriptionPlansPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const { state, actions } = useSubscription();
-  const { state: authState } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const currentTier = state.currentSubscription?.tier || 'free';
 

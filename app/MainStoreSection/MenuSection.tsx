@@ -16,7 +16,7 @@ import {
   Spacing,
   BorderRadius,
 } from "@/constants/DesignSystem";
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -47,7 +47,7 @@ export default function MenuSection({
   onItemPress,
 }: MenuSectionProps) {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const handleItemPress = (item: MenuItem) => {

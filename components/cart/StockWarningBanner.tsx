@@ -35,7 +35,7 @@ function StockWarningBanner({
   useEffect(() => {
     if (issues.length > 0 && visible) {
       // Slide in and fade in
-      const _anim0 = Animated.parallel([
+      const anim = Animated.parallel([
         Animated.timing(slideAnim, {
           toValue: 0,
           duration: 300,
@@ -47,7 +47,7 @@ function StockWarningBanner({
           useNativeDriver: true,
         }),
       ]);
-      _anim0.start();
+      anim.start();
 
       // Auto-hide after duration
       if (autoHide) {
@@ -56,10 +56,12 @@ function StockWarningBanner({
         }, autoHideDuration);
 
         return () => {
-      _anim0.stop();
-      clearTimeout(timer);
-    }
+          anim.stop();
+          clearTimeout(timer);
+        };
       }
+
+      return () => { anim.stop(); };
     }
   }, [issues, visible, autoHide, autoHideDuration]);
 

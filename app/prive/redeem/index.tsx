@@ -21,7 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/priveTheme';
 import { Colors } from '@/constants/DesignSystem';
 import { usePriveSection } from '@/hooks/usePriveSection';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useRefreshWallet } from '@/stores/selectors';
 import priveApi, { RedeemConfig } from '@/services/priveApi';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -74,7 +74,7 @@ const SkeletonBlock = ({ width, height, style }: { width: number | string; heigh
 export default function RedeemScreen() {
   const router = useRouter();
   const { userData, isLoading: priveLoading, error: priveError, refresh: priveRefresh } = usePriveSection();
-  const { refreshWallet } = useWalletContext();
+  const refreshWallet = useRefreshWallet();
 
   const [config, setConfig] = useState<RedeemConfig>(FALLBACK_CONFIG);
   const [configLoading, setConfigLoading] = useState(true);

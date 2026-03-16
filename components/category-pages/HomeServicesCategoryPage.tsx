@@ -37,7 +37,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import EmptyState from '@/components/common/EmptyState';
 import { LoadingState } from '@/components/common/LoadingState';
 import { homeServicesCategoryData, homeServiceFilters, homeModeFilters, homeQuickActions, ALL_HOME_SERVICES } from '@/data/category/homeServicesCategoryData';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const COLORS = {
@@ -87,7 +87,7 @@ function HomeServicesCategoryPage() {
   const router = useRouter();
   const slug = 'home-services';
   const categoryConfig = getCategoryConfig(slug);
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const {

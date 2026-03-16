@@ -20,7 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import travelApi, { TravelService, TravelServiceCategory } from '@/services/travelApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -165,7 +165,7 @@ interface PopularService {
 // ─── Main Component ──────────────────────────────────────────────────────────
 const TravelPage: React.FC = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const cs = getCurrencySymbol();
 
   const [isLoading, setIsLoading] = useState(true);

@@ -11,7 +11,7 @@ try {
   // silently handle
 }
 import { platformAlertSimple } from '@/utils/platformAlert';
-import { useAuth } from './AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import userSettingsApi from '@/services/userSettingsApi';
 
 // Security Settings Interface
@@ -137,8 +137,8 @@ interface SecurityProviderProps {
 let _securitySettingsLoaded = false;
 
 export function SecurityProvider({ children }: SecurityProviderProps) {
-  const { state } = useAuth();
-  const { user, isAuthenticated } = state;
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const [securitySettings, setSecuritySettings] = useState<SecuritySettings | null>(null);
   const [privacySettings, setPrivacySettings] = useState<PrivacySettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);

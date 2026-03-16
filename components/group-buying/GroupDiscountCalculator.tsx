@@ -6,7 +6,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { GroupBuyingGroup } from '@/types/groupBuying.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface GroupDiscountCalculatorProps {
@@ -14,7 +14,7 @@ interface GroupDiscountCalculatorProps {
 }
 
 function GroupDiscountCalculator({ group }: GroupDiscountCalculatorProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const currentMembers = group.currentMemberCount;
   const basePrice = group.product.basePrice;

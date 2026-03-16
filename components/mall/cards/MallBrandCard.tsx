@@ -17,7 +17,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand, BrandBadge } from '../../../types/mall.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface MallBrandCardProps {
@@ -54,7 +54,7 @@ const MallBrandCard: React.FC<MallBrandCardProps> = ({
   width = 170,
   showCategory = false,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [imageError, setImageError] = useState(false);
 

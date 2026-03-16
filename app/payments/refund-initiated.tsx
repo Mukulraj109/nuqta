@@ -17,8 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { colors } from '@/constants/theme';
 
@@ -126,8 +125,9 @@ function mapRefundResponse(raw: any): RefundDetails {
 export default function RefundInitiatedPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { getCurrencySymbol } = useRegion();
-  const { isAuthenticated, authLoading } = useAuth();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const currencySymbol = getCurrencySymbol();
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);

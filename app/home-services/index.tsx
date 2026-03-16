@@ -10,14 +10,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import homeServicesApi, { HomeServiceCategory, HomeService, HomeServicesStats } from '@/services/homeServicesApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const HomeServicesPage: React.FC = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [categories, setCategories] = useState<HomeServiceCategory[]>([]);
   const [featuredServices, setFeaturedServices] = useState<HomeService[]>([]);

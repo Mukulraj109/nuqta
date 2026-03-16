@@ -11,14 +11,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import exploreApi, { VerifiedReview } from '@/services/exploreApi';
 import { CardGridSkeleton } from '@/components/skeletons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 const { width } = Dimensions.get('window');
 
 const VerifiedReviews = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [reviews, setReviews] = useState<VerifiedReview[]>([]);
   const [isLoading, setIsLoading] = useState(true);

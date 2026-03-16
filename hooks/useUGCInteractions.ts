@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import { useToast } from '@/hooks/useToast';
 import ugcApi from '@/services/ugcApi';
 
@@ -15,7 +15,7 @@ interface UGCInteractionState {
  * Includes optimistic updates and rollback on error
  */
 export function useUGCInteractions() {
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   const { showSuccess, showError } = useToast();
 
   const [state, setState] = useState<UGCInteractionState>({
@@ -29,12 +29,12 @@ export function useUGCInteractions() {
    * Check if user is authenticated
    */
   const requireAuth = useCallback(() => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       showError('Please sign in to interact with content');
       return false;
     }
     return true;
-  }, [authState.isAuthenticated, showError]);
+  }, [isAuthenticated, showError]);
 
   /**
    * Initialize state from UGC content array

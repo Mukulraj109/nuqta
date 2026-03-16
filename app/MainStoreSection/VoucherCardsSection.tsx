@@ -20,7 +20,7 @@ import {
   Typography,
   Gradients,
 } from "@/constants/DesignSystem";
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 export interface VoucherCard {
@@ -166,7 +166,7 @@ export default memo(function VoucherCardsSection({
   onBuyVoucher,
   onSeeAllPress,
 }: VoucherCardsSectionProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Don't render if no real vouchers provided - no dummy data

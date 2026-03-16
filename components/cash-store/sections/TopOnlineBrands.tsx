@@ -42,7 +42,7 @@ const BrandCard: React.FC<{
   const pressAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    const _anim0 = Animated.parallel([
+    const anim = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 350,
@@ -57,9 +57,9 @@ const BrandCard: React.FC<{
         useNativeDriver: true,
       }),
     ]);
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
+    anim.start();
+
+    return () => { anim.stop(); };
 }, [index]);
 
   const handlePressIn = () => {
@@ -267,14 +267,14 @@ const TopOnlineBrands: React.FC<TopOnlineBrandsProps> = ({
     : (brands.length > 0 ? `${brands.length}+` : null);
 
   useEffect(() => {
-    const _anim0 = Animated.timing(headerFadeAnim, {
+    const anim = Animated.timing(headerFadeAnim, {
       toValue: 1,
       duration: 400,
       useNativeDriver: true,
     });
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
+    anim.start();
+
+    return () => { anim.stop(); };
 }, []);
 
   const hasActiveFilter = activeFilter && activeFilter !== 'all';

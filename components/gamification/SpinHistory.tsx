@@ -11,7 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import gamificationAPI from '@/services/gamificationApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface CouponMetadata {
@@ -45,7 +45,7 @@ interface SpinHistoryProps {
 }
 
 function SpinHistory({ limit = 10 }: SpinHistoryProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [history, setHistory] = useState<SpinHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);

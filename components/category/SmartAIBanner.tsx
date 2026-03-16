@@ -16,7 +16,7 @@ import {
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface SmartAIBannerProps {
@@ -110,7 +110,7 @@ const SmartAIBanner: React.FC<SmartAIBannerProps> = ({
   onSearch,
 }) => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [query, setQuery] = useState('');
   const AI_SUGGESTIONS = getAISuggestions(currencySymbol);

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useGreeting as useGreetingContext } from '@/contexts/GreetingContext';
 import { useLocation } from '@/contexts/LocationContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 import {
   getCurrentGreeting,
   getGreetingForTime,
@@ -34,11 +34,11 @@ export function useGreetingDisplay() {
 export function useTimeBasedGreeting() {
   const { getGreetingForTime } = useGreetingContext();
   const { state: locationState } = useLocation();
-  const { state: authState } = useAuth();
+  const authUser = useAuthUser();
   
   const getGreetingForCurrentTime = useCallback((config?: GreetingConfig) => {
     const greetingConfig: GreetingConfig = {
-      userName: authState.user?.profile?.firstName || undefined,
+      userName: authUser?.profile?.firstName || undefined,
       timezone: locationState.currentLocation?.timezone || 'Asia/Kolkata',
       language: 'en',
       includeEmoji: true,
@@ -47,11 +47,11 @@ export function useTimeBasedGreeting() {
     };
 
     return getGreetingForTime(new Date(), greetingConfig);
-  }, [getGreetingForTime, authState.user, locationState.currentLocation]);
+  }, [getGreetingForTime, authUser, locationState.currentLocation]);
 
   const getGreetingForSpecificTime = useCallback((date: Date, config?: GreetingConfig) => {
     const greetingConfig: GreetingConfig = {
-      userName: authState.user?.profile?.firstName || undefined,
+      userName: authUser?.profile?.firstName || undefined,
       timezone: locationState.currentLocation?.timezone || 'Asia/Kolkata',
       language: 'en',
       includeEmoji: true,
@@ -60,7 +60,7 @@ export function useTimeBasedGreeting() {
     };
 
     return getGreetingForTime(date, greetingConfig);
-  }, [getGreetingForTime, authState.user, locationState.currentLocation]);
+  }, [getGreetingForTime, authUser, locationState.currentLocation]);
 
   return {
     getGreetingForCurrentTime,
@@ -74,11 +74,11 @@ export function useTimeBasedGreeting() {
 export function useLocationBasedGreeting() {
   const { state: greetingState } = useGreetingContext();
   const { state: locationState } = useLocation();
-  const { state: authState } = useAuth();
+  const authUser = useAuthUser();
   
   const getGreetingWithLocation = useCallback((config?: GreetingConfig) => {
     const greetingConfig: GreetingConfig = {
-      userName: authState.user?.profile?.firstName || undefined,
+      userName: authUser?.profile?.firstName || undefined,
       timezone: locationState.currentLocation?.timezone || 'Asia/Kolkata',
       language: 'en',
       includeEmoji: true,
@@ -88,11 +88,11 @@ export function useLocationBasedGreeting() {
     };
 
     return getSmartGreeting(new Date(), greetingConfig);
-  }, [authState.user, locationState.currentLocation]);
+  }, [authUser, locationState.currentLocation]);
 
   const getGreetingForTimeWithLocation = useCallback((date: Date, config?: GreetingConfig) => {
     const greetingConfig: GreetingConfig = {
-      userName: authState.user?.profile?.firstName || undefined,
+      userName: authUser?.profile?.firstName || undefined,
       timezone: locationState.currentLocation?.timezone || 'Asia/Kolkata',
       language: 'en',
       includeEmoji: true,
@@ -102,7 +102,7 @@ export function useLocationBasedGreeting() {
     };
 
     return getSmartGreeting(date, greetingConfig);
-  }, [authState.user, locationState.currentLocation]);
+  }, [authUser, locationState.currentLocation]);
 
   return {
     currentGreeting: greetingState.currentGreeting,
@@ -117,7 +117,7 @@ export function useLocationBasedGreeting() {
 export function useGreetingCustomization() {
   const { updateGreeting } = useGreetingContext();
   const { state: locationState } = useLocation();
-  const { state: authState } = useAuth();
+  const authUser = useAuthUser();
   
   const [customConfig, setCustomConfig] = useState<GreetingConfig>({
     language: 'en',
@@ -130,13 +130,13 @@ export function useGreetingCustomization() {
     setCustomConfig(newConfig);
     
     const greetingConfig: GreetingConfig = {
-      userName: authState.user?.profile?.firstName || undefined,
+      userName: authUser?.profile?.firstName || undefined,
       timezone: locationState.currentLocation?.timezone || 'Asia/Kolkata',
       ...newConfig,
     };
 
     await updateGreeting(greetingConfig);
-  }, [customConfig, updateGreeting, authState.user, locationState.currentLocation]);
+  }, [customConfig, updateGreeting, authUser, locationState.currentLocation]);
 
   const setLanguage = useCallback((language: 'en' | 'hi' | 'te' | 'ta' | 'bn') => {
     updateCustomGreeting({ language });

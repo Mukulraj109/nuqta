@@ -2,7 +2,7 @@
 // Hook to auto-apply card offers when card payment is selected
 
 import { useState, useEffect, useCallback } from 'react';
-import { useCart } from '@/contexts/CartContext';
+import { useCartState, useCartActions } from '@/stores/selectors';
 import discountsApi, { Discount } from '@/services/discountsApi';
 import { showToast } from '@/components/common/ToastManager';
 import analyticsService from '@/services/analyticsService';
@@ -20,7 +20,8 @@ export function useCardOfferAutoApply({
   cardNumber,
   enabled = true,
 }: UseCardOfferAutoApplyProps) {
-  const { state: cartState, actions: cartActions } = useCart();
+  const cartState = useCartState();
+  const cartActions = useCartActions();
   const [appliedOffer, setAppliedOffer] = useState<Discount | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

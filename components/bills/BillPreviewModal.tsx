@@ -18,7 +18,7 @@ import {
   ManualCorrectionData,
   MerchantMatch,
 } from '@/types/billVerification.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface BillPreviewModalProps {
@@ -40,7 +40,7 @@ function BillPreviewModal({
   onConfirm,
   onEdit,
 }: BillPreviewModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState<ManualCorrectionData>({

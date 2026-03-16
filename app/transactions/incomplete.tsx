@@ -18,7 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import ordersApi, { Order } from '@/services/ordersApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -26,7 +26,7 @@ const INCOMPLETE_STATUSES = ['pending', 'payment_failed', 'cancelled', 'payment_
 
 const IncompleteTransactionsPage = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);

@@ -11,7 +11,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useWalletData, useBrandedCoins } from '@/stores/selectors';
 import { COIN_TYPES } from '@/types/wallet';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -19,7 +19,8 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { colors } from '@/constants/theme';
 export default function BrandedCoinsScreen() {
   const router = useRouter();
-  const { walletData, brandedCoins: brandedCoinsFromCtx } = useWalletContext();
+  const walletData = useWalletData();
+  const brandedCoinsFromCtx = useBrandedCoins();
 
   const screenWidth = Dimensions.get('window').width;
   const styles = useMemo(() => createStyles(screenWidth), [screenWidth]);

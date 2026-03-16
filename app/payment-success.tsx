@@ -17,7 +17,7 @@ import * as Haptics from 'expo-haptics';
 import { ThemedText } from '@/components/ThemedText';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import ordersApi from '@/services/ordersApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import analytics from '@/services/analytics/AnalyticsService';
@@ -75,7 +75,7 @@ interface OrderDetails {
 
 export default function PaymentSuccessPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const { orderId, transactionId, paymentMethod } = useLocalSearchParams<{
     orderId: string;

@@ -12,7 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import notificationService from '@/services/notificationService';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface Notification {
@@ -39,7 +39,7 @@ function NotificationBell({
   iconColor = colors.neutral[800]
 }: NotificationBellProps) {
   const router = useRouter();
-  const { isAuthenticated } = useAuth() as any;
+  const isAuthenticated = useIsAuthenticated();
   const [showDropdown, setShowDropdown] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);

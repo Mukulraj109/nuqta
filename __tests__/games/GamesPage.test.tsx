@@ -5,13 +5,18 @@ import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import GamesPage from '@/app/games/index';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { useGamification } from '@/contexts/GamificationContext';
 import walletApi from '@/services/walletApi';
 import { renderWithProviders } from '../gamification/testUtils';
 
 // Mock dependencies
-jest.mock('@/contexts/AuthContext');
+jest.mock('@/stores/selectors', () => ({
+  ...jest.requireActual('@/stores/selectors'),
+  useAuthUser: jest.fn(),
+  useIsAuthenticated: jest.fn(),
+  useAuthLoading: jest.fn(),
+}));
 jest.mock('@/contexts/GamificationContext');
 jest.mock('@/services/walletApi');
 jest.mock('expo-router', () => ({
@@ -24,18 +29,16 @@ jest.mock('expo-router', () => ({
   },
 }));
 
-const mockUseAuth = useAuth as jest.MockedFunction<typeof useAuth>;
+const mockUseAuthUser = useAuthUser as jest.MockedFunction<typeof useAuthUser>;
+const mockUseIsAuthenticated = useIsAuthenticated as jest.MockedFunction<typeof useIsAuthenticated>;
+const mockUseAuthLoading = useAuthLoading as jest.MockedFunction<typeof useAuthLoading>;
 const mockUseGamification = useGamification as jest.MockedFunction<typeof useGamification>;
 
 describe('GamesPage', () => {
-  const mockAuthState = {
-    isAuthenticated: true,
-    user: {
-      id: 'user-123',
-      email: 'test@example.com',
-      name: 'Test User',
-    },
-    token: 'mock-token',
+  const mockUser = {
+    id: 'user-123',
+    email: 'test@example.com',
+    name: 'Test User',
   };
 
   const mockGamificationState = {
@@ -86,14 +89,9 @@ describe('GamesPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    mockUseAuth.mockReturnValue({
-      state: mockAuthState,
-      login: jest.fn(),
-      logout: jest.fn(),
-      register: jest.fn(),
-      updateProfile: jest.fn(),
-      verifyOTP: jest.fn(),
-    } as any);
+    mockUseAuthUser.mockReturnValue(mockUser as any);
+    mockUseIsAuthenticated.mockReturnValue(true);
+    mockUseAuthLoading.mockReturnValue(false);
 
     mockUseGamification.mockReturnValue({
       state: mockGamificationState,
@@ -356,18 +354,8 @@ describe('GamesPage', () => {
     });
 
     it('should handle unauthenticated state', () => {
-      mockUseAuth.mockReturnValue({
-        state: {
-          ...mockAuthState,
-          isAuthenticated: false,
-          user: null,
-        },
-        login: jest.fn(),
-        logout: jest.fn(),
-        register: jest.fn(),
-        updateProfile: jest.fn(),
-        verifyOTP: jest.fn(),
-      } as any);
+      mockUseAuthUser.mockReturnValue(null);
+      mockUseIsAuthenticated.mockReturnValue(false);
 
       const { getByText } = renderWithProviders(<GamesPage />);
 

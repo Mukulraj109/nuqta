@@ -4,7 +4,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import ordersService, { Order } from '../../services/ordersApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Use same colors as FoodDiningCategoryPage
@@ -44,7 +44,7 @@ const getTimeAgo = (dateString: string) => {
 
 function OrderAgainSection({ orders: ordersProp, categorySlug, limit = 10 }: OrderAgainSectionProps) {
     const router = useRouter();
-    const { getCurrencySymbol } = useRegion();
+    const getCurrencySymbol = useGetCurrencySymbol();
     const currencySymbol = getCurrencySymbol();
     const [fetchedOrders, setFetchedOrders] = useState<Order[]>([]);
 

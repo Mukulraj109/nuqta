@@ -11,7 +11,7 @@ import React, { useMemo, useState, useCallback, memo } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ProductCardProps } from '@/types/homepage.types';
-import { useCart } from '@/contexts/CartContext';
+import { useCartState, useCartActions } from '@/stores/selectors';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useStockStatus } from '@/hooks/useStockStatus';
 import { useStockNotifications } from '@/hooks/useStockNotifications';
@@ -37,7 +37,8 @@ function ProductCard({
   width = 180,
   showAddToCart = true,
 }: ProductCardProps) {
-  const { state: cartState, actions: cartActions } = useCart();
+  const cartState = useCartState();
+  const cartActions = useCartActions();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { subscribe, subscribing } = useStockNotifications();
   const { showSuccess, showError } = useToast();

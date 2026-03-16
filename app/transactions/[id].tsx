@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import walletApi, { TransactionResponse } from '@/services/walletApi';
 import storePaymentApi from '@/services/storePaymentApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
@@ -43,7 +43,7 @@ interface StorePaymentDetail {
 const TransactionDetailPage = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [transaction, setTransaction] = useState<TransactionResponse | null>(null);
   const [storePayment, setStorePayment] = useState<StorePaymentDetail | null>(null);

@@ -21,9 +21,8 @@ import { ThemedView } from '@/components/ThemedView';
 import TierBadge from '@/components/subscription/TierBadge';
 import gamificationAPI from '@/services/gamificationApi';
 import { useLeaderboardRealtime } from '@/hooks/useLeaderboardRealtime';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useGetCurrencySymbol } from '@/stores/selectors';
 import type { LeaderboardData, LeaderboardEntry } from '@/types/gamification.types';
-import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -31,8 +30,8 @@ type Period = 'daily' | 'weekly' | 'monthly' | 'all-time';
 
 export default function LeaderboardPage() {
   const router = useRouter();
-  const { state } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [selectedPeriod, setSelectedPeriod] = useState<Period>('monthly');
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData | null>(null);
@@ -54,16 +53,16 @@ export default function LeaderboardPage() {
     hasRecentRankUp,
   } = useLeaderboardRealtime(
     leaderboardData?.entries || [],
-    state.user?.id,
+    user?.id,
     {
       onRankUp: (userId, newRank, oldRank) => {
-        if (userId === state.user?.id) {
+        if (userId === user?.id) {
           triggerCelebration(`You ranked up from #${oldRank} to #${newRank}!`);
           scrollToUserPosition();
         }
       },
       onPointsEarned: (userId, points, source) => {
-        if (userId === state.user?.id) {
+        if (userId === user?.id) {
 
         }
       },

@@ -16,7 +16,7 @@ import { useRecommendations } from '@/hooks/useHomepage';
 import { RecommendationItem } from '@/types/homepage.types';
 import { useHomepageNavigation } from '@/hooks/useHomepage';
 import { SectionSkeleton } from '@/components/homepage/skeletons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { formatPrice as formatPriceUtil } from '@/utils/priceFormatter';
 import { colors } from '@/constants/theme';
 
@@ -48,7 +48,7 @@ const PickedForYou: React.FC<PickedForYouProps> = ({
   const cardWidth = (screenWidth - 16 * 2 - CARD_GAP) / 2;
   const { section, loading, error } = useRecommendations();
   const { handleItemPress } = useHomepageNavigation();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Extract products from section, limit to specified number

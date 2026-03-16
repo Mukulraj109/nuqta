@@ -6,10 +6,9 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'expo-router';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated, useRefreshWallet } from '@/stores/selectors';
 import { usePriveEligibility } from './usePriveEligibility';
 import { PILLAR_CONFIG } from '@/components/prive/priveTheme';
-import { useWalletContext } from '@/contexts/WalletContext';
 import priveApi, {
   PriveOffer as ApiPriveOffer,
   HighlightItem as ApiHighlightItem,
@@ -149,12 +148,13 @@ const createEmptyUserData = (userName: string): PriveUserData => ({
 
 export const usePriveSection = (): UsePriveSectionReturn => {
   const router = useRouter();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const {
     eligibility,
     refresh: refreshEligibility,
   } = usePriveEligibility();
-  const { refreshWallet } = useWalletContext();
+  const refreshWallet = useRefreshWallet();
 
   // Track if initial fetch has been done
   const hasFetchedRef = useRef(false);
@@ -166,7 +166,7 @@ export const usePriveSection = (): UsePriveSectionReturn => {
 
   // State - initialized with empty defaults (no mock data)
   const [userData, setUserData] = useState<PriveUserData>(
-    createEmptyUserData(authState.user?.name || 'Privé Member')
+    createEmptyUserData(user?.name || 'Privé Member')
   );
   const [featuredOffers, setFeaturedOffers] = useState<PriveOffer[]>([]);
   const [highlights, setHighlights] = useState<{
@@ -206,7 +206,7 @@ export const usePriveSection = (): UsePriveSectionReturn => {
 
   // Fetch dashboard data from backend
   const fetchDashboardData = useCallback(async () => {
-    if (!authState.isAuthenticated) return;
+    if (!isAuthenticated) return;
 
     setIsLoading(true);
 
@@ -299,17 +299,17 @@ export const usePriveSection = (): UsePriveSectionReturn => {
     } finally {
       setIsLoading(false);
     }
-  }, [authState.isAuthenticated]);
+  }, [isAuthenticated]);
 
   // Update user name when auth changes
   useEffect(() => {
-    if (authState.user?.name) {
+    if (user?.name) {
       setUserData(prev => ({
         ...prev,
-        name: authState.user?.name || 'Privé Member',
+        name: user?.name || 'Privé Member',
       }));
     }
-  }, [authState.user?.name]);
+  }, [user?.name]);
 
   // Update pillars when eligibility changes (in background)
   useEffect(() => {
@@ -331,12 +331,12 @@ export const usePriveSection = (): UsePriveSectionReturn => {
 
   // Initial fetch - runs once when authenticated
   useEffect(() => {
-    if (authState.isAuthenticated && !hasFetchedRef.current) {
+    if (isAuthenticated && !hasFetchedRef.current) {
       hasFetchedRef.current = true;
       // Fetch in background without blocking UI
       fetchDashboardData();
     }
-  }, [authState.isAuthenticated, fetchDashboardData]);
+  }, [isAuthenticated, fetchDashboardData]);
 
   // Refresh function
   const refresh = useCallback(async () => {

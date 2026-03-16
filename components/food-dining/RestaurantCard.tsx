@@ -9,7 +9,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { COLORS, FoodRestaurant } from './constants';
 import { isRestaurantOpen } from './helpers';
 import { colors } from '@/constants/theme';
@@ -30,7 +30,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   showNewBadge = false,
 }) => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const isCompact = variant === 'compact';
   const [imageError, setImageError] = useState(false);

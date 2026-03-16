@@ -15,7 +15,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import eventsApiService from '@/services/eventsApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useRegionState } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -82,7 +82,7 @@ const FALLBACK_CATEGORIES: EventCategoryConfig[] = [
 
 const EventsExperiencesSection: React.FC = () => {
   const router = useRouter();
-  const { state: regionState } = useRegion();
+  const regionState = useRegionState();
   const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState<EventCategoryConfig[]>(FALLBACK_CATEGORIES);
   const [featuredEvent, setFeaturedEvent] = useState<{ title: string; discount?: string } | null>(null);

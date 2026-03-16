@@ -24,7 +24,7 @@ import { FilterChips, StoreTabs, PaymentStoreCard } from '@/components/pay-store
 import { StorePaymentInfo, PayInStoreParams } from '@/types/storePayment.types';
 import { usePaymentStoreSearch } from '@/hooks/usePaymentStoreSearch';
 import apiClient from '@/services/apiClient';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import BonusCampaignBanner from '@/components/earn/BonusCampaignBanner';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -32,7 +32,8 @@ import { BRAND } from '@/constants/brand';
 export default function PayInStoreScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<PayInStoreParams & { bonusCampaignSlug?: string }>();
-  const { state } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const searchInputRef = useRef<TextInput>(null);
 
   const [showScanner, setShowScanner] = useState(false);
@@ -128,7 +129,7 @@ export default function PayInStoreScreen() {
   const displayStores = getFilteredStores(baseStores);
 
   // Show loading while auth state is being loaded
-  if (state.isLoading) {
+  if (authLoading) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centerContent}>
@@ -139,7 +140,7 @@ export default function PayInStoreScreen() {
     );
   }
 
-  if (!state.isAuthenticated) {
+  if (!isAuthenticated) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centerContent}>

@@ -8,11 +8,11 @@ import { apiClient } from '@/utils/apiClient';
 import searchService from '@/services/searchApi';
 import searchDiscoveryApi, { TrendingSearch, StoreItem } from '@/services/searchDiscoveryApi';
 import type { FilterState } from '@/components/search/FilterModal';
-import { useCurrentRegion } from '@/contexts/RegionContext';
+import { useCurrentRegionId } from '@/stores/selectors';
 
 export const useSearchPage = () => {
   const { state: searchHookState, actions } = useSearch();
-  const currentRegion = useCurrentRegion();
+  const currentRegion = useCurrentRegionId();
   
   const [state, setState] = useState<SearchPageState>({
     query: '',

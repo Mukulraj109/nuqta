@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { useBackButton } from '@/hooks/useSafeNavigation';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthActions } from '@/stores/selectors';
 import { navigationDebugger } from '@/utils/navigationDebug';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
@@ -73,7 +73,7 @@ const brands: BrandItem[] = [
 export default function TransactionsPreviewScreen() {
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
-  const { actions } = useAuth();
+  const actions = useAuthActions();
 
   const handleFinish = async () => {
     try {

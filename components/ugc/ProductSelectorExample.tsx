@@ -13,7 +13,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import ProductSelector from './ProductSelector';
 import { ProductSelectorProduct } from '@/types/product-selector.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 /**
  * Example 1: Basic Video Upload with Product Tagging
@@ -121,7 +121,7 @@ export function ReviewFormExample() {
  * Example 3: Shopping List Creator
  */
 export function ShoppingListExample() {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [showSelector, setShowSelector] = useState(false);
   const [listProducts, setListProducts] = useState<ProductSelectorProduct[]>([]);
@@ -184,7 +184,7 @@ export function ShoppingListExample() {
  * Example 4: Product Comparison Tool
  */
 export function ProductComparisonExample() {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [showSelector, setShowSelector] = useState(false);
   const [compareProducts, setCompareProducts] = useState<ProductSelectorProduct[]>([]);
@@ -244,7 +244,7 @@ export function ProductComparisonExample() {
  * Example 5: UGC Content Creation (Main Use Case)
  */
 export function UGCContentCreationExample() {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [showSelector, setShowSelector] = useState(false);
   const [taggedProducts, setTaggedProducts] = useState<ProductSelectorProduct[]>([]);

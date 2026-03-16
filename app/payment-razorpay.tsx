@@ -24,7 +24,7 @@ import paymentService, { PaymentMethod, PaymentResponse } from '@/services/payme
 import PaymentValidator from '@/services/paymentValidation';
 import apiClient from '@/services/apiClient';
 import travelApi from '@/services/travelApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { getCurrencySymbol as getPaymentCurrencySymbol } from '@/config/payment';
 import * as WebBrowser from 'expo-web-browser';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
@@ -52,7 +52,7 @@ type PaymentGateway = 'razorpay' | 'stripe';
 export default function PaymentPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const amount = Number(params.amount) || 5000;
   const currency = ((params.currency as string) || 'INR').toUpperCase();

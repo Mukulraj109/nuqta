@@ -1,6 +1,12 @@
 import cacheService from './cacheService';
 import homepageDataService from './homepageDataService';
-import { AuthState } from '@/contexts/AuthContext';
+interface AuthState {
+  isAuthenticated: boolean;
+  user?: { id?: string; _id?: string } | null;
+  isLoading?: boolean;
+  error?: string | null;
+  token?: string | null;
+}
 import NetInfo from '@react-native-community/netinfo';
 
 /**

@@ -10,7 +10,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { JackpotMilestone } from '@/types/partner.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface JackpotTimelineProps {
@@ -26,7 +26,7 @@ function JackpotTimeline({
   currentSpent = 0, // Fixed: Don't hardcode to 18500, use actual value from props
   onMilestonePress
 }: JackpotTimelineProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   // Normalize milestone data (backend sends spendAmount, frontend expects amount)
   const normalizedMilestones = milestones.map(m => ({

@@ -24,7 +24,7 @@ import supportService, {
   CallbackResponse,
   SupportCategory,
 } from '@/services/supportApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 import analyticsService from '@/services/analyticsService';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
@@ -33,7 +33,7 @@ type PageState = 'loading' | 'error' | 'form' | 'submitting' | 'success';
 
 export default function CallSupportPage() {
   const router = useRouter();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
 
   // Page state
   const [pageState, setPageState] = useState<PageState>('loading');
@@ -82,7 +82,7 @@ export default function CallSupportPage() {
 
   // Phone prefill from auth
   useEffect(() => {
-    const userPhone = authState.user?.phoneNumber;
+    const userPhone = user?.phoneNumber;
     if (userPhone) {
       // Try to parse country code prefix
       const prefixes = ['+971', '+91', '+1', '+44', '+966', '+968', '+965', '+973', '+974'];
@@ -101,7 +101,7 @@ export default function CallSupportPage() {
         setPhoneNumber(userPhone);
       }
     }
-  }, [authState.user?.phoneNumber]);
+  }, [user?.phoneNumber]);
 
   // Validation
   const phoneValid = /^\d{7,15}$/.test(phoneNumber);

@@ -24,9 +24,7 @@ import addressApi from '@/services/addressApi';
 import { createRazorpayPayment } from '@/services/razorpayApi';
 import { mapBackendCartToFrontend, mapFrontendCheckoutToBackendOrder } from '@/utils/dataMappers';
 import { showToast } from '@/components/common/ToastManager';
-import { useCart } from '@/contexts/CartContext';
-import { useRegion } from '@/contexts/RegionContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useCartActions, useCartState, useGetCurrencySymbol, useWalletData, useRawWalletData, useRefreshWallet } from '@/stores/selectors';
 import {
   TAX_RATE,
   PLATFORM_FEE,
@@ -101,10 +99,13 @@ const distributeCoinsProportionally = (
 };
 
 export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
-  const { actions: cartActions, state: cartState } = useCart();
-  const { getCurrencySymbol } = useRegion();
+  const cartActions = useCartActions();
+  const cartState = useCartState();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { walletData, rawBackendData: walletRawData, refreshWallet: refreshSharedWallet } = useWalletContext();
+  const walletData = useWalletData();
+  const walletRawData = useRawWalletData();
+  const refreshSharedWallet = useRefreshWallet();
   // Refs to access latest wallet data inside async callbacks (avoids stale closure)
   const walletDataRef = useRef(walletData);
   const walletRawDataRef = useRef(walletRawData);

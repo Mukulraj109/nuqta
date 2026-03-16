@@ -12,7 +12,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { formatPrice } from '@/utils/priceFormatter';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { triggerImpact } from '@/utils/haptics';
 import { colors } from '@/constants/theme';
 
@@ -39,7 +39,7 @@ function AddedToCartModal({
   cartItemCount = 1,
   cartTotal,
 }: AddedToCartModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const slideAnim = React.useRef(new Animated.Value(300)).current;
 

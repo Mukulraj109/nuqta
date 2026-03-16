@@ -18,7 +18,7 @@ import {
   SHADOWS,
   PRODUCT_GRID
 } from '@/constants/search-constants';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import CachedImage from '@/components/ui/CachedImage';
 import { colors } from '@/constants/theme';
 
@@ -29,7 +29,8 @@ const ProductCard: React.FC<ProductCardProps> = memo(({
   showStore = false,
   size = 'medium',
 }) => {
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
   const [imageError, setImageError] = useState(false);

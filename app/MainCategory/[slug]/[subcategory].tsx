@@ -25,7 +25,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { storesApi } from '@/services/storesApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { getCategoryConfig } from '@/config/categoryConfig';
 import { colors } from '@/constants/theme';
 
@@ -226,7 +226,7 @@ function StoreCard({ store, currencySymbol }: { store: any; currencySymbol: stri
 export default function SharedCategoryPage() {
   const { subcategory, slug } = useLocalSearchParams<{ subcategory: string; slug: string }>();
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [stores, setStores] = useState<any[]>([]);

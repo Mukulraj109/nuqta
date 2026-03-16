@@ -9,7 +9,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
@@ -26,7 +26,7 @@ export const AmountToPayCard: React.FC<AmountToPayCardProps> = ({
   coinsApplied,
   showOptimizedBadge = true,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const hasSavings = originalAmount > amountToPay;
 

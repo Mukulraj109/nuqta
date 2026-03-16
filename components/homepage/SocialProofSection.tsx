@@ -12,7 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import socialProofApi from '@/services/socialProofApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -59,7 +59,7 @@ interface CityWideStats {
 }
 
 const SocialProofSection: React.FC = () => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [activities, setActivities] = useState<NearbyActivity[]>([]);
   const [storeAggregates, setStoreAggregates] = useState<StoreAggregate[]>([]);
@@ -150,7 +150,7 @@ const SocialProofSection: React.FC = () => {
 
     const rotateInterval = setInterval(() => {
       // Fade out and slide
-      const _anim0 = Animated.parallel([
+      Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 300,
@@ -180,15 +180,13 @@ const SocialProofSection: React.FC = () => {
             duration: 300,
             useNativeDriver: true,
           }),
-        ]);
-      _anim0.start();
+        ]).start();
       });
     }, 4000);
 
     return () => {
-      _anim0.stop();
       clearInterval(rotateInterval);
-    }
+    };
   }, [activities.length, fadeAnim, slideAnim]);
 
   if (isLoading) {

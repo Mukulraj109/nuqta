@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import UGCGrid from '@/components/UGCGrid';
 import { UGCContent } from '@/types/reviews';
 import { useUGCInteractions } from '@/hooks/useUGCInteractions';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import { useRouter } from 'expo-router';
 
 interface UGCGridWithInteractionsProps {
@@ -19,7 +19,7 @@ function UGCGridWithInteractions({
   ugcContent,
   onContentPress,
 }: UGCGridWithInteractionsProps) {
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   const router = useRouter();
   const {
     toggleLike,
@@ -46,7 +46,7 @@ function UGCGridWithInteractions({
   }, [ugcContent, isLiked, isBookmarked, getLikeCount]);
 
   const handleLikeContent = (contentId: string) => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       // Redirect to sign-in
       router.push('/sign-in');
       return;
@@ -55,7 +55,7 @@ function UGCGridWithInteractions({
   };
 
   const handleBookmarkContent = (contentId: string) => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       // Redirect to sign-in
       router.push('/sign-in');
       return;

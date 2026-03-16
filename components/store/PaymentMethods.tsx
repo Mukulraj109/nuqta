@@ -8,7 +8,7 @@ import {
   Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface PaymentMethod {
@@ -40,7 +40,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
   acceptsEMI = false,
   emiPartners = [],
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [showEMICalculator, setShowEMICalculator] = useState(false);
 

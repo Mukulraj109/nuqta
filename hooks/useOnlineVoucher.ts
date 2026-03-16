@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { BRAND } from '@/constants/brand';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useRezBalance } from '@/stores/selectors';
 import NetInfo from '@react-native-community/netinfo';
 import {
   VoucherState,
@@ -51,7 +51,7 @@ const CATEGORY_COLORS: { [key: string]: { color: string; backgroundColor: string
 
 export const useOnlineVoucher = (): UseVoucherReturn => {
   const router = useRouter();
-  const { rezBalance } = useWalletContext();
+  const rezBalance = useRezBalance();
   const [state, setState] = useState<VoucherState>(VoucherData.initialState);
   const searchAbortControllerRef = useRef<AbortController | null>(null);
 

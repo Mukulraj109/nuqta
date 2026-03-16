@@ -22,8 +22,7 @@ import { useRouter, useNavigation } from 'expo-router';
 import * as Clipboard from 'expo-clipboard';
 import vouchersService from '@/services/realVouchersApi';
 import realOffersApi from '@/services/realOffersApi';
-import { useAuth } from '@/contexts/AuthContext';
-import { useCart } from '@/contexts/CartContext';
+import { useAuthUser, useIsAuthenticated, useAuthLoading, useCartState, useCartActions, useGetCurrencySymbol } from '@/stores/selectors';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { HeaderBackButton } from '@/components/navigation/SafeBackButton';
 import QRCodeModal from '@/components/vouchers/QRCodeModal';
@@ -31,7 +30,6 @@ import OnlineRedemptionModal from '@/components/voucher/OnlineRedemptionModal';
 import PartnerVouchersSection from '@/components/voucher/PartnerVouchersSection';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import logger from '@/utils/logger';
-import { useRegion } from '@/contexts/RegionContext';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -72,10 +70,13 @@ interface UserVoucher {
 const MyVouchersPage = () => {
   const router = useRouter();
   const navigation = useNavigation();
-  const { state: authState } = useAuth();
-  const { state: cartState, actions } = useCart();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const cartState = useCartState();
+  const actions = useCartActions();
   const { goBack } = useSafeNavigation();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [vouchers, setVouchers] = useState<UserVoucher[]>([]);
   const [loading, setLoading] = useState(true);
@@ -100,11 +101,11 @@ const MyVouchersPage = () => {
         setLoadingMore(true);
       }
 
-      if (authState.isLoading) {
+      if (authLoading) {
         return;
       }
 
-      if (!authState.isAuthenticated || !authState.token) {
+      if (!isAuthenticated || !null /* TODO: token not available via selectors */) {
         setVouchers([]);
         setLoading(false);
         return;
@@ -219,13 +220,13 @@ const MyVouchersPage = () => {
       setRefreshing(false);
       setLoadingMore(false);
     }
-  }, [activeTab, authState.isLoading, authState.isAuthenticated, authState.token]);
+  }, [activeTab, authLoading, isAuthenticated, null /* TODO: token not available via selectors */]);
 
   useEffect(() => {
-    if (!authState.isLoading && authState.isAuthenticated) {
+    if (!authLoading && isAuthenticated) {
       fetchVouchers();
     }
-  }, [fetchVouchers, authState.isLoading, authState.isAuthenticated]);
+  }, [fetchVouchers, authLoading, isAuthenticated]);
 
   const handleRefresh = useCallback(() => {
     setRefreshing(true);
@@ -730,7 +731,7 @@ const MyVouchersPage = () => {
                 value: selectedVoucher.value,
                 description: selectedVoucher.description,
                 expiryDate: selectedVoucher.expiryDate,
-                userId: authState.user?.id || '',
+                userId: user?.id || '',
               }
             : null
         }

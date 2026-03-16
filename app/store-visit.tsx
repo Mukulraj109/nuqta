@@ -20,7 +20,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import storesApi, { Store } from '@/services/storesApi';
 import storeVisitApi from '@/services/storeVisitApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import SkeletonLoader from '@/components/common/SkeletonLoader';
@@ -105,8 +105,8 @@ function StoreVisitPageInner() {
   const router = useRouter();
   const storeId = params.storeId as string;
   const rescheduleVisitId = params.rescheduleVisitId as string | undefined;
-  const { state: authState } = useAuth();
-  const { user, isAuthenticated } = authState;
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
 
   // State
   const [loading, setLoading] = useState(true);

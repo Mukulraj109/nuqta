@@ -24,7 +24,7 @@ import { useRouter, Stack, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { challengesApi, ChallengeProgress, Challenge } from '@/services/challengesApi';
 import streakApi from '@/services/streakApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlert, platformAlertSimple } from '@/utils/platformAlert';
 import { SkeletonBox } from '@/components/earn/SkeletonLoader';
 import { BRAND } from '@/constants/brand';
@@ -289,7 +289,7 @@ const MissionCard: React.FC<{
 
 const MissionsScreen: React.FC = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [activeTab, setActiveTab] = useState('daily');
 

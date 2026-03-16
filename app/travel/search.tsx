@@ -18,7 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import travelApi, { TravelService } from '@/services/travelApi';
 import { CardGridSkeleton } from '@/components/skeletons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -34,7 +34,7 @@ const CATEGORIES = [
 export default function TravelSearchPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const initialCategory = (params.category as string) || 'flights';

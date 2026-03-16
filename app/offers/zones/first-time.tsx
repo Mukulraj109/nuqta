@@ -22,8 +22,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
 import realOffersApi from '@/services/realOffersApi';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -56,9 +55,9 @@ interface ZoneInfo {
 export default function FirstTimeUserZonePage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { state: authState } = useAuth();
-  const user = authState?.user;
-  const { getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [loading, setLoading] = useState(true);

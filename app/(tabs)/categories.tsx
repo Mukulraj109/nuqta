@@ -15,9 +15,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { CATEGORY_CONFIGS, SubcategoryItem } from '@/config/categoryConfig';
 import { getSubcategoryIcon } from '@/config/categoryIcons';
-import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
+import { useProfileMenu } from '@/contexts/ProfileContext';
 import { profileMenuSections } from '@/data/profileData';
-import { useAuth } from '@/contexts/AuthContext';
+import { useProfileStore } from '@/stores/profileStore';
+import { useAuthUser, useIsAuthenticated } from '@/stores';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
 // Eagerly loaded — React.lazy + Suspense(null) causes modal to not appear on Android
@@ -46,9 +47,13 @@ const CATEGORY_SECTIONS: CategorySection[] = Object.values(CATEGORY_CONFIGS).map
 // ============ MAIN COMPONENT ============
 export default function CategoriesScreen() {
   const router = useRouter();
-  const { user, isModalVisible, showModal, hideModal } = useProfile();
+  const user = useProfileStore((s) => s.user);
+  const isModalVisible = useProfileStore((s) => s.isModalVisible);
+  const showModal = useProfileStore((s) => s.showModal);
+  const hideModal = useProfileStore((s) => s.hideModal);
   const { handleMenuItemPress } = useProfileMenu();
-  const { state: authState } = useAuth();
+  const authUser = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
 
   // Handle wallet press - navigate to WalletScreen
   const handleWalletPress = () => {
@@ -128,8 +133,8 @@ export default function CategoriesScreen() {
             >
               <ThemedText style={styles.profileText}>
                 {user?.initials ||
-                  (authState.user?.profile?.firstName ? authState.user.profile.firstName.charAt(0).toUpperCase() :
-                    (authState.isAuthenticated ? 'U' : '?')
+                  (authUser?.profile?.firstName ? authUser.profile.firstName.charAt(0).toUpperCase() :
+                    (isAuthenticated ? 'U' : '?')
                   )}
               </ThemedText>
             </Pressable>

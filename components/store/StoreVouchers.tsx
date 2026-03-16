@@ -12,7 +12,7 @@ import {
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import storeVouchersApi, { StoreVoucher } from '@/services/storeVouchersApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface StoreVouchersProps {
@@ -26,7 +26,7 @@ const StoreVouchers: React.FC<StoreVouchersProps> = ({
   storeName,
   onVoucherClaim,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [vouchers, setVouchers] = useState<StoreVoucher[]>([]);
   const [loading, setLoading] = useState(true);

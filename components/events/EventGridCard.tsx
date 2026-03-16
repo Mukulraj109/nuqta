@@ -15,7 +15,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { EventItem } from '@/types/homepage.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -28,7 +28,7 @@ interface EventGridCardProps {
 }
 
 const EventGridCard: React.FC<EventGridCardProps> = ({ event, onPress }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const handlePress = useCallback(() => {

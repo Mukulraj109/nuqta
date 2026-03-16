@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useCurrentLocation } from './useLocation';
-import { useRegion } from '@/contexts/RegionContext';
+import { useRegionState } from '@/stores/selectors';
 import loyaltyApi, {
   HomepageLoyaltySummary,
   LoyaltyHubStats,
@@ -43,7 +43,7 @@ export function useLoyaltySection(options: UseLoyaltySectionOptions = {}): UseLo
   const { currentLocation, isLoading: isLocationLoading } = useCurrentLocation();
 
   // Region context for fallback coordinates
-  const { state: regionState } = useRegion();
+  const regionState = useRegionState();
   const regionConfig = regionState.regionConfig;
 
   // State

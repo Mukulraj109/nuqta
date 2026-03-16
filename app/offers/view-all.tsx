@@ -20,7 +20,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useOffersPage } from '@/hooks/useOffersPage';
 import { shareOffersPage } from '@/utils/shareUtils';
 import { Offer } from '@/services/realOffersApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 import realOffersApi from '@/services/realOffersApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -36,7 +36,7 @@ export default function ViewAllOffersScreen() {
     discount?: string;
     title?: string;
   }>();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
   const [allOffers, setAllOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -69,12 +69,12 @@ export default function ViewAllOffersScreen() {
       if (response.success && response.data) {
         const points = response.data.userEngagement?.userPoints || 
                        response.data.userPoints || 
-                       authState.user?.wallet?.balance || 0;
+                       user?.wallet?.balance || 0;
         setUserPoints(points);
       }
     } catch (error) {
       // Fallback to auth state
-      setUserPoints(authState.user?.wallet?.balance || 0);
+      setUserPoints(user?.wallet?.balance || 0);
     }
   };
 

@@ -29,8 +29,7 @@ import {
   OfferSource,
 } from '@/types/storePayment.types';
 import apiClient from '@/services/apiClient';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
@@ -41,9 +40,10 @@ export default function OffersScreen() {
   const params = useLocalSearchParams<OffersScreenParams>();
   const { storeId, storeName, storeLogo, amount } = params;
   const numericAmount = parseFloat(amount || '0');
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { state: { isAuthenticated, isLoading: authLoading } } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   const [activeTab, setActiveTab] = useState<TabKey>('all');
   const [offers, setOffers] = useState<OffersResponse | null>(null);

@@ -19,7 +19,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { CashStoreCoupon } from '../../../types/cash-store.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface BestCouponCodesProps {
@@ -34,7 +34,7 @@ const CouponCard: React.FC<{
   index: number;
   onCopy: () => void;
 }> = memo(({ coupon, index, onCopy }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [isCopied, setIsCopied] = useState(false);
@@ -45,7 +45,7 @@ const CouponCard: React.FC<{
 
   useEffect(() => {
     // Staggered entry animation
-    const _anim0 = Animated.parallel([
+    const anim = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 400,
@@ -60,9 +60,9 @@ const CouponCard: React.FC<{
         useNativeDriver: true,
       }),
     ]);
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
+    anim.start();
+
+    return () => { anim.stop(); };
 }, [index]);
 
   const handleCopy = () => {

@@ -18,8 +18,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
-import { useAuth } from '@/contexts/AuthContext';
-import { useCart } from '@/contexts/CartContext';
+import { useIsAuthenticated, useCartState, useGetCurrencySymbol } from '@/stores/selectors';
 import { showAlert } from '@/utils/alert';
 import ReportModal from '@/components/ugc/ReportModal';
 import { ReportReason } from '@/types/report.types';
@@ -27,7 +26,6 @@ import { realVideosApi, Video as VideoType } from '@/services/realVideosApi';
 import wishlistApi from '@/services/wishlistApi';
 import useProductInteraction from '@/hooks/useProductInteraction';
 import { shouldCountView, recordView } from '@/utils/viewTracker';
-import { useRegion } from '@/contexts/RegionContext';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -83,9 +81,9 @@ export default function UGCDetailScreen() {
   const [isReported, setIsReported] = useState(false);
 
   // Contexts
-  const { state: authState } = useAuth();
-  const { state: cartState } = useCart();
-  const { getCurrencySymbol } = useRegion();
+  const isAuthenticated = useIsAuthenticated();
+  const cartState = useCartState();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Product interaction
@@ -176,7 +174,7 @@ export default function UGCDetailScreen() {
 
       // Check follow status for the store (using wishlistApi)
       const storeIdToCheck = getFollowableStoreId();
-      if (storeIdToCheck && authState.isAuthenticated) {
+      if (storeIdToCheck && isAuthenticated) {
         wishlistApi.checkWishlistStatus('store', storeIdToCheck)
           .then(response => {
             if (cancelled) return;
@@ -190,7 +188,7 @@ export default function UGCDetailScreen() {
       }
     }
     return () => { cancelled = true; };
-  }, [video, authState.isAuthenticated, getFollowableStoreId]);
+  }, [video, isAuthenticated, getFollowableStoreId]);
 
   // Focus handling
   useFocusEffect(
@@ -200,7 +198,7 @@ export default function UGCDetailScreen() {
 
       // Re-check follow status when screen comes into focus (might have changed in another screen)
       const storeIdToCheck = getFollowableStoreId();
-      if (storeIdToCheck && authState.isAuthenticated) {
+      if (storeIdToCheck && isAuthenticated) {
         wishlistApi.checkWishlistStatus('store', storeIdToCheck)
           .then(response => {
             if (response.success && response.data) {
@@ -214,7 +212,7 @@ export default function UGCDetailScreen() {
         setIsFocused(false);
         StatusBar.setHidden(false);
       };
-    }, [getFollowableStoreId, authState.isAuthenticated])
+    }, [getFollowableStoreId, isAuthenticated])
   );
 
   // Playback control: pause when unfocused, auto-play when ready
@@ -436,7 +434,7 @@ export default function UGCDetailScreen() {
 
   // Social Actions
   const handleLike = useCallback(async () => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       showAlert('Sign In Required', 'Please sign in to like videos', [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Sign In', onPress: () => router.push('/sign-in') }
@@ -465,10 +463,10 @@ export default function UGCDetailScreen() {
       setIsLiked(!isLiked);
       setLikesCount(prev => isLiked ? prev + 1 : Math.max(0, prev - 1));
     }
-  }, [authState.isAuthenticated, isLiked, video?._id, likeScale, router]);
+  }, [isAuthenticated, isLiked, video?._id, likeScale, router]);
 
   const handleBookmark = useCallback(async () => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       showAlert('Sign In Required', 'Please sign in to save videos', [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Sign In', onPress: () => router.push('/sign-in') }
@@ -493,10 +491,10 @@ export default function UGCDetailScreen() {
       // Revert on error
       setIsBookmarked(isBookmarked);
     }
-  }, [authState.isAuthenticated, isBookmarked, video?._id, router]);
+  }, [isAuthenticated, isBookmarked, video?._id, router]);
 
   const handleFollow = useCallback(async () => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       showAlert('Sign In Required', 'Please sign in to follow creators', [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Sign In', onPress: () => router.push('/sign-in') }
@@ -537,7 +535,7 @@ export default function UGCDetailScreen() {
       setIsFollowing(wasFollowing);
       showAlert('Error', wasFollowing ? 'Failed to unfollow' : 'Failed to follow');
     }
-  }, [authState.isAuthenticated, isFollowing, video, getFollowableStoreId, router]);
+  }, [isAuthenticated, isFollowing, video, getFollowableStoreId, router]);
 
   const handleMuteToggle = useCallback(async () => {
     if (videoRef.current) {

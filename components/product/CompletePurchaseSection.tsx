@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { triggerImpact } from '@/utils/haptics';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -55,7 +55,7 @@ export const CompletePurchaseSection: React.FC<CompletePurchaseSectionProps> = (
   onBuyOnline,
   style,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = currency || getCurrencySymbol();
   const router = useRouter();
 

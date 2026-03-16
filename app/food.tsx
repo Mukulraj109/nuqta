@@ -17,7 +17,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { CachedImage } from '@/components/ui/CachedImage';
 import apiClient from '@/services/apiClient';
@@ -78,8 +78,7 @@ interface FoodOffer {
 // ---------- Component ----------
 const FoodPage: React.FC = () => {
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const authLoading = authState.isLoading;
+  const authLoading = useAuthLoading();
 
   // Filter state
   const [selectedFilter, setSelectedFilter] = useState('all');

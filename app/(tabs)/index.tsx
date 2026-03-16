@@ -14,7 +14,24 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
-import { useRegion } from '@/contexts/RegionContext';
+import {
+  useGetCurrencySymbol,
+  useAuthUser,
+  useAuthActions,
+  useIsAuthenticated,
+  useCartItems,
+  useCartActions,
+  useRezBalance,
+  useWalletData,
+  useWalletLoading,
+  useRefreshWallet,
+  useActiveTab,
+  useSetActiveTab,
+} from '@/stores';
+import { useHomeTabStore } from '@/stores/homeTabStore';
+import { useProfileStore } from '@/stores/profileStore';
+import { useCartStore } from '@/stores/cartStore';
+import { useWalletStore } from '@/stores/walletStore';
 
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors, spacing, borderRadius, shadows, typography } from '@/constants/theme';
@@ -35,18 +52,17 @@ const PriveSectionContainer = React.lazy(() =>
   import('@/components/prive/PriveSectionContainer').then(m => ({ default: m.PriveSectionContainer }))
 );
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
-import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
+// Profile now from Zustand store (imported above)
 import { profileMenuSections } from '@/data/profileData';
 import LocationDisplay from '@/components/location/LocationDisplay';
 import LocationPickerModal from '@/components/location/LocationPickerModal';
 import { useCurrentLocation, useLocationPermission } from '@/hooks/useLocation';
 import { AddressSearchResult } from '@/types/location.types';
-import { useCart } from '@/contexts/CartContext';
-import { useAuth } from '@/contexts/AuthContext';
+// Cart & Auth now from Zustand selectors (imported above)
 import { HomepageCacheWarmer } from '@/services/homepageApi';
-import { useWalletContext } from '@/contexts/WalletContext';
+// Wallet now from Zustand selectors (imported above)
 import WhatsNewBadge from '@/components/common/WhatsNewBadge';
-import { useHomeTab } from '@/contexts/HomeTabContext';
+// HomeTab now from Zustand selectors (imported above)
 import CachedImage, { prefetchImages } from '@/components/ui/CachedImage';
 import HomepageSkeleton from '@/components/homepage/HomepageSkeleton';
 import { BRAND } from '@/constants/brand';
@@ -168,26 +184,37 @@ const BadgeAvatar: React.FC<BadgeAvatarProps> = React.memo(({ size = 24, color }
 
 function HomeScreen() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  // Zustand selectors — each only re-renders when its specific value changes
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const { state, actions, getUserContext: getHomepageUserContext } = useHomepage();
   const { handleItemPress, handleAddToCart } = useHomepageNavigation();
-  const { user, isModalVisible, showModal, hideModal } = useProfile();
-  const { handleMenuItemPress } = useProfileMenu();
-  const { state: cartState, refreshCart } = useCart();
-  const { state: authState, actions: authActions } = useAuth();
-  const { rezBalance: userPoints, savingsInsights, refreshWallet, isLoading: isWalletLoading, walletData } = useWalletContext();
-  const totalSaved = savingsInsights.totalSaved;
-  // Get mode context for 4-mode system
-  const {
-    activeTab,
-    setActiveTab,
-    priveEligibility,
-    isPriveEligible,
-    activeHomeTab,
-    setActiveHomeTab,
-    registerScrollToTop,
-  } = useHomeTab();
+  const user = useProfileStore((s) => s.user);
+  const isModalVisible = useProfileStore((s) => s.isModalVisible);
+  const showModal = useProfileStore((s) => s.showModal);
+  const hideModal = useProfileStore((s) => s.hideModal);
+  const handleMenuItemPress = useProfileStore((s) => s.handleMenuItemPress);
+  const cartItems = useCartItems();
+  const cartState = { items: cartItems, itemCount: cartItems?.length ?? 0 } as any;
+  const cartActions = useCartActions();
+  const refreshCart = useCartStore((s) => s.refreshCart);
+  const authUser = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authActions = useAuthActions();
+  const userPoints = useRezBalance();
+  const walletData = useWalletData();
+  const refreshWallet = useRefreshWallet();
+  const isWalletLoading = useWalletLoading();
+  const savingsInsights = useWalletStore((s) => s.savingsInsights);
+  const totalSaved = savingsInsights?.totalSaved ?? 0;
+  // Zustand selectors for home tab — granular subscriptions
+  const activeTab = useActiveTab();
+  const setActiveTab = useSetActiveTab();
+  const priveEligibility = useHomeTabStore((s) => s.priveEligibility);
+  const isPriveEligible = useHomeTabStore((s) => s.isPriveEligible);
+  const activeHomeTab = useHomeTabStore((s) => s.activeHomeTab);
+  const setActiveHomeTab = useHomeTabStore((s) => s.setActiveHomeTab);
+  const registerScrollToTop = useHomeTabStore((s) => s.registerScrollToTop);
   const [refreshing, setRefreshing] = React.useState(false);
   const [showDetailedLocation, setShowDetailedLocation] = React.useState(false);
   // On web, InteractionManager resolves synchronously — start as true to avoid an extra re-render
@@ -277,7 +304,7 @@ function HomeScreen() {
   // This triggers all deferred context providers to initialize
   const onboardingCompletedRef = React.useRef(false);
   React.useEffect(() => {
-    if (authState.isAuthenticated && authState.user && !authState.user.isOnboarded && !onboardingCompletedRef.current) {
+    if (isAuthenticated && authUser && !authUser.isOnboarded && !onboardingCompletedRef.current) {
       onboardingCompletedRef.current = true;
       authActions.completeOnboarding({
         preferences: {
@@ -290,11 +317,11 @@ function HomeScreen() {
         onboardingCompletedRef.current = false;
       });
     }
-  }, [authState.isAuthenticated, authState.user]);
+  }, [isAuthenticated, authUser]);
 
   // Load supplementary homepage data (wallet balance comes from WalletContext)
   const loadUserContext = useCallback(async () => {
-    if (!authState.isAuthenticated || !authState.user) {
+    if (!isAuthenticated || !authUser) {
       setStatsState({ voucherCount: 0, newOffersCount: 0 });
       return;
     }
@@ -320,21 +347,21 @@ function HomeScreen() {
         newOffersCount: contextResult.value.data.offersCount || 0,
       });
     }
-  }, [authState.isAuthenticated, authState.user, getHomepageUserContext]);
+  }, [isAuthenticated, authUser, getHomepageUserContext]);
 
   // Load user context once after interactions complete + authenticated
   React.useEffect(() => {
-    if (interactionsComplete && authState.isAuthenticated && !statsLoadedRef.current) {
+    if (interactionsComplete && isAuthenticated && !statsLoadedRef.current) {
       statsLoadedRef.current = true;
       _statsLoadedGlobal = true; // Module-level — survives remounts
       loadUserContext();
     }
     // Reset flag on logout so next login triggers a fresh load
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       statsLoadedRef.current = false;
       _statsLoadedGlobal = false;
     }
-  }, [authState.isAuthenticated, interactionsComplete, loadUserContext]);
+  }, [isAuthenticated, interactionsComplete, loadUserContext]);
 
   // Refresh all dynamic data when screen comes into focus (throttled to prevent continuous refreshing)
   useFocusEffect(
@@ -356,14 +383,14 @@ function HomeScreen() {
       refreshRecentlyViewed();
 
       // Only refresh user data if authenticated
-      if (authState.user && authState.isAuthenticated) {
+      if (authUser && isAuthenticated) {
         // Single API call for wallet, vouchers, offers, cart, subscription
         loadUserContext();
 
         // Refresh cart context (for badge updates from context)
         refreshCart();
       }
-    }, [authState.user, authState.isAuthenticated, refreshCart, refreshRecentlyViewed, loadUserContext])
+    }, [authUser, isAuthenticated, refreshCart, refreshRecentlyViewed, loadUserContext])
   );
 
 
@@ -386,7 +413,7 @@ function HomeScreen() {
         await actions.refreshAllSections(true);
 
         // Refresh all user data in background (non-blocking)
-        if (authState.user && authState.isAuthenticated) {
+        if (authUser && isAuthenticated) {
           // Single API call for all user-specific data
           loadUserContext().catch(() => {});
 
@@ -402,7 +429,7 @@ function HomeScreen() {
         setRefreshing(false);
       }
     },
-    [actions, authState.user, authState.isAuthenticated, loadUserContext, refreshCart, refreshRecentlyViewed]);
+    [actions, authUser, isAuthenticated, loadUserContext, refreshCart, refreshRecentlyViewed]);
 
   const handleSearchPress = useCallback(() => {
     router.push('/search');
@@ -433,10 +460,10 @@ function HomeScreen() {
   }, [router]);
 
   const handleProfilePress = useCallback(() => {
-    if (authState.isAuthenticated && authState.user) {
+    if (isAuthenticated && authUser) {
       showModal();
     }
-  }, [authState.isAuthenticated, authState.user, showModal]);
+  }, [isAuthenticated, authUser, showModal]);
 
   const handleWhatsNewPress = useCallback(() => {
     router.push('/whats-new');

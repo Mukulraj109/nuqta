@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 import { useWalletStore } from '@/stores/walletStore';
 import { WalletData, CoinBalance } from '@/types/wallet';
 import walletApi from '@/services/walletApi';
-import { useAuth } from './AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 
 // ---------------------------------------------------------------------------
@@ -135,7 +135,8 @@ const WALLET_DEDUP_MS = 10_000; // 10 seconds dedup window
 // Provider
 // ---------------------------------------------------------------------------
 export function WalletProvider({ children }: { children: ReactNode }) {
-  const { state: authState } = useAuth();
+  const authUser = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
 
   const [walletData, setWalletData] = useState<WalletData | null>(null);
   const [rawBackendData, setRawBackendData] = useState<any | null>(null);
@@ -173,7 +174,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         if (abortRef.current.signal.aborted) return;
 
         if (response.success && response.data) {
-          const userId = authState.user?._id || authState.user?.id || 'unknown';
+          const userId = authUser?._id || authUser?.id || 'unknown';
           const transformed = transformWalletResponse(response.data, userId);
           setWalletData(transformed);
           setRawBackendData(response.data);
@@ -191,7 +192,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
     _walletPending = promise;
     await promise;
-  }, [authState.user?._id]);
+  }, [authUser?._id]);
 
   // Stable ref for fetchWallet to break the dependency chain:
   // fetchWallet → refreshWallet → context value → all consumers re-render
@@ -207,22 +208,22 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   // Auto-fetch when user authenticates, clear on logout
   // Skip during onboarding to prevent thundering herd of API calls on Android
   useEffect(() => {
-    if (authState.isAuthenticated && authState.user && authState.user.isOnboarded) {
+    if (isAuthenticated && authUser && authUser.isOnboarded) {
       // Module-level dedup handles preventing duplicate fetches across remounts
       fetchWallet(false);
-    } else if (!authState.isAuthenticated) {
+    } else if (!isAuthenticated) {
       // Clear on logout
       setWalletData(null);
       setRawBackendData(null);
       _walletLastFetch = 0;
       if (abortRef.current) abortRef.current.abort();
     }
-  }, [authState.isAuthenticated, authState.user]);
+  }, [isAuthenticated, authUser]);
 
   // Retry wallet fetch if first attempt failed (e.g., 401 race on page refresh)
   // Waits 2s then retries once if walletData is still null
   useEffect(() => {
-    if (!authState.isAuthenticated || !authState.user?.isOnboarded) return;
+    if (!isAuthenticated || !authUser?.isOnboarded) return;
     if (walletData) return; // Already loaded
     if (isLoading) return; // Still loading
 
@@ -233,7 +234,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     }, 2000);
 
     return () => clearTimeout(retryTimer);
-  }, [authState.isAuthenticated, authState.user, walletData, isLoading, fetchWallet]);
+  }, [isAuthenticated, authUser, walletData, isLoading, fetchWallet]);
 
   // Cleanup on unmount
   useEffect(() => {

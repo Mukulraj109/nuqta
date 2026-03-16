@@ -11,12 +11,11 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ProductItem } from '@/types/homepage.types';
-import { useCart } from '@/contexts/CartContext';
+import { useCartActions, useGetCurrencySymbol } from '@/stores/selectors';
 import { useToast } from '@/hooks/useToast';
 import ProductVariantModal, { VariantSelection } from '@/components/cart/ProductVariantModal';
 import productsService from '@/services/productsApi';
 import CoinIcon from '@/components/ui/CoinIcon';
-import { useRegion } from '@/contexts/RegionContext';
 import { colors } from '@/constants/theme';
 
 export interface BundleProduct extends ProductItem {
@@ -35,7 +34,7 @@ function FrequentlyBoughtTogether({
   storeId,
   onBundleAdded,
 }: FrequentlyBoughtTogetherProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [bundleProducts, setBundleProducts] = useState<BundleProduct[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set());
@@ -45,7 +44,7 @@ function FrequentlyBoughtTogether({
   const [pendingProduct, setPendingProduct] = useState<ProductItem | null>(null);
   const [pendingVariant, setPendingVariant] = useState<VariantSelection | null>(null);
 
-  const { actions: cartActions } = useCart();
+  const cartActions = useCartActions();
   const { showSuccess, showError } = useToast();
 
   // Load frequently bought together products
@@ -558,7 +557,7 @@ function BundleProductCard({
   isCurrentProduct = false,
   bundleDiscount,
 }: BundleProductCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const finalPrice = bundleDiscount
     ? product.price.current * (1 - bundleDiscount / 100)

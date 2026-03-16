@@ -23,8 +23,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { BlurView } from 'expo-blur';
 import { ThemedText } from '@/components/ThemedText';
 import realOffersApi from '@/services/realOffersApi';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import logger from '@/utils/logger';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { CardGridSkeleton } from '@/components/skeletons';
@@ -66,8 +65,8 @@ interface FlashSale {
 export default function FlashSaleDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  const { state: authState } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const isAuthenticated = useIsAuthenticated();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [flashSale, setFlashSale] = useState<FlashSale | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -160,7 +159,7 @@ export default function FlashSaleDetailPage() {
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const handleGetOffer = async () => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       platformAlertConfirm(
         'Sign In Required',
         'Please sign in to get this offer',

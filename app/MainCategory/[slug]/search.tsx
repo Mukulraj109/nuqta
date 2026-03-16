@@ -26,7 +26,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { storesApi } from '@/services/storesApi';
 import apiClient from '@/services/apiClient';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
 const SUBCATEGORY_EMOJIS: Record<string, string> = {
@@ -84,7 +84,7 @@ export default function SharedCategoryPage() {
   const SERVICE_CHIPS = useMemo(() => buildServiceChips(slug || ''), [slug]);
   const QUICK_SUGGESTIONS = useMemo(() => buildQuickSuggestions(slug || ''), [slug]);
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const inputRef = useRef<TextInput>(null);
 

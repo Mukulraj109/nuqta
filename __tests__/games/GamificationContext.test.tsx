@@ -4,7 +4,7 @@
 import React from 'react';
 import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { GamificationProvider, useGamification } from '@/contexts/GamificationContext';
-import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated, useIsOnboarded } from '@/stores/selectors';
 import achievementApi from '@/services/achievementApi';
 import pointsApi from '@/services/pointsApi';
 import gamificationAPI from '@/services/gamificationApi';
@@ -14,38 +14,26 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 jest.mock('@/services/achievementApi');
 jest.mock('@/services/pointsApi');
 jest.mock('@/services/gamificationApi');
-jest.mock('@/contexts/AuthContext', () => ({
-  ...jest.requireActual('@/contexts/AuthContext'),
-  useAuth: jest.fn(),
+jest.mock('@/stores/selectors', () => ({
+  ...jest.requireActual('@/stores/selectors'),
+  useIsAuthenticated: jest.fn(),
+  useIsOnboarded: jest.fn(),
 }));
 
-const mockUseAuth = useAuth as jest.MockedFunction<typeof useAuth>;
+const mockUseIsAuthenticated = useIsAuthenticated as jest.MockedFunction<typeof useIsAuthenticated>;
+const mockUseIsOnboarded = useIsOnboarded as jest.MockedFunction<typeof useIsOnboarded>;
 
 describe('GamificationContext', () => {
   const wrapper = ({ children }: { children: React.ReactNode }) => (
-    <AuthProvider>
-      <GamificationProvider>{children}</GamificationProvider>
-    </AuthProvider>
+    <GamificationProvider>{children}</GamificationProvider>
   );
-
-  const mockAuthState = {
-    isAuthenticated: true,
-    user: { id: 'user-123', email: 'test@example.com', name: 'Test User' },
-    token: 'mock-token',
-  };
 
   beforeEach(() => {
     jest.clearAllMocks();
     AsyncStorage.clear();
 
-    mockUseAuth.mockReturnValue({
-      state: mockAuthState,
-      login: jest.fn(),
-      logout: jest.fn(),
-      register: jest.fn(),
-      updateProfile: jest.fn(),
-      verifyOTP: jest.fn(),
-    } as any);
+    mockUseIsAuthenticated.mockReturnValue(true);
+    mockUseIsOnboarded.mockReturnValue(true);
 
     // Mock API responses
     (achievementApi.getAchievementProgress as jest.Mock).mockResolvedValue({
@@ -212,14 +200,7 @@ describe('GamificationContext', () => {
     });
 
     it('should not load data when not authenticated', async () => {
-      mockUseAuth.mockReturnValue({
-        state: { ...mockAuthState, isAuthenticated: false, user: null },
-        login: jest.fn(),
-        logout: jest.fn(),
-        register: jest.fn(),
-        updateProfile: jest.fn(),
-        verifyOTP: jest.fn(),
-      } as any);
+      mockUseIsAuthenticated.mockReturnValue(false);
 
       const { result } = renderHook(() => useGamification(), { wrapper });
 

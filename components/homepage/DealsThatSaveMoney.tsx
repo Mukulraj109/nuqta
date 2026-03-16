@@ -20,8 +20,7 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import realOffersApi, { Offer } from '@/services/realOffersApi';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthUser, useCurrentRegionId, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Nuqta Brand Colors
@@ -230,10 +229,11 @@ interface DealsThatSaveMoneyProps {
 
 const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const { currentRegion, getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const currentRegion = useCurrentRegionId();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const user = authState?.user;
   const [activeTab, setActiveTab] = useState<TabType>('offers');
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(false);

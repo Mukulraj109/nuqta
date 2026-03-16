@@ -11,7 +11,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ProductItem } from '@/types/homepage.types';
-import { useCart } from '@/contexts/CartContext';
+import { useCartActions } from '@/stores/selectors';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useToast } from '@/hooks/useToast';
 import ProductVariantModal, { VariantSelection } from '@/components/cart/ProductVariantModal';
@@ -39,7 +39,7 @@ function StoreProductCard({
   variants = [],
   onLongPress,
 }: StoreProductCardProps) {
-  const { actions: cartActions } = useCart();
+  const cartActions = useCartActions();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { showSuccess, showError } = useToast();
   const [showVariantModal, setShowVariantModal] = useState(false);

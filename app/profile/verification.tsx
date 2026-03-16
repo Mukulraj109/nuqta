@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import verificationService, { VerificationStatus } from '@/services/verificationApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { FormPageSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
@@ -142,7 +142,8 @@ const PROFESSION_OPTIONS = [
 export default function VerificationPage() {
   const router = useRouter();
   const { zone = 'student' } = useLocalSearchParams<{ zone: string }>();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
 
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [email, setEmail] = useState('');

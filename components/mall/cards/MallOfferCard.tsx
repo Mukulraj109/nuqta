@@ -16,7 +16,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallOffer, OfferBadge } from '../../../types/mall.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface MallOfferCardProps {
@@ -43,7 +43,7 @@ const MallOfferCard: React.FC<MallOfferCardProps> = ({
   onPress,
   width = 260,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   // Calculate days remaining (guard against missing/invalid dates)
   const validUntil = offer.validUntil ? new Date(offer.validUntil) : null;

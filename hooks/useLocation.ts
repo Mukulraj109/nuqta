@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useLocation as useLocationContext } from '@/contexts/LocationContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import {
   LocationCoordinates,
   UserLocation,
@@ -40,7 +40,7 @@ export function useLocationPermission() {
  */
 export function useCurrentLocation() {
   const { state, getCurrentLocation, updateLocation, setManualLocation } = useLocationContext();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
 
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -62,7 +62,7 @@ export function useCurrentLocation() {
   ) => {
     setIsUpdating(true);
     try {
-      if (authState.isAuthenticated) {
+      if (isAuthenticated) {
         // For authenticated users, update on server
         await updateLocation(coordinates, address, source, extraData);
       } else {
@@ -85,7 +85,7 @@ export function useCurrentLocation() {
     } finally {
       setIsUpdating(false);
     }
-  }, [updateLocation, setManualLocation, authState.isAuthenticated]);
+  }, [updateLocation, setManualLocation, isAuthenticated]);
 
   return {
     currentLocation: state.currentLocation,
@@ -116,12 +116,12 @@ function extractCityFromAddress(address?: string): string {
  */
 export function useLocationHistory() {
   const { state, getLocationHistory, clearLocationHistory } = useLocationContext();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
   const loadHistory = useCallback(async () => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       return [];
     }
 
@@ -132,10 +132,10 @@ export function useLocationHistory() {
     } finally {
       setIsLoadingHistory(false);
     }
-  }, [getLocationHistory, authState.isAuthenticated]);
+  }, [getLocationHistory, isAuthenticated]);
 
   const clearHistory = useCallback(async () => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       return;
     }
 
@@ -144,14 +144,14 @@ export function useLocationHistory() {
     } catch (_error) {
       // silently handle
     }
-  }, [clearLocationHistory, authState.isAuthenticated]);
+  }, [clearLocationHistory, isAuthenticated]);
 
   // Load history on mount
   useEffect(() => {
-    if (authState.isAuthenticated && state.locationHistory.length === 0) {
+    if (isAuthenticated && state.locationHistory.length === 0) {
       loadHistory();
     }
-  }, [authState.isAuthenticated, loadHistory, state.locationHistory.length]);
+  }, [isAuthenticated, loadHistory, state.locationHistory.length]);
 
   return {
     locationHistory: state.locationHistory,
@@ -227,13 +227,13 @@ export function useAddressSearch() {
  */
 export function useLocationFeatures() {
   const { state } = useLocationContext();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   
   const [nearbyStores, setNearbyStores] = useState<any[]>([]);
   const [isLoadingStores, setIsLoadingStores] = useState(false);
 
   const getNearbyStores = useCallback(async (radius: number = 5, limit: number = 20) => {
-    if (!state.currentLocation || !authState.isAuthenticated) {
+    if (!state.currentLocation || !isAuthenticated) {
       return [];
     }
 
@@ -248,7 +248,7 @@ export function useLocationFeatures() {
     } finally {
       setIsLoadingStores(false);
     }
-  }, [state.currentLocation, authState.isAuthenticated]);
+  }, [state.currentLocation, isAuthenticated]);
 
   const isLocationAvailable = state.currentLocation !== null;
   const locationCity = state.currentLocation?.address.city || 'Unknown';
@@ -269,13 +269,13 @@ export function useLocationFeatures() {
  */
 export function useLocationInit() {
   const { state, requestLocationPermission, getCurrentLocation } = useLocationContext();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   
   const [isInitializing, setIsInitializing] = useState(false);
   const [initStep, setInitStep] = useState<'permission' | 'location' | 'complete'>('permission');
 
   const initializeLocation = useCallback(async () => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       return false;
     }
 
@@ -306,7 +306,7 @@ export function useLocationInit() {
       setIsInitializing(false);
     }
   }, [
-    authState.isAuthenticated,
+    isAuthenticated,
     state.permissionStatus,
     state.currentLocation,
     requestLocationPermission,

@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { useRouter, usePathname, useRootNavigationState } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingScreen from '@/components/onboarding/LoadingScreen';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { getAuthToken, getUser } from '@/utils/authStorage';
 
 export default function AppEntry() {
@@ -11,15 +11,9 @@ export default function AppEntry() {
   const pathname = usePathname();
   const rootNavigationState = useRootNavigationState();
 
-  // Safe auth context access with fallback
-  let authState;
-  try {
-    const { state } = useAuth();
-    authState = state;
-  } catch (error) {
-    // If AuthProvider is not ready yet, use default state
-    authState = { isLoading: true, isAuthenticated: false, user: null };
-  }
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   const [isChecking, setIsChecking] = useState(true);
   const pendingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -51,12 +45,12 @@ export default function AppEntry() {
       setIsChecking(true);
 
       // Check authentication first
-      if (authState.isAuthenticated && authState.user) {
+      if (isAuthenticated && user) {
         authRestoreRetryCountRef.current = 0;
 
         // User is authenticated, check onboarding status
         const onboardingCompletedFlag = await AsyncStorage.getItem('onboarding_completed');
-        const isOnboarded = authState.user.isOnboarded || onboardingCompletedFlag === 'true';
+        const isOnboarded = user.isOnboarded || onboardingCompletedFlag === 'true';
 
         if (isOnboarded) {
           safeReplace('/(tabs)/');
@@ -98,7 +92,7 @@ export default function AppEntry() {
       safeReplace('/onboarding/splash');
       setIsChecking(false);
     }
-  }, [authState.isAuthenticated, authState.user, clearPendingTimer, pathname, safeReplace]);
+  }, [isAuthenticated, user, clearPendingTimer, pathname, safeReplace]);
 
   useEffect(() => {
     clearPendingTimer();
@@ -118,14 +112,14 @@ export default function AppEntry() {
     }
 
     // Wait for auth context to initialize and react to auth changes
-    if (!authState.isLoading) {
+    if (!authLoading) {
       // Check app state immediately to prevent navigation race conditions
       checkAppState();
     }
     return () => {
       clearPendingTimer();
     };
-  }, [authState.isLoading, authState.isAuthenticated, authState.user, checkAppState, clearPendingTimer, pathname, rootNavigationState?.key]);
+  }, [authLoading, isAuthenticated, user, checkAppState, clearPendingTimer, pathname, rootNavigationState?.key]);
 
   // Only show loading screen on root path - other pages handle their own loading
   const isRootPath = pathname === '/' || pathname === '';

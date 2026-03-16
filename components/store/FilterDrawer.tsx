@@ -13,7 +13,7 @@ import {
   TextInput,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width, height } = Dimensions.get('window');
@@ -57,7 +57,7 @@ function FilterDrawer({
   categories,
   priceRange,
 }: FilterDrawerProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [filters, setFilters] = useState<ProductFilters>(currentFilters);
   const [expandedSections, setExpandedSections] = useState({

@@ -12,7 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface LevelBenefit {
@@ -54,40 +54,36 @@ const ConfettiParticle = ({ delay, color }: { delay: number; color: string }) =>
   const opacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    const startAnimation = () => {
-      const _anim0 = Animated.parallel([
-        Animated.timing(translateY, {
-          toValue: 600,
-          duration: 3000,
-          delay,
-          useNativeDriver: true,
-        }),
-        Animated.timing(translateX, {
-          toValue: translateX._value + (Math.random() - 0.5) * 100,
-          duration: 3000,
-          delay,
-          useNativeDriver: true,
-        }),
-        Animated.timing(rotate, {
-          toValue: Math.random() * 720,
-          duration: 3000,
-          delay,
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacity, {
-          toValue: 0,
-          duration: 3000,
-          delay,
-          useNativeDriver: true,
-        }),
-      ]);
-      _anim0.start();
-    };
+    const anim = Animated.parallel([
+      Animated.timing(translateY, {
+        toValue: 600,
+        duration: 3000,
+        delay,
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateX, {
+        toValue: translateX._value + (Math.random() - 0.5) * 100,
+        duration: 3000,
+        delay,
+        useNativeDriver: true,
+      }),
+      Animated.timing(rotate, {
+        toValue: Math.random() * 720,
+        duration: 3000,
+        delay,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 3000,
+        delay,
+        useNativeDriver: true,
+      }),
+    ]);
+    anim.start();
 
-    startAnimation();
-  
-    return () => { _anim0.stop(); };
-}, []);
+    return () => { anim.stop(); };
+  }, []);
 
   return (
     <Animated.View
@@ -122,7 +118,7 @@ function LevelUpCelebration({
   onClose,
   onShopNow,
 }: LevelUpCelebrationProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const badgeRotate = useRef(new Animated.Value(0)).current;

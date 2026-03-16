@@ -32,7 +32,7 @@ import StoreListSkeleton from '@/components/store-search/StoreListSkeleton';
 import EmptySearchResults from '@/components/store-search/EmptySearchResults';
 import ErrorState from '@/components/store-search/ErrorState';
 import { useStoreSearch } from '@/hooks/useStoreSearch';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
@@ -41,7 +41,7 @@ import { colors } from '@/constants/theme';
 const StoreListPage: React.FC = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Parse sortBy from URL params (for Quick Buttons: Near me, Top rated)

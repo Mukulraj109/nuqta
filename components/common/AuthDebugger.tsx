@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated, useAuthLoading, useAuthError, useAuthActions } from '@/stores/selectors';
 import { getAuthToken, getRefreshToken, getUser } from '@/utils/authStorage';
 import { colors } from '@/constants/theme';
 
 function AuthDebugger() {
-  const { state, actions } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const authError = useAuthError();
+  const actions = useAuthActions();
   const [storageData, setStorageData] = useState<any>({});
   const [isVisible, setIsVisible] = useState(false);
 
@@ -32,7 +36,7 @@ function AuthDebugger() {
 
   useEffect(() => {
     checkStorageData();
-  }, [state]);
+  }, [user, isAuthenticated, authLoading, authError]);
 
   if (!isVisible) {
     return (
@@ -56,12 +60,12 @@ function AuthDebugger() {
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Auth State:</Text>
-        <Text style={styles.item}>Loading: {state.isLoading ? '✅' : '❌'}</Text>
-        <Text style={styles.item}>Authenticated: {state.isAuthenticated ? '✅' : '❌'}</Text>
-        <Text style={styles.item}>Has User: {state.user ? '✅' : '❌'}</Text>
-        <Text style={styles.item}>User ID: {state.user?.id || 'none'}</Text>
-        <Text style={styles.item}>Onboarded: {state.user?.isOnboarded ? '✅' : '❌'}</Text>
-        <Text style={styles.item}>Error: {state.error || 'none'}</Text>
+        <Text style={styles.item}>Loading: {authLoading ? '✅' : '❌'}</Text>
+        <Text style={styles.item}>Authenticated: {isAuthenticated ? '✅' : '❌'}</Text>
+        <Text style={styles.item}>Has User: {user ? '✅' : '❌'}</Text>
+        <Text style={styles.item}>User ID: {user?.id || 'none'}</Text>
+        <Text style={styles.item}>Onboarded: {user?.isOnboarded ? '✅' : '❌'}</Text>
+        <Text style={styles.item}>Error: {authError || 'none'}</Text>
       </View>
 
       <View style={styles.section}>

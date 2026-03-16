@@ -10,7 +10,7 @@ import { useRouter } from 'expo-router';
 import { BRAND } from '@/constants/brand';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { experiencesApi, StoreExperience } from '@/services/experiencesApi';
 import { colors } from '@/constants/theme';
 
@@ -45,7 +45,7 @@ const EXPERIENCE_TYPE_ICONS: Record<string, string> = {
 
 function ExperiencesSection({ categorySlug, pageConfig }: ExperiencesSectionProps) {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [experiences, setExperiences] = useState<StoreExperience[]>([]);

@@ -2,7 +2,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useRegion } from '@/contexts/RegionContext';
+import { useCurrency } from '@/stores/selectors';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import FrequentlyBoughtTogether from '@/components/store/FrequentlyBoughtTogether';
 import Section3 from '@/app/StoreSection/Section3';
@@ -38,7 +38,7 @@ function MenuTabContent({
   sectionCardStyle,
 }: MenuTabContentProps) {
   const router = useRouter();
-  const { currency: regionCurrency } = useRegion();
+  const regionCurrency = useCurrency();
 
   return (
     <>

@@ -13,11 +13,10 @@ import CachedImage from '@/components/ui/CachedImage';
 import { router, Stack, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated, useAuthLoading, useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 import { platformAlert } from '@/utils/platformAlert';
 import gameApi, { AvailableGame } from '@/services/gameApi';
-import { useWalletContext } from '@/contexts/WalletContext';
 import { SkeletonBox } from '@/components/earn/SkeletonLoader';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
@@ -47,13 +46,16 @@ export default function GamesPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [games, setGames] = useState<AvailableGame[]>([]);
   const [todaysEarnings, setTodaysEarnings] = useState(0);
-  const { state: authState } = useAuth();
-  const { rezBalance: userCoins, refreshWallet } = useWalletContext();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const userCoins = useRezBalance();
+  const refreshWallet = useRefreshWallet();
 
   const isFirstFocus = React.useRef(true);
 
   const loadData = useCallback(async (silent = false) => {
-    if (!authState.isAuthenticated) return;
+    if (!isAuthenticated) return;
     try {
       if (!silent) setLoading(true);
       const [gamesRes] = await Promise.all([
@@ -71,15 +73,15 @@ export default function GamesPage() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [authState.isAuthenticated, refreshWallet]);
+  }, [isAuthenticated, refreshWallet]);
 
   useEffect(() => {
-    if (authState.isAuthenticated && authState.user) {
+    if (isAuthenticated && user) {
       loadData();
-    } else if (!authState.isLoading && !authState.isAuthenticated) {
+    } else if (!authLoading && !isAuthenticated) {
       router.replace({ pathname: '/sign-in', params: { returnTo: '/games' } } as any);
     }
-  }, [authState.isAuthenticated, authState.isLoading, authState.user]);
+  }, [isAuthenticated, authLoading, user]);
 
   useFocusEffect(
     useCallback(() => {

@@ -17,7 +17,7 @@ import {
   ManualCorrectionData,
   MerchantMatch,
 } from '@/types/billVerification.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface ManualCorrectionFormProps {
@@ -35,7 +35,7 @@ function ManualCorrectionForm({
   merchantMatches = [],
   onSubmit,
 }: ManualCorrectionFormProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [corrections, setCorrections] = useState<ManualCorrectionData>({

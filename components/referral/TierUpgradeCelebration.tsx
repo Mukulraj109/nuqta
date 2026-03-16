@@ -16,7 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { TIER_COLORS, TIER_GRADIENTS } from '@/types/referral.types';
 import type { ReferralTier } from '@/types/referral.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width, height } = Dimensions.get('window');
@@ -34,7 +34,7 @@ function TierUpgradeCelebration({
   tierData,
   onClose,
 }: TierUpgradeCelebrationProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const scaleAnim = useRef(new Animated.Value(0)).current;

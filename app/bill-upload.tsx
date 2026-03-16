@@ -65,7 +65,7 @@ import {
   VALIDATION_CONFIG,
   type ValidationResult,
 } from '@/utils/billValidation';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { sanitizeInput, sanitizeNumber, sanitizeBillNumber } from '@/utils/inputSanitization';
 import {
   BillUploadErrorType,
@@ -137,7 +137,7 @@ function BillUploadPage() {
   const { bonusCampaignSlug } = useLocalSearchParams<{ bonusCampaignSlug?: string }>();
   const { goBack } = useSafeNavigation();
   const billUploadHook = useBillUpload();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Image quality validation hook

@@ -12,9 +12,8 @@ import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/pr
 import { usePriveSection } from '@/hooks/usePriveSection';
 import priveApi, { Voucher } from '@/services/priveApi';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useRefreshWallet, useGetCurrencySymbol } from '@/stores/selectors';
 import { coinToFiatValue } from '@/constants/priveConversion';
-import { useRegion } from '@/contexts/RegionContext';
 import { colors } from '@/constants/theme';
 
 const generateIdempotencyKey = () => `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
@@ -24,8 +23,8 @@ const QUICK_AMOUNTS = [100, 200, 500, 1000, 2000];
 export default function BillPayScreen() {
   const router = useRouter();
   const { userData, refresh } = usePriveSection();
-  const { refreshWallet } = useWalletContext();
-  const { getCurrencySymbol } = useRegion();
+  const refreshWallet = useRefreshWallet();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const availableCoins = userData?.totalCoins || 0;
 

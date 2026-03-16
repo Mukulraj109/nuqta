@@ -8,7 +8,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface RelatedPackagesSectionProps {
@@ -17,7 +17,8 @@ interface RelatedPackagesSectionProps {
 
 const RelatedPackagesSection: React.FC<RelatedPackagesSectionProps> = ({ currentPackageId }) => {
   const router = useRouter();
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
   const [relatedPackages, setRelatedPackages] = useState<any[]>([]);

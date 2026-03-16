@@ -5,7 +5,7 @@ import pointsApi, { PointsBalance, PointTransaction } from '@/services/pointsApi
 
 import challengesApi from '@/services/challengesApi';
 import coinSyncService from '@/services/coinSyncService';
-import { useAuth } from './AuthContext';
+import { useIsAuthenticated, useIsOnboarded } from '@/stores/selectors';
 import { useWalletContext } from './WalletContext';
 import { useGamificationStore } from '@/stores/gamificationStore';
 
@@ -236,7 +236,8 @@ let _gamificationPending: Promise<void> | null = null;
 
 export function GamificationProvider({ children }: GamificationProviderProps) {
   const [state, dispatch] = useReducer(gamificationReducer, initialState);
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const isOnboarded = useIsOnboarded();
   const { availableBalance, refreshWallet: refreshSharedWallet } = useWalletContext();
 
   // CRITICAL: Queue for coin operations to prevent race conditions
@@ -349,7 +350,7 @@ export function GamificationProvider({ children }: GamificationProviderProps) {
 
   // Load gamification data
   const loadGamificationData = useCallback(async (forceRefresh = false) => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
 
       return;
     }
@@ -436,7 +437,7 @@ export function GamificationProvider({ children }: GamificationProviderProps) {
         payload: error instanceof Error ? error.message : 'Failed to load gamification data',
       });
     }
-  }, [authState.isAuthenticated, state.featureFlags.ENABLE_ACHIEVEMENTS, state.featureFlags.ENABLE_COINS, state.featureFlags.ENABLE_CHALLENGES]);
+  }, [isAuthenticated, state.featureFlags.ENABLE_ACHIEVEMENTS, state.featureFlags.ENABLE_COINS, state.featureFlags.ENABLE_CHALLENGES]);
 
   // Trigger achievement check — cooldown/dedup is handled by achievementApi.recalculateAchievements()
   const triggerAchievementCheck = useCallback(async (eventType: string, data?: any): Promise<Achievement[]> => {
@@ -612,7 +613,7 @@ export function GamificationProvider({ children }: GamificationProviderProps) {
   // Load gamification data on mount and when auth changes
   // Skip during onboarding to prevent thundering herd of API calls on Android
   useEffect(() => {
-    if (authState.isAuthenticated && authState.user?.isOnboarded) {
+    if (isAuthenticated && isOnboarded) {
       // Prevent duplicate calls during rapid re-renders
       if (isLoadingDataRef.current) return;
       // Only initialize once per session
@@ -628,24 +629,24 @@ export function GamificationProvider({ children }: GamificationProviderProps) {
       ]).catch(() => {}).finally(() => {
         isLoadingDataRef.current = false;
       });
-    } else if (!authState.isAuthenticated) {
+    } else if (!isAuthenticated) {
       dispatch({ type: 'CLEAR_GAMIFICATION' });
       hasInitializedRef.current = false; // Reset on logout
       _gamificationInitialized = false;
     }
-  }, [authState.isAuthenticated, authState.user?.isOnboarded]); // Remove callback dependencies to prevent loop
+  }, [isAuthenticated, isOnboarded]); // Remove callback dependencies to prevent loop
 
   // Save data to cache (debounced — avoids writing on every state micro-change)
   const saveToCacheTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
-    if (authState.isAuthenticated && authState.user?.isOnboarded) {
+    if (isAuthenticated && isOnboarded) {
       if (saveToCacheTimerRef.current) clearTimeout(saveToCacheTimerRef.current);
       saveToCacheTimerRef.current = setTimeout(() => saveToCache(), 2000);
     }
     return () => {
       if (saveToCacheTimerRef.current) clearTimeout(saveToCacheTimerRef.current);
     };
-  }, [authState.isAuthenticated, authState.user?.isOnboarded, state.achievements, state.coinBalance, state.challenges, state.dailyStreak]); // saveToCache removed — stable identity via ref
+  }, [isAuthenticated, isOnboarded, state.achievements, state.coinBalance, state.challenges, state.dailyStreak]); // saveToCache removed — stable identity via ref
 
   // Computed values
   const unlockedCount = state.achievementProgress?.summary.unlocked || 0;

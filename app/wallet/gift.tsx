@@ -20,8 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
-import { useAuth } from '@/contexts/AuthContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useAuthUser, useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import { useSecurity } from '@/contexts/SecurityContext';
 import walletApi from '@/services/walletApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
@@ -70,7 +69,7 @@ interface SuccessData {
 
 export default function GiftPage() {
   const router = useRouter();
-  const { state: { user } } = useAuth();
+  const user = useAuthUser();
   const senderName = user?.fullName || user?.phoneNumber || 'You';
 
   // Server-driven config state
@@ -92,7 +91,8 @@ export default function GiftPage() {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [idempotencyKey, setIdempotencyKey] = useState(() => generateIdempotencyKey('gift'));
-  const { rezBalance: walletBalance, refreshWallet } = useWalletContext();
+  const walletBalance = useRezBalance();
+  const refreshWallet = useRefreshWallet();
   const { authenticateWithBiometric, biometricAvailable, biometricEnrolled } = useSecurity();
   const submittingRef = useRef(false);
   const validateTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);

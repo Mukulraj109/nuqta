@@ -17,7 +17,7 @@ import { StoreCardProps } from '@/types/homepage.types';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import QuickActions from '@/components/store/QuickActions';
 import FastImage from '@/components/common/FastImage';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Custom comparison function for React.memo
@@ -50,7 +50,7 @@ function StoreCard({
     email?: string;
   };
 }) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const cardBackground = useThemeColor({ light: colors.background.primary, dark: colors.neutral[800] }, 'background');
   const textColor = useThemeColor({}, 'text');

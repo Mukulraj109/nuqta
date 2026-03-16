@@ -13,8 +13,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { useFrequentlyOrdered } from '@/hooks/useReorder';
 import { router } from 'expo-router';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface QuickReorderProps {
@@ -23,8 +22,8 @@ interface QuickReorderProps {
 }
 
 function QuickReorder({ limit = 5, onViewAll }: QuickReorderProps) {
-  const { isAuthenticated } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const isAuthenticated = useIsAuthenticated();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const { items, loading, error, refresh } = useFrequentlyOrdered(limit);
 

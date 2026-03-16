@@ -19,7 +19,7 @@ import { ThemedText } from '@/components/ThemedText';
 import referralService from '@/services/referralApi';
 import type { ShareTemplate } from '@/types/referral.types';
 import analyticsService from '@/services/analyticsService';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface ShareModalProps {
@@ -81,7 +81,7 @@ function ShareModal({
   currentTierProgress,
   onClose,
 }: ShareModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const SHARE_PLATFORMS = getSharePlatforms(currencySymbol);
   const [isCopied, setIsCopied] = useState(false);

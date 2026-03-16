@@ -9,7 +9,7 @@ import { partnerLevels } from '@/data/partnerData';
 import partnerApi from '@/services/partnerApi';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import toast from '@/utils/toast';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 // Import all partner components
 import JackpotTimeline from '@/components/partner/JackpotTimeline';
@@ -28,7 +28,7 @@ import { colors } from '@/constants/theme';
 // ReZ Premium Design System Colors
 export default function PartnerProfilePage() {
   const { goBack } = useSafeNavigation();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [partnerState, setPartnerState] = useState<PartnerPageState>({
     profile: null,

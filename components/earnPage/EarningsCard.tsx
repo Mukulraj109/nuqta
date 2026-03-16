@@ -42,7 +42,7 @@ function EarningsCard({
   const chartAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const _anim0 = Animated.parallel([
+    const anim = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 600,
@@ -60,10 +60,10 @@ function EarningsCard({
         useNativeDriver: true,
       }),
     ]);
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
-}, []);
+    anim.start();
+
+    return () => { anim.stop(); };
+  }, []);
 
   const toggleChart = () => {
     const toValue = showChart ? 0 : 1;

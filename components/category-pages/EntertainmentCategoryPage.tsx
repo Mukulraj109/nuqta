@@ -37,7 +37,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import EmptyState from '@/components/common/EmptyState';
 import { LoadingState } from '@/components/common/LoadingState';
 import { entertainmentCategoryData, entertainmentServiceFilters, entertainmentModeFilters, entertainmentQuickActions, ALL_ENTERTAINMENT_SERVICES } from '@/data/category/entertainmentCategoryData';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const COLORS = {
@@ -97,7 +97,7 @@ function EntertainmentCategoryPage() {
   const router = useRouter();
   const slug = 'entertainment';
   const categoryConfig = getCategoryConfig(slug);
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const {

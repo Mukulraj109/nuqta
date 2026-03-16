@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ActivityIndicator, TextInput } from 'react-native';
 import { useStripe } from '@stripe/stripe-react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface StripeUpiFormProps {
@@ -22,7 +22,7 @@ function StripeUpiForm({
   onCancel,
 }: StripeUpiFormProps) {
   const stripe = useStripe();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [isProcessing, setIsProcessing] = useState(false);
   const [upiError, setUpiError] = useState<string>('');

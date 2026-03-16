@@ -10,7 +10,7 @@ import {
   BorderRadius,
 } from "@/constants/DesignSystem";
 import { storesApi } from "@/services/storesApi";
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -42,7 +42,7 @@ export default function PeopleEarningSection({
   storeId,
   users: propUsers,
 }: PeopleEarningSectionProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [users, setUsers] = useState<EarningUser[]>(propUsers || []);
   const [loading, setLoading] = useState(false);

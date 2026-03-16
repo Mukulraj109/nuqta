@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ReferralSectionProps } from '@/types/earnPage.types';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 function ReferralSection({
@@ -13,14 +13,14 @@ function ReferralSection({
   onShare,
   onLearnMore
 }: ReferralSectionProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
 
   useEffect(() => {
-    const _anim0 = Animated.parallel([
+    const anim = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 600,
@@ -38,10 +38,10 @@ function ReferralSection({
         useNativeDriver: true,
       }),
     ]);
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
-}, []);
+    anim.start();
+
+    return () => { anim.stop(); };
+  }, []);
 
   return (
     <Animated.View 

@@ -25,15 +25,15 @@ const CashStoreBrandCard: React.FC<CashStoreBrandCardProps> = ({ brand, index, o
   const [logoError, setLogoError] = useState(false);
 
   useEffect(() => {
-    const _anim0 = Animated.timing(fadeAnim, {
+    const anim = Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 350,
       delay: Math.min(index * 50, 300),
       useNativeDriver: true,
     });
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
+    anim.start();
+
+    return () => { anim.stop(); };
 }, [index]);
 
   const handlePressIn = () => {

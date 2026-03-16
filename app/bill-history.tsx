@@ -20,7 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useNavigation } from 'expo-router';
 import { billUploadService } from '@/services/billUploadService';
 import { TransactionListSkeleton } from '@/components/skeletons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -56,7 +56,7 @@ type FilterStatus = 'all' | 'pending' | 'approved' | 'rejected';
 export default function BillHistoryPage() {
   const router = useRouter();
   const navigation = useNavigation();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Hide the default navigation header

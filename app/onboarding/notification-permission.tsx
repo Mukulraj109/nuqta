@@ -19,7 +19,7 @@ import * as Notifications from 'expo-notifications';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import analyticsService from '@/services/analyticsService';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useAuthActions } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const BENEFITS = [
@@ -48,7 +48,8 @@ const BENEFITS = [
 export default function NotificationPermissionPage() {
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
-  const { state: authState, actions } = useAuth();
+  const user = useAuthUser();
+  const actions = useAuthActions();
   const [loading, setLoading] = useState(false);
   const [permissionStatus, setPermissionStatus] = useState<string | null>(null);
 
@@ -58,7 +59,7 @@ export default function NotificationPermissionPage() {
   }, []);
 
   const finishOnboarding = async () => {
-    if (!authState.user?.isOnboarded) {
+    if (!user?.isOnboarded) {
       try {
         await actions.completeOnboarding({
           preferences: {

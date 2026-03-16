@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AppliedCoins } from '@/types/storePayment.types';
 import CoinToggleRow from './CoinToggleRow';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
@@ -36,7 +36,7 @@ export const ApplyCoinsSection: React.FC<ApplyCoinsSectionProps> = ({
   onCoinAmountChange,
   onAutoOptimize,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const maxCoinsAllowed = Math.floor((billAmount * maxCoinRedemptionPercent) / 100);
 

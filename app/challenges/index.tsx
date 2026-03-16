@@ -15,9 +15,8 @@ import { router, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import apiClient from '@/services/apiClient';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useRezBalance, useRefreshWallet, useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import coinSyncService from '@/services/coinSyncService';
-import { useAuth } from '@/contexts/AuthContext';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import logger from '@/utils/logger';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
@@ -81,19 +80,22 @@ export default function ChallengesPage() {
   });
   const [claimingId, setClaimingId] = useState<string | null>(null);
 
-  const { state: authState } = useAuth();
-  const { rezBalance: coinBalance, refreshWallet } = useWalletContext();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const coinBalance = useRezBalance();
+  const refreshWallet = useRefreshWallet();
 
   useEffect(() => {
-    if (authState.isAuthenticated && authState.user) {
+    if (isAuthenticated && user) {
       loadChallengesData();
-    } else if (!authState.isLoading && !authState.isAuthenticated) {
+    } else if (!authLoading && !isAuthenticated) {
       router.replace({
         pathname: '/sign-in',
         params: { returnTo: '/challenges' },
       } as any);
     }
-  }, [authState.isAuthenticated, authState.isLoading, authState.user]);
+  }, [isAuthenticated, authLoading, user]);
 
   const loadChallengesData = async () => {
     try {

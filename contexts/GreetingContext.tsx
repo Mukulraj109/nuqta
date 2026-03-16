@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect, useMemo, useCallback, useRef, ReactNode } from 'react';
 import { useLocation } from './LocationContext';
-import { useAuth } from './AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 import {
   getCurrentGreeting,
   getGreetingForTime as getGreetingForTimeUtil,
@@ -72,11 +72,11 @@ interface GreetingProviderProps {
 export function GreetingProvider({ children }: GreetingProviderProps) {
   const [state, dispatch] = useReducer(greetingReducer, initialState);
   const { state: locationState } = useLocation();
-  const { state: authState } = useAuth();
+  const authUser = useAuthUser();
 
   // Store auth/location state in refs so callbacks don't depend on them
-  const authStateRef = useRef(authState);
-  authStateRef.current = authState;
+  const authUserRef = useRef(authUser);
+  authUserRef.current = authUser;
   const locationStateRef = useRef(locationState);
   locationStateRef.current = locationState;
 
@@ -87,7 +87,7 @@ export function GreetingProvider({ children }: GreetingProviderProps) {
 
       // Build greeting configuration using refs for stable deps
       const greetingConfig: GreetingConfig = {
-        userName: authStateRef.current.user?.profile?.firstName || undefined,
+        userName: authUserRef.current?.profile?.firstName || undefined,
         timezone: locationStateRef.current.currentLocation?.timezone || 'Asia/Kolkata',
         language: 'en',
         includeEmoji: true,
@@ -106,7 +106,7 @@ export function GreetingProvider({ children }: GreetingProviderProps) {
 
   const getGreetingForTime = useCallback((date: Date, config?: GreetingConfig): GreetingData => {
     const greetingConfig: GreetingConfig = {
-      userName: authStateRef.current.user?.profile?.firstName || undefined,
+      userName: authUserRef.current?.profile?.firstName || undefined,
       timezone: locationStateRef.current.currentLocation?.timezone || 'Asia/Kolkata',
       language: 'en',
       includeEmoji: true,
@@ -128,10 +128,10 @@ export function GreetingProvider({ children }: GreetingProviderProps) {
 
   // Update greeting when location or user changes
   useEffect(() => {
-    if (locationState.currentLocation || authState.user) {
+    if (locationState.currentLocation || authUser) {
       updateGreeting();
     }
-  }, [locationState.currentLocation, authState.user, updateGreeting]);
+  }, [locationState.currentLocation, authUser, updateGreeting]);
 
   // Update greeting every hour
   useEffect(() => {

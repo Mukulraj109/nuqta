@@ -12,7 +12,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import * as Clipboard from 'expo-clipboard';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 /**
@@ -60,7 +60,7 @@ export const ProductShareModal: React.FC<ProductShareModalProps> = ({
   referralCode,
   onShareComplete,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [isCopied, setIsCopied] = useState(false);
 

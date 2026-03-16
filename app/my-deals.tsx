@@ -24,7 +24,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { campaignsApi, DealRedemption, RedemptionSummary } from '@/services/campaignsApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -95,7 +95,7 @@ type FilterStatus = 'all' | 'active' | 'used' | 'expired';
 
 const MyDealsPage: React.FC = () => {
   const router = useRouter();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
 
   const [redemptions, setRedemptions] = useState<DealRedemption[]>([]);
   const [summary, setSummary] = useState<RedemptionSummary>({ active: 0, used: 0, expired: 0, cancelled: 0 });
@@ -108,13 +108,13 @@ const MyDealsPage: React.FC = () => {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       router.replace('/sign-in' as any);
     }
-  }, [authState.isAuthenticated]);
+  }, [isAuthenticated]);
 
   const fetchDeals = useCallback(async (reset = false) => {
-    if (!authState.isAuthenticated) return;
+    if (!isAuthenticated) return;
 
     try {
       if (reset) {
@@ -158,7 +158,7 @@ const MyDealsPage: React.FC = () => {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [authState.isAuthenticated, selectedFilter, page]);
+  }, [isAuthenticated, selectedFilter, page]);
 
   useEffect(() => {
     fetchDeals(true);
@@ -400,7 +400,7 @@ const MyDealsPage: React.FC = () => {
     </View>
   );
 
-  if (!authState.isAuthenticated) {
+  if (!isAuthenticated) {
     return (
       <View style={[styles.container, styles.centerContent]}>
         <ActivityIndicator size="large" color={COLORS.green500} />

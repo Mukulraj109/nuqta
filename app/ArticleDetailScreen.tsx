@@ -17,8 +17,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useCart } from '@/contexts/CartContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useCartActions, useGetCurrencySymbol } from '@/stores/selectors';
 import { DiscoverArticle, DiscoverProduct } from '@/types/discover.types';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -202,7 +201,7 @@ export default function ArticleDetailScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // State
@@ -218,7 +217,7 @@ export default function ArticleDetailScreen() {
   const [likesCount, setLikesCount] = useState(0);
 
   // Contexts
-  const { addItem } = useCart();
+  const { addItem } = useCartActions();
 
   // Parse params
   useEffect(() => {

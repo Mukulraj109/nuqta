@@ -26,7 +26,7 @@ import { useRouter } from 'expo-router';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import couponService, { Coupon } from '@/services/couponApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { CardGridSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -79,7 +79,7 @@ function transformCoupon(coupon: Coupon): DisplayCoupon {
 
 export default function CouponsPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [coupons, setCoupons] = useState<DisplayCoupon[]>([]);

@@ -17,8 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { CachedImage } from '@/components/ui/CachedImage';
 import { colors } from '@/constants/theme';
@@ -84,9 +83,10 @@ function mapBankOfferToSponsored(offer: BankOfferRaw, currencySymbol: string): S
 
 export default function SponsoredCashbackPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { isAuthenticated, authLoading } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [filter, setFilter] = useState<'all' | 'highest' | 'expiring'>('all');
   const [offers, setOffers] = useState<SponsoredOffer[]>([]);
   const [loading, setLoading] = useState(true);

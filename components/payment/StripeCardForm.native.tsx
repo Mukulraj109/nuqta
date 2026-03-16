@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ActivityIndicator, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useStripe } from '@stripe/stripe-react-native';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface StripeCardFormProps {
@@ -22,7 +22,7 @@ function StripeCardForm({
   onCancel,
 }: StripeCardFormProps) {
   const { confirmPayment } = useStripe();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [isProcessing, setIsProcessing] = useState(false);
   const [cardError, setCardError] = useState<string>('');

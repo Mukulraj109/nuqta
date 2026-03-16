@@ -14,7 +14,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ProductItem } from '@/types/homepage.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 export interface VariantSelection {
@@ -57,7 +57,7 @@ function ProductVariantModal({
   loading = false,
   variants = [],
 }: ProductVariantModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [selectedSize, setSelectedSize] = useState<string | undefined>();

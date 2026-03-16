@@ -103,6 +103,41 @@ export const useGetCurrencySymbol = () => useRegionStore((s) => s.getCurrencySym
 /** Stable function — never re-renders */
 export const useFormatPrice = () => useRegionStore((s) => s.formatPrice);
 
+/** Stable function — never re-renders */
+export const useGetLocale = () => useRegionStore((s) => s.getLocale);
+
+/** Stable function — never re-renders */
+export const useGetCurrency = () => useRegionStore((s) => s.getCurrency);
+
+/** Stable function — never re-renders */
+export const useSetRegion = () => useRegionStore((s) => s.setRegion);
+
+/** Only re-renders when region state changes */
+export const useRegionState = () => useRegionStore((s) => s.state);
+
+// ============================================================================
+// WALLET EXTRA SELECTORS
+// ============================================================================
+
+/** Only re-renders when savings insights change */
+export const useSavingsInsights = () => useWalletStore((s) => s.savingsInsights);
+
+/** Raw backend data — use sparingly */
+export const useRawWalletData = () => useWalletStore((s) => s.rawBackendData);
+
+/** Only re-renders when refreshing state changes */
+export const useWalletRefreshing = () => useWalletStore((s) => s.isRefreshing);
+
+// ============================================================================
+// CART EXTRA SELECTORS
+// ============================================================================
+
+/** Full cart state (use sparingly) */
+export const useCartState = () => useCartStore((s) => s.state);
+
+/** Stable function — never re-renders */
+export const useRefreshCart = () => useCartStore((s) => s.refreshCart);
+
 // ============================================================================
 // HOME TAB SELECTORS — 5 imports
 // ============================================================================

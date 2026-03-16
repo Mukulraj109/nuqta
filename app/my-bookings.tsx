@@ -20,8 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useFocusEffect } from 'expo-router';
 import serviceBookingApi, { ServiceBooking } from '@/services/serviceBookingApi';
 import CashbackStatusBadge from '@/components/travel/CashbackStatusBadge';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
 const TRAVEL_SLUGS = ['flights', 'hotels', 'trains', 'bus', 'cab', 'packages'];
@@ -42,9 +41,9 @@ const isTravelBooking = (booking: ServiceBooking): boolean => {
 
 const MyBookingsPage = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   const [bookings, setBookings] = useState<ServiceBooking[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -56,7 +55,7 @@ const MyBookingsPage = () => {
       setLoading(true);
       setErrorMessage(null);
 
-      if (!authState.isAuthenticated || !authState.token) {
+      if (!isAuthenticated || !null /* TODO: token not available via selectors */) {
         setErrorMessage('Please login to view your bookings');
         setLoading(false);
         return;
@@ -103,7 +102,7 @@ const MyBookingsPage = () => {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [authState.isAuthenticated, authState.token, activeTab]);
+  }, [isAuthenticated, null /* TODO: token not available via selectors */, activeTab]);
 
   useFocusEffect(
     useCallback(() => {

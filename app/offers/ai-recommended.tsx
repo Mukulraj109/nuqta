@@ -16,8 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { CachedImage } from '@/components/ui/CachedImage';
@@ -100,9 +99,10 @@ function mapOffer(offer: BackendOffer): MappedOffer {
 
 export default function AIRecommendedPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -144,11 +144,11 @@ export default function AIRecommendedPage() {
   }, []);
 
   useEffect(() => {
-    if (authState.isLoading || !authState.isAuthenticated) return;
+    if (authLoading || !isAuthenticated) return;
     setLoading(true);
     setPage(1);
     fetchOffers(1).finally(() => setLoading(false));
-  }, [authState.isLoading, authState.isAuthenticated, fetchOffers]);
+  }, [authLoading, isAuthenticated, fetchOffers]);
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);

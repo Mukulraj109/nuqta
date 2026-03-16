@@ -21,7 +21,7 @@ import { useDiscoverContent } from '@/hooks/useDiscoverContent';
 import { realVideosApi } from '@/services/realVideosApi';
 import DiscoverAndShopHeader from './DiscoverAndShopHeader';
 import DiscoverAndShopTabBar from './DiscoverAndShopTabBar';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -63,7 +63,7 @@ function DiscoverAndShopSection({
   onCategoryPress,
 }: DiscoverAndShopSectionProps) {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [activeTab, setActiveTab] = useState<DiscoverTabType>(initialTab);
   const [refreshing, setRefreshing] = useState(false);

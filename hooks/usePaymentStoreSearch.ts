@@ -16,7 +16,7 @@ import {
   PAYMENT_SEARCH_CONSTANTS,
 } from '@/types/paymentStoreSearch.types';
 import { useCurrentLocation } from '@/hooks/useLocation';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import { storeSearchService } from '@/services/storeSearchService';
 import storePaymentApi from '@/services/storePaymentApi';
 import apiClient from '@/services/apiClient';
@@ -286,7 +286,7 @@ export interface StoreFilters {
  * Main hook for payment store search
  */
 export const usePaymentStoreSearch = (): UsePaymentStoreSearchReturn => {
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   const { currentLocation, refreshLocation, isLoading: isLoadingLocationContext } = useCurrentLocation();
 
   // Search state
@@ -412,7 +412,7 @@ export const usePaymentStoreSearch = (): UsePaymentStoreSearchReturn => {
    * Fetch recent payment stores (from payment history)
    */
   const fetchRecentStores = useCallback(async () => {
-    if (!authState.isAuthenticated) return;
+    if (!isAuthenticated) return;
 
     setIsLoadingRecent(true);
 
@@ -451,7 +451,7 @@ export const usePaymentStoreSearch = (): UsePaymentStoreSearchReturn => {
     } finally {
       setIsLoadingRecent(false);
     }
-  }, [authState.isAuthenticated]);
+  }, [isAuthenticated]);
 
   /**
    * Fetch popular stores
@@ -618,7 +618,7 @@ export const usePaymentStoreSearch = (): UsePaymentStoreSearchReturn => {
       fetchPopularStores(),
     ];
 
-    if (authState.isAuthenticated) {
+    if (isAuthenticated) {
       promises.push(fetchRecentStores());
     }
 
@@ -628,7 +628,7 @@ export const usePaymentStoreSearch = (): UsePaymentStoreSearchReturn => {
 
     await Promise.all(promises);
     setIsInitialLoading(false);
-  }, [authState.isAuthenticated, userLocation, fetchNearbyStores, fetchRecentStores, fetchPopularStores]);
+  }, [isAuthenticated, userLocation, fetchNearbyStores, fetchRecentStores, fetchPopularStores]);
 
   /**
    * Clear search
@@ -756,11 +756,11 @@ export const usePaymentStoreSearch = (): UsePaymentStoreSearchReturn => {
       // Always fetch popular stores (public endpoint)
       fetchPopularStores();
       // Fetch recent stores only if authenticated
-      if (authState.isAuthenticated) {
+      if (isAuthenticated) {
         fetchRecentStores();
       }
     }
-  }, [authState.isAuthenticated, fetchPopularStores, fetchRecentStores]);
+  }, [isAuthenticated, fetchPopularStores, fetchRecentStores]);
 
   // Fetch nearby stores when location becomes available (only once)
   useEffect(() => {

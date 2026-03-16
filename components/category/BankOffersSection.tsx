@@ -17,7 +17,7 @@ import {
 import { useRouter } from 'expo-router';
 import bankOffersApi, { BankOffer } from '@/services/bankOffersApi';
 import { bankOffersData } from '@/data/categoryDummyData';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface BankOffersSectionProps {
@@ -77,7 +77,7 @@ const BankOffersSection: React.FC<BankOffersSectionProps> = ({
   onOfferPress,
 }) => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [apiOffers, setApiOffers] = useState<BankOffer[]>([]);
   const [loading, setLoading] = useState(true);

@@ -17,7 +17,7 @@ import {
   BorderRadius,
   Shadows,
 } from "@/constants/DesignSystem";
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -51,7 +51,7 @@ export default function StoreOffersSection({
   onViewAll,
   onApplyOffer,
 }: StoreOffersSectionProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const getOfferBadge = (offer: Offer) => {

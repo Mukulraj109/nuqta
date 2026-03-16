@@ -16,7 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthActions } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 
@@ -24,7 +24,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { colors } from '@/constants/theme';
 export default function ChangePasswordPage() {
   const router = useRouter();
-  const { actions } = useAuth();
+  const actions = useAuthActions();
   const [formData, setFormData] = useState({
     currentPassword: '',
     newPassword: '',

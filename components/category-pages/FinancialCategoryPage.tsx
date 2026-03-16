@@ -37,8 +37,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import EmptyState from '@/components/common/EmptyState';
 import { LoadingState } from '@/components/common/LoadingState';
 import { financialCategoryData, financialServiceFilters, financialModeFilters, financialQuickActions, ALL_FINANCIAL_SERVICES } from '@/data/category/financialCategoryData';
-import { useRegion } from '@/contexts/RegionContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useGetCurrencySymbol, useSavingsInsights, useTotalBalance, useWalletData } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const COLORS = {
@@ -88,7 +87,7 @@ function FinancialCategoryPage() {
   const router = useRouter();
   const slug = 'financial-lifestyle';
   const categoryConfig = getCategoryConfig(slug);
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const {
@@ -97,7 +96,9 @@ function FinancialCategoryPage() {
   } = useCategoryPageData(slug);
 
   // Wallet data for savings dashboard
-  const { savingsInsights, totalBalance, walletData } = useWalletContext();
+  const savingsInsights = useSavingsInsights();
+  const totalBalance = useTotalBalance();
+  const walletData = useWalletData();
   const savingsThisMonth = savingsInsights?.thisMonth || 0;
   const totalCoins = totalBalance || 0;
   const cashbackBalance = walletData?.cashbackBalance || 0;

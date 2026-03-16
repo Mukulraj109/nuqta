@@ -11,7 +11,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 /**
@@ -41,25 +41,25 @@ export const AddToCartModal: React.FC<AddToCartModalProps> = ({
   price,
   variantDetails,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [scaleAnim] = React.useState(new Animated.Value(0));
 
   React.useEffect(() => {
     if (visible) {
-      const _anim0 = Animated.spring(scaleAnim, {
+      const anim = Animated.spring(scaleAnim, {
         toValue: 1,
         tension: 50,
         friction: 7,
         useNativeDriver: true,
       });
-      _anim0.start();
+      anim.start();
+
+      return () => { anim.stop(); };
     } else {
       scaleAnim.setValue(0);
     }
-  
-    return () => { _anim0.stop(); };
-}, [visible]);
+  }, [visible]);
 
   const totalPrice = quantity * price;
 

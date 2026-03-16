@@ -16,7 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import exploreApi, { NearbyStore } from '@/services/exploreApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useRegionState } from '@/stores/selectors';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { MapViewSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -48,7 +48,7 @@ const ExploreMapPage = () => {
   const [selectedStore, setSelectedStore] = useState<string | null>(null);
 
   // Region context for coordinates and region name
-  const { state: regionState } = useRegion();
+  const regionState = useRegionState();
   const regionName = regionState.regionConfig?.name || 'your area';
   const currentRegion = regionState.currentRegion;
 

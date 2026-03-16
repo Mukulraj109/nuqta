@@ -13,8 +13,7 @@ import { useCartValidation } from '@/hooks/useCartValidation';
 import StockWarningBanner from '@/components/cart/StockWarningBanner';
 import CartValidation from '@/components/cart/CartValidation';
 import CardOffersSection from '@/components/cart/CardOffersSection';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useGetCurrencySymbol, useAuthUser } from '@/stores';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing } from '@/constants/DesignSystem';
 
@@ -39,10 +38,10 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 function CheckoutPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ offerRedemptionCode?: string; orderId?: string }>();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { state: authState } = useAuth();
-  const userLoyaltyTier = (authState.user as any)?.loyaltyTier || null;
+  const authUser = useAuthUser();
+  const userLoyaltyTier = (authUser as any)?.loyaltyTier || null;
 
   // Core checkout state & logic
   const { state, actions, handlers: checkoutHandlers } = useCheckout(params.orderId);

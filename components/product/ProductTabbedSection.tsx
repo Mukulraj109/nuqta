@@ -15,7 +15,7 @@ import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { triggerImpact } from '@/utils/haptics';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -155,7 +155,7 @@ export const ProductTabbedSection: React.FC<ProductTabbedSectionProps> = ({
   currency,
   style,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = currency || getCurrencySymbol();
   const [activeTab, setActiveTab] = useState<TabId>('description');
 

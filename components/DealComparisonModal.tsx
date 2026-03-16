@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { Deal } from '@/types/deals';
 import { calculateDealDiscount } from '@/utils/deal-validation';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface DealComparisonModalProps {
@@ -39,7 +39,7 @@ function DealComparisonModal({
   deals,
   onSelectDeal,
 }: DealComparisonModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
   const [billAmount, setBillAmount] = useState(5000);

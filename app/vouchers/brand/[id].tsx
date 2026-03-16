@@ -26,7 +26,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { getStripePromise } from '@/utils/lazyImports';
 import realVouchersApi from '@/services/realVouchersApi';
 import apiClient from '@/services/apiClient';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { StripeCardForm } from '@/components/payment';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -73,7 +73,7 @@ const COLORS = {
 export default function VoucherBrandDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [brand, setBrand] = useState<VoucherBrand | null>(null);

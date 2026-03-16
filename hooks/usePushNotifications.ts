@@ -7,11 +7,11 @@ import { useEffect, useRef } from 'react';
 import { AppState, Platform } from 'react-native';
 import pushNotificationService from '@/services/pushNotificationService';
 import { handleNotificationDeepLink } from '@/utils/notificationDeepLinkHandler';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 
 export function usePushNotifications() {
-  const { state } = useAuth();
-  const { user, isAuthenticated } = state;
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const appState = useRef(AppState.currentState);
   const initialized = useRef(false);
   const disableWebDevPush = Platform.OS === 'web' && __DEV__;

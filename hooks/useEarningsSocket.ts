@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useSocket } from '@/contexts/SocketContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 
 interface EarningsUpdate {
   earnings: {
@@ -63,12 +63,12 @@ interface LeaderboardUpdateData {
 
 export function useEarningsSocket() {
   const { socket, state } = useSocket();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
 
   // Join earnings room when socket is connected and user is authenticated
   useEffect(() => {
-    if (socket && state.connected && authState.user) {
-      const userId = authState.user._id || authState.user.id;
+    if (socket && state.connected && user) {
+      const userId = user._id || user.id;
       if (userId) {
         socket.emit('join-earnings-room', userId.toString());
       }
@@ -79,7 +79,7 @@ export function useEarningsSocket() {
         }
       };
     }
-  }, [socket, state.connected, authState.user]);
+  }, [socket, state.connected, user]);
 
   // Subscribe to earnings updates
   const onEarningsUpdate = useCallback((callback: (data: EarningsUpdate) => void) => {

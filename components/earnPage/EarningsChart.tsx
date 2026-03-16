@@ -3,7 +3,7 @@ import { View, StyleSheet, Dimensions } from 'react-native';
 import Svg, { Rect, Text as SvgText, G } from 'react-native-svg';
 import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface EarningsChartProps {
@@ -23,7 +23,7 @@ const BAR_WIDTH = (CHART_WIDTH - 60) / 4; // 4 bars with spacing
 const MAX_BAR_HEIGHT = 100;
 
 function EarningsChart({ breakdown, currency }: EarningsChartProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = currency || getCurrencySymbol();
   const data = useMemo(() => {
     const values = [

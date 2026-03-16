@@ -19,8 +19,7 @@ import { FlashList } from '@shopify/flash-list';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { CachedImage } from '@/components/ui/CachedImage';
 import { platformAlert } from '@/utils/platformAlert';
 
@@ -47,9 +46,10 @@ function BillPaymentPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const initialType = (params.type as string) || '';
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { isAuthenticated, authLoading } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // Data state
   const [billTypes, setBillTypes] = useState<BillTypeInfo[]>([]);

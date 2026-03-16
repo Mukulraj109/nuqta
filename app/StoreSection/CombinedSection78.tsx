@@ -11,7 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { ThemedText } from '@/components/ThemedText';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import storeVouchersApi from '@/services/storeVouchersApi';
 import discountsApi from '@/services/discountsApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
@@ -70,7 +70,7 @@ export default memo(function CombinedSection78({
   dynamicData,
   cardType,
 }: CombinedSection78Props) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const defaultMinimumBill = `Minimum bill: ${currencySymbol}5000`;

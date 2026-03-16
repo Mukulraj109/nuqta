@@ -17,7 +17,7 @@ import {
   IconSize,
   Timing,
 } from '@/constants/DesignSystem';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface Section6Props {
@@ -37,7 +37,7 @@ interface Section6Props {
 
 export default memo(function Section6({ dynamicData, cardType }: Section6Props) {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [showDetails, setShowDetails] = useState(false);
   const [isAddingVoucher, setIsAddingVoucher] = useState(false);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useCart } from '@/contexts/CartContext';
+import { useCartState, useCartActions } from '@/stores/selectors';
 import useOfflineCart from '@/hooks/useOfflineCart';
 import useNetworkStatus from '@/hooks/useNetworkStatus';
 import { colors } from '@/constants/theme';
@@ -12,7 +12,8 @@ interface CartSyncStatusProps {
 }
 
 export function CartSyncStatus({ showDetails = false, compact = false }: CartSyncStatusProps) {
-  const { state, actions } = useCart();
+  const state = useCartState();
+  const actions = useCartActions();
   const {
     isSyncing,
     syncError,

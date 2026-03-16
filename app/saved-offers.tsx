@@ -14,7 +14,7 @@ import { useRouter, Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/ThemedText';
 import realOffersApi from '@/services/realOffersApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import logger from '@/utils/logger';
 import { platformAlertConfirm } from '@/utils/platformAlert';
 import { CardGridSkeleton } from '@/components/skeletons';
@@ -25,7 +25,7 @@ const CARD_WIDTH = (width - 48) / 2;
 
 export default function SavedOffersScreen() {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
 
   const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

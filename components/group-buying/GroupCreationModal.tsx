@@ -16,7 +16,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { GroupBuyingProduct, CreateGroupRequest } from '@/types/groupBuying.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface GroupCreationModalProps {
@@ -32,7 +32,7 @@ function GroupCreationModal({
   onClose,
   onSubmit,
 }: GroupCreationModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [quantity, setQuantity] = useState('1');
   const [message, setMessage] = useState('');

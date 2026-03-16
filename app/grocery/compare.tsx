@@ -21,7 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { GroceryHubSkeleton } from '@/components/grocery/GrocerySkeleton';
 import { productsApi } from '@/services/productsApi';
 import { storesApi } from '@/services/storesApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -46,7 +46,7 @@ interface CompareItem {
 
 const GroceryComparePage: React.FC = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // State

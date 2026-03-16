@@ -2,7 +2,7 @@ import React, { createContext, useContext, useReducer, useEffect, ReactNode, use
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import subscriptionApi from '@/services/subscriptionApi';
 import type { CurrentSubscription, SubscriptionTier } from '@/services/subscriptionApi';
-import { useAuth } from './AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 
 // Feature flags for gradual rollout
 const FEATURE_FLAGS = {
@@ -117,29 +117,30 @@ interface SubscriptionProviderProps {
 
 export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
   const [state, dispatch] = useReducer(subscriptionReducer, initialState);
-  const { state: authState } = useAuth();
+  const authUser = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
 
   // BUG FIX #5: Added proper dependencies to useEffect
   // Skip during onboarding to prevent thundering herd of API calls on Android
   useEffect(() => {
-    if (authState.isAuthenticated && authState.user?.isOnboarded && state.featureFlags.ENABLE_SUBSCRIPTIONS) {
+    if (isAuthenticated && authUser?.isOnboarded && state.featureFlags.ENABLE_SUBSCRIPTIONS) {
       // Module-level dedup: prevent re-fetching on DeferredProvider remounts
       if (!_subscriptionLoaded) {
         _subscriptionLoaded = true;
         loadSubscription();
       }
-    } else if (!authState.isAuthenticated) {
+    } else if (!isAuthenticated) {
       // Clear subscription data when user logs out
       dispatch({ type: 'CLEAR_SUBSCRIPTION' });
       _subscriptionLoaded = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authState.isAuthenticated, authState.user?.id, authState.user?.isOnboarded]);
+  }, [isAuthenticated, authUser?.id, authUser?.isOnboarded]);
 
   // BUG FIX #3: Include userId in cache key to prevent cross-user contamination
   const isCacheValid = useCallback(async (): Promise<boolean> => {
     try {
-      const userId = authState.user?.id;
+      const userId = authUser?.id;
       if (!userId) return false;
 
       const STORAGE_KEYS = getStorageKeys(userId);
@@ -151,16 +152,16 @@ export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
     } catch {
       return false;
     }
-  }, [authState.user?.id]);
+  }, [authUser?.id]);
 
   // Load subscription data
   const loadSubscription = useCallback(async (forceRefresh = false) => {
-    if (!authState.isAuthenticated || !state.featureFlags.ENABLE_SUBSCRIPTIONS) {
+    if (!isAuthenticated || !state.featureFlags.ENABLE_SUBSCRIPTIONS) {
       return;
     }
 
     // BUG FIX #3: Get userId and user-specific storage keys
-    const userId = authState.user?.id;
+    const userId = authUser?.id;
     if (!userId) {
       return;
     }
@@ -217,7 +218,7 @@ export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
       if (!subscription) {
         const freeTierDefault: CurrentSubscription = {
           _id: 'free-default',
-          user: authState.user?.id || '',
+          user: authUser?.id || '',
           tier: 'free',
           status: 'active',
           billingCycle: 'monthly',
@@ -259,7 +260,7 @@ export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
       // Graceful degradation - set free tier as default
       const freeTierDefault: CurrentSubscription = {
         _id: 'free-default',
-        user: authState.user?.id || '',
+        user: authUser?.id || '',
         tier: 'free',
         status: 'active',
         billingCycle: 'monthly',
@@ -299,7 +300,7 @@ export function SubscriptionProvider({ children }: SubscriptionProviderProps) {
         payload: error instanceof Error ? error.message : 'Failed to load subscription',
       });
     }
-  }, [authState.isAuthenticated, authState.user?.id, state.featureFlags.ENABLE_SUBSCRIPTIONS]);
+  }, [isAuthenticated, authUser?.id, state.featureFlags.ENABLE_SUBSCRIPTIONS]);
 
   // Refresh subscription
   const refreshSubscription = useCallback(async () => {

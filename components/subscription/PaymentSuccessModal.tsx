@@ -14,7 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface PaymentSuccessModalProps {
@@ -33,7 +33,7 @@ function PaymentSuccessModal({
   onClose,
 }: PaymentSuccessModalProps) {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -41,7 +41,7 @@ function PaymentSuccessModal({
   useEffect(() => {
     if (visible) {
       // Animate success icon
-      const _anim0 = Animated.sequence([
+      const anim = Animated.sequence([
         Animated.spring(scaleAnim, {
           toValue: 1,
           tension: 50,
@@ -54,15 +54,14 @@ function PaymentSuccessModal({
           useNativeDriver: true,
         }),
       ]);
-      _anim0.start();
+      anim.start();
+      return () => { anim.stop(); };
     } else {
       // Reset animations
       scaleAnim.setValue(0);
       fadeAnim.setValue(0);
     }
-  
-    return () => { _anim0.stop(); };
-}, [visible]);
+  }, [visible]);
 
   const handleViewSubscription = () => {
     onClose();

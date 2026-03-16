@@ -19,7 +19,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import eventsApiService from '@/services/eventsApi';
 import tableBookingApi from '@/services/tableBookingApi';
 import serviceBookingService from '@/services/serviceBookingApi';
@@ -124,7 +124,7 @@ const isUpcoming = (d: Date) => d >= new Date(new Date().setHours(0, 0, 0, 0));
 // ══════════════════════════════════════════════════════════════
 export default function BookingsPage() {
   const router = useRouter();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   const tintColor = useThemeColor({}, 'tint');
 
   const [typeFilter, setTypeFilter] = useState<BookingType>('all');
@@ -298,7 +298,7 @@ export default function BookingsPage() {
 
   // ─── Initial load (page 1 of each) ────────────────────
   const loadBookings = useCallback(async () => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       setLoading(false);
       return;
     }
@@ -334,7 +334,7 @@ export default function BookingsPage() {
     } finally {
       setLoading(false);
     }
-  }, [authState.isAuthenticated, refreshing, fetchPage]);
+  }, [isAuthenticated, refreshing, fetchPage]);
 
   // ─── Load more (next page) ────────────────────────────
   const loadMore = useCallback(async () => {
@@ -384,9 +384,9 @@ export default function BookingsPage() {
 
   useFocusEffect(
     useCallback(() => {
-      if (authState.isAuthenticated) loadBookings();
+      if (isAuthenticated) loadBookings();
       else setLoading(false);
-    }, [authState.isAuthenticated])
+    }, [isAuthenticated])
   );
 
   const onRefresh = useCallback(async () => {
@@ -454,7 +454,7 @@ export default function BookingsPage() {
   };
 
   // ─── Unauthenticated state ───────────────────────────────
-  if (!authState.isAuthenticated) {
+  if (!isAuthenticated) {
     return (
       <ThemedView style={styles.container}>
         <Stack.Screen options={{ headerShown: false }} />

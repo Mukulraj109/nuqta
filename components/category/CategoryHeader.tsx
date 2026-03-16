@@ -15,8 +15,7 @@ import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Category } from '@/types/category.types';
 import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
-import { useAuth } from '@/contexts/AuthContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useAuthUser, useIsAuthenticated, useRezBalance } from '@/stores/selectors';
 import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
 import { profileMenuSections } from '@/data/profileData';
 import { colors } from '@/constants/theme';
@@ -45,10 +44,11 @@ function CategoryHeader({
   stats,
 }: CategoryHeaderProps) {
   const router = useRouter();
-  const { user, isModalVisible, showModal, hideModal } = useProfile();
+  const { user: profileUser, isModalVisible, showModal, hideModal } = useProfile();
   const { handleMenuItemPress } = useProfileMenu();
-  const { state: authState } = useAuth();
-  const { rezBalance: userPoints } = useWalletContext();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const userPoints = useRezBalance();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { width, height } = Dimensions.get('window');
 

@@ -12,7 +12,7 @@ import { DealCardProps, Deal } from '@/types/deals';
 import { calculateDealDiscount } from '@/utils/deal-validation';
 import DealCountdownTimer from './DealCountdownTimer';
 import { useCountdown, useIsExpiringSoon } from '@/hooks/useCountdown';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 /**
@@ -32,7 +32,7 @@ function EnhancedDealCard({
   isAdded,
   onMoreDetails
 }: DealCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [billPreview] = useState<number>(deal.minimumBill);
   const [showPreview, setShowPreview] = useState(false);
@@ -73,16 +73,16 @@ function EnhancedDealCard({
 
   // Initialize card animation
   useEffect(() => {
-    const _anim0 = Animated.spring(cardAnim, {
+    const anim = Animated.spring(cardAnim, {
       toValue: 1,
       tension: 100,
       friction: 8,
       useNativeDriver: true,
     });
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
-}, [cardAnim]);
+    anim.start();
+
+    return () => { anim.stop(); };
+  }, [cardAnim]);
 
   // Pulse animation for expiring soon deals
   useEffect(() => {

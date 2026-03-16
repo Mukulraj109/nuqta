@@ -9,7 +9,7 @@ import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { useAchievements } from '@/hooks/useAchievements';
 import { Achievement } from '@/services/achievementApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthActions } from '@/stores/selectors';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { HeaderBackButton } from '@/components/navigation/SafeBackButton';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
@@ -23,7 +23,7 @@ type FilterType = 'all' | 'unlocked' | 'locked';
 export default function AchievementsPage() {
   const router = useRouter();
   const { goBack } = useSafeNavigation();
-  const { state: authState, actions: authActions } = useAuth();
+  const authActions = useAuthActions();
   const {
     achievements,
     progress,

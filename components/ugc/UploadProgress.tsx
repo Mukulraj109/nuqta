@@ -33,17 +33,17 @@ function UploadProgress({
   // Animate progress bar
   useEffect(() => {
     if (progress) {
-      const _anim0 = Animated.timing(progressAnim, {
+      const anim = Animated.timing(progressAnim, {
         toValue: progress.percentage,
         duration: 300,
         easing: Easing.out(Easing.cubic),
         useNativeDriver: false,
       });
-      _anim0.start();
+      anim.start();
+
+      return () => { anim.stop(); };
     }
-  
-    return () => { _anim0.stop(); };
-}, [progress?.percentage]);
+  }, [progress?.percentage]);
 
   // Pulse animation for processing state
   useEffect(() => {

@@ -22,7 +22,7 @@ import {
   PaymentStoreCardProps,
   SEARCH_ANIMATIONS,
 } from '@/types/paymentStoreSearch.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -95,7 +95,7 @@ export const PaymentStoreCard: React.FC<PaymentStoreCardProps> = ({
   variant = 'full',
   showCTA = true,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const scale = useSharedValue(1);
 

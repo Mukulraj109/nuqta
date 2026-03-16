@@ -18,14 +18,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import bonusZoneApi, { BonusZoneCampaign } from '@/services/bonusZoneApi';
 import BonusZoneCard from '@/components/earn/BonusZoneCard';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useRegionState } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const MAX_FEATURED = 2;
 
 const BonusZoneHighlight: React.FC = () => {
   const router = useRouter();
-  const { getCurrencySymbol, state: regionState } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const regionState = useRegionState();
   const currencySymbol = getCurrencySymbol();
 
   const [featured, setFeatured] = useState<BonusZoneCampaign[]>([]);

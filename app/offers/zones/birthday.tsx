@@ -22,7 +22,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
 import realOffersApi from '@/services/realOffersApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -55,8 +55,8 @@ interface ZoneInfo {
 export default function BirthdayZonePage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { state: authState } = useAuth();
-  const user = authState?.user;
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
 
   const [loading, setLoading] = useState(true);
   const [offers, setOffers] = useState<ZoneOffer[]>([]);

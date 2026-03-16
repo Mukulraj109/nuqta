@@ -17,7 +17,7 @@ import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Premium Glass Design Tokens - Green & Gold Theme
@@ -85,7 +85,7 @@ interface AboutModalProps {
 }
 
 function AboutModal({ visible, onClose, storeData }: AboutModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
   const slideAnim = useRef(new Animated.Value(screenData.height)).current;

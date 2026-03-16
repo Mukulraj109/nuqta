@@ -25,7 +25,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { campaignsApi, Campaign, CampaignDeal } from '@/services/campaignsApi';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import CoinIcon from '@/components/ui/CoinIcon';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
@@ -71,7 +71,7 @@ const FALLBACK_DEAL_IMAGE = undefined;
 const DealDetailPage: React.FC = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   const campaignId = params.campaignId as string;
   const dealIndex = parseInt(params.dealIndex as string, 10);
 
@@ -120,7 +120,7 @@ const DealDetailPage: React.FC = () => {
   // Check if user has already redeemed this deal
   useEffect(() => {
     const checkRedemptionStatus = async () => {
-      if (!authState.isAuthenticated || !campaign) return;
+      if (!isAuthenticated || !campaign) return;
 
       try {
         // Fetch user's redemptions and check if this deal is already redeemed
@@ -153,7 +153,7 @@ const DealDetailPage: React.FC = () => {
     };
 
     checkRedemptionStatus();
-  }, [authState.isAuthenticated, campaign, dealIndex]);
+  }, [isAuthenticated, campaign, dealIndex]);
 
   const fetchDealDetails = async () => {
     try {
@@ -218,7 +218,7 @@ const DealDetailPage: React.FC = () => {
       return;
     }
 
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       platformAlertConfirm('Sign In Required', 'Please sign in to redeem this deal', () => router.push('/sign-in' as any), 'Sign In');
       return;
     }
@@ -389,7 +389,7 @@ const DealDetailPage: React.FC = () => {
   };
 
   const handleLike = async () => {
-    if (!deal || !authState.isAuthenticated) return;
+    if (!deal || !isAuthenticated) return;
     try {
       setIsLiked(!isLiked);
       await apiClient.post('/campaigns/deals/track', { campaignId: campaign?._id || campaignId, dealIndex, action: 'like' });
@@ -403,7 +403,7 @@ const DealDetailPage: React.FC = () => {
     try {
       const shareMessage = `Check out this amazing deal!\n\n${deal.store || 'Store'}\n${campaign.title}\n\n${deal.cashback || deal.coins || deal.bonus || deal.drop || 'Special Offer'}`;
       await Share.share({ message: shareMessage, title: `${deal.store} - ${campaign.title}` });
-      if (authState.isAuthenticated) {
+      if (isAuthenticated) {
         await apiClient.post('/campaigns/deals/track', { campaignId: campaign._id || campaignId, dealIndex, action: 'share' });
       }
     } catch (error) {

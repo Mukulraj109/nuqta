@@ -21,9 +21,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import apiClient from '@/services/apiClient';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
-import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -53,8 +52,9 @@ interface Stats {
 
 export default function AdminSocialMediaPosts() {
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState<SocialPost[]>([]);
@@ -75,13 +75,13 @@ export default function AdminSocialMediaPosts() {
   const [rejectionReason, setRejectionReason] = useState('');
 
   useEffect(() => {
-    if (!authState.token) {
+    if (!null /* TODO: token not available via selectors */) {
       router.replace('/sign-in');
       return;
     }
-    apiClient.setAuthToken(authState.token);
+    apiClient.setAuthToken(null /* TODO: token not available via selectors */);
     loadPosts(1);
-  }, [authState.token, selectedStatus]);
+  }, [null /* TODO: token not available via selectors */, selectedStatus]);
 
   const loadPosts = async (pageNum = 1) => {
     if (pageNum === 1) {

@@ -42,7 +42,7 @@ function RewardsBreakdownCard({
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const _anim0 = Animated.parallel([
+    const anim = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 400,
@@ -55,10 +55,10 @@ function RewardsBreakdownCard({
         useNativeDriver: false,
       }),
     ]);
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
-}, [progressPercent]);
+    anim.start();
+
+    return () => { anim.stop(); };
+  }, [progressPercent]);
 
   const progressWidth = progressAnim.interpolate({
     inputRange: [0, 100],

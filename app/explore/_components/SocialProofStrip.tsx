@@ -12,7 +12,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { Ionicons } from '@expo/vector-icons';
 import exploreApi, { ExploreStats } from '@/services/exploreApi';
 import { useCurrentLocation } from '@/hooks/useLocation';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 
 const { width } = Dimensions.get('window');
@@ -50,7 +50,7 @@ const SocialProofStrip = () => {
   const [proofItems, setProofItems] = useState<ProofItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { currentLocation } = useCurrentLocation();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Get location name for display

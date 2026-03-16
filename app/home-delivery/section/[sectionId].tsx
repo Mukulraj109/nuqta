@@ -10,7 +10,7 @@ import {
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { ThemedText } from '@/components/ThemedText';
 import { ProductGrid } from '@/components/home-delivery/ProductGrid';
 import { FilterChips } from '@/components/home-delivery/FilterChips';
@@ -35,7 +35,7 @@ const SECTION_CONFIG = {
 export default function SectionDetailPage() {
   const router = useRouter();
   const { sectionId } = useLocalSearchParams<{ sectionId: string }>();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [products, setProducts] = useState<HomeDeliveryProduct[]>([]);

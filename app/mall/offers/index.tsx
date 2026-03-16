@@ -26,7 +26,7 @@ import { mallApi } from '../../../services/mallApi';
 import { MallOffer, getDaysRemaining, formatValueDisplay } from '../../../types/mall.types';
 import MallEmptyState from '../../../components/mall/pages/MallEmptyState';
 import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkeleton';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -140,7 +140,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, onPress, currencySymbol })
 export default function AllOffersPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [offers, setOffers] = useState<MallOffer[]>([]);

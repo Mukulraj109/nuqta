@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { useLocationPermission } from '@/hooks/useLocation';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 import { navigationDebugger } from '@/utils/navigationDebug';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 
@@ -17,7 +17,7 @@ export default function LocationPermissionScreen() {
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
   const { updateUserData, setLoading, state } = useOnboarding();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
   const { permissionStatus, isRequesting, requestPermission } = useLocationPermission();
   const [permissionRequested, setPermissionRequested] = useState(false);
 
@@ -56,7 +56,7 @@ export default function LocationPermissionScreen() {
         }
       });
 
-      if (authState.user?.isOnboarded) {
+      if (user?.isOnboarded) {
         navigationDebugger.logNavigation('location-permission', '(tabs)', 'location-granted-onboarded-user');
         router.replace('/(tabs)');
       } else {
@@ -233,7 +233,7 @@ export default function LocationPermissionScreen() {
               updateUserData({
                 location: { latitude: 0, longitude: 0 }
               });
-              if (authState.user?.isOnboarded) {
+              if (user?.isOnboarded) {
                 router.replace('/(tabs)');
               } else {
                 router.replace('/onboarding/notification-permission');

@@ -13,7 +13,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ProductRecommendation } from '@/services/recommendationApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface SimilarProductsProps {
@@ -90,7 +90,7 @@ interface ProductCardProps {
 }
 
 function ProductCard({ recommendation, onPress }: ProductCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Handle both nested (recommendation.product) and flat (recommendation) structures

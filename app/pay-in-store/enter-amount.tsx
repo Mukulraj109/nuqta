@@ -27,8 +27,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Location from 'expo-location';
 import { EnterAmountParams, StorePaymentInfo, StorePaymentOffer, OffersResponse } from '@/types/storePayment.types';
 import apiClient from '@/services/apiClient';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated, useRegionState } from '@/stores/selectors';
 import { showToast } from '@/components/common/ToastManager';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -39,10 +38,11 @@ export default function EnterAmountScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<EnterAmountParams>();
   const { storeId, storeName, storeLogo } = params;
-  const { getCurrencySymbol, state: regionState } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const regionState = useRegionState();
   const currencySymbol = getCurrencySymbol();
-  const { state: { isAuthenticated, isLoading: authLoading } } = useAuth();
-
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   // EMI threshold varies by region (INR 4000 ≈ AED 180 ≈ CNY 3500)
   const emiThreshold = regionState.regionConfig?.currency === 'INR' ? 4000
     : regionState.regionConfig?.currency === 'AED' ? 180

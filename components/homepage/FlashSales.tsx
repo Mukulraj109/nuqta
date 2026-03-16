@@ -12,7 +12,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import flashSaleApi, { FlashSaleItem } from '@/services/flashSaleApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface FlashSaleProduct {
@@ -157,7 +157,8 @@ const FlashSales: React.FC<FlashSalesProps> = ({
   onProductPress,
 }) => {
   const router = useRouter();
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
   const [products, setProducts] = useState<FlashSaleProduct[]>([]);

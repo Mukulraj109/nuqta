@@ -9,8 +9,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useAuth } from '@/contexts/AuthContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useAuthUser, useIsAuthenticated, useRezBalance, useRawWalletData } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface HowRezWorksHeaderProps {
@@ -20,8 +19,10 @@ interface HowRezWorksHeaderProps {
 const HowRezWorksHeader: React.FC<HowRezWorksHeaderProps> = ({ onBackPress }) => {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { state: authState } = useAuth();
-  const { rezBalance: coinBalance, rawBackendData } = useWalletContext();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const coinBalance = useRezBalance();
+  const rawBackendData = useRawWalletData();
 
   // Derive cash balance from raw backend data
   const cashBalance = rawBackendData?.cash?.available || rawBackendData?.cashBalance || 0;

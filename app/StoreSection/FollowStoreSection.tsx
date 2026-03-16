@@ -18,7 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import wishlistApi from '@/services/wishlistApi';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { useRouter } from 'expo-router';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -66,8 +66,8 @@ export default function FollowStoreSection({
   onFollowChange,
 }: FollowStoreSectionProps) {
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const isAuthenticated = authState?.isAuthenticated && !!authState?.user;
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
 
   const [isFollowing, setIsFollowing] = useState(isFollowingProp ?? false);
   const [isLoading, setIsLoading] = useState(false);

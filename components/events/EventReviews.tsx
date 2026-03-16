@@ -14,7 +14,7 @@ import {
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { EVENT_COLORS } from '@/constants/EventColors';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import eventReviewApi, { EventReviewData } from '@/services/eventReviewApi';
 import StarRating from './StarRating';
 import EventReviewCard from './EventReviewCard';
@@ -28,7 +28,7 @@ interface EventReviewsProps {
 type SortOption = 'newest' | 'oldest' | 'highest' | 'lowest' | 'helpful';
 
 const EventReviews: React.FC<EventReviewsProps> = ({ eventId, eventTitle }) => {
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   const [reviews, setReviews] = useState<EventReviewData[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -78,7 +78,7 @@ const EventReviews: React.FC<EventReviewsProps> = ({ eventId, eventTitle }) => {
   }, [eventId, sortBy]);
 
   const loadUserReview = useCallback(async () => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       setCanReview(false);
       setHasBooking(false);
       return;
@@ -92,7 +92,7 @@ const EventReviews: React.FC<EventReviewsProps> = ({ eventId, eventTitle }) => {
     } catch (err) {
       // silently handle
     }
-  }, [eventId, authState.isAuthenticated]);
+  }, [eventId, isAuthenticated]);
 
   useEffect(() => {
     loadReviews();
@@ -186,7 +186,7 @@ const EventReviews: React.FC<EventReviewsProps> = ({ eventId, eventTitle }) => {
       {/* Section Header */}
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Reviews</Text>
-        {authState.isAuthenticated && canReview && !userReview && (
+        {isAuthenticated && canReview && !userReview && (
           <Pressable
             style={styles.writeReviewButton}
             onPress={() => setShowReviewForm(true)}

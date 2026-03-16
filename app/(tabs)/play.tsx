@@ -11,7 +11,7 @@ import { usePlayPageData } from '@/hooks/usePlayPageData';
 import { UGCVideoItem, CategoryTab, PLAY_PAGE_COLORS } from '@/types/playPage.types';
 import { Article } from '@/types/article.types';
 import { useVideoPreload } from '@/services/videoPreloadService';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores';
 import LoadingState from '@/components/common/LoadingState';
 import ErrorState from '@/components/common/ErrorState';
 import articlesService from '@/services/articlesApi';
@@ -28,7 +28,7 @@ export default function PlayScreen() {
   const router = useRouter();
   const { state, actions } = usePlayPageData();
   const { preloadVideos, isPreloaded } = useVideoPreload();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
 
   // Separate state for articles
   const [articles, setArticles] = React.useState<Article[]>([]);
@@ -148,7 +148,7 @@ export default function PlayScreen() {
 
   const handleUploadPress = React.useCallback(() => {
     // Check if user is authenticated
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       platformAlertConfirm(
         'Sign In Required',
         'Please sign in to upload videos and share your content.',
@@ -160,7 +160,7 @@ export default function PlayScreen() {
 
     // Navigate to upload screen
     router.push('/ugc/upload');
-  }, [authState.isAuthenticated, router]);
+  }, [isAuthenticated, router]);
 
   React.useEffect(() => {
     const preloadCurrentVideos = async () => {

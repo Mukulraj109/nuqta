@@ -13,7 +13,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import { GroupBuyingGroup } from '@/types/groupBuying.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface GroupShareModalProps {
@@ -27,7 +27,7 @@ function GroupShareModal({
   group,
   onClose,
 }: GroupShareModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   if (!group) return null;

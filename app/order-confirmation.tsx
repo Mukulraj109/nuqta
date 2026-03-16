@@ -22,7 +22,7 @@ import { trackPositiveAction } from '@/utils/appRating';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import ordersService, { Order } from '@/services/ordersApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import usePostOrderRewards from '@/hooks/usePostOrderRewards';
 import RewardsBreakdownCard from '@/components/rewards/RewardsBreakdownCard';
 import ConfettiOverlay from '@/components/ui/ConfettiOverlay';
@@ -32,7 +32,7 @@ export default function OrderConfirmationPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const orderId = params.orderId as string;
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [order, setOrder] = useState<Order | null>(null);

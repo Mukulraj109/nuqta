@@ -24,16 +24,13 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { triggerImpact, triggerNotification } from '@/utils/haptics';
-import { useAuth } from '@/contexts/AuthContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useIsAuthenticated, useCartActions, useGetCurrencySymbol, useGetLocale, useAvailableBalance, useRefreshWallet } from '@/stores/selectors';
 import cartService from '@/services/cartApi';
-import { useCart } from '@/contexts/CartContext';
 import DurationChips, {
   LockDuration,
   LOCK_FEE_PERCENTAGES,
   calculateLockFee,
 } from './DurationChips';
-import { useRegion } from '@/contexts/RegionContext';
 import { colors } from '@/constants/theme';
 
 interface LockProductSectionProps {
@@ -81,12 +78,14 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
   onAddToCart,
   style,
 }) => {
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const locale = getLocale();
   const currencySymbol = currency || getCurrencySymbol();
-  const { state: authState } = useAuth();
-  const { availableBalance, refreshWallet } = useWalletContext();
-  const { actions: cartActions } = useCart();
+  const isAuthenticated = useIsAuthenticated();
+  const availableBalance = useAvailableBalance();
+  const refreshWallet = useRefreshWallet();
+  const cartActions = useCartActions();
 
   // Check if product is already in cart (this is the source of truth)
   const isInCart = cartActions.isItemInCart(productId);
@@ -113,7 +112,7 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
       return;
     }
 
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       setError('Please login to lock this product');
       return;
     }
@@ -157,7 +156,7 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
     hasEnoughBalance,
     lockFee,
     walletBalance,
-    authState.isAuthenticated,
+    isAuthenticated,
     onLockSuccess,
     currency,
   ]);

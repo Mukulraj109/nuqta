@@ -27,7 +27,7 @@ import * as WebBrowser from 'expo-web-browser';
 
 import { mallApi } from '../../../services/mallApi';
 import { MallBrand, BrandBadge, BrandTier } from '../../../types/mall.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -61,7 +61,7 @@ export default function BrandDetailPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [logoError, setLogoError] = useState(false);
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Get initials for fallback

@@ -23,7 +23,7 @@ import cashbackService, {
   UserCashback,
   CashbackCampaign,
 } from '@/services/cashbackApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { TransactionListSkeleton } from '@/components/skeletons';
@@ -34,7 +34,7 @@ type TabType = 'all' | 'pending' | 'credited' | 'expired';
 export default function CashbackPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);

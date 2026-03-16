@@ -16,7 +16,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
 import couponService, { UserCoupon } from '@/services/couponApi';
 import vouchersService from '@/services/realVouchersApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface VoucherOption {
@@ -51,7 +51,7 @@ function VoucherSelectionModal({
   onApply,
   onRemove,
 }: VoucherSelectionModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [loading, setLoading] = useState(false);
   const [manualCode, setManualCode] = useState('');

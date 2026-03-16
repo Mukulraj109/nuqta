@@ -10,7 +10,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useWalletData, useWalletLoading, useRefreshWallet, useBrandedCoins } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -60,7 +60,10 @@ const WalletSnapshotCard: React.FC = () => {
   const hasInitialData = useRef(false);
 
   // Use the shared wallet context
-  const { walletData, isLoading, refreshWallet, brandedCoins: brandedCoinsFromCtx } = useWalletContext();
+  const walletData = useWalletData();
+  const isLoading = useWalletLoading();
+  const refreshWallet = useRefreshWallet();
+  const brandedCoinsFromCtx = useBrandedCoins();
 
   // Track when we have initial data (without triggering re-renders)
   if (walletData && !hasInitialData.current) {

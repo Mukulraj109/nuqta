@@ -13,7 +13,7 @@ import { ThemedView } from '@/components/ThemedView';
 import RatingStars from './RatingStars';
 import { Review } from '@/types/review.types';
 import reviewService from '@/services/reviewApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface ReviewItemProps {
@@ -41,7 +41,7 @@ function ReviewItem({
   cashbackEarned,
   currency: currencyProp,
 }: ReviewItemProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currency = currencyProp || getCurrencySymbol();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isHelpful, setIsHelpful] = useState(false);

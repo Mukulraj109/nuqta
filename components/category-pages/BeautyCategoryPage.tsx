@@ -37,7 +37,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import EmptyState from '@/components/common/EmptyState';
 import { LoadingState } from '@/components/common/LoadingState';
 import { beautyCategoryData, beautyServiceFilters, beautyModeFilters, beautyQuickActions } from '@/data/category/beautyCategoryData';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const COLORS = {
@@ -115,7 +115,7 @@ function BeautyCategoryPage() {
   const router = useRouter();
   const slug = 'beauty-wellness';
   const categoryConfig = getCategoryConfig(slug);
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const {

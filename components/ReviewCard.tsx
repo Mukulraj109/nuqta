@@ -10,7 +10,7 @@ import { ThemedText } from '@/components/ThemedText';
 import StarRating from '@/components/StarRating';
 import { Ionicons } from '@expo/vector-icons';
 import { ReviewCardProps } from '@/types/reviews';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const ReviewCard: React.FC<ReviewCardProps> = ({
@@ -21,10 +21,10 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   showStoreResponse = true,
 }) => {
   const [imageError, setImageError] = useState(false);
-  const { state } = useAuth();
+  const user = useAuthUser();
   
   // Get current user ID (handle both id and _id formats)
-  const currentUserId = state.user?.id || state.user?._id || '';
+  const currentUserId = user?.id || user?._id || '';
   
   // Check if this review belongs to the current user
   // Normalize both IDs to strings for comparison

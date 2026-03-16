@@ -18,7 +18,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import reelApi from '@/services/reelApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { formatTimeAgo } from '@/utils/timeAgoFormatter';
 import { colors } from '@/constants/theme';
 
@@ -69,7 +69,9 @@ export default function CommentsPage() {
   const router = useRouter();
   const { postId } = useLocalSearchParams();
   const videoId = Array.isArray(postId) ? postId[0] : postId;
-  const { isAuthenticated, authLoading, user } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const user = useAuthUser();
 
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');

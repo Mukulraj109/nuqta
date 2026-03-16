@@ -3,7 +3,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { platformAlertSimple } from '@/utils/platformAlert';
-import { useCart } from '@/contexts/CartContext';
+import { useCartState, useCartActions } from '@/stores/selectors';
 import cartValidationService from '@/services/cartValidationService';
 import {
   ValidationState,
@@ -42,7 +42,8 @@ export function useCartValidation(
     showToastNotifications = DEFAULT_VALIDATION_CONFIG.showToastNotifications,
   } = options;
 
-  const { state: cartState, actions: cartActions } = useCart();
+  const cartState = useCartState();
+  const cartActions = useCartActions();
 
   const [validationState, setValidationState] = useState<ValidationState>({
     isValidating: false,

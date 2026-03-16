@@ -18,8 +18,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { CachedImage } from '@/components/ui/CachedImage';
 
@@ -88,8 +87,9 @@ function getProductImage(p: any): string {
 
 const FashionPage: React.FC = () => {
   const router = useRouter();
-  const { isAuthenticated, authLoading } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Filter state

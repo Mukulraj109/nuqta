@@ -20,7 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { Deal } from '@/types/deals';
 import { calculateDealDiscount } from '@/utils/deal-validation';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Premium Glass Design Tokens - Green & Gold Theme
@@ -55,7 +55,7 @@ interface DealDetailsModalProps {
 }
 
 function DealDetailsModal({ visible, onClose, deal }: DealDetailsModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
   const slideAnim = useRef(new Animated.Value(screenData.height)).current;

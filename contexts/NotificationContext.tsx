@@ -5,7 +5,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode, useCa
 import { AppState, AppStateStatus } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
-import { useAuth } from './AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import userSettingsApi from '@/services/userSettingsApi';
 
 // Notification Settings Interface
@@ -117,7 +117,8 @@ interface NotificationProviderProps {
 let _notificationSettingsLoaded = false;
 
 export function NotificationProvider({ children }: NotificationProviderProps) {
-  const { user, isAuthenticated } = useAuth() as any;
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const [settings, setSettings] = useState<NotificationSettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

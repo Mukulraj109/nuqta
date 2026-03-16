@@ -60,15 +60,15 @@ function ClaimRewardModal({
       fadeAnim.setValue(0);
       scaleAnim.setValue(0.3);
       coinCountAnim.setValue(0);
-      confettiAnims.forEach((anim) => {
-        anim.x.setValue(0);
-        anim.y.setValue(0);
-        anim.rotate.setValue(0);
-        anim.opacity.setValue(1);
+      confettiAnims.forEach((a) => {
+        a.x.setValue(0);
+        a.y.setValue(0);
+        a.rotate.setValue(0);
+        a.opacity.setValue(1);
       });
 
       // Start animations
-      const _anim2 = Animated.parallel([
+      const entryAnim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 300,
@@ -81,55 +81,61 @@ function ClaimRewardModal({
           useNativeDriver: true,
         }),
       ]);
-      _anim2.start();
+      entryAnim.start();
 
       // Animate coin counter
-      const _anim1 = Animated.timing(coinCountAnim, {
+      const coinAnim = Animated.timing(coinCountAnim, {
         toValue: reward.coins,
         duration: 1500,
         useNativeDriver: false,
       });
-      _anim1.start();
+      coinAnim.start();
 
       // Animate confetti
-      confettiAnims.forEach((anim, index) => {
+      const confettiAnimList: Animated.CompositeAnimation[] = [];
+      confettiAnims.forEach((a, index) => {
         const delay = index * 50;
         const randomX = (Math.random() - 0.5) * width * 0.8;
         const randomY = Math.random() * -300 - 100;
         const randomRotate = Math.random() * 720;
 
-        const _anim0 = Animated.parallel([
-          Animated.timing(anim.x, {
+        const anim = Animated.parallel([
+          Animated.timing(a.x, {
             toValue: randomX,
             duration: 2000,
             delay,
             useNativeDriver: true,
           }),
-          Animated.timing(anim.y, {
+          Animated.timing(a.y, {
             toValue: randomY,
             duration: 2000,
             delay,
             useNativeDriver: true,
           }),
-          Animated.timing(anim.rotate, {
+          Animated.timing(a.rotate, {
             toValue: randomRotate,
             duration: 2000,
             delay,
             useNativeDriver: true,
           }),
-          Animated.timing(anim.opacity, {
+          Animated.timing(a.opacity, {
             toValue: 0,
             duration: 2000,
             delay: delay + 1000,
             useNativeDriver: true,
           }),
         ]);
-        _anim0.start();
+        anim.start();
+        confettiAnimList.push(anim);
       });
+
+      return () => {
+        entryAnim.stop();
+        coinAnim.stop();
+        confettiAnimList.forEach((a) => a.stop());
+      };
     }
-  
-    return () => { _anim2.stop(); _anim1.stop(); _anim0.stop(); };
-}, [visible]);
+  }, [visible]);
 
   const confettiColors = [colors.brand.purpleLight, colors.successScale[400], colors.warningScale[400], colors.error, colors.infoScale[400], colors.brand.pink];
 

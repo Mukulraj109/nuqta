@@ -14,7 +14,7 @@ import { StatusBar } from 'expo-status-bar';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { useCategory, useCategoryItems } from '@/contexts/CategoryContext';
-import { useCart } from '@/contexts/CartContext';
+import { useCartActions } from '@/stores/selectors';
 import CategoryHeader from '@/components/category/CategoryHeader';
 import CategoryGrid from '@/components/category/CategoryGrid';
 import CategoryFilters from '@/components/category/CategoryFilters';
@@ -41,7 +41,7 @@ export default function CategoryPage() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const { state, actions } = useCategory();
   const { items, totalCount, filteredCount, hasMore, loading } = useCategoryItems();
-  const { actions: cartActions } = useCart();
+  const cartActions = useCartActions();
   const [refreshing, setRefreshing] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [loyaltyStats, setLoyaltyStats] = useState({ ordersCount: 0, brandsCount: 0 });

@@ -12,7 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import type { SpinWheelResult } from '@/types/gamification.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface CelebrationModalProps {
@@ -34,7 +34,7 @@ function CelebrationModal({
   onClose,
   tournamentUpdate,
 }: CelebrationModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -48,7 +48,7 @@ function CelebrationModal({
       fadeAnim.setValue(0);
 
       // Start animations
-      const _anim0 = Animated.parallel([
+      const anim = Animated.parallel([
         Animated.spring(scaleAnim, {
           toValue: 1,
           tension: 50,
@@ -66,11 +66,11 @@ function CelebrationModal({
           useNativeDriver: true,
         }),
       ]);
-      _anim0.start();
+      anim.start();
+
+      return () => { anim.stop(); };
     }
-  
-    return () => { _anim0.stop(); };
-}, [visible]);
+  }, [visible]);
 
   if (!result) return null;
 

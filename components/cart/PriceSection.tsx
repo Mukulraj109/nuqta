@@ -11,7 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { PriceSectionProps } from '@/types/cart';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useFormatPrice, useGetLocale } from '@/stores/selectors';
 import { borderRadius, colors, spacing, typography } from '@/constants/theme';
 
 function PriceSection({
@@ -23,7 +23,9 @@ function PriceSection({
   const { width } = Dimensions.get('window');
   const isSmallScreen = width < 360;
   const scaleAnim = useRef(new Animated.Value(1)).current;
-  const { getCurrencySymbol, formatPrice, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const formatPrice = useFormatPrice();
+  const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
 

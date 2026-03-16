@@ -26,7 +26,7 @@ import CashbackCalculator from '@/components/bills/CashbackCalculator';
 import BillRequirements from '@/components/bills/BillRequirements';
 import ManualCorrectionForm from '@/components/bills/ManualCorrectionForm';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -40,7 +40,7 @@ type CameraTypeValue = typeof CameraType[keyof typeof CameraType];
 export default function EnhancedBillUploadPage() {
   const router = useRouter();
   const navigation = useNavigation();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const {
     workflow,

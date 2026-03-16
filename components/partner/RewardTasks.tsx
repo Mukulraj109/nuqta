@@ -9,7 +9,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { RewardTask } from '@/types/partner.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface RewardTasksProps {
@@ -23,7 +23,7 @@ function RewardTasks({
   onCompleteTask,
   onClaimReward
 }: RewardTasksProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const getTaskIcon = (type: RewardTask['type']) => {
     switch (type) {

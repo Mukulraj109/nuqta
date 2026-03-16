@@ -8,7 +8,7 @@ import { mapBackendCartToFrontend } from '@/utils/dataMappers';
 import offlineQueueService from '@/services/offlineQueueService';
 import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
-import { useAuth } from './AuthContext';
+import { useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { useCartStore } from '@/stores/cartStore';
 
 // Dev-only logger to prevent string accumulation in production
@@ -402,7 +402,9 @@ interface CartProviderProps {
 
 export function CartProvider({ children }: CartProviderProps) {
   const [state, dispatch] = useReducer(cartReducer, initialState);
-  const { state: authState } = useAuth();
+  const authUser = useAuthUser();
+  const authIsAuthenticated = useIsAuthenticated();
+  const authIsLoading = useAuthLoading();
 
   // Actions - Define functions before useEffects
   const loadCart = useCallback(async () => {
@@ -1048,10 +1050,10 @@ export function CartProvider({ children }: CartProviderProps) {
   // Load cart only when user is authenticated and onboarded
   // Skip during onboarding to prevent thundering herd of API calls on Android
   useEffect(() => {
-    if (!authState.isLoading && authState.isAuthenticated && authState.token && authState.user?.isOnboarded) {
+    if (!authIsLoading && authIsAuthenticated && authUser?.isOnboarded) {
       loadCart();
     }
-  }, [authState.isLoading, authState.isAuthenticated, authState.token, authState.user?.isOnboarded, loadCart]);
+  }, [authIsLoading, authIsAuthenticated, authUser?.isOnboarded, loadCart]);
 
   // Monitor network status (deferred import)
   useEffect(() => {

@@ -18,7 +18,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { DealCardProps } from '@/types/deals';
 import { calculateDealDiscount } from '@/utils/deal-validation';
 import FastImage from '@/components/common/FastImage';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 function DealCard({
@@ -28,7 +28,7 @@ function DealCard({
   isAdded,
   onMoreDetails
 }: DealCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [timeLeft, setTimeLeft] = useState<string>('');
   const [billPreview] = useState<number>(deal.minimumBill);

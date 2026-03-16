@@ -12,7 +12,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface DealInsight {
@@ -38,7 +38,7 @@ export const WhyGoodDealSection: React.FC<WhyGoodDealSectionProps> = ({
   insights,
   style,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = currency || getCurrencySymbol();
   // Default insights if not provided
   const defaultInsights: DealInsight[] = [

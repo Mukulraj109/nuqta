@@ -17,7 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import ordersApi, { Order, OrderCounts } from '@/services/ordersApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { getOrderProgress, formatETA } from '@/utils/orderProgress';
 import { useOrderListSocket } from '@/hooks/useOrderListSocket';
 import { DetailPageSkeleton } from '@/components/skeletons';
@@ -147,7 +147,7 @@ const mapOrderToTracking = (order: Order): TrackingOrder => {
 
 export default function OrderTrackingScreen() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [orders, setOrders] = useState<TrackingOrder[]>([]);
   const [counts, setCounts] = useState<OrderCounts>({ active: 0, past: 0 });

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '@/components/ui/Button';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { borderRadius, colors, spacing, typography } from '@/constants/theme';
 
 interface Product {
@@ -44,7 +44,7 @@ function ProductComparison({
   onAddToCart,
   onViewProduct,
 }: ProductComparisonProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   if (products.length === 0) {

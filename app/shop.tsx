@@ -22,7 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import productsApi from '@/services/productsApi';
 import categoryMetadataApi from '@/services/categoryMetadataApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import FastImage from '@/components/common/FastImage';
 import { showToast } from '@/components/common/ToastManager';
 import { getVibesForCategory, getOccasionsForCategory } from '@/data/categoryDummyData';
@@ -135,7 +135,7 @@ export default function ShopPage() {
   const categorySlug = params.category as string;
   const brandId = params.brand as string;
 
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [products, setProducts] = useState<Product[]>([]);

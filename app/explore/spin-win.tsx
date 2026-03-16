@@ -18,9 +18,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import gamificationApi, { SpinWheelSegment } from '@/services/gamificationApi';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useRezBalance, useRefreshWallet, useGetCurrencySymbol } from '@/stores/selectors';
 import { useGamification } from '@/contexts/GamificationContext';
-import { useRegion } from '@/contexts/RegionContext';
 import { platformAlert } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
@@ -44,7 +43,7 @@ function getTimeUntilReset(): string {
 export default function SpinWinPage() {
   const router = useRouter();
   const { actions: gamificationActions } = useGamification();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const spinAnim = useRef(new Animated.Value(0)).current;
   const fetchingRef = useRef(false);
@@ -61,7 +60,8 @@ export default function SpinWinPage() {
   const [spinsLeft, setSpinsLeft] = useState(0);
   const [todayCoinsWon, setTodayCoinsWon] = useState(0);
   const [currentRotation, setCurrentRotation] = useState(0);
-  const { rezBalance: walletBalance, refreshWallet } = useWalletContext();
+  const walletBalance = useRezBalance();
+  const refreshWallet = useRefreshWallet();
   const [resetTimer, setResetTimer] = useState(() => getTimeUntilReset());
 
   // Countdown timer — update every minute

@@ -24,7 +24,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { CameraView, useCameraPermissions, BarcodeScanningResult } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { QRCodeData } from '@/types/storePayment.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -48,7 +48,7 @@ interface QRScannerProps {
 }
 
 function QRScanner({ onScan, onClose, onManualEntry }: QRScannerProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);

@@ -18,7 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import userLoyaltyApi, { UserLoyalty } from '@/services/userLoyaltyApi';
 import { LoyaltyData } from '@/data/categoryDummyData';
 import CoinIcon from '@/components/ui/CoinIcon';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface StreakLoyaltySectionProps {
@@ -81,9 +81,8 @@ const StreakLoyaltySection: React.FC<StreakLoyaltySectionProps> = ({
 }) => {
   const accentColor = primaryColor || colors.lightMustard;
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const isAuthenticated = authState.isAuthenticated;
-  const authLoading = authState.isLoading;
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [apiData, setApiData] = useState<LoyaltyData | null>(null);
   const [loading, setLoading] = useState(true);
 

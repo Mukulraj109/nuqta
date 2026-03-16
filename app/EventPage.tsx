@@ -29,7 +29,7 @@ import EventReviews from "@/components/events/EventReviews";
 import StarRating from "@/components/events/StarRating";
 import { useEventBooking } from "@/hooks/useEventBooking";
 import eventsApiService from "@/services/eventsApi";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { useRegion } from "@/contexts/RegionContext";
 import { BUSINESS_CONFIG } from "@/config/env";
 import stripeApi from "@/services/stripeApi";
@@ -85,11 +85,10 @@ interface DynamicEventData {
 function EventPage({ eventId, initialEvent }: EventPageProps = {}) {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const auth = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const { getCurrencySymbol } = useRegion();
   const currencySymbol = getCurrencySymbol();
-  const user = auth.state.user;
-  const isAuthenticated = auth.state.isAuthenticated;
   const [screenData, setScreenData] = useState(Dimensions.get("window"));
   const resizeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

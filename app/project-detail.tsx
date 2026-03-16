@@ -15,8 +15,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import apiClient from '@/services/apiClient';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { showAlert, alertOk } from '@/utils/alert';
 import ProjectSubmissionForm from '@/components/projects/ProjectSubmissionForm';
 import { DetailPageSkeleton } from '@/components/skeletons';
@@ -95,8 +94,9 @@ export default function ProjectDetailPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const params = useLocalSearchParams();
-  const { state: authState } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const projectId = params.projectId as string;
   const autoOpenForm = params.autoOpenForm === 'true';
@@ -123,14 +123,14 @@ export default function ProjectDetailPage() {
 
   // Auto-open form if requested and project is loaded
   useEffect(() => {
-    if (autoOpenForm && project && !loading && authState.isAuthenticated) {
+    if (autoOpenForm && project && !loading && isAuthenticated) {
       // Auto-open form - allow editing if user has a pending or under_review submission
       // Don't auto-open if submission is approved (user can view it instead)
       if (!userSubmission || userSubmission.status === 'pending' || userSubmission.status === 'under_review' || userSubmission.status === 'rejected') {
         setShowSubmissionForm(true);
       }
     }
-  }, [autoOpenForm, project, loading, authState.isAuthenticated, userSubmission]);
+  }, [autoOpenForm, project, loading, isAuthenticated, userSubmission]);
 
   const loadProject = async () => {
     try {
@@ -144,10 +144,10 @@ export default function ProjectDetailPage() {
         setProject(projectData);
         
         // Check if user has a submission for this project
-        if (authState.isAuthenticated && authState.user?.id && projectData.submissions) {
+        if (isAuthenticated && user?.id && projectData.submissions) {
           const submission = projectData.submissions.find((sub: ProjectSubmission) => {
             const userId = typeof sub.user === 'string' ? sub.user : sub.user?._id;
-            return userId === authState.user?.id;
+            return userId === user?.id;
           });
           setUserSubmission(submission || null);
         } else {
@@ -174,7 +174,7 @@ export default function ProjectDetailPage() {
     contentType: 'text' | 'image' | 'video' | 'rating' | 'checkin' | 'receipt';
     metadata?: any;
   }) => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       showAlert('Authentication Required', 'Please login to submit a project');
       return;
     }
@@ -484,7 +484,7 @@ export default function ProjectDetailPage() {
                   <Pressable
                     style={styles.submitButton}
                     onPress={() => {
-                      if (!authState.isAuthenticated) {
+                      if (!isAuthenticated) {
                         showAlert('Authentication Required', 'Please login to submit a project');
                         return;
                       }

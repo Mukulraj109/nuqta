@@ -13,9 +13,8 @@ import * as Clipboard from 'expo-clipboard';
 import { ThemedText } from '@/components/ThemedText';
 import realOffersApi, { Offer } from '@/services/realOffersApi';
 import verificationService, { VerificationStatus } from '@/services/verificationApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import logger from '@/utils/logger';
-import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -41,8 +40,8 @@ const { width: screenWidth } = Dimensions.get('window');
 export default function OfferDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  const { state: authState } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const isAuthenticated = useIsAuthenticated();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [offer, setOffer] = useState<Offer | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,7 +62,7 @@ export default function OfferDetailPage() {
 
   useEffect(() => {
     loadOfferDetails(id as string);
-  }, [id, authState.isAuthenticated]);
+  }, [id, isAuthenticated]);
 
   const loadOfferDetails = async (offerId: string) => {
     try {
@@ -111,13 +110,13 @@ export default function OfferDetailPage() {
           setRequiresVerification(true);
           setRequiredZone(zone);
           // Check user's verification status for this zone
-          if (authState.isAuthenticated) {
+          if (isAuthenticated) {
             await checkUserVerification(zone);
           }
         }
 
         // Check if already redeemed
-        if (authState.isAuthenticated) {
+        if (isAuthenticated) {
           checkRedemptionStatus(offerId);
         }
       } else {
@@ -212,7 +211,7 @@ export default function OfferDetailPage() {
   const handleRedeem = async () => {
     logger.log('🎟️ [REDEEM] Button clicked');
 
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       logger.log('⚠️ [REDEEM] User not authenticated');
       platformAlertConfirm(
         'Authentication Required',

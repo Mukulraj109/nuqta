@@ -15,7 +15,7 @@ import React, {
   useMemo,
   ReactNode,
 } from 'react';
-import { useAuth } from './AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { useWalletContext } from './WalletContext';
 import { usePriveStore } from '@/stores/priveStore';
 import priveApi, {
@@ -140,7 +140,8 @@ const PriveContext = createContext<PriveContextType | undefined>(undefined);
 // Provider
 // ---------------------------------------------------------------------------
 export function PriveProvider({ children }: { children: ReactNode }) {
-  const { state: authState } = useAuth();
+  const authUser = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const { refreshWallet } = useWalletContext();
 
   const [state, dispatch] = useReducer(priveReducer, initialState);
@@ -279,17 +280,17 @@ export function PriveProvider({ children }: { children: ReactNode }) {
 
   // Skip during onboarding to prevent thundering herd of API calls on Android
   useEffect(() => {
-    if (authState.isAuthenticated && authState.user && authState.user.isOnboarded) {
+    if (isAuthenticated && authUser && authUser.isOnboarded) {
       if (!hasFetchedRef.current) {
         hasFetchedRef.current = true;
         refreshAll();
       }
-    } else if (!authState.isAuthenticated) {
+    } else if (!isAuthenticated) {
       // Clear on logout
       dispatch({ type: 'RESET' });
       hasFetchedRef.current = false;
     }
-  }, [authState.isAuthenticated, authState.user]);
+  }, [isAuthenticated, authUser]);
 
   // ── Derived values ───────────────────────────────────────────────────────
 

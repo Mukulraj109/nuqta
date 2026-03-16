@@ -26,7 +26,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { storesApi } from '@/services/storesApi';
 import productsApi from '@/services/productsApi';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -65,7 +65,7 @@ export default function SubcategoryPage() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const { slug, subSlug } = useLocalSearchParams<{ slug: string; subSlug: string }>();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Tab state

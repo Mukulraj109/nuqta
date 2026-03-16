@@ -15,7 +15,7 @@ import { FlashList } from '@shopify/flash-list';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useSocial } from '../../contexts/SocialContext';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 import { useFollowSystem } from '../../hooks/useFollowSystem';
 import { useFeedRealtime } from '../../hooks/useFeedRealtime';
 import ActivityCard from '../../components/feed/ActivityCard';
@@ -37,8 +37,7 @@ const ActivityFeedPage = () => {
     loadSuggestedUsers
   } = useSocial();
 
-  const { state: authState } = useAuth();
-  const user = authState.user;
+  const user = useAuthUser();
   const [refreshing, setRefreshing] = useState(false);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [feedFilter, setFeedFilter] = useState<'all' | 'following'>('all');

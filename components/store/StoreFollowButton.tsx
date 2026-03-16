@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import { useToast } from '@/hooks/useToast';
 import storesApi from '@/services/storesApi';
 import { useRouter } from 'expo-router';
@@ -57,7 +57,7 @@ function StoreFollowButton({
   variant = 'default',
   showCount = true,
 }: StoreFollowButtonProps) {
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   const { showSuccess, showError } = useToast();
   const router = useRouter();
 
@@ -74,10 +74,10 @@ function StoreFollowButton({
 
   // Check follow status on mount if user is authenticated
   useEffect(() => {
-    if (authState.isAuthenticated && !hasCheckedStatus) {
+    if (isAuthenticated && !hasCheckedStatus) {
       checkFollowStatus();
     }
-  }, [authState.isAuthenticated, hasCheckedStatus]);
+  }, [isAuthenticated, hasCheckedStatus]);
 
   /**
    * Check current follow status from backend
@@ -152,7 +152,7 @@ function StoreFollowButton({
    */
   const handleFollowToggle = async () => {
     // Check authentication
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       showError('Please sign in to follow stores');
       // Navigate to sign-in after a short delay
       setTimeout(() => {

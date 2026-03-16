@@ -19,9 +19,8 @@ import { TransactionListSkeleton } from '@/components/skeletons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
-import { useRegion } from '@/contexts/RegionContext';
 import { HeaderBackButton } from '@/components/navigation/SafeBackButton';
 import { platformAlert } from '@/utils/platformAlert';
 import earningsApi, {
@@ -78,9 +77,10 @@ const SOURCE_DISPLAY: Record<string, { icon: string; color: string }> = {
 
 const MyEarningsPage = () => {
   const router = useRouter();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const { goBack } = useSafeNavigation();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [data, setData] = useState<ConsolidatedEarningsSummary | null>(null);
@@ -98,9 +98,9 @@ const MyEarningsPage = () => {
       if (!refreshing) setLoading(true);
       setError(null);
 
-      if (authState.isLoading) return;
+      if (authLoading) return;
 
-      if (!authState.isAuthenticated || !authState.token) {
+      if (!isAuthenticated || !null /* TODO: token not available via selectors */) {
         setData(null);
         setLoading(false);
         return;
@@ -126,13 +126,13 @@ const MyEarningsPage = () => {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [authState.isLoading, authState.isAuthenticated, authState.token, selectedPeriod, refreshing]);
+  }, [authLoading, isAuthenticated, null /* TODO: token not available via selectors */, selectedPeriod, refreshing]);
 
   useEffect(() => {
-    if (!authState.isLoading && authState.isAuthenticated) {
+    if (!authLoading && isAuthenticated) {
       fetchEarnings();
     }
-  }, [authState.isLoading, authState.isAuthenticated]);
+  }, [authLoading, isAuthenticated]);
 
   // Refetch when period changes
   const handlePeriodChange = useCallback((period: EarningsPeriod) => {

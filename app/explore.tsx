@@ -38,9 +38,7 @@ import StoresNearYou from './explore/_components/StoresNearYou';
 import reelApi from '../services/reelApi';
 import exploreApi from '../services/exploreApi';
 import productsApi from '../services/productsApi';
-import { useWalletContext } from '@/contexts/WalletContext';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useRezBalance, useGetCurrencySymbol } from '@/stores';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
@@ -268,9 +266,8 @@ const getEmojiForCategory = (icon?: string, name?: string): string => {
 
 const ExplorePage = () => {
   const router = useRouter();
-  const { user } = useAuth();
-  const { rezBalance } = useWalletContext();
-  const { getCurrencySymbol } = useRegion();
+  const rezBalance = useRezBalance();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const { currentLocation, isLoading: isLocationLoading } = useCurrentLocation();
 

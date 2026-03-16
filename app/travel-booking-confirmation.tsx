@@ -20,7 +20,7 @@ import * as Haptics from 'expo-haptics';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import serviceBookingApi from '@/services/serviceBookingApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import ConfettiOverlay from '@/components/ui/ConfettiOverlay';
 
@@ -28,7 +28,7 @@ export default function TravelBookingConfirmationPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const bookingId = params.bookingId as string;
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [booking, setBooking] = useState<any>(null);

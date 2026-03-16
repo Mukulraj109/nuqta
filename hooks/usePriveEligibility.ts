@@ -21,7 +21,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSubscription } from '@/contexts/SubscriptionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import {
   PriveEligibility,
   PillarScore,
@@ -59,7 +59,8 @@ const EMPTY_ELIGIBILITY: PriveEligibility = {
 };
 
 export const usePriveEligibility = (): UsePriveEligibilityReturn => {
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const { computed } = useSubscription();
 
   // Start with empty defaults — loading state until real data arrives
@@ -166,7 +167,7 @@ export const usePriveEligibility = (): UsePriveEligibilityReturn => {
   // Calculate eligibility from backend data or fallback to mock
   const calculateEligibility = useCallback(async (): Promise<PriveEligibility> => {
     // Check if user is authenticated
-    if (!authState.isAuthenticated || !authState.user) {
+    if (!isAuthenticated || !user) {
       return DEFAULT_PRIVE_ELIGIBILITY;
     }
 
@@ -181,7 +182,7 @@ export const usePriveEligibility = (): UsePriveEligibilityReturn => {
       ...EMPTY_ELIGIBILITY,
       hasSeenGlowThisSession: eligibility.hasSeenGlowThisSession,
     };
-  }, [authState.isAuthenticated, authState.user, authState.token, eligibility.hasSeenGlowThisSession]);
+  }, [isAuthenticated, user, null /* TODO: token not available via selectors */, eligibility.hasSeenGlowThisSession]);
 
   // Refresh eligibility data
   const refresh = useCallback(async () => {
@@ -208,7 +209,7 @@ export const usePriveEligibility = (): UsePriveEligibilityReturn => {
 
   // Fetch when auth changes
   useEffect(() => {
-    if (authState.isAuthenticated && authState.user) {
+    if (isAuthenticated && user) {
       setIsLoading(true);
       calculateEligibility().then(newEligibility => {
         setEligibility(newEligibility);
@@ -218,7 +219,7 @@ export const usePriveEligibility = (): UsePriveEligibilityReturn => {
         setIsLoading(false);
       });
     }
-  }, [authState.isAuthenticated]);
+  }, [isAuthenticated]);
 
   return {
     eligibility,

@@ -14,7 +14,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BundleItem } from '@/services/recommendationApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -129,7 +129,7 @@ const getProductCashback = (product: any): number => {
 };
 
 function BundleDealCard({ bundle, onAddToCart, onProductPress }: BundleDealCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const originalPrice = bundle.products.reduce(

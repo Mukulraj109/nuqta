@@ -11,7 +11,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { colors } from '@/constants/theme';
 
@@ -50,7 +50,7 @@ function getBankGradient(bankName: string): string[] {
 
 function OffersSection({ categorySlug, categoryId, title, onSeeAll, filterTags }: OffersSectionProps) {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [bankOffers, setBankOffers] = useState<any[]>([]);

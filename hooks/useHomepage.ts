@@ -13,7 +13,7 @@ import {
   fetchSectionData
 } from '@/data/homepageData';
 import homepageDataService, { HomepageUserContext } from '@/services/homepageDataService';
-import { useCart } from '@/contexts/CartContext';
+import { useCartActions, useCurrentRegionId } from '@/stores/selectors';
 import { showToast } from '@/components/common/ToastManager';
 import {
   Product as UnifiedProduct,
@@ -21,7 +21,6 @@ import {
   toProduct,
   toStore
 } from '@/types/unified';
-import { useCurrentRegion } from '@/contexts/RegionContext';
 
 // Homepage Reducer
 function homepageReducer(state: HomepageState, action: HomepageAction): HomepageState {
@@ -107,7 +106,7 @@ export function useHomepage(): UseHomepageDataResult {
   const hasSectionsRef = useRef(
     initialHomepageState.sections.some((s: any) => s.items && s.items.length > 0 && !s.loading)
   );
-  const currentRegion = useCurrentRegion(); // Refetch when region changes
+  const currentRegion = useCurrentRegionId(); // Refetch when region changes
 
   // Track mounted state for cleanup
   useEffect(() => {
@@ -436,7 +435,7 @@ export function useBrandPartnerships() {
 export function useHomepageNavigation() {
   const { actions } = useHomepage();
   const router = useRouter();
-  const { actions: cartActions } = useCart();
+  const cartActions = useCartActions();
 
   const handleItemPress = useCallback((sectionId: string, item: any) => {
     // Track click

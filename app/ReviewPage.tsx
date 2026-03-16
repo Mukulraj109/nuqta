@@ -20,7 +20,7 @@ import { useCashbackModal } from '@/hooks/useCashbackModal';
 import CashbackModal from '@/components/CashbackModal';
 import walletApi from '@/services/walletApi';
 import storesApi from '@/services/storesApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
@@ -29,7 +29,7 @@ import { colors } from '@/constants/theme';
 export default function ReviewPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Get product data from params

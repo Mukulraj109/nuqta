@@ -11,7 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useStreaksGamification } from '@/hooks/useStreaksGamification';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { Mission } from '@/types/streaksGamification.types';
 import { colors } from '@/constants/theme';
 
@@ -23,7 +23,8 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
   onViewAllPress,
 }) => {
   const router = useRouter();
-  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const isAuthLoading = useAuthLoading();
 
   // Fetch real data from gamification API (only if authenticated)
   const { streak, missions, loading, error } = useStreaksGamification();

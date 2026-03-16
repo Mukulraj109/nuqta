@@ -7,7 +7,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 interface OrderSummaryCardProps {
@@ -25,7 +25,7 @@ export const OrderSummaryCard: React.FC<OrderSummaryCardProps> = ({
   coinsApplied = 0,
   showSmartSavingsHint = true,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const orderTotal = billAmount + taxesAndFees;
   const totalSavings = discountAmount + coinsApplied;

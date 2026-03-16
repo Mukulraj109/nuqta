@@ -30,7 +30,7 @@ import {
   GOING_OUT_SECTION_CONFIG,
   GOING_OUT_COLORS,
 } from '@/config/goingOutSectionConfig';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Animated components
@@ -84,7 +84,7 @@ const StoreListItem = memo(({
   index: number;
   onPress: () => void;
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const scale = useSharedValue(1);
 

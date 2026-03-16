@@ -11,7 +11,7 @@ import {
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface PayYourBillCardProps {
@@ -29,7 +29,7 @@ const PayYourBillCard: React.FC<PayYourBillCardProps> = ({
   onQuickPay,
   onUploadBill,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const router = useRouter();
   const [loading, setLoading] = useState<'quick' | 'upload' | null>(null);

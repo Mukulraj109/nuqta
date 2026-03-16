@@ -17,8 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import projectsService from '@/services/realProjectsApi';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -34,10 +33,9 @@ interface ServiceProject {
 
 const MyServicesPage = () => {
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const isAuthenticated = authState.isAuthenticated;
-  const authLoading = authState.isLoading;
-  const { getCurrencySymbol } = useRegion();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [projects, setProjects] = useState<ServiceProject[]>([]);
   const [loading, setLoading] = useState(true);

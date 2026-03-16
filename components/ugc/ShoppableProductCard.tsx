@@ -17,7 +17,7 @@ import { ProductItem } from '@/types/homepage.types';
 import { LinearGradient } from 'expo-linear-gradient';
 import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDataNormalizer';
 import { formatPrice } from '@/utils/priceFormatter';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface ShoppableProductCardProps {
@@ -41,7 +41,7 @@ function ShoppableProductCard({
   showAddButton = true,
   width = 160,
 }: ShoppableProductCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [isAdding, setIsAdding] = useState(false);
   const [scaleAnim] = useState(new Animated.Value(1));

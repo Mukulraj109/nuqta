@@ -21,7 +21,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import productsApi, { Product } from '@/services/productsApi';
 import { RetryButton } from '@/components/common/RetryButton';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 
 // Premium Glass Design Tokens - Mustard & Gold Theme
@@ -67,7 +67,7 @@ const CARD_WIDTH = (width - 84) / 2;
 
 export default function StoreProducts({ storeId, storeName }: StoreProductsProps) {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);

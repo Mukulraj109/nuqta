@@ -24,7 +24,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Video, ResizeMode } from 'expo-av';
 import reelApi, { Reel, ReelComment } from '@/services/reelApi';
 import { toggleFollow, checkFollowStatus } from '@/services/followApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -33,7 +33,7 @@ const { width, height } = Dimensions.get('window');
 
 const ReelDetailPage = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const { id } = useLocalSearchParams();
   const reelId = Array.isArray(id) ? id[0] : id;

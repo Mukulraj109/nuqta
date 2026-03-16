@@ -15,7 +15,7 @@ import BenefitShowcaseCard from '@/components/subscription/BenefitShowcaseCard';
 import TrialStatCard from '@/components/subscription/TrialStatCard';
 import PricingToggle from '@/components/subscription/PricingToggle';
 import subscriptionAPI from '@/services/subscriptionApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -26,7 +26,7 @@ export default function TrialPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const { state, actions, computed } = useSubscription();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // State

@@ -18,7 +18,7 @@ import {
   SUBSCRIPTION_BORDER_RADIUS,
   SUBSCRIPTION_SHADOW,
 } from '@/styles/subscriptionStyles';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface PlanCardProps {
@@ -52,7 +52,7 @@ function PlanCard({
   isLoading = false,
   disabled = false,
 }: PlanCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const tierColor = TIER_COLORS[tier];
   const tierGradient = TIER_GRADIENTS[tier];

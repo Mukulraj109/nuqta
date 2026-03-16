@@ -19,7 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import walletApi from '@/services/walletApi';
 import * as Clipboard from 'expo-clipboard';
 import { platformAlert, platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
@@ -59,7 +59,7 @@ const DEFAULT_CATEGORIES = ['All'];
 
 export default function GiftCardsPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [activeTab, setActiveTab] = useState<'buy' | 'my'>('buy');

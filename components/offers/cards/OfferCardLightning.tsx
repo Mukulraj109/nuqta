@@ -18,7 +18,7 @@ import * as Clipboard from 'expo-clipboard';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useOffersTheme } from '@/contexts/OffersThemeContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { CountdownTimer } from '../common/CountdownTimer';
 import { ProgressBar } from '../common/ProgressBar';
 import { Typography, Spacing, BorderRadius, Shadows, Colors } from '@/constants/DesignSystem';
@@ -60,7 +60,7 @@ export const OfferCardLightning: React.FC<OfferCardLightningProps> = ({
   onPress,
 }) => {
   const { theme, isDark } = useOffersTheme();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const claimedPercentage = Math.round((claimedQuantity / totalQuantity) * 100);
   const remaining = totalQuantity - claimedQuantity;

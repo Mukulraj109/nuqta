@@ -17,7 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { RewardItem, RedemptionResponse } from '@/types/loyaltyRedemption.types';
 import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from 'react-native-reanimated';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface RedemptionModalProps {
@@ -39,7 +39,7 @@ function RedemptionModal({
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<'confirm' | 'success'>('confirm');
   const [redemptionData, setRedemptionData] = useState<RedemptionResponse | null>(null);
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   if (!reward) return null;

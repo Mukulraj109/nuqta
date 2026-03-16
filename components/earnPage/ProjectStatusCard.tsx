@@ -26,7 +26,7 @@ function ProjectStatusCard({
   const pressAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    const _anim0 = Animated.parallel([
+    const anim = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 500,
@@ -41,10 +41,10 @@ function ProjectStatusCard({
         useNativeDriver: true,
       }),
     ]);
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
-}, [delay]);
+    anim.start();
+
+    return () => { anim.stop(); };
+  }, [delay]);
 
   const handlePressIn = () => {
     Animated.spring(pressAnim, {

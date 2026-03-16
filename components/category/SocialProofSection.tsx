@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import socialProofApi, { CategorySocialProofStats } from '@/services/socialProofApi';
 import { socialProofStats, SocialProofStats } from '@/data/categoryDummyData';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface SocialProofSectionProps {
@@ -36,7 +36,7 @@ const SocialProofSection: React.FC<SocialProofSectionProps> = ({
   categorySlug,
   categoryName = 'this category',
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [apiStats, setApiStats] = useState<SocialProofStats | null>(null);
   const [loading, setLoading] = useState(true);

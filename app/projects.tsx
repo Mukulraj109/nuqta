@@ -18,9 +18,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useGetCurrencySymbol } from '@/stores/selectors';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
-import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -78,8 +77,8 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 export default function AllProjectsPage() {
   const router = useRouter();
   const navigation = useNavigation();
-  const { state: authState } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const params = useLocalSearchParams();
   const [projects, setProjects] = useState<Project[]>([]);
@@ -252,7 +251,7 @@ export default function AllProjectsPage() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [selectedCategory, selectedDifficulty, searchQuery, sortBy, filterStatus, authState.user, fadeAnim, slideAnim, cardAnims]);
+  }, [selectedCategory, selectedDifficulty, searchQuery, sortBy, filterStatus, user, fadeAnim, slideAnim, cardAnims]);
 
   useEffect(() => {
     loadProjects(1, true);

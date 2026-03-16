@@ -28,14 +28,13 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import financialServicesApi, { FinancialService } from '@/services/financialServicesApi';
 import cartApi from '@/services/cartApi';
-import { useCart } from '@/contexts/CartContext';
+import { useRefreshCart, useGetCurrencySymbol } from '@/stores/selectors';
 import { useComprehensiveAnalytics } from '@/hooks/useComprehensiveAnalytics';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import FinancialServiceShareModal from '@/components/financial/FinancialServiceShareModal';
-import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 
@@ -61,10 +60,10 @@ interface FinancialServiceDetailPageProps {}
 const FinancialServiceDetailPage: React.FC<FinancialServiceDetailPageProps> = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { refreshCart } = useCart();
+  const refreshCart = useRefreshCart();
   const { trackEvent, trackScreen } = useComprehensiveAnalytics();
   const { isOnline, isOffline } = useNetworkStatus();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [isLoading, setIsLoading] = useState(true);

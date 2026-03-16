@@ -11,7 +11,7 @@ import {
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ProductReference } from '@/types/ugc-upload.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface ProductChipProps {
@@ -29,7 +29,7 @@ function ProductChip({
   onRemove,
   disabled = false,
 }: ProductChipProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const displayPrice = product.salePrice || product.basePrice;
   const imageUrl = product.images && product.images.length > 0 ? product.images[0] : '';

@@ -42,7 +42,7 @@ function Toast({
   };
 
   useEffect(() => {
-    const _anim0 = Animated.parallel([
+    const anim = Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 300,
@@ -54,18 +54,18 @@ function Toast({
         useNativeDriver: true,
       }),
     ]);
-    _anim0.start();
+    anim.start();
 
     if (!actions && duration > 0) {
       const timer = setTimeout(() => {
         dismiss();
       }, duration);
       return () => {
-        _anim0.stop();
+        anim.stop();
         clearTimeout(timer);
       };
     }
-    return () => _anim0.stop();
+    return () => anim.stop();
   }, []);
 
   const dismiss = () => {

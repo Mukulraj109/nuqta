@@ -11,7 +11,7 @@ import { useCurrentLocation, useLocationPermission } from '@/hooks/useLocation';
 import { UserLocation } from '@/types/location.types';
 import { webLocationService } from '@/services/webLocationService';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
-import { useRegion } from '@/contexts/RegionContext';
+import { useRegionState } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface LocationDisplayProps {
@@ -51,7 +51,7 @@ function LocationDisplay({
 }: LocationDisplayProps) {
   const { currentLocation, isLoading, error, refreshLocation } = useCurrentLocation();
   const { permissionStatus, requestPermission } = useLocationPermission();
-  const { state: regionState } = useRegion();
+  const regionState = useRegionState();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Web-specific location state

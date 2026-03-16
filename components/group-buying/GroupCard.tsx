@@ -13,7 +13,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { GroupBuyingGroup } from '@/types/groupBuying.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -25,7 +25,7 @@ interface GroupCardProps {
 }
 
 function GroupCard({ group, onPress, showJoinButton = false }: GroupCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const spotsLeft = group.maxMembers - group.currentMemberCount;
   const progress = (group.currentMemberCount / group.maxMembers) * 100;

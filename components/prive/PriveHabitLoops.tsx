@@ -76,15 +76,15 @@ const AnimatedProgressBar: React.FC<{ progress: number; completed: boolean }> = 
   const widthAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const _anim0 = Animated.timing(widthAnim, {
+    const anim = Animated.timing(widthAnim, {
       toValue: progress,
       duration: 600,
       useNativeDriver: false,
     });
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
-}, [progress, widthAnim]);
+    anim.start();
+
+    return () => { anim.stop(); };
+  }, [progress, widthAnim]);
 
   const animatedWidth = widthAnim.interpolate({
     inputRange: [0, 100],
@@ -110,16 +110,16 @@ const AnimatedCheckmark: React.FC = () => {
   const scale = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const _anim0 = Animated.spring(scale, {
+    const anim = Animated.spring(scale, {
       toValue: 1,
       friction: 4,
       tension: 100,
       useNativeDriver: true,
     });
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
-}, [scale]);
+    anim.start();
+
+    return () => { anim.stop(); };
+  }, [scale]);
 
   return (
     <Animated.View style={[styles.loopCheckmark, { transform: [{ scale }] }]}>

@@ -5,7 +5,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { EarningsStatistics } from '@/services/earningsApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface EarningsStatsCardProps {
@@ -13,7 +13,7 @@ interface EarningsStatsCardProps {
 }
 
 const EarningsStatsCard: React.FC<EarningsStatsCardProps> = ({ stats }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const statItems = [

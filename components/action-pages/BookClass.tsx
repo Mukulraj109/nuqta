@@ -25,7 +25,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import { storesApi } from '@/services/storesApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
 import { colors } from '@/constants/theme';
 
@@ -66,8 +66,7 @@ interface TimeSlot {
 function BookClassPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string }>();
-  const { state: authState } = useAuth();
-  const user = authState.user;
+  const user = useAuthUser();
 
   const [step, setStep] = useState<'salon' | 'details' | 'confirm'>(
     params.storeId ? 'details' : 'salon'

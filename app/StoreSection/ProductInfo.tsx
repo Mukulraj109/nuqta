@@ -18,7 +18,7 @@ import { useRouter } from "expo-router";
 import PriceAndRewardsSection from "@/components/product/PriceAndRewardsSection";
 import LockProductSection from "@/components/product/LockProductSection";
 import { useLocation } from "@/contexts/LocationContext";
-import { useCart } from "@/contexts/CartContext";
+import { useCartActions } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Haversine formula for distance calculation between two coordinates
@@ -86,7 +86,7 @@ export default memo(function ProductScreen({
 }: ProductInfoProps) {
   const router = useRouter();
   const { state: locationState } = useLocation();
-  const { actions: cartActions } = useCart();
+  const cartActions = useCartActions();
   const [active, setActive] = useState("visit"); // 'visit' | 'book'
   const translateX = useRef(new Animated.Value(0)).current;
   const containerWidthRef = useRef(0);

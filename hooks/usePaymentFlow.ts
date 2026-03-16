@@ -13,7 +13,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import storePaymentApi from '@/services/storePaymentApi';
 import externalWalletApi from '@/services/externalWalletApi';
 import apiClient from '@/services/apiClient';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import {
   StorePaymentInfo,
   AppliedCoins,
@@ -107,7 +107,8 @@ const DEFAULT_REWARDS_PREVIEW: RewardsPreview = {
 
 export function usePaymentFlow(params: UsePaymentFlowParams): UsePaymentFlowReturn {
   const { storeId, storeName, amount, selectedOfferIds = [] } = params;
-  const { state: { isAuthenticated, isLoading: authLoading } } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // Refs to prevent infinite loops
   const hasLoadedRef = useRef(false);

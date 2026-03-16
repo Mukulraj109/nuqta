@@ -28,7 +28,7 @@ import gamificationApi, {
   StreakBonus,
 } from '@/services/gamificationApi';
 import { useGamification } from '@/contexts/GamificationContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
@@ -41,7 +41,7 @@ export default function DailyCheckInPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { actions: gamificationActions } = useGamification();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const scrollViewRef = useRef<ScrollView>(null);
   const postersYPosition = useRef(0);

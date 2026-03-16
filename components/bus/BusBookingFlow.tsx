@@ -18,7 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { LinearGradient } from 'expo-linear-gradient';
 import serviceBookingApi from '@/services/serviceBookingApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface BusDetails {
@@ -75,7 +75,8 @@ const BusBookingFlow: React.FC<BusBookingFlowProps> = ({
   onComplete,
   onClose,
 }) => {
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
   const [currentStep, setCurrentStep] = useState(1);

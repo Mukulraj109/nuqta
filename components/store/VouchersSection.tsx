@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import storeVouchersApi, { StoreVoucher } from '@/services/storeVouchersApi';
 import VoucherCardSkeleton from '@/components/skeletons/VoucherCardSkeleton';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface VouchersSectionProps {
@@ -24,7 +24,7 @@ interface VouchersSectionProps {
 }
 
 const VouchersSection: React.FC<VouchersSectionProps> = ({ storeId, storeName }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const router = useRouter();
   const [vouchers, setVouchers] = useState<StoreVoucher[]>([]);

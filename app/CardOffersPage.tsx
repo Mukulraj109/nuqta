@@ -20,15 +20,13 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import discountsApi, { Discount } from '@/services/discountsApi';
-import { useCart } from '@/contexts/CartContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useCartState, useCartActions, useAuthUser, useIsAuthenticated, useGetCurrencySymbol } from '@/stores/selectors';
 import { triggerImpact, triggerNotification } from '@/utils/haptics';
 import { showToast } from '@/components/common/ToastManager';
 import { platformAlert } from '@/utils/platformAlert';
 import analyticsService from '@/services/analyticsService';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
-import { useRegion } from '@/contexts/RegionContext';
 import {
   Colors,
   Spacing,
@@ -49,11 +47,12 @@ export default function CardOffersPage() {
   const storeName = (params.storeName as string) || '';
   const orderValue = params.orderValue ? parseFloat(String(params.orderValue)) : 0;
 
-  const { state: cartState, actions: cartActions } = useCart();
-  const { state: authState } = useAuth();
-  const isAuthenticated = authState?.isAuthenticated && !!authState?.user;
+  const cartState = useCartState();
+  const cartActions = useCartActions();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const { isOnline } = useNetworkStatus();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [cardOffers, setCardOffers] = useState<Discount[]>([]);

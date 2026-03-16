@@ -4,7 +4,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback, useMemo } from 'react';
 import wishlistApi from '@/services/wishlistApi';
 import { useSocket } from '@/contexts/SocketContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 export interface WishlistItem {
   id: string;
@@ -76,23 +76,25 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { subscribeToProduct, onStockUpdate, onProductAvailability } = useSocket();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // Only load wishlist when user is authenticated, onboarded, and not loading
   // Skip during onboarding to prevent thundering herd of API calls on Android
   // Staggering is now handled by DeferredProviders.tsx (delayMs={2500})
   useEffect(() => {
-    if (!authState.isLoading && authState.isAuthenticated && authState.user && authState.user.isOnboarded) {
+    if (!authLoading && isAuthenticated && user && user.isOnboarded) {
       if (_wishlistLoaded) return; // Module-level dedup
       _wishlistLoaded = true;
       loadWishlist();
-    } else if (!authState.isLoading && !authState.isAuthenticated) {
+    } else if (!authLoading && !isAuthenticated) {
       // User is not authenticated, clear wishlist and stop loading
       setWishlistItems([]);
       setIsLoading(false);
       _wishlistLoaded = false;
     }
-  }, [authState.isLoading, authState.isAuthenticated, authState.user]);
+  }, [authLoading, isAuthenticated, user]);
 
   // Subscribe to stock updates for all wishlist items
   useEffect(() => {
@@ -354,10 +356,10 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
 
   // Refresh wishlist from backend - useful when external changes occur (e.g., wishlist page deletes)
   const refreshWishlist = useCallback(async (): Promise<void> => {
-    if (authState.isAuthenticated) {
+    if (isAuthenticated) {
       await loadWishlist();
     }
-  }, [authState.isAuthenticated]);
+  }, [isAuthenticated]);
 
   // OPTIMIZED: Memoize context value to prevent unnecessary re-renders
   const contextValue: WishlistContextType = useMemo(() => ({

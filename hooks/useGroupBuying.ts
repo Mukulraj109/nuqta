@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSocket } from '@/contexts/SocketContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import groupBuyingApi from '@/services/groupBuyingApi';
 import {
   GroupBuyingState,
@@ -21,7 +21,7 @@ import {
 
 export function useGroupBuying() {
   const { socket, state: socketState } = useSocket();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   const [state, setState] = useState<GroupBuyingState>({
     myGroups: [],
     availableGroups: [],
@@ -37,10 +37,10 @@ export function useGroupBuying() {
 
   // Load initial data
   useEffect(() => {
-    if (authState.isAuthenticated) {
+    if (isAuthenticated) {
       loadInitialData();
     }
-  }, [authState.isAuthenticated]);
+  }, [isAuthenticated]);
 
   // Cleanup on unmount
   useEffect(() => {

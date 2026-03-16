@@ -20,8 +20,7 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { goldSavingsApi, GoldPriceData, GoldHoldingData, GoldTransaction } from '@/services/goldSavingsApi';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 
@@ -42,8 +41,9 @@ function generateIdempotencyKey(): string {
 
 function GoldSavingsPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
-  const { isAuthenticated, authLoading } = useAuth();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const currencySymbol = getCurrencySymbol();
 
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');

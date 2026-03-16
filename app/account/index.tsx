@@ -22,7 +22,7 @@ import AccountTabs from '@/components/account/AccountTabs';
 import SettingsItem from '@/components/account/SettingsItem';
 import AccountSkeleton from '@/components/account/AccountSkeleton';
 import useAccountData from '@/hooks/useAccountData';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useRezBalance } from '@/stores';
 import {
   AccountTabType,
   AccountSettingsCategory,
@@ -80,7 +80,7 @@ export default function AccountPage() {
     useAccountData(activeTab);
 
   // Wallet context for dynamic insights
-  const { rezBalance } = useWalletContext();
+  const rezBalance = useRezBalance();
 
   // Inject dynamic insights into sections
   const enrichedSections = useMemo(() => {

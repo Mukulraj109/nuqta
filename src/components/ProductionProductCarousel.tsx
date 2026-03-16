@@ -21,7 +21,7 @@ import Animated, {
   Extrapolate,
 } from 'react-native-reanimated';
 import { FashionProduct } from '@/hooks/useFashionData';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.75;
@@ -225,7 +225,7 @@ const ProductionProductCarousel = ({ products, isLoading, error }: ProductionPro
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollX = useSharedValue(0);
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {

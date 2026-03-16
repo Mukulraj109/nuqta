@@ -15,7 +15,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { router, Stack } from 'expo-router';
 import ordersService, { Order } from '@/services/ordersApi';
 import { mapBackendOrderToFrontend } from '@/utils/dataMappers';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -28,7 +28,7 @@ interface FilterState {
 }
 
 export default function OrdersListScreen() {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);

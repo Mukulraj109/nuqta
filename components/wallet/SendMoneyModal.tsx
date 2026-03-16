@@ -17,7 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ACCOUNT_COLORS } from '@/types/account.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import walletApi from '@/services/walletApi';
 import { generateIdempotencyKey } from '@/utils/idempotencyKey';
@@ -37,7 +37,7 @@ function SendMoneyModal({
   onSuccess,
   currentBalance,
 }: SendMoneyModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [recipientType, setRecipientType] = useState<RecipientType>('phone');
   const [recipient, setRecipient] = useState('');

@@ -24,7 +24,7 @@ import productsApi from '@/services/productsApi';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useProductReviews } from '@/hooks/useProductReviews';
 import { DetailPageSkeleton } from '@/components/skeletons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useCurrency, useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import ProductReviewsSection from '@/components/reviews/ProductReviewsSection';
 import TrainBookingFlow from '../../components/train/TrainBookingFlow';
 import TrainBookingConfirmation from '../../components/train/TrainBookingConfirmation';
@@ -116,7 +116,9 @@ export default function TrainDetailsPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
-  const { currency, getCurrencySymbol, getLocale } = useRegion();
+  const currency = useCurrency();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
 

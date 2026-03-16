@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ProductCardProps } from '@/types/homepage.types';
-import { useCart } from '@/contexts/CartContext';
+import { useCartState, useCartActions } from '@/stores/selectors';
 import { useWishlist } from '@/contexts/WishlistContext';
 import StockBadge from '@/components/common/StockBadge';
 import RatingStars from '@/components/reviews/RatingStars';
@@ -28,7 +28,8 @@ function ProductCard({
   width = 180,
   showAddToCart = true
 }: ProductCardProps) {
-  const { state: cartState, actions: cartActions } = useCart();
+  const cartState = useCartState();
+  const cartActions = useCartActions();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { subscribe, subscribing } = useStockNotifications();
   const { showSuccess, showError } = useToast();

@@ -12,7 +12,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import { loadStripe } from '@stripe/stripe-js';
 import * as authStorage from '@/utils/authStorage';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface StripePaymentModalProps {
@@ -36,7 +36,7 @@ function StripePaymentModal({
   onClose,
   onError,
 }: StripePaymentModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [loading, setLoading] = useState(false);
   const [processingPayment, setProcessingPayment] = useState(false);

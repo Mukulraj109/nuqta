@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { borderRadius, colors, spacing } from '@/constants/theme';
 
 interface LockedItemProps {
@@ -51,7 +51,7 @@ function LockedItem({
   onUnlock,
   showAnimation = true,
 }: LockedItemProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const { width } = Dimensions.get('window');
   const isSmallScreen = width < 360;

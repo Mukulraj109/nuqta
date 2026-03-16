@@ -10,7 +10,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { SellerOption } from '@/types/search.types';
 import { router } from 'expo-router';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -31,7 +31,8 @@ function SellerComparisonCard({
   onCompare,
   productId,
 }: SellerComparisonCardProps) {
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
 

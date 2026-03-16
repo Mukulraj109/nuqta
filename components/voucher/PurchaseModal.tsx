@@ -16,9 +16,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { useVoucherPurchase } from '@/hooks/useVoucherPurchase';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useRezBalance, useWalletLoading, useRefreshWallet, useGetCurrencySymbol } from '@/stores/selectors';
 import logger from '@/utils/logger';
-import { useRegion } from '@/contexts/RegionContext';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -65,10 +64,12 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
 }) => {
   const router = useRouter();
   const { purchaseVoucher, purchasing } = useVoucherPurchase();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
-  const { rezBalance: walletBalance, isLoading: loadingBalance, refreshWallet } = useWalletContext();
+  const walletBalance = useRezBalance();
+  const loadingBalance = useWalletLoading();
+  const refreshWallet = useRefreshWallet();
 
   const [selectedDenomination, setSelectedDenomination] = useState<number | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);

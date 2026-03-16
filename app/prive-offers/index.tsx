@@ -18,8 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/ThemedText';
 import { OffersThemeProvider } from '@/contexts/OffersThemeContext';
 import { OffersPageContent } from '@/components/offers/OffersPageContent';
-import { useAuth } from '@/contexts/AuthContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useAuthUser, useIsAuthenticated, useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import { NuqtaCoin as ReZCoin } from '@/components/homepage/ReZCoin';
 import { Spacing, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -36,8 +35,10 @@ const DarkColors = {
 
 export default function PriveOffersScreen() {
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const { rezBalance: userCoins, refreshWallet } = useWalletContext();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const userCoins = useRezBalance();
+  const refreshWallet = useRefreshWallet();
   const [isFavorited, setIsFavorited] = useState(false);
 
   const handleBack = () => {

@@ -14,15 +14,15 @@
 import React, { useEffect } from 'react';
 import { } from 'react-native';
 import { platformAlertSimple } from '@/utils/platformAlert';
-import { useCart } from '@/contexts/CartContext';
 import { useSocket } from '@/contexts/SocketContext';
 import { formatPrice } from '@/utils/priceFormatter';
-import { useRegion } from '@/contexts/RegionContext';
+import { useCartState, useCartActions, useGetCurrencySymbol } from '@/stores/selectors';
 
 export function CartSocketIntegration() {
-  const { state: cartState, actions: cartActions } = useCart();
+  const cartState = useCartState();
+  const cartActions = useCartActions();
   const { onStockUpdate, onOutOfStock, onPriceUpdate } = useSocket();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   useEffect(() => {

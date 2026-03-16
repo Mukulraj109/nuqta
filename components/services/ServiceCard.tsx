@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -44,7 +44,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   onBookPress,
   onPress,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const formatDuration = (minutes: number): string => {

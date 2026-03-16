@@ -9,7 +9,7 @@ import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useSubscription } from '@/contexts/SubscriptionContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import subscriptionAPI from '@/services/subscriptionApi';
 import ProgressSteps, { Step } from '@/components/subscription/ProgressSteps';
 import RetentionOfferCard from '@/components/subscription/RetentionOfferCard';
@@ -39,7 +39,7 @@ const CANCELLATION_REASONS: { value: CancellationReason; label: string; icon: st
 
 export default function CancelFeedbackPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const { state, actions, computed } = useSubscription();
   const currentTier = state.currentSubscription?.tier || 'free';

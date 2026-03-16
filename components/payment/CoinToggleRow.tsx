@@ -14,7 +14,7 @@ import { View, Text, StyleSheet, Pressable, Switch } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import CrossPlatformSlider from '@/components/common/CrossPlatformSlider';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { borderRadius, colors, spacing, typography } from '@/constants/theme';
 
@@ -84,7 +84,7 @@ export const CoinToggleRow: React.FC<CoinToggleRowProps> = ({
   onToggle,
   onAmountChange,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const defaultStyle = COIN_STYLES[type] || COIN_STYLES.nuqta; // Fallback to nuqta style
   // Always use palette colors - ignore custom colors to maintain design consistency

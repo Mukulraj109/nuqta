@@ -25,7 +25,7 @@ import storesApi from '@/services/storesApi';
 import productsApi from '@/services/productsApi';
 import cartApi from '@/services/cartApi';
 import { campaignsApi } from '@/services/campaignsApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
@@ -95,7 +95,7 @@ export default function BookingPage() {
     dealDiscount,
   } = useLocalSearchParams();
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const insets = useSafeAreaInsets();
   const backgroundColor = useThemeColor({}, 'background');

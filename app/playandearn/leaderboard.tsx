@@ -18,9 +18,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import leaderboardApi, { LeaderboardEntry } from '../../services/leaderboardApi';
 import { useLeaderboardRealtime } from '@/hooks/useLeaderboardRealtime';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useGetCurrencySymbol } from '@/stores/selectors';
 import TierBadge from '@/components/subscription/TierBadge';
-import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -63,8 +62,8 @@ interface DisplayEntry {
 
 const Leaderboard = () => {
   const router = useRouter();
-  const { state } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -105,10 +104,10 @@ const Leaderboard = () => {
     hasRecentRankUp,
   } = useLeaderboardRealtime(
     realtimeInitialEntries,
-    state.user?.id,
+    user?.id,
     {
       onRankUp: (userId, newRank, oldRank) => {
-        if (userId === state.user?.id) {
+        if (userId === user?.id) {
           triggerCelebration(`You ranked up from #${oldRank} to #${newRank}!`);
         }
       },
@@ -157,7 +156,7 @@ const Leaderboard = () => {
           coins: entry.value,
           avatar: entry.user.avatar,
           tier: 'free',
-          isCurrentUser: entry.user._id === state.user?.id,
+          isCurrentUser: entry.user._id === user?.id,
         }));
         setEntries(displayEntries);
 
@@ -173,8 +172,8 @@ const Leaderboard = () => {
         if (responseData.myRank && responseData.myRank.rank > 0) {
           setMyRank({
             rank: responseData.myRank.rank,
-            userId: state.user?.id || '',
-            name: state.user?.name || 'You',
+            userId: user?.id || '',
+            name: user?.name || 'You',
             coins: responseData.myRank.value,
             tier: 'free',
             isCurrentUser: true,
@@ -199,7 +198,7 @@ const Leaderboard = () => {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [selectedPeriod, state.user?.id, state.user?.name]);
+  }, [selectedPeriod, user?.id, user?.name]);
 
   // Load more entries (pagination)
   const loadMore = useCallback(async () => {
@@ -221,7 +220,7 @@ const Leaderboard = () => {
           coins: entry.value,
           avatar: entry.user.avatar,
           tier: 'free',
-          isCurrentUser: entry.user._id === state.user?.id,
+          isCurrentUser: entry.user._id === user?.id,
         }));
         if (newEntries.length > 0) {
           setEntries(prev => [...prev, ...newEntries]);
@@ -241,7 +240,7 @@ const Leaderboard = () => {
     } finally {
       setLoadingMore(false);
     }
-  }, [page, loadingMore, hasMore, selectedPeriod, state.user?.id]);
+  }, [page, loadingMore, hasMore, selectedPeriod, user?.id]);
 
   useEffect(() => {
     fetchLeaderboard();

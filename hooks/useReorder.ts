@@ -8,7 +8,7 @@ import reorderService, {
   FrequentlyOrderedItem,
   ReorderSuggestion
 } from '@/services/reorderApi';
-import { useCart } from '@/contexts/CartContext';
+import { useRefreshCart } from '@/stores/selectors';
 import { router } from 'expo-router';
 
 interface UseReorderReturn {
@@ -44,7 +44,7 @@ export function useReorder(): UseReorderReturn {
   const [reordering, setReordering] = useState(false);
   const [validation, setValidation] = useState<ReorderValidation | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { refreshCart } = useCart();
+  const refreshCart = useRefreshCart();
 
   const validateReorder = useCallback(async (
     orderId: string,

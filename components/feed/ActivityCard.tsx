@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Activity, Comment } from '../../services/activityFeedApi';
 import * as activityFeedApi from '../../services/activityFeedApi';
 import FollowButton from '../social/FollowButton';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface ActivityCardProps {
@@ -25,7 +25,7 @@ interface ActivityCardProps {
 }
 
 const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment, currentUserId }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);

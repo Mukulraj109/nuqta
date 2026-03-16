@@ -21,7 +21,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { experiencesApi, StoreExperience } from '@/services/experiencesApi';
 import { getCategoryTheme } from '@/config/categoryThemeConfig';
 import { getCategoryConfig } from '@/config/categoryConfig';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
 import { colors } from '@/constants/theme';
 
@@ -67,7 +67,7 @@ function StoreCard({ store, currencySymbol, primaryColor }: { store: any; curren
 function GenericExperienceDetail() {
   const router = useRouter();
   const { id, slug } = useLocalSearchParams<{ id: string; slug: string }>();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const theme = getCategoryTheme(slug || '');
   const categoryConfig = getCategoryConfig(slug || '');

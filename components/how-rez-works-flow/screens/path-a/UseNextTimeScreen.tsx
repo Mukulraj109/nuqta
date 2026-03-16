@@ -4,7 +4,7 @@ import FlowScreenLayout from '../../shared/FlowScreenLayout';
 import ActionBtn from '../../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const UseNextTimeScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
-    const { getCurrencySymbol } = useRegion();
+    const getCurrencySymbol = useGetCurrencySymbol();
     const currencySymbol = getCurrencySymbol();
     return (
         <FlowScreenLayout

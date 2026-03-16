@@ -12,7 +12,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { triggerImpact } from '@/utils/haptics';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Lock duration options
@@ -60,7 +60,8 @@ export const DurationChips: React.FC<DurationChipsProps> = ({
   currency,
   style,
 }) => {
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const locale = getLocale();
   const currencySymbol = currency || getCurrencySymbol();
   const handleSelect = (duration: LockDuration) => {

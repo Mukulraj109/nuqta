@@ -17,9 +17,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useAuth } from '@/contexts/AuthContext';
-import { useCart } from '@/contexts/CartContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthUser, useIsAuthenticated, useCartActions, useGetCurrencySymbol } from '@/stores/selectors';
 import { DiscoverImage, DiscoverProduct } from '@/types/discover.types';
 import { realVideosApi } from '@/services/realVideosApi';
 import { DetailPageSkeleton } from '@/components/skeletons';
@@ -35,7 +33,7 @@ export default function ImageDetailScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // State
@@ -51,8 +49,9 @@ export default function ImageDetailScreen() {
   const [likesCount, setLikesCount] = useState(0);
 
   // Contexts
-  const { state: authState } = useAuth();
-  const { addItem } = useCart();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const { addItem } = useCartActions();
 
   // Parse params
   useEffect(() => {

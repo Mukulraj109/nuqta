@@ -18,7 +18,7 @@ import { useRouter, Stack } from 'expo-router';
 import { platformAlertConfirm } from '@/utils/platformAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import exploreApi, { ExploreStore } from '@/services/exploreApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useRegionState } from '@/stores/selectors';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { MapViewSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -74,7 +74,7 @@ const ExploreStoresPage = () => {
   const [sortBy, setSortBy] = useState<'default' | 'rating' | 'name' | 'distance'>('default');
 
   // Region context for coordinates and region name
-  const { state: regionState } = useRegion();
+  const regionState = useRegionState();
   const regionName = regionState.regionConfig?.name || 'your area';
   const currentRegion = regionState.currentRegion;
 

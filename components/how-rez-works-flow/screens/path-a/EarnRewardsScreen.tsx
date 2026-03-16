@@ -18,7 +18,7 @@ import FlowScreenLayout from '../../shared/FlowScreenLayout';
 import ActionBtn from '../../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface Props {
@@ -66,7 +66,7 @@ const FloatingCoin: React.FC<{ delay: number; startX: number }> = ({ delay, star
 };
 
 const EarnRewardsScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
-    const { getCurrencySymbol } = useRegion();
+    const getCurrencySymbol = useGetCurrencySymbol();
     const currencySymbol = getCurrencySymbol();
     const scale = useSharedValue(0);
     const glow = useSharedValue(0);

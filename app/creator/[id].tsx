@@ -22,7 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import creatorsApi, { CreatorProfile, CreatorPick } from '@/services/creatorsApi';
 import { toggleFollow, checkFollowStatus } from '@/services/followApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 import { ProfileSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
@@ -83,7 +83,7 @@ const PickCard = React.memo(({ pick, onPress }: { pick: CreatorPick; onPress: ()
 export default function CreatorProfilePage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -94,9 +94,9 @@ export default function CreatorProfilePage() {
 
   // Check if this is the logged-in user's own profile
   const isOwnProfile = !!(
-    authState?.user?.id &&
+    user?.id &&
     id &&
-    (authState.user.id === id || authState.user.id === creator?.profileId)
+    (user.id === id || user.id === creator?.profileId)
   );
 
   const fetchCreatorData = useCallback(async () => {
@@ -119,7 +119,7 @@ export default function CreatorProfilePage() {
         setCreator(profileResponse.data);
 
         // Check follow status (skip for own profile)
-        const currentUserId = authState.user?.id;
+        const currentUserId = user?.id;
         const isOwnId = currentUserId && (currentUserId === id || currentUserId === profileResponse.data.profileId);
         if (!isOwnId) {
           const followResponse = await checkFollowStatus(id);

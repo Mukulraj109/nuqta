@@ -15,7 +15,7 @@ import { useRouter, useRootNavigationState } from 'expo-router';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated, useAuthLoading, useAuthError, useAuthActions } from '@/stores/selectors';
 import FormInput from '@/components/onboarding/FormInput';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import CountryCodePicker, { COUNTRY_CODES, CountryCode } from '@/components/common/CountryCodePicker';
@@ -29,7 +29,11 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 export default function SignInScreen() {
   const router = useRouter();
   const rootNavigationState = useRootNavigationState();
-  const { state, actions } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const authError = useAuthError();
+  const actions = useAuthActions();
 
   const [formData, setFormData] = useState({
     phoneNumber: '',
@@ -68,14 +72,14 @@ export default function SignInScreen() {
   // Navigate to homepage on successful login (wait for router to be ready)
   useEffect(() => {
     if (!rootNavigationState?.key) return; // Router not mounted yet
-    if (state.isAuthenticated && state.user) {
-      if (state.user.isOnboarded) {
+    if (isAuthenticated && user) {
+      if (user.isOnboarded) {
         router.replace('/(tabs)/' as any);
       } else {
         router.replace('/onboarding/notification-permission');
       }
     }
-  }, [state.isAuthenticated, state.user, rootNavigationState?.key]);
+  }, [isAuthenticated, user, rootNavigationState?.key]);
 
   const validatePhoneNumber = (phone: string): boolean => {
     const phoneRegex = /^[+]?[1-9][\d]{0,15}$/;
@@ -116,7 +120,7 @@ export default function SignInScreen() {
         `Verification code sent to ${selectedCountry.dialCode}${formData.phoneNumber}\n\nFor demo, use: 123456`
       );
     } catch (error: any) {
-      const errorMessage = error?.message || state.error || 'Failed to send OTP. Please try again.';
+      const errorMessage = error?.message || authError || 'Failed to send OTP. Please try again.';
 
       if (errorMessage.toLowerCase().includes('user not found') ||
           errorMessage.toLowerCase().includes('user does not exist') ||
@@ -159,7 +163,7 @@ export default function SignInScreen() {
       const formattedPhone = `${selectedCountry.dialCode}${formData.phoneNumber}`;
       await actions.login(formattedPhone, formData.otp);
     } catch (error: any) {
-      const errorMessage = error?.message || state.error || 'Invalid OTP. Please try again.';
+      const errorMessage = error?.message || authError || 'Invalid OTP. Please try again.';
       setErrors(prev => ({
         ...prev,
         otp: errorMessage
@@ -178,7 +182,7 @@ export default function SignInScreen() {
       setCanResendOTP(false);
       platformAlertSimple('OTP Resent', 'New verification code sent to your phone');
     } catch (error: any) {
-      const errorMessage = error?.message || state.error || 'Failed to resend OTP. Please try again.';
+      const errorMessage = error?.message || authError || 'Failed to resend OTP. Please try again.';
       platformAlertSimple('Error', errorMessage);
       actions.clearError();
     }
@@ -264,18 +268,18 @@ export default function SignInScreen() {
           <Pressable
             style={styles.primaryButtonWrapper}
             onPress={handleRequestOTP}
-            disabled={state.isLoading}
+            disabled={authLoading}
            
-            accessibilityLabel={state.isLoading ? "Sending OTP" : "Send OTP to phone number"}
+            accessibilityLabel={authLoading ? "Sending OTP" : "Send OTP to phone number"}
             accessibilityRole="button"
           >
             <LinearGradient
-              colors={state.isLoading ? [colors.neutral[300], colors.neutral[300]] : [Colors.gold, Colors.nileBlue]}
+              colors={authLoading ? [colors.neutral[300], colors.neutral[300]] : [Colors.gold, Colors.nileBlue]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.primaryButton}
             >
-              {state.isLoading ? (
+              {authLoading ? (
                 <LoadingSpinner size="small" color={Colors.text.inverse} />
               ) : (
                 <>
@@ -383,18 +387,18 @@ export default function SignInScreen() {
           <Pressable
             style={styles.primaryButtonWrapper}
             onPress={handleVerifyOTP}
-            disabled={state.isLoading}
+            disabled={authLoading}
            
-            accessibilityLabel={state.isLoading ? "Verifying OTP" : "Verify OTP and sign in"}
+            accessibilityLabel={authLoading ? "Verifying OTP" : "Verify OTP and sign in"}
             accessibilityRole="button"
           >
             <LinearGradient
-              colors={state.isLoading ? [colors.neutral[300], colors.neutral[300]] : [Colors.gold, Colors.nileBlue]}
+              colors={authLoading ? [colors.neutral[300], colors.neutral[300]] : [Colors.gold, Colors.nileBlue]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.primaryButton}
             >
-              {state.isLoading ? (
+              {authLoading ? (
                 <LoadingSpinner size="small" color={Colors.text.inverse} />
               ) : (
                 <>

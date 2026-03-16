@@ -34,17 +34,16 @@ export const BalanceDisplay: React.FC<BalanceDisplayProps> = React.memo(({ walle
   useEffect(() => {
     if (!isHidden) {
       countAnim.setValue(0);
-      const _anim0 = Animated.timing(countAnim, {
+      const anim = Animated.timing(countAnim, {
         toValue: 1,
         duration: 600,
         easing: Easing.out(Easing.cubic),
         useNativeDriver: false,
       });
-      _anim0.start();
+      anim.start();
+      return () => { anim.stop(); };
     }
-  
-    return () => { _anim0.stop(); };
-}, [isHidden, walletData.totalBalance]);
+  }, [isHidden, walletData.totalBalance]);
 
   const toggleHidden = async () => {
     const newVal = !isHidden;

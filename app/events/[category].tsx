@@ -23,7 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import eventsApiService from '@/services/eventsApi';
 import { EventItem } from '@/types/homepage.types';
 import { EVENT_COLORS } from '@/constants/EventColors';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -61,7 +61,7 @@ interface DisplayEvent {
 const EventsCategoryPage: React.FC = () => {
   const router = useRouter();
   const { category } = useLocalSearchParams<{ category: string }>();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [selectedFilter, setSelectedFilter] = useState<DateFilter>('all');
   const [isLoading, setIsLoading] = useState(true);

@@ -5,7 +5,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import FormInput from '@/components/onboarding/FormInput';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading, useAuthError, useAuthActions } from '@/stores/selectors';
 import CountryCodePicker, { COUNTRY_CODES, CountryCode } from '@/components/common/CountryCodePicker';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import ReferralHandler from '@/utils/referralHandler';
@@ -16,7 +16,9 @@ import { colors } from '@/constants/theme';
 export default function RegistrationScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ referralCode?: string }>();
-  const { state, actions } = useAuth();
+  const authLoading = useAuthLoading();
+  const authError = useAuthError();
+  const actions = useAuthActions();
 
   const [formData, setFormData] = useState({
     phoneNumber: '',
@@ -99,7 +101,7 @@ export default function RegistrationScreen() {
         params: { phoneNumber: formattedPhone }
       });
     } catch (error: any) {
-      const errorMessage = error?.message || state.error || 'Failed to send OTP. Please try again.';
+      const errorMessage = error?.message || authError || 'Failed to send OTP. Please try again.';
 
       if (errorMessage.toLowerCase().includes('already') &&
           (errorMessage.toLowerCase().includes('registered') ||
@@ -264,19 +266,19 @@ export default function RegistrationScreen() {
             <Pressable
               style={styles.primaryButtonWrapper}
               onPress={handleSubmit}
-              disabled={state.isLoading}
+              disabled={authLoading}
              
             >
               <LinearGradient
-                colors={state.isLoading ? [Colors.border.default, Colors.border.default] : [Colors.gold, Colors.nileBlue]}
+                colors={authLoading ? [Colors.border.default, Colors.border.default] : [Colors.gold, Colors.nileBlue]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.primaryButton}
               >
                 <Text style={styles.primaryButtonText}>
-                  {state.isLoading ? 'Submitting...' : 'Continue'}
+                  {authLoading ? 'Submitting...' : 'Continue'}
                 </Text>
-                {!state.isLoading && <Ionicons name="arrow-forward" size={20} color={Colors.background.primary} />}
+                {!authLoading && <Ionicons name="arrow-forward" size={20} color={Colors.background.primary} />}
               </LinearGradient>
             </Pressable>
 

@@ -40,7 +40,7 @@ function ReportToast({
   useEffect(() => {
     if (visible) {
       // Slide in and fade in
-      const _anim0 = Animated.parallel([
+      const anim = Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 300,
@@ -52,7 +52,7 @@ function ReportToast({
           useNativeDriver: true,
         }),
       ]);
-      _anim0.start();
+      anim.start();
 
       // Auto dismiss after 3 seconds
       const timer = setTimeout(() => {
@@ -60,7 +60,7 @@ function ReportToast({
       }, 3000);
 
       return () => {
-      _anim0.stop();
+      anim.stop();
       clearTimeout(timer);
     }
     } else {

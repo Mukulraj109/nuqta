@@ -14,8 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/ThemedText';
 import { OffersThemeProvider } from '@/contexts/OffersThemeContext';
 import { OffersPageContent } from '@/components/offers/OffersPageContent';
-import { useAuth } from '@/contexts/AuthContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useAuthUser, useIsAuthenticated, useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import { NuqtaCoin as ReZCoin } from '@/components/homepage/ReZCoin';
 import { Colors, Spacing, Typography, Shadows, BorderRadius } from '@/constants/DesignSystem';
 import { platformAlertSimple } from '@/utils/platformAlert';
@@ -35,8 +34,10 @@ const PALETTE = {
 
 export default function OffersScreen() {
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const { rezBalance: userCoins, refreshWallet } = useWalletContext();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const userCoins = useRezBalance();
+  const refreshWallet = useRefreshWallet();
   // Favorite state removed — no backend API integration for page-level favorites
 
   // Get URL query parameters for filtering

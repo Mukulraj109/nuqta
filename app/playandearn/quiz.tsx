@@ -17,9 +17,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import gameApi, { QuizQuestion } from '../../services/gameApi';
 import gamificationApi from '../../services/gamificationApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import { useGamification } from '@/contexts/GamificationContext';
-import { useWalletContext } from '@/contexts/WalletContext';
 import { platformAlert } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
@@ -131,9 +130,10 @@ const ConfettiParticle: React.FC<{ delay: number; color: string }> = ({ delay, c
 
 const Quiz = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const { actions: gamificationActions } = useGamification();
-  const { rezBalance: walletBalance, refreshWallet } = useWalletContext();
+  const walletBalance = useRezBalance();
+  const refreshWallet = useRefreshWallet();
   const currencySymbol = getCurrencySymbol();
   const [gameState, setGameState] = useState<'start' | 'playing' | 'result'>('start');
   const [currentQuestion, setCurrentQuestion] = useState(0);

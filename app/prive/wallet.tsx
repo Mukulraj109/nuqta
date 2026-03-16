@@ -32,7 +32,7 @@ import { TransactionListSkeleton } from '@/components/skeletons';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/priveTheme';
 import { Colors } from '@/constants/DesignSystem';
 import { PriveSkeletonBlock } from '@/components/prive/PriveSkeletonBlock';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useWalletData, useRezBalance, useTotalBalance, useBrandedCoins, useWalletLoading, useRefreshWallet } from '@/stores/selectors';
 import priveApi, { TransactionItem } from '@/services/priveApi';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -193,14 +193,12 @@ function WalletSkeleton() {
 
 export default function PriveWalletScreen() {
   const router = useRouter();
-  const {
-    walletData,
-    rezBalance,
-    totalBalance,
-    brandedCoins,
-    isLoading: walletLoading,
-    refreshWallet,
-  } = useWalletContext();
+  const walletData = useWalletData();
+  const rezBalance = useRezBalance();
+  const totalBalance = useTotalBalance();
+  const brandedCoins = useBrandedCoins();
+  const walletLoading = useWalletLoading();
+  const refreshWallet = useRefreshWallet();
 
   const [transactions, setTransactions] = useState<TransactionItem[]>([]);
   const [seenIds, setSeenIds] = useState<Set<string>>(new Set());

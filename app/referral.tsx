@@ -19,8 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import * as Clipboard from 'expo-clipboard';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useIsAuthenticated, useGetCurrencySymbol } from '@/stores/selectors';
 import {
   getReferralStats,
   getReferralHistory,
@@ -65,8 +64,8 @@ const getNextTierInfo = (currentReferrals: number) => {
 
 const ReferralPageContent = () => {
   const router = useRouter();
-  const { state } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const isAuthenticated = useIsAuthenticated();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -89,7 +88,7 @@ const ReferralPageContent = () => {
   // ✅ FIX #1: Authentication verification
   useEffect(() => {
     // Check if user is authenticated before loading data
-    if (!state.isAuthenticated) {
+    if (!isAuthenticated) {
       platformAlertConfirm(
         'Authentication Required',
         'Please sign in to view your referral information',
@@ -120,7 +119,7 @@ const ReferralPageContent = () => {
         clearTimeout(loadingTimeoutRef.current);
       }
     };
-  }, [state.isAuthenticated]);
+  }, [isAuthenticated]);
 
   // ✅ FIX #2: Individual try-catch for each API (fix race condition)
   const fetchReferralData = async () => {
@@ -128,7 +127,7 @@ const ReferralPageContent = () => {
     setLoadingError(null);
 
     // Check auth again before API calls
-    if (!state.isAuthenticated) {
+    if (!isAuthenticated) {
       setLoading(false);
       setRefreshing(false);
       return;
@@ -199,13 +198,13 @@ const ReferralPageContent = () => {
   };
 
   const onRefresh = useCallback(() => {
-    if (!state.isAuthenticated) {
+    if (!isAuthenticated) {
       platformAlertSimple('Error', 'Please sign in to refresh data');
       return;
     }
     setRefreshing(true);
     fetchReferralData();
-  }, [state.isAuthenticated]);
+  }, [isAuthenticated]);
 
   const referralCode = codeInfo?.referralCode || 'LOADING...';
   const referralLink = codeInfo?.referralLink || `https://rezapp.com/invite/${referralCode}`;

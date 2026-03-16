@@ -14,7 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import gamificationApi, { GamificationStats } from '@/services/gamificationApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
 const { width } = Dimensions.get('window');
@@ -36,7 +36,7 @@ interface PlayEarnActivity {
 
 const PlayEarn = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [stats, setStats] = useState<GamificationStats | null>(null);
   const [dynamicActivities, setDynamicActivities] = useState<PlayEarnActivity[] | null>(null);

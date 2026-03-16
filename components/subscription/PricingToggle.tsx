@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface PricingToggleProps {
@@ -23,7 +23,7 @@ function PricingToggle({
   yearlyPrice,
   yearlySavings,
 }: PricingToggleProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const savings = useMemo(() => {
     if (!yearlySavings) {

@@ -25,7 +25,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -132,7 +132,7 @@ const SAMPLE_CLASSES: FitnessClass[] = [
 const FitnessBookingPage: React.FC = () => {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const { storeId, storeName, cashback, type } = useLocalSearchParams<{
     storeId: string;

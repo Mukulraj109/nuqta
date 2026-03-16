@@ -15,7 +15,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'expo-router';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import shareApi from '@/services/shareApi';
 import reviewService from '@/services/reviewApi';
 import apiClient from '@/services/apiClient';
@@ -84,7 +84,8 @@ export function usePostOrderRewards({
   reviewAllowed = true,
 }: UsePostOrderRewardsParams): UsePostOrderRewardsReturn {
   const router = useRouter();
-  const { state: { isAuthenticated, isLoading: authLoading } } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [hasShared, setHasShared] = useState(false);
   const [hasReviewed, setHasReviewed] = useState(false);
   const [shareCoinsEarned, setShareCoinsEarned] = useState<number | null>(null);

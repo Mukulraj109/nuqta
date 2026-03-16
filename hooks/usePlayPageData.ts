@@ -14,7 +14,7 @@ import {
 import { categoryTabs as defaultCategoryTabs } from '@/data/playPageData';
 import realVideosApi from '@/services/realVideosApi';
 import { transformVideosToUGC, getFeaturedVideo } from '@/utils/videoTransformers';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 
 const devLog = {
   log: __DEV__ ? console.log.bind(console) : () => {},
@@ -46,7 +46,7 @@ const initialState: PlayPageState = {
 export function usePlayPageData(): UsePlayPageData {
   const [state, setState] = useState<PlayPageState>(initialState);
   const router = useRouter();
-  const { user } = useAuth();
+  const user = useAuthUser();
   const abortControllerRef = useRef<AbortController | null>(null);
   const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isMountedRef = useRef(true);

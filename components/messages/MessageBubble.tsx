@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { PROFILE_COLORS } from '@/types/profile.types';
 import { Message } from '@/types/messaging.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 interface MessageBubbleProps {
   message: Message;
@@ -28,7 +28,7 @@ function MessageBubble({
   onLongPress,
   onImagePress,
 }: MessageBubbleProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const formatTime = (timestamp: string) => {

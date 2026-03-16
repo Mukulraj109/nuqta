@@ -14,7 +14,7 @@ import { useRouter, Stack, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import storeVisitApi from '@/services/storeVisitApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -36,7 +36,8 @@ interface Visit {
 
 export default function MyVisitsPage() {
   const router = useRouter();
-  const { state: { isAuthenticated, isLoading } } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const isLoading = useAuthLoading();
   const [visits, setVisits] = useState<Visit[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);

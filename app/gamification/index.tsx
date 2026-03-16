@@ -14,13 +14,14 @@ import { router, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import apiClient from '@/services/apiClient';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import coinSyncService from '@/services/coinSyncService';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
 export default function GamificationDashboard() {
-  const { rezBalance: coinBalance, refreshWallet } = useWalletContext();
+  const coinBalance = useRezBalance();
+  const refreshWallet = useRefreshWallet();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState<'challenges' | 'achievements' | 'leaderboards'>('challenges');

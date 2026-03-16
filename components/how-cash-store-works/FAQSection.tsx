@@ -15,7 +15,7 @@ import {
   UIManager,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Enable LayoutAnimation on Android
@@ -89,7 +89,7 @@ const FAQItem: React.FC<{
 );
 
 const FAQSection: React.FC = () => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const FAQS = getFAQS(currencySymbol);
   const [expandedId, setExpandedId] = useState<number | null>(null);

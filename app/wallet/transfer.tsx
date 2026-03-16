@@ -21,7 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import walletApi from '@/services/walletApi';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { generateIdempotencyKey } from '@/utils/idempotencyKey';
@@ -42,7 +42,8 @@ const QUICK_AMOUNTS = [50, 100, 250, 500];
 export default function TransferPage() {
   const router = useRouter();
 
-  const { rezBalance: nuqtaBalance, refreshWallet } = useWalletContext();
+  const nuqtaBalance = useRezBalance();
+  const refreshWallet = useRefreshWallet();
   const { authenticateWithBiometric, biometricAvailable, biometricEnrolled } = useSecurity();
 
   const [step, setStep] = useState<'recipient' | 'amount' | 'otp' | 'success'>('recipient');

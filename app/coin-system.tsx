@@ -23,7 +23,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useTotalBalance, useWalletLoading } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -209,7 +209,8 @@ const SPENDING_PRIORITY = [
 
 const CoinSystemPage = () => {
   const router = useRouter();
-  const { totalBalance: walletBalance, isLoading: loadingWallet } = useWalletContext();
+  const walletBalance = useTotalBalance();
+  const loadingWallet = useWalletLoading();
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
   const faqAnimations = useRef<Animated.Value[]>(
     FAQ_ITEMS.map(() => new Animated.Value(0))

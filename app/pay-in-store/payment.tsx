@@ -30,9 +30,8 @@ import { Elements } from '@stripe/react-stripe-js';
 import { getStripePromise } from '@/utils/lazyImports';
 import { PaymentScreenParams, StorePaymentInitResponse } from '@/types/storePayment.types';
 import apiClient from '@/services/apiClient';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useGetCurrencySymbol } from '@/stores/selectors';
 import { useGamification } from '@/contexts/GamificationContext';
-import { useRegion } from '@/contexts/RegionContext';
 import usePaymentFlow from '@/hooks/usePaymentFlow';
 import { showToast } from '@/components/common/ToastManager';
 
@@ -58,10 +57,9 @@ export default function PaymentScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<PaymentScreenParams>();
   const { storeId, storeName, storeLogo, amount, selectedOffers: selectedOffersParam } = params;
-  const { state } = useAuth();
-  const user = state.user;
+  const user = useAuthUser();
   const { actions: gamificationActions } = useGamification();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const billAmount = parseFloat(amount || '0');

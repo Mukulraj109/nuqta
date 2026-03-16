@@ -22,7 +22,7 @@ import {
   VALIDATION_ISSUE_ICONS,
   VALIDATION_ISSUE_COLORS,
 } from '@/types/validation.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -36,7 +36,7 @@ function CartValidation({
   onRemoveInvalidItems,
   onRefresh,
 }: CartValidationModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [isRemoving, setIsRemoving] = useState(false);
 

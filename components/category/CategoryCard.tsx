@@ -11,7 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { ThemedText } from '@/components/ThemedText';
 import { CategoryItem } from '@/types/category.types';
-import { useCart } from '@/contexts/CartContext';
+import { useCartState, useCartActions } from '@/stores/selectors';
 import { showToast } from '@/components/common/ToastManager';
 import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDataNormalizer';
 import { formatPrice } from '@/utils/priceFormatter';
@@ -37,7 +37,8 @@ function CategoryCard({
   cardStyle = 'elevated',
 }: CategoryCardProps) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-  const { state: cartState, actions: cartActions } = useCart();
+  const cartState = useCartState();
+  const cartActions = useCartActions();
   const [, forceUpdate] = useState({});
 
   // Force re-render when cart changes

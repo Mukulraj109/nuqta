@@ -18,7 +18,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand, BrandBadge, BrandTier } from '../../../types/mall.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface BrandFullWidthCardProps {
@@ -50,7 +50,7 @@ const BrandFullWidthCard: React.FC<BrandFullWidthCardProps> = ({
   showRank = false,
   rank = 0,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [imageError, setImageError] = useState(false);
 

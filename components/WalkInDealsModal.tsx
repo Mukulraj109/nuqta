@@ -23,7 +23,7 @@ import DealDetailsModal from '@/components/DealDetailsModal';
 import DealList from '@/components/DealList';
 import realOffersApi from '@/services/realOffersApi';
 import DealsListSkeleton from '@/components/skeletons/DealsListSkeleton';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Premium Glass Design Tokens - Green & Gold Theme
@@ -52,7 +52,7 @@ const COLORS = {
 };
 
 function WalkInDealsModal({ visible, onClose, deals = [], storeId }: DealModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
   const [selectedDeals, setSelectedDeals] = useState<string[]>([]);

@@ -18,7 +18,7 @@ import { ThemedView } from '@/components/ThemedView';
 import gamificationAPI from '@/services/gamificationApi';
 import { useGamification } from '@/contexts/GamificationContext';
 import type { ScratchCardPrize } from '@/types/gamification.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -36,7 +36,7 @@ function ScratchCardGame({
   onCoinsEarned,
   onError,
 }: ScratchCardGameProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [isScratched, setIsScratched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

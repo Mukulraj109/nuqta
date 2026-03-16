@@ -17,7 +17,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { BRAND } from '@/constants/brand';
 import { BundleItem } from '@/services/recommendationApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -174,7 +174,7 @@ interface BundleCardProps {
 }
 
 function BundleCard({ bundle, bundleWidth, onAddToCart, onProductPress }: BundleCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Calculate prices using helper functions
@@ -309,7 +309,7 @@ interface BundleProductCardProps {
 }
 
 function BundleProductCard({ product, onPress }: BundleProductCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const price = getProductPrice(product);

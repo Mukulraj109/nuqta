@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import FastImage from '@/components/common/FastImage';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 export interface PopularStoreCardProps {
@@ -52,7 +52,7 @@ const arePropsEqual = (prevProps: PopularStoreCardProps, nextProps: PopularStore
 };
 
 function PopularStoreCard({ store, onPress, width = 170 }: PopularStoreCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Get the logo URL (prioritize logo, then first banner, then image)

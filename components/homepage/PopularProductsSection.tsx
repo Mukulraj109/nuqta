@@ -14,7 +14,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { useRouter } from 'expo-router';
 import { productApi, HomepageProduct } from '@/services/productApi';
 import { Ionicons } from '@expo/vector-icons';
-import { useCurrentRegion, useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useCurrentRegionId } from '@/stores/selectors';
 import { formatPrice } from '@/utils/priceFormatter';
 import { colors } from '@/constants/theme';
 
@@ -28,7 +28,7 @@ function PopularProductsSection({
   limit = 3,
 }: PopularProductsSectionProps) {
   const router = useRouter();
-  const currentRegion = useCurrentRegion(); // Refetch when region changes
+  const currentRegion = useCurrentRegionId(); // Refetch when region changes
   const [products, setProducts] = useState<HomepageProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -76,7 +76,7 @@ function PopularProductsSection({
   };
 
   // Get currency symbol from region
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Format delivery fee

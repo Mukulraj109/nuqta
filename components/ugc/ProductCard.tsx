@@ -12,7 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { ProductCardProps } from '@/types/product-selector.types';
 import CachedImage from '@/components/ui/CachedImage';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const PLACEHOLDER_IMAGE = 'https://via.placeholder.com/150x150?text=No+Image';
@@ -27,7 +27,7 @@ function ProductCard({
   showRating = true,
   compactMode = false,
 }: ProductCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const imageUrl = product.images?.[0] || PLACEHOLDER_IMAGE;
   const hasDiscount = product.salePrice && product.salePrice < product.basePrice;

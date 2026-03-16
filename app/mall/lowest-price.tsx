@@ -20,7 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Shadows } from '@/constants/DesignSystem';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import searchService from '@/services/searchApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
@@ -55,7 +55,7 @@ const POPULAR_QUERIES = [
 
 export default function LowestPricePage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [searchQuery, setSearchQuery] = useState('');

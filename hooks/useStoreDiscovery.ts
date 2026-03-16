@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useCurrentLocation } from './useLocation';
 import storesService from '@/services/storesApi';
 import apiClient from '@/services/apiClient';
-import { useCurrentRegion } from '@/contexts/RegionContext';
+import { useCurrentRegionId } from '@/stores/selectors';
 
 const devLog = {
   log: __DEV__ ? console.log.bind(console) : () => {},
@@ -168,7 +168,7 @@ function transformStore(
  */
 export function useStoreDiscovery(limit: number = 10): UseStoreDiscoveryReturn {
   const { currentLocation } = useCurrentLocation();
-  const currentRegion = useCurrentRegion(); // Get current region to refetch on change
+  const currentRegion = useCurrentRegionId(); // Get current region to refetch on change
 
   const [state, setState] = useState<UseStoreDiscoveryState>({
     topStores: [],

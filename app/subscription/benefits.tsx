@@ -15,7 +15,7 @@ import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useSubscription } from '@/contexts/SubscriptionContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { TIER_COLORS, TIER_GRADIENTS, TIER_NAMES } from '@/types/subscription.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -23,7 +23,7 @@ import { colors } from '@/constants/theme';
 export default function BenefitsPage() {
   const router = useRouter();
   const { state, computed } = useSubscription();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const currentTier = state.currentSubscription?.tier || 'free';
   const tierColor = TIER_COLORS[currentTier];

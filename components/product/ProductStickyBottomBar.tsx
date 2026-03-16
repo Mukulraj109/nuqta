@@ -20,7 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LOCK_FEE_PERCENTAGES } from './DurationChips';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface ProductStickyBottomBarProps {
@@ -58,7 +58,8 @@ export const ProductStickyBottomBar: React.FC<ProductStickyBottomBarProps> = ({
   onQuantityChange,
   maxQuantity = 99,
 }) => {
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const locale = getLocale();
   const currencySymbol = currency || getCurrencySymbol();
   const insets = useSafeAreaInsets();

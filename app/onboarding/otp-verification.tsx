@@ -4,7 +4,7 @@ import analyticsService from '@/services/analyticsService';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useAuthLoading, useAuthError, useAuthActions } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -12,7 +12,10 @@ import { colors } from '@/constants/theme';
 export default function OTPVerificationScreen() {
   const router = useRouter();
   const { phoneNumber } = useLocalSearchParams<{ phoneNumber: string }>();
-  const { state, actions } = useAuth();
+  const user = useAuthUser();
+  const authLoading = useAuthLoading();
+  const authError = useAuthError();
+  const actions = useAuthActions();
 
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(30);
@@ -97,13 +100,13 @@ export default function OTPVerificationScreen() {
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      if (state.user?.isOnboarded) {
+      if (user?.isOnboarded) {
         router.replace('/(tabs)');
       } else {
         router.replace('/onboarding/notification-permission');
       }
     } catch (error: any) {
-      const errorMessage = error?.message || state.error || 'Invalid OTP. Please check and try again.';
+      const errorMessage = error?.message || authError || 'Invalid OTP. Please check and try again.';
       platformAlertSimple('Invalid OTP', errorMessage);
       setOtp(['', '', '', '', '', '']);
       inputRefs.current[0]?.focus();
@@ -120,7 +123,7 @@ export default function OTPVerificationScreen() {
       setCanResend(false);
       platformAlertSimple('Success', 'OTP has been resent to your phone number');
     } catch (error: any) {
-      const errorMessage = error?.message || state.error || 'Failed to resend OTP. Please try again.';
+      const errorMessage = error?.message || authError || 'Failed to resend OTP. Please try again.';
       platformAlertSimple('Error', errorMessage);
       actions.clearError();
     }
@@ -225,7 +228,7 @@ export default function OTPVerificationScreen() {
             ) : (
               <Pressable
                 onPress={handleResendOTP}
-                disabled={!canResend || state.isLoading}
+                disabled={!canResend || authLoading}
                 style={styles.resendButton}
               >
                 <Ionicons name="refresh-outline" size={18} color={Colors.gold} />
@@ -238,12 +241,12 @@ export default function OTPVerificationScreen() {
           <Pressable
             style={styles.primaryButtonWrapper}
             onPress={() => handleSubmit()}
-            disabled={state.isLoading || !otp.every(digit => digit.length === 1)}
+            disabled={authLoading || !otp.every(digit => digit.length === 1)}
            
           >
             <LinearGradient
               colors={
-                state.isLoading || !otp.every(digit => digit.length === 1)
+                authLoading || !otp.every(digit => digit.length === 1)
                   ? [colors.neutral[300], colors.neutral[300]]
                   : [Colors.gold, Colors.nileBlue]
               }
@@ -252,9 +255,9 @@ export default function OTPVerificationScreen() {
               style={styles.primaryButton}
             >
               <Text style={styles.primaryButtonText}>
-                {state.isLoading ? 'Verifying...' : 'Verify & Continue'}
+                {authLoading ? 'Verifying...' : 'Verify & Continue'}
               </Text>
-              {!state.isLoading && <Ionicons name="checkmark-circle" size={20} color={colors.background.primary} />}
+              {!authLoading && <Ionicons name="checkmark-circle" size={20} color={colors.background.primary} />}
             </LinearGradient>
           </Pressable>
         </View>

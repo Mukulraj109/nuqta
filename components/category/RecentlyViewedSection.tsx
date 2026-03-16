@@ -19,7 +19,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RecentlyViewedItem } from '@/types/recentlyViewed.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface RecentlyViewedSectionProps {
@@ -150,7 +150,8 @@ const RecentlyViewedSection: React.FC<RecentlyViewedSectionProps> = ({
   maxItems = 10,
 }) => {
   const router = useRouter();
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
 

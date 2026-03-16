@@ -22,7 +22,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import eventsApiService from '@/services/eventsApi';
 import { alertOk } from '@/utils/alert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -64,7 +64,7 @@ const STATUS_CONFIG: Record<string, { color: string; bg: string; icon: string }>
 
 export default function MyEventsPage() {
   const router = useRouter();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   const [activeTab, setActiveTab] = useState<TabType>('upcoming');
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -74,7 +74,7 @@ export default function MyEventsPage() {
   const [checkingIn, setCheckingIn] = useState<string | null>(null);
 
   const fetchData = useCallback(async (tab: TabType) => {
-    if (!authState.isAuthenticated) return;
+    if (!isAuthenticated) return;
 
     try {
       const result = await eventsApiService.getMyEvents(tab === 'favorites' ? 'favorites' : tab === 'past' ? 'past' : 'upcoming');
@@ -93,7 +93,7 @@ export default function MyEventsPage() {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [authState.isAuthenticated]);
+  }, [isAuthenticated]);
 
   useFocusEffect(
     useCallback(() => {
@@ -144,7 +144,7 @@ export default function MyEventsPage() {
     }
   };
 
-  if (!authState.isAuthenticated) {
+  if (!isAuthenticated) {
     return (
       <View style={styles.container}>
         <Stack.Screen options={{ headerShown: false }} />

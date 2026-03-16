@@ -15,7 +15,7 @@ import ActionBtn from '../../shared/ActionBtn';
 import { NavigationAction, BackAction } from '../../types';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface Props {
@@ -24,7 +24,7 @@ interface Props {
 }
 
 const SaveAndEarnScreen: React.FC<Props> = ({ onNavigate, onBack }) => {
-    const { getCurrencySymbol } = useRegion();
+    const getCurrencySymbol = useGetCurrencySymbol();
     const currencySymbol = getCurrencySymbol();
     const discountScale = useSharedValue(0);
     const cashbackScale = useSharedValue(0);

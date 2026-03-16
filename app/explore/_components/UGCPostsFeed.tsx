@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import reelApi from '../../../services/reelApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -69,7 +69,7 @@ const formatTimeAgo = (dateString?: string): string => {
 
 const UGCPostsFeed = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [ugcPosts, setUgcPosts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);

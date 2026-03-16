@@ -20,10 +20,9 @@ import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@/contexts/AuthContext';
+import { useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import productComparisonApi from '@/services/productComparisonApi';
 import { ComparisonProduct } from '@/services/productComparisonApi';
-import { useRegion } from '@/contexts/RegionContext';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 
@@ -82,8 +81,8 @@ const transformProductToCompareItem = (product: ComparisonProduct): CompareItem 
 export default function ComparePage() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { state: authState } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const isAuthenticated = useIsAuthenticated();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [compareItems, setCompareItems] = useState<CompareItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -93,7 +92,7 @@ export default function ComparePage() {
   const [comparisonsLoaded, setComparisonsLoaded] = useState(false);
 
   const loadComparisons = useCallback(async () => {
-    if (!authState.isAuthenticated) return;
+    if (!isAuthenticated) return;
 
     try {
       setIsLoading(true);
@@ -118,20 +117,20 @@ export default function ComparePage() {
       setIsLoading(false);
       setComparisonsLoaded(true);
     }
-  }, [authState.isAuthenticated]);
+  }, [isAuthenticated]);
 
   // Load user's comparisons on mount
   useEffect(() => {
-    if (authState.isAuthenticated) {
+    if (isAuthenticated) {
       loadComparisons();
     } else {
       setIsLoading(false);
       setComparisonsLoaded(true);
     }
-  }, [authState.isAuthenticated, loadComparisons]);
+  }, [isAuthenticated, loadComparisons]);
 
   const handleAddProductFromParams = useCallback(async (productId: string) => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       platformAlertSimple('Login Required', 'Please login to compare products');
       router.push('/login');
       return;
@@ -165,7 +164,7 @@ export default function ComparePage() {
     } finally {
       setIsAddingProduct(false);
     }
-  }, [authState.isAuthenticated, currentComparisonId, compareItems.length, router]);
+  }, [isAuthenticated, currentComparisonId, compareItems.length, router]);
 
   // Check if productId is passed from search (when adding product to compare)
   // Wait for comparisons to load first to avoid race condition
@@ -184,7 +183,7 @@ export default function ComparePage() {
   };
 
   const handleDeleteComparison = useCallback(async () => {
-    if (!authState.isAuthenticated || !currentComparisonId) {
+    if (!isAuthenticated || !currentComparisonId) {
       return;
     }
 
@@ -200,10 +199,10 @@ export default function ComparePage() {
     } catch (error: any) {
       platformAlertSimple('Error', error.message || 'Failed to delete comparison');
     }
-  }, [authState.isAuthenticated, currentComparisonId]);
+  }, [isAuthenticated, currentComparisonId]);
 
   const handleRemoveItem = useCallback(async (id: string) => {
-    if (!authState.isAuthenticated || !currentComparisonId) {
+    if (!isAuthenticated || !currentComparisonId) {
       // If not authenticated, just remove from local state
       setCompareItems(compareItems.filter((item) => item.id !== id));
       return;
@@ -243,7 +242,7 @@ export default function ComparePage() {
     } finally {
       setIsRemovingProduct(null);
     }
-  }, [authState.isAuthenticated, currentComparisonId, compareItems.length, handleDeleteComparison]);
+  }, [isAuthenticated, currentComparisonId, compareItems.length, handleDeleteComparison]);
 
   const handleBuy = (item: CompareItem) => {
     router.push(`/product-page?productId=${item.productId}` as any);

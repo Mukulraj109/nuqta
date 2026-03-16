@@ -7,8 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthUser, useGetCurrencySymbol } from '@/stores/selectors';
 import * as Clipboard from 'expo-clipboard';
 import QRCode from 'react-native-qrcode-svg';
 import { platformAlertSimple } from '@/utils/platformAlert';
@@ -17,10 +16,9 @@ import { colors } from '@/constants/theme';
 
 const QRCodePage = () => {
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const user = authState.user;
+  const user = useAuthUser();
   const [activeTab, setActiveTab] = useState<'profile' | 'wallet'>('profile');
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Generate profile link

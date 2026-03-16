@@ -17,7 +17,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import earningsApi, { PartnerEarningsSummary } from '@/services/earningsApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useFormatPrice } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -74,7 +74,8 @@ function EarningsBreakdown({
   onRefresh,
   compact = false,
 }: EarningsBreakdownProps) {
-  const { getCurrencySymbol, formatPrice } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const formatPrice = useFormatPrice();
   const currencySymbol = getCurrencySymbol();
 
   const formatEarnings = (amount: number): string => {

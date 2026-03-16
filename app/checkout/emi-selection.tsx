@@ -16,7 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { colors } from '@/constants/theme';
 
@@ -49,7 +49,7 @@ export default function EMISelectionPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const amount = parseInt(params.amount as string) || 50000;
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [banks, setBanks] = useState<Bank[]>(getDefaultBanks(currencySymbol));
   const [loadingBanks, setLoadingBanks] = useState(true);

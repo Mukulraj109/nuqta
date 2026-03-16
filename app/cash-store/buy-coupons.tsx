@@ -18,7 +18,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import realVouchersApi from '../../services/realVouchersApi';
 import couponService from '../../services/couponApi';
@@ -48,7 +48,7 @@ const PAGE_SIZE = 20;
 export default function BuyCouponsPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const isFirstSearch = useRef(true);
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);

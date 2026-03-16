@@ -17,8 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import gameApi from '../../services/gameApi';
 import { useGamification } from '@/contexts/GamificationContext';
-import { useRegion } from '@/contexts/RegionContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useGetCurrencySymbol, useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -119,8 +118,9 @@ const ConfettiParticle: React.FC<{ delay: number; color: string }> = ({ delay, c
 const GuessPrice = () => {
   const router = useRouter();
   const { actions: gamificationActions } = useGamification();
-  const { getCurrencySymbol } = useRegion();
-  const { rezBalance: walletBalance, refreshWallet } = useWalletContext();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const walletBalance = useRezBalance();
+  const refreshWallet = useRefreshWallet();
   const currencySymbol = getCurrencySymbol();
   const [gameState, setGameState] = useState<'start' | 'playing' | 'result' | 'error'>('start');
   const [currentProduct, setCurrentProduct] = useState(0);

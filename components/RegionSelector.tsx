@@ -14,7 +14,8 @@ import {
 } from 'react-native';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion, RegionId } from '@/contexts/RegionContext';
+import { useRegionState, useSetRegion } from '@/stores/selectors';
+import type { RegionId } from '@/stores/regionStore';
 import { colors } from '@/constants/theme';
 
 // Region data with flags
@@ -37,7 +38,8 @@ export function RegionSelector({
   compact = false,
   onRegionChange
 }: RegionSelectorProps) {
-  const { state, setRegion } = useRegion();
+  const state = useRegionState();
+  const setRegion = useSetRegion();
   const [modalVisible, setModalVisible] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
 
@@ -197,7 +199,8 @@ function RegionModal({
 
 // Full page region selector for settings
 export function RegionSelectorPage() {
-  const { state, setRegion } = useRegion();
+  const state = useRegionState();
+  const setRegion = useSetRegion();
   const [isChanging, setIsChanging] = useState(false);
 
   const handleSelect = async (regionId: RegionId) => {

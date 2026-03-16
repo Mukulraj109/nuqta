@@ -4,10 +4,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { triggerImpact, triggerNotification } from "@/utils/haptics";
 import { ThemedText } from '@/components/ThemedText';
 import wishlistApi, { DiscountSnapshot } from '@/services/wishlistApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useRouter, useFocusEffect } from 'expo-router';
-import { useRegion } from '@/contexts/RegionContext';
 import { colors } from '@/constants/theme';
 import {
   Colors,
@@ -72,13 +71,13 @@ interface Section5Props {
 }
 
 function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Props) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const { refreshWishlist, wishlistItems } = useWishlist();
-  const isAuthenticated = authState?.isAuthenticated ?? false;
   const router = useRouter();
 
   // Modal state

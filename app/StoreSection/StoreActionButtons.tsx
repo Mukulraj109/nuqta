@@ -23,7 +23,7 @@ import {
 import InfoModal from '@/components/common/InfoModal';
 import ContactModal from '@/components/store/ContactModal';
 import { useRouter } from 'expo-router';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import {
   createInitialButtonState,
   ButtonStateManager,
@@ -73,7 +73,7 @@ function StoreActionButtons({
   const { width } = Dimensions.get('window');
   const backgroundColor = useThemeColor({}, 'background');
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Modal state for showing info/error messages

@@ -10,7 +10,7 @@ import { View, Text, StyleSheet, Pressable, ActivityIndicator, Platform } from '
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RewardsPreview } from '@/types/storePayment.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
 interface PayButtonWithRewardsProps {
@@ -28,7 +28,7 @@ export const PayButtonWithRewards: React.FC<PayButtonWithRewardsProps> = ({
   disabled = false,
   onPress,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const isFreePayment = amountToPay === 0;
   const hasRewards = rewardsPreview && (rewardsPreview.cashback > 0 || rewardsPreview.coinsToEarn > 0);

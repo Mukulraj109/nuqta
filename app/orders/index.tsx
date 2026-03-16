@@ -19,7 +19,7 @@ import { mapBackendOrderToFrontend } from '@/utils/dataMappers';
 import ReorderButton from '@/components/orders/ReorderButton';
 import ReorderSuggestions from '@/components/orders/ReorderSuggestions';
 import SkeletonLoader from '@/components/common/SkeletonLoader';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores';
 import { Colors, Spacing, Gradients, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -313,7 +313,7 @@ const OrderSkeleton = () => (
 // ============================================================================
 
 export default function OrdersListScreen() {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);

@@ -21,7 +21,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import storesApi from '@/services/storesApi';
 import productsApi from '@/services/productsApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { DetailPageSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -85,7 +85,7 @@ interface Product {
 const BrandPage: React.FC = () => {
   const router = useRouter();
   const { name } = useLocalSearchParams<{ name: string }>();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const brandKey = name?.toLowerCase() || 'nykaa';

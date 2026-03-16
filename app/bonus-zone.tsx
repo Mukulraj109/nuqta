@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
 import bonusZoneApi, { BonusZoneCampaign, BonusCampaignType } from '@/services/bonusZoneApi';
 import BonusZoneCard from '@/components/earn/BonusZoneCard';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useRegionState } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -43,7 +43,8 @@ const FILTER_TABS: FilterTab[] = [
 
 export default function BonusZonePage() {
   const router = useRouter();
-  const { getCurrencySymbol, state: regionState } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const regionState = useRegionState();
   const currencySymbol = getCurrencySymbol();
 
   const [campaigns, setCampaigns] = useState<BonusZoneCampaign[]>([]);

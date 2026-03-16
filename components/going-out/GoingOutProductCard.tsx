@@ -13,7 +13,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { GoingOutProductCardProps } from '@/types/going-out.types';
 import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDataNormalizer';
 import { formatPrice } from '@/utils/priceFormatter';
-import { useCart } from '@/contexts/CartContext';
+import { useCartState, useCartActions } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 function _GoingOutProductCardInner({
@@ -27,7 +27,8 @@ function _GoingOutProductCardInner({
 }: GoingOutProductCardProps) {
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
-  const { state: cartState, actions: cartActions } = useCart();
+  const cartState = useCartState();
+  const cartActions = useCartActions();
 
   // Get product ID and check if in cart
   const productId = product._id || product.id;

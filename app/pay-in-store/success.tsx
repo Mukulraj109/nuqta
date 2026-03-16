@@ -25,7 +25,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { SuccessScreenParams, PaymentRewards } from '@/types/storePayment.types';
 import { useRewardPopup } from '@/contexts/RewardPopupContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import usePostOrderRewards from '@/hooks/usePostOrderRewards';
 import RewardsBreakdownCard from '@/components/rewards/RewardsBreakdownCard';
 import { BRAND } from '@/constants/brand';
@@ -36,7 +36,7 @@ export default function PaymentSuccessScreen() {
   const params = useLocalSearchParams<SuccessScreenParams>();
   const { paymentId, storeId, storeName, storeLogo, amount, coinsUsed, rewards: rewardsParam } = params;
   const { showCoinsEarned, showCashbackEarned, showRewardPopup } = useRewardPopup();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Parse rewards - handle both old and new format

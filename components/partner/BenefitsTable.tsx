@@ -9,7 +9,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { PartnerLevel, PartnerBenefit } from '@/types/partner.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface BenefitsTableProps {
@@ -23,7 +23,7 @@ function BenefitsTable({
   currentLevel = 1,
   onUpgradePress
 }: BenefitsTableProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   // Define benefit types with clear, accurate names
   const allBenefitTypes = [

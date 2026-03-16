@@ -26,7 +26,7 @@ import { useComprehensiveAnalytics } from '@/hooks/useComprehensiveAnalytics';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -58,7 +58,7 @@ interface DisplayService {
 
 const FinancialPage: React.FC = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const { trackEvent, trackScreen } = useComprehensiveAnalytics();
   const { isOffline } = useNetworkStatus();

@@ -23,7 +23,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
 import apiClient from '@/services/apiClient';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -41,7 +41,8 @@ interface BirthdayDeal {
 export default function BirthdayRewardsPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const [loading, setLoading] = useState(true);
   const [deals, setDeals] = useState<BirthdayDeal[]>([]);
   const [birthdayActive, setBirthdayActive] = useState(false);
@@ -74,7 +75,7 @@ export default function BirthdayRewardsPage() {
       }
 
       // Check user birthday proximity
-      const userDob = authState.user?.profile?.dateOfBirth;
+      const userDob = user?.profile?.dateOfBirth;
       if (userDob) {
         const dob = new Date(userDob);
         const now = new Date();
@@ -95,12 +96,12 @@ export default function BirthdayRewardsPage() {
     } finally {
       setLoading(false);
     }
-  }, [authState.user]);
+  }, [user]);
 
   useEffect(() => {
-    if (!authState.isAuthenticated) return;
+    if (!isAuthenticated) return;
     loadBirthdayData();
-  }, [authState.isAuthenticated, loadBirthdayData]);
+  }, [isAuthenticated, loadBirthdayData]);
 
   const handleClaimGift = (deal: BirthdayDeal) => {
     router.push(`/offers/${deal.id}` as any);

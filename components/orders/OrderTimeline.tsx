@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface TimelineStep {
@@ -29,7 +29,7 @@ function OrderTimeline({
   timeline,
   estimatedDeliveryTime,
 }: OrderTimelineProps) {
-  const { getLocale } = useRegion();
+  const getLocale = useGetLocale();
   const locale = getLocale();
   // Define the standard order flow
   const standardSteps: TimelineStep[] = [

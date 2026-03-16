@@ -18,7 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { useNotifications } from '@/contexts/NotificationContext';
 import { useSecurity } from '@/contexts/SecurityContext';
@@ -58,8 +58,7 @@ interface UserSettings {
 
 export default function AccountProfilePage() {
   const router = useRouter();
-  const { state } = useAuth();
-  const user = state.user;
+  const user = useAuthUser();
   const { settings: notificationSettings, updateSettings: updateNotificationSettings } = useNotifications();
   const { securitySettings, privacySettings, updateSecuritySettings, updatePrivacySettings } = useSecurity();
   const { preferences: appPreferences, updatePreferences: updateAppPreferences } = useAppPreferences();

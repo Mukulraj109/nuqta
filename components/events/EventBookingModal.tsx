@@ -17,8 +17,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { EventItem } from '@/types/homepage.types';
 import { useEventBooking, BookingFormData } from '@/hooks/useEventBooking';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthUser, useGetCurrency, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import eventsApiService from '@/services/eventsApi';
 import stripeApi from '@/services/stripeApi';
 import eventAnalytics from '@/services/eventAnalytics';
@@ -306,7 +305,8 @@ function EventBookingModal({
   const router = useRouter();
 
   const { isBooking, bookEvent, clearBookingState } = useEventBooking();
-  const { getCurrencySymbol, getCurrency } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getCurrency = useGetCurrency();
   const currencySymbol = getCurrencySymbol();
   const currencyCode = getCurrency().toLowerCase(); // For Stripe (e.g., 'inr', 'aed')
 
@@ -427,7 +427,8 @@ function EventBookingModal({
     }
   };
 
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const handleBookingSubmit = async () => {

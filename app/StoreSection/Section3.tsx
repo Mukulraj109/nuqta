@@ -6,8 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { triggerImpact, triggerNotification } from "@/utils/haptics";
 import discountsApi, { Discount } from '@/services/discountsApi';
-import { useCart } from '@/contexts/CartContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useCartActions, useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlert } from '@/utils/platformAlert';
 import { RetryButton } from '@/components/common/RetryButton';
 import {
@@ -31,8 +30,8 @@ interface Section3Props {
 }
 
 export default memo(function Section3({ productPrice = 1000, storeId }: Section3Props) {
-  const { actions: cartActions } = useCart();
-  const { getCurrencySymbol } = useRegion();
+  const cartActions = useCartActions();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [discounts, setDiscounts] = useState<Discount[]>([]);
   const [loading, setLoading] = useState(true);

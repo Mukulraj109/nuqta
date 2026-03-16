@@ -25,7 +25,7 @@ import wishlistSharingService, {
   PublicWishlist,
   GiftReservation,
 } from '@/services/wishlistSharingApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -40,7 +40,7 @@ function PublicWishlistView({
   onBack,
 }: PublicWishlistViewProps) {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [wishlist, setWishlist] = useState<PublicWishlist | null>(null);
   const [isLoading, setIsLoading] = useState(true);

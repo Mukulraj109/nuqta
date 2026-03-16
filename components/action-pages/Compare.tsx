@@ -24,7 +24,7 @@ import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformA
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import productComparisonApi, { ProductComparison, ComparisonProduct } from '@/services/productComparisonApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 import { errorReporter } from '@/utils/errorReporter';
 
@@ -93,7 +93,7 @@ const HOW_STEPS = [
 
 function ComparePage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Selected products

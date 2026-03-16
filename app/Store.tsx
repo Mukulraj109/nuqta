@@ -15,7 +15,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHomepage, useHomepageNavigation } from '@/hooks/useHomepage';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
+import { useProfileMenu } from '@/contexts/ProfileContext';
+import { useProfileStore } from '@/stores/profileStore';
 import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
 import { profileMenuSections } from '@/data/profileData';
 import { useRouter } from 'expo-router';
@@ -39,9 +40,7 @@ import { Ionicons } from '@expo/vector-icons';
 import LocationDisplay from '@/components/location/LocationDisplay';
 import { storeSearchService, StoreCategory } from '@/services/storeSearchService';
 import CategoryGridSkeleton from '@/components/store-search/CategoryGridSkeleton';
-import { useWalletContext } from '@/contexts/WalletContext';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useRezBalance, useWalletLoading, useGetCurrencySymbol } from '@/stores';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -357,11 +356,14 @@ function StoreCard({ item, index }: { item: Store; index: number }) {
 
 export default function App() {
   const router = useRouter();
-  const { user, isModalVisible, showModal, hideModal } = useProfile();
+  const user = useProfileStore((s) => s.user);
+  const isModalVisible = useProfileStore((s) => s.isModalVisible);
+  const showModal = useProfileStore((s) => s.showModal);
+  const hideModal = useProfileStore((s) => s.hideModal);
   const { handleMenuItemPress } = useProfileMenu();
-  const { state: authState } = useAuth();
-  const { rezBalance: userPoints, isLoading: isLoadingPoints } = useWalletContext();
-  const { getCurrencySymbol } = useRegion();
+  const userPoints = useRezBalance();
+  const isLoadingPoints = useWalletLoading();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [showLocationDropdown, setShowLocationDropdown] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');

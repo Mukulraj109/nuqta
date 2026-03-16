@@ -19,7 +19,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BackendBrandedCoin } from '@/services/walletApi';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useBrandedCoins, useWalletLoading, useRefreshWallet } from '@/stores/selectors';
 import { showToast } from '@/components/common/ToastManager';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -49,7 +49,9 @@ interface StoreCoinSummary {
 }
 
 export default function StorePromoCoinsPage() {
-  const { brandedCoins: brandedCoinsFromCtx, isLoading: walletLoading, refreshWallet } = useWalletContext();
+  const brandedCoinsFromCtx = useBrandedCoins();
+  const walletLoading = useWalletLoading();
+  const refreshWallet = useRefreshWallet();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [storeCoins, setStoreCoins] = useState<StoreCoinItem[]>([]);

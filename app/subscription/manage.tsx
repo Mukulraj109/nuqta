@@ -18,7 +18,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 import subscriptionAPI from '@/services/subscriptionApi';
 import { TIER_COLORS, TIER_GRADIENTS, TIER_ICONS, SubscriptionTier } from '@/types/subscription.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { ManageSubscriptionSkeleton } from '@/components/subscription/SubscriptionSkeleton';
 import PaymentFailedBanner from '@/components/subscription/PaymentFailedBanner';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -28,7 +28,7 @@ import { colors } from '@/constants/theme';
 export default function SubscriptionManagePage() {
   const router = useRouter();
   const { state, actions, computed } = useSubscription();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   // BUG FIX #6: Changed default from 'BASIC' to 'free' (valid SubscriptionTier)
   const currentTier = (state.currentSubscription?.tier || 'free') as SubscriptionTier;

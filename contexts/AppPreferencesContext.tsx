@@ -10,7 +10,7 @@ const getHaptics = async () => {
   if (!_haptics) _haptics = await import('expo-haptics');
   return _haptics;
 };
-import { useAuth } from './AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import userSettingsApi from '@/services/userSettingsApi';
 
 // App Preferences Interface
@@ -71,9 +71,8 @@ interface AppPreferencesProviderProps {
 let _appPreferencesLoaded = false;
 
 export function AppPreferencesProvider({ children }: AppPreferencesProviderProps) {
-  const { state: authState } = useAuth();
-  const user = authState.user;
-  const isAuthenticated = authState.isAuthenticated;
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const [preferences, setPreferences] = useState<AppPreferences | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

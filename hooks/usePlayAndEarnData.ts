@@ -3,8 +3,7 @@ import { InteractionManager } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { BRAND } from '@/constants/brand';
-import { useWalletContext } from '@/contexts/WalletContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useRezBalance, useWalletData, useBrandedCoins, useRefreshWallet, useSavingsInsights, useGetCurrencySymbol, useRegionState } from '@/stores/selectors';
 import streakApi from '@/services/streakApi';
 import leaderboardApi from '@/services/leaderboardApi';
 import { challengesApi } from '@/services/challengesApi';
@@ -263,7 +262,8 @@ export const specialPrograms = [
 
 export function usePlayAndEarnData() {
   const router = useRouter();
-  const { getCurrencySymbol, state: regionState } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const regionState = useRegionState();
   const currencySymbol = getCurrencySymbol();
 
   const replaceCurrencySymbol = useCallback((value: string): string => {
@@ -274,7 +274,11 @@ export function usePlayAndEarnData() {
       .replace(/\u062F\.\u0625\s*/g, currencySymbol);
   }, [currencySymbol]);
 
-  const { rezBalance: rezCoins, walletData, brandedCoins: brandedCoinsFromCtx, refreshWallet, savingsInsights } = useWalletContext();
+  const rezCoins = useRezBalance();
+  const walletData = useWalletData();
+  const brandedCoinsFromCtx = useBrandedCoins();
+  const refreshWallet = useRefreshWallet();
+  const savingsInsights = useSavingsInsights();
   const totalBrandedCoins = useMemo(() => brandedCoinsFromCtx?.reduce((sum: number, c: any) => sum + (c.amount || 0), 0) || 0, [brandedCoinsFromCtx]);
   const totalPromoCoins = useMemo(() => walletData?.coins?.find(c => c.type === 'promo')?.amount || 0, [walletData?.coins]);
 

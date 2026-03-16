@@ -15,9 +15,8 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { useReorder } from '@/hooks/useReorder';
 import { ReorderValidation } from '@/services/reorderApi';
 import { router } from 'expo-router';
-import { useCart } from '@/contexts/CartContext';
 import { showToast } from '@/components/common/ToastManager';
-import { useRegion } from '@/contexts/RegionContext';
+import { useRefreshCart, useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface ReorderModalProps {
@@ -46,8 +45,8 @@ function ReorderModal({
     clearValidation
   } = useReorder();
 
-  const { refreshCart } = useCart();
-  const { getCurrencySymbol } = useRegion();
+  const refreshCart = useRefreshCart();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [selectAll, setSelectAll] = useState(true);

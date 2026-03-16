@@ -20,7 +20,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { campaignsApi, DealCategory, CampaignDeal } from '@/services/campaignsApi';
 import CoinIcon from '@/components/ui/CoinIcon';
-import { useRegion } from '@/contexts/RegionContext';
+import { useCurrentRegionId, useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -135,7 +135,8 @@ const SkeletonLoader: React.FC = () => {
 
 const ExcitingDealsSection: React.FC = () => {
   const router = useRouter();
-  const { currentRegion, getCurrencySymbol } = useRegion();
+  const currentRegion = useCurrentRegionId();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dealCategories, setDealCategories] = useState<DealCategory[]>([]);

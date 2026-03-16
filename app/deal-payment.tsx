@@ -20,7 +20,7 @@ import { WebView } from 'react-native-webview';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { getCurrencySymbol } from '@/config/payment';
 
@@ -29,7 +29,8 @@ import { colors } from '@/constants/theme';
 const DealPaymentPage: React.FC = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const webViewRef = useRef<WebView>(null);
 
   // Stripe checkout URL from navigation params

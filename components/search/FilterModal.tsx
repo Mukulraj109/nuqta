@@ -12,7 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Slider from '@/components/common/CrossPlatformSlider';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -74,7 +74,7 @@ function FilterModal({
   categories: categoriesProp,
 }: FilterModalProps) {
   const displayCategories = categoriesProp || DEFAULT_CATEGORIES;
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [filters, setFilters] = useState<FilterState>(currentFilters);
 

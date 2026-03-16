@@ -25,7 +25,7 @@ import {
   ValidationError,
   ValidationWarning,
 } from '@/types/voucher-redemption.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -43,7 +43,7 @@ function RedemptionFlow({
   vouchers,
   onRedeem,
 }: RedemptionFlowProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedVoucher, setSelectedVoucher] = useState<VoucherRedemption['voucher'] | null>(null);

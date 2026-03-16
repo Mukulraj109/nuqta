@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetLocale } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -54,7 +54,7 @@ export const EnhancedCoinBadge: React.FC<EnhancedCoinBadgeProps> = ({
   size = 'medium',
   style,
 }) => {
-  const { getLocale } = useRegion();
+  const getLocale = useGetLocale();
   const locale = getLocale();
   const config = SIZES[size];
 

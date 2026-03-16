@@ -9,7 +9,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useSubscription } from '@/contexts/SubscriptionContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import subscriptionAPI from '@/services/subscriptionApi';
 import ProratedPriceDisplay from '@/components/subscription/ProratedPriceDisplay';
 import FeatureComparisonTable from '@/components/subscription/FeatureComparisonTable';
@@ -25,7 +25,7 @@ export default function UpgradeConfirmationPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { state, computed, actions } = useSubscription();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const currentTier = (params.currentTier as SubscriptionTier) || state.currentSubscription?.tier || 'free';

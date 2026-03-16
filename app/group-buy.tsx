@@ -20,8 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Stack } from 'expo-router';
 import { useGroupBuying } from '@/hooks/useGroupBuying';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import GroupCard from '@/components/group-buying/GroupCard';
 import GroupCreationModal from '@/components/group-buying/GroupCreationModal';
 import GroupShareModal from '@/components/group-buying/GroupShareModal';
@@ -43,8 +42,9 @@ type TabType = 'available' | 'my-groups' | 'products';
 
 const GroupBuyPage = () => {
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const groupBuying = useGroupBuying();
 
@@ -60,10 +60,10 @@ const GroupBuyPage = () => {
 
   // Load data on mount
   useEffect(() => {
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       router.replace('/sign-in');
     }
-  }, [authState.isAuthenticated]);
+  }, [isAuthenticated]);
 
   // Handle refresh
   const handleRefresh = async () => {
@@ -214,7 +214,7 @@ const GroupBuyPage = () => {
                 <GroupMembersList
                   members={group.members}
                   creatorId={group.creatorId}
-                  currentUserId={authState.user?.id}
+                  currentUserId={user?.id}
                 />
               </View>
             )}
@@ -278,7 +278,7 @@ const GroupBuyPage = () => {
                 <GroupMembersList
                   members={group.members}
                   creatorId={group.creatorId}
-                  currentUserId={authState.user?.id}
+                  currentUserId={user?.id}
                 />
 
                 {/* Group Actions */}
@@ -294,7 +294,7 @@ const GroupBuyPage = () => {
                     <Text style={styles.actionButtonText}>Share Group</Text>
                   </Pressable>
 
-                  {group.creatorId !== authState.user?.id && (
+                  {group.creatorId !== user?.id && (
                     <Pressable
                       style={[styles.actionButton, styles.leaveButton]}
                       onPress={() => handleLeaveGroup(group.id)}

@@ -14,7 +14,7 @@ import { TransactionListSkeleton } from '@/components/skeletons';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import gamificationApi, { SpinHistoryEntry } from '@/services/gamificationApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 const PRIZE_TYPE_CONFIG: Record<string, { icon: string; color: string; label: string }> = {
@@ -46,7 +46,7 @@ function formatDate(dateStr: string): string {
 
 export default function SpinHistoryPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [history, setHistory] = useState<SpinHistoryEntry[]>([]);

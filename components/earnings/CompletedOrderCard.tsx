@@ -4,7 +4,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Unified type for both Order and StorePayment records
@@ -48,7 +48,7 @@ function CompletedOrderCard({
   alreadyEarned = false,
   submissionStatus = null,
 }: CompletedOrderCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const imageUri = order.productImage || order.storeLogo;

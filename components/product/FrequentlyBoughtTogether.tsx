@@ -10,7 +10,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { useRelatedProducts, RelatedProduct } from '@/hooks/useRelatedProducts';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 /**
@@ -37,7 +37,7 @@ export const FrequentlyBoughtTogether: React.FC<FrequentlyBoughtTogetherProps> =
   onAddToCart,
   limit = 3,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   // Track selected products (current product is always selected)
   const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set([productId]));

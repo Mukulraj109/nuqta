@@ -26,7 +26,7 @@ import { StripeCardForm } from '@/components/payment';
 import paymentService, { PaymentMethod, PaymentResponse } from '@/services/paymentService';
 import PaymentValidator from '@/services/paymentValidation';
 import financialServicesApi, { FinancialService } from '@/services/financialServicesApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useGetCurrency } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { FormPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -37,7 +37,8 @@ const stripePromise = getStripePromise(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABL
 
 export default function PaymentPage() {
   const router = useRouter();
-  const { getCurrencySymbol, getCurrency } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getCurrency = useGetCurrency();
   const regionCurrency = getCurrencySymbol();
   const params = useLocalSearchParams();
   const amount = Number(params.amount) || 5000;

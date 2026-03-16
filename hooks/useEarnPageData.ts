@@ -4,7 +4,7 @@ import earningProjectsApi from '@/services/earningProjectsApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { useEarningsSocket } from './useEarningsSocket';
 import earningsNotificationService from '@/services/earningsNotificationService';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 
 const devLog = {
   log: __DEV__ ? console.log.bind(console) : () => {},
@@ -50,7 +50,7 @@ const initialState: EarnPageState = {
 
 export function useEarnPageData() {
   const [state, setState] = useState<EarnPageState>(initialState);
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
   const { 
     onEarningsUpdate, 
     onProjectStatusUpdate, 
@@ -111,7 +111,7 @@ export function useEarnPageData() {
       }
 
       // Get user ID for frontend filtering (as a fallback to backend filtering)
-      const userId = authState.user?.id || (authState.user as any)?._id || null;
+      const userId = user?.id || (user as any)?._id || null;
 
       // Transform API data to match component expectations
       // Apply frontend filtering to hide projects where user has pending/under_review submissions
@@ -225,7 +225,7 @@ export function useEarnPageData() {
         error: error instanceof Error ? error.message : 'Failed to load data',
       }));
     }
-  }, [authState.user]);
+  }, [user]);
 
   // Refresh all data
   const refreshData = useCallback(async () => {
@@ -384,7 +384,7 @@ export function useEarnPageData() {
 
       if (response.success && response.data) {
         // Get user ID for frontend filtering
-        const userId = authState.user?.id || (authState.user as any)?._id || null;
+        const userId = user?.id || (user as any)?._id || null;
 
         // Apply frontend filtering to hide projects where user has pending/under_review submissions
         const transformedProjects: Project[] = (response.data.projects || [])
@@ -433,7 +433,7 @@ export function useEarnPageData() {
     } catch (error) {
       devLog.error('Failed to load more projects:', error);
     }
-  }, [state.recentProjects.length, authState.user]);
+  }, [state.recentProjects.length, user]);
 
   // Filter projects by category
   const filterProjectsByCategory = useCallback((categoryId: string) => {

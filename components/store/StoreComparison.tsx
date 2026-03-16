@@ -12,7 +12,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { platformAlertDestructive } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { Store } from '@/services/storeSearchService';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -32,7 +32,7 @@ const StoreComparison: React.FC<StoreComparisonProps> = ({
   onRemoveStore,
   onClearAll,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
 

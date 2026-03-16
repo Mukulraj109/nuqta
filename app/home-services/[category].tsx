@@ -10,7 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import homeServicesApi, { HomeService, HomeServicesByCategoryResponse } from '@/services/homeServicesApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -27,7 +27,7 @@ const categoryGradients: Record<string, string[]> = {
 const HomeServicesCategoryPage: React.FC = () => {
   const router = useRouter();
   const { category } = useLocalSearchParams<{ category: string }>();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [services, setServices] = useState<HomeService[]>([]);

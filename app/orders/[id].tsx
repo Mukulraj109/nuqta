@@ -6,7 +6,7 @@ import ordersService, { Order } from '@/services/ordersApi';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { mapBackendOrderToFrontend } from '@/utils/dataMappers';
 import ReorderButton from '@/components/orders/ReorderButton';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -14,7 +14,7 @@ import { colors } from '@/constants/theme';
 export default function OrderDetailsScreen() {
   const { id } = useLocalSearchParams();
   const navigation = useNavigation();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);

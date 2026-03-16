@@ -23,7 +23,7 @@ import * as Clipboard from 'expo-clipboard';
 import { ThemedText } from '@/components/ThemedText';
 import { LightningDeal } from '@/types/offers.types';
 import realOffersApi from '@/services/realOffersApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -67,7 +67,7 @@ export const OfferRedemptionModal: React.FC<OfferRedemptionModalProps> = ({
   const [copySuccess, setCopySuccess] = useState(false);
   const [redeeming, setRedeeming] = useState(false);
   const [redemptionCode, setRedemptionCode] = useState<string | null>(null);
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;

@@ -16,12 +16,11 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { ProductItem } from '@/types/homepage.types';
-import { useCart } from '@/contexts/CartContext';
+import { useCartActions, useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { useToast } from '@/hooks/useToast';
 import productsApi from '@/services/productsApi';
 import { VariantSelection } from '@/components/cart/ProductVariantModal';
-import { useRegion } from '@/contexts/RegionContext';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -56,7 +55,8 @@ function ProductQuickView({
   onViewFullDetails,
   onAddToCart,
 }: ProductQuickViewProps) {
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const locale = getLocale();
   const currencySymbol = getCurrencySymbol();
   const [product, setProduct] = useState<ProductDetails | null>(null);
@@ -72,7 +72,7 @@ function ProductQuickView({
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const { actions: cartActions } = useCart();
+  const cartActions = useCartActions();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
   const { showSuccess, showError } = useToast();
 
@@ -81,7 +81,7 @@ function ProductQuickView({
     if (visible && productId) {
       loadProductDetails();
       // Animate in
-      const _anim0 = Animated.parallel([
+      const anim = Animated.parallel([
         Animated.timing(slideAnim, {
           toValue: 0,
           duration: 300,
@@ -93,7 +93,9 @@ function ProductQuickView({
           useNativeDriver: true,
         }),
       ]);
-      _anim0.start();
+      anim.start();
+
+      return () => { anim.stop(); };
     } else {
       // Reset state when modal closes
       setProduct(null);
@@ -103,9 +105,7 @@ function ProductQuickView({
       setExpandedDescription(false);
       setError(null);
     }
-  
-    return () => { _anim0.stop(); };
-}, [visible, productId]);
+  }, [visible, productId]);
 
   const loadProductDetails = async () => {
     try {

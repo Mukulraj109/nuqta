@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useNearbyStores, NearbyStore } from '@/hooks/useNearbyStores';
-import { useRegion } from '@/contexts/RegionContext';
+import { useRegionState } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface StoresNearYouProps {
@@ -23,7 +23,7 @@ const StoresNearYou: React.FC<StoresNearYouProps> = ({ onMapViewPress }) => {
   const router = useRouter();
 
   // Get current region for display
-  const { state: regionState } = useRegion();
+  const regionState = useRegionState();
   const regionName = regionState.regionConfig?.name || 'your area';
 
   // Use the nearby stores hook to fetch real data

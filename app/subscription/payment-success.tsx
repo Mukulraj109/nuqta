@@ -16,7 +16,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { useSubscription } from '@/contexts/SubscriptionContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { showToast } from '@/components/common/ToastManager';
 import { Platform } from 'react-native';
 import subscriptionAPI from '@/services/subscriptionApi';
@@ -25,7 +25,7 @@ export default function PaymentSuccessPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const { state, actions } = useSubscription();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [loading, setLoading] = useState(true);
   const [subscriptionData, setSubscriptionData] = useState<any>(null);

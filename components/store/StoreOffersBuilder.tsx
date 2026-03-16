@@ -1,7 +1,7 @@
 // StoreOffersBuilder.tsx - Builds offers array from store data and renders StoreOffersPreview
 import React, { useMemo } from 'react';
 import { StoreOffersPreview } from '@/app/MainStoreSection';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface StoreOffer {
@@ -47,7 +47,7 @@ function StoreOffersBuilder({
   onViewAll,
   onApplyOffer,
 }: StoreOffersBuilderProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const offers = useMemo(() => {

@@ -20,7 +20,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { SectionListSkeleton } from '@/components/skeletons';
 import walletApi from '@/services/walletApi';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useRawWalletData, useWalletLoading, useRefreshWallet } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -43,7 +43,9 @@ const DEFAULTS: WalletSettings = {
 
 export default function WalletSettingsPage() {
   const router = useRouter();
-  const { rawBackendData, isLoading: walletLoading, refreshWallet } = useWalletContext();
+  const rawBackendData = useRawWalletData();
+  const walletLoading = useWalletLoading();
+  const refreshWallet = useRefreshWallet();
   const [settings, setSettings] = useState<WalletSettings>(DEFAULTS);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

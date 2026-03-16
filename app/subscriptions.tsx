@@ -20,8 +20,7 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import subscriptionApi from '@/services/subscriptionApi';
 import type { SubscriptionTier, CurrentSubscription } from '@/services/subscriptionApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
@@ -29,10 +28,9 @@ import { colors } from '@/constants/theme';
 
 export default function SubscriptionsPage() {
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const isAuthenticated = authState.isAuthenticated;
-  const authLoading = authState.isLoading;
-  const { getCurrencySymbol } = useRegion();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [tiers, setTiers] = useState<SubscriptionTier[]>([]);

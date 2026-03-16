@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface DeliveryInfo {
@@ -16,7 +16,7 @@ interface DeliveryEstimatorProps {
 }
 
 function DeliveryEstimator({ productId, onCheckDelivery }: DeliveryEstimatorProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [pincode, setPincode] = useState('');
   const [loading, setLoading] = useState(false);

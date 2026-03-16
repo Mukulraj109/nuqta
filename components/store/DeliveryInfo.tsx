@@ -7,7 +7,7 @@ import {
   Pressable,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface DeliveryDetails {
@@ -41,7 +41,7 @@ const DeliveryInfo: React.FC<DeliveryInfoProps> = ({
   deliveryInfo,
   storeType = 'product',
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [showAllAreas, setShowAllAreas] = useState(false);
   const [showDeliveryDate, setShowDeliveryDate] = useState(false);

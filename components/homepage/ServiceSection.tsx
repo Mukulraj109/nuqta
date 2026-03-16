@@ -30,7 +30,7 @@ import {
   SERVICE_SECTION_CONFIG,
   SERVICE_COLORS,
 } from '@/config/serviceSectionConfig';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Animated components
@@ -193,7 +193,7 @@ const StoreListItem = memo(({
 // Main Component
 function ServiceSection() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const {
     activeSubcategory,

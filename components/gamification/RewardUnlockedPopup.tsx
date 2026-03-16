@@ -67,7 +67,7 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
     }
 
     // Entrance animation
-    const _anim0 = Animated.parallel([
+    const anim = Animated.parallel([
       Animated.spring(translateY, {
         toValue: 0,
         friction: 8,
@@ -85,7 +85,7 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
         useNativeDriver: true,
       }),
     ]);
-    _anim0.start();
+    anim.start();
 
     // Auto dismiss after duration (if duration > 0)
     let timer: NodeJS.Timeout | null = null;
@@ -95,7 +95,7 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
       }, duration);
     }
 
-    return () => { _anim0.stop(); if (timer) clearTimeout(timer); };
+    return () => { anim.stop(); if (timer) clearTimeout(timer); };
   }, []);
 
   const handleDismiss = () => {

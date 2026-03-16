@@ -31,10 +31,9 @@ import {
   getLockedItemCount,
   updateLockedProductTimers,
 } from '@/utils/mockCartData';
-import { useCart } from '@/contexts/CartContext';
 import { useCartValidation } from '@/hooks/useCartValidation';
-import { useWalletContext } from '@/contexts/WalletContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useCartStore } from '@/stores/cartStore';
+import { useTotalBalance, useWalletLoading, useIsAuthenticated } from '@/stores';
 import CachedImage from '@/components/ui/CachedImage';
 import cartApi from '@/services/cartApi';
 import { CartItemSkeleton } from '@/components/common/SkeletonLoader';
@@ -62,9 +61,11 @@ const formatTimeSlot = (start: string, end?: string): string => {
 export default function CartPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ offerRedemptionCode?: string }>();
-  const { state: cartState, actions: cartActions } = useCart();
-  const { totalBalance, isLoading: walletLoading } = useWalletContext();
-  const { isAuthenticated } = useAuth();
+  const cartState = useCartStore((s) => s.state);
+  const cartActions = useCartStore((s) => s.actions);
+  const totalBalance = useTotalBalance();
+  const walletLoading = useWalletLoading();
+  const isAuthenticated = useIsAuthenticated();
   const [activeTab, setActiveTab] = useState<'products' | 'service' | 'lockedproduct'>('products');
   const [lockedProducts, setLockedProducts] = useState<LockedProduct[]>([]);
 

@@ -19,7 +19,7 @@ import { useRouter } from 'expo-router';
 import { getImagePicker } from '@/utils/lazyImports';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import ugcApi from '@/services/ugcApi';
 import apiClient from '@/services/apiClient';
 import { platformAlert } from '@/utils/platformAlert';
@@ -43,7 +43,7 @@ interface TaggedStore {
 
 export default function UploadPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [contentType, setContentType] = useState<ContentType>('post');
   const [media, setMedia] = useState<string[]>([]);

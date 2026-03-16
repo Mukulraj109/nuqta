@@ -15,7 +15,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface Route {
@@ -35,7 +35,7 @@ const RelatedFlightsSection: React.FC<RelatedFlightsSectionProps> = ({
   route,
 }) => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [relatedFlights, setRelatedFlights] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);

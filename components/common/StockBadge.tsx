@@ -28,15 +28,15 @@ function StockBadge({
 
   // Entrance animation
   useEffect(() => {
-    const _anim0 = Animated.spring(scaleAnim, {
+    const anim = Animated.spring(scaleAnim, {
       toValue: 1,
       tension: 100,
       friction: 7,
       useNativeDriver: true,
     });
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
+    anim.start();
+
+    return () => { anim.stop(); };
 }, []);
 
   // Pulse animation for low stock

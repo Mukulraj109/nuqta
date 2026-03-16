@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
@@ -45,7 +45,8 @@ export const PriceAndRewardsSection: React.FC<PriceAndRewardsSectionProps> = ({
   cashbackAmount,
   bonusCoins = 50,
 }) => {
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const locale = getLocale();
   const currencySymbol = currency || getCurrencySymbol();
   // Calculate values

@@ -24,7 +24,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import { storesApi } from '@/services/storesApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const COLORS = {
@@ -67,7 +67,7 @@ const COMPARISON_SPECS = [
 function CompareDevicesPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ categoryId?: string }>();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [step, setStep] = useState<'category' | 'select' | 'compare'>(

@@ -10,7 +10,7 @@ import {
   ProfileMenuItem,
   UserPreferences
 } from '@/types/profile.types';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated, useAuthLoading, useAuthActions } from '@/stores/selectors';
 import authService, { User as BackendUser, ProfileUpdate } from '@/services/authApi';
 import profileApi from '@/services/profileApi';
 
@@ -111,8 +111,11 @@ let _profileCompletionLoaded = false;
 
 export const ProfileProvider = ({ children }: ProfileProviderProps) => {
   // Get auth context
-  const { state: authState, actions: authActions } = useAuth();
-  
+  const authUser = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const authActions = useAuthActions();
+
   // State
   const [error, setError] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -120,12 +123,12 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
 
   // Convert backend user to profile user format
   const user = useMemo(() => {
-    if (authState.user) {
-      const mappedUser = mapBackendUserToProfileUser(authState.user);
+    if (authUser) {
+      const mappedUser = mapBackendUserToProfileUser(authUser);
       return mappedUser;
     }
     return null;
-  }, [authState.user, authState.isAuthenticated]);
+  }, [authUser, isAuthenticated]);
 
   // Fetch profile completion from backend (single source of truth)
   const refreshCompletionStatus = useCallback(async () => {
@@ -143,20 +146,20 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
   // Skip during onboarding to prevent thundering herd of API calls on Android
   // Staggered delay (500ms) to avoid simultaneous API calls with Cart/Wishlist on mount
   useEffect(() => {
-    if (authState.user && authState.isAuthenticated && authState.user.isOnboarded) {
+    if (user && isAuthenticated && user.isOnboarded) {
       if (_profileCompletionLoaded) return; // Module-level dedup
       _profileCompletionLoaded = true;
       const timer = setTimeout(() => refreshCompletionStatus(), 500);
       return () => clearTimeout(timer);
-    } else if (!authState.isAuthenticated) {
+    } else if (!isAuthenticated) {
       setCompletionStatus(null);
       _profileCompletionLoaded = false;
     }
-  }, [authState.user, authState.isAuthenticated, refreshCompletionStatus]);
+  }, [user, isAuthenticated, refreshCompletionStatus]);
 
   // User data functions - delegate to AuthContext
   const updateUser = useCallback(async (userData: Partial<User>) => {
-    if (!authState.user) return;
+    if (!user) return;
 
     try {
       setError(null);
@@ -211,7 +214,7 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
       setError(err instanceof Error ? err.message : 'Failed to update user profile');
       throw err;
     }
-  }, [authState.user, authActions, refreshCompletionStatus]);
+  }, [user, authActions, refreshCompletionStatus]);
 
   const updatePreferences = useCallback(async (preferences: Partial<UserPreferences>) => {
     if (!user) return;
@@ -327,12 +330,12 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
 
   const contextValue: ProfileContextType = useMemo(() => ({
     user,
-    isLoading: authState.isLoading,
+    isLoading: authLoading,
     error,
     completionStatus,
     isModalVisible,
     ...stableProfileActions,
-  }), [user, authState.isLoading, error, completionStatus, isModalVisible, stableProfileActions]);
+  }), [user, authLoading, error, completionStatus, isModalVisible, stableProfileActions]);
 
   return (
     <ProfileContext.Provider value={contextValue}>

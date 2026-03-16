@@ -17,7 +17,7 @@ import {
   SUBSCRIPTION_BORDER_RADIUS,
   SUBSCRIPTION_SHADOW,
 } from '@/styles/subscriptionStyles';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 interface ROICalculatorProps {
   subscriptionCost: number;
@@ -32,7 +32,7 @@ function ROICalculator({
   showDetails = true,
   currency,
 }: ROICalculatorProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const effectiveCurrency = currency ?? getCurrencySymbol();
   const [expanded, setExpanded] = useState(false);
   const [animatedHeight] = useState(new Animated.Value(expanded ? 200 : 0));

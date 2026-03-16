@@ -14,9 +14,8 @@ import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import discountsApi, { Discount } from '@/services/discountsApi';
-import { useCart } from '@/contexts/CartContext';
+import { useCartState, useGetCurrencySymbol } from '@/stores/selectors';
 import { triggerImpact } from '@/utils/haptics';
-import { useRegion } from '@/contexts/RegionContext';
 import {
   Colors,
   Spacing,
@@ -39,10 +38,10 @@ function CardOffersSection({
   onOfferApplied,
   compact = false,
 }: CardOffersSectionProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const router = useRouter();
-  const { state: cartState } = useCart();
+  const cartState = useCartState();
   const [cardOffers, setCardOffers] = useState<Discount[]>([]);
   const [loading, setLoading] = useState(true);
   const [appliedOffer, setAppliedOffer] = useState<Discount | null>(null);

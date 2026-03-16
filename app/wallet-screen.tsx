@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useRegion } from '@/contexts/RegionContext';
 import RechargeWalletCard from "../components/RechargeWalletCard";
 import ProfileCompletionCard from "@/components/ProfileCompletionCard";
 import ScratchCardOffer from "@/components/ScratchCardOffer";
@@ -22,8 +21,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { CoinBalance, WalletScreenProps, COIN_TYPES, CoinType } from '@/types/wallet';
-import { useWalletContext } from '@/contexts/WalletContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useGetCurrency, useAuthUser, useIsAuthenticated, useAuthLoading, useWalletData, useWalletLoading, useWalletRefreshing, useRefreshWallet } from '@/stores/selectors';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { useProfile } from '@/contexts/ProfileContext';
 import { useReferral } from '@/hooks/useReferral';
@@ -48,19 +46,19 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
   onNavigateBack,
   onCoinPress,
 }) => {
-  const { state: { user, isAuthenticated, isLoading: authLoading } } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const currentUserId = user?.id || '';
   const router = useRouter();
   const { goBack } = useSafeNavigation();
-  const { getCurrency } = useRegion();
+  const getCurrency = useGetCurrency();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
 
-  const {
-    walletData,
-    isLoading: walletLoading,
-    isRefreshing: walletRefreshing,
-    refreshWallet,
-  } = useWalletContext();
+  const walletData = useWalletData();
+  const walletLoading = useWalletLoading();
+  const walletRefreshing = useWalletRefreshing();
+  const refreshWallet = useRefreshWallet();
 
   const { completionStatus, isLoading: profileLoading, error: profileError } = useProfile();
 

@@ -24,8 +24,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import QRScanner from '@/components/store-payment/QRScanner';
 import { ScannerPlaceholder } from '@/components/store-payment';
 import apiClient from '@/services/apiClient';
-import { useCart } from '@/contexts/CartContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useCartActions, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import analyticsService from '@/services/analyticsService';
 import { FormPageSkeleton } from '@/components/skeletons';
 
@@ -41,8 +40,9 @@ interface ResolvedStore {
 function DineInScanScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string; table?: string }>();
-  const { actions: cartActions } = useCart();
-  const { state: authState } = useAuth();
+  const cartActions = useCartActions();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   const [showScanner, setShowScanner] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -134,7 +134,7 @@ function DineInScanScreen() {
   }, [resolvedStore, tableNumber, cartActions, router]);
 
   // Auth gate
-  if (authState.isLoading) {
+  if (authLoading) {
     return (
       <SafeAreaView style={styles.container}>
         <FormPageSkeleton />
@@ -142,7 +142,7 @@ function DineInScanScreen() {
     );
   }
 
-  if (!authState.isAuthenticated) {
+  if (!isAuthenticated) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centerContent}>

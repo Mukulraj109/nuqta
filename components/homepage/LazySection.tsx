@@ -173,20 +173,19 @@ const LazySection: React.FC<LazySectionProps> = ({
     : useLazySectionNative(sectionY, scrollY, rootMargin, onVisible);
 
   // Track if section has ever been loaded — fade in content
+  // Note: fadeAnim is stored in a ref so it's stable; no cleanup needed
+  // (stopping the animation in cleanup caused a race condition where
+  // setHasLoaded triggered re-render → cleanup killed the animation at ~0 opacity)
   useEffect(() => {
     if (isVisible && !hasLoaded) {
       setHasLoaded(true);
-
-      const _anim0 = Animated.timing(fadeAnim, {
+      Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 200,
         useNativeDriver: true,
-      });
-      _anim0.start();
+      }).start();
     }
-  
-    return () => { _anim0.stop(); };
-}, [isVisible, hasLoaded, fadeAnim]);
+  }, [isVisible, hasLoaded, fadeAnim]);
 
   const shouldRenderContent = hasLoaded && (keepMounted || isVisible || !unloadWhenOffscreen);
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useCurrentLocation, useLocationPermission } from './useLocation';
-import { useRegion } from '@/contexts/RegionContext';
+import { useRegionState } from '@/stores/selectors';
 import storesService from '@/services/storesApi';
 
 // Interface for nearby store data from API
@@ -50,7 +50,7 @@ export function useNearbyStores(options: UseNearbyStoresOptions = {}): UseNearby
   const { permissionStatus, requestPermission } = useLocationPermission();
 
   // Region context for fallback coordinates and refetch on region change
-  const { state: regionState } = useRegion();
+  const regionState = useRegionState();
   const currentRegion = regionState.currentRegion;
   const regionConfig = regionState.regionConfig;
 

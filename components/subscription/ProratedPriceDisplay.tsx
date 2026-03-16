@@ -5,7 +5,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface ProratedPriceDisplayProps {
@@ -25,7 +25,7 @@ function ProratedPriceDisplay({
   newTier,
   daysRemaining,
 }: ProratedPriceDisplayProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   return (
     <View style={styles.container}>

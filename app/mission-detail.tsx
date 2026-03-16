@@ -20,7 +20,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, Stack, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { challengesApi, ChallengeProgress, Challenge } from '@/services/challengesApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import Svg, { Circle } from 'react-native-svg';
@@ -111,7 +111,7 @@ const MissionDetailScreen: React.FC = () => {
   const router = useRouter();
   const params = useLocalSearchParams<{ id: string; progressId: string }>();
   const { id: challengeId, progressId } = params;
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [loading, setLoading] = useState(true);

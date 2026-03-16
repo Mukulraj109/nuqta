@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import userLoyaltyApi, { UserLoyalty } from '@/services/userLoyaltyApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { getCategoryTheme, SHARED_COLORS, TIER_COLORS } from '@/config/categoryThemeConfig';
 import { platformAlertSimple } from '@/utils/platformAlert';
@@ -26,7 +26,7 @@ export default function LoyaltyHubPage() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = useMemo(() => getCategoryTheme(slug || 'electronics'), [slug]);
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [loyalty, setLoyalty] = useState<UserLoyalty | null>(null);

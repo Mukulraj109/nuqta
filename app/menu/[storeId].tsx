@@ -18,8 +18,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import menuApi, { MenuCategory as ApiMenuCategory, MenuItem as ApiMenuItem } from '@/services/menuApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
@@ -59,9 +58,10 @@ export default function MenuPage() {
   const storeId = params.storeId as string;
   const isDineIn = params.dineIn === 'true';
   const tableNumber = params.table as string | undefined;
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { state: { isAuthenticated, isLoading: authLoading } } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // State
   const [loading, setLoading] = useState(true);

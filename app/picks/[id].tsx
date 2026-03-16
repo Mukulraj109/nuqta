@@ -21,7 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import creatorsApi, { CreatorPick } from '@/services/creatorsApi';
 import { VideoPlayer } from '@/components/product/VideoPlayer';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 import { platformAlert } from '@/utils/platformAlert';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -55,8 +55,8 @@ const fmt = (n: number) => {
 const CreatorPickDetail = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { state: authState } = useAuth();
-  const currentUserId = authState.user?.id;
+  const user = useAuthUser();
+  const currentUserId = user?.id;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

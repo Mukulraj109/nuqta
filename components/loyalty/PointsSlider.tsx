@@ -8,7 +8,7 @@ import { View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@/components/common/CrossPlatformSlider';
 import { ThemedText } from '@/components/ThemedText';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface PointsSliderProps {
@@ -24,7 +24,7 @@ function PointsSlider({
   pointValue,
   onValueChange,
 }: PointsSliderProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const maxUsablePoints = Math.min(availablePoints, maxPointsForOrder);
   const [selectedPoints, setSelectedPoints] = useState(0);

@@ -23,7 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import apiClient from '@/services/apiClient';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { campaignsApi, DealRedemption } from '@/services/campaignsApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -103,7 +103,7 @@ interface Store {
 const StoreDetailPage: React.FC = () => {
   const router = useRouter();
   const { id, redemptionCode: passedRedemptionCode } = useLocalSearchParams<{ id: string; redemptionCode?: string }>();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   const [store, setStore] = useState<Store | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -158,7 +158,7 @@ const StoreDetailPage: React.FC = () => {
 
   // Fetch active redemptions for this store
   const fetchActiveRedemptions = useCallback(async () => {
-    if (!authState.isAuthenticated || !id) return;
+    if (!isAuthenticated || !id) return;
 
     setLoadingRedemptions(true);
     try {
@@ -192,7 +192,7 @@ const StoreDetailPage: React.FC = () => {
     } finally {
       setLoadingRedemptions(false);
     }
-  }, [authState.isAuthenticated, id, passedRedemptionCode, store]);
+  }, [isAuthenticated, id, passedRedemptionCode, store]);
 
   useEffect(() => {
     fetchActiveRedemptions();

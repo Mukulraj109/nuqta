@@ -24,9 +24,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import CachedImage from '@/components/ui/CachedImage';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { useFrequentlyOrdered } from '@/hooks/useReorder';
-import { useRegion } from '@/contexts/RegionContext';
 import type { FrequentlyOrderedItem } from '@/services/reorderApi';
 import { colors } from '@/constants/theme';
 
@@ -36,9 +35,10 @@ interface QuickReorderSectionProps {
 }
 
 const QuickReorderSection: React.FC<QuickReorderSectionProps> = ({ limit = 5 }) => {
-  const { state: authState } = useAuth();
-  const { isAuthenticated, isLoading: authLoading } = authState;
-  const { getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const router = useRouter();
 

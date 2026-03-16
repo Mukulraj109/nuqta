@@ -15,9 +15,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { useCheckout } from '@/hooks/useCheckout';
-import { useCart } from '@/contexts/CartContext';
+import { useCartState, useGetCurrencySymbol } from '@/stores/selectors';
 import { useCardOfferAutoApply } from '@/hooks/useCardOfferAutoApply';
-import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -26,8 +25,8 @@ const { width } = Dimensions.get('window');
 export default function PaymentMethodsPage() {
   const router = useRouter();
   const { state, handlers } = useCheckout();
-  const { state: cartState } = useCart();
-  const { getCurrencySymbol } = useRegion();
+  const cartState = useCartState();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [showUPIInput, setShowUPIInput] = useState(false);
   const [upiId, setUpiId] = useState('');

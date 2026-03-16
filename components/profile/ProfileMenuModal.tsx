@@ -21,9 +21,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
-import { useAuth } from '@/contexts/AuthContext';
+import {
+  useAuthActions,
+  useGetCurrencySymbol,
+  useGetLocale,
+  useRegionState,
+  useSetRegion,
+} from '@/stores/selectors';
 import { ProfileMenuModalProps, ProfileMenuItem } from '@/types/profile.types';
-import { useRegion, RegionId } from '@/contexts/RegionContext';
+import type { RegionId } from '@/stores/regionStore';
 import { useLocation } from '@/contexts/LocationContext';
 import { UserLocation } from '@/types/location.types';
 import { colors } from '@/constants/theme';
@@ -348,8 +354,11 @@ function ProfileMenuModal({
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { actions } = useAuth();
-  const { state: regionState, setRegion, getCurrencySymbol, getLocale } = useRegion();
+  const actions = useAuthActions();
+  const regionState = useRegionState();
+  const setRegion = useSetRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const { setManualLocation } = useLocation();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();

@@ -14,14 +14,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { storesApi } from '@/services/storesApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
 import { FoodStoreCard } from '@/components/food-dining';
 import { COLORS } from '@/components/food-dining/constants';
 
 export default function FastDeliveryPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [stores, setStores] = useState<any[]>([]);

@@ -19,7 +19,7 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import storesApi, { Store } from '@/services/storesApi';
 import servicesApi, { ServiceItem } from '@/services/servicesApi';
 import bookingApi from '@/services/bookingApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -66,7 +66,7 @@ export default function AppointmentBookingPage() {
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
   const borderColor = useThemeColor({}, 'border');
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // State management

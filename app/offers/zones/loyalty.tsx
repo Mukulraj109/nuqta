@@ -23,7 +23,7 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import realOffersApi from '@/services/realOffersApi';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -183,7 +183,7 @@ const getRemainingLabel = (milestone: LoyaltyMilestone, currencySymbol: string):
 export default function LoyaltyRewardsPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [milestones, setMilestones] = useState<LoyaltyMilestone[]>([]);

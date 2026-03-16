@@ -9,7 +9,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useSubscription } from '@/contexts/SubscriptionContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import subscriptionAPI from '@/services/subscriptionApi';
 import { SubscriptionTier, TIER_NAMES, TIER_COLORS } from '@/types/subscription.types';
 import { platformAlertSimple } from '@/utils/platformAlert';
@@ -20,7 +20,7 @@ export default function DowngradeConfirmationPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { state, computed, actions } = useSubscription();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const currentTier = (params.currentTier as SubscriptionTier) || state.currentSubscription?.tier || 'premium';

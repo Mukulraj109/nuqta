@@ -107,15 +107,15 @@ function EarningOpportunities() {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const _anim0 = Animated.timing(fadeAnim, {
+    const anim = Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 600,
       useNativeDriver: true,
     });
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
-}, []);
+    anim.start();
+
+    return () => { anim.stop(); };
+  }, []);
 
   const handleOpportunityPress = (opportunity: EarningOpportunity) => {
     router.push(opportunity.route as any);

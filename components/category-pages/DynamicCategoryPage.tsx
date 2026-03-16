@@ -46,9 +46,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 // Hooks
 import { useCategoryPageConfig } from '@/hooks/useCategoryPageConfig';
 import { useCategoryPageData } from '@/hooks/useCategoryPageData';
-import { useWalletContext } from '@/contexts/WalletContext';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useSavingsInsights, useGetCurrencySymbol, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 // API services
 import { categoriesApi } from '@/services/categoriesApi';
@@ -191,7 +189,7 @@ const StoreCard = ({
   defaultVisitMilestone?: number;
 }) => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const isCompact = variant === 'compact';
   const [imageError, setImageError] = useState(false);
@@ -414,11 +412,10 @@ const ServiceTypeCard = ({ serviceType, onPress }: { serviceType: PageConfigServ
 // ============================================
 function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { state: authState } = useAuth();
-  const isAuthenticated = authState.isAuthenticated;
-  const authLoading = authState.isLoading;
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // Fetch page configuration
   const {
@@ -453,7 +450,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
   });
 
   // Wallet data
-  const { savingsInsights } = useWalletContext();
+  const savingsInsights = useSavingsInsights();
   const savingsThisMonth = savingsInsights?.thisMonth || 0;
 
   // ============================================
@@ -642,7 +639,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
   useEffect(() => {
     if (recentOrders.length > 1) {
       const timer = setInterval(() => {
-        const _anim0 = Animated.timing(fadeAnim, {
+        Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 300,
           useNativeDriver: true,
@@ -652,14 +649,12 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
             toValue: 1,
             duration: 300,
             useNativeDriver: true,
-          });
-        _anim0.start();
+          }).start();
         });
       }, 4000);
       return () => {
-      _anim0.stop();
-      clearInterval(timer);
-    }
+        clearInterval(timer);
+      };
     }
   }, [recentOrders.length, fadeAnim]);
 

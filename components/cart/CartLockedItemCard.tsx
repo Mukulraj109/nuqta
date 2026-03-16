@@ -7,7 +7,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { LockedItem } from '@/services/cartApi';
 import { triggerImpact } from '@/utils/haptics';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import {
   Colors,
   Spacing,
@@ -76,7 +76,7 @@ function CartLockedItemCard({
   onCancelLock,
   onPress,
 }: CartLockedItemCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const backgroundColor = useThemeColor({}, 'background');
   const [timeRemaining, setTimeRemaining] = useState(() => getTimeRemaining(item.expiresAt));

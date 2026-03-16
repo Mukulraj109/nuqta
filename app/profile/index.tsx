@@ -10,8 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { useProfile } from '@/contexts/ProfileContext';
-import { useAuth } from '@/contexts/AuthContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useIsAuthenticated, useAuthLoading, useAuthActions, useRezBalance, useRefreshWallet, useGetCurrencySymbol } from '@/stores/selectors';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { HeaderBackButton } from '@/components/navigation/SafeBackButton';
 import {
@@ -33,26 +32,28 @@ import { getImagePicker } from '@/utils/lazyImports';
 import { uploadProfileImage } from '@/services/imageUploadService';
 import { ShareService } from '@/services/shareService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRegion } from '@/contexts/RegionContext';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { getReferralStats } from '@/services/referralApi';
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const { goBack } = useSafeNavigation();
   const { user, completionStatus, refreshCompletionStatus } = useProfile();
-  const { state: authState, actions: authActions } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const authActions = useAuthActions();
   const { statistics, isLoading: statsLoading, error: statsError, refetch: refetchStats } = useUserStatistics(true);
-  const { rezBalance: userPoints, refreshWallet } = useWalletContext();
+  const userPoints = useRezBalance();
+  const refreshWallet = useRefreshWallet();
   const [refreshing, setRefreshing] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [referralCount, setReferralCount] = useState<number | null>(null);
 
   // Fetch referral stats for "Friends joined" count
   useEffect(() => {
-    if (!authState.isAuthenticated || authState.loading) return;
+    if (!isAuthenticated || authLoading) return;
     let cancelled = false;
     getReferralStats().then(stats => {
       if (!cancelled && stats) {
@@ -60,7 +61,7 @@ export default function ProfilePage() {
       }
     });
     return () => { cancelled = true; };
-  }, [authState.isAuthenticated, authState.loading]);
+  }, [isAuthenticated, authLoading]);
 
 
 
@@ -187,14 +188,6 @@ export default function ProfilePage() {
   const handleImageUpload = async () => {
 
     try {
-      // Get auth token from auth context state
-      const token = authState.token;
-
-      if (!token) {
-        platformAlertSimple('Error', 'Authentication required. Please log in again.');
-        return;
-      }
-
       const ImagePicker = await getImagePicker();
 
       // Request permission (not needed on web)
@@ -222,8 +215,7 @@ export default function ProfilePage() {
 
         setUploadingImage(true);
 
-        // Pass the token directly to the upload function
-        const uploadResult = await uploadProfileImage(result.assets[0].uri, token);
+        const uploadResult = await uploadProfileImage(result.assets[0].uri);
 
         if (uploadResult.success) {
 

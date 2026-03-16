@@ -15,8 +15,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import tournamentApi, { Tournament, TournamentLeaderboardEntry, UserRankInTournament } from '../../services/tournamentApi';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useGetCurrencySymbol } from '@/stores/selectors';
 import { formatTimeLeft } from '@/types/playandearn.types';
 import { useTournamentSocket } from '@/hooks/useTournamentSocket';
 import { platformAlertSimple } from '@/utils/platformAlert';
@@ -54,10 +53,10 @@ const STATUS_CONFIG: Record<string, { colors: [string, string]; label: string; i
 
 const TournamentDetail = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { state: authState } = useAuth();
-  const currentUserId = authState.user?._id || authState.user?.id || '';
+  const user = useAuthUser();
+  const currentUserId = user?._id || user?.id || '';
   const params = useLocalSearchParams();
   const id = typeof params.id === 'string' ? params.id : Array.isArray(params.id) ? params.id[0] : params.id?.toString() || '';
 

@@ -43,7 +43,7 @@ import CoinIcon from '@/components/ui/CoinIcon';
 import { categoriesApi } from '@/services/categoriesApi';
 import { storesApi } from '@/services/storesApi';
 import apiClient from '@/services/apiClient';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { groceryQuickActions } from '@/data/category/groceryCategoryData';
 import { colors } from '@/constants/theme';
 
@@ -311,7 +311,7 @@ function GroceryCategoryPage() {
   const router = useRouter();
   const slug = 'grocery-essentials';
   const categoryConfig = getCategoryConfig(slug);
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const {

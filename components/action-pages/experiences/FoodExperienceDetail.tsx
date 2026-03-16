@@ -20,7 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { experiencesApi, StoreExperience } from '@/services/experiencesApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
 import { colors } from '@/constants/theme';
 
@@ -76,7 +76,7 @@ function StoreCard({ store, currencySymbol }: { store: any; currencySymbol: stri
 function ExperienceDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const [experience, setExperience] = useState<StoreExperience | null>(null);

@@ -315,14 +315,14 @@ const CashbackActivitySection: React.FC<CashbackActivitySectionProps> = ({
   const headerFadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const _anim0 = Animated.timing(headerFadeAnim, {
+    const anim = Animated.timing(headerFadeAnim, {
       toValue: 1,
       duration: 400,
       useNativeDriver: true,
     });
-    _anim0.start();
-  
-    return () => { _anim0.stop(); };
+    anim.start();
+
+    return () => { anim.stop(); };
 }, []);
 
   if (activities.length === 0 && !isLoading) {

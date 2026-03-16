@@ -9,7 +9,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import logger from '@/utils/logger';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 /**
@@ -57,7 +57,7 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
   productPrice,
   onPinCodeChange,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [pinCode, setPinCode] = useState('');
   const [isChecking, setIsChecking] = useState(false);

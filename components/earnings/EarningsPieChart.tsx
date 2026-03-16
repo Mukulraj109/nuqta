@@ -5,7 +5,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Circle, G } from 'react-native-svg';
 import { EarningsBreakdown } from '@/services/earningsApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface EarningsPieChartProps {
@@ -24,7 +24,7 @@ const EarningsPieChart: React.FC<EarningsPieChartProps> = ({
   breakdown,
   size = 200,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const radius = size / 2;
   const strokeWidth = 30;

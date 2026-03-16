@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { useProfile } from '@/contexts/ProfileContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthActions } from '@/stores/selectors';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { HeaderBackButton } from '@/components/navigation/SafeBackButton';
 import { PROFILE_COLORS } from '@/types/profile.types';
@@ -34,7 +34,7 @@ export default function ProfileEditPage() {
   const router = useRouter();
   const { goBack } = useSafeNavigation();
   const { user, updateUser } = useProfile();
-  const { state: authState, actions: authActions } = useAuth();
+  const authActions = useAuthActions();
 
   const [formData, setFormData] = useState<ProfileFormData>({
     name: user?.name || '',
@@ -130,13 +130,6 @@ export default function ProfileEditPage() {
 
   const handleImageUpload = async () => {
     try {
-      const token = authState.token;
-
-      if (!token) {
-        platformAlertSimple('Error', 'Authentication required. Please log in again.');
-        return;
-      }
-
       const ImagePicker = await getImagePicker();
 
       // Request permission (not needed on web)
@@ -169,7 +162,7 @@ export default function ProfileEditPage() {
         const maxRetries = 2;
 
         while (retryCount <= maxRetries) {
-          uploadResult = await uploadProfileImage(result.assets[0].uri, token);
+          uploadResult = await uploadProfileImage(result.assets[0].uri);
 
           if (uploadResult.success) {
             break; // Success, exit retry loop

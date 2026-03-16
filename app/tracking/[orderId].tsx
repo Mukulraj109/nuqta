@@ -12,7 +12,7 @@ import { useOrderTracking } from '@/hooks/useOrderTracking';
 import { Order } from '@/services/ordersApi';
 import ordersService from '@/services/ordersApi';
 import ContactStoreModal from '@/components/store/ContactStoreModal';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 
@@ -72,7 +72,7 @@ interface DetailedOrder {
 function DetailedOrderTrackingPage() {
   const router = useRouter();
   const { orderId } = useLocalSearchParams();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Use real-time order tracking hook

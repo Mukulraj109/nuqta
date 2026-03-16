@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { EarningCard as EarningCardType, EarningCardTheme } from '@/types/earning';
 import { formatPrice } from '@/utils/priceFormatter';
 import CoinIcon from '@/components/ui/CoinIcon';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface EarningCardProps {
@@ -33,7 +33,7 @@ const themeConfig: Record<EarningCardType['theme'], EarningCardTheme> = {
 };
 
 const EarningCard: React.FC<EarningCardProps> = ({ card }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const theme = themeConfig[card.theme] || themeConfig.purple;
   const safeEarning = typeof card.earning === 'number' ? card.earning : 0;

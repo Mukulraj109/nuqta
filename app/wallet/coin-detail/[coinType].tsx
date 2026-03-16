@@ -18,7 +18,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useWalletData, useWalletLoading, useWalletRefreshing, useRefreshWallet } from '@/stores/selectors';
 import { COIN_TYPES, CoinType } from '@/types/wallet';
 import { Colors, Spacing, BorderRadius, Shadows } from '@/constants/DesignSystem';
 import { ThemedText } from '@/components/ThemedText';
@@ -52,7 +52,10 @@ const DEFAULT_COIN_RULES: Record<string, { usageRules: string[]; earningMethods:
 export default function CoinDetailPage() {
   const { coinType } = useLocalSearchParams<{ coinType: string }>();
   const router = useRouter();
-  const { walletData, isLoading: walletLoading, isRefreshing: walletRefreshing, refreshWallet } = useWalletContext();
+  const walletData = useWalletData();
+  const walletLoading = useWalletLoading();
+  const walletRefreshing = useWalletRefreshing();
+  const refreshWallet = useRefreshWallet();
 
   const validTypes = ['rez', 'nuqta', 'promo', 'branded'];
   const type = (validTypes.includes(coinType || '') ? coinType : 'rez') as CoinType;

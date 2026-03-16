@@ -13,7 +13,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { EventFilters as EventFiltersType } from '@/services/eventsApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -67,7 +67,7 @@ function EventFilters({
   visible,
   onClose
 }: EventFiltersProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const PRICE_RANGES = getPriceRanges(currencySymbol);
   const [localFilters, setLocalFilters] = useState<EventFiltersType>(filters);

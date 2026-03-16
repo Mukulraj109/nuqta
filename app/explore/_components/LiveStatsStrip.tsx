@@ -10,7 +10,7 @@ import {
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import exploreApi, { ExploreStats } from '@/services/exploreApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -18,7 +18,7 @@ const { width } = Dimensions.get('window');
 
 const LiveStatsStrip = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [stats, setStats] = useState<ExploreStats>({
     activeUsers: 0,

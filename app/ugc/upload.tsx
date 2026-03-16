@@ -18,7 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { getImagePicker } from '@/utils/lazyImports';
 import { ThemedText } from '@/components/ThemedText';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -33,7 +33,7 @@ interface UploadForm {
 
 export default function UGCUploadScreen() {
   const router = useRouter();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
   const [uploading, setUploading] = useState(false);
 
   const [form, setForm] = useState<UploadForm>({
@@ -331,11 +331,11 @@ export default function UGCUploadScreen() {
         <View style={styles.userInfo}>
           <View style={styles.userAvatarPlaceholder}>
             <ThemedText style={styles.userAvatarText}>
-              {authState.user?.profile?.fullName?.charAt(0) || 'U'}
+              {user?.profile?.fullName?.charAt(0) || 'U'}
             </ThemedText>
           </View>
           <ThemedText style={styles.userName}>
-            {authState.user?.profile?.fullName || 'User'}
+            {user?.profile?.fullName || 'User'}
           </ThemedText>
         </View>
       </ScrollView>

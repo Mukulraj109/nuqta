@@ -16,7 +16,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { getProductsForCategory, DummyProduct } from '@/data/categoryDummyData';
 import CoinIcon from '@/components/ui/CoinIcon';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface BestDealsSectionProps {
@@ -33,7 +33,7 @@ const DealCard = memo(({
   product: DummyProduct;
   onPress: () => void;
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const discountPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
 

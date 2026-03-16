@@ -14,9 +14,8 @@ import { CartItemProps } from '@/types/cart';
 import { useStockStatus } from '@/hooks/useStockStatus';
 import StockBadge from '@/components/common/StockBadge';
 import QuantitySelector from '@/components/cart/QuantitySelector';
-import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/useToast';
-import { useRegion } from '@/contexts/RegionContext';
+import { useCartActions, useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 function CartItem({
@@ -34,9 +33,10 @@ function CartItem({
   const router = useRouter();
 
   // Cart context and toast
-  const { actions: cartActions } = useCart();
+  const cartActions = useCartActions();
   const { showSuccess, showError } = useToast();
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
 

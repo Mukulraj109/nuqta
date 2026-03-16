@@ -19,7 +19,7 @@ import { useRouter, Stack } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { useActivities } from '@/hooks/useActivities';
 import { Activity, ActivityType } from '@/services/activityApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -40,7 +40,7 @@ const ACTIVITY_TYPE_FILTERS: { label: string; value: ActivityType | 'all' }[] = 
 
 export default function ActivityFeedPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [selectedFilter, setSelectedFilter] = useState<ActivityType | 'all'>('all');
 

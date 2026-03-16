@@ -22,8 +22,7 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
-import { useAuth } from '@/contexts/AuthContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useAuthUser, useIsAuthenticated, useRezBalance } from '@/stores/selectors';
 import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
 import { profileMenuSections } from '@/data/profileData';
 import { CategoryBanner } from '@/config/categoryConfig';
@@ -152,10 +151,11 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({
   gradientColors: customGradientColors,
 }) => {
   const router = useRouter();
-  const { user, isModalVisible, showModal, hideModal } = useProfile();
+  const { user: profileUser, isModalVisible, showModal, hideModal } = useProfile();
   const { handleMenuItemPress } = useProfileMenu();
-  const { state: authState } = useAuth();
-  const { rezBalance: userPoints } = useWalletContext();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const userPoints = useRezBalance();
 
   // Get category-specific visuals
   const categoryVisuals = CATEGORY_VISUALS[categoryName] || {
@@ -325,14 +325,14 @@ const CategoryHeader: React.FC<CategoryHeaderProps> = ({
 
               <Pressable
                 style={styles.profileButton}
-                onPress={() => authState.isAuthenticated && showModal()}
+                onPress={() => isAuthenticated && showModal()}
               >
                 <LinearGradient
                   colors={[colors.brand.goldBright, '#FFA500', categoryVisuals.accentColor]}
                   style={styles.profileGradient}
                 >
                   <Text style={styles.profileInitial}>
-                    {authState.user?.profile?.firstName?.charAt(0).toUpperCase() || 'U'}
+                    {user?.profile?.firstName?.charAt(0).toUpperCase() || 'U'}
                   </Text>
                 </LinearGradient>
               </Pressable>

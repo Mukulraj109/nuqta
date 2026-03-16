@@ -30,7 +30,7 @@ import { NUQTA } from '@/components/search/searchTheme';
 import { useSearchPage } from '@/hooks/useSearchPage';
 import useDebouncedSearch from '@/hooks/useDebouncedSearch';
 import { useCurrentLocation } from '@/hooks/useLocation';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { searchHistoryService } from '@/services/searchHistoryService';
 import { Spacing } from '@/constants/DesignSystem';
 
@@ -45,7 +45,7 @@ export default function SearchPage() {
   const { currentLocation } = useCurrentLocation();
 
   // Get currency symbol for price display
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Use debounced search hook

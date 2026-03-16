@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import gameApi from '../../services/gameApi';
 import { useGamification } from '@/contexts/GamificationContext';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
@@ -151,7 +151,8 @@ const ConfettiParticle: React.FC<{ delay: number; color: string }> = ({ delay, c
 const CoinHunt = () => {
   const router = useRouter();
   const { actions: gamificationActions } = useGamification();
-  const { rezBalance: walletBalance, refreshWallet } = useWalletContext();
+  const walletBalance = useRezBalance();
+  const refreshWallet = useRefreshWallet();
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30);
   const [gameState, setGameState] = useState<'start' | 'playing' | 'result'>('start');

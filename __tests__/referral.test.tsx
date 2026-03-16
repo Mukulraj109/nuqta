@@ -7,7 +7,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react-native';
 import ReferralPage from '../app/referral';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import * as Clipboard from 'expo-clipboard';
 import { Share, Alert } from 'react-native';
 import {
@@ -18,26 +18,19 @@ import {
 } from '@/services/referralApi';
 
 // Mock the dependencies
-jest.mock('@/contexts/AuthContext');
+jest.mock('@/stores/selectors', () => ({
+  ...jest.requireActual('@/stores/selectors'),
+  useIsAuthenticated: jest.fn(),
+}));
 jest.mock('@/services/referralApi');
 jest.mock('expo-clipboard');
 jest.mock('@/utils/privacy', () => ({
   anonymizeEmail: jest.fn((email) => `${email.slice(0, 3)}***@***`),
 }));
 
-describe('ReferralPage', () => {
-  // Mock data
-  const mockAuthState = {
-    state: {
-      isAuthenticated: true,
-      user: {
-        id: 'user123',
-        name: 'Test User',
-        email: 'test@example.com',
-      },
-    },
-  };
+const mockUseIsAuthenticated = useIsAuthenticated as jest.MockedFunction<typeof useIsAuthenticated>;
 
+describe('ReferralPage', () => {
   const mockReferralCode = {
     referralCode: 'TEST123',
     referralLink: 'https://rezapp.com/invite/TEST123',
@@ -81,7 +74,7 @@ describe('ReferralPage', () => {
     jest.clearAllMocks();
 
     // Mock authentication
-    (useAuth as jest.Mock).mockReturnValue(mockAuthState);
+    mockUseIsAuthenticated.mockReturnValue(true);
 
     // Mock API calls
     (getReferralCode as jest.Mock).mockResolvedValue(mockReferralCode);
@@ -290,9 +283,7 @@ describe('ReferralPage', () => {
       const mockUseRouter = require('expo-router').useRouter;
       mockUseRouter.mockReturnValue(mockRouter);
 
-      (useAuth as jest.Mock).mockReturnValue({
-        state: { isAuthenticated: false },
-      });
+      mockUseIsAuthenticated.mockReturnValue(false);
 
       const alertSpy = jest.spyOn(Alert, 'alert');
       render(<ReferralPage />);

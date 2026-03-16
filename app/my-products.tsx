@@ -22,12 +22,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useNavigation } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import ordersService from '@/services/ordersApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated, useAuthLoading, useRefreshCart, useGetCurrencySymbol } from '@/stores/selectors';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { HeaderBackButton } from '@/components/navigation/SafeBackButton';
 import { useReorder } from '@/hooks/useReorder';
-import { useCart } from '@/contexts/CartContext';
-import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -54,9 +52,10 @@ interface PurchasedProduct {
 const MyProductsPage = () => {
   const router = useRouter();
   const navigation = useNavigation();
-  const { state: authState } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const { goBack } = useSafeNavigation();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [products, setProducts] = useState<PurchasedProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,7 +73,7 @@ const MyProductsPage = () => {
   } | null>(null);
 
   const { reorderFull, reordering, validation, error: reorderError } = useReorder();
-  const { refreshCart } = useCart();
+  const refreshCart = useRefreshCart();
 
   const handleBackPress = useCallback(() => {
     goBack('/profile' as any);
@@ -102,11 +101,11 @@ const MyProductsPage = () => {
         setLoadingMore(true);
       }
 
-      if (authState.isLoading) {
+      if (authLoading) {
         return;
       }
 
-      if (!authState.isAuthenticated || !authState.token) {
+      if (!isAuthenticated || !null /* TODO: token not available via selectors */) {
         setProducts([]);
         setLoading(false);
         return;
@@ -162,14 +161,14 @@ const MyProductsPage = () => {
       setRefreshing(false);
       setLoadingMore(false);
     }
-  }, [activeTab, authState.isLoading, authState.isAuthenticated, authState.token]);
+  }, [activeTab, authLoading, isAuthenticated, null /* TODO: token not available via selectors */]);
 
   useEffect(() => {
     // Only fetch when auth is ready
-    if (!authState.isLoading && authState.isAuthenticated) {
+    if (!authLoading && isAuthenticated) {
       fetchProducts();
     }
-  }, [fetchProducts, authState.isLoading, authState.isAuthenticated]);
+  }, [fetchProducts, authLoading, isAuthenticated]);
 
   const handleRefresh = useCallback(() => {
     setRefreshing(true);

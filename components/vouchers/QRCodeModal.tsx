@@ -18,7 +18,7 @@ import * as Clipboard from 'expo-clipboard';
 import * as Brightness from 'expo-brightness';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -47,7 +47,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
   onClose,
   onMarkAsUsed,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [qrRef, setQrRef] = useState<any>(null);
   const [originalBrightness, setOriginalBrightness] = useState<number | null>(null);

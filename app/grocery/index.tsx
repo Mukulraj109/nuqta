@@ -23,7 +23,7 @@ import { GroceryHubSkeleton } from '@/components/grocery/GrocerySkeleton';
 import GroceryStoreCard from '@/components/grocery/GroceryStoreCard';
 import { categoriesApi } from '@/services/categoriesApi';
 import { storesApi } from '@/services/storesApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -96,7 +96,7 @@ interface Stats {
 
 const GroceryPage: React.FC = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // State

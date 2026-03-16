@@ -10,7 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { RewardItem } from '@/types/loyaltyRedemption.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface RewardCardProps {
@@ -30,7 +30,7 @@ function RewardCard({
   tierColor = colors.brand.purpleLight,
   compact = false,
 }: RewardCardProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const getTypeIcon = (type: string): any => {
     switch (type) {

@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import gamificationAPI from '@/services/gamificationApi';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated } from '@/stores/selectors';
 import {
   StreakData,
   Mission,
@@ -67,7 +67,7 @@ const transformChallengeToMission = (challenge: PlayAndEarnResponse['challenges'
 });
 
 export function useStreaksGamification(): UseStreaksGamificationResult {
-  const { isAuthenticated } = useAuth();
+  const isAuthenticated = useIsAuthenticated();
   const [streak, setStreak] = useState<StreakData>(DEFAULT_STREAK);
   const [missions, setMissions] = useState<Mission[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

@@ -30,9 +30,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { ProductItem } from '@/types/homepage.types';
 import storesApi from '@/services/storesApi';
 import { useStoreData } from '@/hooks/useStoreData';
-import { useCart } from '@/contexts/CartContext';
+import { useCartState, useCartActions, useAuthUser, useIsAuthenticated, useGetCurrencySymbol } from '@/stores/selectors';
 import { useWishlist } from '@/contexts/WishlistContext';
-import { useAuth } from '@/contexts/AuthContext';
 import { triggerImpact } from '@/utils/haptics';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import apiClient from '@/services/apiClient';
@@ -44,7 +43,6 @@ import { RetryButton } from '@/components/common/RetryButton';
 import analyticsService from '@/services/analyticsService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { showToast } from '@/components/common/ToastManager';
-import { useRegion } from '@/contexts/RegionContext';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
@@ -252,16 +250,17 @@ function StoreProductsPage({}: StoreProductsPageProps) {
   const { data: storeData, loading: storeLoading } = useStoreData(storeId || '');
 
   // Cart and Wishlist context
-  const { state: cartState, actions: cartActions } = useCart();
+  const cartState = useCartState();
+  const cartActions = useCartActions();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   // Toast notifications (using showToast from ToastManager directly)
 
   // Authentication context
-  const { state: authState } = useAuth();
-  const isAuthenticated = authState.isAuthenticated && !!authState.user;
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
 
   // Network status
   const { isOnline, isOffline, connectionQuality, waitForNetwork } = useNetworkStatus();

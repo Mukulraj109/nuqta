@@ -22,7 +22,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { Ionicons } from '@expo/vector-icons';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/priveTheme';
 import { Colors } from '@/constants/DesignSystem';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertConfirm, platformAlertSimple } from '@/utils/platformAlert';
 import priveApi, { Voucher } from '@/services/priveApi';
 import { colors } from '@/constants/theme';
@@ -45,7 +45,7 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function VouchersScreen() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
   const [isLoading, setIsLoading] = useState(true);

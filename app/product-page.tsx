@@ -34,9 +34,7 @@ import BottomBanner from '@/components/product/BottomBanner';
 import ProductStickyBottomBar from '@/components/product/ProductStickyBottomBar';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { prefetchImages } from '@/components/ui/CachedImage';
-import { useAuth } from '@/contexts/AuthContext';
-import { useCart } from '@/contexts/CartContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useIsAuthenticated, useAuthLoading, useCartState, useRefreshCart, useGetCurrencySymbol } from '@/stores/selectors';
 import cartApi from '@/services/cartApi';
 import asyncStorageService from '@/services/asyncStorageService';
 import reviewsService from '@/services/reviewsApi';
@@ -189,9 +187,11 @@ function formatReviewDate(dateString: string): string {
 export default function StorePage() {
   const params = useLocalSearchParams();
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const { state: cartState, refreshCart } = useCart();
-  const { getCurrencySymbol } = useRegion();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const cartState = useCartState();
+  const refreshCart = useRefreshCart();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [cardData, setCardData] = useState<DynamicCardData | null>(null);
   const [isDynamic, setIsDynamic] = useState(false);
@@ -392,7 +392,7 @@ export default function StorePage() {
 
   // Check if product is locked (call this when page comes into focus)
   const checkLockStatus = useCallback(async () => {
-    if (authState.isLoading || !authState.isAuthenticated) return;
+    if (authLoading || !isAuthenticated) return;
     const productId = cardData?.id || cardData?._id || params.cardId;
     if (!productId) return;
 
@@ -408,7 +408,7 @@ export default function StorePage() {
     } catch (error) {
       // silently handle
     }
-  }, [cardData?.id, cardData?._id, params.cardId, authState.isLoading, authState.isAuthenticated]);
+  }, [cardData?.id, cardData?._id, params.cardId, authLoading, isAuthenticated]);
 
   // Refresh lock status when page comes into focus
   useFocusEffect(

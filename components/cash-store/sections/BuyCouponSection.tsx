@@ -19,7 +19,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { GiftCardBrand } from '../../../types/cash-store.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface BuyCouponSectionProps {
@@ -34,7 +34,7 @@ const GiftCardCard: React.FC<{
   index: number;
   onPress: () => void;
 }> = memo(({ brand, index, onPress }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   const scaleAnim = useRef(new Animated.Value(0.9)).current;

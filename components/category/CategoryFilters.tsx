@@ -12,7 +12,7 @@ import Slider from '@/components/common/CrossPlatformSlider';
 
 import { ThemedText } from '@/components/ThemedText';
 import { CategoryFilter } from '@/types/category.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface CategoryFiltersProps {
@@ -28,7 +28,7 @@ function CategoryFilters({
   onFilterChange,
   onReset,
 }: CategoryFiltersProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [expandedFilters, setExpandedFilters] = useState<Set<string>>(new Set());
 

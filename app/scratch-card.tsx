@@ -20,7 +20,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { useGamification } from '@/contexts/GamificationContext';
 import { platformAlert, platformAlertSimple } from '@/utils/platformAlert';
 import { useScratchCard } from '@/hooks/useScratchCard';
@@ -33,7 +33,9 @@ const { width } = Dimensions.get('window');
 
 export default function ScratchCardPage() {
   const router = useRouter();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const { actions: gamificationActions } = useGamification();
   const {
     state: cardState,
@@ -59,8 +61,8 @@ export default function ScratchCardPage() {
 
   // Auth guard — runs once on mount
   useEffect(() => {
-    if (!authState.isLoading) {
-      if (authState.isAuthenticated && authState.user) {
+    if (!authLoading) {
+      if (isAuthenticated && user) {
         if (!hasLoadedRef.current) {
           hasLoadedRef.current = true;
           checkEligibility();
@@ -69,7 +71,7 @@ export default function ScratchCardPage() {
         router.replace({ pathname: '/sign-in', params: { returnTo: '/scratch-card' } } as any);
       }
     }
-  }, [authState.isAuthenticated, authState.isLoading]);
+  }, [isAuthenticated, authLoading]);
 
   // Refresh on re-focus (skip initial focus — handled by useEffect above)
   useFocusEffect(
@@ -78,11 +80,11 @@ export default function ScratchCardPage() {
         isFirstFocusRef.current = false;
         return;
       }
-      if (authState.isAuthenticated) {
+      if (isAuthenticated) {
         checkEligibility();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [authState.isAuthenticated])
+    }, [isAuthenticated])
   );
 
   // Animate card entrance — only once when card first becomes available

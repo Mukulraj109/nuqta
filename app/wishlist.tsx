@@ -22,8 +22,7 @@ import { useRouter, Stack } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import wishlistApi, { Wishlist, WishlistItem as ApiWishlistItem, DiscountSnapshot } from '@/services/wishlistApi';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRegion } from '@/contexts/RegionContext';
+import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { useWishlist } from '@/contexts/WishlistContext';
 import ShareModal from '@/components/wishlist/ShareModal';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
@@ -84,8 +83,9 @@ interface WishlistData {
 
 export default function WishlistPage() {
   const router = useRouter();
-  const { state: authState } = useAuth();
-  const { getCurrencySymbol } = useRegion();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const { refreshWishlist } = useWishlist(); // Global wishlist context for syncing state
   const [wishlists, setWishlists] = useState<WishlistData[]>([]);
@@ -294,7 +294,7 @@ export default function WishlistPage() {
       setIsLoading(true);
       setError(null);
 
-      if (!authState?.isAuthenticated) {
+      if (!isAuthenticated) {
         setWishlists([]);
         setIsLoading(false);
         return;
@@ -340,7 +340,7 @@ export default function WishlistPage() {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, [authState?.isAuthenticated]);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     fetchWishlists();
@@ -949,7 +949,7 @@ export default function WishlistPage() {
           wishlistId={selectedWishlistForShare.id}
           wishlistName={selectedWishlistForShare.name}
           itemCount={selectedWishlistForShare.itemCount}
-          ownerName={authState?.user?.profile?.firstName || 'User'}
+          ownerName={user?.profile?.firstName || 'User'}
         />
       )}
     </ThemedView>

@@ -12,10 +12,9 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useAvailableBalance, useRefreshWallet, useGetCurrencySymbol } from '@/stores/selectors';
 import cartService, { LockWithPaymentRequest } from '@/services/cartApi';
 import { triggerImpact, triggerNotification } from '@/utils/haptics';
-import { useRegion } from '@/contexts/RegionContext';
 import { DurationChips, LockDuration, LOCK_FEE_PERCENTAGES, calculateLockFee } from './DurationChips';
 import { colors } from '@/constants/theme';
 
@@ -54,9 +53,10 @@ function LockPriceModal({
   variant,
   onLockSuccess,
 }: LockPriceModalProps) {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { availableBalance, refreshWallet } = useWalletContext();
+  const availableBalance = useAvailableBalance();
+  const refreshWallet = useRefreshWallet();
 
   const [selectedDuration, setSelectedDuration] = useState<LockDuration>(DEFAULT_DURATION);
   const [isLoading, setIsLoading] = useState(false);

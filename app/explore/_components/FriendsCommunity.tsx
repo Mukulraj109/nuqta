@@ -14,7 +14,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import exploreApi, { CommunityActivity } from '@/services/exploreApi';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
 const { width } = Dimensions.get('window');
@@ -45,7 +45,7 @@ interface FriendShopping {
 
 const FriendsCommunity = () => {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [activities, setActivities] = useState<CommunityActivity[]>([]);
   const [friendsShopping, setFriendsShopping] = useState<FriendShopping[]>([]);

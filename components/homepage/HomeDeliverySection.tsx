@@ -30,7 +30,7 @@ import {
   HOME_DELIVERY_SECTION_CONFIG,
   HOME_DELIVERY_COLORS,
 } from '@/config/homeDeliverySectionConfig';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 // Animated components
@@ -193,7 +193,7 @@ const StoreListItem = memo(({
 // Main Component
 function HomeDeliverySection() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const {
     activeSubcategory,

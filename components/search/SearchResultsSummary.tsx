@@ -5,7 +5,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { SearchResultsSummary as SearchResultsSummaryType } from '@/types/search.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface SearchResultsSummaryProps {
@@ -14,7 +14,8 @@ interface SearchResultsSummaryProps {
 }
 
 function SearchResultsSummary({ query, summary }: SearchResultsSummaryProps) {
-  const { getCurrencySymbol, getLocale } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const getLocale = useGetLocale();
   const currencySymbol = getCurrencySymbol();
   const locale = getLocale();
 

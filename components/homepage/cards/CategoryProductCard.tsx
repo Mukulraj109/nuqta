@@ -12,7 +12,7 @@ import { useRouter } from 'expo-router';
 import { HomepageProduct } from '@/services/productApi';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface CategoryProductCardProps {
@@ -25,7 +25,7 @@ function CategoryProductCard({
   width = 156,
 }: CategoryProductCardProps) {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);

@@ -23,7 +23,7 @@ import OffersSection from '@/components/category/OffersSection';
 import ExperiencesSection from '@/components/category/ExperiencesSection';
 import OrderAgainSection from '@/components/category/OrderAgainSection';
 import { useCategoryPageData } from '@/hooks/useCategoryPageData';
-import { useWalletContext } from '@/contexts/WalletContext';
+import { useSavingsInsights, useGetCurrencySymbol } from '@/stores/selectors';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import EmptyState from '@/components/common/EmptyState';
 import { LoadingState } from '@/components/common/LoadingState';
@@ -33,7 +33,6 @@ import ordersApi, { Order } from '@/services/ordersApi';
 import tableBookingApi from '@/services/tableBookingApi';
 import { storesApi } from '@/services/storesApi';
 import productsApi from '@/services/productsApi';
-import { useRegion } from '@/contexts/RegionContext';
 
 // Extracted food-dining components
 import {
@@ -52,7 +51,7 @@ import { colors } from '@/constants/theme';
 
 function FoodDiningCategoryPage() {
   const router = useRouter();
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const slug = 'food-dining';
   const categoryConfig = getCategoryConfig(slug);
@@ -100,7 +99,7 @@ function FoodDiningCategoryPage() {
   })) || SORT_OPTIONS, [pageConfig?.sortOptions]);
 
   // Wallet data for savings display
-  const { savingsInsights } = useWalletContext();
+  const savingsInsights = useSavingsInsights();
   const savingsThisMonth = savingsInsights?.thisMonth || 0;
 
   // ===== State =====
@@ -260,16 +259,14 @@ function FoodDiningCategoryPage() {
   useEffect(() => {
     if (recentOrders.length > 1) {
       const timer = setInterval(() => {
-        const _anim0 = Animated.timing(fadeAnim, { toValue: 0, duration: 300, useNativeDriver: true }).start(() => {
+        Animated.timing(fadeAnim, { toValue: 0, duration: 300, useNativeDriver: true }).start(() => {
           setTickerIndex((prev) => (prev + 1) % recentOrders.length);
-          Animated.timing(fadeAnim, { toValue: 1, duration: 300, useNativeDriver: true });
-        _anim0.start();
+          Animated.timing(fadeAnim, { toValue: 1, duration: 300, useNativeDriver: true }).start();
         });
       }, 4000);
       return () => {
-      _anim0.stop();
-      clearInterval(timer);
-    }
+        clearInterval(timer);
+      };
     }
   }, [recentOrders.length, fadeAnim]);
 

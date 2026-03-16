@@ -20,8 +20,7 @@ import { FlashList } from '@shopify/flash-list';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRegion } from '@/contexts/RegionContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useGetCurrencySymbol, useIsAuthenticated, useRegionState } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { CachedImage } from '@/components/ui/CachedImage';
 import { platformAlert } from '@/utils/platformAlert';
@@ -53,13 +52,13 @@ export default function RechargePage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const initialAmount = (params.amount as string) || '';
-  const { getCurrencySymbol, state: regionState } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const regionState = useRegionState();
   const currencySymbol = getCurrencySymbol();
   // Map region countryCode to phone prefix for fallback
   const regionPhonePrefix = regionState.regionConfig?.countryCode === 'AE' ? '+971'
     : regionState.regionConfig?.countryCode === 'CN' ? '+86' : '+91';
-  const { state: authState } = useAuth();
-
+  const isAuthenticated = useIsAuthenticated();
   // Form state
   const [mobileNumber, setMobileNumber] = useState('');
   const [selectedOperator, setSelectedOperator] = useState<Operator | null>(null);
@@ -161,7 +160,7 @@ export default function RechargePage() {
   const handleProceed = useCallback(async () => {
     if (!mobileNumber || mobileNumber.length !== 10 || !amount || !selectedOperator) return;
 
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       router.push('/sign-in');
       return;
     }
@@ -193,7 +192,7 @@ export default function RechargePage() {
     } finally {
       setSubmitting(false);
     }
-  }, [mobileNumber, amount, selectedOperator, selectedPlan, authState.isAuthenticated, router]);
+  }, [mobileNumber, amount, selectedOperator, selectedPlan, isAuthenticated, router]);
 
   // ============================================
   // QUICK AMOUNTS (derived from plans or fallback)

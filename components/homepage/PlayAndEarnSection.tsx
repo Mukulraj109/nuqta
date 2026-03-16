@@ -11,7 +11,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import gamificationApi, { PlayAndEarnData } from '@/services/gamificationApi';
 
 // Import card components
@@ -41,12 +41,11 @@ const COLORS = {
 
 const PlayAndEarnSection: React.FC = () => {
   const router = useRouter();
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const [data, setData] = useState<PlayAndEarnData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const isAuthenticated = authState?.isAuthenticated ?? false;
 
   const fetchPlayAndEarnData = useCallback(async () => {
     if (!isAuthenticated) {

@@ -10,7 +10,7 @@ import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ExternalWallet } from '@/types/storePayment.types';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { borderRadius, colors, spacing, typography } from '@/constants/theme';
 
 interface WalletPaymentOptionProps {
@@ -26,7 +26,7 @@ export const WalletPaymentOption: React.FC<WalletPaymentOptionProps> = ({
   onSelect,
   disabled = false,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   return (

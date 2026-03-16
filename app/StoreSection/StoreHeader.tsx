@@ -7,9 +7,8 @@ import { useRouter, useFocusEffect } from 'expo-router';
 import { triggerImpact, triggerNotification } from "@/utils/haptics";
 import { ThemedText } from '@/components/ThemedText';
 import { useWishlist } from '@/contexts/WishlistContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useIsAuthenticated, useRezBalance, useWalletLoading } from '@/stores/selectors';
 import wishlistApi from '@/services/wishlistApi';
-import { useWalletContext } from '@/contexts/WalletContext';
 import EnhancedCoinBadge from '@/components/product/EnhancedCoinBadge';
 import AvailabilityBadge from '@/components/product/AvailabilityBadge';
 import { ImageZoomModal } from '@/components/product/ImageZoomModal';
@@ -64,8 +63,9 @@ function StoreHeader({
 }: StoreHeaderProps) {
   const router = useRouter();
   const { refreshWishlist } = useWishlist();
-  const { state: authState } = useAuth();
-  const { rezBalance: coinCount, isLoading: isLoadingCoins } = useWalletContext();
+  const isAuthenticated = useIsAuthenticated();
+  const coinCount = useRezBalance();
+  const isLoadingCoins = useWalletLoading();
 
   // Wishlist state
   const [isSaved, setIsSaved] = useState(false);
@@ -82,7 +82,7 @@ function StoreHeader({
 
   // Check wishlist status function
   const checkWishlistStatus = useCallback(async () => {
-    if (!authState.isAuthenticated || !productId) return;
+    if (!isAuthenticated || !productId) return;
 
     try {
       const response = await wishlistApi.checkWishlistStatus('product', productId);
@@ -94,7 +94,7 @@ function StoreHeader({
     } catch (error) {
       setIsSaved(false);
     }
-  }, [productId, authState.isAuthenticated]);
+  }, [productId, isAuthenticated]);
 
   useEffect(() => {
     checkWishlistStatus();
@@ -138,7 +138,7 @@ function StoreHeader({
   const handleFavoritePress = useCallback(async () => {
     triggerImpact('Medium');
 
-    if (!authState.isAuthenticated) {
+    if (!isAuthenticated) {
       router.push('/sign-in');
       return;
     }
@@ -173,7 +173,7 @@ function StoreHeader({
     } finally {
       setIsWishlistLoading(false);
     }
-  }, [authState.isAuthenticated, productId, isSaved, refreshWishlist, router]);
+  }, [isAuthenticated, productId, isSaved, refreshWishlist, router]);
 
   // Animation helper
   const animateScale = (animValue: Animated.Value, toValue: number) => {

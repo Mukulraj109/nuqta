@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { router } from 'expo-router';
 import realOffersApi, { Offer, OfferCategory, HeroBanner, OffersPageData } from '@/services/realOffersApi';
 import { useLocation } from '@/contexts/LocationContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 
 export interface OffersPageState {
   pageData: OffersPageData | null;
@@ -43,7 +43,8 @@ export interface UseOffersPageReturn {
 }
 
 export function useOffersPage(): UseOffersPageReturn {
-  const { state: authState } = useAuth();
+  const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const { state: locationState, requestLocationPermission } = useLocation();
   
   const [state, setState] = useState<OffersPageState>({

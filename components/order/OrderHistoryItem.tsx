@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 interface OrderHistoryItemProps {
@@ -23,7 +23,7 @@ interface OrderHistoryItemProps {
 }
 
 const OrderHistoryItem: React.FC<OrderHistoryItemProps> = ({ order, onPress, onReorder, onTrack }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
   if (!order) return null;

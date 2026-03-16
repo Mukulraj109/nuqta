@@ -17,7 +17,7 @@ import * as Clipboard from 'expo-clipboard';
 import * as Linking from 'expo-linking';
 import { ThemedText } from '@/components/ThemedText';
 import logger from '@/utils/logger';
-import { useRegion } from '@/contexts/RegionContext';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -65,7 +65,7 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
   onClose,
   onMarkAsUsed,
 }) => {
-  const { getCurrencySymbol } = useRegion();
+  const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [copySuccess, setCopySuccess] = useState(false);
   const [marking, setMarking] = useState(false);
