@@ -332,8 +332,19 @@ const APP_PREFS_DEFAULTS: AppPreferencesContextType = {
 };
 
 // Hook to use app preferences context
+// Now backed by Zustand store — works with or without AppPreferencesProvider in tree.
 export function useAppPreferences(): AppPreferencesContextType {
   const context = useContext(AppPreferencesContext);
-  if (context === undefined) return APP_PREFS_DEFAULTS;
-  return context;
+  const store = __useAppPreferencesStore();
+  if (context) return context;
+  return store as unknown as AppPreferencesContextType;
+}
+
+// Lazy import to avoid circular deps
+let __useAppPreferencesStore: () => any;
+try {
+  const { useAppPreferencesStore } = require('@/stores/appPreferencesStore');
+  __useAppPreferencesStore = useAppPreferencesStore;
+} catch {
+  __useAppPreferencesStore = () => APP_PREFS_DEFAULTS;
 }

@@ -1,6 +1,27 @@
 /**
  * Full provider tree for the app.
  * Composes all eager and deferred context providers in the correct nesting order.
+ *
+ * Removed providers (now Zustand stores):
+ * - NuqtaThemeProvider → themeStore
+ * - CrossPlatformAlertProvider → alertStore
+ * - ToastProvider → toastStore
+ * - DeferredOfflineQueue → offlineQueueStore
+ * - DeferredSubscription → subscriptionStore
+ * - RegionProvider → regionStore
+ * - DeferredNotification → notificationStore
+ * - SharedSkeletonProvider → module-level singleton
+ * - AppProvider → appStore
+ * - HomeTabProvider → homeTabStore
+ * - RewardPopupProvider → rewardPopupStore
+ * - DeferredSecurity → securityStore
+ * - DeferredWishlist → wishlistStore
+ * - DeferredProfile → profileStore
+ * - DeferredGreeting → greetingStore
+ * - DeferredOffers → offersThemeStore
+ * - DeferredAppPreferences → appPreferencesStore
+ * - DeferredCategory → categoryStore
+ * - DeferredRecommendation → recommendationStore
  */
 import React, { useEffect, useRef } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -10,39 +31,20 @@ import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import analytics from '@/services/analytics/AnalyticsService';
 
-import { ThemeProvider as NuqtaThemeProvider, useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
-import { AppProvider } from '@/contexts/AppContext';
 import { AuthProvider } from '@/contexts/AuthContext';
-// OfflineQueueProvider is now deferred via DeferredOfflineQueue
-import { ToastProvider } from '@/contexts/ToastContext';
 import { LocationProvider } from '@/contexts/LocationContext';
-import { RegionProvider } from '@/contexts/RegionContext';
-// CartProvider is now deferred via DeferredCart
-import { HomeTabProvider } from '@/contexts/HomeTabContext';
-import { RewardPopupProvider } from '@/contexts/RewardPopupContext';
 import ToastManager from '@/components/common/ToastManager';
-import { CrossPlatformAlertProvider } from '@/components/common/CrossPlatformAlert';
+import { CrossPlatformAlertRenderer } from '@/components/common/CrossPlatformAlert';
 import LocationRegionSync from '@/components/common/LocationRegionSync';
 import OfflineBanner from '@/components/common/OfflineBanner';
-import { SharedSkeletonProvider } from '@/components/homepage/SharedSkeletonContext';
 
 import {
   DeferredSocket,
-  DeferredNotification,
-  DeferredSecurity,
   DeferredWallet,
   DeferredGamification,
-  DeferredWishlist,
-  DeferredProfile,
-  DeferredGreeting,
-  DeferredOffers,
-  DeferredAppPreferences,
-  DeferredSubscription,
-  DeferredCategory,
-  DeferredRecommendation,
   DeferredCart,
-  DeferredOfflineQueue,
 } from './DeferredProviders';
 
 const RewardPopupManager = React.lazy(() => import('@/components/gamification/RewardPopupManager'));
@@ -56,68 +58,29 @@ interface AppProvidersProps {
 
 export default function AppProviders({
   onErrorBoundaryError,
-  onQueueSyncComplete,
-  onQueueSyncError,
+  // Queue sync callbacks kept in interface for backwards compat with _layout.tsx
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onQueueSyncComplete: _onQueueSyncComplete,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onQueueSyncError: _onQueueSyncError,
 }: AppProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
     <ErrorBoundary onError={onErrorBoundaryError}>
-      <NuqtaThemeProvider>
-      <CrossPlatformAlertProvider>
-        <ToastProvider>
-            <AppProvider>
-              <AuthProvider>
-                <DeferredOfflineQueue
-                  autoSync={true}
-                  onSyncComplete={onQueueSyncComplete}
-                  onSyncError={onQueueSyncError}
-                >
-                <DeferredWallet>
-                  <DeferredSubscription>
-                    <DeferredGamification>
-                      <DeferredSocket>
-                      <RegionProvider>
-                        <LocationProvider>
-                          <LocationRegionSync />
-                          <DeferredGreeting>
-                            <DeferredCart>
-                              <DeferredOffers>
-                                <DeferredCategory>
-                                  <DeferredProfile>
-                                    <DeferredWishlist>
-                                      <DeferredNotification>
-                                        <DeferredSecurity>
-                                          <DeferredAppPreferences>
-                                            <DeferredRecommendation>
-                                              <HomeTabProvider>
-                                                <RewardPopupProvider>
-                                                  <SharedSkeletonProvider>
-                                                  <ThemedNavigation />
-                                                  </SharedSkeletonProvider>
-                                                </RewardPopupProvider>
-                                              </HomeTabProvider>
-                                            </DeferredRecommendation>
-                                          </DeferredAppPreferences>
-                                        </DeferredSecurity>
-                                      </DeferredNotification>
-                                    </DeferredWishlist>
-                                  </DeferredProfile>
-                                </DeferredCategory>
-                              </DeferredOffers>
-                            </DeferredCart>
-                          </DeferredGreeting>
-                        </LocationProvider>
-                      </RegionProvider>
-                    </DeferredSocket>
-                    </DeferredGamification>
-                  </DeferredSubscription>
-                </DeferredWallet>
-                </DeferredOfflineQueue>
-              </AuthProvider>
-            </AppProvider>
-        </ToastProvider>
-      </CrossPlatformAlertProvider>
-      </NuqtaThemeProvider>
+      <AuthProvider>
+        <DeferredWallet>
+          <DeferredGamification>
+            <DeferredSocket>
+              <LocationProvider>
+                <LocationRegionSync />
+                <DeferredCart>
+                  <ThemedNavigation />
+                </DeferredCart>
+              </LocationProvider>
+            </DeferredSocket>
+          </DeferredGamification>
+        </DeferredWallet>
+      </AuthProvider>
     </ErrorBoundary>
     </QueryClientProvider>
   );
@@ -168,6 +131,7 @@ function ThemedNavigation() {
       </Stack>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <ToastManager />
+      <CrossPlatformAlertRenderer />
       <OfflineBanner />
       <React.Suspense fallback={null}>
         <RewardPopupManager />

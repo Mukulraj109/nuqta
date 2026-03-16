@@ -227,12 +227,24 @@ export const SocialProvider = ({ children }: { children: ReactNode }) => {
   return <SocialContext.Provider value={value}>{children}</SocialContext.Provider>;
 };
 
+/**
+ * Hook to access social context.
+ * Now backed by Zustand store — works with or without SocialProvider in tree.
+ */
 export const useSocial = () => {
   const context = useContext(SocialContext);
-  if (context === undefined) {
-    throw new Error('useSocial must be used within a SocialProvider');
-  }
-  return context;
+  const store = __useSocialStore();
+  if (context) return context;
+  return store as unknown as SocialContextType;
 };
+
+// Lazy import to avoid circular deps
+let __useSocialStore: () => any;
+try {
+  const { useSocialStore } = require('@/stores/socialStore');
+  __useSocialStore = useSocialStore;
+} catch {
+  __useSocialStore = () => ({});
+}
 
 export default SocialContext;

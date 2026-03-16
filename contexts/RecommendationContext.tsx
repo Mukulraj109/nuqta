@@ -155,27 +155,32 @@ export function RecommendationProvider({ children }: RecommendationProviderProps
  */
 export function useRecommendationTracking() {
   const context = useContext(RecommendationContext);
+  const store = __useRecommendationStore();
+  if (context) return context;
+  return store as unknown as RecommendationContextType;
+}
 
-  if (context === undefined) {
-    // Return no-op functions if context not available (graceful degradation)
-    return {
-      shownProducts: new Set<string>(),
-      shownStores: new Set<string>(),
-      addShownProduct: () => {},
-      addShownProducts: () => {},
-      addShownStore: () => {},
-      addShownStores: () => {},
-      isProductShown: () => false,
-      isStoreShown: () => false,
-      getShownProducts: () => [],
-      getShownStores: () => [],
-      clearShownProducts: () => {},
-      clearShownStores: () => {},
-      clearAll: () => {},
-    };
-  }
-
-  return context;
+// Lazy import to avoid circular deps
+let __useRecommendationStore: () => any;
+try {
+  const { useRecommendationStore } = require('@/stores/recommendationStore');
+  __useRecommendationStore = useRecommendationStore;
+} catch {
+  __useRecommendationStore = () => ({
+    shownProducts: new Set<string>(),
+    shownStores: new Set<string>(),
+    addShownProduct: () => {},
+    addShownProducts: () => {},
+    addShownStore: () => {},
+    addShownStores: () => {},
+    isProductShown: () => false,
+    isStoreShown: () => false,
+    getShownProducts: () => [],
+    getShownStores: () => [],
+    clearShownProducts: () => {},
+    clearShownStores: () => {},
+    clearAll: () => {},
+  });
 }
 
 export default RecommendationContext;

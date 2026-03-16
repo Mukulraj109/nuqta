@@ -45,12 +45,20 @@ export const OffersThemeProvider: React.FC<OffersThemeProviderProps> = ({
   );
 };
 
+// Lazy import to avoid circular deps
+let __useOffersThemeStore: () => any;
+try {
+  const { useOffersThemeStore } = require('@/stores/offersThemeStore');
+  __useOffersThemeStore = useOffersThemeStore;
+} catch {
+  __useOffersThemeStore = () => ({ theme: LightTheme, mode: 'light' as const, isDark: false });
+}
+
 export const useOffersTheme = (): OffersThemeContextValue => {
   const context = useContext(OffersThemeContext);
-  if (!context) {
-    throw new Error('useOffersTheme must be used within an OffersThemeProvider');
-  }
-  return context;
+  const store = __useOffersThemeStore();
+  if (context) return context;
+  return store as unknown as OffersThemeContextValue;
 };
 
 // Convenience exports

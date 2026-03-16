@@ -1,12 +1,12 @@
 /**
  * LocationRegionSync Component
  *
- * Syncs the LocationContext with the RegionContext on app initialization.
+ * Syncs the LocationContext with the region store on app initialization.
  * Ensures that when the app loads, the location defaults to the current region's location.
  */
 
 import React, { useEffect, useRef } from 'react';
-import { useRegion, RegionId } from '@/contexts/RegionContext';
+import { useRegionStore, type RegionId } from '@/stores/regionStore';
 import { useLocation } from '@/contexts/LocationContext';
 import { UserLocation } from '@/types/location.types';
 
@@ -33,7 +33,7 @@ const REGION_LOCATIONS: Record<RegionId, { name: string; coords: { lat: number; 
 };
 
 function LocationRegionSync() {
-  const { state: regionState } = useRegion();
+  const regionState = useRegionStore((s) => s.state);
   const { state: locationState, setManualLocation } = useLocation();
   const hasInitialized = useRef(false);
 
@@ -69,8 +69,7 @@ function LocationRegionSync() {
             source: 'manual' as const,
           };
 
-          setManualLocation(defaultLocation).catch(err => {
-          });
+          setManualLocation(defaultLocation).catch(() => {});
         }
       }
     }

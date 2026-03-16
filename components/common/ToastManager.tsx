@@ -1,6 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Toast from './Toast';
+import { useToastStore } from '@/stores/toastStore';
 
 export interface ToastConfig {
   id: string;
@@ -14,36 +15,27 @@ export interface ToastConfig {
   }>;
 }
 
-let showToastGlobal: ((config: Omit<ToastConfig, 'id'>) => void) | null = null;
-
+/**
+ * Imperative showToast — works without any React context.
+ * Used by many files that import { showToast } from '@/components/common/ToastManager'.
+ */
 export function showToast(config: Omit<ToastConfig, 'id'>) {
-  if (showToastGlobal) {
-    showToastGlobal(config);
-  } else {
-  }
+  useToastStore.getState().showToast(
+    config.message,
+    config.type || 'info',
+    config.duration,
+  );
 }
 
+/**
+ * ToastManager — renders the current toast from the Zustand toastStore.
+ * No provider needed. Place this component once in the tree (e.g., ThemedNavigation).
+ */
 export default function ToastManager() {
-  const [toasts, setToasts] = useState<ToastConfig[]>([]);
-  const toastIdCounter = React.useRef(0);
+  const currentToast = useToastStore((s) => s.currentToast);
+  const onDismiss = useToastStore((s) => s._onDismiss);
 
-  const addToast = useCallback((config: Omit<ToastConfig, 'id'>) => {
-    // Generate unique ID using timestamp + counter to avoid duplicate keys
-    const id = `${Date.now()}_${++toastIdCounter.current}_${Math.random().toString(36).substring(2, 9)}`;
-    setToasts((prev) => [...prev, { ...config, id }]);
-  }, []);
-
-  const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
-  }, []);
-
-  // Set global reference
-  React.useEffect(() => {
-    showToastGlobal = addToast;
-    return () => {
-      showToastGlobal = null;
-    };
-  }, [addToast]);
+  if (!currentToast) return null;
 
   return (
     <View
@@ -52,18 +44,16 @@ export default function ToastManager() {
       accessible={false}
       importantForAccessibility="no-hide-descendants"
     >
-      {toasts.map((toast) => (
-        <Toast
-          key={toast.id}
-          message={toast.message}
-          type={toast.type}
-          duration={toast.duration}
-          actions={toast.actions}
-          onDismiss={() => removeToast(toast.id)}
-        />
-      ))}
+      <Toast
+        key={currentToast.id}
+        message={currentToast.message}
+        type={currentToast.type}
+        duration={currentToast.duration}
+        actions={currentToast.actions}
+        onDismiss={onDismiss}
+      />
     </View>
-);
+  );
 }
 
 const styles = StyleSheet.create({

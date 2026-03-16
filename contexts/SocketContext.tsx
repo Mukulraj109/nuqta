@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useState, useRef, ReactNod
 type Socket = any;
 const getIO = async () => (await import('socket.io-client')).io;
 import Constants from 'expo-constants';
+import { useSocketStore } from '@/stores/socketStore';
 import { AppState, AppStateStatus, Platform } from 'react-native';
 import { getAuthToken, getUser } from '@/utils/authStorage';
 import {
@@ -519,6 +520,12 @@ export function SocketProvider({ children, config }: SocketProviderProps) {
     unsubscribeFromStore,
   ]);
 
+  // Sync connection state to Zustand store for crash-safe fallback
+  const _setFromProvider = useSocketStore((s) => s._setFromProvider);
+  useEffect(() => {
+    _setFromProvider(socketState);
+  }, [socketState, _setFromProvider]);
+
   return (
     <SocketContext.Provider value={contextValue}>
       {children}
@@ -556,12 +563,18 @@ const SOCKET_DEFAULTS: SocketContextType = {
   unsubscribeFromStore: () => {},
 };
 
+// Hook — falls back to Zustand store (connection state only) for crash safety when outside Provider
 export function useSocket() {
   const context = useContext(SocketContext);
-  if (context === undefined) {
-    return SOCKET_DEFAULTS;
+  const storeState = useSocketStore((s) => s.state);
+
+  if (context !== undefined) {
+    return context;
   }
-  return context;
+
+  // Fallback: Zustand has connection state, but socket instance is unavailable
+  // Return defaults with connection state from store
+  return { ...SOCKET_DEFAULTS, state: storeState };
 }
 
 // Custom hook to subscribe to stock updates for a specific product

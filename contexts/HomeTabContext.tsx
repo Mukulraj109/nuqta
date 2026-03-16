@@ -256,14 +256,24 @@ export const HomeTabProvider: React.FC<HomeTabProviderProps> = ({ children }) =>
 };
 
 /**
- * Hook to access tab context
+ * Hook to access tab context.
+ * Now backed by Zustand store — works with or without HomeTabProvider in tree.
  */
 export const useHomeTab = (): HomeTabContextType => {
+  // Try context first (backward compat), fall back to Zustand store
   const context = useContext(HomeTabContext);
-  if (!context) {
-    throw new Error('useHomeTab must be used within a HomeTabProvider');
-  }
-  return context;
+  const store = __useHomeTabStore();
+  if (context) return context;
+  return store as unknown as HomeTabContextType;
 };
+
+// Lazy import to avoid circular deps
+let __useHomeTabStore: () => any;
+try {
+  const { useHomeTabStore } = require('@/stores/homeTabStore');
+  __useHomeTabStore = useHomeTabStore;
+} catch {
+  __useHomeTabStore = () => ({});
+}
 
 export default HomeTabContext;

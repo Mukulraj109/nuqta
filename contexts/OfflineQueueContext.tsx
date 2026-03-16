@@ -509,14 +509,42 @@ export const OfflineQueueProvider: React.FC<OfflineQueueProviderProps> = ({
  * Use offline queue context
  * Must be used within OfflineQueueProvider
  */
+// Lazy import to avoid circular deps
+const OFFLINE_QUEUE_DEFAULTS: OfflineQueueContextValue = {
+  queue: [],
+  status: null,
+  isSyncing: false,
+  isOnline: true,
+  lastSyncResult: null,
+  error: null,
+  addToQueue: async () => '',
+  removeFromQueue: async () => {},
+  syncQueue: async () => ({ success: 0, failed: 0, total: 0, errors: [] } as any),
+  retryFailed: async () => {},
+  clearCompleted: async () => {},
+  clearAll: async () => {},
+  getBill: async () => null,
+  refreshQueue: async () => {},
+  isPending: () => false,
+  isUploading: () => false,
+  hasFailed: () => false,
+  hasSucceeded: () => false,
+  getPendingCount: () => 0,
+  getFailedCount: () => 0,
+};
+
+let __useOfflineQueueStore: () => any;
+try {
+  const { useOfflineQueueStore } = require('@/stores/offlineQueueStore');
+  __useOfflineQueueStore = useOfflineQueueStore;
+} catch {
+  __useOfflineQueueStore = () => OFFLINE_QUEUE_DEFAULTS;
+}
+
+// Now backed by Zustand store -- works with or without OfflineQueueProvider in tree.
 export const useOfflineQueueContext = (): OfflineQueueContextValue => {
   const context = useContext(OfflineQueueContext);
-
-  if (!context) {
-    throw new Error(
-      'useOfflineQueueContext must be used within OfflineQueueProvider'
-    );
-  }
-
-  return context;
+  const store = __useOfflineQueueStore();
+  if (context) return context;
+  return store as unknown as OfflineQueueContextValue;
 };

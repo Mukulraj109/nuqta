@@ -455,13 +455,24 @@ export function AppProvider({ children }: AppProviderProps) {
   );
 }
 
-// Hook
+/**
+ * Hook to access app context.
+ * Now backed by Zustand store — works with or without AppProvider in tree.
+ */
 export function useApp() {
   const context = useContext(AppContext);
-  if (context === undefined) {
-    throw new Error('useApp must be used within an AppProvider');
-  }
-  return context;
+  const store = __useAppStore();
+  if (context) return context;
+  return store as unknown as AppContextType;
+}
+
+// Lazy import to avoid circular deps
+let __useAppStore: () => any;
+try {
+  const { useAppStore } = require('@/stores/appStore');
+  __useAppStore = useAppStore;
+} catch {
+  __useAppStore = () => ({});
 }
 
 export { AppContext };

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect, ReactNode, useRef, useCallback, useMemo } from 'react';
+import { useAuthStore } from '@/stores/authStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter, useSegments } from 'expo-router';
 import authService, { User, AuthResponse, UnifiedUser } from '@/services/authApi';
@@ -766,6 +767,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     actions: stableActions,
   }), [state, stableActions]);
 
+  // Sync to Zustand store for crash-safe fallback
+  const _setFromProvider = useAuthStore((s) => s._setFromProvider);
+  useEffect(() => {
+    _setFromProvider(state, stableActions);
+  }, [state, stableActions, _setFromProvider]);
+
   return (
     <AuthContext.Provider value={contextValue}>
       {children}
@@ -773,13 +780,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   );
 }
 
-// Hook
+// Hook — falls back to Zustand store for crash safety when outside Provider
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+  const storeState = useAuthStore((s) => s.state);
+  const storeActions = useAuthStore((s) => s.actions);
+
+  if (context !== undefined) {
+    return context;
   }
-  return context;
+
+  // Fallback to Zustand store (populated by Provider elsewhere in the tree)
+  return { state: storeState, actions: storeActions };
 }
 
 export { AuthContext };

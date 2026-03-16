@@ -358,13 +358,34 @@ export function LocationProvider({ children }: LocationProviderProps) {
   );
 }
 
+// Lazy import to avoid circular deps
+let __useLocationStore: () => any;
+try {
+  const { useLocationStore } = require('@/stores/locationStore');
+  __useLocationStore = useLocationStore;
+} catch {
+  __useLocationStore = () => ({
+    state: initialState,
+    updateLocation: async () => {},
+    setManualLocation: async () => {},
+    getCurrentLocation: async () => null,
+    getLocationHistory: async () => [],
+    clearLocationHistory: async () => {},
+    requestLocationPermission: async () => false,
+    searchAddresses: async () => [],
+    reverseGeocode: async () => { throw new Error('Not available'); },
+    validateAddress: async () => false,
+    clearError: () => {},
+  });
+}
+
 // Custom hook to use location context
+// Now backed by Zustand store -- works with or without LocationProvider in tree.
 export function useLocation(): LocationContextType {
   const context = useContext(LocationContext);
-  if (context === undefined) {
-    throw new Error('useLocation must be used within a LocationProvider');
-  }
-  return context;
+  const store = __useLocationStore();
+  if (context) return context;
+  return store as unknown as LocationContextType;
 }
 
 // Custom hook for location permission

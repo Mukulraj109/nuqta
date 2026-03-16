@@ -164,10 +164,21 @@ const GREETING_DEFAULTS: GreetingContextType = {
 };
 
 // Custom hook to use greeting context
+// Now backed by Zustand store — works with or without GreetingProvider in tree.
 export function useGreeting(): GreetingContextType {
   const context = useContext(GreetingContext);
-  if (context === undefined) return GREETING_DEFAULTS;
-  return context;
+  const store = __useGreetingStore();
+  if (context) return context;
+  return store as unknown as GreetingContextType;
+}
+
+// Lazy import to avoid circular deps
+let __useGreetingStore: () => any;
+try {
+  const { useGreetingStore } = require('@/stores/greetingStore');
+  __useGreetingStore = useGreetingStore;
+} catch {
+  __useGreetingStore = () => GREETING_DEFAULTS;
 }
 
 // Custom hook for greeting display

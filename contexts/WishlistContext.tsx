@@ -48,10 +48,20 @@ const WISHLIST_DEFAULTS: WishlistContextType = {
   error: null,
 };
 
+// Lazy import to avoid circular deps
+let __useWishlistStore: () => any;
+try {
+  const { useWishlistStore } = require('@/stores/wishlistStore');
+  __useWishlistStore = useWishlistStore;
+} catch {
+  __useWishlistStore = () => WISHLIST_DEFAULTS;
+}
+
 export const useWishlist = () => {
   const context = useContext(WishlistContext);
-  if (!context) return WISHLIST_DEFAULTS;
-  return context;
+  const store = __useWishlistStore();
+  if (context) return context;
+  return store as unknown as WishlistContextType;
 };
 
 interface WishlistProviderProps {

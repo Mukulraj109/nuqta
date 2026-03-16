@@ -1,18 +1,22 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { useColorScheme as useSystemColorScheme } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+/**
+ * Theme Context — now backed by Zustand (themeStore).
+ *
+ * The provider is no longer needed in the tree. `useTheme()` reads directly
+ * from the Zustand store + `useColorScheme()` to resolve dark/light mode.
+ *
+ * ThemeProvider is kept as a passthrough for backwards compat during migration.
+ */
+import React from 'react';
 import {
   colors,
-  darkColors,
   gradients,
-  darkGradients,
   shadows,
-  darkShadows,
   glass,
-  darkGlass,
 } from '@/constants/theme';
+import { useResolvedTheme } from '@/stores/themeStore';
+import type { ThemeMode } from '@/stores/themeStore';
 
-export type ThemeMode = 'system' | 'light' | 'dark';
+export type { ThemeMode };
 
 interface ThemeContextValue {
   themeMode: ThemeMode;
@@ -25,71 +29,20 @@ interface ThemeContextValue {
   toggleTheme: () => void;
 }
 
-const THEME_STORAGE_KEY = '@nuqta_theme_mode';
-
-const ThemeContext = createContext<ThemeContextValue | null>(null);
-
+/**
+ * ThemeProvider — now a passthrough. Kept for backwards compatibility.
+ * Remove once all imports are cleaned up.
+ */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const systemScheme = useSystemColorScheme();
-  const [themeMode, setThemeModeState] = useState<ThemeMode>('system');
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    AsyncStorage.getItem(THEME_STORAGE_KEY).then((stored) => {
-      if (stored === 'light' || stored === 'dark' || stored === 'system') {
-        setThemeModeState(stored);
-      }
-      setLoaded(true);
-    }).catch(() => setLoaded(true));
-  }, []);
-
-  const setThemeMode = useCallback((mode: ThemeMode) => {
-    setThemeModeState(mode);
-    AsyncStorage.setItem(THEME_STORAGE_KEY, mode).catch(() => {});
-  }, []);
-
-  const toggleTheme = useCallback(() => {
-    setThemeMode(themeMode === 'dark' ? 'light' : themeMode === 'light' ? 'dark' : 'dark');
-  }, [themeMode, setThemeMode]);
-
-  const isDark = themeMode === 'system' ? systemScheme === 'dark' : themeMode === 'dark';
-
-  const value = useMemo<ThemeContextValue>(() => ({
-    themeMode,
-    isDark,
-    colors: isDark ? darkColors : colors,
-    gradients: isDark ? darkGradients : gradients,
-    shadows: isDark ? darkShadows : shadows,
-    glass: isDark ? darkGlass : glass,
-    setThemeMode,
-    toggleTheme,
-  }), [themeMode, isDark, setThemeMode, toggleTheme]);
-
-  if (!loaded) return null;
-
-  return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <>{children}</>;
 }
 
+/**
+ * Hook to get theme values. Now reads from Zustand store.
+ * Works with or without ThemeProvider in the tree.
+ */
 export function useTheme(): ThemeContextValue {
-  const ctx = useContext(ThemeContext);
-  if (!ctx) {
-    // Fallback for components outside the provider (e.g., during tests)
-    return {
-      themeMode: 'light',
-      isDark: false,
-      colors,
-      gradients,
-      shadows,
-      glass,
-      setThemeMode: () => {},
-      toggleTheme: () => {},
-    };
-  }
-  return ctx;
+  return useResolvedTheme();
 }
 
-export default ThemeContext;
+export default {};

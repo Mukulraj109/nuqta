@@ -359,10 +359,19 @@ const NOTIFICATION_DEFAULTS: NotificationContextType = {
   canShowInAppNotification: () => false,
 };
 
+// Lazy import to avoid circular deps
+let __useNotificationStore: () => any;
+try {
+  const { useNotificationStore } = require('@/stores/notificationStore');
+  __useNotificationStore = useNotificationStore;
+} catch {
+  __useNotificationStore = () => NOTIFICATION_DEFAULTS;
+}
+
+// Now backed by Zustand store -- works with or without NotificationProvider in tree.
 export function useNotifications(): NotificationContextType {
   const context = useContext(NotificationContext);
-  if (context === undefined) {
-    return NOTIFICATION_DEFAULTS;
-  }
-  return context;
+  const store = __useNotificationStore();
+  if (context) return context;
+  return store as unknown as NotificationContextType;
 }

@@ -7,6 +7,7 @@ import challengesApi from '@/services/challengesApi';
 import coinSyncService from '@/services/coinSyncService';
 import { useAuth } from './AuthContext';
 import { useWalletContext } from './WalletContext';
+import { useGamificationStore } from '@/stores/gamificationStore';
 
 // Feature flags for gradual rollout
 const GAMIFICATION_FLAGS = {
@@ -715,6 +716,12 @@ export function GamificationProvider({ children }: GamificationProviderProps) {
     canEarnCoins,
   ]);
 
+  // Sync to Zustand store for crash-safe fallback
+  const _setFromProvider = useGamificationStore((s) => s._setFromProvider);
+  useEffect(() => {
+    _setFromProvider(contextValue);
+  }, [contextValue, _setFromProvider]);
+
   return (
     <GamificationContext.Provider value={contextValue}>
       {children}
@@ -757,12 +764,19 @@ const GAMIFICATION_DEFAULTS: GamificationContextType = {
   },
 };
 
+// Hook — falls back to Zustand store for crash safety when outside Provider
 export function useGamification() {
   const context = useContext(GamificationContext);
-  if (context === undefined) {
-    return GAMIFICATION_DEFAULTS;
+  const storeState = useGamificationStore((s) => s.state);
+  const storeActions = useGamificationStore((s) => s.actions);
+  const storeComputed = useGamificationStore((s) => s.computed);
+
+  if (context !== undefined) {
+    return context;
   }
-  return context;
+
+  // Fallback to Zustand store (populated by Provider elsewhere in the tree)
+  return { state: storeState, actions: storeActions, computed: storeComputed };
 }
 
 export { GamificationContext };

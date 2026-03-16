@@ -379,11 +379,22 @@ const SUBSCRIPTION_DEFAULTS: SubscriptionContextType = {
   },
 };
 
+// Lazy import to avoid circular deps
+let __useSubscriptionStore: () => any;
+try {
+  const { useSubscriptionStore } = require('@/stores/subscriptionStore');
+  __useSubscriptionStore = useSubscriptionStore;
+} catch {
+  __useSubscriptionStore = () => SUBSCRIPTION_DEFAULTS;
+}
+
 // Hook
+// Now backed by Zustand store -- works with or without SubscriptionProvider in tree.
 export function useSubscription() {
   const context = useContext(SubscriptionContext);
-  if (context === undefined) return SUBSCRIPTION_DEFAULTS;
-  return context;
+  const store = __useSubscriptionStore();
+  if (context) return context;
+  return store as unknown as SubscriptionContextType;
 }
 
 export { SubscriptionContext };

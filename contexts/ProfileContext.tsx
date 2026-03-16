@@ -356,11 +356,22 @@ const PROFILE_DEFAULTS: ProfileContextType = {
   navigateToScreen: () => {},
 };
 
+// Lazy import to avoid circular deps
+let __useProfileStore: () => any;
+try {
+  const { useProfileStore } = require('@/stores/profileStore');
+  __useProfileStore = useProfileStore;
+} catch {
+  __useProfileStore = () => PROFILE_DEFAULTS;
+}
+
 // Custom hook to use profile context
+// Now backed by Zustand store -- works with or without ProfileProvider in tree.
 export const useProfile = (): ProfileContextType => {
   const context = useContext(ProfileContext);
-  if (!context) return PROFILE_DEFAULTS;
-  return context;
+  const store = __useProfileStore();
+  if (context) return context;
+  return store as unknown as ProfileContextType;
 };
 
 // Custom hook specifically for the profile modal

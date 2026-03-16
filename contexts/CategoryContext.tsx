@@ -722,14 +722,21 @@ export function CategoryProvider({ children }: CategoryProviderProps) {
 };
 
 // Hook to use category context
+// Now backed by Zustand store — works with or without CategoryProvider in tree.
 export function useCategory(): CategoryContextType {
   const context = useContext(CategoryContext);
-  
-  if (!context) {
-    throw new Error('useCategory must be used within a CategoryProvider');
-  }
-  
-  return context;
+  const store = __useCategoryStore();
+  if (context) return context;
+  return store as unknown as CategoryContextType;
+}
+
+// Lazy import to avoid circular deps
+let __useCategoryStore: () => any;
+try {
+  const { useCategoryStore } = require('@/stores/categoryStore');
+  __useCategoryStore = useCategoryStore;
+} catch {
+  __useCategoryStore = () => ({});
 }
 
 // Utility hook for filtered and sorted items

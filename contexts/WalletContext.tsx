@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef, useMemo, ReactNode } from 'react';
+import { useWalletStore } from '@/stores/walletStore';
 import { WalletData, CoinBalance } from '@/types/wallet';
 import walletApi from '@/services/walletApi';
 import { useAuth } from './AuthContext';
@@ -264,6 +265,12 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     ...dataValue, ...loadingValue,
   }), [dataValue, loadingValue]);
 
+  // Sync to Zustand store for crash-safe fallback
+  const _setFromProvider = useWalletStore((s) => s._setFromProvider);
+  useEffect(() => {
+    _setFromProvider(combinedValue);
+  }, [combinedValue, _setFromProvider]);
+
   return (
     <WalletDataContext.Provider value={dataValue}>
       <WalletLoadingContext.Provider value={loadingValue}>
@@ -280,18 +287,41 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 // ---------------------------------------------------------------------------
 /**
  * Primary hook — reads from data context only (not affected by loading state transitions).
- * Most consumers should use this.
+ * Falls back to Zustand store for crash safety when outside Provider.
  */
 export function useWalletContext(): WalletContextType {
   const dataCtx = useContext(WalletDataContext);
   const loadingCtx = useContext(WalletLoadingContext);
 
-  if (!dataCtx || !loadingCtx) {
-    // Return safe defaults if provider hasn't loaded yet (deferred loading)
-    return WALLET_DEFAULTS;
+  // Zustand fallback selectors (always called — hooks can't be conditional)
+  const storeWalletData = useWalletStore((s) => s.walletData);
+  const storeRezBalance = useWalletStore((s) => s.rezBalance);
+  const storeTotalBalance = useWalletStore((s) => s.totalBalance);
+  const storeAvailableBalance = useWalletStore((s) => s.availableBalance);
+  const storeBrandedCoins = useWalletStore((s) => s.brandedCoins);
+  const storeSavingsInsights = useWalletStore((s) => s.savingsInsights);
+  const storeRefreshWallet = useWalletStore((s) => s.refreshWallet);
+  const storeRawBackendData = useWalletStore((s) => s.rawBackendData);
+  const storeIsLoading = useWalletStore((s) => s.isLoading);
+  const storeIsRefreshing = useWalletStore((s) => s.isRefreshing);
+
+  if (dataCtx && loadingCtx) {
+    return { ...dataCtx, ...loadingCtx };
   }
 
-  return { ...dataCtx, ...loadingCtx };
+  // Fallback to Zustand store (populated by Provider elsewhere in the tree)
+  return {
+    walletData: storeWalletData,
+    rezBalance: storeRezBalance,
+    totalBalance: storeTotalBalance,
+    availableBalance: storeAvailableBalance,
+    brandedCoins: storeBrandedCoins,
+    savingsInsights: storeSavingsInsights,
+    refreshWallet: storeRefreshWallet,
+    rawBackendData: storeRawBackendData,
+    isLoading: storeIsLoading,
+    isRefreshing: storeIsRefreshing,
+  };
 }
 
 /**

@@ -524,10 +524,19 @@ const SECURITY_DEFAULTS: SecurityContextType = {
   isProfileVisible: () => false,
 };
 
+// Lazy import to avoid circular deps
+let __useSecurityStore: () => any;
+try {
+  const { useSecurityStore } = require('@/stores/securityStore');
+  __useSecurityStore = useSecurityStore;
+} catch {
+  __useSecurityStore = () => SECURITY_DEFAULTS;
+}
+
+// Now backed by Zustand store -- works with or without SecurityProvider in tree.
 export function useSecurity(): SecurityContextType {
   const context = useContext(SecurityContext);
-  if (context === undefined) {
-    return SECURITY_DEFAULTS;
-  }
-  return context;
+  const store = __useSecurityStore();
+  if (context) return context;
+  return store as unknown as SecurityContextType;
 }

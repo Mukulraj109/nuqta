@@ -9,6 +9,7 @@ import offlineQueueService from '@/services/offlineQueueService';
 import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
 import { useAuth } from './AuthContext';
+import { useCartStore } from '@/stores/cartStore';
 
 // Dev-only logger to prevent string accumulation in production
 const devLog = {
@@ -1156,6 +1157,12 @@ export function CartProvider({ children }: CartProviderProps) {
     actions: stableCartActions,
   }), [state, stableRefreshCart, stableCartActions]);
 
+  // Sync to Zustand store for crash-safe fallback
+  const _setFromProvider = useCartStore((s) => s._setFromProvider);
+  useEffect(() => {
+    _setFromProvider(contextValue);
+  }, [contextValue, _setFromProvider]);
+
   return (
     <CartContext.Provider value={contextValue}>
       {children}
@@ -1188,13 +1195,19 @@ const CART_DEFAULTS: CartContextType = {
   },
 };
 
+// Hook — falls back to Zustand store for crash safety when outside Provider
 export function useCart() {
   const context = useContext(CartContext);
-  if (context === undefined) {
-    // Return safe defaults if provider hasn't loaded yet (deferred loading)
-    return CART_DEFAULTS;
+  const storeState = useCartStore((s) => s.state);
+  const storeRefreshCart = useCartStore((s) => s.refreshCart);
+  const storeActions = useCartStore((s) => s.actions);
+
+  if (context !== undefined) {
+    return context;
   }
-  return context;
+
+  // Fallback to Zustand store (populated by Provider elsewhere in the tree)
+  return { state: storeState, refreshCart: storeRefreshCart, actions: storeActions };
 }
 
 export { CartContext };

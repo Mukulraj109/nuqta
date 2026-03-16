@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
+import { useAlertStore, showAlert as showAlertFromStore } from '@/stores/alertStore';
 
 interface AlertButton {
   text: string;
@@ -17,44 +18,28 @@ interface AlertButton {
   style?: 'default' | 'cancel' | 'destructive';
 }
 
-interface AlertOptions {
-  title: string;
-  message: string;
-  buttons?: AlertButton[];
-  type?: 'success' | 'error' | 'warning' | 'info';
-}
+// Re-export the imperative showAlert for existing consumers
+export const showAlert = showAlertFromStore;
 
-let alertCallback: ((options: AlertOptions) => void) | null = null;
-
-export const showAlert = (
-  title: string,
-  message: string,
-  buttons?: AlertButton[],
-  type: 'success' | 'error' | 'warning' | 'info' = 'info'
-) => {
-  if (alertCallback) {
-    alertCallback({ title, message, buttons, type });
-  }
-};
-
+/**
+ * CrossPlatformAlertProvider — now a passthrough.
+ * Kept for backwards compatibility. The alert modal is rendered by
+ * CrossPlatformAlertRenderer (placed in ThemedNavigation).
+ */
 export const CrossPlatformAlertProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [visible, setVisible] = useState(false);
-  const [alertData, setAlertData] = useState<AlertOptions | null>(null);
-  const fadeAnim = useState(new Animated.Value(0))[0];
-  const scaleAnim = useState(new Animated.Value(0.9))[0];
+  return <>{children}</>;
+};
 
-  useEffect(() => {
-    alertCallback = (options: AlertOptions) => {
-      setAlertData(options);
-      setVisible(true);
-    };
-
-    return () => {
-      alertCallback = null;
-    };
-  }, []);
+/**
+ * Standalone alert modal renderer. Reads from Zustand alertStore.
+ * Must be placed somewhere in the component tree (e.g., ThemedNavigation).
+ */
+export function CrossPlatformAlertRenderer() {
+  const { visible, alertData, dismiss } = useAlertStore();
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const scaleAnim = React.useRef(new Animated.Value(0.9)).current;
 
   useEffect(() => {
     let _anim: Animated.CompositeAnimation;
@@ -88,22 +73,13 @@ export const CrossPlatformAlertProvider: React.FC<{ children: React.ReactNode }>
       ]);
       _anim.start();
     }
-  
     return () => _anim.stop();
-}, [visible]);
+  }, [visible, fadeAnim, scaleAnim]);
 
-  const handleClose = (button?: AlertButton) => {
-    setVisible(false);
-    setTimeout(() => {
-      if (button?.onPress) {
-        button.onPress();
-      }
-      setAlertData(null);
-    }, 200);
-  };
+  if (!alertData) return null;
 
   const getIconName = (): keyof typeof Ionicons.glyphMap => {
-    switch (alertData?.type) {
+    switch (alertData.type) {
       case 'success':
         return 'checkmark-circle';
       case 'error':
@@ -117,101 +93,75 @@ export const CrossPlatformAlertProvider: React.FC<{ children: React.ReactNode }>
   };
 
   const getIconColor = () => {
-    switch (alertData?.type) {
+    switch (alertData.type) {
       case 'success':
-        return colors.nileBlue;  // Nile Blue
+        return colors.nileBlue;
       case 'error':
         return colors.error;
       case 'warning':
-        return colors.lightMustard;  // Light Mustard
+        return colors.lightMustard;
       case 'info':
       default:
-        return colors.nileBlue;  // Nile Blue
+        return colors.nileBlue;
     }
   };
 
-  if (!alertData) {
-    return <>{children}</>;
-  }
-
-  const buttons = alertData.buttons || [{ text: 'OK', style: 'default' }];
+  const buttons = alertData.buttons || [{ text: 'OK', style: 'default' as const }];
 
   return (
-    <>
-      {children}
-      <Modal
-        transparent
-        visible={visible}
-        animationType="none"
-        onRequestClose={() => handleClose()}
-      >
+    <Modal
+      transparent
+      visible={visible}
+      animationType="none"
+      onRequestClose={() => dismiss()}
+    >
+      <Animated.View style={[styles.overlay, { opacity: fadeAnim }]}>
+        <Pressable style={styles.backdrop} onPress={() => dismiss()} />
         <Animated.View
           style={[
-            styles.overlay,
+            styles.alertContainer,
             {
+              transform: [{ scale: scaleAnim }],
               opacity: fadeAnim,
             },
           ]}
         >
-          <Pressable
-            style={styles.backdrop}
-           
-            onPress={() => handleClose()}
-          />
-          <Animated.View
-            style={[
-              styles.alertContainer,
-              {
-                transform: [{ scale: scaleAnim }],
-                opacity: fadeAnim,
-              },
-            ]}
-          >
-            {/* Icon */}
-            <View style={styles.iconContainer}>
-              <Ionicons name={getIconName()} size={48} color={getIconColor()} />
-            </View>
-
-            {/* Title */}
-            <Text style={styles.title}>{alertData.title}</Text>
-
-            {/* Message */}
-            <View style={styles.messageContainer}>
-              <Text style={styles.message}>{alertData.message}</Text>
-            </View>
-
-            {/* Buttons */}
-            <View style={styles.buttonsContainer}>
-              {buttons.map((button, index) => (
-                <Pressable
-                  key={index}
+          <View style={styles.iconContainer}>
+            <Ionicons name={getIconName()} size={48} color={getIconColor()} />
+          </View>
+          <Text style={styles.title}>{alertData.title}</Text>
+          <View style={styles.messageContainer}>
+            <Text style={styles.message}>{alertData.message}</Text>
+          </View>
+          <View style={styles.buttonsContainer}>
+            {buttons.map((button, index) => (
+              <Pressable
+                key={index}
+                style={[
+                  styles.button,
+                  button.style === 'cancel' && styles.cancelButton,
+                  button.style === 'destructive' && styles.destructiveButton,
+                  buttons.length === 1 && styles.singleButton,
+                ]}
+                onPress={() => dismiss(button)}
+              >
+                <Text
                   style={[
-                    styles.button,
-                    button.style === 'cancel' && styles.cancelButton,
-                    button.style === 'destructive' && styles.destructiveButton,
-                    buttons.length === 1 && styles.singleButton,
+                    styles.buttonText,
+                    button.style === 'cancel' && styles.cancelButtonText,
+                    button.style === 'destructive' && styles.destructiveButtonText,
                   ]}
-                  onPress={() => handleClose(button)}
-                 
                 >
-                  <Text
-                    style={[
-                      styles.buttonText,
-                      button.style === 'cancel' && styles.cancelButtonText,
-                      button.style === 'destructive' && styles.destructiveButtonText,
-                    ]}
-                  >
-                    {button.text}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-          </Animated.View>
+                  {button.text}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
         </Animated.View>
-      </Modal>
-    </>
+      </Animated.View>
+    </Modal>
   );
-};
+}
 
 const styles = StyleSheet.create({
   overlay: {

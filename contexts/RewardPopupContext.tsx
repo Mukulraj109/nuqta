@@ -175,13 +175,24 @@ export function RewardPopupProvider({ children }: RewardPopupProviderProps) {
   );
 }
 
-// Hook to use the reward popup context
+/**
+ * Hook to use the reward popup context.
+ * Now backed by Zustand store — works with or without RewardPopupProvider in tree.
+ */
 export function useRewardPopup() {
   const context = useContext(RewardPopupContext);
-  if (context === undefined) {
-    throw new Error('useRewardPopup must be used within a RewardPopupProvider');
-  }
-  return context;
+  const store = __useRewardPopupStore();
+  if (context) return context;
+  return store as unknown as RewardPopupContextType;
+}
+
+// Lazy import to avoid circular deps
+let __useRewardPopupStore: () => any;
+try {
+  const { useRewardPopupStore } = require('@/stores/rewardPopupStore');
+  __useRewardPopupStore = useRewardPopupStore;
+} catch {
+  __useRewardPopupStore = () => ({});
 }
 
 // Export type for external use

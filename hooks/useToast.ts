@@ -1,11 +1,8 @@
-import { useContext } from 'react';
-import { ToastContext } from '@/contexts/ToastContext';
+import { useToastStore } from '@/stores/toastStore';
 
 /**
- * Hook to access toast notification functionality
- *
- * @returns ToastContextValue with methods to show and dismiss toasts
- * @throws Error if used outside of ToastProvider
+ * Hook to access toast notification functionality.
+ * Now backed entirely by Zustand store — works anywhere, no provider needed.
  *
  * @example
  * ```tsx
@@ -25,11 +22,6 @@ import { ToastContext } from '@/contexts/ToastContext';
  * ```
  */
 export function useToast() {
-  const context = useContext(ToastContext);
-
-  if (context === undefined) {
-    throw new Error('useToast must be used within a ToastProvider');
-  }
-
-  return context;
+  const { showToast, showSuccess, showError, showInfo, showWarning, dismissAll } = useToastStore();
+  return { showToast, showSuccess, showError, showInfo, showWarning, dismissAll };
 }
