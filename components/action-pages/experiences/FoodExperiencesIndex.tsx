@@ -6,9 +6,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  View, Text, StyleSheet, Pressable, FlatList,
+  View, Text, StyleSheet, Pressable,
   RefreshControl, ActivityIndicator, ScrollView,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -131,7 +132,7 @@ function ExperiencesPage() {
           <Text style={styles.loadingText}>Loading experiences...</Text>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={experiences}
           keyExtractor={(item, i) => item._id || item.slug || `exp-${i}`}
           renderItem={renderExperience}
@@ -145,6 +146,7 @@ function ExperiencesPage() {
               <Text style={styles.emptySubtitle}>Food experiences will appear here soon</Text>
             </View>
           }
+          estimatedItemSize={150}
         />
       )}
     </SafeAreaView>

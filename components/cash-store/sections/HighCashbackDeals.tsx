@@ -11,10 +11,10 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  FlatList,
   Platform,
   Animated,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -349,7 +349,7 @@ const HighCashbackDeals: React.FC<HighCashbackDealsProps> = ({
       </Animated.View>
 
       {/* Horizontal List */}
-      <FlatList
+      <FlashList
         data={isLoading ? Array.from({ length: 3 }) : deals}
         renderItem={renderDealItem}
         keyExtractor={(item, index) =>
@@ -358,6 +358,7 @@ const HighCashbackDeals: React.FC<HighCashbackDealsProps> = ({
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+        estimatedItemSize={150}
       />
     </View>
   );

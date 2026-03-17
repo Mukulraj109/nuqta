@@ -9,7 +9,6 @@ import React, { memo, useCallback } from 'react';
 import {
   View,
   Text,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
@@ -19,6 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallCollection } from '../../types/mall.types';
 import MallCollectionCard from './cards/MallCollectionCard';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 interface MallCollectionsProps {
@@ -157,7 +157,7 @@ const MallCollections: React.FC<MallCollectionsProps> = ({
         </View>
 
         {/* Collections List */}
-        <FlatList
+        <FlashList
           data={collections}
           renderItem={renderCollection}
           keyExtractor={keyExtractor}
@@ -168,6 +168,7 @@ const MallCollections: React.FC<MallCollectionsProps> = ({
           maxToRenderPerBatch={4}
           windowSize={4}
           initialNumToRender={2}
+          estimatedItemSize={150}
         />
       </LinearGradient>
     </View>

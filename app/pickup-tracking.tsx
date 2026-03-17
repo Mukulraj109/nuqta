@@ -17,6 +17,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 const STATUS_STEPS = [
   { key: 'placed', label: 'Order Placed', icon: 'receipt-outline' as const },
@@ -65,7 +66,7 @@ export default function PickupTrackingScreen() {
         android: `geo:${lat},${lng}?q=${lat},${lng}`,
         default: `https://www.google.com/maps?q=${lat},${lng}`,
       });
-      try { Linking.openURL(url!); } catch (e) {}
+      try { Linking.openURL(url!); } catch (e) { catchAndWarn(e, 'PickupTracking/openURL'); }
     }
   }, [storeCoords]);
 

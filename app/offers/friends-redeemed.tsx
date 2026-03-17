@@ -8,7 +8,6 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  FlatList,
   ActivityIndicator,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
@@ -294,13 +293,14 @@ export default function FriendsRedeemedPage() {
           ListHeaderComponent={
             FRIENDS.length > 1 ? (
               <View style={styles.filtersSection}>
-                <FlatList
+                <FlashList
                   data={FRIENDS}
                   renderItem={renderFriendFilter}
                   keyExtractor={item => item.id}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={styles.filtersContainer}
+                  estimatedItemSize={120}
                 />
               </View>
             ) : null

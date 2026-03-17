@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import {
   View,
-  FlatList,
   Pressable,
   StyleSheet,
   ActivityIndicator,
@@ -14,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import ProductCard from '@/components/homepage/cards/ProductCard';
 import { usePersonalizedRecommendations } from '@/hooks/useRecommendations';
 import { ProductItem } from '@/types/homepage.types';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -277,7 +277,7 @@ const CrossStoreProductsSection: React.FC<CrossStoreProductsSectionProps> = ({
         ) : products.length === 0 ? (
           renderEmpty()
         ) : (
-          <FlatList
+          <FlashList
             data={products}
             renderItem={renderProduct}
             keyExtractor={(item, index) => item._id || item.id || `product-${index}`}
@@ -285,11 +285,7 @@ const CrossStoreProductsSection: React.FC<CrossStoreProductsSectionProps> = ({
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.listContainer}
             ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
-            getItemLayout={(data, index) => ({
-              length: cardWidth,
-              offset: (cardWidth + 12) * index,
-              index,
-            })}
+            estimatedItemSize={220}
             initialNumToRender={3}
             maxToRenderPerBatch={3}
             windowSize={5}

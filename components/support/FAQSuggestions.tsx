@@ -13,6 +13,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import type { FAQSuggestion } from '@/types/supportChat.types';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 interface FAQSuggestionsProps {
   suggestions: FAQSuggestion[];
@@ -45,7 +46,7 @@ function FAQSuggestions({
     if (url) {
       try {
         Linking.openURL(url);
-      } catch (e) {}
+      } catch (e) { catchAndWarn(e, 'FAQSuggestions/handleArticlePress'); }
     }
   };
 

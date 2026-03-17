@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { PLAY_PAGE_COLORS } from '@/types/playPage.types';
 import { Article } from '@/types/article.types';
 import SectionHeader from './SectionHeader';
@@ -38,15 +39,15 @@ function ArticleSection({
         onViewAllPress={onViewAllPress}
       />
 
-      <FlatList
+      <FlashList
         data={articles.slice(0, 4)}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.id || `article-${index}`}
         numColumns={2}
-        columnWrapperStyle={styles.row}
         contentContainerStyle={styles.gridContainer}
         scrollEnabled={false}
         showsVerticalScrollIndicator={false}
+        estimatedItemSize={200}
       />
     </View>
   );

@@ -14,7 +14,6 @@ import {
   Dimensions,
   TextInput,
   Modal,
-  FlatList,
 } from 'react-native';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';

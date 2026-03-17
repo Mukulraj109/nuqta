@@ -25,6 +25,7 @@ import emergencyApi from '@/services/emergencyApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const COLORS = {
@@ -136,7 +137,7 @@ const HealthcarePage: React.FC = () => {
   }, []);
 
   const handleQuickCall = (phone: string) => {
-    try { Linking.openURL(`tel:${phone}`); } catch (e) {}
+    try { Linking.openURL(`tel:${phone}`); } catch (e) { catchAndWarn(e, 'Healthcare/openURL'); }
   };
 
   const getCategoryCount = (id: string): string => {

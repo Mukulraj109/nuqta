@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
   RefreshControl,
@@ -16,6 +15,7 @@ import ReviewItem from './ReviewItem';
 import RatingStars from './RatingStars';
 import { Review, ReviewFilters, ReviewStats } from '@/types/review.types';
 import reviewService from '@/services/reviewApi';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 interface ReviewListProps {
@@ -274,7 +274,7 @@ function ReviewList({
   }
 
   return (
-    <FlatList
+    <FlashList
       data={reviews}
       keyExtractor={(item) => item._id || item.id || Math.random().toString()}
       renderItem={renderReviewItem}
@@ -287,6 +287,7 @@ function ReviewList({
       maxToRenderPerBatch={10}
       windowSize={5}
       initialNumToRender={8}
+      estimatedItemSize={150}
       refreshControl={
         <RefreshControl
           refreshing={isRefreshing}
@@ -303,6 +304,8 @@ function ReviewList({
     />
   );
 }
+
+
 
 const styles = StyleSheet.create({
   listContent: {

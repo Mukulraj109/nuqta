@@ -12,9 +12,9 @@ import {
   Platform,
   Dimensions,
   ActivityIndicator,
-  FlatList,
   Share,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -573,11 +573,12 @@ const CreatorPickDetail = () => {
             <Text style={s.relatedSectionTitle}>
               {pick.creator ? `More from ${pick.creator.name}` : 'You might also like'}
             </Text>
-            <FlatList
+            <FlashList
               horizontal
               data={relatedPicks}
               renderItem={renderRelatedPick}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) =        estimatedItemSize={150}
+          > item.id}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ paddingHorizontal: Spacing.base, gap: 10 }}
             />

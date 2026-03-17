@@ -12,8 +12,8 @@ import {
   Share,
   ActivityIndicator,
   RefreshControl,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
@@ -565,10 +565,11 @@ const ReferralPageContent = () => {
         {history.length > 0 && (
           <View style={styles.section}>
             <ThemedText style={styles.sectionTitle}>Referral History</ThemedText>
-            <FlatList
+            <FlashList
               data={history.slice(0, 5)}
               scrollEnabled={false}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) =        estimatedItemSize={70}
+          > item.id}
               renderItem={renderReferralHistoryItem}
             />
           </View>

@@ -13,14 +13,15 @@ import {
   Platform,
   Dimensions,
   ActivityIndicator,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { CachedImage } from '@/components/ui/CachedImage';
+import { catchAndReport } from '@/utils/catchAndReport';
 
 import { Colors, Spacing, BorderRadius } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -107,6 +108,7 @@ const FashionPage: React.FC = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const isMounted = useRef(true);
 
   useEffect(() => {
@@ -227,7 +229,7 @@ const FashionPage: React.FC = () => {
           brand: p.brand || p.store?.name || '',
         })));
       }
-    } catch (_) {}
+    } catch (e) { catchAndReport(e, setError, 'Fashion/fetchTrending'); }
   }, []);
 
   // ── Fetch fashion stores (brands) ────────────────────────────
@@ -247,7 +249,7 @@ const FashionPage: React.FC = () => {
           tags: s.tags,
         })));
       }
-    } catch (_) {}
+    } catch (e) { catchAndReport(e, setError, 'Fashion/fetchStores'); }
   }, []);
 
   // ── Initial load ─────────────────────────────────────────────
@@ -405,12 +407,12 @@ const FashionPage: React.FC = () => {
       </View>
 
       {/* ── Main scrollable content ────────────────────── */}
-      <FlatList
+      <FlashList
         data={products}
         renderItem={renderProductCard}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) =        estimatedItemSize={220}
+          > item.id}
         numColumns={2}
-        columnWrapperStyle={styles.productsRow}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 120 }}
         onEndReached={handleLoadMore}

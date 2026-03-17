@@ -18,6 +18,7 @@ import { triggerImpact } from '@/utils/haptics';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 interface StoreInfo {
   name: string;
@@ -75,7 +76,7 @@ export const CompletePurchaseSection: React.FC<CompletePurchaseSectionProps> = (
         ios: `${scheme}${label}@${latLng}`,
         android: `${scheme}${latLng}(${label})`,
       });
-      if (url) { try { Linking.openURL(url); } catch (e) {} }
+      if (url) { try { Linking.openURL(url); } catch (e) { catchAndWarn(e, 'CompletePurchaseSection/openURL'); } }
     }
   };
 

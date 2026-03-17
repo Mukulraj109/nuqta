@@ -2,6 +2,7 @@
 // Comprehensive multi-step modal for uploading UGC content
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { catchSilent } from '@/utils/catchAndReport';
 import {
   View,
   Modal,
@@ -212,7 +213,7 @@ function UGCUploadModal({
           });
           setCurrentStep('preview');
           if (Platform.OS !== 'web') {
-            try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) {}
+            try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) { catchSilent(e, 'UGCUploadModal/haptics'); }
           }
         }
       }
@@ -251,7 +252,7 @@ function UGCUploadModal({
           });
           setCurrentStep('preview');
           if (Platform.OS !== 'web') {
-            try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) {}
+            try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) { catchSilent(e, 'UGCUploadModal/haptics'); }
           }
         }
       }
@@ -368,7 +369,7 @@ function UGCUploadModal({
         }).start();
 
         if (Platform.OS !== 'web') {
-          try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) {}
+          try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) { catchSilent(e, 'UGCUploadModal/haptics'); }
         }
 
         // Auto close after 3 seconds
@@ -386,7 +387,7 @@ function UGCUploadModal({
       setError(err.message || 'Failed to upload content. Please try again.');
       setCurrentStep('details');
       if (Platform.OS !== 'web') {
-        try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {}); } catch (e) {}
+        try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error).catch(() => {}); } catch (e) { catchSilent(e, 'UGCUploadModal/haptics'); }
       }
     } finally {
       if (progressInterval) clearInterval(progressInterval);

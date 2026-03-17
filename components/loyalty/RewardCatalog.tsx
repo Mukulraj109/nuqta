@@ -4,7 +4,8 @@
  */
 
 import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, FlatList, Pressable, TextInput } from 'react-native';
+import { View, StyleSheet, Pressable, TextInput } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { RewardItem, RewardCategory } from '@/types/loyaltyRedemption.types';
@@ -116,13 +117,14 @@ function RewardCatalog({
 
       {/* Category Filter */}
       <View style={styles.categoryContainer}>
-        <FlatList
+        <FlashList
           horizontal
           showsHorizontalScrollIndicator={false}
           data={CATEGORIES}
           keyExtractor={item => item.value}
           renderItem={renderCategoryChip}
           contentContainerStyle={styles.categoryList}
+          estimatedItemSize={44}
         />
       </View>
 

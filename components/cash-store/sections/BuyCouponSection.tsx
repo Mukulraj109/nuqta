@@ -11,10 +11,10 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  FlatList,
   Platform,
   Animated,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -374,13 +374,14 @@ const BuyCouponSection: React.FC<BuyCouponSectionProps> = ({
       </Animated.View>
 
       {/* Horizontal List */}
-      <FlatList
+      <FlashList
         data={isLoading ? Array.from({ length: 4 }) : brands}
         renderItem={renderGiftCardItem}
         keyExtractor={(item, index) => (isLoading ? `skeleton-${index}` : (item as GiftCardBrand).id)}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+        estimatedItemSize={150}
       />
     </View>
   );

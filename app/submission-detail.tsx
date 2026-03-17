@@ -21,6 +21,7 @@ import { showAlert } from '@/utils/alert';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -233,7 +234,7 @@ export default function SubmissionDetailPage() {
                   if (Platform.OS === 'web') {
                     window.open(videoUrl, '_blank');
                   } else {
-                    try { Linking.openURL(videoUrl); } catch (e) {}
+                    try { Linking.openURL(videoUrl); } catch (e) { catchAndWarn(e, 'SubmissionDetail/openURL'); }
                   }
                 }}
               >

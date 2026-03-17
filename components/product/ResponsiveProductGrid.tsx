@@ -6,7 +6,8 @@
  */
 
 import React, { useCallback } from 'react';
-import { FlatList, View, StyleSheet, ViewStyle } from 'react-native';
+import { View, StyleSheet, ViewStyle } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useResponsiveGrid } from '@/hooks/useResponsiveGrid';
 import { spacing } from '@/constants/theme';
 interface Product {
@@ -116,25 +117,12 @@ function ResponsiveProductGrid({
     []
   );
 
-  const getItemLayout = useCallback(
-    (data: any, index: number) => {
-      const itemHeight = cardWidth * 1.5; // Approximate aspect ratio
-      return {
-        length: itemHeight,
-        offset: itemHeight * Math.floor(index / numColumns),
-        index,
-      };
-    },
-    [cardWidth, numColumns]
-  );
-
   return (
-    <FlatList
+    <FlashList
       data={products}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       numColumns={numColumns}
-      key={numColumns} // Force re-render when columns change
       contentContainerStyle={[styles.content, style]}
       onEndReached={onEndReached}
       onEndReachedThreshold={onEndReachedThreshold}
@@ -146,8 +134,7 @@ function ResponsiveProductGrid({
       maxToRenderPerBatch={10}
       windowSize={10}
       initialNumToRender={8}
-      // Uncomment if items have consistent heights for better performance
-      // getItemLayout={getItemLayout}
+      estimatedItemSize={220}
       accessible={true}
       accessibilityRole="list"
       accessibilityLabel="Product grid"

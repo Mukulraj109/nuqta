@@ -18,6 +18,7 @@ import { QUICK_MESSAGE_TEMPLATES } from '@/types/messaging.types';
 import { useRouter } from 'expo-router';
 import storeMessagingService from '@/services/storeMessagingApi';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 interface ContactStoreModalProps {
   visible: boolean;
@@ -167,7 +168,7 @@ function ContactStoreModal({
       : 'Customer Inquiry';
     const emailUrl = `mailto:${storeEmail}?subject=${encodeURIComponent(subject)}`;
 
-    try { Linking.openURL(emailUrl); } catch (e) {}
+    try { Linking.openURL(emailUrl); } catch (e) { catchAndWarn(e, 'ContactStoreModal/openURL'); }
   };
 
   // Render contact option

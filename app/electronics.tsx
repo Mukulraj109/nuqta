@@ -425,13 +425,14 @@ const ElectronicsPage: React.FC = () => {
             <Text style={styles.emptyTitle}>No brands found</Text>
           </View>
         ) : (
-          <FlatList
+          <FlashList
             data={stores}
             renderItem={renderStoreItem}
             keyExtractor={(item) => item._id}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingRight: 8 }}
+            estimatedItemSize={110}
           />
         )}
       </View>
@@ -552,12 +553,13 @@ const ElectronicsPage: React.FC = () => {
 
       {/* Filters */}
       <View style={styles.filtersContainer}>
-        <FlatList
+        <FlashList
           data={FILTER_OPTIONS as unknown as FilterType[]}
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item) => item}
           renderItem={renderFilterItem}
+          estimatedItemSize={44}
         />
       </View>
 

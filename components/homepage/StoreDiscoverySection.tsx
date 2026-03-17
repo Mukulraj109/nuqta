@@ -2,10 +2,10 @@ import React, { useCallback, useMemo } from 'react';
 import {
   View,
   StyleSheet,
-  FlatList,
   Pressable,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -119,24 +119,6 @@ const StoreDiscoverySection = React.memo(function StoreDiscoverySection({
   const keyExtractorTop = useCallback((item: DiscoveryStore) => `top-${item.id}`, []);
   const keyExtractorPopular = useCallback((item: DiscoveryStore) => `popular-${item.id}`, []);
 
-  // Get item layout for performance optimization
-  const getItemLayoutTop = useCallback(
-    (_: any, index: number) => ({
-      length: 180 + 12, // width + margin
-      offset: (180 + 12) * index,
-      index,
-    }),
-    []
-  );
-
-  const getItemLayoutPopular = useCallback(
-    (_: any, index: number) => ({
-      length: 170 + 12, // width + margin
-      offset: (170 + 12) * index,
-      index,
-    }),
-    []
-  );
 
   // Show skeleton while loading
   const isLoading = isLoadingTop && isLoadingPopular;
@@ -170,7 +152,7 @@ const StoreDiscoverySection = React.memo(function StoreDiscoverySection({
           {isLoadingTop ? (
             <StoreDiscoverySkeleton showTopStores={true} showPopularStores={false} />
           ) : (
-            <FlatList
+            <FlashList
               data={topStores}
               renderItem={renderTopStoreCard}
               keyExtractor={keyExtractorTop}
@@ -184,7 +166,7 @@ const StoreDiscoverySection = React.memo(function StoreDiscoverySection({
               windowSize={5}
               scrollEventThrottle={16}
               decelerationRate="normal"
-              getItemLayout={getItemLayoutTop}
+              estimatedItemSize={110}
             />
           )}
         </View>
@@ -205,7 +187,7 @@ const StoreDiscoverySection = React.memo(function StoreDiscoverySection({
           {isLoadingPopular ? (
             <StoreDiscoverySkeleton showTopStores={false} showPopularStores={true} />
           ) : (
-            <FlatList
+            <FlashList
               data={popularStores}
               renderItem={renderPopularStoreCard}
               keyExtractor={keyExtractorPopular}
@@ -219,7 +201,7 @@ const StoreDiscoverySection = React.memo(function StoreDiscoverySection({
               windowSize={5}
               scrollEventThrottle={16}
               decelerationRate="normal"
-              getItemLayout={getItemLayoutPopular}
+              estimatedItemSize={110}
             />
           )}
         </View>

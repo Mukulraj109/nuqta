@@ -1,15 +1,15 @@
 import React from 'react';
 import { 
-  View, 
-  StyleSheet, 
-  FlatList, 
-  ActivityIndicator, 
-  Pressable, 
-  Dimensions 
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  Pressable,
+  Dimensions
 } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { VideoGridProps, PLAY_PAGE_COLORS } from '@/types/playPage.types';
 import VideoCard from './VideoCard';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -67,7 +67,7 @@ function VideoGrid({
       {items.length === 0 ? (
         renderEmpty()
       ) : (
-        <FlatList
+        <FlashList
           data={items}
           renderItem={renderVideoCard}
           keyExtractor={(item, index) => `${item.id || index}`}
@@ -79,6 +79,7 @@ function VideoGrid({
           snapToInterval={width * 0.7 + 16}   // smooth snapping like carousel
           decelerationRate="fast"
           snapToAlignment="start"
+          estimatedItemSize={250}
         />
       )}
     </View>

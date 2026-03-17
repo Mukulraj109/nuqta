@@ -8,11 +8,11 @@ import {
   Platform,
   Dimensions,
   TextInput,
-  FlatList,
   ActivityIndicator,
   Animated,
   ImageBackground,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
@@ -749,13 +749,14 @@ export default function OnlineVoucherPage() {
             <ThemedText style={styles.newBadgeText}>NEW</ThemedText>
           </View>
         </View>
-        <FlatList
+        <FlashList
           data={newlyAdded}
           renderItem={renderNewBrandItem}
           keyExtractor={(item) => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.newBrandsContent}
+          estimatedItemSize={150}
         />
       </View>
     );

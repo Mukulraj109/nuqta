@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback, memo } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ThemedText } from '@/components/ThemedText';
 import { useRouter } from 'expo-router';
 import { productApi, HomepageProduct } from '@/services/productApi';
@@ -166,13 +166,14 @@ function CategoryProductsSection({
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={products}
           renderItem={renderProduct}
           keyExtractor={keyExtractor}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
+          estimatedItemSize={220}
           initialNumToRender={4}
           maxToRenderPerBatch={6}
           windowSize={5}

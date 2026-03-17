@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SectionHeader } from '../common';
 import { OfferCardCompact } from '../cards';

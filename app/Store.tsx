@@ -7,11 +7,11 @@ import {
   TextInput,
   Platform,
   Pressable,
-  FlatList,
   Dimensions,
   ActivityIndicator,
   Animated,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHomepage, useHomepageNavigation } from '@/hooks/useHomepage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -562,18 +562,14 @@ export default function App() {
       </LinearGradient>
 
       {/* Scrollable Grid */}
-      <FlatList
+      <FlashList
         data={categories}
         keyExtractor={(it) => it.id}
         numColumns={2}
-        columnWrapperStyle={{ gap: CARD_GAP }}
         renderItem={renderStoreCategoryItem}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.flatListContent}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
+        estimatedItemSize={220}
         ListHeaderComponent={
           <>
             {isLoadingCategories ? (
@@ -597,6 +593,7 @@ export default function App() {
           </>
         }
       />
+
 
       {/* Profile Menu Modal */}
       {profileUser && (

@@ -11,7 +11,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   TextInput,
   Platform,
@@ -307,13 +306,14 @@ export default function CouponsPage() {
 
       {/* Category Filter */}
       <View style={styles.filterContainer}>
-        <FlatList
+        <FlashList
           data={CATEGORIES}
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item) => item.key}
           contentContainerStyle={styles.filterList}
           renderItem={renderCategoryFilterItem}
+          estimatedItemSize={44}
         />
       </View>
 

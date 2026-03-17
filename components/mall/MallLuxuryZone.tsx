@@ -9,7 +9,6 @@ import React, { memo, useCallback } from 'react';
 import {
   View,
   Text,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
@@ -20,6 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../types/mall.types';
 import MallLuxuryBrandCard from './cards/MallLuxuryBrandCard';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -197,7 +197,7 @@ const MallLuxuryZone: React.FC<MallLuxuryZoneProps> = ({
         </View>
 
         {/* Horizontal Brands List */}
-        <FlatList
+        <FlashList
           data={brands}
           renderItem={renderBrand}
           keyExtractor={keyExtractor}
@@ -210,6 +210,7 @@ const MallLuxuryZone: React.FC<MallLuxuryZoneProps> = ({
           maxToRenderPerBatch={3}
           windowSize={3}
           initialNumToRender={2}
+          estimatedItemSize={180}
         />
 
         {/* Bottom CTA */}

@@ -12,7 +12,6 @@ import {
   ScrollView,
   StyleSheet,
   Pressable,
-  FlatList,
 } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';

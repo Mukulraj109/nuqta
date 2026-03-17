@@ -369,6 +369,14 @@ export interface PaymentRewards {
   coinsEarned: number;
   bonusCoins?: number;
   firstVisitBonus?: number;
+  cashbackBreakdown?: {
+    baseCashbackPercent: number;
+    baseCashbackAmount: number;
+    subscriptionMultiplier: number;
+    priveMultiplier: number;
+    priveTier: string;
+    finalCashbackAmount: number;
+  };
   loyaltyProgress: {
     currentVisits: number;
     nextMilestone: number;

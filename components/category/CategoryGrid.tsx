@@ -1,12 +1,12 @@
 import React from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
   Dimensions,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 
 import { ThemedText } from '@/components/ThemedText';
 import CategoryCard from './CategoryCard';
@@ -147,7 +147,7 @@ function CategoryGrid({
 
   return (
     <View style={getContainerStyle()}>
-      <FlatList
+      <FlashList
         data={items}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
@@ -161,8 +161,8 @@ function CategoryGrid({
           items.length === 0 && styles.emptyContent,
         ]}
         ItemSeparatorComponent={
-          layoutConfig.type === 'list' && !horizontal ? 
-            () => <View style={styles.listSeparator} /> : 
+          layoutConfig.type === 'list' && !horizontal ?
+            () => <View style={styles.listSeparator} /> :
             undefined
         }
         ListFooterComponent={renderFooter}
@@ -178,23 +178,7 @@ function CategoryGrid({
             />
           ) : undefined
         }
-        // Performance optimizations
-        removeClippedSubviews={true}
-        maxToRenderPerBatch={10}
-        updateCellsBatchingPeriod={50}
-        initialNumToRender={8}
-        windowSize={10}
-        getItemLayout={
-          layoutConfig.type === 'list' ? (data, index) => ({
-            length: 120, // Estimated item height for list items
-            offset: 120 * index,
-            index,
-          }) : layoutConfig.type === 'cards' || layoutConfig.type === 'grid' ? (data, index) => ({
-            length: 380 + (layoutConfig.spacing || 16), // Card height + spacing
-            offset: (380 + (layoutConfig.spacing || 16)) * Math.floor(index / (layoutConfig.itemsPerRow || 2)),
-            index,
-          }) : undefined
-        }
+        estimatedItemSize={220}
       />
       
       {/* Loading overlay for initial load */}

@@ -28,6 +28,7 @@ import ordersApi, { Order } from '@/services/ordersApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 interface SocialPost {
   id: string;
@@ -620,7 +621,7 @@ export default function SocialMediaPage() {
                             <Text style={styles.postCashbackAmount}>{currencySymbol}{post.cashbackAmount}</Text>
                           </View>
                           <Pressable
-                            onPress={() => { try { Linking.openURL(post.url); } catch (e) {} }}
+                            onPress={() => { try { Linking.openURL(post.url); } catch (e) { catchAndWarn(e, 'SocialMedia/openURL'); } }}
                             style={styles.postLink}
                             accessibilityLabel={`View ${post.platform} post`}
                             accessibilityRole="link"

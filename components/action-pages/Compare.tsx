@@ -11,12 +11,12 @@ import {
   StyleSheet,
   TextInput,
   Pressable,
-  FlatList,
   ActivityIndicator,
   ScrollView,
   Modal,
   Keyboard,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -756,13 +756,14 @@ function ComparePage() {
 
           {/* Results */}
           {!isSearching && searchResults.length > 0 && (
-            <FlatList
+            <FlashList
               data={searchResults}
               keyExtractor={(item, i) => item._id || item.id || String(i)}
               renderItem={renderSearchResult}
               contentContainerStyle={styles.searchResultsList}
               showsVerticalScrollIndicator={false}
               keyboardShouldPersistTaps="handled"
+              estimatedItemSize={70}
             />
           )}
 

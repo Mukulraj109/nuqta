@@ -25,6 +25,7 @@ import { useAuthUser, useGetCurrencySymbol, useIsAuthenticated, useAuthLoading }
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 interface SocialPost {
   _id: string;
@@ -483,7 +484,7 @@ export default function AdminSocialMediaPosts() {
               {/* Post URL */}
               <Pressable
                 style={styles.postUrlContainer}
-                onPress={() => { try { Linking.openURL(post.postUrl); } catch (e) {} }}
+                onPress={() => { try { Linking.openURL(post.postUrl); } catch (e) { catchAndWarn(e, 'SocialMediaPosts/openURL'); } }}
                 accessibilityRole="link"
                 accessibilityLabel={`Open post URL: ${post.postUrl}`}
                 accessibilityHint="Double tap to open in browser"

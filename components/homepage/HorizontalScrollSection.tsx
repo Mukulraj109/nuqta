@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Dimensions, RefreshControl, Platform, FlatList } from 'react-native';
+import { View, ScrollView, StyleSheet, Dimensions, RefreshControl, Platform } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { HorizontalScrollSectionProps } from '@/types/homepage.types';
@@ -80,7 +81,7 @@ const HorizontalScrollSection = React.memo(function HorizontalScrollSection({
       </ThemedView>
 
       {/* Horizontal Scroll Content - Optimized FlatList for all platforms */}
-      <FlatList
+      <FlashList
         data={section.items}
         horizontal
         nestedScrollEnabled={true}
@@ -95,11 +96,7 @@ const HorizontalScrollSection = React.memo(function HorizontalScrollSection({
         windowSize={5} // Keep 5 screens worth of items in memory
         scrollEventThrottle={16}
         decelerationRate="normal"
-        getItemLayout={(data, index) => ({
-          length: cardWidth + spacing,
-          offset: (cardWidth + spacing) * index,
-          index
-        })}
+        estimatedItemSize={150}
         keyExtractor={(item, index) => item?.id || item?._id || `item-${index}`}
         renderItem={renderSectionCard}
       />

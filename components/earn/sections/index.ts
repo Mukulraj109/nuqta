@@ -9,6 +9,7 @@ export { default as ShoppingEarnSection } from './ShoppingEarnSection';
 export { default as ShareEngageSection } from './ShareEngageSection';
 export { default as SocialImpactSection } from './SocialImpactSection';
 export { default as SpecialProgramsSection } from './SpecialProgramsSection';
+export { default as ExclusiveZonesSection } from './ExclusiveZonesSection';
 export { default as EventsSection } from './EventsSection';
 export { default as BonusZoneSection } from './BonusZoneSection';
 export { default as BonusOpportunitiesSection } from './BonusOpportunitiesSection';

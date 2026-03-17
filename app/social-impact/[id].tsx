@@ -27,6 +27,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 // Nuqta Brand Colors
 const COLORS = {
@@ -263,18 +264,18 @@ function SocialImpactEventDetail() {
       // Web fallback — open Google Maps in a new tab
       url = `https://www.google.com/maps/search/?api=1&query=${encoded}`;
     }
-    try { Linking.openURL(url); } catch (e) {}
+    try { Linking.openURL(url); } catch (e) { catchAndWarn(e, 'SocialImpactDetail/openURL'); }
   };
 
   const callPhone = () => {
     if (event?.contact?.phone) {
-      try { Linking.openURL(`tel:${event.contact.phone}`); } catch (e) {}
+      try { Linking.openURL(`tel:${event.contact.phone}`); } catch (e) { catchAndWarn(e, 'SocialImpactDetail/openURL'); }
     }
   };
 
   const sendEmail = () => {
     if (event?.contact?.email) {
-      try { Linking.openURL(`mailto:${event.contact.email}`); } catch (e) {}
+      try { Linking.openURL(`mailto:${event.contact.email}`); } catch (e) { catchAndWarn(e, 'SocialImpactDetail/openURL'); }
     }
   };
 
@@ -629,7 +630,7 @@ function SocialImpactEventDetail() {
               {event.merchant?.phone && (
                 <Pressable
                   style={styles.hostedByContact}
-                  onPress={() => { try { Linking.openURL(`tel:${event.merchant!.phone}`); } catch (e) {} }}
+                  onPress={() => { try { Linking.openURL(`tel:${event.merchant!.phone}`); } catch (e) { catchAndWarn(e, 'SocialImpactDetail/openURL'); } }}
                 >
                   <Ionicons name="call-outline" size={14} color={Colors.info} />
                   <Text style={styles.hostedByContactText}>{event.merchant.phone}</Text>

@@ -23,6 +23,7 @@ import {
   ShareEngageSection,
   SocialImpactSection,
   SpecialProgramsSection,
+  ExclusiveZonesSection,
   EventsSection,
   BonusZoneSection,
   BonusOpportunitiesSection,
@@ -114,6 +115,12 @@ const PlayAndEarn = () => {
             specialProgramsLoaded={data.specialProgramsLoaded}
             selectedProgramSlug={data.selectedProgramSlug}
             setSelectedProgramSlug={data.setSelectedProgramSlug}
+            navigateTo={data.navigateTo}
+          />
+
+          {/* Exclusive Zones */}
+          <ExclusiveZonesSection
+            zones={data.exclusiveZones}
             navigateTo={data.navigateTo}
           />
 

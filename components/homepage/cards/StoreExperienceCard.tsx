@@ -5,6 +5,7 @@
  */
 
 import React, { memo, useCallback } from 'react';
+import { catchSilent } from '@/utils/catchAndReport';
 import {
   View,
   Text,
@@ -62,7 +63,7 @@ const StoreExperienceCard: React.FC<StoreExperienceCardProps> = memo(({
 
   const handlePress = useCallback(() => {
     if (Platform.OS !== 'web') {
-      try { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {}); } catch (e) {}
+      try { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {}); } catch (e) { catchSilent(e, 'StoreExperienceCard/haptics'); }
     }
     router.push({
       pathname: '/StoreListPage',

@@ -11,10 +11,10 @@ import {
   StyleSheet,
   Pressable,
   ScrollView,
-  FlatList,
   Dimensions,
   RefreshControl,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -423,13 +423,13 @@ const BadgesScreen: React.FC = () => {
         </View>
       </View>
 
-      <FlatList
+      <FlashList
         data={filteredAchievements}
         keyExtractor={keyExtractor}
         renderItem={renderAchievementItem}
         numColumns={2}
-        columnWrapperStyle={styles.achievementsRow}
         showsVerticalScrollIndicator={false}
+        estimatedItemSize={150}
         ListHeaderComponent={listHeader}
         ListFooterComponent={listFooter}
         ListEmptyComponent={listEmpty}

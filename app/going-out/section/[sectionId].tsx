@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   SafeAreaView,
   Platform,
@@ -9,6 +8,7 @@ import {
   ActivityIndicator,
   Pressable,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -136,12 +136,12 @@ export default function GoingOutSectionPage() {
         <View style={{ width: 40 }} />
       </View>
 
-      <FlatList
+      <FlashList
         data={products}
         renderItem={renderProduct}
-        keyExtractor={item => item._id}
+        keyExtractor={item =        estimatedItemSize={220}
+          > item._id}
         numColumns={2}
-        columnWrapperStyle={styles.row}
         contentContainerStyle={styles.listContent}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.3}

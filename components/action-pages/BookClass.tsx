@@ -15,8 +15,8 @@ import {
   TextInput,
   ActivityIndicator,
   Platform,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -350,12 +350,13 @@ function BookClassPage() {
             </Text>
           </View>
         ) : (
-          <FlatList
+          <FlashList
             data={filteredSalons}
             keyExtractor={(item) => item._id || item.id}
             renderItem={renderStoreCard}
             contentContainerStyle={styles.storeList}
             showsVerticalScrollIndicator={false}
+            estimatedItemSize={110}
           />
         )}
       </SafeAreaView>

@@ -1,11 +1,11 @@
 import React, { memo, useMemo } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   Dimensions,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CategoryIconItem from './CategoryIconItem';
 
 interface Category {
@@ -75,19 +75,15 @@ const CategoryIconGrid: React.FC<CategoryIconGridProps> = memo(({
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         data={normalizedCategories}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         numColumns={numColumns}
         scrollEnabled={false}
         contentContainerStyle={styles.gridContent}
-        columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
         showsVerticalScrollIndicator={false}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        initialNumToRender={maxItems}
-        maxToRenderPerBatch={maxItems}
-        windowSize={1}
+        estimatedItemSize={80}
       />
     </View>
   );
@@ -101,10 +97,6 @@ const styles = StyleSheet.create({
   },
   gridContent: {
     paddingHorizontal: 16,
-  },
-  row: {
-    justifyContent: 'space-between',
-    marginBottom: 8,
   },
   itemContainer: {
     alignItems: 'center',

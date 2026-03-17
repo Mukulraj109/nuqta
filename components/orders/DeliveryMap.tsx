@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Linking, Platform } from 'react-native';
+import { catchAndWarn } from '@/utils/catchAndReport';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { OrderLocationUpdate } from '@/hooks/useOrderTracking';
@@ -54,7 +55,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
     if (locationUpdate?.deliveryPartner.phone) {
       try {
         Linking.openURL(`tel:${locationUpdate.deliveryPartner.phone}`);
-      } catch (e) {}
+      } catch (e) { catchAndWarn(e, 'DeliveryMap/handleCallDriver'); }
     }
   };
 
@@ -72,7 +73,7 @@ function DeliveryMap({ locationUpdate, deliveryAddress, storeLocation }: Deliver
         const url = `https://www.google.com/maps/dir/?api=1&destination=${deliveryAddress.latitude},${deliveryAddress.longitude}`;
         Linking.openURL(url).catch(() => {});
       }
-    } catch (e) {}
+    } catch (e) { catchAndWarn(e, 'DeliveryMap/openInMaps'); }
   };
 
   // Build static map URL for web fallback

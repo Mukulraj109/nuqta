@@ -9,7 +9,6 @@ import {
   ScrollView,
   Pressable,
   TextInput,
-  FlatList,
   ActivityIndicator,
   Platform,
 } from 'react-native';

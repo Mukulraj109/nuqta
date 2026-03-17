@@ -10,11 +10,11 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  FlatList,
   Platform,
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -302,14 +302,14 @@ const UGCSocialProofSection: React.FC<UGCSocialProofSectionProps> = ({
       </Text>
 
       {/* UGC Grid */}
-      <FlatList
+      <FlashList
         data={displayContent}
         renderItem={renderVideoItem}
         keyExtractor={(item) => item.id || Math.random().toString()}
         numColumns={2}
         scrollEnabled={false}
         contentContainerStyle={styles.gridContainer}
-        columnWrapperStyle={styles.columnWrapper}
+        estimatedItemSize={250}
       />
 
       {/* CTA Banner */}
@@ -384,9 +384,6 @@ const styles = StyleSheet.create({
   },
   gridContainer: {
     gap: GAP,
-  },
-  columnWrapper: {
-    justifyContent: 'space-between',
   },
   ugcItem: {
     width: ITEM_WIDTH,

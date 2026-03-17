@@ -11,7 +11,6 @@ import {
   Text,
   Pressable,
   StyleSheet,
-  FlatList,
   Dimensions,
   Platform,
 } from 'react-native';
@@ -19,6 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from './priveTheme';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -85,7 +85,7 @@ const PriveHeroBanner: React.FC<PriveHeroBannerProps> = ({
   banners = STATIC_BANNERS,
   onBannerPress,
 }) => {
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlashList<PriveBanner>>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const autoScrollTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -262,7 +262,7 @@ const PriveHeroBanner: React.FC<PriveHeroBannerProps> = ({
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         ref={flatListRef}
         data={banners}
         renderItem={renderBanner}
@@ -275,11 +275,7 @@ const PriveHeroBanner: React.FC<PriveHeroBannerProps> = ({
         snapToInterval={BANNER_WIDTH + 10}
         decelerationRate="fast"
         contentContainerStyle={styles.listContent}
-        getItemLayout={(_, index) => ({
-          length: BANNER_WIDTH + 10,
-          offset: (BANNER_WIDTH + 10) * index,
-          index,
-        })}
+        estimatedItemSize={200}
       />
       {renderDots()}
     </View>

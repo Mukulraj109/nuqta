@@ -3,7 +3,6 @@ import {
   View,
   Pressable,
   StyleSheet,
-  FlatList,
   Dimensions,
   ListRenderItemInfo,
   ViewToken,
@@ -12,6 +11,7 @@ import {
   ScrollView,
   Linking,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
@@ -19,6 +19,7 @@ import { triggerImpact, triggerNotification } from "@/utils/haptics";
 import { GlassCard } from "@/components/ui";
 import { ThemedText } from "@/components/ThemedText";
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 import {
   Colors,
   Spacing,
@@ -77,7 +78,7 @@ export default memo(function ProductDisplay({
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
-  const flatRef = useRef<FlatList<any> | null>(null);
+  const flatRef = useRef<FlashList<any> | null>(null);
 
   // Format rating display
   const formattedRating = rating ? rating.toFixed(1) : null;
@@ -220,7 +221,7 @@ export default memo(function ProductDisplay({
         android: `geo:${locationCoords.lat},${locationCoords.lng}?q=${locationCoords.lat},${locationCoords.lng}`,
         default: `https://www.google.com/maps/search/?api=1&query=${locationCoords.lat},${locationCoords.lng}`,
       });
-      try { Linking.openURL(url); } catch (e) {}
+      try { Linking.openURL(url); } catch (e) { catchAndWarn(e, 'ProductDisplay/openURL'); }
     }
   }, [onDirectionsPress, locationCoords]);
 
@@ -229,7 +230,7 @@ export default memo(function ProductDisplay({
     if (onCallPress) {
       onCallPress();
     } else if (phoneNumber) {
-      try { Linking.openURL(`tel:${phoneNumber}`); } catch (e) {}
+      try { Linking.openURL(`tel:${phoneNumber}`); } catch (e) { catchAndWarn(e, 'ProductDisplay/openURL'); }
     }
   }, [onCallPress, phoneNumber]);
 
@@ -270,7 +271,7 @@ export default memo(function ProductDisplay({
       style={styles.container}
       accessibilityLabel="Product image gallery"
     >
-      <FlatList
+      <FlashList
         ref={flatRef}
         data={images}
         keyExtractor={(i) => i.id}
@@ -283,9 +284,9 @@ export default memo(function ProductDisplay({
         scrollEventThrottle={16}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
-        getItemLayout={(_, index) => ({ length: width, offset: width * index, index })}
         accessibilityLabel={`Product image carousel. Showing image ${currentIndex + 1} of ${images.length}`}
         accessibilityRole="list"
+        estimatedItemSize={150}
       />
 
       {/* Share and Favorite buttons removed - now in header */}

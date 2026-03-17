@@ -34,6 +34,7 @@ import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 const { width } = Dimensions.get('window');
 
@@ -867,7 +868,7 @@ export default function DailyCheckInPage() {
                     <Text style={styles.submissionTitle}>{submission.posterTitle}</Text>
                     <Text style={styles.submissionDate}>Submitted: {new Date(submission.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</Text>
                     <Pressable
-                      onPress={() => { try { Linking.openURL(submission.postUrl); } catch (e) {} }}
+                      onPress={() => { try { Linking.openURL(submission.postUrl); } catch (e) { catchAndWarn(e, 'DailyCheckin/openURL'); } }}
                       style={styles.submissionLink}
                     >
                       <Ionicons name="link" size={12} color={Colors.info} />

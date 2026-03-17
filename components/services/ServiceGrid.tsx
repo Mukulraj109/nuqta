@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   ActivityIndicator,
   Text,
@@ -10,6 +9,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ServiceCard, { ServiceItem } from './ServiceCard';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -98,19 +98,19 @@ const ServiceGrid: React.FC<ServiceGridProps> = ({
   }
 
   return (
-    <FlatList
+    <FlashList
       data={services}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
       numColumns={columns}
       contentContainerStyle={[styles.listContent, contentContainerStyle]}
-      columnWrapperStyle={styles.columnWrapper}
       showsVerticalScrollIndicator={false}
       ListEmptyComponent={renderEmpty}
       removeClippedSubviews={Platform.OS !== 'web'}
       maxToRenderPerBatch={10}
       windowSize={5}
       initialNumToRender={8}
+      estimatedItemSize={220}
     />
   );
 };

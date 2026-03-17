@@ -10,7 +10,6 @@ import {
   Pressable,
   Dimensions,
   ActivityIndicator,
-  FlatList,
   Platform,
   StatusBar,
   Share,
@@ -27,6 +26,7 @@ import { ProfileSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 const { width } = Dimensions.get('window');
 const NUQTA_COIN = BRAND.COIN_IMAGE;
@@ -401,7 +401,7 @@ export default function CreatorProfilePage() {
                 <Pressable
                   key={index}
                   style={styles.socialLink}
-                  onPress={() => { if (link.url) { try { Linking.openURL(link.url); } catch (e) {} } }}
+                  onPress={() => { if (link.url) { try { Linking.openURL(link.url); } catch (e) { catchAndWarn(e, 'CreatorProfile/openURL'); } } }}
                  
                 >
                   <Ionicons

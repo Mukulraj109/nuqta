@@ -6,6 +6,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { catchSilent } from '@/utils/catchAndReport';
 import {
   View,
   Text,
@@ -99,7 +100,7 @@ export default function PriveReviewEarnPage() {
   );
 
   const handleItemPress = useCallback((item: PriveReviewableItem) => {
-    try { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {}); } catch (e) {}
+    try { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {}); } catch (e) { catchSilent(e, 'ReviewEarn/haptics'); }
     router.push({
       pathname: '/ReviewPage',
       params: {

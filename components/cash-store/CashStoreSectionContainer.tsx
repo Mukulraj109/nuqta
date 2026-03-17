@@ -23,6 +23,7 @@ import {
   Linking,
   Dimensions,
 } from 'react-native';
+import { catchAndWarn } from '@/utils/catchAndReport';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as WebBrowser from 'expo-web-browser';
 
@@ -114,7 +115,7 @@ const CashStoreSectionContainer: React.FC<CashStoreSectionContainerProps> = ({
           if (deal.externalUrl) {
             try {
               await Linking.openURL(deal.externalUrl);
-            } catch (e) {}
+            } catch (e) { catchAndWarn(e, 'CashStoreSectionContainer/handleTrendingDealPress-fallback'); }
           }
         }
       } else {
@@ -155,7 +156,7 @@ const CashStoreSectionContainer: React.FC<CashStoreSectionContainerProps> = ({
           if (deal.externalUrl) {
             try {
               await Linking.openURL(deal.externalUrl);
-            } catch (e) {}
+            } catch (e) { catchAndWarn(e, 'CashStoreSectionContainer/handleHighCashbackPress-fallback'); }
           }
         }
       } else {

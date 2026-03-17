@@ -3,7 +3,6 @@
 import React, { useCallback } from 'react';
 import {
   View,
-  FlatList,
   Text,
   Pressable,
   StyleSheet,
@@ -11,6 +10,7 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -225,7 +225,7 @@ function ArticlesTab({
   }, [loading]);
 
   return (
-    <FlatList
+    <FlashList
       data={data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
@@ -237,10 +237,7 @@ function ArticlesTab({
       ListEmptyComponent={renderEmpty}
       refreshing={refreshing}
       onRefresh={onRefresh}
-      removeClippedSubviews={Platform.OS !== 'web'}
-      maxToRenderPerBatch={5}
-      initialNumToRender={5}
-      windowSize={5}
+      estimatedItemSize={200}
     />
   );
 }

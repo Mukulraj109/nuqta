@@ -6,12 +6,12 @@ import {
   Pressable,
   Dimensions,
   ScrollView,
-  FlatList,
   StatusBar,
   ActivityIndicator,
   RefreshControl,
   Alert,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -271,14 +271,14 @@ const ExploreHotPage = () => {
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={hotItems}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) =        estimatedItemSize={220}
+          > item.id}
           numColumns={2}
           style={styles.itemsScroll}
           contentContainerStyle={[styles.itemsContainer, { paddingBottom: 120 }]}
           showsVerticalScrollIndicator={false}
-          columnWrapperStyle={styles.grid}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[Colors.gold]} />
           }

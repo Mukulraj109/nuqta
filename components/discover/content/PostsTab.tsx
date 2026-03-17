@@ -3,7 +3,6 @@
 import React, { useCallback } from 'react';
 import {
   View,
-  FlatList,
   Text,
   Pressable,
   StyleSheet,
@@ -11,6 +10,7 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -201,13 +201,12 @@ function PostsTab({
   }, [loading]);
 
   return (
-    <FlatList
+    <FlashList
       data={data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       numColumns={2}
       contentContainerStyle={styles.listContent}
-      columnWrapperStyle={styles.columnWrapper}
       showsVerticalScrollIndicator={false}
       onEndReached={hasMore ? onLoadMore : undefined}
       onEndReachedThreshold={0.5}
@@ -215,10 +214,7 @@ function PostsTab({
       ListEmptyComponent={renderEmpty}
       refreshing={refreshing}
       onRefresh={onRefresh}
-      removeClippedSubviews={Platform.OS !== 'web'}
-      maxToRenderPerBatch={6}
-      initialNumToRender={6}
-      windowSize={5}
+      estimatedItemSize={250}
     />
   );
 }
@@ -228,9 +224,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 100,
-  },
-  columnWrapper: {
-    justifyContent: 'space-between',
   },
   card: {
     width: CARD_WIDTH,

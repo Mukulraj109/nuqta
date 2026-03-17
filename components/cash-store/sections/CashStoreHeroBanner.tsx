@@ -12,10 +12,10 @@ import {
   StyleSheet,
   Pressable,
   Dimensions,
-  FlatList,
   Platform,
   Animated,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { CashStoreHeroBanner as HeroBannerType } from '../../../types/cash-store.types';
@@ -37,7 +37,7 @@ const CashStoreHeroBanner: React.FC<CashStoreHeroBannerProps> = ({
   onBannerPress,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlashList<HeroBannerType>>(null);
   const autoScrollRef = useRef<NodeJS.Timeout | null>(null);
   const activeIndexRef = useRef(0); // Ref to track current index without re-running effects
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -301,7 +301,7 @@ const CashStoreHeroBanner: React.FC<CashStoreHeroBannerProps> = ({
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         ref={flatListRef}
         data={banners}
         renderItem={renderBanner}
@@ -315,11 +315,7 @@ const CashStoreHeroBanner: React.FC<CashStoreHeroBannerProps> = ({
         snapToInterval={BANNER_WIDTH + 8}
         decelerationRate="fast"
         contentContainerStyle={styles.listContent}
-        getItemLayout={(_, index) => ({
-          length: BANNER_WIDTH + 8,
-          offset: (BANNER_WIDTH + 8) * index,
-          index,
-        })}
+        estimatedItemSize={BANNER_WIDTH + 8}
       />
 
       {/* Pagination Dots */}

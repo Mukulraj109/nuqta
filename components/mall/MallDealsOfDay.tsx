@@ -10,7 +10,6 @@ import React, { memo, useCallback, useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
@@ -21,6 +20,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallOffer } from '../../types/mall.types';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 interface MallDealsOfDayProps {
@@ -299,7 +299,7 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
         </View>
 
         {/* Offers List */}
-        <FlatList
+        <FlashList
           data={offers}
           renderItem={renderOffer}
           keyExtractor={keyExtractor}
@@ -312,6 +312,7 @@ const MallDealsOfDay: React.FC<MallDealsOfDayProps> = ({
           maxToRenderPerBatch={4}
           windowSize={4}
           initialNumToRender={2}
+          estimatedItemSize={150}
         />
       </LinearGradient>
     </View>

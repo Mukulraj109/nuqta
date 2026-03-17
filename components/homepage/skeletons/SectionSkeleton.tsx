@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { View, StyleSheet, ScrollView, Platform, FlatList } from 'react-native';
+import { View, StyleSheet, ScrollView, Platform } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import SkeletonCard from '@/components/common/SkeletonCard';
 import ProductCardSkeleton from './ProductCardSkeleton';
 import StoreCardSkeleton from './StoreCardSkeleton';
@@ -80,7 +81,7 @@ function SectionSkeleton({
 
       {/* Horizontal Scroll Content Skeleton */}
       {Platform.OS === 'web' ? (
-        <FlatList
+        <FlashList
           data={skeletonCards}
           horizontal
           showsHorizontalScrollIndicator={showIndicator}
@@ -90,6 +91,7 @@ function SectionSkeleton({
           scrollEnabled={false}
           renderItem={renderSkeletonItem}
           keyExtractor={(item) => item.id}
+          estimatedItemSize={150}
         />
       ) : (
         <ScrollView

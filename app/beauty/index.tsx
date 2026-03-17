@@ -22,6 +22,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import storesApi from '@/services/storesApi';
 import productsApi from '@/services/productsApi';
+import { catchAndReport } from '@/utils/catchAndReport';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
@@ -90,6 +91,7 @@ const BeautyPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [featuredSalons, setFeaturedSalons] = useState<DisplaySalon[]>([]);
   const [trendingProducts, setTrendingProducts] = useState<DisplayProduct[]>([]);
   const [stats, setStats] = useState({ salons: 0, maxCashback: 30, products: 0 });
@@ -158,7 +160,7 @@ const BeautyPage: React.FC = () => {
         }));
       }
     } catch (error) {
-      // silently handle
+      catchAndReport(error, setError, 'BeautyPage/fetchData');
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);

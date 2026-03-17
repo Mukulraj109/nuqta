@@ -3,12 +3,12 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/contexts/AuthContext';
@@ -139,9 +139,10 @@ export default function DisputeListScreen() {
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         data={disputes}
-        keyExtractor={item => item._id}
+        keyExtractor={item =        estimatedItemSize={70}
+          > item._id}
         renderItem={renderDispute}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#7C3AED" />}
         onEndReached={loadMore}

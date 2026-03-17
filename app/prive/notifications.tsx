@@ -11,6 +11,7 @@ import { PriveEmptyState } from '@/components/prive/PriveEmptyState';
 import priveApi from '@/services/priveApi';
 import { NotificationListSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { catchAndReport } from '@/utils/catchAndReport';
 
 interface NotificationItem {
   id: string;
@@ -28,6 +29,7 @@ export default function NotificationsScreen() {
   const [counts, setCounts] = useState({ critical: 0, warning: 0, info: 0 });
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -36,7 +38,7 @@ export default function NotificationsScreen() {
         setNotifications(response.data.notifications || []);
         setCounts(response.data.counts || { critical: 0, warning: 0, info: 0 });
       }
-    } catch (_) {}
+    } catch (e) { catchAndReport(e, setError, 'Notifications/fetchData'); }
     finally { setIsLoading(false); setIsRefreshing(false); }
   }, []);
 

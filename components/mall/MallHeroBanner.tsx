@@ -13,7 +13,6 @@ import {
   Text,
   Pressable,
   StyleSheet,
-  FlatList,
   Dimensions,
   Platform,
   ActivityIndicator,
@@ -26,6 +25,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBanner } from '../../types/mall.types';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -114,7 +114,7 @@ const MallHeroBanner: React.FC<MallHeroBannerProps> = ({
   isLoading = false,
   onBannerPress,
 }) => {
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlashList<MallBanner>>(null);
   const currentIndexRef = useRef(0);
   const autoScrollTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const isUserScrolling = useRef(false);
@@ -262,11 +262,6 @@ const MallHeroBanner: React.FC<MallHeroBannerProps> = ({
 
   const keyExtractor = useCallback((item: MallBanner) => item.id || item._id, []);
 
-  const getItemLayout = useCallback((_: any, index: number) => ({
-    length: BANNER_WIDTH + BANNER_GAP,
-    offset: (BANNER_WIDTH + BANNER_GAP) * index,
-    index,
-  }), []);
 
   const ItemSeparator = useCallback(() => (
     <View style={{ width: BANNER_GAP }} />
@@ -289,7 +284,7 @@ const MallHeroBanner: React.FC<MallHeroBannerProps> = ({
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         ref={flatListRef}
         data={displayBanners}
         renderItem={renderBanner}
@@ -304,7 +299,7 @@ const MallHeroBanner: React.FC<MallHeroBannerProps> = ({
         snapToAlignment="start"
         decelerationRate="fast"
         contentContainerStyle={styles.listContent}
-        getItemLayout={getItemLayout}
+        estimatedItemSize={200}
         ItemSeparatorComponent={ItemSeparator}
         removeClippedSubviews={Platform.OS !== 'web'}
         initialNumToRender={1}

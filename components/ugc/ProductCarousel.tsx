@@ -6,7 +6,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   Dimensions,
   Animated,
@@ -46,7 +45,7 @@ function ProductCarousel({
   emptyMessage = 'No products tagged in this video',
   cardWidth = 180,
 }: ProductCarouselProps) {
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<any>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
 

@@ -10,10 +10,10 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  FlatList,
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -177,7 +177,7 @@ export default function GroceryFastDeliveryPage() {
         </LinearGradient>
       </View>
 
-      <FlatList
+      <FlashList
         data={stores}
         keyExtractor={(item) => item._id || item.id}
         renderItem={renderStoreCard}
@@ -191,6 +191,7 @@ export default function GroceryFastDeliveryPage() {
             <Text style={styles.emptySubtitle}>Check back later for available options</Text>
           </View>
         }
+        estimatedItemSize={110}
       />
     </SafeAreaView>
   );

@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { UGCVideoItem, PLAY_PAGE_COLORS } from '@/types/playPage.types';
 import SectionHeader from './SectionHeader';
 import ThumbnailVideoCard from './ThumbnailVideoCard';
@@ -33,15 +34,15 @@ function MerchantVideoSection({
         onViewAllPress={onViewAllPress}
       />
 
-      <FlatList
+      <FlashList
         data={videos.slice(0, 4)}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.id || `merchant-video-${index}`}
         numColumns={2}
-        columnWrapperStyle={styles.row}
         contentContainerStyle={styles.gridContainer}
         scrollEnabled={false}
         showsVerticalScrollIndicator={false}
+        estimatedItemSize={250}
 
         // Performance Optimizations
         initialNumToRender={4} // Render first 4 videos (2 rows)

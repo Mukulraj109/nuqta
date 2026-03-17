@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
   Platform,
@@ -14,6 +13,7 @@ import SkeletonLoader from '@/components/common/SkeletonLoader';
 import productsService from '@/services/productsApi';
 import { useToast } from '@/hooks/useToast';
 import { useRouter } from 'expo-router';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 interface RelatedProductsProps {
@@ -189,7 +189,7 @@ function RelatedProducts({
       ) : products.length === 0 ? (
         renderEmptyState()
       ) : (
-        <FlatList
+        <FlashList
           data={products}
           renderItem={renderProductCard}
           keyExtractor={(item) => item.id}
@@ -203,11 +203,7 @@ function RelatedProducts({
           maxToRenderPerBatch={5}
           initialNumToRender={3}
           windowSize={5}
-          getItemLayout={(data, index) => ({
-            length: CARD_WIDTH + CARD_SPACING,
-            offset: (CARD_WIDTH + CARD_SPACING) * index,
-            index,
-          })}
+          estimatedItemSize={220}
         />
       )}
     </View>

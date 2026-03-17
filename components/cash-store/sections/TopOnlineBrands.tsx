@@ -13,8 +13,8 @@ import {
   Pressable,
   Platform,
   Animated,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -333,22 +333,24 @@ const TopOnlineBrands: React.FC<TopOnlineBrandsProps> = ({
         ) : hasNoBrands ? (
           <EmptyState onViewAllPress={onViewAllPress} />
         ) : isLoading ? (
-          <FlatList
+          <FlashList
             data={Array.from({ length: 6 })}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.listContent}
             keyExtractor={(_, i) => `skeleton-${i}`}
             renderItem={renderSkeletonCard}
+            estimatedItemSize={150}
           />
         ) : (
-          <FlatList
+          <FlashList
             data={displayBrands}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.listContent}
             keyExtractor={(item) => item.id}
             renderItem={renderBrandCard}
+            estimatedItemSize={150}
           />
         )}
       </LinearGradient>

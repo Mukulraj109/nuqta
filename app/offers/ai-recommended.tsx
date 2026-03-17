@@ -8,10 +8,10 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  FlatList,
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -302,18 +302,14 @@ export default function AIRecommendedPage() {
         </View>
       </LinearGradient>
 
-      <FlatList
+      <FlashList
         data={offers}
         renderItem={renderOffer}
-        keyExtractor={item => item.id}
+        keyExtractor={item =        estimatedItemSize={220}
+          > item.id}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         numColumns={2}
-        columnWrapperStyle={styles.row}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.3}
         refreshControl={

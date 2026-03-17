@@ -1,12 +1,12 @@
 import React, { useCallback, memo } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   ActivityIndicator,
   Dimensions,
   ListRenderItemInfo,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 
 import { ThemedText } from '@/components/ThemedText';
 import { HomeDeliveryProductCard } from './HomeDeliveryProductCard';
@@ -89,12 +89,6 @@ export const ProductGrid = memo(function ProductGrid({
 
   const keyExtractor = useCallback((item: HomeDeliveryProduct) => item.id, []);
 
-  const getItemLayout = useCallback((data: any, index: number) => ({
-    length: ESTIMATED_CARD_HEIGHT,
-    offset: ESTIMATED_CARD_HEIGHT * Math.floor(index / numColumns),
-    index,
-  }), [numColumns]);
-
   if (loading && products.length === 0) {
     return (
       <View
@@ -111,31 +105,23 @@ export const ProductGrid = memo(function ProductGrid({
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         data={products}
         renderItem={renderProductCard}
         keyExtractor={keyExtractor}
         numColumns={numColumns}
-        key={numColumns} // Force re-render if columns change
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.contentContainer,
           products.length === 0 && styles.emptyContentContainer,
         ]}
-        columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={renderEmptyState}
         ListFooterComponent={renderLoadingFooter}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.3}
-        removeClippedSubviews={true}
-        maxToRenderPerBatch={6}
-        windowSize={3}
-        initialNumToRender={6}
-        getItemLayout={getItemLayout}
-        accessibilityLabel={`Product grid. ${products.length} products available`}
-        accessibilityRole="list"
+        estimatedItemSize={220}
       />
     </View>
 );
@@ -157,10 +143,6 @@ const styles = StyleSheet.create({
   cardContainer: {
     marginVertical: 8,
     marginHorizontal: 4,
-  },
-  row: {
-    justifyContent: 'space-between',
-    gap: 16,
   },
   separator: {
     height: 12,

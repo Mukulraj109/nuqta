@@ -11,10 +11,10 @@ import {
   Pressable,
   RefreshControl,
   ActivityIndicator,
-  FlatList,
   Dimensions,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -420,44 +420,37 @@ export default function SubcategoryPage() {
             </ThemedText>
           </View>
         ) : activeTab === 'stores' ? (
-          <FlatList
+          <FlashList
             data={stores}
             renderItem={renderStoreCard}
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
-            removeClippedSubviews={Platform.OS !== 'web'}
-            maxToRenderPerBatch={10}
-            windowSize={5}
-            initialNumToRender={8}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
                 tintColor={Colors.gold}
                 colors={[Colors.gold]}
+                estimatedItemSize={110}
               />
             }
           />
         ) : (
-          <FlatList
+          <FlashList
             data={products}
             renderItem={renderProductCard}
             keyExtractor={(item) => item.id}
             numColumns={2}
-            columnWrapperStyle={styles.productRow}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
-            removeClippedSubviews={Platform.OS !== 'web'}
-            maxToRenderPerBatch={10}
-            windowSize={5}
-            initialNumToRender={8}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
                 tintColor={Colors.gold}
                 colors={[Colors.gold]}
+                estimatedItemSize={220}
               />
             }
           />

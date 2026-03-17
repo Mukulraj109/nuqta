@@ -5,10 +5,10 @@ import {
   StyleSheet,
   Pressable,
   Dimensions,
-  FlatList,
   TextInput,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
@@ -185,18 +185,14 @@ export default function ProductsVideosPage() {
       </ScrollView>
 
       {/* Products Grid */}
-      <FlatList
+      <FlashList
         data={filteredProducts}
         renderItem={renderVideoCard}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) =        estimatedItemSize={250}
+          > item.id}
         numColumns={2}
-        columnWrapperStyle={styles.gridRow}
         contentContainerStyle={styles.gridContent}
         showsVerticalScrollIndicator={false}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
             <LinearGradient

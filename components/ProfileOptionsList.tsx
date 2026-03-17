@@ -1,6 +1,7 @@
 // components/ProfileOptionsList.tsx
 import React from "react";
-import { View, Text, Pressable, StyleSheet, FlatList } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from "@expo/vector-icons";
 import { ProfileOption, ProfileOptionsListProps } from "@/types/profile";
 import { useRegion } from "@/contexts/RegionContext";
@@ -100,11 +101,12 @@ const ProfileOptionsList: React.FC<ProfileOptionsListProps> = ({
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         data={optionsToRender}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         scrollEnabled={false}
+        estimatedItemSize={70}
       />
     </View>
   );

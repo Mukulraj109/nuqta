@@ -6,11 +6,11 @@ import {
   StyleSheet,
   Pressable,
   Dimensions,
-  FlatList,
   TextInput,
   Platform,
   RefreshControl,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
@@ -269,18 +269,14 @@ export default function ArticlesPage() {
 
       {/* Articles Grid */}
       {!loading && !error && (
-        <FlatList
+        <FlashList
           data={filteredArticles}
           renderItem={renderArticleCard}
           keyExtractor={(item) => item.id}
           numColumns={2}
-          columnWrapperStyle={styles.gridRow}
           contentContainerStyle={styles.gridContent}
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={15}
-          windowSize={7}
-          initialNumToRender={8}
+          estimatedItemSize={200}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -305,6 +301,7 @@ export default function ArticlesPage() {
           )}
         />
       )}
+
 
       {/* FAB for Create Article */}
       <Pressable

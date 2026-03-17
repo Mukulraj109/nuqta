@@ -178,13 +178,14 @@ export default function MyParticipationsScreen() {
 
       {/* Filter Tabs */}
       <View style={styles.tabsContainer}>
-        <FlatList
+        <FlashList
           horizontal
           showsHorizontalScrollIndicator={false}
           data={TABS}
           keyExtractor={t => t.id}
           contentContainerStyle={styles.tabsContent}
           renderItem={renderTabItem}
+          estimatedItemSize={44}
         />
       </View>
 

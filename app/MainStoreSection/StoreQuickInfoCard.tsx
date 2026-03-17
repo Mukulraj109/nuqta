@@ -10,6 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 interface OperationalHours {
   open?: string;
@@ -105,10 +106,10 @@ export default function StoreQuickInfoCard({
         android: `google.navigation:q=${location.coordinates.lat},${location.coordinates.lng}`,
         default: `https://www.google.com/maps/dir/?api=1&destination=${location.coordinates.lat},${location.coordinates.lng}`,
       });
-      try { Linking.openURL(url); } catch (e) {}
+      try { Linking.openURL(url); } catch (e) { catchAndWarn(e, 'StoreQuickInfoCard/openURL'); }
     } else if (formattedAddress) {
       const encodedAddress = encodeURIComponent(formattedAddress);
-      try { Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`); } catch (e) {}
+      try { Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`); } catch (e) { catchAndWarn(e, 'StoreQuickInfoCard/openURL'); }
     }
   };
 

@@ -6,9 +6,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  View, Text, StyleSheet, Pressable, FlatList,
+  View, Text, StyleSheet, Pressable,
   RefreshControl, ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -108,7 +109,7 @@ export default function FastDeliveryPage() {
         </LinearGradient>
       </View>
 
-      <FlatList
+      <FlashList
         data={stores}
         keyExtractor={(item, i) => item._id || item.id || `store-${i}`}
         renderItem={renderStoreCard}
@@ -122,6 +123,7 @@ export default function FastDeliveryPage() {
             <Text style={styles.emptySubtitle}>Check back later for available options</Text>
           </View>
         }
+        estimatedItemSize={110}
       />
     </SafeAreaView>
   );

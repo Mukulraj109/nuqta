@@ -30,6 +30,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -205,7 +206,7 @@ const StoreDetailPage: React.FC = () => {
 
   const handleCall = () => {
     if (store?.contact?.phone) {
-      try { Linking.openURL(`tel:${store.contact.phone}`); } catch (e) {}
+      try { Linking.openURL(`tel:${store.contact.phone}`); } catch (e) { catchAndWarn(e, 'StoreDetail/openURL'); }
     }
   };
 
@@ -213,7 +214,7 @@ const StoreDetailPage: React.FC = () => {
     const phone = store?.contact?.whatsapp || store?.contact?.phone;
     if (phone) {
       const cleanPhone = phone.replace(/[^0-9]/g, '');
-      try { Linking.openURL(`whatsapp://send?phone=${cleanPhone}&text=Hi, I found you on ${BRAND.APP_NAME} app!`); } catch (e) {}
+      try { Linking.openURL(`whatsapp://send?phone=${cleanPhone}&text=Hi, I found you on ${BRAND.APP_NAME} app!`); } catch (e) { catchAndWarn(e, 'StoreDetail/openURL'); }
     }
   };
 
@@ -225,13 +226,13 @@ const StoreDetailPage: React.FC = () => {
         android: `google.navigation:q=${lat},${lng}`,
         default: `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
       });
-      if (url) { try { Linking.openURL(url); } catch (e) {} }
+      if (url) { try { Linking.openURL(url); } catch (e) { catchAndWarn(e, 'StoreDetail/openURL'); } }
     }
   };
 
   const handleWebsite = () => {
     if (store?.contact?.website) {
-      try { Linking.openURL(store.contact.website); } catch (e) {}
+      try { Linking.openURL(store.contact.website); } catch (e) { catchAndWarn(e, 'StoreDetail/openURL'); }
     }
   };
 

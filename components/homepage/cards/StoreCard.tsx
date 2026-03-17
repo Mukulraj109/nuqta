@@ -3,12 +3,12 @@ import {
   Pressable,
   StyleSheet,
   View,
-  FlatList,
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
@@ -110,7 +110,7 @@ function StoreCard({
   }, [store]);
   
   const banners = getBanners();
-  const flatListRef = useRef<FlatList<string> | null>(null);
+  const flatListRef = useRef<FlashList<string> | null>(null);
   
   // Reset banner index when store changes
   useEffect(() => {
@@ -343,7 +343,7 @@ function StoreCard({
             <>
               {banners.length > 1 ? (
                 <>
-                  <FlatList
+                  <FlashList
                     ref={flatListRef}
                     data={banners}
                     renderItem={renderBannerItem}
@@ -363,20 +363,16 @@ function StoreCard({
                     scrollEventThrottle={16}
                     snapToInterval={width}
                     decelerationRate="fast"
-                    getItemLayout={(data, index) => ({
-                      length: width,
-                      offset: width * index,
-                      index,
-                    })}
+                    estimatedItemSize={200}
                     onScrollToIndexFailed={(info) => {
                       // Handle scroll to index failure - scroll to offset instead
                       const wait = new Promise(resolve => setTimeout(resolve, 500));
                       wait.then(() => {
                         if (flatListRef.current) {
                           const offset = info.index * width;
-                          flatListRef.current.scrollToOffset({ 
-                            offset, 
-                            animated: true 
+                          flatListRef.current.scrollToOffset({
+                            offset,
+                            animated: true
                           });
                         }
                       });

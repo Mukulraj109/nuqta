@@ -11,7 +11,6 @@ import {
   StatusBar,
   Platform,
   ActivityIndicator,
-  FlatList,
   TextInput,
   Modal,
 } from 'react-native';
@@ -720,13 +719,14 @@ export default function WishlistPage() {
               <Ionicons name="pricetag" size={16} color={Colors.primary[500]} />
               <ThemedText style={styles.sectionTitle}>Saved Deals</ThemedText>
             </View>
-            <FlatList
+            <FlashList
               data={deals}
               renderItem={renderWishlistItem(wishlist.id)}
               keyExtractor={(item, idx) => `deal-${wishlist.id}-${item.id}-${idx}`}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.itemsRow}
+              estimatedItemSize={70}
             />
           </View>
         )}
@@ -738,13 +738,14 @@ export default function WishlistPage() {
               <Ionicons name="storefront-outline" size={16} color={Colors.primary[500]} />
               <ThemedText style={styles.sectionTitle}>Following Stores</ThemedText>
             </View>
-            <FlatList
+            <FlashList
               data={stores.slice(0, 5)}
               renderItem={renderWishlistItem(wishlist.id)}
               keyExtractor={(item, idx) => `store-${wishlist.id}-${item.id}-${idx}`}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.itemsRow}
+              estimatedItemSize={70}
             />
           </View>
         )}
@@ -756,13 +757,14 @@ export default function WishlistPage() {
               <Ionicons name="bag-outline" size={16} color={Colors.primary[500]} />
               <ThemedText style={styles.sectionTitle}>Products</ThemedText>
             </View>
-            <FlatList
+            <FlashList
               data={products.slice(0, 5)}
               renderItem={renderWishlistItem(wishlist.id)}
               keyExtractor={(item, idx) => `product-${wishlist.id}-${item.id}-${idx}`}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.itemsRow}
+              estimatedItemSize={70}
             />
           </View>
         )}
@@ -774,13 +776,14 @@ export default function WishlistPage() {
               <Ionicons name="videocam-outline" size={16} color={Colors.primary[500]} />
               <ThemedText style={styles.sectionTitle}>Saved Videos</ThemedText>
             </View>
-            <FlatList
+            <FlashList
               data={videos.slice(0, 5)}
               renderItem={renderWishlistItem(wishlist.id)}
               keyExtractor={(item, idx) => `video-${wishlist.id}-${item.id}-${idx}`}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.itemsRow}
+              estimatedItemSize={70}
             />
           </View>
         )}

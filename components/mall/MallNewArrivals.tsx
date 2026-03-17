@@ -9,7 +9,6 @@ import React, { memo, useCallback } from 'react';
 import {
   View,
   Text,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
@@ -19,6 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../types/mall.types';
 import MallNewArrivalCard from './cards/MallNewArrivalCard';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 interface MallNewArrivalsProps {
@@ -182,7 +182,7 @@ const MallNewArrivals: React.FC<MallNewArrivalsProps> = ({
         </View>
 
         {/* Brands List */}
-        <FlatList
+        <FlashList
           data={brands}
           renderItem={renderBrand}
           keyExtractor={keyExtractor}
@@ -193,6 +193,7 @@ const MallNewArrivals: React.FC<MallNewArrivalsProps> = ({
           maxToRenderPerBatch={4}
           windowSize={4}
           initialNumToRender={2}
+          estimatedItemSize={180}
         />
       </LinearGradient>
     </View>

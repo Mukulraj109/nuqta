@@ -11,6 +11,7 @@ import priveApi from '@/services/priveApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { catchAndReport } from '@/utils/catchAndReport';
 
 type Tab = 'available' | 'active' | 'completed';
 
@@ -51,7 +52,7 @@ export default function MissionsScreen() {
     try {
       const res = await priveApi.claimMission(id);
       if (res.success) await fetchData();
-    } catch (_) {}
+    } catch (e) { catchAndReport(e, setError, 'Missions/claimMission'); }
     finally { setClaiming(null); }
   };
 
@@ -60,7 +61,7 @@ export default function MissionsScreen() {
     try {
       const res = await priveApi.completeMission(id);
       if (res.success) await fetchData();
-    } catch (_) {}
+    } catch (e) { catchAndReport(e, setError, 'Missions/completeMission'); }
     finally { setCompleting(null); }
   };
 

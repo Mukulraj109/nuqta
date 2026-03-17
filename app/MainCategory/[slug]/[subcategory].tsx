@@ -14,8 +14,8 @@ import {
   Pressable,
   RefreshControl,
   ActivityIndicator,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
@@ -445,9 +445,10 @@ export default function SharedCategoryPage() {
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={filteredStores}
-          keyExtractor={(item) => item._id || item.id}
+          keyExtractor={(item) =        estimatedItemSize={110}
+          > item._id || item.id}
           renderItem={renderStoreItem}
           contentContainerStyle={styles.storeList}
           showsVerticalScrollIndicator={false}

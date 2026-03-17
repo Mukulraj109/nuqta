@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { View, StyleSheet, ScrollView, Platform, FlatList } from 'react-native';
+import { View, StyleSheet, ScrollView, Platform } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import SkeletonCard from '@/components/common/SkeletonCard';
 import { ThemedView } from '@/components/ThemedView';
 import TopStoreCardSkeleton from './TopStoreCardSkeleton';
@@ -71,7 +72,7 @@ function StoreDiscoverySkeleton({
 
       {/* Horizontal Scroll Content Skeleton */}
       {Platform.OS === 'web' ? (
-        <FlatList
+        <FlashList
           data={topStoreSkeletons}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -81,6 +82,7 @@ function StoreDiscoverySkeleton({
           scrollEnabled={false}
           renderItem={renderTopStoreSkeletonItem}
           keyExtractor={(item) => item.id}
+          estimatedItemSize={110}
         />
       ) : (
         <ScrollView
@@ -123,7 +125,7 @@ function StoreDiscoverySkeleton({
 
       {/* Horizontal Scroll Content Skeleton */}
       {Platform.OS === 'web' ? (
-        <FlatList
+        <FlashList
           data={popularStoreSkeletons}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -133,6 +135,7 @@ function StoreDiscoverySkeleton({
           scrollEnabled={false}
           renderItem={renderPopularStoreSkeletonItem}
           keyExtractor={(item) => item.id}
+          estimatedItemSize={110}
         />
       ) : (
         <ScrollView

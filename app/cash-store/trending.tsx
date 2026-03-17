@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View,
   ScrollView,
-  FlatList,
   Text,
   StyleSheet,
   Pressable,
@@ -13,6 +12,7 @@ import {
   StatusBar,
   Dimensions,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { platformAlertConfirm } from '@/utils/platformAlert';
@@ -24,6 +24,7 @@ import * as WebBrowser from 'expo-web-browser';
 import cashStoreApi from '../../services/cashStoreApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -216,7 +217,7 @@ export default function TrendingOffersPage() {
         platformAlertConfirm(
           'Tracking Issue',
           'Your cashback may not be tracked. Open anyway?',
-          () => { try { Linking.openURL(brand.externalUrl!); } catch (e) {} },
+          () => { try { Linking.openURL(brand.externalUrl!); } catch (e) { catchAndWarn(e, 'CashStoreTrending/openURL'); } },
           'Open Anyway'
         );
       }
@@ -254,7 +255,7 @@ export default function TrendingOffersPage() {
         platformAlertConfirm(
           'Tracking Issue',
           'Your cashback may not be tracked. Open anyway?',
-          () => { try { Linking.openURL(offer.externalUrl!); } catch (e) {} },
+          () => { try { Linking.openURL(offer.externalUrl!); } catch (e) { catchAndWarn(e, 'CashStoreTrending/openURL'); } },
           'Open Anyway'
         );
       }
@@ -470,13 +471,14 @@ export default function TrendingOffersPage() {
               </View>
             </View>
 
-            <FlatList
+            <FlashList
               data={activeOffers}
               renderItem={renderOfferItem}
               keyExtractor={(item) => item._id}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.offersListContent}
+              estimatedItemSize={150}
             />
           </View>
         )}

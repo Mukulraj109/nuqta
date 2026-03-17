@@ -10,10 +10,10 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  FlatList,
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -178,7 +178,7 @@ function ExperienceDetailPage() {
       )}
 
       {/* Stores */}
-      <FlatList
+      <FlashList
         data={stores}
         keyExtractor={(item) => item._id || item.id}
         renderItem={renderStoreCard}
@@ -192,6 +192,7 @@ function ExperienceDetailPage() {
             <Text style={styles.emptySubtitle}>Check back later for available options</Text>
           </View>
         }
+        estimatedItemSize={110}
       />
 
       {/* Book Experience CTA */}

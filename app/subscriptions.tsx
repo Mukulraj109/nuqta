@@ -25,6 +25,7 @@ import subscriptionApi from '@/services/subscriptionApi';
 import type { SubscriptionTier, CurrentSubscription } from '@/services/subscriptionApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { TierCard, BenefitsTable, ValueCalculator } from '@/components/subscriptions';
 
 export default function SubscriptionsPage() {
   const router = useRouter();
@@ -144,6 +145,7 @@ export default function SubscriptionsPage() {
 
       <ScrollView
         style={styles.content}
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={Colors.gold} />
@@ -250,86 +252,30 @@ export default function SubscriptionsPage() {
         {tiers.length > 0 && (
           <View style={styles.section}>
             <View style={styles.plansList}>
-              {tiers.map((tier) => {
-                const price = selectedCycle === 'yearly' ? tier.pricing.yearly : tier.pricing.monthly;
-                const isSelected = selectedTier?.tier === tier.tier;
-                const isCurrent = currentSub?.tier === tier.tier;
-                return (
-                  <Pressable
-                    key={tier.tier}
-                    style={[styles.planCard, isSelected && styles.planCardActive]}
-                    onPress={() => setSelectedTier(tier)}
-                  >
-                    <View style={styles.planHeader}>
-                      <View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.sm }}>
-                          <Text style={styles.planName}>{tier.name}</Text>
-                          {isCurrent && (
-                            <View style={styles.currentBadge}>
-                              <Text style={styles.currentBadgeText}>Current</Text>
-                            </View>
-                          )}
-                        </View>
-                        <Text style={styles.planDuration}>/{selectedCycle === 'yearly' ? 'year' : 'month'}</Text>
-                      </View>
-                      <View style={styles.planPricing}>
-                        <Text style={styles.planPrice}>
-                          {currencySymbol}{price.toFixed(2)}
-                        </Text>
-                        {selectedCycle === 'yearly' && tier.pricing.yearlyDiscount > 0 && (
-                          <View style={styles.planCashback}>
-                            <Text style={styles.planCashbackText}>
-                              {tier.pricing.yearlyDiscount}% off
-                            </Text>
-                          </View>
-                        )}
-                      </View>
-                    </View>
-
-                    {/* Features */}
-                    {tier.features && tier.features.length > 0 && (
-                      <View style={styles.featuresList}>
-                        {tier.features.slice(0, 3).map((feature, idx) => (
-                          <View key={idx} style={styles.featureRow}>
-                            <Ionicons name="checkmark-circle" size={16} color={Colors.success} />
-                            <Text style={styles.featureText}>{feature}</Text>
-                          </View>
-                        ))}
-                        {tier.features.length > 3 && (
-                          <Text style={styles.moreFeatures}>+{tier.features.length - 3} more benefits</Text>
-                        )}
-                      </View>
-                    )}
-
-                    {isSelected && (
-                      <View style={styles.planSelected}>
-                        <Ionicons name="checkmark-circle" size={24} color={Colors.gold} />
-                      </View>
-                    )}
-                  </Pressable>
-                );
-              })}
+              {tiers.map((tier) => (
+                <TierCard
+                  key={tier.tier}
+                  tier={tier}
+                  selectedCycle={selectedCycle}
+                  isSelected={selectedTier?.tier === tier.tier}
+                  isCurrent={currentSub?.tier === tier.tier}
+                  currencySymbol={currencySymbol}
+                  onSelect={setSelectedTier}
+                />
+              ))}
             </View>
           </View>
         )}
 
-        {/* Benefits */}
-        <View style={styles.benefitsSection}>
-          <Text style={styles.sectionTitle}>Why Subscribe?</Text>
-          <View style={styles.benefitsGrid}>
-            {[
-              { icon: 'cash-outline', title: 'More Cashback' },
-              { icon: 'flash-outline', title: 'Priority Access' },
-              { icon: 'shield-checkmark-outline', title: 'Exclusive Deals' },
-              { icon: 'gift-outline', title: 'Bonus Coins' },
-            ].map((benefit, index) => (
-              <View key={index} style={styles.benefitCard}>
-                <Ionicons name={benefit.icon as any} size={24} color={Colors.gold} />
-                <Text style={styles.benefitTitle}>{benefit.title}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
+        {/* Value Calculator */}
+        <ValueCalculator
+          selectedTier={selectedTier}
+          currencySymbol={currencySymbol}
+          isAuthenticated={isAuthenticated}
+        />
+
+        {/* Benefits Comparison Table */}
+        {tiers.length > 0 && <BenefitsTable tiers={tiers} />}
       </ScrollView>
 
       {/* Bottom CTA */}
@@ -526,87 +472,6 @@ const styles = StyleSheet.create({
   plansList: {
     gap: Spacing.md,
   },
-  planCard: {
-    backgroundColor: Colors.background.primary,
-    borderRadius: BorderRadius.lg,
-    padding: Spacing.base,
-    borderWidth: 2,
-    borderColor: 'transparent',
-    position: 'relative',
-  },
-  planCardActive: {
-    borderColor: Colors.gold,
-  },
-  planHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: Spacing.md,
-  },
-  planName: {
-    ...Typography.bodyLarge,
-    fontWeight: '600',
-    color: Colors.text.primary,
-  },
-  planDuration: {
-    ...Typography.bodySmall,
-    color: Colors.text.secondary,
-  },
-  planPricing: {
-    alignItems: 'flex-end',
-  },
-  planPrice: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: Colors.text.primary,
-  },
-  planCashback: {
-    backgroundColor: Colors.success + '15',
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.sm,
-    marginTop: Spacing.xs,
-  },
-  planCashbackText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: Colors.success,
-  },
-  featuresList: {
-    gap: 6,
-  },
-  featureRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-  },
-  featureText: {
-    ...Typography.bodySmall,
-    color: Colors.text.secondary,
-    flex: 1,
-  },
-  moreFeatures: {
-    ...Typography.bodySmall,
-    color: Colors.gold,
-    fontWeight: '500',
-    marginTop: 2,
-  },
-  currentBadge: {
-    backgroundColor: Colors.gold + '20',
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 2,
-    borderRadius: BorderRadius.sm,
-  },
-  currentBadgeText: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: Colors.gold,
-  },
-  planSelected: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-  },
   // Active subscription
   activeCard: {
     flexDirection: 'row',
@@ -647,29 +512,6 @@ const styles = StyleSheet.create({
     ...Typography.body,
     fontWeight: '600',
     color: Colors.gold,
-  },
-  // Benefits
-  benefitsSection: {
-    margin: Spacing.base,
-    padding: Spacing.base,
-    backgroundColor: Colors.background.primary,
-    borderRadius: BorderRadius.lg,
-    marginBottom: 120,
-  },
-  benefitsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  benefitCard: {
-    width: '50%',
-    alignItems: 'center',
-    padding: Spacing.base,
-  },
-  benefitTitle: {
-    ...Typography.bodySmall,
-    fontWeight: '500',
-    color: Colors.text.primary,
-    marginTop: Spacing.sm,
   },
   // Bottom CTA
   bottomCta: {

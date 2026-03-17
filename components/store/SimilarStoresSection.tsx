@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
-  FlatList,
   Pressable,
   StyleSheet,
   ActivityIndicator,
@@ -13,6 +12,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import StoreCard from '@/components/homepage/cards/StoreCard';
 import storesApi from '@/services/storesApi';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -209,7 +209,7 @@ const SimilarStoresSection: React.FC<SimilarStoresSectionProps> = ({
         </Pressable>
       </View>
 
-      <FlatList
+      <FlashList
         data={stores}
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -223,6 +223,7 @@ const SimilarStoresSection: React.FC<SimilarStoresSectionProps> = ({
         windowSize={isWeb ? 10 : 5}
         removeClippedSubviews={Platform.OS === 'android'}
         accessibilityLabel="Similar stores list"
+        estimatedItemSize={110}
       />
 
       {/* View All Button - Bottom */}

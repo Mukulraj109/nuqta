@@ -2,7 +2,8 @@
 // Edit user profile information with photo upload
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, StyleSheet, Pressable, StatusBar, Platform, TextInput, SafeAreaView, ActivityIndicator, Modal, FlatList } from 'react-native';
+import { View, ScrollView, StyleSheet, Pressable, StatusBar, Platform, TextInput, SafeAreaView, ActivityIndicator, Modal } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -545,9 +546,10 @@ export default function ProfileEditPage() {
               </Pressable>
             </View>
             
-            <FlatList
+            <FlashList
               data={genderOptions}
-              keyExtractor={(item) => item.value}
+              keyExtractor={(item) =        estimatedItemSize={44}
+          > item.value}
               renderItem={renderGenderOption}
             />
           </View>

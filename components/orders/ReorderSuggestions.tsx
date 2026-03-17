@@ -6,7 +6,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
 } from 'react-native';
@@ -16,6 +15,7 @@ import { router } from 'expo-router';
 import { useCartActions, useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlert } from '@/utils/platformAlert';
 import SkeletonLoader from '@/components/common/SkeletonLoader';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 interface ReorderSuggestionsProps {
@@ -237,13 +237,14 @@ function ReorderSuggestions({ onAddToCart }: ReorderSuggestionsProps) {
         </Text>
       </View>
 
-      <FlatList
+      <FlashList
         data={suggestions}
         renderItem={renderSuggestion}
         keyExtractor={item => `${item.productId}-${item.type}`}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+        estimatedItemSize={150}
       />
     </View>
 );

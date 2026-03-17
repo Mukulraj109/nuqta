@@ -2,7 +2,8 @@
 // Displays user badges and achievements with progress tracking
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, FlatList, StyleSheet, Pressable, StatusBar, Platform, RefreshControl, Modal, Dimensions } from 'react-native';
+import { View, ScrollView, StyleSheet, Pressable, StatusBar, Platform, RefreshControl, Modal, Dimensions } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -295,14 +296,14 @@ export default function AchievementsPage() {
           <ThemedText style={styles.loadingText}>Loading achievements...</ThemedText>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={filteredAchievements}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item) =        estimatedItemSize={150}
+          > item._id}
           renderItem={renderAchievementItem}
           numColumns={2}
           style={styles.content}
           contentContainerStyle={[styles.scrollContent, { paddingBottom: 120 }]}
-          columnWrapperStyle={styles.achievementsGrid}
           refreshControl={
             <RefreshControl refreshing={isLoading} onRefresh={refetch} />
           }

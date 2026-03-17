@@ -15,9 +15,9 @@ import {
   Platform,
   ActivityIndicator,
   RefreshControl,
-  FlatList,
   Dimensions,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -315,16 +315,12 @@ const LockDealsPage: React.FC = () => {
         </Pressable>
       </View>
 
-      <FlatList
+      <FlashList
         data={deals}
         renderItem={renderDealCard}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) =        estimatedItemSize={220}
+          > item._id}
         numColumns={2}
-        columnWrapperStyle={styles.row}
-        removeClippedSubviews={Platform.OS !== 'web'}
-        maxToRenderPerBatch={10}
-        windowSize={5}
-        initialNumToRender={8}
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>

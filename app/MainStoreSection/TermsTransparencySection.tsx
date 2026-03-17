@@ -19,6 +19,7 @@ import {
   Spacing,
   BorderRadius,
 } from "@/constants/DesignSystem";
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 // Enable LayoutAnimation on Android
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -56,7 +57,7 @@ export default function TermsTransparencySection({
 
   const handleContactSupport = () => {
     triggerImpact('Light');
-    try { Linking.openURL(`mailto:${supportEmail}`); } catch (e) {}
+    try { Linking.openURL(`mailto:${supportEmail}`); } catch (e) { catchAndWarn(e, 'TermsTransparencySection/openURL'); }
   };
 
   const rotateInterpolate = rotateAnim.interpolate({

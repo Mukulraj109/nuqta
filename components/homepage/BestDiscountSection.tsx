@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback, memo } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ThemedText } from '@/components/ThemedText';
 import { useRouter } from 'expo-router';
 import categoriesApi, { Category } from '@/services/categoriesApi';
@@ -123,11 +123,6 @@ function BestDiscountSection({
 
   const keyExtractor = useCallback((item: Category) => item._id, []);
 
-  const getItemLayout = useCallback((_: any, index: number) => ({
-    length: 160 + 12, // card width + margin
-    offset: (160 + 12) * index,
-    index,
-  }), []);
 
   // Don't render if no categories and not loading
   if (!loading && categories.length === 0 && !error) {
@@ -167,14 +162,14 @@ function BestDiscountSection({
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={categories}
           renderItem={renderCategory}
           keyExtractor={keyExtractor}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
-          getItemLayout={getItemLayout}
+          estimatedItemSize={150}
           initialNumToRender={4}
           maxToRenderPerBatch={6}
           windowSize={5}

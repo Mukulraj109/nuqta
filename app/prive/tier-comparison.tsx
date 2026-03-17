@@ -11,6 +11,7 @@ import priveApi from '@/services/priveApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { catchAndReport } from '@/utils/catchAndReport';
 
 const COMPARISON_ROWS = [
   { label: 'Coin Multiplier', key: 'coinMultiplier', format: (v: number) => `${v}x` },
@@ -25,12 +26,13 @@ export default function TierComparisonScreen() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
       const response = await priveApi.getTierComparison();
       if (response.success && response.data) setData(response.data);
-    } catch (_) {}
+    } catch (e) { catchAndReport(e, setError, 'TierComparison/fetchData'); }
     finally { setIsLoading(false); setIsRefreshing(false); }
   }, []);
 

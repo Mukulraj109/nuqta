@@ -6,8 +6,8 @@ import {
   StyleSheet,
   Dimensions,
   Modal,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { FilterChipsProps, SearchFilters, FilterOption } from '@/types/store-search';
@@ -130,11 +130,12 @@ const FilterChips: React.FC<FilterChipsProps & { parentCategorySlug?: string }> 
             </Pressable>
           </View>
           
-          <FlatList
+          <FlashList
             data={Object.values(GENDER_OPTIONS)}
             keyExtractor={(item) => item.id}
             renderItem={renderGenderOption}
             showsVerticalScrollIndicator={false}
+            estimatedItemSize={70}
           />
         </View>
       </Pressable>

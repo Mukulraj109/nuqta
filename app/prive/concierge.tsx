@@ -11,6 +11,7 @@ import priveApi from '@/services/priveApi';
 import { ChatSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { catchAndReport } from '@/utils/catchAndReport';
 
 export default function ConciergeScreen() {
   const { tier } = usePriveEligibility();
@@ -23,6 +24,7 @@ export default function ConciergeScreen() {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchTickets = useCallback(async () => {
     try {
@@ -30,7 +32,7 @@ export default function ConciergeScreen() {
       if (response.success && response.data) {
         setTickets(response.data.tickets || response.data || []);
       }
-    } catch (_) {}
+    } catch (e) { catchAndReport(e, setError, 'Concierge/fetchTickets'); }
     finally { setIsLoading(false); setIsRefreshing(false); }
   }, []);
 
@@ -52,7 +54,7 @@ export default function ConciergeScreen() {
         setShowForm(false);
         await fetchTickets();
       }
-    } catch (_) {}
+    } catch (e) { catchAndReport(e, setError, 'Concierge/submitTicket'); }
     finally { setIsSubmitting(false); }
   };
 

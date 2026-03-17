@@ -8,7 +8,6 @@ import {
   Animated,
   Dimensions,
   TextInput,
-  FlatList,
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
@@ -20,6 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import ugcApi, { UGCComment } from '@/services/ugcApi';
 import { useToast } from '@/hooks/useToast';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -259,7 +259,7 @@ function UGCCommentsModal({
   const [error, setError] = useState<string | null>(null);
 
   const { showSuccess, showError } = useToast();
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlashList<UGCComment>>(null);
   const inputRef = useRef<TextInput>(null);
 
   const slideAnim = useRef(new Animated.Value(screenHeight)).current;
@@ -614,7 +614,7 @@ function UGCCommentsModal({
             </View>
 
             {/* Comments List */}
-            <FlatList
+            <FlashList
               ref={flatListRef}
               data={comments}
               keyExtractor={(item) => item._id}
@@ -630,6 +630,7 @@ function UGCCommentsModal({
               maxToRenderPerBatch={10}
               windowSize={5}
               initialNumToRender={8}
+              estimatedItemSize={150}
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}

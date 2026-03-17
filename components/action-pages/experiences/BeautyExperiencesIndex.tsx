@@ -10,11 +10,11 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  FlatList,
   RefreshControl,
   ActivityIndicator,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -303,13 +303,14 @@ function BeautyExperiencesPage() {
 
       {/* Category Chips */}
       <View style={styles.chipsContainer}>
-        <FlatList
+        <FlashList
           horizontal
           data={CATEGORY_CHIPS}
           keyExtractor={(item) => item.key}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.chipsList}
           renderItem={renderCategoryChip}
+          estimatedItemSize={44}
         />
       </View>
 
@@ -324,7 +325,7 @@ function BeautyExperiencesPage() {
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={filteredExperiences}
           keyExtractor={(item) => item._id || item.id || Math.random().toString()}
           renderItem={renderExperienceItem}
@@ -347,6 +348,7 @@ function BeautyExperiencesPage() {
               </Text>
             </View>
           }
+          estimatedItemSize={220}
         />
       )}
     </SafeAreaView>

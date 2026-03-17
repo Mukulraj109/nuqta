@@ -6,10 +6,10 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useFrequentlyOrdered } from '@/hooks/useReorder';
 import { router } from 'expo-router';
@@ -128,7 +128,7 @@ function QuickReorder({ limit = 5, onViewAll }: QuickReorderProps) {
         </Pressable>
       </View>
 
-      <FlatList
+      <FlashList
         data={items}
         renderItem={renderItem}
         keyExtractor={item => item.productId}
@@ -136,6 +136,7 @@ function QuickReorder({ limit = 5, onViewAll }: QuickReorderProps) {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={renderEmpty}
+        estimatedItemSize={150}
       />
     </View>
   );

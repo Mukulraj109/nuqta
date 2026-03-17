@@ -8,13 +8,13 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   ActivityIndicator,
   RefreshControl,
   Dimensions,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -208,12 +208,12 @@ export default function OccasionsPage() {
           <Text style={styles.loadingText}>Loading occasions...</Text>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={occasions}
           renderItem={renderOccasion}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) =        estimatedItemSize={150}
+          > item.id}
           numColumns={2}
-          columnWrapperStyle={styles.row}
           contentContainerStyle={styles.listContent}
           ListHeaderComponent={renderHeader}
           ListEmptyComponent={renderEmpty}

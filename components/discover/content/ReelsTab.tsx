@@ -3,13 +3,13 @@
 import React, { useCallback, useRef, useMemo, useState } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   ActivityIndicator,
   Text,
   Platform,
   ViewToken,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -140,13 +140,12 @@ function ReelsTab({
   }, [loading]);
 
   return (
-    <FlatList
+    <FlashList
       data={data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       numColumns={2}
       contentContainerStyle={styles.listContent}
-      columnWrapperStyle={styles.columnWrapper}
       showsVerticalScrollIndicator={false}
       onViewableItemsChanged={onViewableItemsChanged}
       viewabilityConfig={viewabilityConfig}
@@ -156,16 +155,7 @@ function ReelsTab({
       ListEmptyComponent={renderEmpty}
       refreshing={refreshing}
       onRefresh={onRefresh}
-      // Performance optimizations
-      removeClippedSubviews={Platform.OS !== 'web'}
-      maxToRenderPerBatch={4}
-      initialNumToRender={4}
-      windowSize={5}
-      getItemLayout={(_, index) => ({
-        length: 230, // Approximate card height
-        offset: 230 * Math.floor(index / 2),
-        index,
-      })}
+      estimatedItemSize={250}
     />
   );
 }
@@ -175,9 +165,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 100,
-  },
-  columnWrapper: {
-    justifyContent: 'space-between',
   },
   cardWrapper: {
     flex: 1,

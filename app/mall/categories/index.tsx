@@ -7,7 +7,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   RefreshControl,
   Text,
@@ -15,6 +14,7 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter, Stack } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -143,12 +143,11 @@ export default function AllCategoriesPage() {
       <Stack.Screen options={{ headerTitle: 'All Categories' }} />
 
       <View style={styles.container}>
-        <FlatList
+        <FlashList
           data={categories}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           numColumns={2}
-          columnWrapperStyle={styles.row}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={ListHeader}
@@ -157,7 +156,8 @@ export default function AllCategoriesPage() {
               title="No categories available"
               message="Check back later for categories"
               icon="grid-outline"
-            />
+                    estimatedItemSize={80}
+          />
           }
           refreshControl={
             <RefreshControl

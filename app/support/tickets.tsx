@@ -267,13 +267,14 @@ export default function TicketsPage() {
 
         {/* Filter Chips */}
         <View style={styles.filtersContainer}>
-          <FlatList
+          <FlashList
             data={STATUS_FILTERS as unknown as typeof STATUS_FILTERS[number][]}
             renderItem={renderFilterChipItem}
             keyExtractor={item => item.key}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.filtersList}
+            estimatedItemSize={44}
           />
         </View>
 

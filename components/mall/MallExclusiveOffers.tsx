@@ -9,7 +9,6 @@ import React, { memo, useCallback, useEffect, useRef } from 'react';
 import {
   View,
   Text,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
@@ -20,6 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallOffer } from '../../types/mall.types';
 import MallOfferCard from './cards/MallOfferCard';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 interface MallExclusiveOffersProps {
@@ -185,7 +185,7 @@ const MallExclusiveOffers: React.FC<MallExclusiveOffersProps> = ({
         </Text>
 
         {/* Offers List */}
-        <FlatList
+        <FlashList
           data={offers}
           renderItem={renderOffer}
           keyExtractor={keyExtractor}
@@ -196,6 +196,7 @@ const MallExclusiveOffers: React.FC<MallExclusiveOffersProps> = ({
           maxToRenderPerBatch={3}
           windowSize={3}
           initialNumToRender={2}
+          estimatedItemSize={150}
         />
       </LinearGradient>
     </View>

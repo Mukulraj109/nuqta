@@ -11,6 +11,7 @@ import { TransactionListSkeleton } from '@/components/skeletons';
 import usePriveEligibility from '@/hooks/usePriveEligibility';
 import priveApi from '@/services/priveApi';
 import { colors } from '@/constants/theme';
+import { catchAndReport } from '@/utils/catchAndReport';
 
 export default function AnalyticsScreen() {
   const { tier } = usePriveEligibility();
@@ -20,12 +21,13 @@ export default function AnalyticsScreen() {
   const [period, setPeriod] = useState(30);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
       const response = await priveApi.getAnalytics(period);
       if (response.success && response.data) setData(response.data);
-    } catch (_) {}
+    } catch (e) { catchAndReport(e, setError, 'Analytics/fetchData'); }
     finally { setIsLoading(false); setIsRefreshing(false); }
   }, [period]);
 

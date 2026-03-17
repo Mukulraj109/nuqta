@@ -3,13 +3,13 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  FlatList,
   ListRenderItemInfo,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ProductGridProps, ProductItem } from '@/types/store-search';
 import ProductCard from './ProductCard';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 import {
   COLORS,
@@ -54,13 +54,6 @@ const ProductGrid: React.FC<ProductGridProps> = memo(({
     item.productId || String(Math.random()),
   []);
 
-  // Optimized getItemLayout for instant scrolling
-  const getItemLayout = useCallback((data: any, index: number) => ({
-    length: ESTIMATED_CARD_HEIGHT,
-    offset: ESTIMATED_CARD_HEIGHT * Math.floor(index / columns),
-    index,
-  }), [columns]);
-
   // Empty state
   if (products.length === 0) {
     return (
@@ -75,21 +68,19 @@ const ProductGrid: React.FC<ProductGridProps> = memo(({
   return (
     <View style={styles.container}>
       {/* Virtualized Product Grid with FlatList */}
-      <FlatList
+      <FlashList
         data={productsToShow}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         numColumns={columns}
-        key={columns} // Force re-render if columns change
         scrollEnabled={false} // Parent ScrollView handles scrolling
         showsVerticalScrollIndicator={false}
-        columnWrapperStyle={columns > 1 ? styles.row : undefined}
         contentContainerStyle={styles.grid}
         initialNumToRender={maxItems} // Only render visible items initially
         maxToRenderPerBatch={columns * 2} // Render 2 rows at a time
         windowSize={3} // Keep 3 screens of content in memory
         removeClippedSubviews={true} // Unmount off-screen items (Android optimization)
-        getItemLayout={getItemLayout}
+        estimatedItemSize={220}
       />
 
       {/* Show More Products Indicator */}

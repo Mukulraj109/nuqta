@@ -6,8 +6,8 @@ import {
   Pressable,
   Switch,
   Alert,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { colors } from '@/constants/theme';
@@ -277,12 +277,13 @@ function LocationNotifications({
             </Text>
           </View>
         ) : (
-          <FlatList
+          <FlashList
             data={notifications}
             renderItem={renderNotificationItem}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             scrollEnabled={false}
+            estimatedItemSize={70}
           />
         )}
       </View>

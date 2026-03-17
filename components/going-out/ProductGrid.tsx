@@ -1,13 +1,13 @@
 import React, { useCallback, memo } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   ActivityIndicator,
   Dimensions,
   RefreshControl,
   ListRenderItemInfo,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 
 import { ThemedText } from '@/components/ThemedText';
 import { GoingOutProductCard } from './GoingOutProductCard';
@@ -104,36 +104,21 @@ export const ProductGrid = memo(function ProductGrid({
 
   const keyExtractor = useCallback((item: any) => item.id, []);
 
-  const getItemLayout = useCallback((_: any, index: number) => ({
-    length: 380 + GAP, // Card height + gap
-    offset: (380 + GAP) * Math.floor(index / numColumns),
-    index,
-  }), [numColumns]);
-
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         data={products}
         renderItem={renderProduct}
         keyExtractor={keyExtractor}
         numColumns={numColumns}
-        key={numColumns} // Force re-render if columns change
         contentContainerStyle={styles.listContainer}
-        columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
         showsVerticalScrollIndicator={false}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.1}
         ListHeaderComponent={renderHeader}
         ListFooterComponent={renderLoadingFooter}
         ListEmptyComponent={!loading ? renderEmptyState : null}
-        getItemLayout={getItemLayout}
-        removeClippedSubviews={true}
-        maxToRenderPerBatch={6}
-        initialNumToRender={6}
-        windowSize={3}
-        scrollEventThrottle={16}
-        bounces={true}
-        bouncesZoom={false}
+        estimatedItemSize={220}
       />
 
       {/* Initial Loading State */}
@@ -162,10 +147,6 @@ const styles = StyleSheet.create({
   listContainer: {
     paddingTop: 16,
     paddingBottom: 20,
-  },
-  row: {
-    justifyContent: 'space-between',
-    paddingHorizontal: 0,
   },
   productContainer: {
     marginBottom: GAP,

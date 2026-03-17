@@ -3,6 +3,7 @@
 
 import { Platform } from 'react-native';
 import { parseConnectionError, formatConnectionError, isConnectionError } from '@/utils/connectionUtils';
+import { Sentry } from '@/config/sentry';
 import { globalDeduplicator, createRequestKey } from '@/utils/requestDeduplicator';
 import { globalConcurrencyLimiter } from '@/utils/concurrencyLimiter';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -347,6 +348,26 @@ class ApiClient {
 
     } catch (error) {
       if (slowWarningId) clearTimeout(slowWarningId);
+
+      // Report API errors to Sentry with tier tags for filtering
+      try {
+        const { useSubscriptionStore } = require('@/stores/subscriptionStore');
+        const { usePriveStore } = require('@/stores/priveStore');
+        const subComputed = useSubscriptionStore.getState().computed;
+        const priveEligibility = usePriveStore.getState().eligibility;
+
+        Sentry?.withScope?.((scope: any) => {
+          scope.setTag('endpoint', endpoint);
+          scope.setTag('method', method);
+          scope.setTag('user_tier', subComputed?.isVIP ? 'vip' : subComputed?.isPremium ? 'premium' : 'free');
+          scope.setTag('prive_tier', priveEligibility?.tier ?? 'none');
+          scope.setTag('error_type', error instanceof Error && error.name === 'AbortError' ? 'timeout'
+            : error instanceof Error && isConnectionError(error) ? 'network' : 'api');
+          Sentry.captureException(error instanceof Error ? error : new Error(String(error)));
+        });
+      } catch {
+        // Sentry/store unavailable — don't block error handling
+      }
 
       if (error instanceof Error) {
         if (error.name === 'AbortError') {

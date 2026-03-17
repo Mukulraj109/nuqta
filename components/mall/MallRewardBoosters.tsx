@@ -11,7 +11,6 @@ import { BRAND } from '@/constants/brand';
 import {
   View,
   Text,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
@@ -21,6 +20,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../types/mall.types';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 interface MallRewardBoostersProps {
@@ -263,7 +263,7 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
         </View>
 
         {/* Brands List */}
-        <FlatList
+        <FlashList
           data={brands}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
@@ -276,6 +276,7 @@ const MallRewardBoosters: React.FC<MallRewardBoostersProps> = ({
           maxToRenderPerBatch={5}
           windowSize={5}
           initialNumToRender={3}
+          estimatedItemSize={150}
         />
       </LinearGradient>
     </View>

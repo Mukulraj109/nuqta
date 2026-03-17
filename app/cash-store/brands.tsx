@@ -28,6 +28,7 @@ import cashStoreApi from '../../services/cashStoreApi';
 import { CashStoreBrand, CashStoreCategoryFilter } from '../../types/cash-store.types';
 import CashStoreBrandCard from '../../components/cash-store/pages/CashStoreBrandCard';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -220,7 +221,7 @@ export default function CashStoreBrandsPage() {
         platformAlertConfirm(
           'Tracking Issue',
           'Your cashback may not be tracked. Open anyway?',
-          () => { try { Linking.openURL(brand.externalUrl!); } catch (e) {} },
+          () => { try { Linking.openURL(brand.externalUrl!); } catch (e) { catchAndWarn(e, 'CashStoreBrands/openURL'); } },
           'Open Anyway'
         );
       }

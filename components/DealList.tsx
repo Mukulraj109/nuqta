@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useMemo, useRef,useEffect } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   Dimensions,
   RefreshControl,
@@ -9,6 +8,7 @@ import {
   Pressable,
   Text,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { Deal, DealCategory } from '@/types/deals';
@@ -50,7 +50,7 @@ function DealList({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
   
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlashList<DealListItemData>>(null);
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
   const isTablet = screenData.width > 768;
   const numColumns = isTablet ? 2 : 1;
@@ -274,29 +274,19 @@ function DealList({
   // Key extractor for FlatList
   const keyExtractor = useCallback((item: DealListItemData) => item.deal.id, []);
 
-  // Get item layout for performance
-  const getItemLayout = useCallback((data: any, index: number) => {
-    const ITEM_HEIGHT = 400; // Approximate height of deal card
-    return {
-      length: ITEM_HEIGHT,
-      offset: ITEM_HEIGHT * index,
-      index,
-    };
-  }, []);
-
   if (isLoading && processedDeals.length === 0) {
     // Show skeleton loading for initial load
     return (
       <View style={styles.container}>
         {renderHeader()}
-        <FlatList
+        <FlashList
           data={Array(3).fill(null)}
           renderItem={renderSkeletonItem}
           keyExtractor={(_, index) => `skeleton-${index}`}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContainer}
           numColumns={numColumns}
-          key={numColumns} // Force re-render when columns change
+          estimatedItemSize={220}
         />
       </View>
     )
@@ -304,7 +294,7 @@ function DealList({
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         ref={flatListRef}
         data={processedDeals}
         renderItem={renderDealItem}
@@ -324,13 +314,7 @@ function DealList({
           ) : undefined
         }
         numColumns={numColumns}
-        key={numColumns} // Force re-render when orientation changes
-        getItemLayout={processedDeals.length > 20 ? getItemLayout : undefined}
-        removeClippedSubviews={processedDeals.length > 10}
-        maxToRenderPerBatch={5}
-        windowSize={10}
-        initialNumToRender={3}
-        updateCellsBatchingPeriod={100}
+        estimatedItemSize={220}
       />
 
       {/* Loading overlay for refresh */}

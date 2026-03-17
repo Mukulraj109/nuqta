@@ -7,7 +7,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   Pressable,
   Dimensions,
   Modal,
@@ -16,6 +15,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import CachedImage from '@/components/ui/CachedImage';
 import { BRAND } from '@/constants/brand';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -130,7 +130,7 @@ function CoinEducationOverlay({ visible, onDismiss }: CoinEducationOverlayProps)
             </Pressable>
           </View>
 
-          <FlatList
+          <FlashList
             data={COIN_TYPES}
             keyExtractor={item => item.id}
             renderItem={renderCard}
@@ -140,6 +140,7 @@ function CoinEducationOverlay({ visible, onDismiss }: CoinEducationOverlayProps)
             snapToInterval={CARD_WIDTH + 16}
             decelerationRate="fast"
             contentContainerStyle={styles.listContent}
+            estimatedItemSize={150}
           />
 
           <Text style={styles.swipeHint}>Swipe to learn about each coin type</Text>

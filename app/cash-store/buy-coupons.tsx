@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   RefreshControl,
   ActivityIndicator,
@@ -14,6 +13,7 @@ import {
   StatusBar,
   KeyboardAvoidingView,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -577,7 +577,7 @@ export default function BuyCouponsPage() {
 
       {/* ─── Gift Cards Tab ─────────────────────────────────── */}
       {activeTab === 'gift-cards' && (
-        <FlatList
+        <FlashList
           style={{ flex: 1 }}
           data={giftCards}
           renderItem={renderGiftCard}
@@ -593,13 +593,11 @@ export default function BuyCouponsPage() {
               onRefresh={handleGiftCardRefresh}
               tintColor={colors.brand.caramel}
               colors={[colors.brand.caramel]}
+              estimatedItemSize={220}
             />
           }
           onEndReached={handleGiftCardLoadMore}
           onEndReachedThreshold={0.3}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          windowSize={10}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
         />
@@ -607,7 +605,7 @@ export default function BuyCouponsPage() {
 
       {/* ─── Coupons Tab ────────────────────────────────────── */}
       {activeTab === 'coupons' && (
-        <FlatList
+        <FlashList
           style={{ flex: 1 }}
           data={coupons}
           renderItem={renderCoupon}
@@ -620,9 +618,9 @@ export default function BuyCouponsPage() {
               onRefresh={handleCouponRefresh}
               tintColor={colors.brand.caramel}
               colors={[colors.brand.caramel]}
+              estimatedItemSize={70}
             />
           }
-          initialNumToRender={10}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.couponListContent}
         />

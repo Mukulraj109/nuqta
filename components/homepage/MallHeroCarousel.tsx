@@ -12,10 +12,10 @@ import {
   Text,
   Pressable,
   StyleSheet,
-  FlatList,
   Dimensions,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -89,7 +89,7 @@ interface MallHeroCarouselProps {
 
 function MallHeroCarousel({ banners = DEFAULT_BANNERS }: MallHeroCarouselProps) {
   const router = useRouter();
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlashList<CarouselItem>>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const autoScrollTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -201,7 +201,7 @@ function MallHeroCarousel({ banners = DEFAULT_BANNERS }: MallHeroCarouselProps) 
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlashList
         ref={flatListRef}
         data={banners}
         renderItem={renderBanner}
@@ -214,11 +214,7 @@ function MallHeroCarousel({ banners = DEFAULT_BANNERS }: MallHeroCarouselProps) 
         snapToInterval={BANNER_WIDTH}
         decelerationRate="fast"
         contentContainerStyle={styles.listContent}
-        getItemLayout={(_, index) => ({
-          length: BANNER_WIDTH,
-          offset: BANNER_WIDTH * index,
-          index,
-        })}
+        estimatedItemSize={200}
       />
 
       {/* Pagination Dots */}

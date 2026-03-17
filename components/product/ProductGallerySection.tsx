@@ -10,8 +10,8 @@ import {
   ScrollView,
   ActivityIndicator,
   Dimensions,
-  FlatList,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -451,13 +451,14 @@ function ProductGallerySection({ productId, variantId }: ProductGallerySectionPr
           </ScrollView>
         ) : (
           /* Gallery Grid View */
-          <FlatList
+          <FlashList
             data={galleryItems}
             renderItem={renderGalleryItem}
             keyExtractor={(item) => item.id}
             numColumns={3}
             scrollEnabled={false}
             contentContainerStyle={styles.galleryGrid}
+            estimatedItemSize={80}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
                 <Ionicons name="images-outline" size={48} color={colors.neutral[400]} />
@@ -495,6 +496,7 @@ function ProductGallerySection({ productId, variantId }: ProductGallerySectionPr
             }
           />
         )}
+
 
         {/* Image Preloader */}
         {galleryItems.length > 0 && (

@@ -13,6 +13,7 @@ import type { SpecialProgramSlug, ProgramListItem } from '@/services/specialProg
 import type { LiveTournament } from '@/services/tournamentApi';
 import creatorsApiService from '@/services/creatorsApi';
 import type { Creator, CreatorPick } from '@/services/creatorsApi';
+import realOffersApi from '@/services/realOffersApi';
 
 import {
   useGamesData,
@@ -254,6 +255,14 @@ export function usePlayAndEarnData() {
   const bonus = useBonusData(regionState?.currentRegion);
   const quickActionsQuery = useQuickActionsData();
 
+  // Exclusive zones (fetched from API)
+  const [exclusiveZones, setExclusiveZones] = useState<any[]>([]);
+  useEffect(() => {
+    realOffersApi.getExclusiveZones().then(res => {
+      if (res.success && res.data) setExclusiveZones(res.data);
+    }).catch(() => {});
+  }, []);
+
   // Liked picks (local state, not from API)
   const [likedPicks, setLikedPicks] = useState<Set<string>>(new Set());
 
@@ -433,6 +442,9 @@ export function usePlayAndEarnData() {
 
     // Value cards
     valueCards: quickActionsQuery.data?.valueCards || [],
+
+    // Exclusive zones
+    exclusiveZones,
 
     // Navigation
     navigateTo,

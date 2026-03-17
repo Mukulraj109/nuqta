@@ -14,7 +14,6 @@ import {
   View,
   Pressable,
   StyleSheet,
-  FlatList,
   Dimensions,
   Animated,
   ActivityIndicator,
@@ -22,6 +21,7 @@ import {
   RefreshControl,
   ScrollView,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -827,21 +827,18 @@ export default function UGCSection({
         )}
       </View>
 
-      <FlatList
+      <FlashList
         data={images}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) =        estimatedItemSize={250}
+          > item.id}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={[styles.imagesList, { paddingHorizontal: horizontalPadding }]}
         ItemSeparatorComponent={() => <View style={{ width: cardSpacing }} />}
         snapToInterval={cardWidth + cardSpacing}
-        decelerationRate="fast"
-        getItemLayout={(_, index) => ({ length: cardWidth + cardSpacing, offset: (cardWidth + cardSpacing) * index, index })}
+        decelerationRate="fast")}
         removeClippedSubviews
-        maxToRenderPerBatch={isTablet ? 4 : 3}
-        windowSize={isTablet ? 6 : 5}
-        initialNumToRender={isTablet ? 3 : 2}
         updateCellsBatchingPeriod={60}
         disableIntervalMomentum
         onViewableItemsChanged={stableOnViewableItemsChanged}

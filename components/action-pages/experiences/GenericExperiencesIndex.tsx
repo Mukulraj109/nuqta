@@ -5,9 +5,10 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  View, Text, StyleSheet, Pressable, FlatList,
+  View, Text, StyleSheet, Pressable,
   RefreshControl, ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -124,7 +125,7 @@ function GenericExperiencesIndex() {
           <Text style={styles.loadingText}>Loading experiences...</Text>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={experiences}
           keyExtractor={(item, i) => item._id || item.slug || `exp-${i}`}
           renderItem={renderExperience}
@@ -138,6 +139,7 @@ function GenericExperiencesIndex() {
               <Text style={styles.emptySubtitle}>{categoryName} experiences will appear here soon</Text>
             </View>
           }
+          estimatedItemSize={150}
         />
       )}
     </SafeAreaView>

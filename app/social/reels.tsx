@@ -10,11 +10,11 @@ import {
   StatusBar,
   Platform,
   Dimensions,
-  FlatList,
   ActivityIndicator,
   Share,
   Animated,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
@@ -90,7 +90,7 @@ export default function ReelsPage() {
   const [likedReels, setLikedReels] = useState<Set<string>>(new Set());
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
   const [bookmarkedReels, setBookmarkedReels] = useState<Set<string>>(new Set());
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlashList>(null);
   const likeAnimations = useRef<Map<string, Animated.Value>>(new Map());
 
   const MAX_LIKE_ANIMATIONS = 50;
@@ -476,7 +476,7 @@ export default function ReelsPage() {
       {loading ? (
         <CardGridSkeleton />
       ) : (
-        <FlatList
+        <FlashList
           ref={flatListRef}
           data={reels}
           renderItem={renderReel}
@@ -485,10 +485,6 @@ export default function ReelsPage() {
           showsVerticalScrollIndicator={false}
           snapToInterval={SCREEN_HEIGHT}
           decelerationRate="fast"
-          removeClippedSubviews={Platform.OS !== 'web'}
-          maxToRenderPerBatch={5}
-          windowSize={5}
-          initialNumToRender={3}
           onMomentumScrollEnd={(e) => {
             const index = Math.round(e.nativeEvent.contentOffset.y / SCREEN_HEIGHT);
             setCurrentIndex(index);
@@ -498,6 +494,7 @@ export default function ReelsPage() {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
           ListEmptyComponent={renderEmpty}
+          estimatedItemSize={250}
           ListFooterComponent={loadingMore ? (
             <View style={styles.footerLoader}>
               <ActivityIndicator size="small" color={Colors.text.inverse} />

@@ -8,7 +8,6 @@ import {
   TextInput,
   RefreshControl,
   Modal,
-  FlatList,
   Dimensions,
   ActivityIndicator,
 } from 'react-native';

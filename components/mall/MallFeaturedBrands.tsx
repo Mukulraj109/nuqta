@@ -10,7 +10,6 @@ import { BRAND } from '@/constants/brand';
 import {
   View,
   Text,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
@@ -20,6 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { MallBrand } from '../../types/mall.types';
 import MallBrandCard from './cards/MallBrandCard';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 interface MallFeaturedBrandsProps {
@@ -151,7 +151,7 @@ const MallFeaturedBrands: React.FC<MallFeaturedBrandsProps> = ({
         </View>
 
         {/* Brands List */}
-        <FlatList
+        <FlashList
           data={brands}
           renderItem={renderBrand}
           keyExtractor={keyExtractor}
@@ -162,6 +162,7 @@ const MallFeaturedBrands: React.FC<MallFeaturedBrandsProps> = ({
           maxToRenderPerBatch={4}
           windowSize={4}
           initialNumToRender={2}
+          estimatedItemSize={180}
         />
       </LinearGradient>
     </View>

@@ -20,6 +20,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { catchAndReport } from '@/utils/catchAndReport';
 interface DeliveryPartner {
   name: string;
   phone: string;
@@ -92,6 +93,7 @@ function DetailedOrderTrackingPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [linkError, setLinkError] = useState<string | null>(null);
 
   // Handle refresh
   const handleRefresh = async () => {
@@ -159,7 +161,7 @@ function DetailedOrderTrackingPage() {
     if (order?.deliveryPartnerData?.phone) {
       try {
         Linking.openURL(`tel:${order.deliveryPartnerData.phone}`);
-      } catch (e) {}
+      } catch (e) { catchAndReport(e, setLinkError, 'OrderTracking/callDeliveryPartner'); }
     } else {
       platformAlertSimple('Not Available', 'Delivery partner contact not available yet.');
     }

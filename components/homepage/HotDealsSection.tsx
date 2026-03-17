@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback, memo } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
   Dimensions,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { ThemedText } from '@/components/ThemedText';
 import { useRouter } from 'expo-router';
@@ -201,14 +201,14 @@ function HotDealsSection({
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={products}
           renderItem={renderProduct}
           keyExtractor={keyExtractor}
           numColumns={2}
           scrollEnabled={false}
           contentContainerStyle={styles.listContent}
-          columnWrapperStyle={styles.columnWrapper}
+          estimatedItemSize={220}
           initialNumToRender={6}
           maxToRenderPerBatch={8}
           ItemSeparatorComponent={() => <View style={styles.rowSeparator} />}

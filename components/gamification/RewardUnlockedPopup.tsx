@@ -7,6 +7,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { BRAND } from '@/constants/brand';
+import { catchSilent } from '@/utils/catchAndReport';
 import {
   View,
   Text,
@@ -63,7 +64,7 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
   useEffect(() => {
     // Haptic feedback on show
     if (Platform.OS !== 'web') {
-      try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) {}
+      try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) { catchSilent(e, 'RewardUnlockedPopup/haptics'); }
     }
 
     // Entrance animation
@@ -123,7 +124,7 @@ function RewardUnlockedPopup({ data, onDismiss }: RewardUnlockedPopupProps) {
 
   const handleClaim = () => {
     if (Platform.OS !== 'web') {
-      try { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {}); } catch (e) {}
+      try { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {}); } catch (e) { catchSilent(e, 'RewardUnlockedPopup/haptics'); }
     }
     onClaim?.();
     handleDismiss();

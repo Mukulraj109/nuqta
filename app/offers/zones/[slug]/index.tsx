@@ -63,6 +63,7 @@ interface ZoneInfo {
   verificationRequired: boolean;
   eligibilityDetails?: string;
   userEligible?: boolean;
+  cashbackBonusPercent?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -141,6 +142,34 @@ const ZONE_THEMES: Record<string, ZoneTheme> = {
     emoji: '',
     tagLabel: 'Loyalty',
     placeholderSubtitle: 'Rewards for our loyal members',
+  },
+  healthcare: {
+    gradientColors: ['#F87171', '#DC2626', '#B91C1C'],
+    ionicon: 'medkit',
+    emoji: '',
+    tagLabel: 'Healthcare',
+    placeholderSubtitle: 'Benefits for healthcare professionals',
+  },
+  teacher: {
+    gradientColors: [colors.brand.purpleSoft, '#7C3AED', '#6D28D9'],
+    ionicon: 'library',
+    emoji: '',
+    tagLabel: 'Educators',
+    placeholderSubtitle: 'Exclusive deals for teachers & educators',
+  },
+  government: {
+    gradientColors: ['#D97706', '#B45309', '#92400E'],
+    ionicon: 'business',
+    emoji: '',
+    tagLabel: 'Government',
+    placeholderSubtitle: 'Special offers for government employees',
+  },
+  'differently-abled': {
+    gradientColors: ['#22D3EE', '#0891B2', '#0E7490'],
+    ionicon: 'accessibility',
+    emoji: '',
+    tagLabel: 'Differently Abled',
+    placeholderSubtitle: 'Inclusive benefits & accessibility offers',
   },
 };
 
@@ -272,6 +301,7 @@ export default function ExclusiveZonePage() {
             verificationRequired: zone.verificationRequired,
             eligibilityDetails: zone.eligibilityDetails,
             userEligible: zone.userEligible,
+            cashbackBonusPercent: zone.cashbackBonusPercent || 0,
           });
         }
       }
@@ -539,9 +569,9 @@ export default function ExclusiveZonePage() {
           </View>
           <View style={styles.statCard}>
             <ThemedText style={[styles.statValue, { color: Colors.success }]}>
-              {loading ? '...' : zoneInfo?.offersCount ? `${zoneInfo.offersCount}+` : `${stats.totalDeals}`}
+              {loading ? '...' : zoneInfo?.cashbackBonusPercent ? `+${zoneInfo.cashbackBonusPercent}%` : zoneInfo?.offersCount ? `${zoneInfo.offersCount}+` : `${stats.totalDeals}`}
             </ThemedText>
-            <ThemedText style={styles.statLabel}>Total Offers</ThemedText>
+            <ThemedText style={styles.statLabel}>{zoneInfo?.cashbackBonusPercent ? 'Extra Cashback' : 'Total Offers'}</ThemedText>
           </View>
         </View>
 

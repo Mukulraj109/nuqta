@@ -4,10 +4,10 @@ import {
   Text,
   Pressable,
   Modal,
-  FlatList,
   StyleSheet,
   Platform,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 
@@ -104,12 +104,13 @@ function CountryCodePicker({
               </Pressable>
             </View>
 
-            <FlatList
+            <FlashList
               data={COUNTRY_CODES}
               renderItem={renderCountryItem}
               keyExtractor={(item) => item.code}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.listContent}
+              estimatedItemSize={70}
             />
           </View>
         </Pressable>

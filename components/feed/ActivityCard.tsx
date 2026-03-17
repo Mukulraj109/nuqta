@@ -6,9 +6,9 @@ import {
   Pressable,
   TextInput,
   Modal,
-  FlatList,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { Ionicons } from '@expo/vector-icons';
 import { Activity, Comment } from '../../services/activityFeedApi';
@@ -229,7 +229,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
               <ActivityIndicator size="large" color={colors.brand.ios} />
             </View>
           ) : (
-            <FlatList
+            <FlashList
               data={comments}
               keyExtractor={(item) => item._id}
               renderItem={renderCommentItem}
@@ -238,6 +238,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
                   <Text style={styles.emptyText}>No comments yet. Be the first to comment!</Text>
                 </View>
               }
+              estimatedItemSize={70}
             />
           )}
 

@@ -3,7 +3,6 @@ import React, { memo, useCallback } from "react";
 import {
   View,
   StyleSheet,
-  FlatList,
   Pressable,
   Dimensions,
   ListRenderItemInfo,
@@ -223,7 +222,7 @@ export default memo(function VoucherCardsSection({
       </View>
 
       {/* Voucher Cards Carousel */}
-      <FlatList
+      <FlashList
         data={vouchers}
         renderItem={renderVoucherCard}
         keyExtractor={keyExtractor}
@@ -232,7 +231,8 @@ export default memo(function VoucherCardsSection({
         contentContainerStyle={styles.carouselContent}
         snapToInterval={CARD_WIDTH + CARD_GAP}
         decelerationRate="fast"
-        ItemSeparatorComponent={() => <View style={{ width: CARD_GAP }} />}
+        ItemSeparatorComponent={() =        estimatedItemSize={150}
+          > <View style={{ width: CARD_GAP }} />}
       />
     </View>
   );

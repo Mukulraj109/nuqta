@@ -9,6 +9,7 @@
  */
 
 import React, { useEffect, useRef } from 'react';
+import { catchSilent } from '@/utils/catchAndReport';
 import {
   View,
   Text,
@@ -80,7 +81,7 @@ export default function PaymentSuccessScreen() {
   useEffect(() => {
     // Trigger haptic feedback
     if (Platform.OS !== 'web') {
-      try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) {}
+      try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) { catchSilent(e, 'PayInStoreSuccess/haptics'); }
     }
 
     // Run animations

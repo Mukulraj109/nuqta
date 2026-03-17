@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Pressable, View, Linking } from 'react-native';
+import { catchAndWarn } from '@/utils/catchAndReport';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { colors as themeColors, darkColors } from '@/constants/theme';
@@ -61,7 +62,7 @@ export const PrivacyNotice: React.FC<PrivacyNoticeProps> = ({
     if (privacyPolicyUrl.startsWith('http')) {
       try {
         Linking.openURL(privacyPolicyUrl);
-      } catch (e) {}
+      } catch (e) { catchAndWarn(e, 'PrivacyNotice/handlePrivacyPolicyPress'); }
     } else {
       // For internal navigation, you would use your router here
     }

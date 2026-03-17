@@ -19,6 +19,7 @@ import {
   BorderRadius,
   Shadows,
 } from "@/constants/DesignSystem";
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 export interface LocationSectionProps {
   address?: string;
@@ -67,7 +68,7 @@ export default function LocationSection({
     } else {
       // Search by address
       const encodedAddress = encodeURIComponent(address);
-      try { Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`); } catch (e) {}
+      try { Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`); } catch (e) { catchAndWarn(e, 'LocationSection/openURL'); }
     }
   };
 

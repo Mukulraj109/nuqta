@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback, memo } from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
   Pressable,
   ActivityIndicator,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -183,13 +183,14 @@ function NearbyProductsSection({
           </Pressable>
         </View>
       ) : (
-        <FlatList
+        <FlashList
           data={products}
           renderItem={renderProduct}
           keyExtractor={keyExtractor}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
+          estimatedItemSize={220}
           initialNumToRender={4}
           maxToRenderPerBatch={6}
           windowSize={5}

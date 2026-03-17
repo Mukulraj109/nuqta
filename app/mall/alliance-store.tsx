@@ -9,10 +9,10 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  FlatList,
   SafeAreaView,
   RefreshControl,
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -187,12 +187,12 @@ export default function AllianceStorePage() {
             </Pressable>
           </View>
         ) : (
-          <FlatList
+          <FlashList
             data={stores}
             renderItem={renderStore}
-            keyExtractor={item => item._id}
+            keyExtractor={item =        estimatedItemSize={110}
+          > item._id}
             numColumns={2}
-            columnWrapperStyle={styles.row}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
             refreshControl={

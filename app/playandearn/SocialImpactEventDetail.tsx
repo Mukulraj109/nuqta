@@ -17,6 +17,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import programApi from '../../services/programApi';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { catchAndWarn } from '@/utils/catchAndReport';
 
 const SocialImpactEventDetail = () => {
   const router = useRouter();
@@ -238,15 +239,15 @@ const SocialImpactEventDetail = () => {
   const event = events[id] || events['1'];
 
   const handleCall = () => {
-    try { Linking.openURL(`tel:${event.contact.phone}`); } catch (e) {}
+    try { Linking.openURL(`tel:${event.contact.phone}`); } catch (e) { catchAndWarn(e, 'SocialImpactEventDetail/openURL'); }
   };
 
   const handleEmail = () => {
-    try { Linking.openURL(`mailto:${event.contact.email}`); } catch (e) {}
+    try { Linking.openURL(`mailto:${event.contact.email}`); } catch (e) { catchAndWarn(e, 'SocialImpactEventDetail/openURL'); }
   };
 
   const handleMaps = () => {
-    try { Linking.openURL(`https://maps.google.com/?q=${encodeURIComponent(event.fullAddress)}`); } catch (e) {}
+    try { Linking.openURL(`https://maps.google.com/?q=${encodeURIComponent(event.fullAddress)}`); } catch (e) { catchAndWarn(e, 'SocialImpactEventDetail/openURL'); }
   };
 
   return (

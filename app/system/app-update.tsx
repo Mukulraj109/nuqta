@@ -19,6 +19,7 @@ import Constants from 'expo-constants';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { catchAndReport } from '@/utils/catchAndReport';
 
 interface UpdateInfo {
   currentVersion: string;
@@ -55,6 +56,7 @@ export default function AppUpdatePage() {
   });
 
   const isForceUpdate = updateInfo.updateType === 'force';
+  const [error, setError] = useState<string | null>(null);
 
   const handleUpdateNow = async () => {
     try {
@@ -66,7 +68,7 @@ export default function AppUpdatePage() {
       if (canOpen) {
         await Linking.openURL(storeUrl);
       }
-    } catch (e) {}
+    } catch (e) { catchAndReport(e, setError, 'AppUpdate/openStoreUrl'); }
   };
 
   const handleLater = () => {

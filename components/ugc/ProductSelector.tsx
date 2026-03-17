@@ -9,7 +9,6 @@ import {
   Modal,
   Pressable,
   TextInput,
-  FlatList,
   ActivityIndicator,
   Platform,
   SafeAreaView,
@@ -20,6 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useProductSearch } from '@/hooks/useProductSearch';
 import { ProductSelectorProps, ProductSelectorProduct } from '@/types/product-selector.types';
 import ProductCard from './ProductCard';
+import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -340,7 +340,7 @@ function ProductSelector({
             {/* Product List */}
             <View style={styles.contentContainer}>
               {renderHeaderLoading()}
-              <FlatList
+              <FlashList
                 data={products}
                 renderItem={renderProductItem}
                 keyExtractor={(item) => item._id}
@@ -354,6 +354,7 @@ function ProductSelector({
                 maxToRenderPerBatch={10}
                 updateCellsBatchingPeriod={50}
                 windowSize={10}
+                estimatedItemSize={70}
               />
             </View>
 
@@ -368,12 +369,13 @@ function ProductSelector({
                     <Ionicons name="checkmark-circle" size={20} color={colors.lightMustard} />
                   )}
                 </View>
-                <FlatList
+                <FlashList
                   data={selectedProducts}
                   renderItem={renderSelectedItem}
                   keyExtractor={(item) => item._id}
                   style={styles.selectedList}
                   showsVerticalScrollIndicator={false}
+                  estimatedItemSize={44}
                 />
               </View>
             )}
