@@ -305,8 +305,8 @@ export default function AIRecommendedPage() {
       <FlashList
         data={offers}
         renderItem={renderOffer}
-        keyExtractor={item =        estimatedItemSize={220}
-          > item.id}
+        keyExtractor={(item) => item.id}
+          estimatedItemSize={220}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
         numColumns={2}

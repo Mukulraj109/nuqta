@@ -410,8 +410,8 @@ const FashionPage: React.FC = () => {
       <FlashList
         data={products}
         renderItem={renderProductCard}
-        keyExtractor={(item) =        estimatedItemSize={220}
-          > item.id}
+        keyExtractor={(item) => item.id}
+          estimatedItemSize={220}
         numColumns={2}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 120 }}

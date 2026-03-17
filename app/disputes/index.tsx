@@ -141,8 +141,8 @@ export default function DisputeListScreen() {
     <View style={styles.container}>
       <FlashList
         data={disputes}
-        keyExtractor={item =        estimatedItemSize={70}
-          > item._id}
+        keyExtractor={(item) => item._id}
+          estimatedItemSize={70}
         renderItem={renderDispute}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#7C3AED" />}
         onEndReached={loadMore}

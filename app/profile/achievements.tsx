@@ -298,8 +298,8 @@ export default function AchievementsPage() {
       ) : (
         <FlashList
           data={filteredAchievements}
-          keyExtractor={(item) =        estimatedItemSize={150}
-          > item._id}
+          keyExtractor={(item) => item._id}
+          estimatedItemSize={150}
           renderItem={renderAchievementItem}
           numColumns={2}
           style={styles.content}

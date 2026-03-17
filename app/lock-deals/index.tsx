@@ -318,8 +318,8 @@ const LockDealsPage: React.FC = () => {
       <FlashList
         data={deals}
         renderItem={renderDealCard}
-        keyExtractor={(item) =        estimatedItemSize={220}
-          > item._id}
+        keyExtractor={(item) => item._id}
+          estimatedItemSize={220}
         numColumns={2}
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={

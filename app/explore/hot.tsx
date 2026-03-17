@@ -273,8 +273,8 @@ const ExploreHotPage = () => {
       ) : (
         <FlashList
           data={hotItems}
-          keyExtractor={(item) =        estimatedItemSize={220}
-          > item.id}
+          keyExtractor={(item) => item.id}
+          estimatedItemSize={220}
           numColumns={2}
           style={styles.itemsScroll}
           contentContainerStyle={[styles.itemsContainer, { paddingBottom: 120 }]}

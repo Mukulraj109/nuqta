@@ -190,8 +190,8 @@ export default function AllianceStorePage() {
           <FlashList
             data={stores}
             renderItem={renderStore}
-            keyExtractor={item =        estimatedItemSize={110}
-          > item._id}
+            keyExtractor={(item) => item._id}
+          estimatedItemSize={110}
             numColumns={2}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}

@@ -548,8 +548,8 @@ export default function ProfileEditPage() {
             
             <FlashList
               data={genderOptions}
-              keyExtractor={(item) =        estimatedItemSize={44}
-          > item.value}
+              keyExtractor={(item) => item.value}
+          estimatedItemSize={44}
               renderItem={renderGenderOption}
             />
           </View>

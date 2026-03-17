@@ -188,8 +188,8 @@ export default function ProductsVideosPage() {
       <FlashList
         data={filteredProducts}
         renderItem={renderVideoCard}
-        keyExtractor={(item) =        estimatedItemSize={250}
-          > item.id}
+        keyExtractor={(item) => item.id}
+          estimatedItemSize={250}
         numColumns={2}
         contentContainerStyle={styles.gridContent}
         showsVerticalScrollIndicator={false}

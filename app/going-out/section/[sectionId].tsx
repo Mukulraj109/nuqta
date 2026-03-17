@@ -139,8 +139,8 @@ export default function GoingOutSectionPage() {
       <FlashList
         data={products}
         renderItem={renderProduct}
-        keyExtractor={item =        estimatedItemSize={220}
-          > item._id}
+        keyExtractor={(item) => item._id}
+          estimatedItemSize={220}
         numColumns={2}
         contentContainerStyle={styles.listContent}
         onEndReached={handleLoadMore}

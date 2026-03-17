@@ -568,8 +568,8 @@ const ReferralPageContent = () => {
             <FlashList
               data={history.slice(0, 5)}
               scrollEnabled={false}
-              keyExtractor={(item) =        estimatedItemSize={70}
-          > item.id}
+              keyExtractor={(item) => item.id}
+          estimatedItemSize={70}
               renderItem={renderReferralHistoryItem}
             />
           </View>

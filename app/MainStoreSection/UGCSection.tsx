@@ -830,14 +830,14 @@ export default function UGCSection({
       <FlashList
         data={images}
         renderItem={renderItem}
-        keyExtractor={(item) =        estimatedItemSize={250}
-          > item.id}
+        keyExtractor={(item) => item.id}
+          estimatedItemSize={250}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={[styles.imagesList, { paddingHorizontal: horizontalPadding }]}
         ItemSeparatorComponent={() => <View style={{ width: cardSpacing }} />}
         snapToInterval={cardWidth + cardSpacing}
-        decelerationRate="fast")}
+        decelerationRate="fast"
         removeClippedSubviews
         updateCellsBatchingPeriod={60}
         disableIntervalMomentum

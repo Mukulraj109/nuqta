@@ -447,8 +447,8 @@ export default function SharedCategoryPage() {
       ) : (
         <FlashList
           data={filteredStores}
-          keyExtractor={(item) =        estimatedItemSize={110}
-          > item._id || item.id}
+          keyExtractor={(item) => item._id || item.id}
+          estimatedItemSize={110}
           renderItem={renderStoreItem}
           contentContainerStyle={styles.storeList}
           showsVerticalScrollIndicator={false}

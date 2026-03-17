@@ -211,8 +211,8 @@ export default function OccasionsPage() {
         <FlashList
           data={occasions}
           renderItem={renderOccasion}
-          keyExtractor={(item) =        estimatedItemSize={150}
-          > item.id}
+          keyExtractor={(item) => item.id}
+          estimatedItemSize={150}
           numColumns={2}
           contentContainerStyle={styles.listContent}
           ListHeaderComponent={renderHeader}

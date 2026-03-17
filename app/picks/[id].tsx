@@ -577,8 +577,8 @@ const CreatorPickDetail = () => {
               horizontal
               data={relatedPicks}
               renderItem={renderRelatedPick}
-              keyExtractor={(item) =        estimatedItemSize={150}
-          > item.id}
+              keyExtractor={(item) => item.id}
+          estimatedItemSize={150}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ paddingHorizontal: Spacing.base, gap: 10 }}
             />

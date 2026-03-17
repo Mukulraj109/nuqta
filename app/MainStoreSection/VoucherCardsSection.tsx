@@ -231,8 +231,8 @@ export default memo(function VoucherCardsSection({
         contentContainerStyle={styles.carouselContent}
         snapToInterval={CARD_WIDTH + CARD_GAP}
         decelerationRate="fast"
-        ItemSeparatorComponent={() =        estimatedItemSize={150}
-          > <View style={{ width: CARD_GAP }} />}
+        ItemSeparatorComponent={() => <View style={{ width: CARD_GAP }} />}
+        estimatedItemSize={150}
       />
     </View>
   );
