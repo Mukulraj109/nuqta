@@ -28,6 +28,7 @@ interface OfferCardDefaultProps {
   storeName: string;
   storeLogo?: string;
   cashbackPercentage: number;
+  saveAmount?: number;
   rating?: number;
   distance?: string;
   deliveryTime?: string;
@@ -46,6 +47,7 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
   storeName,
   storeLogo,
   cashbackPercentage,
+  saveAmount,
   rating,
   distance,
   deliveryTime,
@@ -185,6 +187,22 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
       color: theme.colors.text.secondary,
       marginBottom: Spacing.sm,
     },
+    saveRow: {
+      flexDirection: 'row' as const,
+      alignItems: 'center' as const,
+      marginBottom: Spacing.sm,
+    },
+    saveAmount: {
+      fontSize: 14,
+      fontWeight: '700' as const,
+      color: Colors.primary[700],
+      marginRight: 4,
+    },
+    savePercent: {
+      fontSize: 11,
+      fontWeight: '500' as const,
+      color: theme.colors.text.tertiary,
+    },
     footer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -292,6 +310,18 @@ export const OfferCardDefault: React.FC<OfferCardDefaultProps> = ({
         <Text style={styles.subtitle} numberOfLines={1}>
           {subtitle}
         </Text>
+
+        {/* Savings display — ₹ amount when available, % fallback */}
+        {(saveAmount != null && saveAmount > 0) ? (
+          <View style={styles.saveRow}>
+            <Text style={styles.saveAmount}>SAVE {currencySymbol}{saveAmount.toLocaleString()}</Text>
+            <Text style={styles.savePercent}>({cashbackPercentage}%)</Text>
+          </View>
+        ) : cashbackPercentage > 0 ? (
+          <View style={styles.saveRow}>
+            <Text style={styles.saveAmount}>Up to {cashbackPercentage}% off</Text>
+          </View>
+        ) : null}
 
         <View style={styles.footer}>
           <View style={styles.deliveryInfo}>

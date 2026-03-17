@@ -135,8 +135,8 @@ class LocationService {
         pincode: extraData?.pincode,
       });
 
-      // Handle different response structures
-      const locationData = response.data?.data?.location || response.data?.location || response.data?.data || response.data;
+      // apiClient already unwraps responseData.data, so response.data is the backend's data field
+      const locationData = response.data?.location || response.data;
 
       if (!locationData) {
         throw new Error('No location data in response');
@@ -222,8 +222,8 @@ class LocationService {
     try {
       const response = await this.apiClient.get('/location/current');
 
-      // Safely access nested properties
-      const locationData = response?.data?.data?.location || response?.data?.location || response?.data;
+      // apiClient already unwraps responseData.data, so response.data is the backend's data field
+      const locationData = response?.data?.location || response?.data;
       
       if (!locationData || !locationData.coordinates) {
         return null;
@@ -264,11 +264,9 @@ class LocationService {
    */
   async getLocationHistory(page: number = 1, limit: number = 10): Promise<LocationHistoryEntry[]> {
     try {
-      const response = await this.apiClient.get('/location/history', {
-        params: { page, limit },
-      });
+      const response = await this.apiClient.get('/location/history', { page, limit });
       
-      return response.data.data.history.map((entry: any) => ({
+      return (response.data?.history || []).map((entry: any) => ({
         coordinates: {
           latitude: entry.coordinates[1],
           longitude: entry.coordinates[0],
@@ -293,14 +291,14 @@ class LocationService {
         longitude: coordinates.longitude,
       });
       
-      const data = response.data.data;
+      const data = response.data;
         return {
-        address: data.formattedAddress,
-        city: data.city,
-        state: data.state,
-        country: data.country,
-        pincode: data.pincode,
-        formattedAddress: data.formattedAddress,
+        address: data?.formattedAddress || '',
+        city: data?.city || '',
+        state: data?.state || '',
+        country: data?.country || '',
+        pincode: data?.pincode || '',
+        formattedAddress: data?.formattedAddress || '',
       };
     } catch (error) {
       throw new Error('Failed to get address from coordinates');
@@ -317,8 +315,8 @@ class LocationService {
         limit,
       });
 
-      // Handle different response structures
-      const results = response.data?.data?.results || response.data?.results || [];
+      // apiClient already unwraps responseData.data, so response.data is the backend's data field
+      const results = response.data?.results || [];
 
       if (!Array.isArray(results)) {
         return [];
@@ -348,7 +346,7 @@ class LocationService {
   async validateAddress(address: string): Promise<boolean> {
     try {
       const response = await this.apiClient.post('/location/validate', { address });
-      return response.data.data.isValid;
+      return response.data?.isValid;
     } catch (error) {
       return false;
     }
@@ -360,13 +358,11 @@ class LocationService {
   async getTimezone(coordinates: LocationCoordinates): Promise<string> {
     try {
       const response = await this.apiClient.get('/location/timezone', {
-        params: {
-          latitude: coordinates.latitude,
-          longitude: coordinates.longitude,
-        },
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
       });
       
-      return response.data.data.timezone;
+      return response.data?.timezone;
     } catch (error) {
       return 'Asia/Kolkata'; // Default timezone
     }
@@ -382,15 +378,13 @@ class LocationService {
   ): Promise<any[]> {
     try {
       const response = await this.apiClient.get('/nearby-stores', {
-        params: {
-          latitude: coordinates.latitude,
-          longitude: coordinates.longitude,
-          radius,
-          limit,
-        },
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+        radius,
+        limit,
       });
       
-      return response.data.data.stores;
+      return response.data?.stores || [];
     } catch (error) {
       return [];
     }
@@ -402,7 +396,7 @@ class LocationService {
   async getLocationStats(): Promise<LocationStats> {
     try {
       const response = await this.apiClient.get('/stats');
-      const data = response.data.data.stats;
+      const data = response.data?.stats;
       
       return {
         totalLocations: data.totalLocations,

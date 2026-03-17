@@ -132,7 +132,7 @@ export default function ComparePage() {
   const handleAddProductFromParams = useCallback(async (productId: string) => {
     if (!isAuthenticated) {
       platformAlertSimple('Login Required', 'Please login to compare products');
-      router.push('/login');
+      router.push('/sign-in' as any);
       return;
     }
 

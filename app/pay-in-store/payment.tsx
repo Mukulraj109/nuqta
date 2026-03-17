@@ -63,7 +63,10 @@ export default function PaymentScreen() {
   const currencySymbol = getCurrencySymbol();
 
   const billAmount = parseFloat(amount || '0');
-  const selectedOfferIds: string[] = selectedOffersParam ? JSON.parse(selectedOffersParam) : [];
+  let selectedOfferIds: string[] = [];
+  if (selectedOffersParam) {
+    try { selectedOfferIds = JSON.parse(selectedOffersParam); } catch { selectedOfferIds = []; }
+  }
 
   // Use the payment flow hook
   const paymentFlow = usePaymentFlow({

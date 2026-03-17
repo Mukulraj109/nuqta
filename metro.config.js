@@ -45,7 +45,14 @@ config.watcher = {
   // Disable worker threads for watcher — fixes startup timeout on Windows + OneDrive
   unstable_workerThreads: false,
   additionalExts: [],
+  // Increase watcher timeout for Windows + OneDrive (default 5s is too short)
+  watchman: {
+    deferStates: ['hg.update'],
+  },
 };
+
+// Increase file map watcher timeout (default is too aggressive for OneDrive)
+process.env.METRO_FILE_MAP_WATCHER_HEALTH_CHECK_TIMEOUT = '120000';
 
 // =============================================================================
 // RESOLVER OPTIMIZATIONS

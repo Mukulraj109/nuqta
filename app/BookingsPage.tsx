@@ -474,7 +474,7 @@ export default function BookingsPage() {
           <Text style={styles.emptySubtitle}>Please login to view your bookings</Text>
           <Pressable
             style={[styles.ctaButton, { backgroundColor: tintColor || C.primary }]}
-            onPress={() => router.push('/login' as any)}
+            onPress={() => router.push('/sign-in' as any)}
           >
             <Text style={styles.ctaButtonText}>Login</Text>
           </Pressable>

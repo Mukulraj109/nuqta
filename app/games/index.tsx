@@ -76,10 +76,9 @@ export default function GamesPage() {
   }, [isAuthenticated, refreshWallet]);
 
   useEffect(() => {
+    // AuthContext navigation guard handles unauthenticated redirect
     if (isAuthenticated && user) {
       loadData();
-    } else if (!authLoading && !isAuthenticated) {
-      router.replace({ pathname: '/sign-in', params: { returnTo: '/games' } } as any);
     }
   }, [isAuthenticated, authLoading, user]);
 

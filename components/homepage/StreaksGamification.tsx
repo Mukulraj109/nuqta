@@ -80,7 +80,7 @@ const StreaksGamification: React.FC<StreaksGamificationProps> = ({
               </Text>
               <Pressable
                 style={styles.loginButton}
-                onPress={() => router.push('/login')}
+                onPress={() => router.push('/sign-in' as any)}
                
               >
                 <Text style={styles.loginButtonText}>Login to Start</Text>

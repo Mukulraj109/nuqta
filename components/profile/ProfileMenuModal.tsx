@@ -464,16 +464,8 @@ function ProfileMenuModal({
   const performLogout = async () => {
     try {
       onClose();
+      // AuthContext navigation guard handles redirect after logout
       await actions.logout();
-      try {
-        router.replace('/sign-in');
-      } catch (routerError) {
-        if (typeof window !== 'undefined') {
-          window.location.href = '/sign-in';
-        } else {
-          router.push('/sign-in');
-        }
-      }
     } catch (error) {
       platformAlertSimple('Logout Error', 'There was an issue logging you out.');
     }

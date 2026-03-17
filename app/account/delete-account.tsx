@@ -56,8 +56,8 @@ export default function DeleteAccountPage() {
           'Account Deleted',
           'Your account has been successfully deleted. You will be redirected to the login page.',
           async () => {
+            // AuthContext navigation guard handles redirect after logout
             await actions.logout();
-            router.replace('/sign-in');
           },
           'OK'
         );

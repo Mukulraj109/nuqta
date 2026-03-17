@@ -107,11 +107,7 @@ const MyDealsPage: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.replace('/sign-in' as any);
-    }
-  }, [isAuthenticated]);
+  // AuthContext navigation guard handles unauthenticated redirect
 
   const fetchDeals = useCallback(async (reset = false) => {
     if (!isAuthenticated) return;

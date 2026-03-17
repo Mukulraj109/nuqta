@@ -17,6 +17,8 @@ import {
 import { FlashList } from '@shopify/flash-list';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenSkeleton from '@/components/common/ScreenSkeleton';
+import ScreenError from '@/components/common/ScreenError';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -370,7 +372,7 @@ const BadgesScreen: React.FC = () => {
     return (
       <>
         <Stack.Screen options={{ headerShown: false }} />
-        <CardGridSkeleton />
+        <ScreenSkeleton variant="grid" />
       </>
     );
   }
@@ -380,30 +382,12 @@ const BadgesScreen: React.FC = () => {
     return (
       <>
         <Stack.Screen options={{ headerShown: false }} />
-        <SafeAreaView style={styles.container}>
-          <View style={styles.header}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={20} color={COLORS.navy} />
-          </Pressable>
-          <View>
-            <Text style={styles.headerTitle}>Achievements</Text>
-            <Text style={styles.headerSubtitle}>Unlock badges & earn coins</Text>
-          </View>
-        </View>
-        <View style={styles.errorContainer}>
-          <Ionicons name="cloud-offline-outline" size={64} color={COLORS.gray400} />
-          <Text style={styles.errorTitle}>Unable to load achievements</Text>
-          <Text style={styles.errorText}>{error}</Text>
-          <Pressable style={styles.retryButton} onPress={() => fetchAchievements()}>
-            <LinearGradient
-              colors={[COLORS.purple500, COLORS.purple600]}
-              style={styles.retryButtonGradient}
-            >
-              <Text style={styles.retryButtonText}>Try Again</Text>
-            </LinearGradient>
-          </Pressable>
-        </View>
-        </SafeAreaView>
+        <ScreenError
+          error={error}
+          onRetry={() => fetchAchievements()}
+          title="Unable to load achievements"
+          onSecondaryAction={() => router.back()}
+        />
       </>
     );
   }

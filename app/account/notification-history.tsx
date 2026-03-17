@@ -248,7 +248,7 @@ export default function NotificationHistoryScreen() {
         </View>
       </View>
     </Pressable>
-  ), []);
+  ), [markNotificationAsRead]);
 
   if (loading) {
     return <NotificationListSkeleton />;

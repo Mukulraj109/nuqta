@@ -17,7 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import gameApi, { QuizQuestion } from '../../services/gameApi';
 import gamificationApi from '../../services/gamificationApi';
-import { useGetCurrencySymbol, useRezBalance, useRefreshWallet } from '@/stores/selectors';
+import { useGetCurrencySymbol, useRezBalance, useRefreshWallet, useAdjustBalance } from '@/stores/selectors';
 import { useGamification } from '@/contexts/GamificationContext';
 import { platformAlert } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -134,6 +134,7 @@ const Quiz = () => {
   const { actions: gamificationActions } = useGamification();
   const walletBalance = useRezBalance();
   const refreshWallet = useRefreshWallet();
+  const adjustBalance = useAdjustBalance();
   const currencySymbol = getCurrencySymbol();
   const [gameState, setGameState] = useState<'start' | 'playing' | 'result'>('start');
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -304,6 +305,7 @@ const Quiz = () => {
       const response = await gameApi.submitQuiz(answers);
       if (response.data) {
         setScore(response.data.totalCoins);
+        if (response.data.totalCoins > 0) adjustBalance(response.data.totalCoins);
       }
       // Refresh limits
       const limitsResponse = await gameApi.getDailyLimits();
@@ -312,7 +314,8 @@ const Quiz = () => {
       } else {
         setTodayPlays(todayPlays + 1);
       }
-      // Sync coins
+      // Refresh wallet then sync coins
+      await refreshWallet();
       await gamificationActions.syncCoinsFromWallet();
     } catch (error) {
       setTodayPlays(todayPlays + 1);

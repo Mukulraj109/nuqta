@@ -23,6 +23,8 @@ import EditAddressModal from '@/components/account/EditAddressModal';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { SectionListSkeleton } from '@/components/skeletons';
+import ScreenSkeleton from '@/components/common/ScreenSkeleton';
+import ScreenError from '@/components/common/ScreenError';
 import { colors } from '@/constants/theme';
 
 // Use same AddressType as API (uppercase)
@@ -331,50 +333,35 @@ export default function SavedAddressesPage() {
     );
   }, [handleEditAddress, handleDeleteAddress, handleSetDefault]);
 
+  const headerElement = (
+    <>
+      <StatusBar barStyle="light-content" backgroundColor={Colors.nileBlue} />
+      <LinearGradient colors={[Colors.nileBlue, Colors.secondary[500]]} style={styles.headerBg}>
+        <View style={styles.headerContainer}>
+          <Pressable style={styles.backButton} onPress={handleBackPress}>
+            <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
+          </Pressable>
+          <ThemedText style={styles.headerTitle}>Saved Addresses</ThemedText>
+          <Pressable style={styles.addButton} onPress={handleAddAddress}>
+            <Ionicons name="add" size={24} color={Colors.text.inverse} />
+          </Pressable>
+        </View>
+      </LinearGradient>
+    </>
+  );
+
   if (isLoading) {
-    return (
-      <ThemedView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor={Colors.nileBlue} />
-        <LinearGradient colors={[Colors.nileBlue, Colors.secondary[500]]} style={styles.headerBg}>
-          <View style={styles.headerContainer}>
-            <Pressable style={styles.backButton} onPress={handleBackPress}>
-              <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
-            </Pressable>
-            <ThemedText style={styles.headerTitle}>Saved Addresses</ThemedText>
-            <Pressable style={styles.addButton} onPress={handleAddAddress}>
-              <Ionicons name="add" size={24} color={Colors.text.inverse} />
-            </Pressable>
-          </View>
-        </LinearGradient>
-        <SectionListSkeleton />
-      </ThemedView>
-    );
+    return <ScreenSkeleton variant="sections" header={headerElement} />;
   }
 
   if (error) {
     return (
-      <ThemedView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor={Colors.nileBlue} />
-        <LinearGradient colors={[Colors.nileBlue, Colors.secondary[500]]} style={styles.headerBg}>
-          <View style={styles.headerContainer}>
-            <Pressable style={styles.backButton} onPress={handleBackPress}>
-              <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
-            </Pressable>
-            <ThemedText style={styles.headerTitle}>Saved Addresses</ThemedText>
-            <Pressable style={styles.addButton} onPress={handleAddAddress}>
-              <Ionicons name="add" size={24} color={Colors.text.inverse} />
-            </Pressable>
-          </View>
-        </LinearGradient>
-        <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
-          <ThemedText style={styles.errorTitle}>Error</ThemedText>
-          <ThemedText style={styles.errorDetails}>{error}</ThemedText>
-          <Pressable style={styles.retryButton} onPress={handleRefresh}>
-            <ThemedText style={styles.retryButtonText}>Try Again</ThemedText>
-          </Pressable>
-        </View>
-      </ThemedView>
+      <ScreenError
+        error={error}
+        onRetry={handleRefresh}
+        header={headerElement}
+        onSecondaryAction={handleBackPress}
+      />
     );
   }
 

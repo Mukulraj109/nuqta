@@ -54,7 +54,7 @@ export default function SearchPage() {
   const [viewMode, setViewMode] = useState<SearchViewMode>(initialQuery ? 'results' : 'categories');
   const [inputFocused, setInputFocused] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [currentSort, setCurrentSort] = useState<SortOption>('best_value');
+  const [currentSort, setCurrentSort] = useState<SortOption>('cashback_high');
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const [currentFilters, setCurrentFilters] = useState<FilterState>({
     priceRange: { min: 0, max: 100000 },

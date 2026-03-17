@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  ActivityIndicator,
   Platform,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -14,15 +13,18 @@ import { useAuth } from '@/contexts/AuthContext';
 import disputeApi, { Dispute } from '@/services/disputeApi';
 import { CachedImage } from '@/components/ui/CachedImage';
 import { platformAlert } from '@/utils/platformAlert';
+import { colors, typography, spacing, borderRadius, shadows } from '@/constants/theme';
+import ScreenSkeleton from '@/components/common/ScreenSkeleton';
+import ScreenError from '@/components/common/ScreenError';
 
 const STATUS_COLORS: Record<string, string> = {
-  open: '#EF4444',
-  under_review: '#F59E0B',
-  escalated: '#8B5CF6',
-  resolved_refund: '#10B981',
-  resolved_reject: '#3B82F6',
-  auto_resolved: '#6366F1',
-  closed: '#6B7280',
+  open: colors.error,
+  under_review: colors.warningScale[400],
+  escalated: colors.brand.purpleLight,
+  resolved_refund: colors.successScale[400],
+  resolved_reject: colors.brand.blue,
+  auto_resolved: colors.brand.indigo,
+  closed: colors.neutral[500],
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -52,6 +54,7 @@ export default function DisputeDetailScreen() {
   const { isAuthenticated, authLoading } = useAuth();
   const [dispute, setDispute] = useState<Dispute | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id || authLoading || !isAuthenticated) return;
@@ -60,36 +63,33 @@ export default function DisputeDetailScreen() {
 
   const loadDispute = async () => {
     setLoading(true);
+    setError(null);
     try {
       const response = await disputeApi.getDispute(id!);
       if (response.success && response.data) {
         setDispute(response.data as any);
+      } else {
+        setError('Dispute not found');
       }
-    } catch (err) {
-      console.error('Failed to load dispute:', err);
+    } catch (err: any) {
+      setError(err?.message || 'Failed to load dispute');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
+  if (loading) return <ScreenSkeleton variant="detail" />;
+  if (error || !dispute) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#7C3AED" />
-      </View>
+      <ScreenError
+        error={error || 'Dispute not found'}
+        onRetry={loadDispute}
+        onSecondaryAction={() => router.back()}
+      />
     );
   }
 
-  if (!dispute) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Ionicons name="alert-circle-outline" size={48} color="#9CA3AF" />
-        <Text style={styles.errorText}>Dispute not found</Text>
-      </View>
-    );
-  }
-
-  const statusColor = STATUS_COLORS[dispute.status] || '#6B7280';
+  const statusColor = STATUS_COLORS[dispute.status] || colors.neutral[500];
   const isOpen = ['open', 'under_review', 'escalated'].includes(dispute.status);
 
   return (
@@ -168,7 +168,7 @@ export default function DisputeDetailScreen() {
       {/* Resolution */}
       {dispute.resolution && (
         <View style={[styles.section, styles.resolutionCard, {
-          backgroundColor: dispute.resolution.decision === 'reject' ? '#FEE2E2' : '#D1FAE5',
+          backgroundColor: dispute.resolution.decision === 'reject' ? colors.errorScale[100] : colors.successScale[100],
         }]}>
           <Text style={styles.sectionTitle}>Resolution</Text>
           <InfoRow label="Decision" value={dispute.resolution.decision.replace(/_/g, ' ').toUpperCase()} />
@@ -185,7 +185,7 @@ export default function DisputeDetailScreen() {
         <Text style={styles.sectionTitle}>Timeline</Text>
         {dispute.timeline.map((t, i) => (
           <View key={i} style={styles.timelineItem}>
-            <View style={[styles.timelineDot, { backgroundColor: i === 0 ? '#7C3AED' : '#D1D5DB' }]} />
+            <View style={[styles.timelineDot, { backgroundColor: i === 0 ? colors.brand.purple : colors.neutral[300] }]} />
             {i < dispute.timeline.length - 1 && <View style={styles.timelineLine} />}
             <View style={styles.timelineContent}>
               <Text style={styles.timelineAction}>{t.action.replace(/_/g, ' ')}</Text>
@@ -222,59 +222,54 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8FAFC', padding: 16 },
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F8FAFC', gap: 8 },
-  errorText: { fontSize: 14, color: '#6B7280' },
+  container: { flex: 1, backgroundColor: colors.tint.coolGray, padding: spacing.base },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.tint.coolGray, gap: spacing.sm },
 
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
-  disputeNumber: { fontSize: 18, fontWeight: '700', color: '#111827' },
-  badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  badgeText: { fontSize: 12, fontWeight: '600' },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.base },
+  disputeNumber: { ...typography.h4, color: colors.text.primary },
+  badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: borderRadius.md },
+  badgeText: { ...typography.labelSmall },
 
   infoCard: {
-    backgroundColor: '#fff', borderRadius: 14, padding: 14, marginBottom: 16,
-    ...Platform.select({
-      ios: { shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 6, shadowOffset: { width: 0, height: 2 } },
-      android: { elevation: 2 },
-      web: { boxShadow: '0 1px 4px rgba(0,0,0,0.06)' },
-    }),
+    backgroundColor: colors.background.primary, borderRadius: 14, padding: 14, marginBottom: spacing.base,
+    ...shadows.subtle,
   },
-  infoRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomWidth: 0.5, borderBottomColor: '#F3F4F6' },
-  infoLabel: { fontSize: 13, color: '#6B7280' },
-  infoValue: { fontSize: 13, fontWeight: '600', color: '#111827', maxWidth: '55%', textAlign: 'right' },
+  infoRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6, borderBottomWidth: 0.5, borderBottomColor: colors.border.light },
+  infoLabel: { ...typography.body, color: colors.neutral[500] },
+  infoValue: { ...typography.label, color: colors.text.primary, maxWidth: '55%', textAlign: 'right' },
 
-  section: { marginBottom: 16 },
-  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#111827', marginBottom: 8 },
-  descText: { fontSize: 13, color: '#6B7280', lineHeight: 20 },
-  dateText: { fontSize: 11, color: '#9CA3AF', marginTop: 4 },
+  section: { marginBottom: spacing.base },
+  sectionTitle: { fontSize: 15, fontWeight: '700', color: colors.text.primary, marginBottom: spacing.sm },
+  descText: { ...typography.body, color: colors.neutral[500], lineHeight: 20 },
+  dateText: { fontSize: 11, color: colors.neutral[400], marginTop: spacing.xs },
 
   evidenceItem: {
-    backgroundColor: '#fff', borderRadius: 10, padding: 12, marginBottom: 8,
-    borderWidth: 1, borderColor: '#F3F4F6',
+    backgroundColor: colors.background.primary, borderRadius: 10, padding: spacing.md, marginBottom: spacing.sm,
+    borderWidth: 1, borderColor: colors.border.light,
   },
-  evidenceType: { fontSize: 11, color: '#9CA3AF', marginBottom: 4, textTransform: 'capitalize' },
-  evidenceDesc: { fontSize: 13, color: '#374151' },
-  attachmentRow: { flexDirection: 'row', gap: 8, marginTop: 8 },
-  attachmentThumb: { width: 60, height: 60, borderRadius: 8, backgroundColor: '#F3F4F6' },
+  evidenceType: { fontSize: 11, color: colors.neutral[400], marginBottom: spacing.xs, textTransform: 'capitalize' },
+  evidenceDesc: { ...typography.body, color: colors.neutral[700] },
+  attachmentRow: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.sm },
+  attachmentThumb: { width: 60, height: 60, borderRadius: borderRadius.sm, backgroundColor: colors.border.light },
 
-  merchantCard: { backgroundColor: '#FFF7ED', borderRadius: 10, padding: 12, borderWidth: 1, borderColor: '#FED7AA' },
+  merchantCard: { backgroundColor: colors.tint.orange, borderRadius: 10, padding: spacing.md, borderWidth: 1, borderColor: colors.warningScale[200] },
 
   resolutionCard: { borderRadius: 14, padding: 14 },
 
-  timelineItem: { flexDirection: 'row', marginBottom: 4, minHeight: 40 },
-  timelineDot: { width: 10, height: 10, borderRadius: 5, marginTop: 4, marginRight: 12, zIndex: 1 },
+  timelineItem: { flexDirection: 'row', marginBottom: spacing.xs, minHeight: 40 },
+  timelineDot: { width: 10, height: 10, borderRadius: 5, marginTop: 4, marginRight: spacing.md, zIndex: 1 },
   timelineLine: {
-    position: 'absolute', left: 4, top: 14, bottom: -4, width: 2, backgroundColor: '#E5E7EB',
+    position: 'absolute', left: 4, top: 14, bottom: -4, width: 2, backgroundColor: colors.border.default,
   },
-  timelineContent: { flex: 1, paddingBottom: 12 },
-  timelineAction: { fontSize: 13, fontWeight: '600', color: '#111827', textTransform: 'capitalize' },
-  timelineDetails: { fontSize: 12, color: '#6B7280', marginTop: 2 },
-  timelineTime: { fontSize: 11, color: '#9CA3AF', marginTop: 2, textTransform: 'capitalize' },
+  timelineContent: { flex: 1, paddingBottom: spacing.md },
+  timelineAction: { ...typography.label, color: colors.text.primary, textTransform: 'capitalize' },
+  timelineDetails: { ...typography.bodySmall, color: colors.neutral[500], marginTop: 2 },
+  timelineTime: { fontSize: 11, color: colors.neutral[400], marginTop: 2, textTransform: 'capitalize' },
 
   addEvidenceBtn: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, backgroundColor: '#7C3AED', borderRadius: 12,
-    paddingVertical: 14, marginTop: 8,
+    gap: spacing.sm, backgroundColor: colors.brand.purple, borderRadius: borderRadius.md,
+    paddingVertical: 14, marginTop: spacing.sm,
   },
-  addEvidenceBtnText: { fontSize: 15, fontWeight: '600', color: '#fff' },
+  addEvidenceBtnText: { fontSize: 15, fontWeight: '600', color: colors.text.inverse },
 });

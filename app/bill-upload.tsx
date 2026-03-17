@@ -262,12 +262,15 @@ function BillUploadPage() {
     try {
       const savedData = await AsyncStorage.getItem(FORM_STORAGE_KEY);
       if (savedData) {
-        const parsed = JSON.parse(savedData);
-        setFormData({
-          ...parsed,
-          billDate: parsed.billDate ? new Date(parsed.billDate) : new Date(),
-        });
-        showToast('Draft restored', 'info');
+        let parsed;
+        try { parsed = JSON.parse(savedData); } catch { parsed = null; }
+        if (parsed) {
+          setFormData({
+            ...parsed,
+            billDate: parsed.billDate ? new Date(parsed.billDate) : new Date(),
+          });
+          showToast('Draft restored', 'info');
+        }
       }
     } catch (error) {
       logger.error('Failed to load saved form data:', error);

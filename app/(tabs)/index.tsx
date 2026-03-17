@@ -19,19 +19,23 @@ import {
   useAuthUser,
   useAuthActions,
   useIsAuthenticated,
-  useCartItems,
+  useCartItemCount,
   useCartActions,
+  useRefreshCart,
   useRezBalance,
   useWalletData,
   useWalletLoading,
   useRefreshWallet,
+  useSavingsInsights,
   useActiveTab,
   useSetActiveTab,
+  usePriveEligibility,
+  useIsPriveEligible,
+  useActiveHomeTab,
+  useSetActiveHomeTab,
+  useRegisterScrollToTop,
 } from '@/stores';
-import { useHomeTabStore } from '@/stores/homeTabStore';
 import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
-import { useCartStore } from '@/stores/cartStore';
-import { useWalletStore } from '@/stores/walletStore';
 
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors, spacing, borderRadius, shadows, typography } from '@/constants/theme';
@@ -198,10 +202,9 @@ function HomeScreen() {
   const { handleItemPress, handleAddToCart } = useHomepageNavigation();
   const { user: profileUser, isModalVisible, showModal, hideModal } = useProfile();
   const { handleMenuItemPress } = useProfileMenu();
-  const cartItems = useCartItems();
-  const cartState = { items: cartItems, itemCount: cartItems?.length ?? 0 } as any;
+  const cartItemCount = useCartItemCount();
   const cartActions = useCartActions();
-  const refreshCart = useCartStore((s) => s.refreshCart);
+  const refreshCart = useRefreshCart();
   const authUser = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
   const authActions = useAuthActions();
@@ -209,16 +212,16 @@ function HomeScreen() {
   const walletData = useWalletData();
   const refreshWallet = useRefreshWallet();
   const isWalletLoading = useWalletLoading();
-  const savingsInsights = useWalletStore((s) => s.savingsInsights);
+  const savingsInsights = useSavingsInsights();
   const totalSaved = savingsInsights?.totalSaved ?? 0;
   // Zustand selectors for home tab — granular subscriptions
   const activeTab = useActiveTab();
   const setActiveTab = useSetActiveTab();
-  const priveEligibility = useHomeTabStore((s) => s.priveEligibility);
-  const isPriveEligible = useHomeTabStore((s) => s.isPriveEligible);
-  const activeHomeTab = useHomeTabStore((s) => s.activeHomeTab);
-  const setActiveHomeTab = useHomeTabStore((s) => s.setActiveHomeTab);
-  const registerScrollToTop = useHomeTabStore((s) => s.registerScrollToTop);
+  const priveEligibility = usePriveEligibility();
+  const isPriveEligible = useIsPriveEligible();
+  const activeHomeTab = useActiveHomeTab();
+  const setActiveHomeTab = useSetActiveHomeTab();
+  const registerScrollToTop = useRegisterScrollToTop();
   const [refreshing, setRefreshing] = React.useState(false);
   const [showDetailedLocation, setShowDetailedLocation] = React.useState(false);
   // On web, InteractionManager resolves synchronously — start as true to avoid an extra re-render
@@ -626,19 +629,19 @@ function HomeScreen() {
             <Pressable
               onPress={handleCartPress}
              
-              accessibilityLabel={`Shopping cart: ${cartState.totalItems} items`}
+              accessibilityLabel={`Shopping cart: ${cartItemCount} items`}
               accessibilityRole="button"
               accessibilityHint="Double tap to view your shopping cart"
               style={viewStyles.headerIconButton}
             >
               <Ionicons name="cart-outline" size={24} color={tabStyles.iconColor} />
-              {cartState.totalItems > 0 && (
+              {cartItemCount > 0 && (
                 <LinearGradient
                   colors={[colors.error, '#FF5252']}
                   style={viewStyles.cartBadgeModern}
                 >
                   <Text style={viewStyles.cartBadgeTextModern}>
-                    {cartState.totalItems > 9 ? '9+' : cartState.totalItems}
+                    {cartItemCount > 9 ? '9+' : cartItemCount}
                   </Text>
                 </LinearGradient>
               )}
@@ -845,6 +848,9 @@ function HomeScreen() {
               trendingService={trendingService}
               isLoyaltySectionLoading={isLoyaltySectionLoading}
               scrollY={scrollY}
+              totalSaved={totalSaved}
+              thisMonthSaved={savingsInsights?.thisMonth ?? 0}
+              currencySymbol={currencySymbol}
             />
           </Suspense>
         )}

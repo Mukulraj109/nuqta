@@ -648,15 +648,15 @@ export function GamificationProvider({ children }: GamificationProviderProps) {
     };
   }, [isAuthenticated, isOnboarded, state.achievements, state.coinBalance, state.challenges, state.dailyStreak]); // saveToCache removed — stable identity via ref
 
-  // Computed values
-  const unlockedCount = state.achievementProgress?.summary.unlocked || 0;
-  const completionPercentage = state.achievementProgress?.summary.completionPercentage || 0;
-  const pendingAchievements = useMemo(
-    () => state.achievementQueue.filter((item) => !item.shown),
-    [state.achievementQueue]
-  );
-  const hasUnshownAchievements = pendingAchievements.length > 0;
-  const canEarnCoins = state.featureFlags.ENABLE_COINS;
+  // Computed values — memoized on specific state slices (not entire state object)
+  const computed = useMemo(() => {
+    const unlockedCount = state.achievementProgress?.summary.unlocked || 0;
+    const completionPercentage = state.achievementProgress?.summary.completionPercentage || 0;
+    const pendingAchievements = state.achievementQueue.filter((item) => !item.shown);
+    const hasUnshownAchievements = pendingAchievements.length > 0;
+    const canEarnCoins = state.featureFlags.ENABLE_COINS;
+    return { unlockedCount, completionPercentage, pendingAchievements, hasUnshownAchievements, canEarnCoins };
+  }, [state.achievementProgress?.summary, state.achievementQueue, state.featureFlags.ENABLE_COINS]);
 
   // Stable actions ref — callbacks change identity on re-render but their behavior
   // is always "latest". Using a ref avoids invalidating the context memo on every render.
@@ -700,28 +700,16 @@ export function GamificationProvider({ children }: GamificationProviderProps) {
   const contextValue: GamificationContextType = useMemo(() => ({
     state,
     actions: stableActions,
-    computed: {
-      unlockedCount,
-      completionPercentage,
-      pendingAchievements,
-      hasUnshownAchievements,
-      canEarnCoins,
-    },
-  }), [
-    state,
-    stableActions,
-    unlockedCount,
-    completionPercentage,
-    pendingAchievements,
-    hasUnshownAchievements,
-    canEarnCoins,
-  ]);
+    computed,
+  }), [state, stableActions, computed]);
 
-  // Sync to Zustand store for crash-safe fallback
+  // Sync to Zustand store for crash-safe fallback (synchronous to avoid one-frame lag)
   const _setFromProvider = useGamificationStore((s) => s._setFromProvider);
-  useEffect(() => {
+  const prevGamificationValueRef = useRef(contextValue);
+  if (prevGamificationValueRef.current !== contextValue) {
+    prevGamificationValueRef.current = contextValue;
     _setFromProvider(contextValue);
-  }, [contextValue, _setFromProvider]);
+  }
 
   return (
     <GamificationContext.Provider value={contextValue}>

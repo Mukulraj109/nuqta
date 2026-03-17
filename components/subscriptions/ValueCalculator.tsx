@@ -9,14 +9,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors, Spacing, BorderRadius } from '@/constants/DesignSystem';
 import subscriptionApi from '@/services/subscriptionApi';
 import type { SubscriptionTier, ValueProposition } from '@/services/subscriptionApi';
+import PaybackProgressBar from './PaybackProgressBar';
 
 interface ValueCalculatorProps {
   selectedTier: SubscriptionTier | null;
   currencySymbol: string;
   isAuthenticated: boolean;
+  selectedCycle?: 'monthly' | 'yearly';
 }
 
-function ValueCalculator({ selectedTier, currencySymbol, isAuthenticated }: ValueCalculatorProps) {
+function ValueCalculator({ selectedTier, currencySymbol, isAuthenticated, selectedCycle }: ValueCalculatorProps) {
   const [data, setData] = useState<ValueProposition | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -125,6 +127,15 @@ function ValueCalculator({ selectedTier, currencySymbol, isAuthenticated }: Valu
           </View>
         </View>
       </View>
+
+      {/* Payback Progress Bar */}
+      {data && selectedTier && (
+        <PaybackProgressBar
+          subscriptionCost={selectedTier.pricing?.[selectedCycle || 'monthly'] ?? 0}
+          estimatedMonthlySavings={data.estimatedMonthlySavings ?? 0}
+          currencySymbol={currencySymbol}
+        />
+      )}
     </View>
   );
 }

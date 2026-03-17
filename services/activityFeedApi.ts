@@ -1,6 +1,8 @@
 import apiClient from './apiClient';
 
-type ApiEnvelope<T> = { data: T; pagination?: { page: number; limit: number; hasMore: boolean } };
+// Note: apiClient already unwraps responseData.data, so response.data IS the backend's data field directly.
+// For paginated endpoints, pagination is at the top level of the backend response but the apiClient
+// doesn't carry it through, so we compute hasMore from the result count.
 
 const API_PREFIX = '/api';
 
@@ -68,13 +70,13 @@ export async function getActivityFeed(page: number = 1, limit: number = 20): Pro
   pagination: { page: number; limit: number; hasMore: boolean };
 }> {
   try {
-    const response = await apiClient.get<ApiEnvelope<Activity[]>>(`${API_PREFIX}/social/feed`, {
-      params: { page, limit }
-    });
+    const response = await apiClient.get<Activity[]>(`${API_PREFIX}/social/feed`, { page, limit });
+
+    const activities = Array.isArray(response.data) ? response.data : [];
 
     return {
-      activities: response.data?.data || [],
-      pagination: response.data?.pagination || { page, limit, hasMore: false }
+      activities,
+      pagination: { page, limit, hasMore: activities.length === limit }
     };
   } catch (error: any) {
     throw new Error(error.response?.data?.error || 'Failed to fetch activity feed');
@@ -93,13 +95,13 @@ export async function getUserActivities(
   pagination: { page: number; limit: number; hasMore: boolean };
 }> {
   try {
-    const response = await apiClient.get<ApiEnvelope<Activity[]>>(`${API_PREFIX}/social/users/${userId}/activities`, {
-      params: { page, limit }
-    });
+    const response = await apiClient.get<Activity[]>(`${API_PREFIX}/social/users/${userId}/activities`, { page, limit });
+
+    const activities = Array.isArray(response.data) ? response.data : [];
 
     return {
-      activities: response.data?.data || [],
-      pagination: response.data?.pagination || { page, limit, hasMore: false }
+      activities,
+      pagination: { page, limit, hasMore: activities.length === limit }
     };
   } catch (error: any) {
     throw new Error(error.response?.data?.error || 'Failed to fetch user activities');
@@ -120,8 +122,8 @@ export async function createActivity(data: {
   metadata?: Record<string, any>;
 }): Promise<Activity> {
   try {
-    const response = await apiClient.post<ApiEnvelope<Activity>>(`${API_PREFIX}/social/activities`, data);
-    return response.data!.data as Activity;
+    const response = await apiClient.post<Activity>(`${API_PREFIX}/social/activities`, data);
+    return response.data as Activity;
   } catch (error: any) {
     throw new Error(error.response?.data?.error || 'Failed to create activity');
   }
@@ -132,8 +134,8 @@ export async function createActivity(data: {
  */
 export async function toggleLike(activityId: string): Promise<{ liked: boolean; likesCount: number }> {
   try {
-    const response = await apiClient.post<ApiEnvelope<{ liked: boolean; likesCount: number }>>(`${API_PREFIX}/social/activities/${activityId}/like`);
-    return response.data!.data as { liked: boolean; likesCount: number };
+    const response = await apiClient.post<{ liked: boolean; likesCount: number }>(`${API_PREFIX}/social/activities/${activityId}/like`);
+    return response.data as { liked: boolean; likesCount: number };
   } catch (error: any) {
     throw new Error(error.response?.data?.error || 'Failed to like activity');
   }
@@ -151,13 +153,13 @@ export async function getActivityComments(
   pagination: { page: number; limit: number; hasMore: boolean };
 }> {
   try {
-    const response = await apiClient.get<ApiEnvelope<Comment[]>>(`${API_PREFIX}/social/activities/${activityId}/comments`, {
-      params: { page, limit }
-    });
+    const response = await apiClient.get<Comment[]>(`${API_PREFIX}/social/activities/${activityId}/comments`, { page, limit });
+
+    const comments = Array.isArray(response.data) ? response.data : [];
 
     return {
-      comments: response.data?.data || [],
-      pagination: response.data?.pagination || { page, limit, hasMore: false }
+      comments,
+      pagination: { page, limit, hasMore: comments.length === limit }
     };
   } catch (error: any) {
     throw new Error(error.response?.data?.error || 'Failed to fetch comments');
@@ -169,10 +171,10 @@ export async function getActivityComments(
  */
 export async function addComment(activityId: string, comment: string): Promise<Comment> {
   try {
-    const response = await apiClient.post<ApiEnvelope<Comment>>(`${API_PREFIX}/social/activities/${activityId}/comment`, {
+    const response = await apiClient.post<Comment>(`${API_PREFIX}/social/activities/${activityId}/comment`, {
       comment
     });
-    return response.data!.data as Comment;
+    return response.data as Comment;
   } catch (error: any) {
     throw new Error(error.response?.data?.error || 'Failed to add comment');
   }
@@ -183,8 +185,8 @@ export async function addComment(activityId: string, comment: string): Promise<C
  */
 export async function toggleFollow(userId: string): Promise<FollowStatus> {
   try {
-    const response = await apiClient.post<ApiEnvelope<FollowStatus>>(`${API_PREFIX}/social/users/${userId}/follow`);
-    return response.data!.data as FollowStatus;
+    const response = await apiClient.post<FollowStatus>(`${API_PREFIX}/social/users/${userId}/follow`);
+    return response.data as FollowStatus;
   } catch (error: any) {
     throw new Error(error.response?.data?.error || 'Failed to follow/unfollow user');
   }
@@ -195,8 +197,8 @@ export async function toggleFollow(userId: string): Promise<FollowStatus> {
  */
 export async function checkFollowStatus(userId: string): Promise<boolean> {
   try {
-    const response = await apiClient.get<ApiEnvelope<{ isFollowing: boolean }>>(`${API_PREFIX}/social/users/${userId}/is-following`);
-    return response.data?.data?.isFollowing ?? false;
+    const response = await apiClient.get<{ isFollowing: boolean }>(`${API_PREFIX}/social/users/${userId}/is-following`);
+    return response.data?.isFollowing ?? false;
   } catch (error: any) {
     return false;
   }
@@ -214,13 +216,13 @@ export async function getFollowers(
   pagination: { page: number; limit: number; hasMore: boolean };
 }> {
   try {
-    const response = await apiClient.get<ApiEnvelope<UserProfile[]>>(`${API_PREFIX}/social/users/${userId}/followers`, {
-      params: { page, limit }
-    });
+    const response = await apiClient.get<UserProfile[]>(`${API_PREFIX}/social/users/${userId}/followers`, { page, limit });
+
+    const followers = Array.isArray(response.data) ? response.data : [];
 
     return {
-      followers: response.data?.data || [],
-      pagination: response.data?.pagination || { page, limit, hasMore: false }
+      followers,
+      pagination: { page, limit, hasMore: followers.length === limit }
     };
   } catch (error: any) {
     throw new Error(error.response?.data?.error || 'Failed to fetch followers');
@@ -239,13 +241,13 @@ export async function getFollowing(
   pagination: { page: number; limit: number; hasMore: boolean };
 }> {
   try {
-    const response = await apiClient.get<ApiEnvelope<UserProfile[]>>(`${API_PREFIX}/social/users/${userId}/following`, {
-      params: { page, limit }
-    });
+    const response = await apiClient.get<UserProfile[]>(`${API_PREFIX}/social/users/${userId}/following`, { page, limit });
+
+    const following = Array.isArray(response.data) ? response.data : [];
 
     return {
-      following: response.data?.data || [],
-      pagination: response.data?.pagination || { page, limit, hasMore: false }
+      following,
+      pagination: { page, limit, hasMore: following.length === limit }
     };
   } catch (error: any) {
     throw new Error(error.response?.data?.error || 'Failed to fetch following list');
@@ -257,8 +259,8 @@ export async function getFollowing(
  */
 export async function getFollowCounts(userId: string): Promise<{ followersCount: number; followingCount: number }> {
   try {
-    const response = await apiClient.get<ApiEnvelope<{ followersCount: number; followingCount: number }>>(`${API_PREFIX}/social/users/${userId}/follow-counts`);
-    return response.data?.data ?? { followersCount: 0, followingCount: 0 };
+    const response = await apiClient.get<{ followersCount: number; followingCount: number }>(`${API_PREFIX}/social/users/${userId}/follow-counts`);
+    return response.data ?? { followersCount: 0, followingCount: 0 };
   } catch (error: any) {
     return { followersCount: 0, followingCount: 0 };
   }
@@ -269,10 +271,8 @@ export async function getFollowCounts(userId: string): Promise<{ followersCount:
  */
 export async function getSuggestedUsers(limit: number = 10): Promise<UserProfile[]> {
   try {
-    const response = await apiClient.get<ApiEnvelope<UserProfile[]>>(`${API_PREFIX}/social/suggested-users`, {
-      params: { limit }
-    });
-    return response.data?.data || [];
+    const response = await apiClient.get<UserProfile[]>(`${API_PREFIX}/social/suggested-users`, { limit });
+    return Array.isArray(response.data) ? response.data : [];
   } catch (error: any) {
     return [];
   }
@@ -283,7 +283,7 @@ export async function getSuggestedUsers(limit: number = 10): Promise<UserProfile
  */
 export async function shareActivity(activityId: string): Promise<void> {
   try {
-    await apiClient.post<ApiEnvelope<unknown>>(`${API_PREFIX}/social/activities/${activityId}/share`);
+    await apiClient.post(`${API_PREFIX}/social/activities/${activityId}/share`);
   } catch (error: any) {
     throw new Error(error.response?.data?.error || 'Failed to share activity');
   }
@@ -294,8 +294,8 @@ export async function shareActivity(activityId: string): Promise<void> {
  */
 export async function getActivityStats(activityId: string): Promise<ActivityStats> {
   try {
-    const response = await apiClient.get<ApiEnvelope<ActivityStats>>(`${API_PREFIX}/social/activities/${activityId}/stats`);
-    return response.data?.data ?? { likes: 0, comments: 0, shares: 0 };
+    const response = await apiClient.get<ActivityStats>(`${API_PREFIX}/social/activities/${activityId}/stats`);
+    return response.data ?? { likes: 0, comments: 0, shares: 0 };
   } catch (error: any) {
     return { likes: 0, comments: 0, shares: 0 };
   }

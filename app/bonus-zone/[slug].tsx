@@ -21,6 +21,8 @@ import bonusZoneApi, {
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useRefreshWallet } from '@/stores/selectors';
+import { usePressGuard } from '@/hooks/usePressGuard';
 
 // ============================================================================
 // TIMER HELPER (same pattern as BonusZoneCard)
@@ -173,6 +175,7 @@ function getRewardDescription(type: string, value: number): string {
 export default function CampaignDetailPage() {
   const { slug, claimSuccess } = useLocalSearchParams<{ slug: string; claimSuccess?: string }>();
   const router = useRouter();
+  const refreshWallet = useRefreshWallet();
   const [showClaimSuccess, setShowClaimSuccess] = useState(false);
 
   const [campaign, setCampaign] = useState<BonusZoneCampaignDetail | null>(null);
@@ -226,6 +229,7 @@ export default function CampaignDetailPage() {
     if (claimSuccess === 'true') {
       setShowClaimSuccess(true);
       fetchDetail(); // Refresh to get updated claim count
+      refreshWallet(); // Refresh wallet to reflect earned coins
       const timer = setTimeout(() => setShowClaimSuccess(false), 5000);
       return () => clearTimeout(timer);
     }

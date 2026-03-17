@@ -22,6 +22,8 @@ import { BlurView } from 'expo-blur';
 import realOffersApi, { Offer } from '@/services/realOffersApi';
 import { useAuthUser, useCurrentRegionId, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import OfferTile from '@/components/offers/OfferTile';
+import { calculateSaveAmount } from '@/utils/savingsCalculator';
 
 // Nuqta Brand Colors
 const COLORS = {
@@ -953,6 +955,11 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
     </Pressable>
   );
 
+  // Handle individual offer press - navigate to offer detail
+  const handleOfferPress = (offer: Offer) => {
+    router.push(`/offers/${offer._id}` as any);
+  };
+
   // Handle admin-managed item press
   const handleAdminItemPress = (item: any) => {
     // Track click
@@ -1220,7 +1227,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
       return renderSkeletonRows();
     }
 
-    if (offerCategories.length === 0) {
+    if (offerCategories.length === 0 && offers.length === 0) {
       return (
         <View style={styles.emptyContainer}>
           <Ionicons name="alert-circle-outline" size={48} color={COLORS.textMuted} />
@@ -1229,7 +1236,45 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
       );
     }
 
-    // Split categories into rows of 2 for horizontal scroll
+    // Show individual offers via OfferTile if we have them
+    if (offers.length > 0) {
+      // Show top offers (limit to 8 for homepage)
+      const topOffers = offers.slice(0, 8);
+      return (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          nestedScrollEnabled={true}
+          contentContainerStyle={styles.offerTileScrollContent}
+          style={styles.exclusiveScrollView}
+        >
+          {topOffers.map((offer) => (
+            <View key={offer._id} style={styles.offerTileWrapper}>
+              <OfferTile
+                storeName={offer.store?.name || 'Store'}
+                storeLogo={offer.store?.logo}
+                distance={offer.distance}
+                saveAmount={calculateSaveAmount({
+                  cashbackPercent: offer.cashbackPercentage,
+                  originalPrice: offer.originalPrice,
+                  discountedPrice: offer.discountedPrice,
+                })}
+                cashbackPercent={offer.cashbackPercentage}
+                badges={[
+                  offer.exclusiveZone && { label: 'Exclusive', color: '#7C3AED' },
+                  offer.metadata?.featured && { label: 'Featured', color: '#059669' },
+                ].filter(Boolean) as any}
+                expiryDate={offer.validity?.endDate}
+                onPress={() => handleOfferPress(offer)}
+                currencySymbol={currencySymbol}
+              />
+            </View>
+          ))}
+        </ScrollView>
+      );
+    }
+
+    // Fallback to category cards
     const rows = [];
     for (let i = 0; i < offerCategories.length; i += 2) {
       rows.push(offerCategories.slice(i, i + 2));
@@ -1756,6 +1801,14 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     paddingLeft: 4,
     gap: 12,
+  },
+  offerTileScrollContent: {
+    paddingRight: 16,
+    paddingLeft: 4,
+    gap: 10,
+  },
+  offerTileWrapper: {
+    width: 180,
   },
   exclusiveRow: {
     flexDirection: 'column',

@@ -19,6 +19,8 @@ interface WalletStoreData {
 
 interface WalletStoreState extends WalletStoreData {
   _setFromProvider: (data: WalletStoreData) => void;
+  /** Optimistic balance adjustment — adds delta to rez/total/available balances */
+  adjustBalance: (delta: number) => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -46,5 +48,27 @@ export const useWalletStore = create<WalletStoreState>((set) => ({
   // Called by WalletProvider on every render to keep store in sync
   _setFromProvider: (data: WalletStoreData) => {
     set(data);
+  },
+
+  // Optimistic balance adjustment for instant UI feedback after earning coins.
+  // Server truth is restored by the next refreshWallet() call.
+  adjustBalance: (delta: number) => {
+    set((state) => {
+      if (!state.walletData) return state;
+      const updatedCoins = state.walletData.coins.map((c) =>
+        c.type === 'rez' ? { ...c, amount: c.amount + delta } : c
+      );
+      return {
+        rezBalance: state.rezBalance + delta,
+        totalBalance: state.totalBalance + delta,
+        availableBalance: state.availableBalance + delta,
+        walletData: {
+          ...state.walletData,
+          totalBalance: state.walletData.totalBalance + delta,
+          availableBalance: state.walletData.availableBalance + delta,
+          coins: updatedCoins,
+        },
+      };
+    });
   },
 }));

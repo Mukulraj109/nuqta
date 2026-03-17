@@ -19,6 +19,7 @@ import { BRAND } from '@/constants/brand';
 import { apiClient } from '@/utils/apiClient';
 import SearchResultsSummary from './SearchResultsSummary';
 import FilterBar, { SortOption } from './FilterBar';
+import SearchSortChips from './SearchSortChips';
 import ProductGroupHeader from './ProductGroupHeader';
 import SellerComparisonCard from './SellerComparisonCard';
 import { NUQTA } from './searchTheme';
@@ -123,12 +124,19 @@ function SearchResultsView({
           <SearchResultsSummary query={query} summary={searchSummary} />
         )}
 
+        {/* Sort Chips */}
+        {groupedProducts.length > 0 && (
+          <SearchSortChips
+            currentSort={currentSort}
+            onSortChange={onSortChange}
+            resultCount={groupedProducts.reduce((sum, g) => sum + g.sellers.length, 0) + matchingStores.length}
+          />
+        )}
+
         {/* Filter Bar */}
         {groupedProducts.length > 0 && (
           <FilterBar
             onFilterPress={onFilterPress}
-            onSortChange={onSortChange}
-            currentSort={currentSort}
             activeFilters={activeFilters}
           />
         )}
@@ -262,6 +270,11 @@ function SearchResultsView({
               <Text style={styles.resultDescription} numberOfLines={2}>
                 {result.description}
               </Text>
+              {result.cashbackPercentage > 0 && (
+                <Text style={styles.resultSaveAmount}>
+                  SAVE {Math.round((result.cashbackPercentage / 100) * (result.price?.current || 500))}
+                </Text>
+              )}
               <View style={styles.resultMeta}>
                 <LinearGradient
                   colors={[NUQTA.nileBlue, NUQTA.nileBlueLight]}
@@ -631,6 +644,12 @@ const styles = StyleSheet.create({
     color: NUQTA.text.secondary,
     marginBottom: Spacing.md,
     lineHeight: 17,
+  },
+  resultSaveAmount: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#1a3a52',
+    marginBottom: 6,
   },
   resultMeta: {
     flexDirection: 'row',

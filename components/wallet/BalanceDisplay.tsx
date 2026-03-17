@@ -141,8 +141,8 @@ const styles = StyleSheet.create({
   },
   balanceText: {
     color: Colors.nileBlue,
-    fontSize: 26,
-    fontWeight: '800',
+    fontSize: 20,
+    fontWeight: '700',
     letterSpacing: -0.3,
   },
   eyeButton: {

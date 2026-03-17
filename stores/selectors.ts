@@ -79,7 +79,7 @@ export const useCartItemCount = () => useCartStore((s) => s.state.items?.length 
 export const useCartItems = () => useCartStore((s) => s.state.items);
 
 /** Only re-renders when cart total changes */
-export const useCartTotal = () => useCartStore((s) => s.state.totalAmount ?? 0);
+export const useCartTotal = () => useCartStore((s) => s.state.totalPrice ?? 0);
 
 /** Only re-renders when cart loading changes */
 export const useCartLoading = () => useCartStore((s) => s.state.isLoading);
@@ -128,6 +128,9 @@ export const useRawWalletData = () => useWalletStore((s) => s.rawBackendData);
 /** Only re-renders when refreshing state changes */
 export const useWalletRefreshing = () => useWalletStore((s) => s.isRefreshing);
 
+/** Stable function — optimistic balance adjustment for instant UI feedback */
+export const useAdjustBalance = () => useWalletStore((s) => s.adjustBalance);
+
 // ============================================================================
 // CART EXTRA SELECTORS
 // ============================================================================
@@ -151,6 +154,21 @@ export const useSetActiveTab = () => useHomeTabStore((s) => s.setActiveTab);
 /** Derived booleans */
 export const useIsPriveActive = () => useHomeTabStore((s) => s.isPriveActive);
 export const useIsMallActive = () => useHomeTabStore((s) => s.isMallActive);
+
+/** Only re-renders when prive eligibility changes */
+export const usePriveEligibility = () => useHomeTabStore((s) => s.priveEligibility);
+
+/** Only re-renders when prive eligible status changes */
+export const useIsPriveEligible = () => useHomeTabStore((s) => s.isPriveEligible);
+
+/** Legacy tab ID — only re-renders when active tab changes */
+export const useActiveHomeTab = () => useHomeTabStore((s) => s.activeHomeTab);
+
+/** Stable function — never re-renders */
+export const useSetActiveHomeTab = () => useHomeTabStore((s) => s.setActiveHomeTab);
+
+/** Stable function — never re-renders */
+export const useRegisterScrollToTop = () => useHomeTabStore((s) => s.registerScrollToTop);
 
 // ============================================================================
 // THEME SELECTORS — most used

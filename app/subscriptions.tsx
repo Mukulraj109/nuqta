@@ -218,6 +218,14 @@ export default function SubscriptionsPage() {
           </View>
         )}
 
+        {/* Value Calculator - above billing cycle for visibility */}
+        <ValueCalculator
+          selectedTier={selectedTier || tiers.find(t => t.tier !== 'free') || null}
+          currencySymbol={currencySymbol}
+          isAuthenticated={isAuthenticated}
+          selectedCycle={selectedCycle}
+        />
+
         {/* Billing Cycle Toggle */}
         {tiers.length > 0 && (
           <View style={styles.section}>
@@ -266,13 +274,6 @@ export default function SubscriptionsPage() {
             </View>
           </View>
         )}
-
-        {/* Value Calculator */}
-        <ValueCalculator
-          selectedTier={selectedTier}
-          currencySymbol={currencySymbol}
-          isAuthenticated={isAuthenticated}
-        />
 
         {/* Benefits Comparison Table */}
         {tiers.length > 0 && <BenefitsTable tiers={tiers} />}

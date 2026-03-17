@@ -58,12 +58,7 @@ const GroupBuyPage = () => {
   const [showJoinInput, setShowJoinInput] = useState(false);
   const [expandedGroupId, setExpandedGroupId] = useState<string | null>(null);
 
-  // Load data on mount
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.replace('/sign-in');
-    }
-  }, [isAuthenticated]);
+  // AuthContext navigation guard handles unauthenticated redirect
 
   // Handle refresh
   const handleRefresh = async () => {

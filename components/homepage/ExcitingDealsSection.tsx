@@ -12,16 +12,15 @@ import {
   ScrollView,
   Dimensions,
   Animated,
-  Platform,
 } from 'react-native';
-import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { campaignsApi, DealCategory, CampaignDeal } from '@/services/campaignsApi';
-import CoinIcon from '@/components/ui/CoinIcon';
 import { useCurrentRegionId, useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import OfferTile from '@/components/offers/OfferTile';
+import { calculateSaveAmount } from '@/utils/savingsCalculator';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2.3;
@@ -34,19 +33,9 @@ const COLORS = {
   gray200: colors.neutral[200],
   gray300: colors.neutral[300],
   gray600: colors.neutral[500],
-  gray800: colors.neutral[800],
   nileBlue: colors.nileBlue,
   nileBlueLight: colors.brand.nileBlueLight,
-  lightMustard: colors.lightMustard,
-  lightPeach: colors.lightPeach,
-  peachDark: colors.brand.sand,
   linen: colors.linen,
-  lavenderMist: colors.lavenderMist,
-  green500: colors.success,
-  emerald500: colors.successScale[400],
-  amber500: colors.warningScale[400],
-  red500: colors.error,
-  purple500: colors.brand.purpleLight,
 };
 
 // Default gradient colors for different campaign types
@@ -59,6 +48,13 @@ const TYPE_GRADIENTS: Record<string, string[]> = {
   flash: ['#FFF8DC', '#FFE4B5'],
   'new-user': [colors.greenMist, '#C8E6C9'],
   general: [colors.tint.warmGray, '#EEEEEE'],
+};
+
+// Parse cashback percentage from a string like "10% Cashback" or "10"
+const parseCashbackPercent = (cashback?: string): number => {
+  if (!cashback) return 0;
+  const match = cashback.match(/(\d+)/);
+  return match ? parseInt(match[1], 10) : 0;
 };
 
 // Skeleton loader with shimmer animation
@@ -210,56 +206,6 @@ const ExcitingDealsSection: React.FC = () => {
       .replace(/د\.إ\s*/g, currencySymbol);
   };
 
-  const renderDealValue = (deal: CampaignDeal) => {
-    if (deal.cashback) {
-      const formatted = deal.cashback.includes('%')
-        ? deal.cashback
-        : formatValue(deal.cashback);
-      return (
-        <View style={styles.dealValueContainer}>
-          <Text style={styles.dealCashback}>{formatted}</Text>
-          <Text style={styles.dealValueLabel}>Cashback</Text>
-        </View>
-      );
-    }
-    if (deal.coins) {
-      return (
-        <View style={styles.dealValueContainer}>
-          <View style={styles.dealCoinsRow}>
-            <CoinIcon size={14} />
-            <Text style={styles.dealCoins}>{deal.coins}</Text>
-          </View>
-          <Text style={styles.dealValueLabel}>Coins</Text>
-        </View>
-      );
-    }
-    if (deal.bonus) {
-      return (
-        <View style={styles.dealValueContainer}>
-          <Text style={styles.dealBonus}>{formatValue(deal.bonus)}</Text>
-          <Text style={styles.dealValueLabel}>Bonus</Text>
-        </View>
-      );
-    }
-    if (deal.drop) {
-      return (
-        <View style={styles.dealValueContainer}>
-          <Text style={styles.dealDrop}>{deal.drop}</Text>
-          <Text style={styles.dealValueLabel}>Drop</Text>
-        </View>
-      );
-    }
-    if (deal.discount) {
-      return (
-        <View style={styles.dealValueContainer}>
-          <Text style={styles.dealCashback}>{formatValue(deal.discount)}</Text>
-          <Text style={styles.dealValueLabel}>Discount</Text>
-        </View>
-      );
-    }
-    return null;
-  };
-
   // Loading state with skeleton
   if (isLoading) {
     return <SkeletonLoader />;
@@ -362,73 +308,20 @@ const ExcitingDealsSection: React.FC = () => {
               >
                 {category.deals && category.deals.length > 0 ? (
                   <>
-                    {category.deals.map((deal, idx) => {
-                      const isPaidDeal = deal.isPaid || (deal.price && deal.price > 0);
-                      const dealPrice = deal.price || 0;
-                      const dealCurrency = deal.currency || 'INR';
-                      const priceSymbol = dealCurrency === 'AED' ? 'AED ' : dealCurrency === 'USD' ? '$' : currencySymbol;
-
-                      return (
-                        <Pressable
-                          key={`${category.id}-${idx}`}
-                          style={[styles.dealCard, deal.isSoldOut && styles.dealCardSoldOut]}
+                    {category.deals.map((deal, idx) => (
+                      <View key={`${category.id}-${idx}`} style={{ width: CARD_WIDTH }}>
+                        <OfferTile
+                          storeName={deal.store || 'Featured Store'}
+                          saveAmount={calculateSaveAmount({ cashbackPercent: parseCashbackPercent(deal.cashback) })}
+                          cashbackPercent={parseCashbackPercent(deal.cashback)}
+                          badges={[
+                            deal.bonus && { label: `+${deal.bonus}`, color: '#059669' },
+                          ].filter(Boolean) as any}
                           onPress={() => handleDealPress(deal, category.id, idx)}
-                         
-                        >
-                          {/* Deal Image */}
-                          <View style={styles.dealImageContainer}>
-                            {deal.image ? (
-                              <CachedImage
-                                source={deal.image}
-                                style={styles.dealImage}
-                                contentFit="cover"
-                              />
-                            ) : (
-                              <View style={[styles.dealImage, styles.dealImagePlaceholder]}>
-                                <Ionicons name="image-outline" size={32} color={COLORS.gray300} />
-                              </View>
-                            )}
-                            {/* Timer badge for flash deals */}
-                            {deal.endsIn && !isPaidDeal && (
-                              <View style={styles.timerBadge}>
-                                <Ionicons name="time-outline" size={10} color={COLORS.white} />
-                                <Text style={styles.timerText}>{deal.endsIn}</Text>
-                              </View>
-                            )}
-                            {/* Price badge for paid deals */}
-                            {isPaidDeal && (
-                              <View style={[styles.timerBadge, styles.priceBadge]}>
-                                <Ionicons name="pricetag" size={10} color={COLORS.white} />
-                                <Text style={styles.timerText}>
-                                  {deal.isSoldOut ? 'SOLD OUT' : `${priceSymbol}${dealPrice}`}
-                                </Text>
-                              </View>
-                            )}
-                            {/* Free badge for free deals */}
-                            {!isPaidDeal && !deal.endsIn && (
-                              <View style={[styles.timerBadge, styles.freeBadge]}>
-                                <Ionicons name="gift" size={10} color={COLORS.white} />
-                                <Text style={styles.timerText}>FREE</Text>
-                              </View>
-                            )}
-                            {/* Sold out overlay */}
-                            {deal.isSoldOut && (
-                              <View style={styles.soldOutOverlay}>
-                                <Text style={styles.soldOutText}>SOLD OUT</Text>
-                              </View>
-                            )}
-                          </View>
-
-                          {/* Deal Info */}
-                          <View style={styles.dealInfo}>
-                            <Text style={styles.dealStore} numberOfLines={1}>
-                              {deal.store || 'Featured Store'}
-                            </Text>
-                            {renderDealValue(deal)}
-                          </View>
-                        </Pressable>
-                      );
-                    })}
+                          currencySymbol={currencySymbol}
+                        />
+                      </View>
+                    ))}
 
                     {/* View More Card */}
                     <Pressable
@@ -695,100 +588,8 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
-  dealCardSoldOut: {
-    opacity: 0.7,
-  },
-  dealImageContainer: {
-    position: 'relative',
-    height: 90,
-    backgroundColor: COLORS.gray100,
-  },
-  dealImage: {
-    width: '100%',
-    height: '100%',
-  },
-  dealImagePlaceholder: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: COLORS.gray100,
-  },
-  timerBadge: {
-    position: 'absolute',
-    top: 6,
-    right: 6,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLORS.red500,
-    paddingHorizontal: 6,
-    paddingVertical: 3,
-    borderRadius: 6,
-    gap: 3,
-  },
-  timerText: {
-    fontSize: 9,
-    fontWeight: '700',
-    color: COLORS.white,
-  },
-  priceBadge: {
-    backgroundColor: COLORS.amber500,
-  },
-  freeBadge: {
-    backgroundColor: COLORS.green500,
-  },
-  soldOutOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  soldOutText: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: COLORS.white,
-    letterSpacing: 1,
-  },
   dealInfo: {
     padding: 10,
-  },
-  dealStore: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: COLORS.navy,
-    marginBottom: 4,
-  },
-  dealValueContainer: {
-    gap: 1,
-  },
-  dealCashback: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.emerald500,
-  },
-  dealCoinsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  dealCoins: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.amber500,
-  },
-  dealBonus: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.purple500,
-  },
-  dealDrop: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.red500,
-  },
-  dealValueLabel: {
-    fontSize: 10,
-    color: COLORS.gray600,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
 
   // View More Card

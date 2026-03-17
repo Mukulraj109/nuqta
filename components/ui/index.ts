@@ -23,3 +23,4 @@ export { AnimatedButton } from './AnimatedButton';
 export { ShimmerSkeleton } from './ShimmerSkeleton';
 export { default as CachedImage, prefetchImages } from './CachedImage';
 export type { CachedImageProps } from './CachedImage';
+export { default as OfferTile } from './OfferTile';

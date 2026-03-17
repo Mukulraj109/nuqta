@@ -90,18 +90,9 @@ const ReferralPageContent = () => {
   const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isMountedRef = useRef(true);
 
-  // ✅ FIX #1: Authentication verification
+  // AuthContext navigation guard handles unauthenticated redirect
   useEffect(() => {
-    // Check if user is authenticated before loading data
-    if (!isAuthenticated) {
-      platformAlertConfirm(
-        'Authentication Required',
-        'Please sign in to view your referral information',
-        () => router.replace('/sign-in'),
-        'Sign In'
-      );
-      return;
-    }
+    if (!isAuthenticated) return;
 
     // ✅ Analytics: Track referral page view
     analyticsService.track('referral_page_viewed');

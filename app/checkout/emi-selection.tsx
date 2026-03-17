@@ -106,7 +106,7 @@ export default function EMISelectionPage() {
   const handleContinue = () => {
     if (selectedBank && selectedTenure) {
       // In real app, pass EMI details to payment
-      router.push('/checkout/payment' as any);
+      router.push('/payment' as any);
     }
   };
 

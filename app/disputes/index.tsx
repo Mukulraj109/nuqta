@@ -14,15 +14,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/contexts/AuthContext';
 import disputeApi, { Dispute } from '@/services/disputeApi';
 import { CachedImage } from '@/components/ui/CachedImage';
+import { colors, typography, spacing, borderRadius, shadows } from '@/constants/theme';
 
 const STATUS_COLORS: Record<string, string> = {
-  open: '#EF4444',
-  under_review: '#F59E0B',
-  escalated: '#8B5CF6',
-  resolved_refund: '#10B981',
-  resolved_reject: '#3B82F6',
-  auto_resolved: '#6366F1',
-  closed: '#6B7280',
+  open: colors.error,
+  under_review: colors.warningScale[400],
+  escalated: colors.brand.purpleLight,
+  resolved_refund: colors.successScale[400],
+  resolved_reject: colors.brand.blue,
+  auto_resolved: colors.brand.indigo,
+  closed: colors.neutral[500],
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -66,7 +67,7 @@ export default function DisputeListScreen() {
         setHasMore(pagination?.hasNext ?? false);
       }
     } catch (err) {
-      console.error('Failed to fetch disputes:', err);
+      if (__DEV__) console.error('Failed to fetch disputes:', err);
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -90,7 +91,7 @@ export default function DisputeListScreen() {
   }, [loadingMore, hasMore, page, fetchDisputes]);
 
   const renderDispute = useCallback(({ item }: { item: Dispute }) => {
-    const statusColor = STATUS_COLORS[item.status] || '#6B7280';
+    const statusColor = STATUS_COLORS[item.status] || colors.neutral[500];
 
     return (
       <TouchableOpacity
@@ -109,11 +110,11 @@ export default function DisputeListScreen() {
 
         <View style={styles.cardBody}>
           <View style={styles.cardRow}>
-            <Ionicons name="receipt-outline" size={14} color="#6B7280" />
+            <Ionicons name="receipt-outline" size={14} color={colors.neutral[500]} />
             <Text style={styles.cardRowText}>Order: {item.targetRef}</Text>
           </View>
           <View style={styles.cardRow}>
-            <Ionicons name="alert-circle-outline" size={14} color="#6B7280" />
+            <Ionicons name="alert-circle-outline" size={14} color={colors.neutral[500]} />
             <Text style={styles.cardRowText}>{item.reason.replace(/_/g, ' ')}</Text>
           </View>
         </View>
@@ -123,7 +124,7 @@ export default function DisputeListScreen() {
           <Text style={styles.dateText}>
             {new Date(item.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
           </Text>
-          <Ionicons name="chevron-forward" size={16} color="#9CA3AF" />
+          <Ionicons name="chevron-forward" size={16} color={colors.neutral[400]} />
         </View>
       </TouchableOpacity>
     );
@@ -132,7 +133,7 @@ export default function DisputeListScreen() {
   if (loading && !refreshing) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#7C3AED" />
+        <ActivityIndicator size="large" color={colors.brand.purple} />
       </View>
     );
   }
@@ -144,14 +145,14 @@ export default function DisputeListScreen() {
         keyExtractor={(item) => item._id}
           estimatedItemSize={70}
         renderItem={renderDispute}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#7C3AED" />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.brand.purple} />}
         onEndReached={loadMore}
         onEndReachedThreshold={0.3}
         ListFooterComponent={loadingMore ? <ActivityIndicator size="small" style={{ padding: 16 }} /> : null}
         ListEmptyComponent={
           <View style={styles.emptyState}>
             <View style={styles.emptyIcon}>
-              <Ionicons name="shield-checkmark-outline" size={40} color="#9CA3AF" />
+              <Ionicons name="shield-checkmark-outline" size={40} color={colors.neutral[400]} />
             </View>
             <Text style={styles.emptyTitle}>No Disputes</Text>
             <Text style={styles.emptySubtitle}>You haven't raised any disputes yet</Text>
@@ -167,33 +168,29 @@ export default function DisputeListScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8FAFC', padding: 16 },
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F8FAFC' },
+  container: { flex: 1, backgroundColor: colors.tint.coolGray, padding: spacing.base },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.tint.coolGray },
 
   card: {
-    backgroundColor: '#fff', borderRadius: 14, padding: 14, marginBottom: 10,
-    ...Platform.select({
-      ios: { shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 6, shadowOffset: { width: 0, height: 2 } },
-      android: { elevation: 2 },
-      web: { boxShadow: '0 1px 4px rgba(0,0,0,0.06)' },
-    }),
+    backgroundColor: colors.background.primary, borderRadius: 14, padding: 14, marginBottom: 10,
+    ...shadows.subtle,
   },
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
-  disputeNumber: { fontSize: 14, fontWeight: '700', color: '#111827' },
+  disputeNumber: { ...typography.label, color: colors.text.primary },
   badge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
-  badgeText: { fontSize: 11, fontWeight: '600' },
+  badgeText: { ...typography.labelSmall },
   cardBody: { gap: 5, marginBottom: 10 },
   cardRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  cardRowText: { fontSize: 13, color: '#6B7280', textTransform: 'capitalize' },
+  cardRowText: { ...typography.body, color: colors.neutral[500], textTransform: 'capitalize' },
   cardFooter: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  amountText: { fontSize: 14, fontWeight: '700', color: '#111827' },
-  dateText: { fontSize: 11, color: '#9CA3AF' },
+  amountText: { ...typography.label, color: colors.text.primary },
+  dateText: { fontSize: 11, color: colors.neutral[400] },
 
   emptyState: { alignItems: 'center', gap: 6 },
   emptyIcon: {
-    width: 72, height: 72, borderRadius: 36, backgroundColor: '#F3F4F6',
-    justifyContent: 'center', alignItems: 'center', marginBottom: 8,
+    width: 72, height: 72, borderRadius: 36, backgroundColor: colors.border.light,
+    justifyContent: 'center', alignItems: 'center', marginBottom: spacing.sm,
   },
-  emptyTitle: { fontSize: 17, fontWeight: '700', color: '#111827' },
-  emptySubtitle: { fontSize: 13, color: '#6B7280' },
+  emptyTitle: { fontSize: 17, fontWeight: '700', color: colors.text.primary },
+  emptySubtitle: { ...typography.body, color: colors.neutral[500] },
 });

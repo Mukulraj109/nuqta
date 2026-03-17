@@ -28,7 +28,7 @@ import gamificationApi, {
   StreakBonus,
 } from '@/services/gamificationApi';
 import { useGamification } from '@/contexts/GamificationContext';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useRefreshWallet } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
@@ -43,6 +43,7 @@ export default function DailyCheckInPage() {
   const insets = useSafeAreaInsets();
   const { actions: gamificationActions } = useGamification();
   const getCurrencySymbol = useGetCurrencySymbol();
+  const refreshWallet = useRefreshWallet();
   const currencySymbol = getCurrencySymbol();
   const scrollViewRef = useRef<ScrollView>(null);
   const postersYPosition = useRef(0);
@@ -342,7 +343,8 @@ export default function DailyCheckInPage() {
             r.day === pendingCheckInReward.day ? { ...r, claimed: true } : r
           ));
 
-          // Sync coins to wallet to reflect the earned coins
+          // Refresh wallet to reflect the earned coins
+          await refreshWallet();
           await gamificationActions.syncCoinsFromWallet();
 
           setTimeout(() => {

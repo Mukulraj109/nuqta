@@ -81,11 +81,8 @@ export default function SocialMediaPage() {
       return;
     }
 
-    // Check if user is authenticated
-    if (!isAuthenticated || !user) {
-      router.replace('/sign-in');
-      return;
-    }
+    // Let AuthContext handle unauthenticated redirect
+    if (!isAuthenticated || !user) return;
 
     loadData();
     loadCompletedOrders();
@@ -149,11 +146,8 @@ export default function SocialMediaPage() {
 
     } catch (error: any) {
 
-      // Check for auth error
+      // Auth errors (401) are handled by apiClient's refresh flow + AuthContext guard
       if (error.response?.status === 401 || error.message?.includes('Access token')) {
-
-        platformAlertSimple('Authentication Required', 'Please sign in to continue');
-        router.replace('/sign-in');
         return;
       }
 

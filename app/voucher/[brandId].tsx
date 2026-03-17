@@ -24,6 +24,7 @@ import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { platformAlertSimple } from '@/utils/platformAlert';
 
 const { width, height } = Dimensions.get('window');
 
@@ -146,7 +147,7 @@ export default function BrandDetailPage() {
           await navigator.share({ title: brand.name, text: shareMessage });
         } else {
           await Clipboard.setStringAsync(shareMessage);
-          alert('Link copied to clipboard!');
+          platformAlertSimple('Copied', 'Link copied to clipboard!');
         }
       } else {
         await RNShare.share({ message: shareMessage, title: brand.name });

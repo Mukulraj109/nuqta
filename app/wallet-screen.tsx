@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useFocusEffect } from 'expo-router';
 import RechargeWalletCard from "../components/RechargeWalletCard";
-import ProfileCompletionCard from "@/components/ProfileCompletionCard";
-import ScratchCardOffer from "@/components/ScratchCardOffer";
-import scratchImage from "@/assets/images/scratch-offer.png";
 import ReferAndEarnCard from "@/components/ReferAndEarnCard";
 import {
   View,
@@ -22,7 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { CoinBalance, WalletScreenProps, COIN_TYPES, CoinType } from '@/types/wallet';
-import { useGetCurrency, useAuthUser, useIsAuthenticated, useAuthLoading, useWalletData, useWalletLoading, useWalletRefreshing, useRefreshWallet } from '@/stores/selectors';
+import { useGetCurrency, useGetCurrencySymbol, useAuthUser, useIsAuthenticated, useAuthLoading, useWalletData, useWalletLoading, useWalletRefreshing, useRefreshWallet } from '@/stores/selectors';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { useProfile } from '@/contexts/ProfileContext';
 import { useReferral } from '@/hooks/useReferral';
@@ -37,6 +34,8 @@ import { InsightSection } from '@/components/wallet/InsightSection';
 import { TransactionCTA } from '@/components/wallet/TransactionCTA';
 import { MoreForYouSection } from '@/components/wallet/MoreForYouSection';
 import CoinEducationOverlay from '@/components/wallet/CoinEducationOverlay';
+import SavingsHero from '@/components/wallet/SavingsHero';
+import CoinProportionBar from '@/components/wallet/CoinProportionBar';
 import { platformAlert } from '@/utils/platformAlert';
 import { ThemedText } from '@/components/ThemedText';
 import { BRAND } from '@/constants/brand';
@@ -56,8 +55,11 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
   const router = useRouter();
   const { goBack } = useSafeNavigation();
   const getCurrency = useGetCurrency();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const currencySymbol = getCurrencySymbol();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
   const [coinEducationVisible, setCoinEducationVisible] = useState(false);
+  const [isBalanceHidden, setIsBalanceHidden] = useState(false);
 
   const walletData = useWalletData();
   const walletLoading = useWalletLoading();
@@ -83,6 +85,27 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
     });
     return () => subscription?.remove();
   }, []);
+
+  // Sync balance hidden state from AsyncStorage (same key as BalanceDisplay)
+  useEffect(() => {
+    AsyncStorage.getItem('@wallet_balance_hidden').then(val => {
+      if (val === 'true') setIsBalanceHidden(true);
+    }).catch(() => {});
+  }, []);
+
+  // Compute coin balances for CoinProportionBar
+  const rezBalance = useMemo(() => {
+    const rezCoin = walletData?.coins?.find(c => c.type === 'rez' || c.type === 'nuqta');
+    return rezCoin?.amount ?? 0;
+  }, [walletData?.coins]);
+
+  const promoBalance = useMemo(() => {
+    const promoCoin = walletData?.coins?.find(c => c.type === 'promo');
+    return promoCoin?.amount ?? 0;
+  }, [walletData?.coins]);
+
+  const totalBrandedCoins = walletData?.brandedCoinsTotal ?? 0;
+  const totalBalance = walletData?.totalBalance ?? 0;
 
   useEffect(() => {
     trackWalletViewed();
@@ -347,6 +370,14 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
               <Ionicons name="settings-outline" size={20} color={Colors.text.inverse} />
             </Pressable>
           </View>
+
+          {/* Savings Hero - inside gradient header for white-on-dark text */}
+          <SavingsHero
+            totalSaved={walletData?.savingsInsights?.totalSaved ?? 0}
+            thisMonth={walletData?.savingsInsights?.thisMonth ?? 0}
+            currencySymbol={currencySymbol}
+            isHidden={isBalanceHidden}
+          />
         </LinearGradient>
 
         {/* Scrollable Content */}
@@ -380,6 +411,15 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
           <BalanceDisplay
             walletData={walletData}
             onCoinPress={handleCoinTypePress}
+          />
+
+          {/* Coin Proportion Bar */}
+          <CoinProportionBar
+            rezBalance={rezBalance}
+            promoBalance={promoBalance}
+            brandedBalance={totalBrandedCoins}
+            totalBalance={totalBalance}
+            currencySymbol={currencySymbol}
           />
 
           {/* Coin Expiry Warning */}

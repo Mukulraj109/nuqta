@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { platformAlertSimple } from '@/utils/platformAlert';
 
 export default function MaintenancePage() {
   const router = useRouter();
@@ -80,7 +81,7 @@ export default function MaintenancePage() {
   const handleNotifyMe = () => {
     // In production, register for push notification when maintenance ends
     // For now, just show a message
-    alert('We\'ll notify you when the app is back online!');
+    platformAlertSimple('Notification Set', 'We\'ll notify you when the app is back online!');
   };
 
   return (

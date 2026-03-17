@@ -626,7 +626,7 @@ export default function AdminSocialMediaPosts() {
         >
           <View
             style={styles.modalContent}
-            accessibilityRole="dialog"
+            accessibilityRole="none"
             accessibilityLabel="Reject post form"
           >
             <View

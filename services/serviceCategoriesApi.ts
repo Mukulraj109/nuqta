@@ -109,7 +109,7 @@ class ServiceCategoriesService {
    */
   async getServiceCategories(includeCount: boolean = true): Promise<ApiResponse<ServiceCategory[]>> {
     try {
-      const response = await apiClient.get<{ data: ServiceCategory[]; count: number }>(
+      const response = await apiClient.get<ServiceCategory[]>(
         '/service-categories',
         { includeCount: includeCount.toString() }
       );
@@ -121,9 +121,8 @@ class ServiceCategoriesService {
         };
       }
 
-      // Add cashbackText to each category
-      // response.data is already the array (apiClient unwraps responseData.data)
-      const rawCategories = Array.isArray(response.data) ? response.data : (response.data?.data || []);
+      // apiClient already unwraps responseData.data, so response.data is the categories array
+      const rawCategories = Array.isArray(response.data) ? response.data : [];
       const categories = rawCategories.map((cat: ServiceCategory) => ({
         ...cat,
         cashbackText: `Up to ${cat.cashbackPercentage}% cash back`
@@ -153,7 +152,7 @@ class ServiceCategoriesService {
         };
       }
 
-      const response = await apiClient.get<{ data: ServiceCategory }>(
+      const response = await apiClient.get<ServiceCategory>(
         `/service-categories/${slug}`
       );
 
@@ -164,7 +163,7 @@ class ServiceCategoriesService {
         };
       }
 
-      const category = response.data?.data;
+      const category = response.data;
       if (category) {
         category.cashbackText = `Up to ${category.cashbackPercentage}% cash back`;
       }
@@ -254,7 +253,7 @@ class ServiceCategoriesService {
         };
       }
 
-      const response = await apiClient.get<{ data: ServiceCategory[]; parent: ServiceCategory }>(
+      const response = await apiClient.get<ServiceCategory[]>(
         `/service-categories/${slug}/children`
       );
 
@@ -267,7 +266,7 @@ class ServiceCategoriesService {
 
       return {
         success: true,
-        data: response.data?.data || []
+        data: Array.isArray(response.data) ? response.data : []
       };
     } catch (error) {
       return {

@@ -28,7 +28,7 @@ export const LoyaltyProgressSection: React.FC<LoyaltyProgressSectionProps> = ({
   const router = useRouter();
   const { theme, isDark } = useOffersTheme();
 
-  if (progress.length === 0) return null;
+  if (!progress?.length) return null;
 
   const handleProgressPress = (_item: LoyaltyProgress) => {
     router.push('/loyalty' as any);

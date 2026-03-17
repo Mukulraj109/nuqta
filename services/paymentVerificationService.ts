@@ -129,8 +129,14 @@ class PaymentVerificationService {
       }
     }
 
-    // Mock verification for testing
-    return this.mockCardVerification(request);
+    // Mock verification for testing — only in development
+    if (__DEV__) {
+      return this.mockCardVerification(request);
+    }
+    return {
+      success: false,
+      error: 'No payment gateway configured for card verification',
+    };
   }
 
   /**
@@ -193,11 +199,23 @@ class PaymentVerificationService {
         return response;
       }
 
-      // Fallback to mock
-      return this.mockBankVerification(request);
+      // Fallback to mock only in development
+      if (__DEV__) {
+        return this.mockBankVerification(request);
+      }
+      return {
+        success: false,
+        error: 'Bank verification failed',
+      };
     } catch (error: any) {
       devLog.error('❌ [VERIFICATION] Bank verification failed:', error);
-      return this.mockBankVerification(request);
+      if (__DEV__) {
+        return this.mockBankVerification(request);
+      }
+      return {
+        success: false,
+        error: error.message || 'Failed to initiate bank verification',
+      };
     }
   }
 
@@ -265,11 +283,23 @@ class PaymentVerificationService {
         return response;
       }
 
-      // Fallback to mock
-      return this.mockUPIVerification(request);
+      // Fallback to mock only in development
+      if (__DEV__) {
+        return this.mockUPIVerification(request);
+      }
+      return {
+        success: false,
+        error: 'UPI verification failed',
+      };
     } catch (error: any) {
       devLog.error('❌ [VERIFICATION] UPI verification failed:', error);
-      return this.mockUPIVerification(request);
+      if (__DEV__) {
+        return this.mockUPIVerification(request);
+      }
+      return {
+        success: false,
+        error: error.message || 'Failed to initiate UPI verification',
+      };
     }
   }
 
@@ -321,11 +351,23 @@ class PaymentVerificationService {
         return response;
       }
 
-      // Fallback to mock
-      return this.mockKYCVerification(request);
+      // Fallback to mock only in development
+      if (__DEV__) {
+        return this.mockKYCVerification(request);
+      }
+      return {
+        success: false,
+        error: 'KYC document upload failed',
+      };
     } catch (error: any) {
       devLog.error('❌ [VERIFICATION] KYC upload failed:', error);
-      return this.mockKYCVerification(request);
+      if (__DEV__) {
+        return this.mockKYCVerification(request);
+      }
+      return {
+        success: false,
+        error: error.message || 'Failed to upload KYC documents',
+      };
     }
   }
 
@@ -365,11 +407,23 @@ class PaymentVerificationService {
         return response;
       }
 
-      // Fallback to mock
-      return this.mockSendOTP(request);
+      // Fallback to mock only in development
+      if (__DEV__) {
+        return this.mockSendOTP(request);
+      }
+      return {
+        success: false,
+        error: 'Failed to send OTP',
+      };
     } catch (error: any) {
       devLog.error('❌ [VERIFICATION] OTP send failed:', error);
-      return this.mockSendOTP(request);
+      if (__DEV__) {
+        return this.mockSendOTP(request);
+      }
+      return {
+        success: false,
+        error: error.message || 'Failed to send OTP',
+      };
     }
   }
 
@@ -515,11 +569,23 @@ class PaymentVerificationService {
         return response;
       }
 
-      // Fallback to mock
-      return this.mockVerificationStatus(paymentMethodId);
+      // Fallback to mock only in development
+      if (__DEV__) {
+        return this.mockVerificationStatus(paymentMethodId);
+      }
+      return {
+        success: false,
+        error: 'Failed to get verification status',
+      };
     } catch (error: any) {
       devLog.error('❌ [VERIFICATION] Status check failed:', error);
-      return this.mockVerificationStatus(paymentMethodId);
+      if (__DEV__) {
+        return this.mockVerificationStatus(paymentMethodId);
+      }
+      return {
+        success: false,
+        error: error.message || 'Failed to check verification status',
+      };
     }
   }
 

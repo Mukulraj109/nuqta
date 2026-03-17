@@ -355,7 +355,29 @@ const LoyaltyPage = () => {
     );
   }
 
-  if (!balance) return null;
+  if (!balance) {
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor={Colors.brand.purple} />
+        <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple]} style={styles.header}>
+          <View style={styles.headerContent}>
+            <Pressable style={styles.backButton} onPress={() => router.back()} accessibilityRole="button">
+              <Ionicons name="arrow-back" size={24} color="white" />
+            </Pressable>
+            <ThemedText style={styles.headerTitle}>Loyalty Rewards</ThemedText>
+            <View style={styles.headerButton} />
+          </View>
+        </LinearGradient>
+        <View style={styles.loadingContainer}>
+          <Ionicons name="gift-outline" size={64} color={Colors.brand.purple} />
+          <ThemedText style={styles.loadingText}>No loyalty data available yet.</ThemedText>
+          <Pressable style={styles.retryButton} onPress={refresh} accessibilityRole="button">
+            <ThemedText style={styles.retryButtonText}>Refresh</ThemedText>
+          </Pressable>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

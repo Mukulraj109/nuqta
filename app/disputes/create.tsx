@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/contexts/AuthContext';
 import disputeApi from '@/services/disputeApi';
 import { platformAlert } from '@/utils/platformAlert';
+import { colors, typography, spacing, borderRadius } from '@/constants/theme';
 
 const REASONS = [
   { key: 'item_not_received', label: 'Item Not Received', icon: 'cube-outline' },
@@ -121,7 +122,7 @@ export default function CreateDisputeScreen() {
 
       {params.orderRef && (
         <View style={styles.orderRefCard}>
-          <Ionicons name="receipt-outline" size={16} color="#7C3AED" />
+          <Ionicons name="receipt-outline" size={16} color={colors.brand.purple} />
           <Text style={styles.orderRefText}>Order: {params.orderRef}</Text>
         </View>
       )}
@@ -140,7 +141,7 @@ export default function CreateDisputeScreen() {
                 <Ionicons
                   name={r.icon as any}
                   size={18}
-                  color={reason === r.key ? '#fff' : '#6B7280'}
+                  color={reason === r.key ? colors.text.inverse : colors.neutral[500]}
                 />
                 <Text style={[styles.reasonText, reason === r.key && styles.reasonTextActive]}>
                   {r.label}
@@ -200,42 +201,42 @@ export default function CreateDisputeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8FAFC', padding: 16 },
-  pageTitle: { fontSize: 22, fontWeight: '700', color: '#111827', marginBottom: 16 },
+  container: { flex: 1, backgroundColor: colors.tint.coolGray, padding: spacing.base },
+  pageTitle: { ...typography.h2, color: colors.text.primary, marginBottom: spacing.base },
 
   orderRefCard: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: '#F5F3FF', borderRadius: 10, padding: 12, marginBottom: 16,
-    borderWidth: 1, borderColor: '#DDD6FE',
+    flexDirection: 'row', alignItems: 'center', gap: spacing.sm,
+    backgroundColor: colors.tint.purpleLight, borderRadius: 10, padding: spacing.md, marginBottom: spacing.base,
+    borderWidth: 1, borderColor: colors.tint.purple,
   },
-  orderRefText: { fontSize: 14, fontWeight: '600', color: '#7C3AED' },
+  orderRefText: { ...typography.label, color: colors.brand.purple },
 
-  section: { marginBottom: 20 },
-  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#111827', marginBottom: 10 },
+  section: { marginBottom: spacing.lg },
+  sectionTitle: { fontSize: 15, fontWeight: '700', color: colors.text.primary, marginBottom: 10 },
 
-  reasonGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  reasonGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   reasonChip: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
-    paddingHorizontal: 14, paddingVertical: 10, borderRadius: 20,
-    backgroundColor: '#fff', borderWidth: 1, borderColor: '#E5E7EB',
+    paddingHorizontal: 14, paddingVertical: 10, borderRadius: borderRadius.full,
+    backgroundColor: colors.background.primary, borderWidth: 1, borderColor: colors.border.default,
   },
-  reasonChipActive: { backgroundColor: '#7C3AED', borderColor: '#7C3AED' },
-  reasonText: { fontSize: 13, color: '#374151' },
-  reasonTextActive: { color: '#fff', fontWeight: '600' },
+  reasonChipActive: { backgroundColor: colors.brand.purple, borderColor: colors.brand.purple },
+  reasonText: { ...typography.body, color: colors.neutral[700] },
+  reasonTextActive: { color: colors.text.inverse, fontWeight: '600' },
 
   textArea: {
-    backgroundColor: '#fff', borderRadius: 12, padding: 14,
-    fontSize: 14, minHeight: 120, borderWidth: 1, borderColor: '#E5E7EB',
-    color: '#111827', lineHeight: 20,
+    backgroundColor: colors.background.primary, borderRadius: borderRadius.md, padding: 14,
+    fontSize: 14, minHeight: 120, borderWidth: 1, borderColor: colors.border.default,
+    color: colors.text.primary, lineHeight: 20,
   },
-  charCount: { fontSize: 11, color: '#9CA3AF', textAlign: 'right', marginTop: 4 },
+  charCount: { fontSize: 11, color: colors.neutral[400], textAlign: 'right', marginTop: spacing.xs },
 
   submitBtn: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, backgroundColor: '#7C3AED', borderRadius: 12,
-    paddingVertical: 14, marginBottom: 12,
+    gap: spacing.sm, backgroundColor: colors.brand.purple, borderRadius: borderRadius.md,
+    paddingVertical: 14, marginBottom: spacing.md,
   },
-  submitBtnText: { fontSize: 15, fontWeight: '600', color: '#fff' },
+  submitBtnText: { fontSize: 15, fontWeight: '600', color: colors.text.inverse },
 
-  disclaimer: { fontSize: 12, color: '#9CA3AF', textAlign: 'center', lineHeight: 18, paddingHorizontal: 10 },
+  disclaimer: { ...typography.bodySmall, color: colors.neutral[400], textAlign: 'center', lineHeight: 18, paddingHorizontal: 10 },
 });

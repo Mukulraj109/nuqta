@@ -91,8 +91,8 @@ export default function ChangePasswordPage() {
           'Password Changed',
           'Your password has been changed successfully. You will be logged out for security.',
           async () => {
+            // AuthContext navigation guard handles redirect after logout
             await actions.logout();
-            router.replace('/sign-in');
           },
           'OK'
         );

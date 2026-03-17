@@ -20,7 +20,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
+import { useAuthUser, useIsAuthenticated, useAuthLoading, useRefreshWallet } from '@/stores/selectors';
 import { useGamification } from '@/contexts/GamificationContext';
 import { platformAlert, platformAlertSimple } from '@/utils/platformAlert';
 import { useScratchCard } from '@/hooks/useScratchCard';
@@ -37,6 +37,7 @@ export default function ScratchCardPage() {
   const isAuthenticated = useIsAuthenticated();
   const authLoading = useAuthLoading();
   const { actions: gamificationActions } = useGamification();
+  const refreshWallet = useRefreshWallet();
   const {
     state: cardState,
     eligibility,
@@ -67,9 +68,8 @@ export default function ScratchCardPage() {
           hasLoadedRef.current = true;
           checkEligibility();
         }
-      } else {
-        router.replace({ pathname: '/sign-in', params: { returnTo: '/scratch-card' } } as any);
       }
+      // AuthContext navigation guard handles unauthenticated redirect
     }
   }, [isAuthenticated, authLoading]);
 
@@ -153,6 +153,7 @@ export default function ScratchCardPage() {
 
         // Refresh wallet balance from server
         try {
+          await refreshWallet();
           await gamificationActions.loadGamificationData(true);
         } catch (e) {
           // Non-blocking — balance will refresh on next navigation
@@ -160,7 +161,7 @@ export default function ScratchCardPage() {
       }
       setIsAnimating(false);
     });
-  }, [session, isAnimating, revealPrize, scratchAnim, prizeScaleAnim, gamificationActions]);
+  }, [session, isAnimating, revealPrize, scratchAnim, prizeScaleAnim, gamificationActions, refreshWallet]);
 
   /** Retry failed claim */
   const handleRetry = useCallback(async () => {
@@ -169,12 +170,13 @@ export default function ScratchCardPage() {
     if (success) {
       // Refresh wallet balance
       try {
+        await refreshWallet();
         await gamificationActions.loadGamificationData(true);
       } catch (e) { /* non-blocking */ }
     } else {
       platformAlertSimple('Retry Failed', 'Please try again or contact support.');
     }
-  }, [session, retryClaim, gamificationActions]);
+  }, [session, retryClaim, gamificationActions, refreshWallet]);
 
   /** Done — go back and refresh eligibility */
   const handleDone = useCallback(() => {

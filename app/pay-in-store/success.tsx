@@ -41,7 +41,10 @@ export default function PaymentSuccessScreen() {
   const currencySymbol = getCurrencySymbol();
 
   // Parse rewards - handle both old and new format
-  const rawRewards = rewardsParam ? JSON.parse(rewardsParam) : {};
+  let rawRewards: any = {};
+  if (rewardsParam) {
+    try { rawRewards = JSON.parse(rewardsParam); } catch { rawRewards = {}; }
+  }
   const rewards: PaymentRewards = {
     cashbackEarned: rawRewards.cashbackEarned || rawRewards.cashback || 0,
     coinsEarned: rawRewards.coinsEarned || 0,

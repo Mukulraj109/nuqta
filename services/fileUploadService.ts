@@ -5,6 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { Platform } from 'react-native';
 import { platformAlertSimple, platformAlert } from '@/utils/platformAlert';
+import apiClient from './apiClient';
 
 export interface UploadOptions {
   allowsEditing?: boolean;
@@ -33,12 +34,6 @@ export interface UploadProgress {
 }
 
 class FileUploadService {
-  private baseUrl: string;
-
-  constructor() {
-    // In real app, this would come from environment config
-    this.baseUrl = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001/api';
-  }
 
   // Request permissions for camera and media library
   async requestPermissions(): Promise<boolean> {
@@ -162,82 +157,64 @@ class FileUploadService {
     return results;
   }
 
-  // Upload file to server
+  // Map upload type to the correct backend endpoint and form field name
+  private getUploadConfig(uploadType: 'profile' | 'ugc' | 'review'): { endpoint: string; fieldName: string } {
+    switch (uploadType) {
+      case 'profile':
+        return { endpoint: '/user/profile/picture', fieldName: 'profilePicture' };
+      case 'review':
+        return { endpoint: '/reviews/upload-image', fieldName: 'image' };
+      case 'ugc':
+      default:
+        return { endpoint: '/projects/upload', fieldName: 'file' };
+    }
+  }
+
+  // Upload file to server via backend Cloudinary endpoint
   async uploadFile(
     file: UploadResult,
     uploadType: 'profile' | 'ugc' | 'review',
     onProgress?: (progress: UploadProgress) => void
   ): Promise<{ url: string; thumbnailUrl?: string }> {
+    const { endpoint, fieldName } = this.getUploadConfig(uploadType);
+
+    // Create form data
+    const formData = new FormData();
+
+    // Add the file with the correct field name for the backend multer middleware
+    formData.append(fieldName, {
+      uri: file.uri,
+      type: file.mimeType || (file.type === 'image' ? 'image/jpeg' : 'video/mp4'),
+      name: file.fileName || 'upload.jpg',
+    } as any);
+
+    // Add metadata
+    formData.append('type', uploadType);
+    if (file.width) formData.append('width', file.width.toString());
+    if (file.height) formData.append('height', file.height.toString());
+    if (file.duration) formData.append('duration', file.duration.toString());
+
+    // Signal start of upload
+    onProgress?.({ loaded: 0, total: 100, percentage: 0 });
+
     try {
-      // Create form data
-      const formData = new FormData();
-      
-      // Add the file
-      formData.append('file', {
-        uri: file.uri,
-        type: file.mimeType || (file.type === 'image' ? 'image/jpeg' : 'video/mp4'),
-        name: file.fileName || 'upload.jpg',
-      } as any);
+      const response = await apiClient.uploadFile<{
+        url: string;
+        thumbnailUrl?: string;
+        publicId?: string;
+      }>(endpoint, formData);
 
-      // Add metadata
-      formData.append('type', uploadType);
-      formData.append('width', file.width?.toString() || '');
-      formData.append('height', file.height?.toString() || '');
-      
-      if (file.duration) {
-        formData.append('duration', file.duration.toString());
+      // Signal upload complete
+      onProgress?.({ loaded: 100, total: 100, percentage: 100 });
+
+      if (response.success && response.data) {
+        return {
+          url: response.data.url,
+          thumbnailUrl: response.data.thumbnailUrl,
+        };
       }
 
-      // Mock upload with progress
-      return new Promise((resolve, reject) => {
-        // Simulate upload progress
-        let progress = 0;
-        const interval = setInterval(() => {
-          progress += 10 + Math.random() * 20;
-          if (progress > 100) progress = 100;
-          
-          onProgress?.({
-            loaded: progress,
-            total: 100,
-            percentage: Math.round(progress),
-          });
-
-          if (progress >= 100) {
-            clearInterval(interval);
-            
-            // Mock successful response
-            setTimeout(() => {
-              const mockUrl = `https://cdn.example.com/uploads/${uploadType}/${Date.now()}_${file.fileName}`;
-              const thumbnailUrl = file.type === 'video' 
-                ? `https://cdn.example.com/thumbnails/${Date.now()}_thumb.jpg`
-                : undefined;
-
-              resolve({
-                url: mockUrl,
-                thumbnailUrl,
-              });
-            }, 500);
-          }
-        }, 200);
-      });
-
-      /* Real implementation would look like this:
-      const response = await fetch(`${this.baseUrl}/${uploadType}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${authToken}`,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Upload failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      return result;
-      */
+      throw new Error(response.error || 'Upload failed');
     } catch (error) {
       throw error;
     }

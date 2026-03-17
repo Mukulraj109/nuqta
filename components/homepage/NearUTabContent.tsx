@@ -11,8 +11,10 @@
 
 import React, { Suspense, useCallback } from 'react';
 import { View, Animated } from 'react-native';
+import { useRouter } from 'expo-router';
 import LazySection from '@/components/homepage/LazySection';
 import { SectionSkeleton } from '@/components/homepage/skeletons';
+import HomeSavingsSummaryCard from '@/components/homepage/HomeSavingsSummaryCard';
 
 // Tier 1: Above the fold - render immediately (static imports)
 import QuickActionsSection from '@/components/homepage/QuickActionsSection';
@@ -189,6 +191,9 @@ interface NearUTabContentProps {
   trendingService: any;
   isLoyaltySectionLoading: boolean;
   scrollY: Animated.Value;
+  totalSaved?: number;
+  thisMonthSaved?: number;
+  currencySymbol?: string;
 }
 
 const NearUTabContent: React.FC<NearUTabContentProps> = ({
@@ -206,7 +211,11 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
   trendingService,
   isLoyaltySectionLoading,
   scrollY,
+  totalSaved,
+  thisMonthSaved,
+  currencySymbol,
 }) => {
+  const router = useRouter();
   // Memoize card renderers
   const renderEventCard = useCallback((item: HomepageSectionItem) => {
     const event = item as EventItem;
@@ -432,18 +441,25 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
   return (
     <>
       {/* ===== TIER 1: Above the fold - render immediately ===== */}
+      <HomeSavingsSummaryCard
+        totalSaved={totalSaved ?? 0}
+        thisMonthSaved={thisMonthSaved ?? 0}
+        currencySymbol={currencySymbol ?? '\u20B9'}
+        onPress={() => router.push('/wallet-screen')}
+      />
       <QuickActionsSection
         voucherCount={voucherCount}
         walletBalance={userPoints}
         newOffersCount={newOffersCount}
       />
-      <HowRezWorksCard />
-      <EarnRezCoinsSection />
+      <ShopByCategorySection />
 
       {/* Quick Reorder — compact cards, above the fold */}
       <QuickReorderSection />
 
       {/* ===== TIER 2: Near fold - static imports, LazySection controls mount ===== */}
+      <HowRezWorksCard />
+      <EarnRezCoinsSection />
       <LazySection sectionId="quick-reorder" scrollY={scrollY} height={180}
         renderSection={() => <QuickReorder limit={5} />} />
       <LazySection sectionId="play-earn-v2" scrollY={scrollY} height={250}
@@ -456,8 +472,6 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
         renderSection={() => <NewOnRezSection />} />
       <LazySection sectionId="events-experiences" scrollY={scrollY} height={300}
         renderSection={() => <EventsExperiencesSection />} />
-      <LazySection sectionId="shop-by-category" scrollY={scrollY} height={300}
-        renderSection={() => <ShopByCategorySection />} />
 
       {/* ===== TIER 3: Below fold - viewport + React.lazy dynamic loading ===== */}
       <LazySection sectionId="beauty-wellness" scrollY={scrollY} height={300}

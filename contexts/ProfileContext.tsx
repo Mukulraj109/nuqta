@@ -239,10 +239,8 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
       setIsModalVisible(false);
 
       // Use AuthContext logout which handles tokens, API calls, etc.
+      // AuthContext navigation guard handles redirect to sign-in automatically
       await authActions.logout();
-      
-      // Navigate to sign-in after logout
-      router.replace('/sign-in');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to logout');
       throw err;

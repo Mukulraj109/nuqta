@@ -18,6 +18,7 @@ import { useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import coinSyncService from '@/services/coinSyncService';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { platformAlertSimple } from '@/utils/platformAlert';
 
 export default function GamificationDashboard() {
   const coinBalance = useRezBalance();
@@ -80,9 +81,9 @@ export default function GamificationDashboard() {
         );
 
         if (syncResult.success) {
-          alert(`Claimed ${coinsEarned} coins! New balance: ${syncResult.newWalletBalance}`);
+          platformAlertSimple('Reward Claimed', `Claimed ${coinsEarned} coins! New balance: ${syncResult.newWalletBalance}`);
         } else {
-          alert(`Claimed ${coinsEarned} coins!`);
+          platformAlertSimple('Reward Claimed', `Claimed ${coinsEarned} coins!`);
         }
 
         // Refresh wallet balance via context + reload gamification data
@@ -90,7 +91,7 @@ export default function GamificationDashboard() {
         loadGamificationData();
       }
     } catch (error: any) {
-      alert(error.response?.data?.message || 'Failed to claim rewards');
+      platformAlertSimple('Error', error.response?.data?.message || 'Failed to claim rewards');
     }
   };
 
@@ -154,11 +155,9 @@ export default function GamificationDashboard() {
           </View>
           <View style={styles.streakRow}>
             {Object.entries(streaks).map(([type, data]: [string, any]) => (
-              <Pressable
+              <View
                 key={type}
                 style={styles.streakCard}
-                onPress={() => router.push('/gamification/streaks' as any)}
-               
               >
                 <LinearGradient
                   colors={
@@ -183,7 +182,7 @@ export default function GamificationDashboard() {
                     <Text style={styles.streakBadgeText}>+{data.current} days</Text>
                   </View>
                 </LinearGradient>
-              </Pressable>
+              </View>
             ))}
           </View>
         </View>
@@ -243,7 +242,7 @@ export default function GamificationDashboard() {
 
           <Pressable
             style={styles.viewAllButton}
-            onPress={() => router.push('/gamification/achievements' as any)}
+            onPress={() => router.push('/badges' as any)}
           >
             <Text style={styles.viewAllText}>View All Achievements</Text>
           </Pressable>
@@ -254,7 +253,7 @@ export default function GamificationDashboard() {
         <View style={styles.content}>
           <Pressable
             style={styles.leaderboardCard}
-            onPress={() => router.push('/leaderboard' as any)}
+            onPress={() => router.push('/playandearn/leaderboard' as any)}
           >
             <Ionicons name="trophy" size={24} color={colors.brand.goldBright} />
             <Text style={styles.leaderboardTitle}>View Leaderboards</Text>

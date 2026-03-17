@@ -1159,11 +1159,13 @@ export function CartProvider({ children }: CartProviderProps) {
     actions: stableCartActions,
   }), [state, stableRefreshCart, stableCartActions]);
 
-  // Sync to Zustand store for crash-safe fallback
+  // Sync to Zustand store for crash-safe fallback (synchronous to avoid one-frame lag)
   const _setFromProvider = useCartStore((s) => s._setFromProvider);
-  useEffect(() => {
+  const prevContextValueRef = useRef(contextValue);
+  if (prevContextValueRef.current !== contextValue) {
+    prevContextValueRef.current = contextValue;
     _setFromProvider(contextValue);
-  }, [contextValue, _setFromProvider]);
+  }
 
   return (
     <CartContext.Provider value={contextValue}>

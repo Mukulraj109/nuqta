@@ -181,7 +181,7 @@ class ServiceBookingService {
         };
       }
 
-      const response = await apiClient.post<{ data: ServiceBooking }>(
+      const response = await apiClient.post<ServiceBooking>(
         '/service-bookings',
         data
       );
@@ -195,7 +195,7 @@ class ServiceBookingService {
 
       return {
         success: true,
-        data: response.data?.data,
+        data: response.data,
         message: 'Booking created successfully'
       };
     } catch (error) {
@@ -222,7 +222,7 @@ class ServiceBookingService {
         Object.entries(queryParams).filter(([_, v]) => v !== undefined)
       );
 
-      const response = await apiClient.get<{ data: ServiceBooking[]; pagination: any }>(
+      const response = await apiClient.get<ServiceBooking[]>(
         '/service-bookings',
         cleanParams
       );
@@ -236,8 +236,8 @@ class ServiceBookingService {
 
       return {
         success: true,
-        data: response.data?.data || [],
-        meta: { pagination: response.data?.pagination }
+        data: Array.isArray(response.data) ? response.data : [],
+        meta: { pagination: response.meta?.pagination }
       };
     } catch (error) {
       return {
@@ -259,7 +259,7 @@ class ServiceBookingService {
         };
       }
 
-      const response = await apiClient.get<{ data: ServiceBooking }>(
+      const response = await apiClient.get<ServiceBooking>(
         `/service-bookings/${bookingId}`
       );
 
@@ -272,7 +272,7 @@ class ServiceBookingService {
 
       return {
         success: true,
-        data: response.data?.data
+        data: response.data
       };
     } catch (error) {
       return {
@@ -294,7 +294,7 @@ class ServiceBookingService {
         };
       }
 
-      const response = await apiClient.put<{ data: ServiceBooking }>(
+      const response = await apiClient.put<ServiceBooking>(
         `/service-bookings/${bookingId}/cancel`,
         { reason }
       );
@@ -308,7 +308,7 @@ class ServiceBookingService {
 
       return {
         success: true,
-        data: response.data?.data,
+        data: response.data,
         message: 'Booking cancelled successfully'
       };
     } catch (error) {
@@ -335,7 +335,7 @@ class ServiceBookingService {
         };
       }
 
-      const response = await apiClient.put<{ data: ServiceBooking }>(
+      const response = await apiClient.put<ServiceBooking>(
         `/service-bookings/${bookingId}/reschedule`,
         { bookingDate, timeSlot }
       );
@@ -349,7 +349,7 @@ class ServiceBookingService {
 
       return {
         success: true,
-        data: response.data?.data,
+        data: response.data,
         message: 'Booking rescheduled successfully'
       };
     } catch (error) {
@@ -383,7 +383,7 @@ class ServiceBookingService {
         };
       }
 
-      const response = await apiClient.post<{ data: { bookingId: string; rating: any } }>(
+      const response = await apiClient.post<{ bookingId: string; rating: any }>(
         `/service-bookings/${bookingId}/rate`,
         { score, review }
       );
@@ -397,7 +397,7 @@ class ServiceBookingService {
 
       return {
         success: true,
-        data: response.data?.data,
+        data: response.data,
         message: 'Rating added successfully'
       };
     } catch (error) {
@@ -423,7 +423,7 @@ class ServiceBookingService {
         };
       }
 
-      const response = await apiClient.get<{ data: AvailableSlotsResponse }>(
+      const response = await apiClient.get<AvailableSlotsResponse>(
         '/service-bookings/available-slots',
         { serviceId, date }
       );
@@ -437,7 +437,7 @@ class ServiceBookingService {
 
       return {
         success: true,
-        data: response.data?.data
+        data: response.data
       };
     } catch (error) {
       return {
