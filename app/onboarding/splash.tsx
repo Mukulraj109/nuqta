@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated, Dimensions, Platform } from 'react-native';
 import analyticsService from '@/services/analyticsService';
@@ -22,7 +23,7 @@ const COLORS = {
   white: Colors.background.primary,
 };
 
-export default function SplashScreen() {
+function SplashScreen() {
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
 
@@ -344,3 +345,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 });
+
+export default withErrorBoundary(SplashScreen, 'OnboardingSplash');

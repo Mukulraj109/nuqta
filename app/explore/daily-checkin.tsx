@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   View,
@@ -38,7 +39,7 @@ import { catchAndWarn } from '@/utils/catchAndReport';
 
 const { width } = Dimensions.get('window');
 
-export default function DailyCheckInPage() {
+function DailyCheckInPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { actions: gamificationActions } = useGamification();
@@ -2082,3 +2083,5 @@ const styles = StyleSheet.create({
   streakResetText: { flex: 1, marginLeft: Spacing.sm, ...Typography.bodySmall, color: '#991B1B' },
   bottomSpacer: { height: 120 },
 });
+
+export default withErrorBoundary(DailyCheckInPage, 'ExploreDailyCheckin');

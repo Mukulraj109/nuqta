@@ -2,6 +2,7 @@
 // Display all subscription tiers with glassmorphism and premium styling
 
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { View, StyleSheet, ScrollView, Pressable, StatusBar, ActivityIndicator, TextInput, Platform, Animated, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -22,7 +23,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { colors } from '@/constants/theme';
 const { width } = Dimensions.get('window');
 
-export default function SubscriptionPlansPage() {
+function SubscriptionPlansPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const { state, actions } = useSubscription();
@@ -1285,3 +1286,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(SubscriptionPlansPage, 'SubscriptionPlans');

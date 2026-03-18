@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Cancellation Feedback Flow
 // Multi-step wizard for subscription cancellation with retention attempts
 
@@ -37,7 +38,7 @@ const CANCELLATION_REASONS: { value: CancellationReason; label: string; icon: st
   { value: 'other', label: 'Other', icon: 'ellipsis-horizontal-outline' },
 ];
 
-export default function CancelFeedbackPage() {
+function CancelFeedbackPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -826,3 +827,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default withErrorBoundary(CancelFeedbackPage, 'SubscriptionCancelFeedback');

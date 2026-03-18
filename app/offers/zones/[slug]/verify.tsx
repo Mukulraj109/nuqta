@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Zone Verification Page
  *
@@ -108,7 +109,7 @@ const ZONE_CONFIG: Record<string, {
   },
 };
 
-export default function ZoneVerifyScreen() {
+function ZoneVerifyScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const router = useRouter();
   const user = useAuthUser();
@@ -744,3 +745,5 @@ const styles = StyleSheet.create({
     marginTop: Spacing.sm,
   },
 });
+
+export default withErrorBoundary(ZoneVerifyScreen, 'OffersZonesSlugVerify');

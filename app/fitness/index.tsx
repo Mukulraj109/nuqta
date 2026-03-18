@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Fitness & Sports Hub Page
  * Connected to real API data
@@ -346,4 +347,4 @@ const styles = StyleSheet.create({
   promoButtonText: { fontSize: Typography.body.fontSize, fontWeight: '700', color: Colors.success },
 });
 
-export default FitnessPage;
+export default withErrorBoundary(FitnessPage, 'FitnessIndex');

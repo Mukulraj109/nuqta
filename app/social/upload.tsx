@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Upload Post/Content Page
 // Create UGC content
 
@@ -41,7 +42,7 @@ interface TaggedStore {
   name: string;
 }
 
-export default function UploadPage() {
+function UploadPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -714,3 +715,5 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
   },
 });
+
+export default withErrorBoundary(UploadPage, 'SocialUpload');

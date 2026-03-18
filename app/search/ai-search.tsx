@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // AI Search Page
 // Natural language product search - connected to real API
 
@@ -52,7 +53,7 @@ const getExamplePrompts = (currencySymbol: string) => [
   "Healthy meal delivery options",
 ];
 
-export default function AISearchPage() {
+function AISearchPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -603,3 +604,5 @@ const styles = StyleSheet.create({
     ...Typography.body,
   },
 });
+
+export default withErrorBoundary(AISearchPage, 'SearchAiSearch');

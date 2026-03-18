@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import {
   View,
@@ -45,7 +46,7 @@ interface VoucherBrandItem {
 const PAGE_SIZE = 20;
 
 // ─── Main Component ─────────────────────────────────────────
-export default function BuyCouponsPage() {
+function BuyCouponsPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -1458,3 +1459,5 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 });
+
+export default withErrorBoundary(BuyCouponsPage, 'CashStoreBuyCoupons');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Modern Payment Page
 // Production-ready payment interface with Stripe integration
 
@@ -35,7 +36,7 @@ import { BRAND } from '@/constants/brand';
 // Initialize Stripe lazily — SDK is only loaded when this promise is first awaited
 const stripePromise = getStripePromise(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
-export default function PaymentPage() {
+function PaymentPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const getCurrency = useGetCurrency();
@@ -1349,3 +1350,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(PaymentPage, 'Payment');

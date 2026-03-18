@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback } from 'react';
 import {
   View,
@@ -27,7 +28,7 @@ const REASONS = [
   { key: 'other', label: 'Other', icon: 'ellipsis-horizontal-outline' },
 ] as const;
 
-export default function CreateDisputeScreen() {
+function CreateDisputeScreen() {
   const router = useRouter();
   const { isAuthenticated } = useAuth();
   const params = useLocalSearchParams<{
@@ -240,3 +241,5 @@ const styles = StyleSheet.create({
 
   disclaimer: { ...typography.bodySmall, color: colors.neutral[400], textAlign: 'center', lineHeight: 18, paddingHorizontal: 10 },
 });
+
+export default withErrorBoundary(CreateDisputeScreen, 'DisputesCreate');

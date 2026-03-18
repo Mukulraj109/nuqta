@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Lowest Price / Best Price Page
 // Real price comparison using products-grouped API
 
@@ -53,7 +54,7 @@ const POPULAR_QUERIES = [
   'Shoes', 'T-shirt', 'Perfume', 'Skincare', 'Rice',
 ];
 
-export default function LowestPricePage() {
+function LowestPricePage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -848,3 +849,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
 });
+
+export default withErrorBoundary(LowestPricePage, 'MallLowestPrice');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, Pressable,
@@ -13,7 +14,7 @@ import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { catchAndReport } from '@/utils/catchAndReport';
 
-export default function ConciergeScreen() {
+function ConciergeScreen() {
   const { tier } = usePriveEligibility();
   const tierRank: Record<string, number> = { none: 0, entry: 1, signature: 2, elite: 3 };
 
@@ -259,3 +260,5 @@ const styles = StyleSheet.create({
   lastMessage: { fontSize: 12, color: PRIVE_COLORS.text.secondary, marginBottom: PRIVE_SPACING.sm },
   ticketDate: { fontSize: 11, color: PRIVE_COLORS.text.tertiary },
 });
+
+export default withErrorBoundary(ConciergeScreen, 'PriveConcierge');

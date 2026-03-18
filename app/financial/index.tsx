@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Financial Services Hub Page
  * Connected to /api/services (financial category)
@@ -507,4 +508,4 @@ const FinancialPageWithErrorBoundary: React.FC = () => {
   );
 };
 
-export default FinancialPageWithErrorBoundary;
+export default withErrorBoundary(FinancialPageWithErrorBoundary, 'FinancialIndex');

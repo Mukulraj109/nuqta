@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // AIInsightCard.tsx - AI-powered savings insight card
 import { colors } from '@/constants/theme';
 import React from "react";
@@ -17,7 +18,7 @@ export interface AIInsightCardProps {
   bestTimeToVisit?: string;
 }
 
-export default function AIInsightCard({
+function AIInsightCard({
   insightText = "You usually save more here on weekends",
   bestTimeToVisit = "7-9pm",
 }: AIInsightCardProps) {
@@ -86,3 +87,5 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 });
+
+export default withErrorBoundary(AIInsightCard, 'MainStoreSectionAIInsightCard');

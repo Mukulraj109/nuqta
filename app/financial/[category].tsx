@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Financial Category Page - Dynamic route
  */
@@ -263,4 +264,4 @@ const FinancialCategoryPageWithErrorBoundary: React.FC = () => {
   );
 };
 
-export default FinancialCategoryPageWithErrorBoundary;
+export default withErrorBoundary(FinancialCategoryPageWithErrorBoundary, 'FinancialCategory');

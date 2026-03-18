@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Transactions Page
 // Displays user's transaction history with filtering and search
 
@@ -158,7 +159,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction, onPress,
   );
 };
 
-export default function TransactionsPage() {
+function TransactionsPage() {
   const router = useRouter();
   const [transactions, setTransactions] = useState<TransactionResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -585,3 +586,4 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+export default withErrorBoundary(TransactionsPage, 'TransactionsIndex');

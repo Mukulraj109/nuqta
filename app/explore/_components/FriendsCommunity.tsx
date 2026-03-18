@@ -117,7 +117,7 @@ const FriendsCommunity = () => {
     return (
       <View style={styles.container}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Friends Shopping Now</Text>
+          <Text style={styles.sectionTitle}>People Shopping Nearby</Text>
         </View>
         <View style={styles.errorContainer}>
           <Ionicons name="alert-circle-outline" size={32} color={Colors.error} />
@@ -132,10 +132,10 @@ const FriendsCommunity = () => {
 
   return (
     <View style={styles.container}>
-      {/* Friends Shopping Now */}
+      {/* People Shopping Nearby */}
       <View style={styles.friendsSection}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Friends Shopping Now</Text>
+          <Text style={styles.sectionTitle}>People Shopping Nearby</Text>
           <Pressable onPress={() => navigateTo('/explore/friends')}>
             <Text style={styles.viewAllText}>See all</Text>
           </Pressable>

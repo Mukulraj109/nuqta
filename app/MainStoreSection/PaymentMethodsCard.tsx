@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // PaymentMethodsCard.tsx - Shows accepted payment methods at store
 import React from "react";
 import {
@@ -18,7 +19,7 @@ interface PaymentMethodsCardProps {
   acceptPayLater?: boolean;
 }
 
-export default function PaymentMethodsCard({
+function PaymentMethodsCard({
   acceptPromoCoins = true,
   acceptBrandedCoins = true,
   acceptRezCoins = true,
@@ -195,3 +196,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default withErrorBoundary(PaymentMethodsCard, 'MainStoreSectionPaymentMethodsCard');

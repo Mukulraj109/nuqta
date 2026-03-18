@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Mobile Recharge Page
  * Allows users to recharge mobile, DTH, etc. with cashback
@@ -48,7 +49,7 @@ const COLORS = {
   border: Colors.border.default,
 };
 
-export default function RechargePage() {
+function RechargePage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const initialAmount = (params.amount as string) || '';
@@ -861,3 +862,5 @@ const styles = StyleSheet.create({
     color: COLORS.white,
   },
 });
+
+export default withErrorBoundary(RechargePage, 'Recharge');

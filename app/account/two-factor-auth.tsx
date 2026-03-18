@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Two-Factor Authentication Setup Page
 // Manages 2FA setup and configuration
 
@@ -61,7 +62,7 @@ const TWO_FACTOR_OPTIONS: TwoFactorOption[] = [
   },
 ];
 
-export default function TwoFactorAuthPage() {
+function TwoFactorAuthPage() {
   const router = useRouter();
   const { 
     securitySettings, 
@@ -683,3 +684,5 @@ const styles = StyleSheet.create({
   },
 });
 
+
+export default withErrorBoundary(TwoFactorAuthPage, 'AccountTwoFactorAuth');

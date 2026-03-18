@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Travel Search Page
 // Category-specific search with city inputs, date pickers, passenger selectors
 
@@ -30,7 +31,7 @@ const CATEGORIES = [
   { slug: 'packages', label: 'Packages', icon: 'briefcase' },
 ];
 
-export default function TravelSearchPage() {
+function TravelSearchPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -417,3 +418,5 @@ const styles = StyleSheet.create({
   },
   cashbackText: { ...Typography.caption, fontWeight: '600', color: Colors.success },
 });
+
+export default withErrorBoundary(TravelSearchPage, 'TravelSearch');

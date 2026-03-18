@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Offers Page - "Near U" (White Theme)
  *
@@ -32,7 +33,7 @@ const PALETTE = {
   lavenderMist: colors.lavenderMist,
 };
 
-export default function OffersScreen() {
+function OffersScreen() {
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -289,3 +290,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 205, 87, 0.15)',
   },
 });
+
+export default withErrorBoundary(OffersScreen, 'OffersIndex');

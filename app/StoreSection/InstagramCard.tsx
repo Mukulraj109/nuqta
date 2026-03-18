@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -28,7 +29,7 @@ interface InstagramCardProps {
   onError?: (error: Error) => void;
 }
 
-export default function InstagramCard({ productData, disabled = false, onError }: InstagramCardProps) {
+function InstagramCard({ productData, disabled = false, onError }: InstagramCardProps) {
   const router = useRouter();
   const { width } = Dimensions.get('window');
   const responsiveMargin = width < 360 ? 16 : 20;
@@ -178,3 +179,4 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
   },
 });
+export default withErrorBoundary(InstagramCard, 'StoreSectionInstagramCard');

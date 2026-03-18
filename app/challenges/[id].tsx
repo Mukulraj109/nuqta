@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
@@ -66,7 +67,7 @@ interface ChallengeDetailData {
   userProgress: UserProgress | null;
 }
 
-export default function ChallengeDetailPage() {
+function ChallengeDetailPage() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<ChallengeDetailData | null>(null);
@@ -885,3 +886,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(ChallengeDetailPage, 'ChallengesId');

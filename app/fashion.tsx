@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Fashion Category Page
  * Production-ready: fetches subcategories, products, and stores from real APIs.
@@ -697,4 +698,4 @@ const styles = StyleSheet.create({
   endText: { textAlign: 'center', fontSize: 13, color: Colors.neutral[400], paddingVertical: Spacing.base },
 });
 
-export default FashionPage;
+export default withErrorBoundary(FashionPage, 'Fashion');

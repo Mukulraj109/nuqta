@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -25,7 +26,7 @@ interface SMSNotifications {
   otpMessages: boolean;
 }
 
-export default function SMSNotificationsScreen() {
+function SMSNotificationsScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -370,3 +371,5 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.sm,
   },
 });
+
+export default withErrorBoundary(SMSNotificationsScreen, 'AccountSmsNotifications');

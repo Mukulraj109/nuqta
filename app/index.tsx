@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useRouter, usePathname, useRootNavigationState } from 'expo-router';
@@ -6,7 +7,7 @@ import LoadingScreen from '@/components/onboarding/LoadingScreen';
 import { useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { getAuthToken, getUser } from '@/utils/authStorage';
 
-export default function AppEntry() {
+function AppEntry() {
   const router = useRouter();
   const pathname = usePathname();
   const rootNavigationState = useRootNavigationState();
@@ -141,3 +142,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default withErrorBoundary(AppEntry, 'Index');

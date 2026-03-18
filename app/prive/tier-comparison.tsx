@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, Pressable,
@@ -21,7 +22,7 @@ const COMPARISON_ROWS = [
   { label: 'Min Score', key: 'threshold', format: (v: number) => `${v}+` },
 ];
 
-export default function TierComparisonScreen() {
+function TierComparisonScreen() {
   const router = useRouter();
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -201,3 +202,5 @@ const styles = StyleSheet.create({
   },
   ctaText: { fontSize: 15, fontWeight: '600', color: PRIVE_COLORS.gold.primary },
 });
+
+export default withErrorBoundary(TierComparisonScreen, 'PriveTierComparison');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
@@ -353,7 +354,7 @@ function StoreCard({ item, index }: { item: Store; index: number }) {
   );
 }
 
-export default function App() {
+function App() {
   const router = useRouter();
   const { user: profileUser, isModalVisible, showModal, hideModal } = useProfile();
   const { handleMenuItemPress } = useProfileMenu();
@@ -966,3 +967,5 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
 });
+
+export default withErrorBoundary(App, 'Store');

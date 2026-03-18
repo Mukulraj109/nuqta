@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Privé Review & Earn Page
  *
@@ -56,7 +57,7 @@ const SkeletonBlock: React.FC<{ width: number | string; height: number; borderRa
 
 type FilterType = 'all' | 'store' | 'product';
 
-export default function PriveReviewEarnPage() {
+function PriveReviewEarnPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -524,3 +525,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
 });
+
+export default withErrorBoundary(PriveReviewEarnPage, 'PriveReviewEarn');

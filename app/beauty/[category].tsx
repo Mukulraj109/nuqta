@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Beauty Category Page - Dynamic route with API Integration
  * salon, spa, products, wellness, skincare, haircare
@@ -750,4 +751,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BeautyCategoryPage;
+export default withErrorBoundary(BeautyCategoryPage, 'BeautyCategory');

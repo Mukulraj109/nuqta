@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Wallet Settings Page
 // Toggle auto-topup, low balance alerts, configure thresholds
 
@@ -41,7 +42,7 @@ const DEFAULTS: WalletSettings = {
   lowBalanceThreshold: 50,
 };
 
-export default function WalletSettingsPage() {
+function WalletSettingsPage() {
   const router = useRouter();
   const rawBackendData = useRawWalletData();
   const walletLoading = useWalletLoading();
@@ -385,3 +386,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(WalletSettingsPage, 'WalletSettings');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React from 'react';
 import {
   View,
@@ -24,7 +25,7 @@ import { HomeDeliveryProduct } from '@/types/home-delivery.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function HomeDeliveryPage() {
+function HomeDeliveryPage() {
   const router = useRouter();
   const { state, actions, handlers } = useHomeDeliveryPage();
 
@@ -564,3 +565,4 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+export default withErrorBoundary(HomeDeliveryPage, 'HomeDelivery');

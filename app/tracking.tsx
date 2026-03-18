@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
@@ -145,7 +146,7 @@ const mapOrderToTracking = (order: Order): TrackingOrder => {
   };
 };
 
-export default function OrderTrackingScreen() {
+function OrderTrackingScreen() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -1163,3 +1164,4 @@ const styles = StyleSheet.create({
     height: 40,
   },
 });
+export default withErrorBoundary(OrderTrackingScreen, 'Tracking');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Comments Page
 // Full comments view for a post
 
@@ -65,7 +66,7 @@ function transformComment(raw: any): Comment {
   };
 }
 
-export default function CommentsPage() {
+function CommentsPage() {
   const router = useRouter();
   const { postId } = useLocalSearchParams();
   const videoId = Array.isArray(postId) ? postId[0] : postId;
@@ -605,3 +606,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(CommentsPage, 'SocialCommentsPostId');

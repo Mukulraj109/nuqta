@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Travel Hub Page - Premium Redesign
  * Connected to /api/travel-services
@@ -877,4 +878,4 @@ const s = StyleSheet.create({
   quickLinksWrap: { paddingHorizontal: 16, marginBottom: 16 },
 });
 
-export default TravelPage;
+export default withErrorBoundary(TravelPage, 'TravelIndex');

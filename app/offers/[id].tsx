@@ -2,6 +2,7 @@
 // Dynamic route for individual offer details with redemption
 
 import React, { useState, useEffect } from 'react';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { View, ScrollView, StyleSheet, Pressable, Dimensions, ActivityIndicator, Share, Modal } from 'react-native';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
@@ -37,7 +38,7 @@ const ZONE_VERIFICATION_MAP: Record<string, string> = {
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function OfferDetailPage() {
+function OfferDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const isAuthenticated = useIsAuthenticated();
@@ -1496,3 +1497,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default withErrorBoundary(OfferDetailPage, 'OfferDetail');

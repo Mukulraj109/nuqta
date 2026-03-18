@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Coin Expiry Tracker Page
 // Enhanced expiry tracking with timeline
 
@@ -57,7 +58,7 @@ function mapCoin(raw: any, index: number): ExpiringCoin {
   };
 }
 
-export default function ExpiryTrackerPage() {
+function ExpiryTrackerPage() {
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const authLoading = useAuthLoading();
@@ -554,3 +555,5 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
   },
 });
+
+export default withErrorBoundary(ExpiryTrackerPage, 'WalletExpiryTracker');

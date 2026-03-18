@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
@@ -1053,4 +1054,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreStoresPage;
+export default withErrorBoundary(ExploreStoresPage, 'ExploreStores');

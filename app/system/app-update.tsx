@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // App Update Required Screen
 // Force or suggest users to update when new version available
 
@@ -33,7 +34,7 @@ interface UpdateInfo {
   };
 }
 
-export default function AppUpdatePage() {
+function AppUpdatePage() {
   const router = useRouter();
   const params = useLocalSearchParams();
 
@@ -336,3 +337,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(AppUpdatePage, 'SystemAppUpdate');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Profile QR Code Page
 // Display QR code for profile sharing and wallet payments
 
@@ -516,4 +517,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QRCodePage;
+export default withErrorBoundary(QRCodePage, 'ProfileQrCode');

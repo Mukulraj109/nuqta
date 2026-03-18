@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Charity Redemption Page
  * Donate coins to charitable causes
@@ -20,7 +21,7 @@ import { colors } from '@/constants/theme';
 
 const generateIdempotencyKey = () => `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
 
-export default function CharityScreen() {
+function CharityScreen() {
   const router = useRouter();
   const { userData, refresh } = usePriveSection();
   const refreshWallet = useRefreshWallet();
@@ -622,3 +623,5 @@ const styles = StyleSheet.create({
     color: PRIVE_COLORS.gold.primary,
   },
 });
+
+export default withErrorBoundary(CharityScreen, 'PriveRedeemCharity');

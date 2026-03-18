@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Achievements Screen
 // Displays user badges and achievements with progress tracking
 
@@ -21,7 +22,7 @@ const CARD_WIDTH = (width - 60) / 2;
 
 type FilterType = 'all' | 'unlocked' | 'locked';
 
-export default function AchievementsPage() {
+function AchievementsPage() {
   const router = useRouter();
   const { goBack } = useSafeNavigation();
   const authActions = useAuthActions();
@@ -744,3 +745,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+export default withErrorBoundary(AchievementsPage, 'ProfileAchievements');

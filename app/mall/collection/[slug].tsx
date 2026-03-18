@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Collection Brands Page
  *
@@ -25,7 +26,7 @@ import MallEmptyState from '../../../components/mall/pages/MallEmptyState';
 import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkeleton';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 
-export default function CollectionBrandsPage() {
+function CollectionBrandsPage() {
   const params = useLocalSearchParams<{ slug: string }>();
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
   const router = useRouter();
@@ -320,3 +321,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(CollectionBrandsPage, 'MallCollectionSlug');

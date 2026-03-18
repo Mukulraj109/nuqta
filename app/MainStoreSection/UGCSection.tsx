@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * UGCSection v3.0 - Modernized with Design System & Haptic Feedback
  *
@@ -437,7 +438,7 @@ const UGCCard = memo(function UGCCard({
   );
 });
 
-export default function UGCSection({
+function UGCSection({
   title = 'UGC',
   storeId,
   images: propImages,
@@ -1117,3 +1118,5 @@ const styles = StyleSheet.create({
     textShadowRadius: 2,
   },
 });
+
+export default withErrorBoundary(UGCSection, 'MainStoreSectionUGCSection');

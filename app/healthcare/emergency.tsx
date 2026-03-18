@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Emergency 24x7 Page
  * Provides emergency contacts and ambulance booking functionality
@@ -577,4 +578,4 @@ const styles = StyleSheet.create({
   emergencyNote: { ...Typography.bodySmall, color: COLORS.gray600, textAlign: 'center', marginTop: Spacing.md },
 });
 
-export default EmergencyPage;
+export default withErrorBoundary(EmergencyPage, 'HealthcareEmergency');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
@@ -74,7 +75,7 @@ interface OrderDetails {
   createdAt: string;
 }
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -940,3 +941,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default withErrorBoundary(PaymentSuccessPage, 'PaymentSuccess');

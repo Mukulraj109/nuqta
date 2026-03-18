@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Report Fraud Page
 // Report fraudulent activity
 
@@ -32,7 +33,7 @@ const FRAUD_TYPES = [
   { id: 'other', label: 'Other Fraud', icon: 'alert-circle-outline' },
 ];
 
-export default function ReportFraudPage() {
+function ReportFraudPage() {
   const router = useRouter();
 
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -631,3 +632,5 @@ const styles = StyleSheet.create({
     color: Colors.text.white,
   },
 });
+
+export default withErrorBoundary(ReportFraudPage, 'SupportReportFraud');

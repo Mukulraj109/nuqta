@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Train Details Page - Dedicated page for train bookings
  * Production-ready with complete booking flow
@@ -112,7 +113,7 @@ interface BookingData {
   bookingNumber?: string;
 }
 
-export default function TrainDetailsPage() {
+function TrainDetailsPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
@@ -1274,3 +1275,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 });
+
+export default withErrorBoundary(TrainDetailsPage, 'TrainId');

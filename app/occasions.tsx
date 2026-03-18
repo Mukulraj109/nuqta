@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Occasions Listing Page
  * Shows all shopping occasions for a category
@@ -105,7 +106,7 @@ const OccasionCard = ({
   );
 };
 
-export default function OccasionsPage() {
+function OccasionsPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const categorySlug = params.category as string;
@@ -378,3 +379,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(OccasionsPage, 'Occasions');

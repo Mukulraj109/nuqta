@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Scratch & Win Page
 // Server-driven scratch card game with fraud-proof prize generation.
 // Flow: eligibility check → create session → scratch animation → play (server prize) → wallet credit → confirmation
@@ -31,7 +32,7 @@ import { BRAND } from '@/constants/brand';
 
 const { width } = Dimensions.get('window');
 
-export default function ScratchCardPage() {
+function ScratchCardPage() {
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -677,3 +678,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(ScratchCardPage, 'ScratchCard');

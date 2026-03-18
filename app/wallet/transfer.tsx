@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // P2P Coin Transfer Page
 // Send Nuqta Coins to other users
 
@@ -39,7 +40,7 @@ interface RecentRecipient {
 
 const QUICK_AMOUNTS = [50, 100, 250, 500];
 
-export default function TransferPage() {
+function TransferPage() {
   const router = useRouter();
 
   const nuqtaBalance = useRezBalance();
@@ -953,3 +954,5 @@ const styles = StyleSheet.create({
     ...Shadows.subtle,
   },
 });
+
+export default withErrorBoundary(TransferPage, 'WalletTransfer');

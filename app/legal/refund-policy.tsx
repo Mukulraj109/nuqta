@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Refund Policy Page
 // Refund terms with FAQ accordion
 
@@ -122,7 +123,7 @@ Coins refunded maintain their original expiry date.`,
   ],
 };
 
-export default function RefundPolicyPage() {
+function RefundPolicyPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -499,3 +500,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(RefundPolicyPage, 'LegalRefundPolicy');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreActionButtons.tsx - Scan & Pay, Upload Bill, View Offers buttons
 import React, { useRef } from "react";
 import {
@@ -25,7 +26,7 @@ export interface StoreActionButtonsProps {
   onViewOffers?: () => void;
 }
 
-export default function StoreActionButtons({
+function StoreActionButtons({
   storeId,
   onScanPay,
   onUploadBill,
@@ -173,3 +174,5 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
 });
+
+export default withErrorBoundary(StoreActionButtons, 'MainStoreSectionStoreActionButtons');

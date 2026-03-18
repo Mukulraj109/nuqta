@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // FAQ Page
 // Comprehensive Frequently Asked Questions page with search and categories
 
@@ -14,7 +15,7 @@ import { Colors, Gradients, Spacing } from '@/constants/DesignSystem';
 import { SectionListSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
 
-export default function FAQPage() {
+function FAQPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
 
@@ -955,3 +956,5 @@ const styles = StyleSheet.create({
     height: 40,
   },
 });
+
+export default withErrorBoundary(FAQPage, 'SupportFaq');

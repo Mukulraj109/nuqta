@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
@@ -43,7 +44,7 @@ const getEventTypeEmoji = (eventType?: string): string => {
   return map[eventType || ''] || '✨';
 };
 
-export default function MyParticipationsScreen() {
+function MyParticipationsScreen() {
   const router = useRouter();
   const [enrollments, setEnrollments] = useState<UserEnrollment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -401,3 +402,5 @@ const styles = StyleSheet.create({
     color: colors.deepNavy,
   },
 });
+
+export default withErrorBoundary(MyParticipationsScreen, 'SocialImpactMyEvents');

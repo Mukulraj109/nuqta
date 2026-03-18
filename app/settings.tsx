@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // App Settings Page
 // General application preferences and configurations
 
@@ -54,7 +55,7 @@ const DEFAULT_SETTINGS = {
   crashReporting: true,
 };
 
-export default function SettingsPage() {
+function SettingsPage() {
   const router = useRouter();
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
@@ -595,3 +596,4 @@ const styles = StyleSheet.create({
     height: 20,
   },
 });
+export default withErrorBoundary(SettingsPage, 'Settings');

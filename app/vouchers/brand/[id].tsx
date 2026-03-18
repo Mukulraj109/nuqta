@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Voucher Brand Detail Page
  *
@@ -32,8 +33,10 @@ import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-// Initialize Stripe lazily — SDK is only loaded when this promise is first awaited
-const stripePromise = getStripePromise(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
+// Initialize Stripe lazily — only if key is configured
+const stripeKey = process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+if (__DEV__ && !stripeKey) console.warn('[Vouchers] EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY missing — card payments disabled');
+const stripePromise = stripeKey ? getStripePromise(stripeKey) : null;
 
 interface VoucherBrand {
   _id: string;
@@ -70,7 +73,7 @@ const COLORS = {
   purple: Colors.brand.purpleLight,
 };
 
-export default function VoucherBrandDetailPage() {
+function VoucherBrandDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -81,7 +84,7 @@ export default function VoucherBrandDetailPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [selectedDenomination, setSelectedDenomination] = useState<number | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(stripeKey ? 'card' : 'wallet');
   const [showTerms, setShowTerms] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -1212,3 +1215,5 @@ const styles = StyleSheet.create({
     color: COLORS.white,
   },
 });
+
+export default withErrorBoundary(VoucherBrandDetailPage, 'VouchersBrandId');

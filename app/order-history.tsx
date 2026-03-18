@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Order History Page
 // Displays user's order history with server-side filtering, search, and pagination.
 
@@ -77,7 +78,7 @@ function dateRangeToISO(dateRange: string): { dateFrom?: string; dateTo?: string
   return { dateFrom: start.toISOString(), dateTo: now.toISOString() };
 }
 
-export default function OrderHistoryPage() {
+function OrderHistoryPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilterModal, setShowFilterModal] = useState(false);
@@ -482,3 +483,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(OrderHistoryPage, 'OrderHistory');

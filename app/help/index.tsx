@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Help & Support Main Page
 // Central hub for user assistance and support
 
@@ -45,7 +46,7 @@ interface HelpCategory {
   route: string;
 }
 
-export default function HelpPage() {
+function HelpPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null);
@@ -643,3 +644,4 @@ const styles = StyleSheet.create({
     height: 20,
   },
 });
+export default withErrorBoundary(HelpPage, 'HelpIndex');

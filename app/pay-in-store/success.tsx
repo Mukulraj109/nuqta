@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Pay In Store - Success Screen
  *
@@ -32,7 +33,7 @@ import RewardsBreakdownCard from '@/components/rewards/RewardsBreakdownCard';
 import { BRAND } from '@/constants/brand';
 import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
 
-export default function PaymentSuccessScreen() {
+function PaymentSuccessScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<SuccessScreenParams>();
   const { paymentId, storeId, storeName, storeLogo, amount, coinsUsed, rewards: rewardsParam } = params;
@@ -471,3 +472,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(PaymentSuccessScreen, 'PayInStoreSuccess');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Language Settings Page
 // Comprehensive language and localization settings
 
@@ -71,7 +72,7 @@ const REGION_OPTIONS: RegionOption[] = [
   { code: 'JP', name: 'Japan', currency: 'JPY', timezone: 'Asia/Tokyo', dateFormat: 'YYYY/MM/DD' },
 ];
 
-export default function LanguageSettingsPage() {
+function LanguageSettingsPage() {
   const router = useRouter();
   const { settings, isLoading, updateGeneralSettings, refetch } = useUserSettings(true);
   const { actions: appActions } = useApp();
@@ -706,3 +707,5 @@ const styles = StyleSheet.create({
     height: 20,
   },
 });
+
+export default withErrorBoundary(LanguageSettingsPage, 'AccountLanguage');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // UGCDetailScreen.tsx - Modern TikTok/Reels Style Video Player
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import {
@@ -35,7 +36,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 // Fallback video URL
 const FALLBACK_VIDEO_URL = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
-export default function UGCDetailScreen() {
+function UGCDetailScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const videoRef = useRef<Video | null>(null);
@@ -1243,3 +1244,5 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.primary,
   },
 });
+
+export default withErrorBoundary(UGCDetailScreen, 'UGCDetailScreen');

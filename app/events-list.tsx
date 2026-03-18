@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * EventsListPage
  * Main events listing page with search, filters, categories, and grid display
@@ -38,7 +39,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { colors } from '@/constants/theme';
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function EventsListPage() {
+function EventsListPage() {
   const router = useRouter();
 
   // Modal states
@@ -501,3 +502,5 @@ const styles = StyleSheet.create({
     height: 20,
   },
 });
+
+export default withErrorBoundary(EventsListPage, 'EventsList');

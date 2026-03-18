@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Pay In Store - Premium Payment Screen
  *
@@ -53,7 +54,7 @@ import { borderRadius, colors, shadows, spacing, typography } from '@/constants/
 // Initialize Stripe lazily — SDK is only loaded when this promise is first awaited
 const stripePromise = getStripePromise(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
-export default function PaymentScreen() {
+function PaymentScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<PaymentScreenParams>();
   const { storeId, storeName, storeLogo, amount, selectedOffers: selectedOffersParam } = params;
@@ -764,3 +765,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(PaymentScreen, 'PayInStorePayment');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // My Vouchers Page
 // Shows user's owned vouchers and gift cards
 
@@ -1098,4 +1099,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyVouchersPage;
+export default withErrorBoundary(MyVouchersPage, 'MyVouchers');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // UGC (User Generated Content) Detail Page
 // This route uses UGCDetailScreen component for viewing videos
 
@@ -5,7 +6,7 @@ import React from 'react';
 import { Stack } from 'expo-router';
 import UGCDetailScreen from '@/app/UGCDetailScreen';
 
-export default function UGCDetailPage() {
+function UGCDetailPage() {
   return (
     <>
       {/* Hide the default header for immersive video experience */}
@@ -14,3 +15,5 @@ export default function UGCDetailPage() {
     </>
   );
 }
+
+export default withErrorBoundary(UGCDetailPage, 'UgcId');

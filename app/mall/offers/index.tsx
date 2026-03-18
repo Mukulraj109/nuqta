@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * All Offers Page
  *
@@ -137,7 +138,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, onPress, currencySymbol })
   );
 };
 
-export default function AllOffersPage() {
+function AllOffersPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -481,3 +482,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(AllOffersPage, 'MallOffersIndex');

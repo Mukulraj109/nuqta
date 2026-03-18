@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // My Products Page
 // Shows all products the user has purchased from their order history
 
@@ -837,4 +838,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyProductsPage;
+export default withErrorBoundary(MyProductsPage, 'MyProducts');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,7 +8,7 @@ import CashStoreSectionContainer from '../../components/cash-store/CashStoreSect
 import BonusCampaignBanner from '@/components/earn/BonusCampaignBanner';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 
-export default function CashStorePage() {
+function CashStorePage() {
   const router = useRouter();
   const { bonusCampaignSlug } = useLocalSearchParams<{ bonusCampaignSlug?: string }>();
   const insets = useSafeAreaInsets();
@@ -73,3 +74,5 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.secondary, justifyContent: 'center', alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(CashStorePage, 'CashStoreIndex');

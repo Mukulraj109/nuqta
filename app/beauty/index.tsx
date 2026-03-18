@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Beauty & Wellness Hub Page - Production Ready
  * Main hub for all beauty services with real API data
@@ -813,4 +814,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BeautyPage;
+export default withErrorBoundary(BeautyPage, 'BeautyIndex');

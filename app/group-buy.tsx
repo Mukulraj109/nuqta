@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Group Buy Page
 // Complete Group Buying Feature Implementation
 
@@ -776,4 +777,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroupBuyPage;
+export default withErrorBoundary(GroupBuyPage, 'GroupBuy');

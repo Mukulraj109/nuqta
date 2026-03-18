@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Prive Tier Progress Page
  *
@@ -375,7 +376,7 @@ const TierRow = React.memo(({
 });
 
 // ─── Main Screen ─────────────────────────────────────────────────────────────
-export default function TierProgressScreen() {
+function TierProgressScreen() {
   const { eligibility, isLoading: hookLoading, refresh, error: hookError } = usePriveEligibility();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -886,3 +887,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(TierProgressScreen, 'PriveTierProgress');

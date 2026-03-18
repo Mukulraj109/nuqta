@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Account Profile Page
 // User's account information and settings overview
 
@@ -56,7 +57,7 @@ interface UserSettings {
   };
 }
 
-export default function AccountProfilePage() {
+function AccountProfilePage() {
   const router = useRouter();
   const user = useAuthUser();
   const { settings: notificationSettings, updateSettings: updateNotificationSettings } = useNotifications();
@@ -749,3 +750,5 @@ const styles = StyleSheet.create({
     marginLeft: 68,
   },
 });
+
+export default withErrorBoundary(AccountProfilePage, 'AccountProfile');

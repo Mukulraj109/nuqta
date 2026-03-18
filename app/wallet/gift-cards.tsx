@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Gift Cards Page
 // Buy and manage gift cards
 
@@ -57,7 +58,7 @@ interface MyGiftCard {
 
 const DEFAULT_CATEGORIES = ['All'];
 
-export default function GiftCardsPage() {
+function GiftCardsPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -846,3 +847,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(GiftCardsPage, 'WalletGiftCards');

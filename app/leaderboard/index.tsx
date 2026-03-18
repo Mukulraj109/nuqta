@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Leaderboard Page
 // Display top users by coins with ranking and filters with real-time updates
 
@@ -28,7 +29,7 @@ import { colors } from '@/constants/theme';
 
 type Period = 'daily' | 'weekly' | 'monthly' | 'all-time';
 
-export default function LeaderboardPage() {
+function LeaderboardPage() {
   const router = useRouter();
   const user = useAuthUser();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -663,3 +664,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(LeaderboardPage, 'LeaderboardIndex');

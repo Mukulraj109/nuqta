@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Slot Machine Game
 // 3-reel slot machine with spin animation, symbol matching, win logic, visual feedback
 
@@ -62,7 +63,7 @@ function calculateSpinResult(): SpinResult {
   return { reels, win: false, winAmount: 0, winType: 'none' };
 }
 
-export default function SlotsPage() {
+function SlotsPage() {
   const [balance, setBalance] = useState(100); // Start with 100 NC
   const [currentReels, setCurrentReels] = useState(['🍒', '💎', '⭐']);
   const [spinning, setSpinning] = useState(false);
@@ -670,3 +671,5 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
 });
+
+export default withErrorBoundary(SlotsPage, 'GamesSlots');

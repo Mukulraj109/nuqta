@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, TextInput, ActivityIndicator, Platform } from 'react-native';
@@ -19,7 +20,7 @@ const COLORS = {
   error: Colors.error,
 };
 
-export default function SurveyTakePage() {
+function SurveyTakePage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [survey, setSurvey] = useState<SurveyDetail | null>(null);
@@ -470,3 +471,5 @@ const styles = StyleSheet.create({
   navButtonTextDisabled: { color: COLORS.textMuted },
   nextButtonText: { fontSize: 15, fontWeight: '600', color: Colors.text.inverse },
 });
+
+export default withErrorBoundary(SurveyTakePage, 'SurveyIdTake');

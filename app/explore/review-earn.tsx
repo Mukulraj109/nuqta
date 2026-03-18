@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -26,7 +27,7 @@ const reviewTips = [
   { icon: 'checkmark-circle', tip: 'Helpful reviews earn bonuses' },
 ];
 
-export default function ReviewEarnPage() {
+function ReviewEarnPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [filter, setFilter] = useState<'all' | 'store' | 'product'>('all');
@@ -582,3 +583,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default withErrorBoundary(ReviewEarnPage, 'ExploreReviewEarn');

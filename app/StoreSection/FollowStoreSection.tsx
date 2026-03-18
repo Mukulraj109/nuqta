@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // FollowStoreSection.tsx
 // Premium Glassmorphism "Follow Store" section
 // Inspired by Apple's Liquid Glass design
@@ -60,7 +61,7 @@ interface FollowStoreSectionProps {
   onFollowChange?: (isFollowing: boolean) => void;
 }
 
-export default function FollowStoreSection({
+function FollowStoreSection({
   storeData,
   isFollowingProp,
   onFollowChange,
@@ -871,3 +872,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(FollowStoreSection, 'StoreSectionFollowStoreSection');

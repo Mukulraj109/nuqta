@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // MainStoreHeader.tsx - Redesigned for new MainStorePage UI
 import React, { useRef } from "react";
 import {
@@ -35,7 +36,7 @@ export interface MainStoreHeaderProps {
   storeId?: string;
 }
 
-export default function MainStoreHeader({
+function MainStoreHeader({
   storeName = "Store",
   storeCategory = "Store",
   onBack,
@@ -288,3 +289,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(MainStoreHeader, 'MainStoreSectionMainStoreHeader');

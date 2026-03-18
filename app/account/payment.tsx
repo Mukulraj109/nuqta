@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Payment Settings Screen
 // Manage payment methods, preferences, and security settings
 
@@ -44,7 +45,7 @@ interface LocalPaymentPreferences {
   oneClickPayments: boolean;
 }
 
-export default function PaymentSettingsScreen() {
+function PaymentSettingsScreen() {
   const router = useRouter();
   const { goBack } = useSafeNavigation();
 
@@ -1020,3 +1021,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+export default withErrorBoundary(PaymentSettingsScreen, 'AccountPayment');

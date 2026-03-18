@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -19,7 +20,7 @@ import TimeDisplay from '@/components/location/TimeDisplay';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function LocationSettingsScreen() {
+function LocationSettingsScreen() {
   const router = useRouter();
   const { permissionStatus, requestPermission } = useLocationPermission();
   const { currentLocation } = useCurrentLocation();
@@ -501,3 +502,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default withErrorBoundary(LocationSettingsScreen, 'LocationSettings');

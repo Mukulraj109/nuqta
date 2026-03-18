@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Upgrade Confirmation Screen
 // Confirm subscription tier upgrade with prorated pricing
 
@@ -21,7 +22,7 @@ import { colors } from '@/constants/theme';
 
 type UpgradeTiming = 'immediate' | 'cycle_end';
 
-export default function UpgradeConfirmationPage() {
+function UpgradeConfirmationPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { state, computed, actions } = useSubscription();
@@ -542,3 +543,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(UpgradeConfirmationPage, 'SubscriptionUpgradeConfirmation');

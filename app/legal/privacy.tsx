@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Privacy Policy Page
 // Privacy policy with section navigation
 
@@ -133,7 +134,7 @@ We aim to respond within 30 days.`,
   ],
 };
 
-export default function PrivacyPage() {
+function PrivacyPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -395,3 +396,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(PrivacyPage, 'LegalPrivacy');

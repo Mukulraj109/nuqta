@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Bank Offer Detail Page
 import React, { useState, useEffect } from 'react';
 import {
@@ -24,7 +25,7 @@ import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
-export default function BankOfferDetailScreen() {
+function BankOfferDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const isAuthenticated = useIsAuthenticated();
@@ -299,3 +300,5 @@ const styles = StyleSheet.create({
   ctaGradient: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 14, gap: Spacing.sm },
   ctaText: { color: Colors.text.inverse, ...Typography.bodyLarge, fontWeight: '700' },
 });
+
+export default withErrorBoundary(BankOfferDetailScreen, 'BankOffersId');

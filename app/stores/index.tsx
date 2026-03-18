@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Stores Listing Page
  * Shows all stores filtered by category with search and filtering capabilities
@@ -577,4 +578,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoresPage;
+export default withErrorBoundary(StoresPage, 'StoresIndex');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState } from 'react';
 import {
   View,
@@ -17,7 +18,7 @@ import { platformAlert } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
-export default function QuizPage() {
+function QuizPage() {
   const [gameComplete, setGameComplete] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [coinsEarned, setCoinsEarned] = useState(0);
@@ -339,3 +340,5 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
+export default withErrorBoundary(QuizPage, 'GamesQuiz');

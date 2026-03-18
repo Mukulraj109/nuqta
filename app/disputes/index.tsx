@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -36,7 +37,7 @@ const STATUS_LABELS: Record<string, string> = {
   closed: 'Closed',
 };
 
-export default function DisputeListScreen() {
+function DisputeListScreen() {
   const router = useRouter();
   const { isAuthenticated, authLoading } = useAuth();
   const [disputes, setDisputes] = useState<Dispute[]>([]);
@@ -194,3 +195,5 @@ const styles = StyleSheet.create({
   emptyTitle: { fontSize: 17, fontWeight: '700', color: colors.text.primary },
   emptySubtitle: { ...typography.body, color: colors.neutral[500] },
 });
+
+export default withErrorBoundary(DisputeListScreen, 'DisputesIndex');

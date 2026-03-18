@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Flash Sale Success Page
 // Shows voucher code after successful Stripe payment
 
@@ -24,7 +25,7 @@ import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function FlashSaleSuccessPage() {
+function FlashSaleSuccessPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -537,3 +538,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(FlashSaleSuccessPage, 'FlashSaleSuccess');

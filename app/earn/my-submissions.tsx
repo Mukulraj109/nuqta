@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // My Submissions Dashboard
 // Unified view of all user submissions across engagement types
 
@@ -99,7 +100,7 @@ const TYPE_CONFIG = {
   },
 };
 
-export default function MySubmissionsPage() {
+function MySubmissionsPage() {
   const router = useRouter();
   const [filter, setFilter] = useState<FilterType>('all');
   const [submissions, setSubmissions] = useState<SubmissionItem[]>([]);
@@ -750,3 +751,5 @@ const styles = StyleSheet.create({
     color: COLORS.white,
   },
 });
+
+export default withErrorBoundary(MySubmissionsPage, 'EarnMySubmissions');

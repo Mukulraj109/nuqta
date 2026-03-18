@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Electronics Category Page
  * Production-ready: fetches subcategories, products, and stores from real APIs.
@@ -647,4 +648,4 @@ const styles = StyleSheet.create({
   emptySubtitle: { fontSize: 13, color: Colors.neutral[500] },
 });
 
-export default ElectronicsPage;
+export default withErrorBoundary(ElectronicsPage, 'Electronics');

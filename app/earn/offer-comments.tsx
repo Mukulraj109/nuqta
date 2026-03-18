@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Offer Comments Page
 // Comment on offers to earn coins
 
@@ -26,7 +27,7 @@ import { colors } from '@/constants/theme';
 
 type TabType = 'offers' | 'my-comments';
 
-export default function OfferCommentsPage() {
+function OfferCommentsPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('offers');
   const [offers, setOffers] = useState<CommentableOffer[]>([]);
@@ -577,3 +578,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
   },
 });
+
+export default withErrorBoundary(OfferCommentsPage, 'EarnOfferComments');

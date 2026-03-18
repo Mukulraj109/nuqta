@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback, useMemo } from 'react';
 import {
   View,
@@ -23,7 +24,7 @@ import { colors } from '@/constants/theme';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
 
-export default function ProductsVideosPage() {
+function ProductsVideosPage() {
   const router = useRouter();
   const { state, actions } = usePlayPageData();
   const [searchQuery, setSearchQuery] = useState('');
@@ -375,3 +376,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(ProductsVideosPage, 'ProductsVideos');

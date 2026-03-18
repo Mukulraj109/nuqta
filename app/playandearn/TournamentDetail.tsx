@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import {
@@ -862,4 +863,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TournamentDetail;
+export default withErrorBoundary(TournamentDetail, 'PlayandearnTournamentDetail');

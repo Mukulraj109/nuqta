@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Share Experience Page
  * Allows users to share their experiences with stores/products
@@ -36,7 +37,7 @@ const COLORS = {
   border: Colors.border.default,
 };
 
-export default function SharePage() {
+function SharePage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const [caption, setCaption] = useState('');
@@ -433,3 +434,5 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
   },
 });
+
+export default withErrorBoundary(SharePage, 'Share');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Standalone Program Detail Screen
  *
@@ -37,7 +38,7 @@ const PROGRAM_ICONS: Record<string, { name: string; color: string; bgColor: stri
   nuqta_prive: { name: 'diamond', color: colors.brand.goldAccent, bgColor: colors.deepNavy },
 };
 
-export default function ProgramDetailScreen() {
+function ProgramDetailScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -787,3 +788,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(ProgramDetailScreen, 'ProgramSlug');

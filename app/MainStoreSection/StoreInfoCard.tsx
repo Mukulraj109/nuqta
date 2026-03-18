@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreInfoCard.tsx - Store info section with image, name, rating, tags, and status
 import React from "react";
 import {
@@ -33,7 +34,7 @@ export interface StoreInfoCardProps {
   acceptsCoins?: boolean;
 }
 
-export default function StoreInfoCard({
+function StoreInfoCard({
   storeImage,
   storeName,
   rating = 0,
@@ -277,3 +278,5 @@ const styles = StyleSheet.create({
     color: colors.lightMustard,
   },
 });
+
+export default withErrorBoundary(StoreInfoCard, 'MainStoreSectionStoreInfoCard');

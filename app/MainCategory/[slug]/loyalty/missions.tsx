@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Shared Missions Page
  * /MainCategory/[slug]/loyalty/missions
@@ -23,7 +24,7 @@ import { colors } from '@/constants/theme';
 
 type TabKey = 'active' | 'completed';
 
-export default function ElectronicsMissionsPage() {
+function ElectronicsMissionsPage() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -288,3 +289,5 @@ const styles = StyleSheet.create({
   emptyTitle: { ...Typography.bodyLarge, fontWeight: '600', color: Colors.text.primary, marginTop: Spacing.base },
   emptySubtitle: { ...Typography.bodySmall, color: Colors.text.tertiary, marginTop: Spacing.xs, textAlign: 'center' },
 });
+
+export default withErrorBoundary(ElectronicsMissionsPage, 'MainCategorySlugLoyaltyMissions');

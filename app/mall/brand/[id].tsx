@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Brand Detail Page
  *
@@ -50,7 +51,7 @@ const TIER_COLORS: Record<BrandTier, { gradient: string[]; badge: string }> = {
   luxury: { gradient: [Colors.warning, colors.warningScale[700]], badge: colors.brand.amberDeep },
 };
 
-export default function BrandDetailPage() {
+function BrandDetailPage() {
   const params = useLocalSearchParams<{ id: string }>();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
   const router = useRouter();
@@ -800,3 +801,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(BrandDetailPage, 'MallBrandId');

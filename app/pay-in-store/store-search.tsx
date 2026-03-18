@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Store Search Screen for Pay-In-Store Flow
  *
@@ -51,7 +52,7 @@ import {
 // Use Animated.ScrollView directly from reanimated
 const AnimatedScrollView = Animated.ScrollView;
 
-export default function StoreSearchScreen() {
+function StoreSearchScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const scrollY = useSharedValue(0);
@@ -301,3 +302,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(StoreSearchScreen, 'PayInStoreStoreSearch');

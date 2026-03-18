@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // FAQ Page
 // Frequently Asked Questions with search and categories
 
@@ -21,7 +22,7 @@ import { SectionListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function FAQPage() {
+function FAQPage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
@@ -636,3 +637,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(FAQPage, 'Faq');

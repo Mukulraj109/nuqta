@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, Pressable, StyleSheet, Animated, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -455,7 +456,7 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
   );
 }
 
-export default React.memo(Section5);
+export default withErrorBoundary(React.memo(Section5), 'StoreSectionSection5');
 
 const styles = StyleSheet.create({
   // Modern Container

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Pay In Store - Enter Amount Screen
  *
@@ -34,7 +35,7 @@ import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-export default function EnterAmountScreen() {
+function EnterAmountScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<EnterAmountParams>();
   const { storeId, storeName, storeLogo } = params;
@@ -757,3 +758,5 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
 });
+
+export default withErrorBoundary(EnterAmountScreen, 'PayInStoreEnterAmount');

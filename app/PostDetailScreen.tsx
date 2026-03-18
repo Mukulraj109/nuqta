@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // PostDetailScreen.tsx - Modern Instagram-style Post Detail View
 import React, { useEffect, useState, useCallback } from 'react';
 import {
@@ -29,7 +30,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 // ReZ Brand Colors
 
-export default function PostDetailScreen() {
+function PostDetailScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
@@ -790,3 +791,5 @@ const styles = StyleSheet.create({
     }),
   },
 });
+
+export default withErrorBoundary(PostDetailScreen, 'PostDetailScreen');

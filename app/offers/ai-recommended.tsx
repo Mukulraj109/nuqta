@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // AI Recommended Offers Page
 // Personalized AI-curated offers
 
@@ -97,7 +98,7 @@ function mapOffer(offer: BackendOffer): MappedOffer {
   };
 }
 
-export default function AIRecommendedPage() {
+function AIRecommendedPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -575,3 +576,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(AIRecommendedPage, 'OffersAiRecommended');

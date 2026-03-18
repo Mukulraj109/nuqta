@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Financial Service Detail Page
  * Dedicated page for financial services (bills, OTT, recharge, gold, insurance)
@@ -1194,4 +1195,4 @@ const FinancialServiceDetailPageWithErrorBoundary: React.FC = () => {
   );
 };
 
-export default FinancialServiceDetailPageWithErrorBoundary;
+export default withErrorBoundary(FinancialServiceDetailPageWithErrorBoundary, 'FinancialServiceId');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Smart Spend — Privé Curated Marketplace
  *
@@ -26,7 +27,7 @@ import priveApi, { SmartSpendItem, SmartSpendSection } from '@/services/priveApi
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - PRIVE_SPACING.lg * 2 - PRIVE_SPACING.md) / 2;
 
-export default function SmartSpendScreen() {
+function SmartSpendScreen() {
   const router = useRouter();
 
   // State
@@ -637,3 +638,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(SmartSpendScreen, 'PriveSmartSpend');

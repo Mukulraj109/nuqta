@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Birthday Specials Page
  * Redesigned birthday rewards page
@@ -38,7 +39,7 @@ interface BirthdayDeal {
   image?: string;
 }
 
-export default function BirthdayRewardsPage() {
+function BirthdayRewardsPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const user = useAuthUser();
@@ -690,3 +691,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(BirthdayRewardsPage, 'OffersBirthday');

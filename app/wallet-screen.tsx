@@ -43,6 +43,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors, Spacing, BorderRadius, Typography, Gradients } from '@/constants/DesignSystem';
 import walletApi from '@/services/walletApi';
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 
 const WalletScreen: React.FC<WalletScreenProps> = ({
   onNavigateBack,
@@ -664,4 +665,4 @@ const createStyles = (screenData: { width: number; height: number }) => {
   });
 };
 
-export default WalletScreen;
+export default withErrorBoundary(WalletScreen, 'Wallet');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, Platform, StatusBar, ActivityIndicator, TextInput } from 'react-native';
 import { DetailPageSkeleton } from '@/components/skeletons';
@@ -24,7 +25,7 @@ const categoryEmojis: Record<string, string> = {
   'General': '📋',
 };
 
-export default function SurveyDetailPage() {
+function SurveyDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [survey, setSurvey] = useState<SurveyDetail | null>(null);
@@ -958,3 +959,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(SurveyDetailPage, 'SurveyId');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Activity Feed Screen
 // Displays user activity timeline with pagination and filtering
 
@@ -38,7 +39,7 @@ const ACTIVITY_TYPE_FILTERS: { label: string; value: ActivityType | 'all' }[] = 
   { label: 'Achievements', value: ActivityType.ACHIEVEMENT },
 ];
 
-export default function ActivityFeedPage() {
+function ActivityFeedPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -491,3 +492,4 @@ const styles = StyleSheet.create({
     marginTop: Spacing.md,
   },
 });
+export default withErrorBoundary(ActivityFeedPage, 'ProfileActivity');

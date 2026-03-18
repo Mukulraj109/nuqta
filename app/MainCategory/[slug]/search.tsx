@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Shared Category Search Page
  * /MainCategory/[slug]/search
@@ -77,7 +78,7 @@ function buildQuickSuggestions(slug: string): string[] {
   return suggestions;
 }
 
-export default function SharedCategoryPage() {
+function SharedCategoryPage() {
   const { q, slug } = useLocalSearchParams<{ q?: string; slug: string }>();
   const theme = getCategoryTheme(slug || '');
   const categoryConfig = getCategoryConfig(slug || '');
@@ -488,3 +489,5 @@ const styles = StyleSheet.create({
   emptyResultsText: { ...Typography.body, fontWeight: '500', color: Colors.text.primary, marginTop: Spacing.base },
   emptyResultsHint: { ...Typography.bodySmall, color: Colors.text.tertiary, marginTop: Spacing.xs },
 });
+
+export default withErrorBoundary(SharedCategoryPage, 'MainCategorySlugSearch');

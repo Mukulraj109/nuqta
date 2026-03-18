@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Bank Offers Listing Page
 import React, { useState, useEffect, useCallback } from 'react';
 import {
@@ -58,7 +59,7 @@ function formatDate(iso?: string): string {
   }
 }
 
-export default function BankOffersListScreen() {
+function BankOffersListScreen() {
   const router = useRouter();
 
   const [offers, setOffers] = useState<BankOffer[]>([]);
@@ -509,3 +510,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(BankOffersListScreen, 'BankOffersIndex');

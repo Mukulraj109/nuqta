@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl, Pressable, ActivityIndicator, Linking, Platform } from 'react-native';
 import { useLocalSearchParams, router, Stack } from 'expo-router';
@@ -11,7 +12,7 @@ import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } f
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function OrderTrackingScreen() {
+function OrderTrackingScreen() {
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -632,3 +633,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default withErrorBoundary(OrderTrackingScreen, 'OrdersOrderIdTracking');

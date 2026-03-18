@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreProducts.tsx - Premium Glassmorphism Design
 // Green & Gold color theme following TASK.md
 
@@ -65,7 +66,7 @@ interface StoreProductsProps {
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 84) / 2;
 
-export default function StoreProducts({ storeId, storeName }: StoreProductsProps) {
+function StoreProducts({ storeId, storeName }: StoreProductsProps) {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -637,3 +638,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default withErrorBoundary(StoreProducts, 'MainStoreSectionStoreProducts');

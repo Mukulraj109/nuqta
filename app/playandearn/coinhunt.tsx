@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
@@ -792,4 +793,4 @@ const styles = StyleSheet.create({
   secondaryActionText: { ...Typography.body, fontSize: 15, fontWeight: '600', color: COLORS.textMuted },
 });
 
-export default CoinHunt;
+export default withErrorBoundary(CoinHunt, 'PlayandearnCoinhunt');

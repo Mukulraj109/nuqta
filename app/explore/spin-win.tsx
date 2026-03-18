@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   View,
@@ -40,7 +41,7 @@ function getTimeUntilReset(): string {
   return `${minutes}m`;
 }
 
-export default function SpinWinPage() {
+function SpinWinPage() {
   const router = useRouter();
   const { actions: gamificationActions } = useGamification();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -745,3 +746,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(SpinWinPage, 'ExploreSpinWin');

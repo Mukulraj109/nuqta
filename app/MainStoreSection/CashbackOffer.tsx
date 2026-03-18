@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useRef } from "react";
 import {
   View,
@@ -29,7 +30,7 @@ interface CashbackOfferProps {
   compact?: boolean;          // slightly smaller footprint
 }
 
-export default function CashbackOffer({
+function CashbackOffer({
   percentage = "10%",
   title = "Cash back",
   showIcon = true,
@@ -216,3 +217,5 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 });
+
+export default withErrorBoundary(CashbackOffer, 'MainStoreSectionCashbackOffer');

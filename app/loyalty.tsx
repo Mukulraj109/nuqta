@@ -27,6 +27,7 @@ import RewardCatalog from '@/components/loyalty/RewardCatalog';
 import RedemptionHistory from '@/components/loyalty/RedemptionHistory';
 import PointsExpiryBanner from '@/components/loyalty/PointsExpiryBanner';
 import { RewardItem } from '@/types/loyaltyRedemption.types';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 
 type TabType = 'rewards' | 'history' | 'challenges';
 
@@ -59,6 +60,11 @@ const LoyaltyPage = () => {
   const [selectedReward, setSelectedReward] = useState<RewardItem | null>(null);
   const [showRedemptionModal, setShowRedemptionModal] = useState(false);
   const [showAllTiersModal, setShowAllTiersModal] = useState(false);
+
+  const safeNav = (path: string) => {
+    try { router.push(path as any); }
+    catch { platformAlertSimple('Error', 'Could not open screen. Please try again.'); }
+  };
 
   // Handle reward redemption
   const handleRedeemReward = (reward: RewardItem) => {
@@ -152,7 +158,7 @@ const LoyaltyPage = () => {
 
           <Pressable
             style={styles.actionCard}
-            onPress={() => router.push('/scratch-card')}
+            onPress={() => safeNav('/scratch-card')}
           >
             <Ionicons name="gift" size={28} color={Colors.warning} />
             <ThemedText style={styles.actionTitle}>Scratch Card</ThemedText>
@@ -161,7 +167,7 @@ const LoyaltyPage = () => {
 
           <Pressable
             style={styles.actionCard}
-            onPress={() => router.push('/referral')}
+            onPress={() => safeNav('/referral')}
           >
             <Ionicons name="people" size={28} color={Colors.success} />
             <ThemedText style={styles.actionTitle}>Refer Friend</ThemedText>
@@ -170,7 +176,7 @@ const LoyaltyPage = () => {
 
           <Pressable
             style={styles.actionCard}
-            onPress={() => router.push('/my-reviews')}
+            onPress={() => safeNav('/my-reviews')}
           >
             <Ionicons name="star" size={28} color={Colors.error} />
             <ThemedText style={styles.actionTitle}>Write Review</ThemedText>
@@ -398,7 +404,7 @@ const LoyaltyPage = () => {
           <ThemedText style={styles.headerTitle}>Loyalty Rewards</ThemedText>
           <Pressable
             style={styles.headerButton}
-            onPress={() => router.push('/profile' as any)}
+            onPress={() => safeNav('/profile')}
           >
             <Ionicons name="stats-chart" size={24} color="white" />
           </Pressable>
@@ -802,4 +808,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoyaltyPage;
+export default withErrorBoundary(LoyaltyPage, 'Loyalty');

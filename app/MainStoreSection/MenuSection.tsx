@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // MenuSection.tsx - Menu list with coin earnings
 import React, { useCallback } from "react";
 import {
@@ -42,7 +43,7 @@ export interface MenuSectionProps {
 //   { id: "4", name: "Cold Brew", variant: "Venti", price: 360, coinsToEarn: 18 },
 // ];
 
-export default function MenuSection({
+function MenuSection({
   items = [],
   onItemPress,
 }: MenuSectionProps) {
@@ -185,3 +186,5 @@ const styles = StyleSheet.create({
     marginLeft: 70 + Spacing.base + Spacing.md, // Align with text start
   },
 });
+
+export default withErrorBoundary(MenuSection, 'MainStoreSectionMenuSection');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
@@ -172,7 +173,7 @@ function getRewardDescription(type: string, value: number): string {
 // COMPONENT
 // ============================================================================
 
-export default function CampaignDetailPage() {
+function CampaignDetailPage() {
   const { slug, claimSuccess } = useLocalSearchParams<{ slug: string; claimSuccess?: string }>();
   const router = useRouter();
   const refreshWallet = useRefreshWallet();
@@ -1220,3 +1221,5 @@ const styles = StyleSheet.create({
     color: colors.neutral[400],
   },
 });
+
+export default withErrorBoundary(CampaignDetailPage, 'BonusZoneSlug');

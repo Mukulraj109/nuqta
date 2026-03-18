@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Senior Citizens Zone Page - Production Ready
  * Fetches real data from backend API for 60+ citizens
@@ -53,7 +54,7 @@ interface ZoneInfo {
   discountRange?: string;
 }
 
-export default function SeniorCitizenZonePage() {
+function SeniorCitizenZonePage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const user = useAuthUser();
@@ -424,3 +425,5 @@ const styles = StyleSheet.create({
   ctaGradient: { flexDirection: 'row', paddingVertical: Spacing.base, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
   ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' },
 });
+
+export default withErrorBoundary(SeniorCitizenZonePage, 'OffersZonesSenior');

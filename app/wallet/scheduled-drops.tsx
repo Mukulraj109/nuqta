@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Scheduled Coin Drops Page
 // View upcoming coin rewards — API-driven
 
@@ -39,7 +40,7 @@ interface ScheduledDrop {
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-export default function ScheduledDropsPage() {
+function ScheduledDropsPage() {
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -542,3 +543,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default withErrorBoundary(ScheduledDropsPage, 'WalletScheduledDrops');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreOffersSection.tsx - Offers at this store section
 import React, { useRef } from "react";
 import {
@@ -46,7 +47,7 @@ export interface StoreOffersSectionProps {
 //   { id: "3", type: "cashback", value: 15, title: "Extra 15% Cashback with UPI", description: "Max cashback 150", validity: "Valid for 7 days", coinsToEarn: 30 },
 // ];
 
-export default function StoreOffersSection({
+function StoreOffersSection({
   offers = [],
   onViewAll,
   onApplyOffer,
@@ -274,3 +275,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(StoreOffersSection, 'MainStoreSectionStoreOffersSection');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Menu Page - Restaurant/Store Menu Display with Dine-In Ordering & Pre-order
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
@@ -52,7 +53,7 @@ interface CartItem {
   specialInstructions?: string;
 }
 
-export default function MenuPage() {
+function MenuPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const storeId = params.storeId as string;
@@ -1046,3 +1047,5 @@ const styles = StyleSheet.create({
     color: Colors.brand.purple,
   },
 });
+
+export default withErrorBoundary(MenuPage, 'MenuStoreId');

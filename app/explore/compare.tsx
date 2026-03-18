@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
@@ -575,4 +576,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ComparePage;
+export default withErrorBoundary(ComparePage, 'ExploreCompare');

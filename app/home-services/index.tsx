@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Home Services Hub Page
  */
@@ -212,4 +213,4 @@ const styles = StyleSheet.create({
   promoButtonText: { fontSize: 14, fontWeight: '700', color: Colors.success },
 });
 
-export default HomeServicesPage;
+export default withErrorBoundary(HomeServicesPage, 'HomeServicesIndex');

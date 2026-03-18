@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Grocery Stores Directory Page
  * Browse all grocery stores with filtering
@@ -671,4 +672,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroceryStoresPage;
+export default withErrorBoundary(GroceryStoresPage, 'GroceryStores');

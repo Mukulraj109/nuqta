@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // My Tickets Page
 // Lists all support tickets with filters, pagination, and status badges
 
@@ -29,7 +30,7 @@ const STATUS_FILTERS = [
   { key: 'closed', label: 'Closed' },
 ] as const;
 
-export default function TicketsPage() {
+function TicketsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -495,3 +496,5 @@ const styles = StyleSheet.create({
     color: Colors.gray[400],
   },
 });
+
+export default withErrorBoundary(TicketsPage, 'SupportTickets');

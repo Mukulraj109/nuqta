@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Cab Details Page - Dedicated page for cab bookings
  * Production-ready with complete booking flow
@@ -111,7 +112,7 @@ interface BookingData {
   bookingNumber?: string;
 }
 
-export default function CabDetailsPage() {
+function CabDetailsPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
@@ -1151,3 +1152,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(CabDetailsPage, 'CabId');

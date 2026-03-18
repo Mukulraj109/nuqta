@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, StatusBar, Share } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
@@ -676,4 +677,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TransactionDetailPage;
+export default withErrorBoundary(TransactionDetailPage, 'TransactionsId');

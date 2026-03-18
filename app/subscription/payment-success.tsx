@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Payment Success Page
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import {
@@ -21,7 +22,7 @@ import { showToast } from '@/components/common/ToastManager';
 import { Platform } from 'react-native';
 import subscriptionAPI from '@/services/subscriptionApi';
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const { state, actions } = useSubscription();
@@ -576,3 +577,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(PaymentSuccessPage, 'SubscriptionPaymentSuccess');

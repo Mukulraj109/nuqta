@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Sponsored Cashback Offers Page
 // Brand-sponsored cashback offers (wired to GET /api/offers/bank-offers)
 
@@ -81,7 +82,7 @@ function mapBankOfferToSponsored(offer: BankOfferRaw, currencySymbol: string): S
   };
 }
 
-export default function SponsoredCashbackPage() {
+function SponsoredCashbackPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -547,3 +548,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default withErrorBoundary(SponsoredCashbackPage, 'OffersSponsored');

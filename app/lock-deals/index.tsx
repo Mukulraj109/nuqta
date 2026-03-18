@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Lock Price Deals - Browse & Lock Deals
  *
@@ -668,4 +669,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LockDealsPage;
+export default withErrorBoundary(LockDealsPage, 'LockDealsIndex');

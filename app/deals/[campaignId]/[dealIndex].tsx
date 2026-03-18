@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Deal Detail Page - Premium Individual Deal View
  * Route: /deals/[campaignId]/[dealIndex]
@@ -28,6 +29,7 @@ import CoinIcon from '@/components/ui/CoinIcon';
 import { useIsAuthenticated } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useGetCurrencySymbol as useGetCurrencySymbolFromStore } from '@/stores/selectors';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -72,6 +74,8 @@ const DealDetailPage: React.FC = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
   const isAuthenticated = useIsAuthenticated();
+  const getRegionCurrencySymbol = useGetCurrencySymbolFromStore();
+  const regionCurrencySymbol = getRegionCurrencySymbol();
   const campaignId = params.campaignId as string;
   const dealIndex = parseInt(params.dealIndex as string, 10);
 
@@ -198,7 +202,7 @@ const DealDetailPage: React.FC = () => {
       case 'AED': return 'AED ';
       case 'USD': return '$';
       case 'INR':
-      default: return '₹';
+      default: return regionCurrencySymbol;
     }
   };
 
@@ -741,14 +745,14 @@ const DealDetailPage: React.FC = () => {
               {campaign.minOrderValue && (
                 <View style={styles.detailCard}>
                   <Ionicons name="cart-outline" size={24} color={COLORS.blue500} />
-                  <Text style={styles.detailValue}>₹{campaign.minOrderValue}</Text>
+                  <Text style={styles.detailValue}>{regionCurrencySymbol}{campaign.minOrderValue}</Text>
                   <Text style={styles.detailLabel}>Minimum Order</Text>
                 </View>
               )}
               {campaign.maxBenefit && (
                 <View style={styles.detailCard}>
                   <Ionicons name="trending-up-outline" size={24} color={COLORS.green500} />
-                  <Text style={styles.detailValue}>₹{campaign.maxBenefit}</Text>
+                  <Text style={styles.detailValue}>{regionCurrencySymbol}{campaign.maxBenefit}</Text>
                   <Text style={styles.detailLabel}>Max Benefit</Text>
                 </View>
               )}
@@ -1776,4 +1780,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DealDetailPage;
+export default withErrorBoundary(DealDetailPage, 'DealsCampaignIdDealIndex');

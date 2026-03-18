@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Polls Page
 // Vote in polls to earn coins
 
@@ -25,7 +26,7 @@ import { colors } from '@/constants/theme';
 
 type TabType = 'active' | 'history';
 
-export default function PollsPage() {
+function PollsPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('active');
   const [polls, setPolls] = useState<Poll[]>([]);
@@ -598,3 +599,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
   },
 });
+
+export default withErrorBoundary(PollsPage, 'EarnPolls');

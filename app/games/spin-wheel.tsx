@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -23,7 +24,7 @@ import { GamePageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function SpinWheelPage() {
+function SpinWheelPage() {
   const [loading, setLoading] = useState(true);
   const [segments, setSegments] = useState<SpinWheelSegment[]>([]);
   const [spinsRemaining, setSpinsRemaining] = useState(0);
@@ -428,3 +429,5 @@ const styles = StyleSheet.create({
     color: Colors.brand.purpleLight,
   },
 });
+
+export default withErrorBoundary(SpinWheelPage, 'GamesSpinWheel');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Fitness Booking Page - Gym/Studio/Trainer specific booking
  * Handles membership plans, class bookings, trainer sessions, day passes
@@ -907,4 +908,4 @@ const styles = StyleSheet.create({
   doneButtonText: { fontSize: Typography.bodyLarge.fontSize, fontWeight: '700', color: Colors.text.inverse },
 });
 
-export default FitnessBookingPage;
+export default withErrorBoundary(FitnessBookingPage, 'FitnessBookStoreId');

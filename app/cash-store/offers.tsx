@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View,
@@ -22,6 +23,7 @@ import couponService from '../../services/couponApi';
 import realVouchersApi from '../../services/realVouchersApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -165,9 +167,11 @@ const SkeletonBlock = React.memo(({ width: w, height: h, style, index = 0 }: {
 });
 
 // ─── Main Component ─────────────────────────────────────────
-export default function OffersPage() {
+function OffersPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const currencySymbol = getCurrencySymbol();
 
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [coinDrops, setCoinDrops] = useState<CoinDrop[]>([]);
@@ -422,7 +426,7 @@ export default function OffersPage() {
                 {featuredCoupons.map((coupon) => {
                   const discount = coupon.discountType === 'PERCENTAGE'
                     ? `${coupon.discountValue}% Off`
-                    : `₹${coupon.discountValue} Off`;
+                    : `${currencySymbol}${coupon.discountValue} Off`;
                   const timeLeft = coupon.validTo ? formatTimeLeft(coupon.validTo) : '';
                   const isEnded = timeLeft === 'Ended';
 
@@ -456,7 +460,7 @@ export default function OffersPage() {
                           ) : null}
                         </View>
                         {coupon.minOrderValue ? (
-                          <Text style={styles.couponMinOrder}>Min. order ₹{coupon.minOrderValue}</Text>
+                          <Text style={styles.couponMinOrder}>Min. order {currencySymbol}{coupon.minOrderValue}</Text>
                         ) : null}
                       </View>
                     </Pressable>
@@ -1394,3 +1398,5 @@ const styles = StyleSheet.create({
   headerSpacer: { width: 32 },
   bottomSpacer: { height: 100 },
 });
+
+export default withErrorBoundary(OffersPage, 'CashStoreOffers');

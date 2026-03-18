@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Reviews Page - Standalone store reviews page
 import React, { useState, useEffect, useCallback } from 'react';
 import {
@@ -51,7 +52,7 @@ interface ReviewStats {
   };
 }
 
-export default function ReviewsPage() {
+function ReviewsPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const storeId = params.storeId as string;
@@ -669,3 +670,5 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
 });
+
+export default withErrorBoundary(ReviewsPage, 'ReviewsStoreId');

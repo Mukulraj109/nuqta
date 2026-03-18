@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useMemo } from 'react';
 import {
   View,
@@ -17,7 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
-export default function BrandedCoinsScreen() {
+function BrandedCoinsScreen() {
   const router = useRouter();
   const walletData = useWalletData();
   const brandedCoinsFromCtx = useBrandedCoins();
@@ -269,3 +270,5 @@ const createStyles = (screenWidth: number) => {
     },
   });
 };
+
+export default withErrorBoundary(BrandedCoinsScreen, 'BrandedCoinsScreen');

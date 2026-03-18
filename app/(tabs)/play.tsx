@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { Suspense } from 'react';
 import { View, ScrollView, StyleSheet, RefreshControl, Pressable, Animated, Platform } from 'react-native';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
@@ -26,7 +27,7 @@ const UGCVideoSection = React.lazy(() => import('@/components/playPage/UGCVideoS
 import logger from '@/utils/logger';
 import { colors } from '@/constants/theme';
 
-export default function PlayScreen() {
+function PlayScreen() {
   const router = useRouter();
   const { state, actions } = usePlayPageData();
   const { preloadVideos, isPreloaded } = useVideoPreload();
@@ -561,3 +562,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(PlayScreen, '(tabs)Play');

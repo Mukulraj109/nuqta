@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Prive Offer Detail Page
  *
@@ -41,7 +42,7 @@ const REWARD_TYPE_LABELS: Record<string, string> = {
   coins: 'Coin Reward',
 };
 
-export default function PriveOfferDetailScreen() {
+function PriveOfferDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
 
@@ -678,3 +679,5 @@ const styles = StyleSheet.create({
     color: PRIVE_COLORS.text.inverse,
   },
 });
+
+export default withErrorBoundary(PriveOfferDetailScreen, 'PriveOffersId');

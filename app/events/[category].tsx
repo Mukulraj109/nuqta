@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Events Category Page - Dynamic route for event categories
  * Connected to /api/events/category/:category
@@ -592,4 +593,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventsCategoryPage;
+export default withErrorBoundary(EventsCategoryPage, 'EventsCategory');

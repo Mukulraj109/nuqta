@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import {
@@ -999,5 +1000,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UGCCreator;
+export default withErrorBoundary(UGCCreator, 'PlayandearnUGCCreator');
 

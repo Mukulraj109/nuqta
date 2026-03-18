@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React from 'react';
 import { View, Text, Pressable, StyleSheet, Platform, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -11,7 +12,7 @@ import { colors } from '@/constants/theme';
 
 // Nuqta Design System Colors
 
-export default function RewardsIntroScreen() {
+function RewardsIntroScreen() {
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
 
@@ -537,3 +538,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default withErrorBoundary(RewardsIntroScreen, 'OnboardingRewardsIntro');

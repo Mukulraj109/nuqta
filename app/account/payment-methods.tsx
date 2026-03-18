@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Payment Methods Management Screen
 // Full CRUD operations for saved payment methods
 
@@ -35,7 +36,7 @@ import { colors } from '@/constants/theme';
 
 type ModalMode = 'add' | 'edit' | null;
 
-export default function PaymentMethodsManagementPage() {
+function PaymentMethodsManagementPage() {
   const router = useRouter();
   const {
     paymentMethods,
@@ -1424,3 +1425,4 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+export default withErrorBoundary(PaymentMethodsManagementPage, 'AccountPaymentMethods');

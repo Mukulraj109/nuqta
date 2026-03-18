@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Subscription Management Page
 // Manage current subscription, view usage statistics, and handle upgrades/cancellations
 
@@ -25,7 +26,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { colors } from '@/constants/theme';
 // StickyCTAContainer available for future use
 
-export default function SubscriptionManagePage() {
+function SubscriptionManagePage() {
   const router = useRouter();
   const { state, actions, computed } = useSubscription();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -703,3 +704,5 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.errorScale[50],
   },
 });
+
+export default withErrorBoundary(SubscriptionManagePage, 'SubscriptionManage');

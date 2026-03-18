@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * My Locked Deals Page
  *
@@ -595,4 +596,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyLocksPage;
+export default withErrorBoundary(MyLocksPage, 'LockDealsMyLocks');

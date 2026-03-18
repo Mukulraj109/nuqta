@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useRef, useState } from "react";
 import { View, Pressable, StyleSheet, ViewStyle, TextStyle, Linking, Platform, Animated } from "react-native";
 import { useRouter } from "expo-router";
@@ -51,7 +52,7 @@ const actions: ActionButtonProps[] = [
   { label: "Location", icon: "location-outline" },
 ];
 
-export default function Section2({ dynamicData, cardType }: Section2Props){
+function Section2({ dynamicData, cardType }: Section2Props){
   const router = useRouter();
   const [showContactModal, setShowContactModal] = useState(false);
 
@@ -307,3 +308,5 @@ const styles = StyleSheet.create<Styles>({
     textAlign: "center",
   },
 });
+
+export default withErrorBoundary(Section2, 'StoreSectionSection2');

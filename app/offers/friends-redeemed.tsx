@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Friends Redeemed Offers Page
 // Social proof - what friends bought
 
@@ -73,7 +74,7 @@ function mapRedemptionToFriendOffer(item: any, currencySymbol: string): FriendOf
   };
 }
 
-export default function FriendsRedeemedPage() {
+function FriendsRedeemedPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -566,3 +567,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(FriendsRedeemedPage, 'OffersFriendsRedeemed');

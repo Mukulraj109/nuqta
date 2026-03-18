@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Women Exclusive Zone Page - Production Ready
  * Fetches real data from backend API
@@ -60,7 +61,7 @@ const CATEGORIES = [
   { id: 'Fitness', icon: '💪', label: 'Fitness' },
 ];
 
-export default function WomenZonePage() {
+function WomenZonePage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const user = useAuthUser();
@@ -421,3 +422,5 @@ const styles = StyleSheet.create({
   ctaGradient: { paddingVertical: Spacing.base, alignItems: 'center', justifyContent: 'center' },
   ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' },
 });
+
+export default withErrorBoundary(WomenZonePage, 'OffersZonesWomen');

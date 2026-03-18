@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Shared Brand Loyalty Tracking Page
  * /MainCategory/[slug]/loyalty/brands
@@ -42,7 +43,7 @@ const TIER_CONFIG: Record<string, {
   },
 };
 
-export default function ElectronicsBrandsPage() {
+function ElectronicsBrandsPage() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -239,3 +240,5 @@ const styles = StyleSheet.create({
   emptyTitle: { fontSize: 16, fontWeight: '600', color: colors.neutral[900], marginTop: 16 },
   emptySubtitle: { fontSize: 13, color: colors.neutral[500], marginTop: 4, textAlign: 'center' },
 });
+
+export default withErrorBoundary(ElectronicsBrandsPage, 'MainCategorySlugLoyaltyBrands');

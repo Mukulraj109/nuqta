@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { useBackButton } from '@/hooks/useSafeNavigation';
@@ -5,7 +6,7 @@ import LoadingScreen from '@/components/onboarding/LoadingScreen';
 import { navigationDebugger } from '@/utils/navigationDebug';
 import analyticsService from '@/services/analyticsService';
 
-export default function OnboardingLoadingScreen() {
+function OnboardingLoadingScreen() {
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
 
@@ -25,3 +26,4 @@ export default function OnboardingLoadingScreen() {
     />
   );
 }
+export default withErrorBoundary(OnboardingLoadingScreen, 'OnboardingLoading');

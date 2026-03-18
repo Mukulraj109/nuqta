@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { useState, useEffect } from 'react';
 import { useRouter, Link } from 'expo-router';
 import {
@@ -676,5 +677,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SocialImpact;
+export default withErrorBoundary(SocialImpact, 'PlayandearnSocialImpact');
 

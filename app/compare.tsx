@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Product/Store Comparison Page
  * Allows users to compare products or stores side by side
@@ -78,7 +79,7 @@ const transformProductToCompareItem = (product: ComparisonProduct): CompareItem 
   };
 };
 
-export default function ComparePage() {
+function ComparePage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const isAuthenticated = useIsAuthenticated();
@@ -636,3 +637,5 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
   },
 });
+
+export default withErrorBoundary(ComparePage, 'Compare');

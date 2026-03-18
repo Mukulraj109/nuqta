@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect, useRef } from 'react';
 import {
   View,
@@ -16,7 +17,7 @@ import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
-export default function SurveyCompletePage() {
+function SurveyCompletePage() {
   const router = useRouter();
   const { coinsEarned, timeSpent } = useLocalSearchParams<{
     coinsEarned: string;
@@ -426,3 +427,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(SurveyCompletePage, 'SurveyIdComplete');

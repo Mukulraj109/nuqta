@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Creator Dashboard
 // Shows earnings overview, recent conversions, picks management, and tier progress
 
@@ -39,7 +40,7 @@ const tierColors: Record<string, { bg: string; text: string; border: string }> =
   platinum: { bg: colors.tint.purple, text: '#5B21B6', border: colors.brand.purpleLight },
 };
 
-export default function CreatorDashboard() {
+function CreatorDashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -965,3 +966,5 @@ const styles = StyleSheet.create({
   coinIcon14: { width: 14, height: 14, borderRadius: 7 },
   coinIcon28: { width: 28, height: 28, borderRadius: 14 },
 });
+
+export default withErrorBoundary(CreatorDashboard, 'CreatorDashboard');

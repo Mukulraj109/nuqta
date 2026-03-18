@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Downgrade Confirmation Screen
 // Warning screen before downgrading subscription tier
 
@@ -16,7 +17,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function DowngradeConfirmationPage() {
+function DowngradeConfirmationPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { state, computed, actions } = useSubscription();
@@ -529,3 +530,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default withErrorBoundary(DowngradeConfirmationPage, 'SubscriptionDowngradeConfirmation');

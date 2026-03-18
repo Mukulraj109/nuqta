@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, StyleSheet, ScrollView,
@@ -13,7 +14,7 @@ import priveApi from '@/services/priveApi';
 import { colors } from '@/constants/theme';
 import { catchAndReport } from '@/utils/catchAndReport';
 
-export default function AnalyticsScreen() {
+function AnalyticsScreen() {
   const { tier } = usePriveEligibility();
   const tierRank: Record<string, number> = { none: 0, entry: 1, signature: 2, elite: 3 };
 
@@ -213,3 +214,5 @@ const styles = StyleSheet.create({
   pillarDelta: { fontSize: 12, fontWeight: '500', width: 50, textAlign: 'right' },
   trendDirection: { fontSize: 14, color: PRIVE_COLORS.text.secondary },
 });
+
+export default withErrorBoundary(AnalyticsScreen, 'PriveAnalytics');

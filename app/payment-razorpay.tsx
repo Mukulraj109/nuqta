@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Payment Page with Razorpay + Stripe Dual Gateway Support
 // Supports multi-currency: INR (Razorpay/Stripe), AED/USD/EUR/GBP (Stripe only)
 
@@ -49,7 +50,7 @@ const STRIPE_ONLY_CURRENCIES = ['AED', 'USD', 'EUR', 'GBP', 'CAD', 'AUD'];
 
 type PaymentGateway = 'razorpay' | 'stripe';
 
-export default function PaymentPage() {
+function PaymentPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -1060,3 +1061,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(PaymentPage, 'PaymentRazorpay');

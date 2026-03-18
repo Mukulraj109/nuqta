@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import {
@@ -979,5 +980,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CorporateEmployee;
+export default withErrorBoundary(CorporateEmployee, 'PlayandearnCorporateEmployee');
 

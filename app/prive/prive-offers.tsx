@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Privé Offers — All offers listing page
  * Accessible from "See All" in PriveOffersCarousel
@@ -22,7 +23,7 @@ import priveApi, { PriveOffer } from '@/services/priveApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
 
-export default function PriveOffersScreen() {
+function PriveOffersScreen() {
   const router = useRouter();
   const [offers, setOffers] = useState<PriveOffer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -268,3 +269,5 @@ const styles = StyleSheet.create({
     paddingVertical: PRIVE_SPACING.xl,
   },
 });
+
+export default withErrorBoundary(PriveOffersScreen, 'PrivePriveOffers');

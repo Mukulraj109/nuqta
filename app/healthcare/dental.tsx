@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -108,7 +109,7 @@ const timeSlots: BookingSlot[] = [
   { time: '06:00 PM', available: true },
 ];
 
-export default function DentalCarePage() {
+function DentalCarePage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [dentists, setDentists] = useState<DentistStore[]>([]);
@@ -1183,3 +1184,5 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.sm,
   },
 });
+
+export default withErrorBoundary(DentalCarePage, 'HealthcareDental');

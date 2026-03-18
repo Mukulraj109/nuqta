@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Deal Store Page - All deals in one place
  * 100% production ready - Connected to /api/campaigns
@@ -592,4 +593,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DealStorePage;
+export default withErrorBoundary(DealStorePage, 'DealStore');

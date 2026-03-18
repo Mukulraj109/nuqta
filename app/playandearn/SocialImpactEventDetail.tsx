@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { useState, useEffect } from 'react';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import {
@@ -753,5 +754,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SocialImpactEventDetail;
+export default withErrorBoundary(SocialImpactEventDetail, 'PlayandearnSocialImpactEventDetail');
 

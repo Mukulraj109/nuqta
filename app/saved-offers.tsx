@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Saved/Favorite Offers Page
 import React, { useState, useEffect, useCallback } from 'react';
 import {
@@ -23,7 +24,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
 
-export default function SavedOffersScreen() {
+function SavedOffersScreen() {
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
 
@@ -232,3 +233,5 @@ const styles = StyleSheet.create({
   browseButton: { backgroundColor: Colors.info, paddingHorizontal: Spacing.xl, paddingVertical: Spacing.md, borderRadius: 10, marginTop: Spacing.lg },
   browseButtonText: { color: Colors.text.inverse, fontSize: Typography.body.fontSize, fontWeight: '600' },
 });
+
+export default withErrorBoundary(SavedOffersScreen, 'SavedOffers');

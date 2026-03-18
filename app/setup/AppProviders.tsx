@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Full provider tree for the app.
  * Composes all eager and deferred context providers in the correct nesting order.
@@ -56,7 +57,7 @@ interface AppProvidersProps {
   onQueueSyncError: (error: Error) => void;
 }
 
-export default function AppProviders({
+function AppProviders({
   onErrorBoundaryError,
   // Queue sync callbacks kept in interface for backwards compat with _layout.tsx
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -144,3 +145,5 @@ function ThemedNavigation() {
     </ThemeProvider>
   );
 }
+
+export default withErrorBoundary(AppProviders, 'SetupAppProviders');

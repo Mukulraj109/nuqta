@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
@@ -789,4 +790,4 @@ const styles = StyleSheet.create({
   secondaryActionText: { fontSize: 15, fontWeight: '600', color: COLORS.textMuted },
 });
 
-export default GuessPrice;
+export default withErrorBoundary(GuessPrice, 'PlayandearnGuessprice');

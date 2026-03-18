@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React from 'react';
 import {
   View,
@@ -12,7 +13,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 
-export default function GoldSavingsHistoryPage() {
+function GoldSavingsHistoryPage() {
   const { goBack } = useSafeNavigation();
 
   return (
@@ -92,3 +93,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default withErrorBoundary(GoldSavingsHistoryPage, 'GoldSavingsHistory');

@@ -144,9 +144,16 @@ class PartnerApiService {
   /**
    * Get partner dashboard data
    */
-  async getDashboard(): Promise<ApiResponse<PartnerDashboard>> {
+  async getDashboard(): Promise<ApiResponse<PartnerDashboard & { enrolled?: boolean }>> {
 
     return apiClient.get(`${this.baseUrl}/dashboard`);
+  }
+
+  /**
+   * Explicitly enroll user in partner program
+   */
+  async enrollPartner(): Promise<ApiResponse<PartnerDashboard & { enrolled: boolean }>> {
+    return apiClient.post(`${this.baseUrl}/enroll`);
   }
 
   /**

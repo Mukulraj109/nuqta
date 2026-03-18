@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Subscriptions Page
  * Shows available subscription tiers and user's current subscription.
@@ -27,7 +28,7 @@ import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSys
 import { colors } from '@/constants/theme';
 import { TierCard, BenefitsTable, ValueCalculator } from '@/components/subscriptions';
 
-export default function SubscriptionsPage() {
+function SubscriptionsPage() {
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const authLoading = useAuthLoading();
@@ -560,3 +561,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(SubscriptionsPage, 'Subscriptions');

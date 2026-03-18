@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Privé Pillars Page
  * Detailed view of all 6 pillars with hero score, animated bars,
@@ -225,7 +226,7 @@ const HeroScoreSection = ({
 };
 
 // ─── Main Pillars Screen ──────────────────────────────────────────────────────
-export default function PillarsScreen() {
+function PillarsScreen() {
   const { eligibility, isLoading: hookLoading, refresh, error: hookError } = usePriveEligibility();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -705,3 +706,5 @@ const styles = StyleSheet.create({
     backgroundColor: PRIVE_COLORS.border.primary,
   },
 });
+
+export default withErrorBoundary(PillarsScreen, 'PrivePillars');

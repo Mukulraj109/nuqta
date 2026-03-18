@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Notification Permission Screen
 // Dedicated screen to request push notification permission
 
@@ -45,7 +46,7 @@ const BENEFITS = [
   },
 ];
 
-export default function NotificationPermissionPage() {
+function NotificationPermissionPage() {
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
   const user = useAuthUser();
@@ -411,3 +412,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(NotificationPermissionPage, 'OnboardingNotificationPermission');

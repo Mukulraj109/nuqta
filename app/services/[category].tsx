@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors } from '@/constants/theme';
 import React, { useState, useCallback, useEffect, memo } from 'react';
 import {
@@ -125,7 +126,7 @@ const SORT_OPTIONS = [
   { label: 'Popular', value: 'popular' },
 ];
 
-export default function ServiceCategoryPage() {
+function ServiceCategoryPage() {
   const router = useRouter();
   const { category: categorySlug } = useLocalSearchParams();
 
@@ -721,3 +722,5 @@ const styles = StyleSheet.create({
     color: colors.gray[400],
   },
 });
+
+export default withErrorBoundary(ServiceCategoryPage, 'ServicesCategory');

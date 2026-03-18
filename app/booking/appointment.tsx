@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -60,7 +61,7 @@ interface TimeSlot {
   available: boolean;
 }
 
-export default function AppointmentBookingPage() {
+function AppointmentBookingPage() {
   const { storeId } = useLocalSearchParams<{ storeId: string }>();
   const router = useRouter();
   const backgroundColor = useThemeColor({}, 'background');
@@ -964,3 +965,5 @@ const styles = StyleSheet.create({
     color: Colors.background.primary,
   },
 });
+
+export default withErrorBoundary(AppointmentBookingPage, 'BookingAppointment');

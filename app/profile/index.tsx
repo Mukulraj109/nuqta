@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Profile Page
 // User profile page with icon grid and menu list
 
@@ -36,7 +37,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { getReferralStats } from '@/services/referralApi';
 
-export default function ProfilePage() {
+function ProfilePage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -1427,3 +1428,4 @@ const styles = StyleSheet.create({
     height: 100,
   },
 });
+export default withErrorBoundary(ProfilePage, 'ProfileIndex');

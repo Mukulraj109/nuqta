@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback } from 'react';
 import {
   View,
@@ -18,7 +19,7 @@ import * as identityApi from '@/services/identityApi';
 import analyticsService, { IdentityAnalyticsEvents } from '@/services/analyticsService';
 import { platformAlertSimple } from '@/utils/platformAlert';
 
-export default function StudentVerifyPage() {
+function StudentVerifyPage() {
   const router = useRouter();
   const { setIdentity } = useUserIdentityStore();
 
@@ -270,3 +271,5 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 });
+
+export default withErrorBoundary(StudentVerifyPage, 'OnboardingStudentVerify');

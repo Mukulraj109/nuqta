@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors } from '@/constants/theme';
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {
@@ -25,7 +26,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
 
-export default function ArticlesPage() {
+function ArticlesPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -553,3 +554,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(ArticlesPage, 'Articles');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Double Cashback Campaigns Page
 // Shows active 2X/3X/5X cashback campaigns from admin
 
@@ -21,6 +22,7 @@ import cashStoreApi from '../../services/cashStoreApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 const { width } = Dimensions.get('window');
 
@@ -90,9 +92,11 @@ function getCategoryIcon(cat: string): string {
 }
 
 // ─── Component ──────────────────────────────────────────────
-export default function DoubleCashbackPage() {
+function DoubleCashbackPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const currencySymbol = getCurrencySymbol();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -267,7 +271,7 @@ export default function DoubleCashbackPage() {
                   <Ionicons name="cart-outline" size={18} color={Colors.nileBlue} />
                 </View>
                 <Text style={styles.statValue}>Min. Order</Text>
-                <Text style={styles.statLabel}>₹{heroCampaign.minOrderValue}</Text>
+                <Text style={styles.statLabel}>{currencySymbol}{heroCampaign.minOrderValue}</Text>
               </View>
             ) : null}
             {heroCampaign.maxCashback ? (
@@ -276,7 +280,7 @@ export default function DoubleCashbackPage() {
                   <Ionicons name="wallet-outline" size={18} color={Colors.nileBlue} />
                 </View>
                 <Text style={styles.statValue}>Max Cashback</Text>
-                <Text style={styles.statLabel}>₹{heroCampaign.maxCashback}</Text>
+                <Text style={styles.statLabel}>{currencySymbol}{heroCampaign.maxCashback}</Text>
               </View>
             ) : null}
             <View style={styles.statCard}>
@@ -531,3 +535,5 @@ const styles = StyleSheet.create({
   otherSubtitle: { fontSize: 12, color: 'rgba(255,255,255,0.8)', marginTop: 2 },
   otherTimer: { fontSize: 11, color: 'rgba(255,255,255,0.6)', marginTop: 4, fontWeight: '600' },
 });
+
+export default withErrorBoundary(DoubleCashbackPage, 'OffersDoubleCashback');

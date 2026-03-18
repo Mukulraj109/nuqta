@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Prive Wallet Page
  * Shows detailed coin balance and transaction history with real data.
@@ -191,7 +192,7 @@ function WalletSkeleton() {
 // Main Component
 // ---------------------------------------------------------------------------
 
-export default function PriveWalletScreen() {
+function PriveWalletScreen() {
   const router = useRouter();
   const walletData = useWalletData();
   const rezBalance = useRezBalance();
@@ -964,3 +965,5 @@ const styles = StyleSheet.create({
   scrollContentPadding: { paddingBottom: 120 },
   skeletonFlex1: { flex: 1 },
 });
+
+export default withErrorBoundary(PriveWalletScreen, 'PriveWallet');

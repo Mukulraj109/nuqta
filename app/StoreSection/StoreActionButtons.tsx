@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreActionButtons.tsx - Modernized with Design System & Haptics
 import React, { useState, useCallback, useMemo, useRef } from 'react';
 import {
@@ -371,7 +372,7 @@ function StoreActionButtons({
   );
 }
 
-export default React.memo(StoreActionButtons);
+export default withErrorBoundary(React.memo(StoreActionButtons), 'StoreSectionStoreActionButtons');
 
 const styles = StyleSheet.create({
   // Modern Container

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Grocery Compare Page
  * Compare prices across different stores
@@ -583,4 +584,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroceryComparePage;
+export default withErrorBoundary(GroceryComparePage, 'GroceryCompare');

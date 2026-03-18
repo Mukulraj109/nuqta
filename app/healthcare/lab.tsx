@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Lab Tests Page
  * Browse and book diagnostic lab tests
@@ -704,4 +705,4 @@ const styles = StyleSheet.create({
   confirmButtonText: { fontSize: Typography.bodyLarge.fontSize, fontWeight: '700', color: Colors.text.inverse },
 });
 
-export default LabTestsPage;
+export default withErrorBoundary(LabTestsPage, 'HealthcareLab');

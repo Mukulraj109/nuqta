@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * All Categories Page
  *
@@ -58,7 +59,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, onPress }) => {
   );
 };
 
-export default function AllCategoriesPage() {
+function AllCategoriesPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -250,3 +251,5 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 });
+
+export default withErrorBoundary(AllCategoriesPage, 'MallCategoriesIndex');

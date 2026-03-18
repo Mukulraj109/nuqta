@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback, useEffect } from 'react';
 import {
   View,
@@ -21,7 +22,7 @@ import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-export default function ArticleDetailPage() {
+function ArticleDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
 
@@ -638,3 +639,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(ArticleDetailPage, 'ArticleId');

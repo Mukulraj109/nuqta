@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // LocationSection.tsx - Location & Directions section
 import React, { useRef } from "react";
 import {
@@ -29,7 +30,7 @@ export interface LocationSectionProps {
   mapImageUrl?: string;
 }
 
-export default function LocationSection({
+function LocationSection({
   address = "MG Road, Bangalore",
   distance = "300m away",
   latitude,
@@ -321,3 +322,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(LocationSection, 'MainStoreSectionLocationSection');

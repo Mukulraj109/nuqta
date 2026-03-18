@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Admin Dashboard - Campaign Management
 // Allows admins to view and edit campaigns, link deals to stores
 
@@ -69,7 +70,7 @@ interface Store {
   location?: { city: string };
 }
 
-export default function AdminCampaigns() {
+function AdminCampaigns() {
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -757,3 +758,5 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 });
+
+export default withErrorBoundary(AdminCampaigns, 'AdminCampaigns');

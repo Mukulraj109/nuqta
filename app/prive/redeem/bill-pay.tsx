@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Bill Pay Redemption Page
  * Redeem coins for bill payments
@@ -20,7 +21,7 @@ const generateIdempotencyKey = () => `${Date.now()}-${Math.random().toString(36)
 
 const QUICK_AMOUNTS = [100, 200, 500, 1000, 2000];
 
-export default function BillPayScreen() {
+function BillPayScreen() {
   const router = useRouter();
   const { userData, refresh } = usePriveSection();
   const refreshWallet = useRefreshWallet();
@@ -566,3 +567,5 @@ const styles = StyleSheet.create({
     color: PRIVE_COLORS.gold.primary,
   },
 });
+
+export default withErrorBoundary(BillPayScreen, 'PriveRedeemBillPay');

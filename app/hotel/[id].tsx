@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Hotel Details Page - Dedicated page for hotel bookings
  * Production-ready with complete booking flow
@@ -112,7 +113,7 @@ interface BookingData {
   bookingNumber?: string;
 }
 
-export default function HotelDetailsPage() {
+function HotelDetailsPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
@@ -1212,3 +1213,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 });
+
+export default withErrorBoundary(HotelDetailsPage, 'HotelId');

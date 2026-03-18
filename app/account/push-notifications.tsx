@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -28,7 +29,7 @@ interface PushNotifications {
   chatMessages: boolean;
 }
 
-export default function PushNotificationsScreen() {
+function PushNotificationsScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -398,3 +399,5 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.sm,
   },
 });
+
+export default withErrorBoundary(PushNotificationsScreen, 'AccountPushNotifications');

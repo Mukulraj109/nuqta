@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Trivia Challenge Game
 // Multiple choice quiz, 10 questions, timer per question, score tracking, backend integration
 
@@ -113,7 +114,7 @@ const TOTAL_QUESTIONS = 10;
 
 type GameState = 'idle' | 'playing' | 'answered' | 'completed';
 
-export default function TriviaPage() {
+function TriviaPage() {
   const [gameState, setGameState] = useState<GameState>('idle');
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -904,3 +905,5 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
 });
+
+export default withErrorBoundary(TriviaPage, 'GamesTrivia');

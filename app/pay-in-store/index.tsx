@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Pay In Store - Entry Screen (Find Store)
  *
@@ -29,7 +30,7 @@ import BonusCampaignBanner from '@/components/earn/BonusCampaignBanner';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
-export default function PayInStoreScreen() {
+function PayInStoreScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<PayInStoreParams & { bonusCampaignSlug?: string }>();
   const isAuthenticated = useIsAuthenticated();
@@ -533,3 +534,5 @@ const styles = StyleSheet.create({
     color: Colors.nileBlue,
   },
 });
+
+export default withErrorBoundary(PayInStoreScreen, 'PayInStoreIndex');

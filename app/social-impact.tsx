@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -84,7 +85,7 @@ const defaultStats: UserImpactStats = {
   longestStreak: 0,
 };
 
-export default function SocialImpactPage() {
+function SocialImpactPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('all');
   const [events, setEvents] = useState<SocialImpactEvent[]>([]);
@@ -1053,3 +1054,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(SocialImpactPage, 'SocialImpact');

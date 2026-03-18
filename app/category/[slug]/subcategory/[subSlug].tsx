@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * SubcategoryPage - Shows stores AND products for a subcategory
  * User can switch between tabs to see stores or products
@@ -60,7 +61,7 @@ interface ProductItem {
   storeName?: string;
 }
 
-export default function SubcategoryPage() {
+function SubcategoryPage() {
   const router = useRouter();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
@@ -715,3 +716,5 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.xs,
   },
 });
+
+export default withErrorBoundary(SubcategoryPage, 'CategorySlugSubcategorySubSlug');

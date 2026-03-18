@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback, useRef, useLayoutEffect } from 'react';
 import {
   View,
@@ -74,7 +75,7 @@ interface ProjectsResponse {
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-export default function AllProjectsPage() {
+function AllProjectsPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const user = useAuthUser();
@@ -1257,3 +1258,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(AllProjectsPage, 'Projects');

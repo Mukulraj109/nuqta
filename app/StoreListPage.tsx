@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreListPage.tsx
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
@@ -1114,4 +1115,4 @@ const createStyles = (screenData: { width: number; height: number }) => {
   });
 };
 
-export default StoreListPage;
+export default withErrorBoundary(StoreListPage, 'StoreListPage');

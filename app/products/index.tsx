@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Products Listing Page
  * Shows all products filtered by category with search and filtering capabilities
@@ -718,4 +719,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductsPage;
+export default withErrorBoundary(ProductsPage, 'ProductsIndex');

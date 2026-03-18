@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
 import analyticsService from '@/services/analyticsService';
@@ -13,7 +14,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
-export default function LocationPermissionScreen() {
+function LocationPermissionScreen() {
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
   const { updateUserData, setLoading, state } = useOnboarding();
@@ -537,3 +538,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(LocationPermissionScreen, 'OnboardingLocationPermission');

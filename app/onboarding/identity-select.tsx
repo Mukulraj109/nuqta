@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect } from 'react';
 import { View, StyleSheet, StatusBar, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -40,8 +41,6 @@ const IDENTITIES = [
     accentColor: colors.successScale[600],
     backgroundColor: '#F0FDF4',
     next: '/onboarding/other-verify' as const,
-    disabled: true,
-    badge: 'Coming soon',
   },
   {
     id: 'general' as const,
@@ -54,7 +53,7 @@ const IDENTITIES = [
   },
 ];
 
-export default function IdentitySelectPage() {
+function IdentitySelectPage() {
   const router = useRouter();
   const { setIdentity } = useUserIdentityStore();
   const user = useAuthUser();
@@ -145,8 +144,6 @@ export default function IdentitySelectPage() {
             accentColor={identity.accentColor}
             backgroundColor={identity.backgroundColor}
             onPress={() => handleSelect(identity)}
-            disabled={identity.disabled}
-            badge={identity.badge}
           />
         ))}
 
@@ -201,3 +198,5 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
 });
+
+export default withErrorBoundary(IdentitySelectPage, 'OnboardingIdentitySelect');

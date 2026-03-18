@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState } from 'react';
 import {
   View,
@@ -22,7 +23,7 @@ import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
-export default function PaymentMethodsPage() {
+function PaymentMethodsPage() {
   const router = useRouter();
   const { state, handlers } = useCheckout();
   const cartState = useCartState();
@@ -599,3 +600,4 @@ const styles = StyleSheet.create({
     height: 40,
   },
 });
+export default withErrorBoundary(PaymentMethodsPage, 'PaymentMethods');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
@@ -55,7 +56,7 @@ interface Project {
   };
 }
 
-export default function SubmissionDetailPage() {
+function SubmissionDetailPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const params = useLocalSearchParams();
@@ -795,3 +796,5 @@ const styles = StyleSheet.create({
 });
 
 
+
+export default withErrorBoundary(SubmissionDetailPage, 'SubmissionDetail');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Delivery Settings Screen
 // Manage delivery addresses, preferences, and options
 
@@ -28,7 +29,7 @@ import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformA
 import userSettingsApi from '@/services/userSettingsApi';
 import { colors } from '@/constants/theme';
 
-export default function DeliverySettingsScreen() {
+function DeliverySettingsScreen() {
   const router = useRouter();
   const {
     addresses,
@@ -821,3 +822,4 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+export default withErrorBoundary(DeliverySettingsScreen, 'AccountDelivery');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Creator Profile Page
 // Shows a creator's public profile, stats, picks, and follow/unfollow
 
@@ -80,7 +81,7 @@ const PickCard = React.memo(({ pick, onPress }: { pick: CreatorPick; onPress: ()
 // MAIN COMPONENT
 // ============================================
 
-export default function CreatorProfilePage() {
+function CreatorProfilePage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const user = useAuthUser();
@@ -901,3 +902,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(CreatorProfilePage, 'CreatorId');

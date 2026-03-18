@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -29,7 +30,7 @@ const difficultyColors = {
   hard: { bg: 'rgba(239, 68, 68, 0.1)', text: Colors.error, border: 'rgba(239, 68, 68, 0.3)' },
 };
 
-export default function SurveyDetailPage() {
+function SurveyDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [survey, setSurvey] = useState<SurveyDetail | null>(null);
@@ -315,3 +316,5 @@ const styles = StyleSheet.create({
   startButtonGradient: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: Spacing.base, gap: Spacing.sm },
   startButtonText: { fontSize: Typography.bodyLarge.fontSize, fontWeight: '700', color: Colors.text.inverse },
 });
+
+export default withErrorBoundary(SurveyDetailPage, 'SurveyIdIndex');

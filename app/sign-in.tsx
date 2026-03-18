@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -21,12 +22,13 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import CountryCodePicker, { COUNTRY_CODES, CountryCode } from '@/components/common/CountryCodePicker';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { BRAND } from '@/constants/brand';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-// Nuqta Design System Colors
+// Rez Design System Colors
 
-export default function SignInScreen() {
+function SignInScreen() {
   const router = useRouter();
   const rootNavigationState = useRootNavigationState();
   const user = useAuthUser();
@@ -73,11 +75,19 @@ export default function SignInScreen() {
   useEffect(() => {
     if (!rootNavigationState?.key) return; // Router not mounted yet
     if (isAuthenticated && user) {
-      if (user.isOnboarded) {
-        router.replace('/(tabs)/' as any);
-      } else {
-        router.replace('/onboarding/notification-permission');
-      }
+      // Small delay ensures Root Layout is fully mounted on web
+      const timer = setTimeout(() => {
+        try {
+          if (user.isOnboarded) {
+            router.replace('/(tabs)/' as any);
+          } else {
+            router.replace('/onboarding/notification-permission');
+          }
+        } catch {
+          // Root layout not ready yet — will retry on next state change
+        }
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [isAuthenticated, user, rootNavigationState?.key]);
 
@@ -214,10 +224,10 @@ export default function SignInScreen() {
 
         {/* Header */}
         <View style={styles.header}>
-          {/* Nuqta Logo */}
+          {/* App Logo */}
           <View style={styles.logoContainer}>
             <CachedImage
-              source={require('@/assets/images/nuqta-logo.png')}
+              source={BRAND.LOGO_IMAGE}
               style={styles.logoImage}
               contentFit="contain"
             />
@@ -226,10 +236,10 @@ export default function SignInScreen() {
           <Text style={styles.title}>Welcome Back!</Text>
           <Text style={styles.subtitle}>Sign in to your account</Text>
 
-          {/* Gold Underline */}
+          {/* Brand Underline */}
           <View style={styles.underlineContainer}>
             <LinearGradient
-              colors={[Colors.gold, colors.warning]}
+              colors={[colors.brand.purple, colors.brand.purpleLight]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.underline}
@@ -248,7 +258,7 @@ export default function SignInScreen() {
               />
               <View style={styles.phoneDivider} />
               <View style={styles.phoneNumberInput}>
-                <Ionicons name="call-outline" size={18} color={Colors.gold} style={styles.phoneIcon} />
+                <Ionicons name="call-outline" size={18} color={colors.brand.purple} style={styles.phoneIcon} />
                 <TextInput
                   style={styles.phoneTextInput}
                   placeholder="Mobile number"
@@ -310,14 +320,14 @@ export default function SignInScreen() {
             accessibilityRole="button"
           >
             <View style={styles.backButtonInner}>
-              <Ionicons name="arrow-back" size={20} color={Colors.gold} />
+              <Ionicons name="arrow-back" size={20} color={colors.brand.purple} />
             </View>
           </Pressable>
 
           {/* Shield Icon */}
           <View style={styles.shieldIconContainer}>
             <LinearGradient
-              colors={[Colors.gold, Colors.nileBlue]}
+              colors={[colors.brand.purple, colors.brand.purpleDeep]}
               style={styles.shieldIcon}
             >
               <Ionicons name="shield-checkmark" size={28} color={Colors.text.inverse} />
@@ -330,10 +340,10 @@ export default function SignInScreen() {
             <Text style={styles.phoneNumber}>{selectedCountry.dialCode} {formData.phoneNumber}</Text>
           </Text>
 
-          {/* Gold Underline */}
+          {/* Brand Underline */}
           <View style={styles.underlineContainer}>
             <LinearGradient
-              colors={[Colors.gold, colors.warning]}
+              colors={[colors.brand.purple, colors.brand.purpleLight]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.underline}
@@ -352,7 +362,7 @@ export default function SignInScreen() {
             error={errors.otp}
             containerStyle={styles.inputContainer}
             leftIcon={
-              <Ionicons name="keypad-outline" size={20} color={Colors.gold} />
+              <Ionicons name="keypad-outline" size={20} color={colors.brand.purple} />
             }
           />
 
@@ -405,9 +415,9 @@ export default function SignInScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Hero Gradient Background - Green to Gold */}
+      {/* Hero Gradient Background - Brand Purple */}
       <LinearGradient
-        colors={[Colors.gold, Colors.nileBlue, Colors.nileBlue]}
+        colors={[colors.brand.purple, colors.brand.purpleDeep, colors.brand.purpleDeep]}
         style={StyleSheet.absoluteFill}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -501,7 +511,7 @@ const styles = StyleSheet.create({
     height: 300,
     top: -80,
     right: -100,
-    backgroundColor: 'rgba(255, 200, 87, 0.15)',
+    backgroundColor: 'rgba(139, 92, 246, 0.15)',
   },
   circleGreenMedium: {
     width: 200,
@@ -515,7 +525,7 @@ const styles = StyleSheet.create({
     height: 100,
     top: 150,
     left: 20,
-    backgroundColor: 'rgba(255, 200, 87, 0.12)',
+    backgroundColor: 'rgba(139, 92, 246, 0.12)',
   },
   circleGreenTiny: {
     width: 60,
@@ -567,7 +577,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing['2xl'],
   },
 
-  // Nuqta Logo
+  // App Logo
   logoContainer: {
     marginBottom: Spacing.lg,
     alignItems: 'center',
@@ -581,7 +591,7 @@ const styles = StyleSheet.create({
   // Shield Icon (OTP step)
   shieldIconContainer: {
     marginBottom: Spacing.lg,
-    shadowColor: Colors.gold,
+    shadowColor: colors.brand.purple,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 16,
@@ -606,11 +616,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: BorderRadius.md,
-    backgroundColor: 'rgba(255, 205, 87, 0.1)',
+    backgroundColor: 'rgba(124, 58, 237, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255, 205, 87, 0.2)',
+    borderColor: 'rgba(124, 58, 237, 0.2)',
   },
 
   // Typography
@@ -631,7 +641,7 @@ const styles = StyleSheet.create({
   },
   phoneNumber: {
     fontWeight: '700',
-    color: Colors.gold,
+    color: colors.brand.purple,
     ...Typography.bodyLarge,
   },
 
@@ -726,7 +736,7 @@ const styles = StyleSheet.create({
   },
   resendText: {
     ...Typography.body,
-    color: Colors.gold,
+    color: colors.brand.purple,
     fontWeight: '700',
   },
   resendTextDisabled: {
@@ -737,7 +747,7 @@ const styles = StyleSheet.create({
   primaryButtonWrapper: {
     borderRadius: BorderRadius.lg,
     overflow: 'hidden',
-    shadowColor: Colors.gold,
+    shadowColor: colors.brand.purple,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.35,
     shadowRadius: 16,
@@ -778,7 +788,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   signUpText: {
-    color: Colors.gold,
+    color: colors.brand.purple,
     fontWeight: '700',
   },
   recoveryLink: {
@@ -796,3 +806,5 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
 });
+
+export default withErrorBoundary(SignInScreen, 'SignIn');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, FlatList, Pressable, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,7 +10,7 @@ import CachedImage from '@/components/ui/CachedImage';
 
 const FILTER_CHIPS = ['All', 'Lunch (12-2pm)', 'After Work (5-8pm)'];
 
-export default function CorporateOffersPage() {
+function CorporateOffersPage() {
   const router = useRouter();
   const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -127,3 +128,5 @@ const styles = StyleSheet.create({
   emptyState: { alignItems: 'center', marginTop: 60 },
   emptyText: { fontSize: 14, color: colors.text.tertiary, marginTop: spacing.md },
 });
+
+export default withErrorBoundary(CorporateOffersPage, 'OffersCorporate');

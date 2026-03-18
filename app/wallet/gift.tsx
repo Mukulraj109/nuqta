@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Coin Gift Page
 // Gift coins with personalized message — server-driven config
 
@@ -67,7 +68,7 @@ interface SuccessData {
   newBalance: number;
 }
 
-export default function GiftPage() {
+function GiftPage() {
   const router = useRouter();
   const user = useAuthUser();
   const senderName = user?.fullName || user?.phoneNumber || 'You';
@@ -1022,3 +1023,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(GiftPage, 'WalletGift');

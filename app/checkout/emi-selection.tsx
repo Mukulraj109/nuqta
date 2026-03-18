@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // EMI Selection Screen
 // Choose EMI plan during checkout
 
@@ -45,7 +46,7 @@ const getDefaultBanks = (currencySymbol: string): Bank[] => [
   { id: '6', name: 'AMEX', logo: '💳', noCostTenures: [3], processingFee: `${currencySymbol}499` },
 ];
 
-export default function EMISelectionPage() {
+function EMISelectionPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const amount = parseInt(params.amount as string) || 50000;
@@ -572,3 +573,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(EMISelectionPage, 'CheckoutEmiSelection');

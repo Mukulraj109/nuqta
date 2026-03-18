@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Student Zone Page - Production Ready
  * Fetches real data from backend API
@@ -84,7 +85,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   wellness: 'Wellness',
 };
 
-export default function StudentZonePage() {
+function StudentZonePage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const user = useAuthUser();
@@ -951,3 +952,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(StudentZonePage, 'OffersZonesStudent');

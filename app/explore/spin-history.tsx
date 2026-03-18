@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors } from '@/constants/theme';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
@@ -44,7 +45,7 @@ function formatDate(dateStr: string): string {
   });
 }
 
-export default function SpinHistoryPage() {
+function SpinHistoryPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -348,3 +349,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(SpinHistoryPage, 'ExploreSpinHistory');

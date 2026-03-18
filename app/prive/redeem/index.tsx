@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Privé Redeem Page
  * Coin redemption options with dynamic config from backend
@@ -71,7 +72,7 @@ const SkeletonBlock = ({ width, height, style }: { width: number | string; heigh
   );
 };
 
-export default function RedeemScreen() {
+function RedeemScreen() {
   const router = useRouter();
   const { userData, isLoading: priveLoading, error: priveError, refresh: priveRefresh } = usePriveSection();
   const refreshWallet = useRefreshWallet();
@@ -610,3 +611,5 @@ const styles = StyleSheet.create({
     color: PRIVE_COLORS.background.primary,
   },
 });
+
+export default withErrorBoundary(RedeemScreen, 'PriveRedeemIndex');

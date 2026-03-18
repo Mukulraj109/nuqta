@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Profile Visibility Settings Page
 // Manages user's profile visibility preferences
 
@@ -54,7 +55,7 @@ const VISIBILITY_OPTIONS: VisibilityOptionData[] = [
   },
 ];
 
-export default function ProfileVisibilityPage() {
+function ProfileVisibilityPage() {
   const router = useRouter();
   const { privacySettings, updatePrivacySettings, isLoading } = useSecurity();
   const [selectedVisibility, setSelectedVisibility] = useState<VisibilityOption>('FRIENDS');
@@ -365,3 +366,5 @@ const styles = StyleSheet.create({
   },
 });
 
+
+export default withErrorBoundary(ProfileVisibilityPage, 'AccountProfileVisibility');

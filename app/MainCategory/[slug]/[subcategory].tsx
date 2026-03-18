@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Shared Subcategory Page
  * Dynamic route: /MainCategory/[slug]/[subcategory]
@@ -223,7 +224,7 @@ function StoreCard({ store, currencySymbol }: { store: any; currencySymbol: stri
   );
 }
 
-export default function SharedCategoryPage() {
+function SharedCategoryPage() {
   const { subcategory, slug } = useLocalSearchParams<{ subcategory: string; slug: string }>();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -751,3 +752,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(SharedCategoryPage, 'MainCategorySlugSubcategory');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Create Support Ticket Page
 // Form to submit a new support ticket
 
@@ -59,7 +60,7 @@ function generateIdempotencyKey(): string {
   return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 }
 
-export default function CreateTicketPage() {
+function CreateTicketPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{
     category?: string;
@@ -488,3 +489,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export default withErrorBoundary(CreateTicketPage, 'SupportCreateTicket');

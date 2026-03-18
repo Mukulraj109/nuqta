@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * My Deals Page - Shows user's redeemed campaign deals
  * Route: /my-deals
@@ -967,4 +968,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyDealsPage;
+export default withErrorBoundary(MyDealsPage, 'MyDeals');

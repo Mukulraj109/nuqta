@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Submit Pick Page
 // Allows approved creators to submit product picks
 
@@ -25,6 +26,7 @@ import apiClient from '@/services/apiClient';
 import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.config';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 interface ProductResult {
   _id: string;
@@ -38,8 +40,10 @@ interface ProductResult {
 
 const PAGE_SIZE = 10;
 
-export default function SubmitPickPage() {
+function SubmitPickPage() {
   const router = useRouter();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const currencySymbol = getCurrencySymbol();
 
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
@@ -337,7 +341,7 @@ export default function SubmitPickPage() {
           <Text style={styles.productName} numberOfLines={1}>{product.name}</Text>
           <Text style={styles.productMeta}>
             {product.store?.name || product.brand || ''}
-            {price ? ` · ₹${price}` : ''}
+            {price ? ` · ${currencySymbol}${price}` : ''}
           </Text>
         </View>
         <Ionicons name="add-circle-outline" size={22} color={Colors.brand.purple} />
@@ -471,7 +475,7 @@ export default function SubmitPickPage() {
               <Text style={styles.selectedProductName}>{selectedProduct.name}</Text>
               <Text style={styles.selectedProductMeta}>
                 {selectedProduct.store?.name || selectedProduct.brand || ''}
-                {getProductPrice(selectedProduct) ? ` · ₹${getProductPrice(selectedProduct)}` : ''}
+                {getProductPrice(selectedProduct) ? ` · ${currencySymbol}${getProductPrice(selectedProduct)}` : ''}
               </Text>
             </View>
             <Pressable onPress={() => setSelectedProduct(null)} style={styles.removeProductBtn}>
@@ -802,3 +806,5 @@ const styles = StyleSheet.create({
   secondaryBtn: { marginTop: 14, paddingVertical: 10 },
   secondaryBtnText: { ...Typography.body, fontWeight: '600', color: Colors.brand.purple },
 });
+
+export default withErrorBoundary(SubmitPickPage, 'SubmitPick');

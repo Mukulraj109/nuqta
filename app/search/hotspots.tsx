@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Nearby Hotspots Page
 // Location-based popular areas - connected to real API
 
@@ -54,7 +55,7 @@ interface HotspotFromAPI {
 
 type ViewMode = 'list' | 'map';
 
-export default function HotspotsPage() {
+function HotspotsPage() {
   const router = useRouter();
   const { currentLocation } = useCurrentLocation();
   const [viewMode, setViewMode] = useState<ViewMode>('list');
@@ -613,3 +614,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default withErrorBoundary(HotspotsPage, 'SearchHotspots');

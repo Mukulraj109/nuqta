@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * All Campaigns Page - Premium campaign listing with filters
  * Route: /campaigns
@@ -22,6 +23,7 @@ import { campaignsApi, Campaign } from '@/services/campaignsApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -58,6 +60,8 @@ const TYPE_COLORS: Record<string, { bg: string; text: string; icon: string }> = 
 
 const AllCampaignsPage: React.FC = () => {
   const router = useRouter();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const currencySymbol = getCurrencySymbol();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -302,12 +306,12 @@ const AllCampaignsPage: React.FC = () => {
                       <View style={styles.additionalInfo}>
                         {campaign.minOrderValue && (
                           <View style={styles.infoChip}>
-                            <Text style={styles.infoChipText}>Min ₹{campaign.minOrderValue}</Text>
+                            <Text style={styles.infoChipText}>Min {currencySymbol}{campaign.minOrderValue}</Text>
                           </View>
                         )}
                         {campaign.maxBenefit && (
                           <View style={styles.infoChip}>
-                            <Text style={styles.infoChipText}>Max ₹{campaign.maxBenefit}</Text>
+                            <Text style={styles.infoChipText}>Max {currencySymbol}{campaign.maxBenefit}</Text>
                           </View>
                         )}
                       </View>
@@ -649,4 +653,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AllCampaignsPage;
+export default withErrorBoundary(AllCampaignsPage, 'Campaigns');

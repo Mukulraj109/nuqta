@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // My Reviews Page
 // Shows all reviews written by the user
 
@@ -33,7 +34,7 @@ const FILTER_TABS: { key: FilterTab; label: string }[] = [
   { key: 'rejected', label: 'Rejected' },
 ];
 
-export default function MyReviewsPage() {
+function MyReviewsPage() {
   const router = useRouter();
   const [reviews, setReviews] = useState<UserReview[]>([]);
   const [loading, setLoading] = useState(true);
@@ -717,3 +718,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(MyReviewsPage, 'MyReviews');

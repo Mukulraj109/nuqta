@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // UserLoyaltyCard.tsx - User's loyalty progress with a store
 import React from "react";
 import {
@@ -24,7 +25,7 @@ interface UserLoyaltyCardProps {
   onViewDetails?: () => void;
 }
 
-export default function UserLoyaltyCard({
+function UserLoyaltyCard({
   visitsCompleted = 0,
   totalVisitsRequired = 5,
   nextReward = "Free Coffee",
@@ -189,3 +190,5 @@ const styles = StyleSheet.create({
     color: colors.nileBlue,
   },
 });
+
+export default withErrorBoundary(UserLoyaltyCard, 'MainStoreSectionUserLoyaltyCard');

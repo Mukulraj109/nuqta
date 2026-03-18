@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Mall Stores Listing Page (Nuqta Mall)
  *
@@ -141,7 +142,7 @@ function transformStoreToMallBrand(store: any): MallBrand {
   };
 }
 
-export default function BrandsListingPage() {
+function BrandsListingPage() {
   const { filter: initialFilter } = useLocalSearchParams<{ filter?: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -744,3 +745,5 @@ const styles = StyleSheet.create({
     color: colors.brand.amberDeep,
   },
 });
+
+export default withErrorBoundary(BrandsListingPage, 'MallBrandsIndex');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
@@ -30,7 +31,7 @@ const { width, height } = Dimensions.get('window');
 
 // ReZ Premium Color System from TASK.md
 
-export default function BrandDetailPage() {
+function BrandDetailPage() {
   const router = useRouter();
   const { brandId } = useLocalSearchParams();
   const [brand, setBrand] = useState<Brand | null>(null);
@@ -1086,3 +1087,5 @@ const styles = StyleSheet.create({
     height: 60,
   },
 });
+
+export default withErrorBoundary(BrandDetailPage, 'VoucherBrandId');

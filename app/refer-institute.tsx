@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback } from 'react';
 import {
   View, StyleSheet, ScrollView, TextInput, Pressable,
@@ -14,7 +15,7 @@ import { useEffect } from 'react';
 
 type InstituteType = 'college' | 'company';
 
-export default function ReferInstitutePage() {
+function ReferInstitutePage() {
   const router = useRouter();
   const [instituteName, setInstituteName] = useState('');
   const [instituteType, setInstituteType] = useState<InstituteType>('college');
@@ -217,3 +218,5 @@ const styles = StyleSheet.create({
   },
   ctaText: { fontSize: 16, fontWeight: '700', color: '#fff' },
 });
+
+export default withErrorBoundary(ReferInstitutePage, 'ReferInstitute');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Booking Detail Page
 // Full booking details with travel-specific enhancements, cancellation, and actions
 
@@ -41,7 +42,7 @@ const isTravelBooking = (booking: ServiceBooking): boolean => {
   return TRAVEL_SLUGS.includes(slug) || !!booking.travelDetails;
 };
 
-export default function BookingDetailPage() {
+function BookingDetailPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const bookingId = params.bookingId as string;
@@ -729,3 +730,5 @@ const styles = StyleSheet.create({
   },
   timestampText: { ...Typography.caption, color: Colors.text.tertiary, textAlign: 'center' },
 });
+
+export default withErrorBoundary(BookingDetailPage, 'BookingDetail');

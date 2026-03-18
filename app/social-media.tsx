@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Social Media Page
 // Earn cashback by sharing purchases on social media platforms
 
@@ -49,7 +50,7 @@ interface EarningsData {
   approvalRate: number;
 }
 
-export default function SocialMediaPage() {
+function SocialMediaPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ orderId?: string }>();
   const user = useAuthUser();
@@ -1097,3 +1098,5 @@ const styles = StyleSheet.create({
     color: colors.brand.green,
   },
 });
+
+export default withErrorBoundary(SocialMediaPage, 'SocialMedia');

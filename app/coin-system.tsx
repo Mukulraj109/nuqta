@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Coin System Guide Page
 // Educational/informational page about the ReZ coin system
 
@@ -895,4 +896,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CoinSystemPage;
+export default withErrorBoundary(CoinSystemPage, 'CoinSystem');

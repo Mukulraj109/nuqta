@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Incomplete Transactions Page
 // Displays orders that are pending, failed, or cancelled
 
@@ -413,4 +414,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default IncompleteTransactionsPage;
+export default withErrorBoundary(IncompleteTransactionsPage, 'TransactionsIncomplete');

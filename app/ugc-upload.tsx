@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // UGC Video Upload Screen
 // Main screen for uploading user-generated content videos
 
@@ -31,7 +32,7 @@ import { colors } from '@/constants/theme';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function UGCUploadScreen() {
+function UGCUploadScreen() {
   const router = useRouter();
   const {
     state,
@@ -697,3 +698,5 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
 });
+
+export default withErrorBoundary(UGCUploadScreen, 'UgcUpload');

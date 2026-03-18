@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -32,7 +33,7 @@ const SECTION_CONFIG = {
   },
 };
 
-export default function SectionDetailPage() {
+function SectionDetailPage() {
   const router = useRouter();
   const { sectionId } = useLocalSearchParams<{ sectionId: string }>();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -363,3 +364,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(SectionDetailPage, 'HomeDeliverySectionSectionId');

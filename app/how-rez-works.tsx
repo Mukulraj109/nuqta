@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React from 'react';
 import { View, StyleSheet, StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -22,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HowNuqtaWorksPage;
+export default withErrorBoundary(HowNuqtaWorksPage, 'HowRezWorks');

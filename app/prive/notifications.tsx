@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, StyleSheet, SectionList,
@@ -23,7 +24,7 @@ interface NotificationItem {
   deepLink?: string;
 }
 
-export default function NotificationsScreen() {
+function NotificationsScreen() {
   const router = useRouter();
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [counts, setCounts] = useState({ critical: 0, warning: 0, info: 0 });
@@ -182,3 +183,5 @@ const styles = StyleSheet.create({
   countdown: { fontSize: 13, fontWeight: '700' },
   arrow: { fontSize: 16, color: PRIVE_COLORS.gold.primary },
 });
+
+export default withErrorBoundary(NotificationsScreen, 'PriveNotifications');

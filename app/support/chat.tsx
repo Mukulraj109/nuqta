@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Live Chat Support Page (Full Implementation)
 // Real-time chat support with complete functionality
 
@@ -23,7 +24,7 @@ import { Colors, Spacing } from '@/constants/DesignSystem';
 import analyticsService from '@/services/analyticsService';
 import { colors } from '@/constants/theme';
 
-export default function SupportChatPage() {
+function SupportChatPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ ticketId?: string; category?: string }>();
   const scrollViewRef = useRef<ScrollView>(null);
@@ -915,3 +916,5 @@ const styles = StyleSheet.create({
     color: Colors.gray[600],
   },
 });
+
+export default withErrorBoundary(SupportChatPage, 'SupportChat');

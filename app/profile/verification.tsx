@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Verification Page
  * Handles verification for different exclusive zones
@@ -70,7 +71,7 @@ const ZONE_CONFIGS: Record<string, {
   healthcare: {
     title: 'Healthcare Heroes',
     icon: 'medkit',
-    color: colors.error,
+    color: colors.success,
     methods: [
       { id: 'hospital_id', label: 'Hospital ID', type: 'document' },
       { id: 'medical_council', label: 'Medical Council Certificate', type: 'document' },
@@ -139,7 +140,7 @@ const PROFESSION_OPTIONS = [
   { label: 'Pharmacist', value: 'pharmacist' },
 ];
 
-export default function VerificationPage() {
+function VerificationPage() {
   const router = useRouter();
   const { zone = 'student' } = useLocalSearchParams<{ zone: string }>();
   const user = useAuthUser();
@@ -1127,3 +1128,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(VerificationPage, 'ProfileVerification');

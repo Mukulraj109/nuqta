@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Coin Detail Page - Shows detailed info for each coin type (nuqta/promo/branded)
  * Route: /wallet/coin-detail/[coinType]
@@ -49,7 +50,7 @@ const DEFAULT_COIN_RULES: Record<string, { usageRules: string[]; earningMethods:
   },
 };
 
-export default function CoinDetailPage() {
+function CoinDetailPage() {
   const { coinType } = useLocalSearchParams<{ coinType: string }>();
   const router = useRouter();
   const walletData = useWalletData();
@@ -279,3 +280,5 @@ const styles = StyleSheet.create({
   merchantAmount: { fontSize: 14, fontWeight: '800' },
   conversionText: { fontSize: 12, color: Colors.text.tertiary, lineHeight: 18 },
 });
+
+export default withErrorBoundary(CoinDetailPage, 'WalletCoinDetailCoinType');

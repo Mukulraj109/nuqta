@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Healthcare Hub Page
  * Production-ready with API integration
@@ -732,4 +733,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HealthcarePage;
+export default withErrorBoundary(HealthcarePage, 'HealthcareIndex');

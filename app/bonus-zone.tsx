@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
@@ -41,7 +42,7 @@ const FILTER_TABS: FilterTab[] = [
 // COMPONENT
 // ============================================
 
-export default function BonusZonePage() {
+function BonusZonePage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const regionState = useRegionState();
@@ -419,3 +420,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(BonusZonePage, 'BonusZone');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Vouchers History Page
  * Shows user's voucher history and active vouchers
@@ -43,7 +44,7 @@ const STATUS_COLORS: Record<string, string> = {
   cancelled: '#FF9800',
 };
 
-export default function VouchersScreen() {
+function VouchersScreen() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -829,3 +830,5 @@ const styles = StyleSheet.create({
     color: PRIVE_COLORS.background.primary,
   },
 });
+
+export default withErrorBoundary(VouchersScreen, 'PriveVouchers');

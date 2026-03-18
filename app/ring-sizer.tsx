@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Ring Sizer Tool Page
 // Interactive tool to help users determine their ring size
 
@@ -46,7 +47,7 @@ const RING_SIZES: RingSize[] = [
   { size: '10', diameter: 19.7, circumference: 62.0, description: 'Extra Large' },
 ];
 
-export default function RingSizerPage() {
+function RingSizerPage() {
   const router = useRouter();
   const [selectedMethod, setSelectedMethod] = useState<'measure' | 'compare' | 'guide'>('measure');
   const [fingerMeasurement, setFingerMeasurement] = useState<string>('');
@@ -639,3 +640,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default withErrorBoundary(RingSizerPage, 'RingSizer');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // My Services Page
 // Shows user's service bookings or video projects (as service-like feature)
 
@@ -452,4 +453,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyServicesPage;
+export default withErrorBoundary(MyServicesPage, 'MyServices');

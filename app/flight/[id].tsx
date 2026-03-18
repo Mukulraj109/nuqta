@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Flight Details Page - Dedicated page for flight bookings
  * Production-ready with complete booking flow
@@ -124,7 +125,7 @@ const amenityIconMap: Record<string, keyof typeof Ionicons.glyphMap> = {
   'Blankets': 'bed-outline',
 };
 
-export default function FlightDetailsPage() {
+function FlightDetailsPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
@@ -839,3 +840,5 @@ const s = StyleSheet.create({
   ratingPill: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.tint.amberLight, paddingHorizontal: 10, paddingVertical: 5, borderRadius: 6 },
   ratingPillText: { fontSize: 13, fontWeight: '600', color: colors.brand.amberDark },
 });
+
+export default withErrorBoundary(FlightDetailsPage, 'FlightId');

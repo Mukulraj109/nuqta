@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Bus Details Page - Dedicated page for bus bookings
  * Production-ready with complete booking flow
@@ -112,7 +113,7 @@ interface BookingData {
   bookingNumber?: string;
 }
 
-export default function BusDetailsPage() {
+function BusDetailsPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
@@ -1147,3 +1148,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(BusDetailsPage, 'BusId');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Quick Delivery Page
  * Products and stores with fast delivery (10-30 min)
@@ -648,4 +649,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuickDeliveryPage;
+export default withErrorBoundary(QuickDeliveryPage, 'GroceryQuick');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -65,7 +66,7 @@ interface ChallengeStats {
 
 type TabType = 'daily' | 'weekly' | 'monthly' | 'completed';
 
-export default function ChallengesPage() {
+function ChallengesPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('daily');
@@ -1023,3 +1024,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(ChallengesPage, 'ChallengesIndex');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Brand Detail Page
  * Shows brand information and products
@@ -508,4 +509,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BrandPage;
+export default withErrorBoundary(BrandPage, 'BrandName');

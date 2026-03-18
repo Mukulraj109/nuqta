@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Shared Offer Detail Page
  * /MainCategory/[slug]/offers/[id]
@@ -20,7 +21,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
-export default function OffersDetailPage() {
+function OffersDetailPage() {
   const router = useRouter();
   const { id, slug } = useLocalSearchParams<{ id: string; slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -363,3 +364,5 @@ const styles = StyleSheet.create({
   applyBtnDisabled: { backgroundColor: Colors.text.tertiary },
   applyBtnText: { ...Typography.bodyLarge, fontWeight: '600', color: Colors.text.inverse },
 });
+
+export default withErrorBoundary(OffersDetailPage, 'MainCategorySlugOffersId');

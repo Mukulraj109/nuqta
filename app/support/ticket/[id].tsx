@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Support Ticket Detail Page
 // View and interact with a support ticket (real API)
 
@@ -24,7 +25,7 @@ import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } f
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function TicketDetailPage() {
+function TicketDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const scrollRef = useRef<ScrollView>(null);
@@ -846,3 +847,5 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
 });
+
+export default withErrorBoundary(TicketDetailPage, 'SupportTicketId');

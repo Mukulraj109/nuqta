@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Delete Account Page
 // Allows users to permanently delete their account with confirmation
 
@@ -22,7 +23,7 @@ import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } f
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function DeleteAccountPage() {
+function DeleteAccountPage() {
   const router = useRouter();
   const actions = useAuthActions();
   const [confirmationText, setConfirmationText] = useState('');
@@ -436,3 +437,5 @@ const styles = StyleSheet.create({
     height: 20,
   },
 });
+
+export default withErrorBoundary(DeleteAccountPage, 'AccountDeleteAccount');

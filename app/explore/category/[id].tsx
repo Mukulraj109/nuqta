@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -701,4 +702,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryDetailPage;
+export default withErrorBoundary(CategoryDetailPage, 'ExploreCategoryId');

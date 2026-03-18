@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Share to Earn Page
 // Earn coins by sharing content
 
@@ -44,7 +45,7 @@ const SHARE_PLATFORMS = [
   { id: 'more', name: 'More', icon: 'share-outline', color: Colors.gray[600] },
 ];
 
-export default function ShareToEarnPage() {
+function ShareToEarnPage() {
   const router = useRouter();
   const [selectedContent, setSelectedContent] = useState<ShareableContent | null>(null);
   const [totalEarned, setTotalEarned] = useState(0);
@@ -600,3 +601,5 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
   },
 });
+
+export default withErrorBoundary(ShareToEarnPage, 'EarnShare');

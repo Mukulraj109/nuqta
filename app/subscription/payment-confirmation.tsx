@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Payment Confirmation Page
 // Success/failure screen after subscription payment
 
@@ -15,7 +16,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { TIER_COLORS, TIER_GRADIENTS, TIER_NAMES } from '@/types/subscription.types';
 import { platformAlertSimple } from '@/utils/platformAlert';
 
-export default function PaymentConfirmationPage() {
+function PaymentConfirmationPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const { state } = useSubscription();
@@ -577,3 +578,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(PaymentConfirmationPage, 'SubscriptionPaymentConfirmation');

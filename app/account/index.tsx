@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Account Settings Page — Redesigned
 // Compact header, sticky segmented control, sectioned cards, dynamic insights,
 // micro-interactions, skeleton loading, and production-ready design tokens.
@@ -70,7 +71,7 @@ const SectionCard = React.memo(function SectionCard({
 // Main Account Page
 // ---------------------------------------------------------------------------
 
-export default function AccountPage() {
+function AccountPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<AccountTabType>('SETTINGS');
@@ -445,3 +446,5 @@ const styles = StyleSheet.create({
     marginTop: Spacing.md,
   },
 });
+
+export default withErrorBoundary(AccountPage, 'AccountIndex');

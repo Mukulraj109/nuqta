@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // TermsTransparencySection.tsx - Collapsible terms and transparency section
 import React, { useState, useRef } from "react";
 import {
@@ -33,7 +34,7 @@ export interface TermsTransparencySectionProps {
   supportEmail?: string;
 }
 
-export default function TermsTransparencySection({
+function TermsTransparencySection({
   cashbackRules = "Cashback is credited within 24 hours of purchase. Valid on all payment methods.",
   coinExpiry = "Earned coins expire after 90 days. Branded coins expire as per store policy.",
   returnImpact = "Returns will deduct earned cashback and coins from your wallet.",
@@ -163,3 +164,5 @@ const styles = StyleSheet.create({
     color: colors.lightMustard,
   },
 });
+
+export default withErrorBoundary(TermsTransparencySection, 'MainStoreSectionTermsTransparencySection');

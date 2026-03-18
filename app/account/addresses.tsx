@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Saved Addresses Page
 // Page for managing user's saved addresses
 
@@ -47,7 +48,7 @@ interface Address {
   updatedAt: string;
 }
 
-export default function SavedAddressesPage() {
+function SavedAddressesPage() {
   const router = useRouter();
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -690,3 +691,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+export default withErrorBoundary(SavedAddressesPage, 'AccountAddresses');

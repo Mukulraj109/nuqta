@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreBottomActionBar.tsx - Sticky bottom action bar
 import React, { useRef } from "react";
 import {
@@ -27,7 +28,7 @@ export interface StoreBottomActionBarProps {
   onOffers?: () => void;
 }
 
-export default function StoreBottomActionBar({
+function StoreBottomActionBar({
   storeId,
   onScanPayEarn,
   onWallet,
@@ -190,3 +191,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+export default withErrorBoundary(StoreBottomActionBar, 'MainStoreSectionStoreBottomActionBar');

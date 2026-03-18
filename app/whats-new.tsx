@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React from 'react';
 import { View, StyleSheet, StatusBar } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
@@ -33,4 +34,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WhatsNewPage;
+export default withErrorBoundary(WhatsNewPage, 'WhatsNew');

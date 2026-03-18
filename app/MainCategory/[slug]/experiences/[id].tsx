@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Shared Experience Detail
  * Routes to the correct experience detail page based on category slug.
@@ -5,7 +6,7 @@
 import React from 'react';
 import { useLocalSearchParams } from 'expo-router';
 
-export default function ExperienceDetail() {
+function ExperienceDetail() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
 
   if (slug === 'beauty-wellness') {
@@ -21,3 +22,5 @@ export default function ExperienceDetail() {
   const GenericDetail = require('@/components/action-pages/experiences/GenericExperienceDetail').default;
   return <GenericDetail />;
 }
+
+export default withErrorBoundary(ExperienceDetail, 'MainCategorySlugExperiencesId');

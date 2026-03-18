@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -20,7 +21,7 @@ import { colors } from '@/constants/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-export default function OutletsPage() {
+function OutletsPage() {
   const params = useLocalSearchParams();
   const router = useRouter();
   const [outlets, setOutlets] = useState<Outlet[]>([]);
@@ -728,3 +729,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(OutletsPage, 'OutletsPage');

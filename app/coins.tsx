@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // CoinPage.tsx
 import React from 'react';
 import { View, ScrollView, StyleSheet, Pressable, Text, Dimensions, Platform } from 'react-native';
@@ -23,7 +24,7 @@ const coinCardImages = [
   CardImg4,
 ];
 
-export default function CoinPage() {
+function CoinPage() {
   const router = useRouter();
 
   return (
@@ -238,3 +239,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(CoinPage, 'Coins');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -27,7 +28,7 @@ interface NotificationHistoryItem {
 
 const PAGE_LIMIT = 20;
 
-export default function NotificationHistoryScreen() {
+function NotificationHistoryScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -477,3 +478,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
   },
 });
+
+export default withErrorBoundary(NotificationHistoryScreen, 'AccountNotificationHistory');

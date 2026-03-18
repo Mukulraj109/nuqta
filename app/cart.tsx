@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import {
   View,
@@ -56,7 +57,7 @@ const formatTimeSlot = (start: string, end?: string): string => {
   return formattedStart;
 };
 
-export default function CartPage() {
+function CartPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{ offerRedemptionCode?: string }>();
   const cartState = useCartStore((s) => s.state);
@@ -720,3 +721,5 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
 });
+
+export default withErrorBoundary(CartPage, 'Cart');

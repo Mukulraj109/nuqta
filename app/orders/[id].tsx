@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
@@ -11,7 +12,7 @@ import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } f
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function OrderDetailsScreen() {
+function OrderDetailsScreen() {
   const { id } = useLocalSearchParams();
   const navigation = useNavigation();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -872,3 +873,4 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 });
+export default withErrorBoundary(OrderDetailsScreen, 'OrdersId');

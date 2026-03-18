@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -27,7 +28,7 @@ interface TopPerformer {
   avatar?: string;
 }
 
-export default function PartnerLeaderboard() {
+function PartnerLeaderboard() {
   const router = useRouter();
   const [stats, setStats] = useState<PartnerStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -613,3 +614,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(PartnerLeaderboard, 'PartnerLeaderboard');

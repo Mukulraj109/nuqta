@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Travel Booking Confirmation Page
 // Shows booking success, travel details, cashback status, and next actions
 
@@ -24,7 +25,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import ConfettiOverlay from '@/components/ui/ConfettiOverlay';
 
-export default function TravelBookingConfirmationPage() {
+function TravelBookingConfirmationPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const bookingId = params.bookingId as string;
@@ -420,3 +421,5 @@ const styles = StyleSheet.create({
   },
   secondaryButtonText: { ...Typography.body, fontWeight: '600', color: Colors.nileBlue },
 });
+
+export default withErrorBoundary(TravelBookingConfirmationPage, 'TravelBookingConfirmation');

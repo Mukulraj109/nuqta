@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreOffersPreview.tsx - Store offers section with offer cards
 import React from "react";
 import {
@@ -31,7 +32,7 @@ interface StoreOffersPreviewProps {
   onApplyOffer?: (offer: StoreOffer) => void;
 }
 
-export default function StoreOffersPreview({
+function StoreOffersPreview({
   offers = [],
   onViewAll,
   onApplyOffer,
@@ -256,3 +257,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(StoreOffersPreview, 'MainStoreSectionStoreOffersPreview');

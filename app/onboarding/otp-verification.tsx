@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, Platform } from 'react-native';
 import analyticsService from '@/services/analyticsService';
@@ -9,7 +10,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
-export default function OTPVerificationScreen() {
+function OTPVerificationScreen() {
   const router = useRouter();
   const { phoneNumber } = useLocalSearchParams<{ phoneNumber: string }>();
   const user = useAuthUser();
@@ -485,3 +486,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default withErrorBoundary(OTPVerificationScreen, 'OnboardingOtpVerification');

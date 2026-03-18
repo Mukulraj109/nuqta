@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback } from 'react';
 import {
   View,
@@ -34,7 +35,7 @@ interface Visit {
   queueNumber?: number;
 }
 
-export default function MyVisitsPage() {
+function MyVisitsPage() {
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const isLoading = useAuthLoading();
@@ -617,3 +618,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(MyVisitsPage, 'MyVisits');

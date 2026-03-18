@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -27,7 +28,7 @@ interface FilterState {
   storeId?: string;
 }
 
-export default function OrdersListScreen() {
+function OrdersListScreen() {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [orders, setOrders] = useState<Order[]>([]);
@@ -845,3 +846,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(OrdersListScreen, 'OrdersIndex.enhanced');

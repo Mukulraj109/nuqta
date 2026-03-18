@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React from 'react';
 import {
   View,
@@ -214,4 +215,4 @@ const PlayAndEarn = () => {
   );
 };
 
-export default PlayAndEarn;
+export default withErrorBoundary(PlayAndEarn, 'Playandearn');

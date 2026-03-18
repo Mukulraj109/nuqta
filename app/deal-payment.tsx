@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Deal Payment Page - Handles Stripe payment for paid deals
  * Route: /deal-payment
@@ -534,4 +535,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DealPaymentPage;
+export default withErrorBoundary(DealPaymentPage, 'DealPayment');

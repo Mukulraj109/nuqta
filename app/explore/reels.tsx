@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
@@ -560,4 +561,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreReelsPage;
+export default withErrorBoundary(ExploreReelsPage, 'ExploreReels');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Maintenance Screen
 // Display when backend is under maintenance
 
@@ -17,7 +18,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { platformAlertSimple } from '@/utils/platformAlert';
 
-export default function MaintenancePage() {
+function MaintenancePage() {
   const router = useRouter();
   const params = useLocalSearchParams();
 
@@ -329,3 +330,5 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xs,
   },
 });
+
+export default withErrorBoundary(MaintenancePage, 'SystemMaintenance');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Shop Page
  * Shows products filtered by vibe, occasion, category, or brand
@@ -125,7 +126,7 @@ const ProductCard = ({
   );
 };
 
-export default function ShopPage() {
+function ShopPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
 
@@ -617,3 +618,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(ShopPage, 'Shop');

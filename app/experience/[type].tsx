@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Experience Detail Page - Production Ready
  * Fetches experience data and stores from backend API
@@ -531,4 +532,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExperienceDetailPage;
+export default withErrorBoundary(ExperienceDetailPage, 'ExperienceType');

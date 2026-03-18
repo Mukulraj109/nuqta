@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // UGC Upload Screen
 // Create and upload user-generated content (videos/images)
 
@@ -31,7 +32,7 @@ interface UploadForm {
   location: string;
 }
 
-export default function UGCUploadScreen() {
+function UGCUploadScreen() {
   const router = useRouter();
   const user = useAuthUser();
   const [uploading, setUploading] = useState(false);
@@ -524,3 +525,5 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
 });
+
+export default withErrorBoundary(UGCUploadScreen, 'UgcUpload');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * My Events Page
  * Shows user's event bookings (upcoming/past) and favorited events
@@ -62,7 +63,7 @@ const STATUS_CONFIG: Record<string, { color: string; bg: string; icon: string }>
   cancelled: { color: Colors.error, bg: colors.errorScale[50], icon: 'close-circle-outline' },
 };
 
-export default function MyEventsPage() {
+function MyEventsPage() {
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const [activeTab, setActiveTab] = useState<TabType>('upcoming');
@@ -598,3 +599,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(MyEventsPage, 'MyEvents');

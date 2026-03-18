@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Shared Top Rated Stores Page
  * /MainCategory/[slug]/top-rated
@@ -140,7 +141,7 @@ function StoreCard({ store, currencySymbol, onVisitNow, primaryColor }: { store:
   );
 }
 
-export default function SharedCategoryPage() {
+function SharedCategoryPage() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || '');
   const categoryConfig = getCategoryConfig(slug || '');
@@ -403,3 +404,5 @@ const styles = StyleSheet.create({
   emptyTitle: { ...Typography.bodyLarge, fontWeight: '600', color: Colors.text.primary, marginTop: Spacing.base },
   emptySubtitle: { ...Typography.bodySmall, color: Colors.text.tertiary, marginTop: Spacing.xs, textAlign: 'center' },
 });
+
+export default withErrorBoundary(SharedCategoryPage, 'MainCategorySlugTopRated');

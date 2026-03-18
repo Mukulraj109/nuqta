@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Review to Earn Page
 // Earn coins for writing reviews
 
@@ -37,7 +38,7 @@ interface PendingReview {
   bonusCoins?: number;
 }
 
-export default function ReviewToEarnPage() {
+function ReviewToEarnPage() {
   const router = useRouter();
   const [pendingReviews, setPendingReviews] = useState<PendingReview[]>([]);
   const [potentialEarnings, setPotentialEarnings] = useState(0);
@@ -740,3 +741,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(ReviewToEarnPage, 'EarnReview');

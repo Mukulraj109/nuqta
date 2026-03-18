@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { useThemeColor } from '@/hooks/useThemeColor';
@@ -41,7 +42,7 @@ function NewSection({ dynamicData, cardType }: NewSectionProps) {
   );
 }
 
-export default React.memo(NewSection);
+export default withErrorBoundary(React.memo(NewSection), 'StoreSectionNewSection');
 
 const styles = StyleSheet.create({
   container: {

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -25,7 +26,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
-export default function ReferralSharePage() {
+function ReferralSharePage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -410,3 +411,5 @@ const styles = StyleSheet.create({
   },
   nativeShareText: { ...Typography.bodyLarge, fontWeight: '600', color: Colors.text.inverse },
 });
+
+export default withErrorBoundary(ReferralSharePage, 'ReferralShare');

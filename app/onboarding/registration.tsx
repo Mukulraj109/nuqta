@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, StyleSheet, Platform, TextInput } from 'react-native';
 import analyticsService from '@/services/analyticsService';
@@ -13,7 +14,7 @@ import ReferralHandler from '@/utils/referralHandler';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 // Nuqta Design System Colors
-export default function RegistrationScreen() {
+function RegistrationScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ referralCode?: string }>();
   const authLoading = useAuthLoading();
@@ -538,3 +539,5 @@ const styles = StyleSheet.create({
     marginBottom: 28,
   },
 });
+
+export default withErrorBoundary(RegistrationScreen, 'OnboardingRegistration');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import {
@@ -885,5 +886,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BrandTasks;
+export default withErrorBoundary(BrandTasks, 'PlayandearnBrandTasks');
 

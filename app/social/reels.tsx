@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Reels Page
 // Full-screen immersive video reels (TikTok-style)
 
@@ -79,7 +80,7 @@ const reelVideoStyles = StyleSheet.create({
   placeholderSubtext: { ...Typography.bodySmall, color: 'rgba(255,255,255,0.3)', marginTop: 6 },
 });
 
-export default function ReelsPage() {
+function ReelsPage() {
   const router = useRouter();
   const [reels, setReels] = useState<UgcReel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -865,3 +866,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(ReelsPage, 'SocialReels');

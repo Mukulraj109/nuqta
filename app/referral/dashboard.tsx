@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Pressable, StyleSheet, Dimensions, RefreshControl } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -22,7 +23,7 @@ import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
-export default function ReferralDashboard() {
+function ReferralDashboard() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -693,3 +694,5 @@ const styles = StyleSheet.create({
     color: Colors.brand.purple
   }
 });
+
+export default withErrorBoundary(ReferralDashboard, 'ReferralDashboard');

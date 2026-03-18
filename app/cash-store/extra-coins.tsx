@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View,
@@ -156,7 +157,7 @@ const SkeletonBlock = React.memo(({ width: w, height: h, style, index = 0 }: {
 });
 
 // ─── Main Component ─────────────────────────────────────────
-export default function ExtraCoinsPage() {
+function ExtraCoinsPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -1264,3 +1265,5 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
 });
+
+export default withErrorBoundary(ExtraCoinsPage, 'CashStoreExtraCoins');

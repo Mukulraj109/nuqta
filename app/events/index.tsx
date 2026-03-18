@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Events Page - Main events hub
  * Connected to /api/events
@@ -894,4 +895,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventsPage;
+export default withErrorBoundary(EventsPage, 'EventsIndex');

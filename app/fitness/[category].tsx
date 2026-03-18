@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Fitness Category Page - Dynamic route
  * Connected to real API with functional filters, search, and location
@@ -723,4 +724,4 @@ const styles = StyleSheet.create({
   searchHintText: { ...Typography.body, color: Colors.text.tertiary },
 });
 
-export default FitnessCategoryPage;
+export default withErrorBoundary(FitnessCategoryPage, 'FitnessCategory');

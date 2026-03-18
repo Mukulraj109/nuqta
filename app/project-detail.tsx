@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import {
   View,
@@ -90,7 +91,7 @@ interface Project {
   createdAt: string;
 }
 
-export default function ProjectDetailPage() {
+function ProjectDetailPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const params = useLocalSearchParams();
@@ -881,3 +882,5 @@ const styles = StyleSheet.create({
   },
 });
 
+
+export default withErrorBoundary(ProjectDetailPage, 'ProjectDetail');

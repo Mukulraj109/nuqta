@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // ArticleDetailScreen.tsx - Modern Article Reader with Markdown Support
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import {
@@ -197,7 +198,7 @@ const markdownStyles = StyleSheet.create({
   },
 });
 
-export default function ArticleDetailScreen() {
+function ArticleDetailScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
@@ -862,3 +863,5 @@ const styles = StyleSheet.create({
     }),
   },
 });
+
+export default withErrorBoundary(ArticleDetailScreen, 'ArticleDetailScreen');

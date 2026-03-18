@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Birthday Zone Page - Production Ready
  * Fetches real data from backend API
@@ -52,7 +53,7 @@ interface ZoneInfo {
   userEligible?: boolean;
 }
 
-export default function BirthdayZonePage() {
+function BirthdayZonePage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const user = useAuthUser();
@@ -437,3 +438,5 @@ const styles = StyleSheet.create({
   ctaGradient: { flexDirection: 'row', paddingVertical: Spacing.base, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm },
   ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' },
 });
+
+export default withErrorBoundary(BirthdayZonePage, 'OffersZonesBirthday');

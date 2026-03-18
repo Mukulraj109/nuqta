@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -119,7 +120,7 @@ function ClaimRow({ claim, onPress }: { claim: BonusClaim; onPress: () => void }
 // MAIN COMPONENT
 // ============================================
 
-export default function BonusZoneHistoryPage() {
+function BonusZoneHistoryPage() {
   const router = useRouter();
   const [claims, setClaims] = useState<BonusClaim[]>([]);
   const [loading, setLoading] = useState(true);
@@ -520,3 +521,5 @@ const styles = StyleSheet.create({
     color: colors.brand.orange,
   },
 });
+
+export default withErrorBoundary(BonusZoneHistoryPage, 'BonusZoneHistory');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Subscription Benefits Page
 // Showcase all benefits and usage tips for current subscription tier
 
@@ -20,7 +21,7 @@ import { TIER_COLORS, TIER_GRADIENTS, TIER_NAMES } from '@/types/subscription.ty
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function BenefitsPage() {
+function BenefitsPage() {
   const router = useRouter();
   const { state, computed } = useSubscription();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -405,3 +406,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default withErrorBoundary(BenefitsPage, 'SubscriptionBenefits');

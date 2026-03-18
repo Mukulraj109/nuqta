@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   StyleSheet,
@@ -41,7 +42,7 @@ interface TimeSlot {
   isPast?: boolean;
 }
 
-export default function ConsultationBookingScreen() {
+function ConsultationBookingScreen() {
   const router = useRouter();
   const { storeId } = useLocalSearchParams<{ storeId: string }>();
 
@@ -908,3 +909,5 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.sm,
   },
 });
+
+export default withErrorBoundary(ConsultationBookingScreen, 'BookingConsultation');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // My Earnings Page
 // Financial source-of-truth dashboard showing lifetime earnings, breakdown, statistics, and history
 // Data sourced from GET /api/earnings/consolidated-summary (CoinTransaction aggregation)
@@ -881,4 +882,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyEarningsPage;
+export default withErrorBoundary(MyEarningsPage, 'MyEarnings');

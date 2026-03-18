@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import {
@@ -995,5 +996,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CollegeAmbassador;
+export default withErrorBoundary(CollegeAmbassador, 'PlayandearnCollegeAmbassador');
 

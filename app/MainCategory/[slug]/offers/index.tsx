@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Shared Offers Page
  * /MainCategory/[slug]/offers
@@ -39,7 +40,7 @@ function getBankGradient(bankName: string): string[] {
   return key ? BANK_GRADIENTS[key] : BANK_GRADIENTS.DEFAULT;
 }
 
-export default function OffersIndexPage() {
+function OffersIndexPage() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -360,3 +361,5 @@ const styles = StyleSheet.create({
   emptyTitle: { fontSize: 16, fontWeight: '600', color: colors.neutral[900], marginTop: 16 },
   emptySubtitle: { fontSize: 13, color: colors.neutral[500], marginTop: 4 },
 });
+
+export default withErrorBoundary(OffersIndexPage, 'MainCategorySlugOffersIndex');

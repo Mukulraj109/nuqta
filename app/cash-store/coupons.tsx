@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Coupons List Page
  *
@@ -76,7 +77,7 @@ function transformCoupon(coupon: Coupon): DisplayCoupon {
   };
 }
 
-export default function CouponsPage() {
+function CouponsPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -699,3 +700,5 @@ const styles = StyleSheet.create({
     color: Colors.background.secondary0,
   },
 });
+
+export default withErrorBoundary(CouponsPage, 'CashStoreCoupons');

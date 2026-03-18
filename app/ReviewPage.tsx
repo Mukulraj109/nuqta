@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -26,7 +27,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
-export default function ReviewPage() {
+function ReviewPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -52,17 +53,20 @@ export default function ReviewPage() {
   const [storeLogo, setStoreLogo] = useState(params.storeLogo as string || '');
   const [loadingStore, setLoadingStore] = useState(false);
 
+  const mountedRef = useRef(true);
+  useEffect(() => { return () => { mountedRef.current = false; }; }, []);
+
   // Fetch store details if we have storeId but no store name
   useEffect(() => {
     if (isStoreReview && storeId && !storeName) {
       setLoadingStore(true);
       storesApi.getStoreById(storeId).then((res) => {
-        if (res.success && res.data) {
+        if (mountedRef.current && res.success && res.data) {
           const store = res.data as any;
           setStoreName(store.name || 'Store');
           setStoreLogo(store.logo || '');
         }
-      }).catch(() => {}).finally(() => setLoadingStore(false));
+      }).catch(() => {}).finally(() => { if (mountedRef.current) setLoadingStore(false); });
     }
   }, [storeId, isStoreReview]);
   const {
@@ -116,15 +120,15 @@ export default function ReviewPage() {
           status: 'credited' as const,
         }));
 
-        setRecentCashback(cashbackData);
+        if (mountedRef.current) setRecentCashback(cashbackData);
 
       } else {
-        setRecentCashback([]);
+        if (mountedRef.current) setRecentCashback([]);
       }
     } catch (error: any) {
-      setRecentCashback([]);
+      if (mountedRef.current) setRecentCashback([]);
     } finally {
-      setLoadingCashback(false);
+      if (mountedRef.current) setLoadingCashback(false);
     }
   };
 
@@ -563,3 +567,5 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xs,
   },
 });
+
+export default withErrorBoundary(ReviewPage, 'ReviewPage');

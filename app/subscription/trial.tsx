@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Trial Management Page
 // Complete trial period management system with beautiful UI and animations
 
@@ -22,7 +23,7 @@ import { colors } from '@/constants/theme';
 
 const { height: screenHeight } = Dimensions.get('window');
 
-export default function TrialPage() {
+function TrialPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const { state, actions, computed } = useSubscription();
@@ -824,3 +825,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(TrialPage, 'SubscriptionTrial');

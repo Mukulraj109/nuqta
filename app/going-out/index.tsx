@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React from 'react';
 import {
   View,
@@ -25,7 +26,7 @@ import { useGoingOutPage } from '@/hooks/useGoingOutPage';
 import { GoingOutProduct } from '@/types/going-out.types';
 import { colors } from '@/constants/theme';
 
-export default function GoingOutPage() {
+function GoingOutPage() {
   const router = useRouter();
   const { goBack } = useSafeNavigation();
   const { state, actions, handlers } = useGoingOutPage();
@@ -651,3 +652,4 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+export default withErrorBoundary(GoingOutPage, 'GoingOutIndex');

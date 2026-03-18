@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Transaction Detail Page
 // Shows full details for a single wallet transaction
 
@@ -42,7 +43,7 @@ const STATUS_COLORS: Record<string, { color: string; bg: string }> = {
   reversed: { color: colors.brand.purpleLight, bg: colors.tint.purple },
 };
 
-export default function TransactionDetailPage() {
+function TransactionDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [transaction, setTransaction] = useState<TransactionResponse | null>(null);
@@ -424,3 +425,5 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
   },
 });
+
+export default withErrorBoundary(TransactionDetailPage, 'WalletTransactionId');

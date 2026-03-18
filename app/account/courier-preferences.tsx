@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -59,7 +60,7 @@ const COURIERS = [
 
 const WEEKDAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
-export default function CourierPreferencesScreen() {
+function CourierPreferencesScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -719,3 +720,5 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.sm,
   },
 });
+
+export default withErrorBoundary(CourierPreferencesScreen, 'AccountCourierPreferences');

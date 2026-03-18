@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -56,7 +57,7 @@ const difficultyColors = {
   hard: { bg: 'rgba(239, 68, 68, 0.1)', text: colors.error, border: 'rgba(239, 68, 68, 0.3)' },
 };
 
-export default function SurveysPage() {
+function SurveysPage() {
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState('All');
   const [surveys, setSurveys] = useState<Survey[]>([]);
@@ -807,3 +808,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(SurveysPage, 'Surveys');

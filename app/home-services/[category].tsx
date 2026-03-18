@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Home Services Category Page - Dynamic route
  */
@@ -284,4 +285,4 @@ const styles = StyleSheet.create({
   bookButtonText: { ...Typography.body, fontWeight: '700', color: Colors.text.inverse },
 });
 
-export default HomeServicesCategoryPage;
+export default withErrorBoundary(HomeServicesCategoryPage, 'HomeServicesCategory');

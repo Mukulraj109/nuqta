@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -41,7 +42,7 @@ const GAME_COLORS: [string, string][] = [
   [Colors.error, colors.errorScale[400]],
 ];
 
-export default function GamesPage() {
+function GamesPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [games, setGames] = useState<AvailableGame[]>([]);
@@ -487,3 +488,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(GamesPage, 'GamesIndex');

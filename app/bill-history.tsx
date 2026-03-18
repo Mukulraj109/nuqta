@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Bill History Page
 // View all uploaded bills with their verification status and cashback details
 
@@ -53,7 +54,7 @@ interface Bill {
 
 type FilterStatus = 'all' | 'pending' | 'approved' | 'rejected';
 
-export default function BillHistoryPage() {
+function BillHistoryPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -972,3 +973,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(BillHistoryPage, 'BillHistory');

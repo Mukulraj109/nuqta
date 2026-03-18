@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Brands Listing Page
  * Shows all brands for a category with filtering options
@@ -63,7 +64,7 @@ const BrandCard = ({
   </Pressable>
 );
 
-export default function BrandsPage() {
+function BrandsPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const categorySlug = params.category as string;
@@ -464,3 +465,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(BrandsPage, 'Brands');

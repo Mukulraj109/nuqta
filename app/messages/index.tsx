@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Messages Index Page
 // Shows all conversations with stores
 
@@ -24,7 +25,7 @@ import { useSocket } from '@/contexts/SocketContext';
 import { MessagingSocketEvents } from '@/types/messaging.types';
 import { ChatSkeleton } from '@/components/skeletons';
 
-export default function MessagesIndexPage() {
+function MessagesIndexPage() {
   const router = useRouter();
   const { socket } = useSocket();
 
@@ -412,3 +413,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(MessagesIndexPage, 'MessagesIndex');

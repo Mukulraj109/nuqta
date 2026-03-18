@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // PeopleEarningSection.tsx - People are earning here section
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
@@ -38,7 +39,7 @@ export interface PeopleEarningSectionProps {
 // Avatar colors for users without profile pictures - Nuqta palette
 const AVATAR_COLORS = [colors.lightPeach, colors.nileBlue, colors.lavenderMist, colors.lightMustard, colors.linen];
 
-export default function PeopleEarningSection({
+function PeopleEarningSection({
   storeId,
   users: propUsers,
 }: PeopleEarningSectionProps) {
@@ -212,3 +213,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+export default withErrorBoundary(PeopleEarningSection, 'MainStoreSectionPeopleEarningSection');

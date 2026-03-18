@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Profile Edit Page
 // Edit user profile information with photo upload
 
@@ -31,7 +32,7 @@ interface ProfileFormData {
   gender: string;
 }
 
-export default function ProfileEditPage() {
+function ProfileEditPage() {
   const router = useRouter();
   const { goBack } = useSafeNavigation();
   const { user, updateUser } = useProfile();
@@ -894,3 +895,4 @@ const styles = StyleSheet.create({
     color: PROFILE_COLORS.text.secondary,
   },
 });
+export default withErrorBoundary(ProfileEditPage, 'ProfileEdit');

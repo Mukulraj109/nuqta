@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Campaign Detail Page - Premium Campaign View
  * Route: /deals/[campaignId]
@@ -23,6 +24,7 @@ import CoinIcon from '@/components/ui/CoinIcon';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const DEAL_CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
@@ -64,6 +66,8 @@ const COLORS = {
 const CampaignDetailPage: React.FC = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const currencySymbol = getCurrencySymbol();
   const campaignId = params.campaignId as string;
 
   const [campaign, setCampaign] = useState<Campaign | null>(null);
@@ -413,7 +417,7 @@ const CampaignDetailPage: React.FC = () => {
                     <View style={[styles.offerDetailIcon, { backgroundColor: COLORS.blue50 }]}>
                       <Ionicons name="cart-outline" size={22} color={COLORS.blue500} />
                     </View>
-                    <Text style={styles.offerDetailValue}>₹{campaign.minOrderValue}</Text>
+                    <Text style={styles.offerDetailValue}>{currencySymbol}{campaign.minOrderValue}</Text>
                     <Text style={styles.offerDetailLabel}>Minimum Order</Text>
                   </View>
                 )}
@@ -422,7 +426,7 @@ const CampaignDetailPage: React.FC = () => {
                     <View style={[styles.offerDetailIcon, { backgroundColor: COLORS.green50 }]}>
                       <Ionicons name="trending-up" size={22} color={COLORS.green500} />
                     </View>
-                    <Text style={styles.offerDetailValue}>₹{campaign.maxBenefit}</Text>
+                    <Text style={styles.offerDetailValue}>{currencySymbol}{campaign.maxBenefit}</Text>
                     <Text style={styles.offerDetailLabel}>Max Savings</Text>
                   </View>
                 )}
@@ -1323,4 +1327,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CampaignDetailPage;
+export default withErrorBoundary(CampaignDetailPage, 'DealsCampaignId');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Referral Program Page
 // Invite friends and earn rewards
 
@@ -933,4 +934,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReferralPage;
+export default withErrorBoundary(ReferralPage, 'Referral');

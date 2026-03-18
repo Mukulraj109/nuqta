@@ -45,7 +45,10 @@ const ExclusiveZonesSection = React.memo(function ExclusiveZonesSection({
           <Pressable
             key={zone._id || zone.slug}
             style={zoneStyles.card}
-            onPress={() => navigateTo(`/offers/zones/${zone.slug}`)}
+            onPress={() => {
+              if (!zone?.slug) return;
+              navigateTo(`/offers/zones/${zone.slug}`);
+            }}
           >
             <View style={[zoneStyles.iconCircle, { backgroundColor: zone.backgroundColor }]}>
               <Ionicons

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, Pressable,
@@ -13,7 +14,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import priveApi from '@/services/priveApi';
 import { colors } from '@/constants/theme';
 
-export default function NextActionsScreen() {
+function NextActionsScreen() {
   const router = useRouter();
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -205,3 +206,5 @@ const styles = StyleSheet.create({
   actionGain: { fontSize: 12, fontWeight: '600', color: PRIVE_COLORS.status.success },
   urgencyText: { fontSize: 11, fontWeight: '500' },
 });
+
+export default withErrorBoundary(NextActionsScreen, 'PriveNextActions');

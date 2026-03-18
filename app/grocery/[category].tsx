@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Grocery Category Page - Dynamic route with API Integration
  * Handles all grocery subcategories: fruits, veggies, dairy, snacks, etc.
@@ -665,4 +666,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroceryCategoryPage;
+export default withErrorBoundary(GroceryCategoryPage, 'GroceryCategory');

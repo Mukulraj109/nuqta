@@ -266,13 +266,11 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     ...dataValue, ...loadingValue,
   }), [dataValue, loadingValue]);
 
-  // Sync to Zustand store for crash-safe fallback (synchronous to avoid one-frame lag)
+  // Sync to Zustand store for crash-safe fallback
   const _setFromProvider = useWalletStore((s) => s._setFromProvider);
-  const prevWalletValueRef = useRef(combinedValue);
-  if (prevWalletValueRef.current !== combinedValue) {
-    prevWalletValueRef.current = combinedValue;
+  useEffect(() => {
     _setFromProvider(combinedValue);
-  }
+  }, [combinedValue, _setFromProvider]);
 
   return (
     <WalletDataContext.Provider value={dataValue}>

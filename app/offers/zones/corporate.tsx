@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Corporate/Employee Zone Page - Production Ready
  * Fetches real data from backend API
@@ -67,7 +68,7 @@ const QUICK_CATEGORIES = [
   { icon: 'barbell', label: 'Fitness', color: Colors.success },
 ];
 
-export default function CorporateZonePage() {
+function CorporateZonePage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const user = useAuthUser();
@@ -458,3 +459,5 @@ const styles = StyleSheet.create({
   ctaGradient: { paddingVertical: Spacing.base, alignItems: 'center', justifyContent: 'center' },
   ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' },
 });
+
+export default withErrorBoundary(CorporateZonePage, 'OffersZonesCorporate');

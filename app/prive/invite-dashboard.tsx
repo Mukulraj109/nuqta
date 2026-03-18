@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Privé Invite Dashboard
  *
@@ -38,7 +39,7 @@ const TIER_COLORS: Record<string, string> = {
   none: '#6B6B6B',
 };
 
-export default function PriveInviteDashboard() {
+function PriveInviteDashboard() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { tier, isWhitelisted } = usePriveEligibility();
@@ -469,3 +470,5 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 });
+
+export default withErrorBoundary(PriveInviteDashboard, 'PriveInviteDashboard');

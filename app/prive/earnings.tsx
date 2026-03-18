@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Prive Earnings Page
  * Shows earnings history and breakdown with real data
@@ -84,7 +85,7 @@ const TIME_RANGE_OPTIONS: TimeRangeOption[] = [
 
 // --- Component ---
 
-export default function EarningsScreen() {
+function EarningsScreen() {
   const router = useRouter();
 
   // Data state
@@ -787,3 +788,5 @@ const styles = StyleSheet.create({
   skeletonEarningRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: PRIVE_SPACING.md },
   skeletonFlex1: { flex: 1 },
 });
+
+export default withErrorBoundary(EarningsScreen, 'PriveEarnings');

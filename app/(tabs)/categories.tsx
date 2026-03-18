@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useCallback } from 'react';
 import {
   View,
@@ -44,7 +45,7 @@ const CATEGORY_SECTIONS: CategorySection[] = Object.values(CATEGORY_CONFIGS).map
 }));
 
 // ============ MAIN COMPONENT ============
-export default function CategoriesScreen() {
+function CategoriesScreen() {
   const router = useRouter();
   const { user: profileUser, isModalVisible, showModal, hideModal } = useProfile();
   const { handleMenuItemPress } = useProfileMenu();
@@ -314,3 +315,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default withErrorBoundary(CategoriesScreen, '(tabs)Categories');

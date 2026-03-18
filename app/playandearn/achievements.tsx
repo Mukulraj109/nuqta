@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -559,4 +560,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Achievements;
+export default withErrorBoundary(Achievements, 'PlayandearnAchievements');

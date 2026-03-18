@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Hotspot Detail Page — Shows offers for a specific hotspot area
 import React, { useState, useEffect } from 'react';
 import {
@@ -42,7 +43,7 @@ interface OfferFromAPI {
   };
 }
 
-export default function HotspotDetailPage() {
+function HotspotDetailPage() {
   const router = useRouter();
   const params = useLocalSearchParams<{
     slug: string;
@@ -400,3 +401,5 @@ const styles = StyleSheet.create({
     color: Colors.nileBlue,
   },
 });
+
+export default withErrorBoundary(HotspotDetailPage, 'SearchHotspotDetail');

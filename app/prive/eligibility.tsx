@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Privé Eligibility Screen
  *
@@ -213,7 +214,7 @@ const ThresholdsInfo: React.FC<{ currentScore: number }> = ({ currentScore }) =>
 };
 
 // Main screen component
-export default function PriveEligibilityScreen() {
+function PriveEligibilityScreen() {
   const router = useRouter();
   const { eligibility, isLoading, refresh, tier } = usePriveEligibility();
   const [refreshing, setRefreshing] = useState(false);
@@ -647,3 +648,5 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
   },
 });
+
+export default withErrorBoundary(PriveEligibilityScreen, 'PriveEligibility');

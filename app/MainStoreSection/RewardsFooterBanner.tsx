@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // RewardsFooterBanner.tsx - Premium glassy footer banner
 import React from "react";
 import {
@@ -16,7 +17,7 @@ export interface RewardsFooterBannerProps {
   subMessage?: string;
 }
 
-export default function RewardsFooterBanner({
+function RewardsFooterBanner({
   message = "This store rewards you for shopping smarter",
   subMessage = `— only on ${BRAND.APP_NAME}.`,
 }: RewardsFooterBannerProps) {
@@ -141,3 +142,5 @@ const styles = StyleSheet.create({
     right: 28,
   },
 });
+
+export default withErrorBoundary(RewardsFooterBanner, 'MainStoreSectionRewardsFooterBanner');

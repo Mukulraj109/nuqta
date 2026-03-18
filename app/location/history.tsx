@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -18,7 +19,7 @@ import { LocationHistoryEntry } from '@/types/location.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function LocationHistoryScreen() {
+function LocationHistoryScreen() {
   const router = useRouter();
   const { locationHistory, isLoading, error, loadHistory, clearHistory } = useLocationHistory();
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -366,3 +367,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(LocationHistoryScreen, 'LocationHistory');

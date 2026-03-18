@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Feedback Page
 // App feedback submission
 
@@ -35,7 +36,7 @@ const FEEDBACK_CATEGORIES = [
 
 const RATING_LABELS = ['Terrible', 'Bad', 'Okay', 'Good', 'Excellent'];
 
-export default function FeedbackPage() {
+function FeedbackPage() {
   const router = useRouter();
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -591,3 +592,5 @@ const styles = StyleSheet.create({
     color: Colors.text.white,
   },
 });
+
+export default withErrorBoundary(FeedbackPage, 'SupportFeedback');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Terms & Conditions Page
 // Terms of service with markdown content viewer
 
@@ -104,7 +105,7 @@ Address: ${BRAND.APP_NAME} Technologies Pvt Ltd, Bangalore, India`,
   ],
 };
 
-export default function TermsPage() {
+function TermsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -380,3 +381,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(TermsPage, 'LegalTerms');

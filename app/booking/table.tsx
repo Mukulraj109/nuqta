@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
@@ -62,7 +63,7 @@ interface DateItem {
   fullDate: Date;
 }
 
-export default function TableBookingPage() {
+function TableBookingPage() {
   const { storeId } = useLocalSearchParams();
   const router = useRouter();
   const backgroundColor = useThemeColor({}, 'background');
@@ -991,3 +992,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(TableBookingPage, 'BookingTable');

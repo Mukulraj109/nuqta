@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Memory Match Game
 // 4x4 card grid, flip animation, match checking, score tracking, timer, backend integration
 
@@ -58,7 +59,7 @@ function createDeck(): Card[] {
   }));
 }
 
-export default function MemoryPage() {
+function MemoryPage() {
   const [gameState, setGameState] = useState<GameState>('idle');
   const [cards, setCards] = useState<Card[]>(createDeck());
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
@@ -694,3 +695,5 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
 });
+
+export default withErrorBoundary(MemoryPage, 'GamesMemory');

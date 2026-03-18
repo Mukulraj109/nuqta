@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // PaymentMethodsSection.tsx - How you can pay here section
 import React from "react";
 import {
@@ -62,7 +63,7 @@ const DEFAULT_METHODS: PaymentMethod[] = [
   },
 ];
 
-export default function PaymentMethodsSection({
+function PaymentMethodsSection({
   methods = DEFAULT_METHODS,
 }: PaymentMethodsSectionProps) {
   return (
@@ -171,3 +172,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default withErrorBoundary(PaymentMethodsSection, 'MainStoreSectionPaymentMethodsSection');

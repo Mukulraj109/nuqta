@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Missions Screen - Improved UI
  * Uses DesignTokens for consistent styling
@@ -1151,4 +1152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MissionsScreen;
+export default withErrorBoundary(MissionsScreen, 'Missions');

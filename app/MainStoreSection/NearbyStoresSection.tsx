@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // NearbyStoresSection.tsx - Nearby ReZ stores section
 import React, { useState, useEffect } from "react";
 import {
@@ -48,7 +49,7 @@ const formatDistance = (distanceKm: number): string => {
   return `${distanceKm.toFixed(1)}km`;
 };
 
-export default function NearbyStoresSection({
+function NearbyStoresSection({
   stores: propStores,
   currentStoreId,
   userLat,
@@ -166,3 +167,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(NearbyStoresSection, 'MainStoreSectionNearbyStoresSection');

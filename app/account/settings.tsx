@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // User Settings Screen
 // Comprehensive settings management across 8 categories
 
@@ -24,7 +25,7 @@ import { colors } from '@/constants/theme';
 
 type SettingsSection = 'general' | 'notifications' | 'privacy' | 'security' | 'delivery' | 'payment' | 'preferences';
 
-export default function SettingsPage() {
+function SettingsPage() {
   const router = useRouter();
   const {
     settings,
@@ -912,3 +913,4 @@ const styles = StyleSheet.create({
     height: Spacing.lg,
   },
 });
+export default withErrorBoundary(SettingsPage, 'AccountSettings');

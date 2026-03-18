@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView, StyleSheet, SafeAreaView, StatusBar, Pressable, Platform, Clipboard, Animated, RefreshControl } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, SafeAreaView, StatusBar, Pressable, Platform, Clipboard, Animated, RefreshControl, ActivityIndicator } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -25,11 +25,14 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // ReZ Premium Design System Colors
-export default function PartnerProfilePage() {
+function PartnerProfilePage() {
   const { goBack } = useSafeNavigation();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
+  const [enrolled, setEnrolled] = useState<boolean | null>(null); // null = unknown yet
+  const [enrolling, setEnrolling] = useState(false);
   const [partnerState, setPartnerState] = useState<PartnerPageState>({
     profile: null,
     milestones: [],
@@ -66,12 +69,19 @@ export default function PartnerProfilePage() {
     try {
       setPartnerState(prev => ({ ...prev, loading: true, error: null }));
 
-      const [dashboardResponse, benefitsResponse] = await Promise.all([
-        partnerApi.getDashboard(),
-        partnerApi.getBenefits()
-      ]);
+      const dashboardResponse = await partnerApi.getDashboard();
 
       if (dashboardResponse.success && dashboardResponse.data) {
+        // Check if user is enrolled in the partner program
+        if (dashboardResponse.data.enrolled === false) {
+          setEnrolled(false);
+          setPartnerState(prev => ({ ...prev, loading: false, error: null }));
+          return;
+        }
+
+        setEnrolled(true);
+
+        const benefitsResponse = await partnerApi.getBenefits();
         const levelsWithBenefits = benefitsResponse.success && benefitsResponse.data
           ? benefitsResponse.data.allLevels
           : [];
@@ -96,6 +106,26 @@ export default function PartnerProfilePage() {
         loading: false,
         error: error instanceof Error ? error.message : 'Failed to load partner data',
       }));
+    }
+  };
+
+  const handleEnroll = async () => {
+    try {
+      setEnrolling(true);
+      const response = await partnerApi.enrollPartner();
+
+      if (response.success && response.data) {
+        setEnrolled(true);
+        toast.success('Welcome to the Partner Program!');
+        // Reload full dashboard data after enrollment
+        await loadPartnerData();
+      } else {
+        platformAlertSimple('Error', response.error || 'Failed to join the Partner Program. Please try again.');
+      }
+    } catch (error) {
+      platformAlertSimple('Error', 'Failed to join the Partner Program. Please try again.');
+    } finally {
+      setEnrolling(false);
     }
   };
 
@@ -332,11 +362,83 @@ export default function PartnerProfilePage() {
           <Pressable
             style={styles.retryButton}
             onPress={loadPartnerData}
-           
+
           >
             <LinearGradient colors={[Colors.gold, Colors.nileBlue]} style={styles.retryButtonGradient}>
               <Ionicons name="refresh" size={18} color="white" />
               <Text style={styles.retryButtonText}>Try Again</Text>
+            </LinearGradient>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // Not enrolled — show join screen
+  if (enrolled === false) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor={Colors.gold} />
+        <LinearGradient
+          colors={[Colors.gold, Colors.nileBlue]}
+          style={styles.header}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={styles.headerGlassOverlay} />
+          <View style={styles.headerContent}>
+            <Pressable onPress={handleGoBack} style={styles.backButton}>
+              <View style={styles.backButtonInner}>
+                <Ionicons name="arrow-back" size={20} color="white" />
+              </View>
+            </Pressable>
+            <View style={styles.headerTitleContainer}>
+              <Text style={styles.headerTitle}>Partner Program</Text>
+            </View>
+            <View style={{ width: 40 }} />
+          </View>
+        </LinearGradient>
+
+        <View style={styles.enrollContainer}>
+          <View style={styles.enrollIconWrapper}>
+            <LinearGradient colors={[Colors.gold, Colors.nileBlue]} style={styles.enrollIconGradient}>
+              <Ionicons name="people" size={40} color="white" />
+            </LinearGradient>
+          </View>
+          <Text style={styles.enrollTitle}>Partner Program</Text>
+          <Text style={styles.enrollDescription}>
+            Earn rewards, unlock milestones, and get exclusive offers as a REZ partner. Track your progress and level up for bigger benefits.
+          </Text>
+
+          <View style={styles.enrollBenefits}>
+            {[
+              { icon: 'trophy' as const, text: 'Unlock milestones and earn cashback' },
+              { icon: 'gift' as const, text: 'Claim exclusive partner offers' },
+              { icon: 'trending-up' as const, text: 'Level up for bigger rewards' },
+            ].map((item, index) => (
+              <View key={index} style={styles.enrollBenefitRow}>
+                <View style={styles.enrollBenefitIcon}>
+                  <Ionicons name={item.icon} size={18} color={Colors.gold} />
+                </View>
+                <Text style={styles.enrollBenefitText}>{item.text}</Text>
+              </View>
+            ))}
+          </View>
+
+          <Pressable
+            style={[styles.enrollButton, enrolling && styles.enrollButtonDisabled]}
+            onPress={handleEnroll}
+            disabled={enrolling}
+          >
+            <LinearGradient colors={[Colors.gold, Colors.nileBlue]} style={styles.enrollButtonGradient}>
+              {enrolling ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <>
+                  <Ionicons name="rocket" size={20} color="white" />
+                  <Text style={styles.enrollButtonText}>Join Now</Text>
+                </>
+              )}
             </LinearGradient>
           </Pressable>
         </View>
@@ -1249,4 +1351,101 @@ const styles = StyleSheet.create({
   bottomSpacer: {
     height: 40,
   },
+
+  // Enrollment Screen
+  enrollContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.xl,
+    paddingBottom: 60,
+  },
+  enrollIconWrapper: {
+    marginBottom: Spacing.xl,
+    borderRadius: 44,
+    overflow: 'hidden',
+  },
+  enrollIconGradient: {
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  enrollTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: Colors.nileBlue,
+    marginBottom: Spacing.md,
+    textAlign: 'center',
+  },
+  enrollDescription: {
+    fontSize: Typography.bodyLarge.fontSize,
+    color: colors.gray[400],
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: Spacing.xl,
+    paddingHorizontal: Spacing.md,
+  },
+  enrollBenefits: {
+    width: '100%',
+    marginBottom: Spacing.xl,
+    gap: Spacing.md,
+  },
+  enrollBenefitRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.background.primary,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.base,
+    ...Platform.select({
+      web: {
+        boxShadow: '0 1px 4px rgba(0, 0, 0, 0.06)',
+      },
+      default: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.06,
+        shadowRadius: 4,
+        elevation: 1,
+      },
+    }),
+  },
+  enrollBenefitIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255, 205, 87, 0.12)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Spacing.md,
+  },
+  enrollBenefitText: {
+    flex: 1,
+    fontSize: Typography.body.fontSize,
+    color: Colors.nileBlue,
+    fontWeight: '500',
+  },
+  enrollButton: {
+    width: '100%',
+    borderRadius: 14,
+    overflow: 'hidden',
+  },
+  enrollButtonDisabled: {
+    opacity: 0.7,
+  },
+  enrollButtonGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    gap: Spacing.sm,
+  },
+  enrollButtonText: {
+    color: Colors.text.inverse,
+    fontSize: Typography.bodyLarge.fontSize,
+    fontWeight: '700',
+  },
 });
+
+export default withErrorBoundary(PartnerProfilePage, 'Partner');

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import {
   View,
   ScrollView,
@@ -84,7 +85,7 @@ const PLATFORM_CONFIG: Record<PlatformType, { label: string; icon: string; color
   },
 };
 
-export default function EarnFromSocialMediaPage() {
+function EarnFromSocialMediaPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
 
@@ -1826,3 +1827,5 @@ const styles = StyleSheet.create({
     height: 100,
   },
 });
+
+export default withErrorBoundary(EarnFromSocialMediaPage, 'EarnFromSocialMedia');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Category Stores Page
  *
@@ -168,7 +169,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, onPress, index }) => {
   );
 };
 
-export default function CategoryStoresPage() {
+function CategoryStoresPage() {
   const params = useLocalSearchParams<{ slug: string }>();
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
   const router = useRouter();
@@ -724,3 +725,5 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
 });
+
+export default withErrorBoundary(CategoryStoresPage, 'MallCategorySlug');

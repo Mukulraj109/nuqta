@@ -6,6 +6,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import type { CashbackStatus } from '@/services/serviceBookingApi';
 import { colors } from '@/constants/theme';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 interface CashbackStatusBadgeProps {
   status: CashbackStatus;
@@ -53,9 +54,11 @@ function CashbackStatusBadge({
   amount,
   verificationDays,
   creditedAt,
-  currencySymbol = '₹',
+  currencySymbol: currencySymbolProp,
   compact = false,
 }: CashbackStatusBadgeProps) {
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const currencySymbol = currencySymbolProp ?? getCurrencySymbol();
   const config = STATUS_CONFIG[status] || STATUS_CONFIG.pending;
 
   // Build label with dynamic info

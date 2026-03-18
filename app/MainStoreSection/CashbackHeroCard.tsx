@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // CashbackHeroCard.tsx - Green gradient cashback display card
 import React from "react";
 import { View, StyleSheet } from 'react-native';
@@ -11,16 +12,21 @@ import {
 } from "@/constants/DesignSystem";
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useGetCurrencySymbol } from '@/stores/selectors';
 
 export interface CashbackHeroCardProps {
   cashbackPercentage?: number;
   coinsToEarn?: number;
+  savingsAmount?: number;
 }
 
-export default function CashbackHeroCard({
+function CashbackHeroCard({
   cashbackPercentage = 20,
   coinsToEarn = 50,
+  savingsAmount,
 }: CashbackHeroCardProps) {
+  const getCurrencySymbol = useGetCurrencySymbol();
+  const currencySymbol = getCurrencySymbol();
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -32,8 +38,18 @@ export default function CashbackHeroCard({
         <View style={styles.content}>
           {/* Cashback Info */}
           <View style={styles.textContent}>
-            <ThemedText style={styles.label}>Earn up to</ThemedText>
-            <ThemedText style={styles.percentage}>{cashbackPercentage}% Cashback</ThemedText>
+            {savingsAmount != null && savingsAmount > 0 ? (
+              <>
+                <ThemedText style={styles.label}>You save</ThemedText>
+                <ThemedText style={styles.savingsHero}>{currencySymbol}{savingsAmount.toLocaleString('en-IN')}</ThemedText>
+                <ThemedText style={styles.percentageSecondary}>{cashbackPercentage}% Cashback</ThemedText>
+              </>
+            ) : (
+              <>
+                <ThemedText style={styles.label}>Earn up to</ThemedText>
+                <ThemedText style={styles.percentage}>{cashbackPercentage}% Cashback</ThemedText>
+              </>
+            )}
             <View style={styles.coinsRow}>
               <View style={styles.divider} />
               <ThemedText style={styles.plus}>+</ThemedText>
@@ -78,6 +94,18 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginBottom: 4,
   },
+  savingsHero: {
+    fontSize: 34,
+    fontWeight: "800",
+    color: colors.background.primary,
+    marginBottom: 2,
+  },
+  percentageSecondary: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "rgba(255, 255, 255, 0.8)",
+    marginBottom: 4,
+  },
   percentage: {
     fontSize: 34,
     fontWeight: "800",
@@ -119,3 +147,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(CashbackHeroCard, 'MainStoreSectionCashbackHeroCard');

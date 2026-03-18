@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Shared Loyalty Hub Dashboard
  * /MainCategory/[slug]/loyalty
@@ -22,7 +23,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function LoyaltyHubPage() {
+function LoyaltyHubPage() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = useMemo(() => getCategoryTheme(slug || 'electronics'), [slug]);
@@ -385,3 +386,5 @@ const styles = StyleSheet.create({
   statValue: { fontSize: 20, fontWeight: '700', color: SHARED_COLORS.textPrimary },
   statLabel: { fontSize: 12, color: SHARED_COLORS.textSecondary },
 });
+
+export default withErrorBoundary(LoyaltyHubPage, 'MainCategorySlugLoyaltyIndex');

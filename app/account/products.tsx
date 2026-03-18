@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -16,7 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import userProductService, { UserProduct } from '../../services/userProductApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
-export default function ProductsScreen() {
+function ProductsScreen() {
   const router = useRouter();
   const [products, setProducts] = useState<UserProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -511,3 +512,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(ProductsScreen, 'AccountProducts');

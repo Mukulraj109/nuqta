@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   View,
@@ -69,7 +70,7 @@ const GlassCard = ({ children, style, intensity = 60 }: any) => {
   );
 };
 
-export default function OnlineVoucherPage() {
+function OnlineVoucherPage() {
   const router = useRouter();
   const { state, handlers, heroCarousel, actions } = useOnlineVoucher();
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -1820,3 +1821,5 @@ const styles = StyleSheet.create({
     height: 60,
   },
 });
+
+export default withErrorBoundary(OnlineVoucherPage, 'OnlineVoucher');

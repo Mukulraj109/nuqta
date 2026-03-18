@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Heroes/Special Profiles Page - Production Ready
  * Fetches real data from backend API for Defence/Healthcare/Teachers/Seniors
@@ -66,7 +67,7 @@ const PROFILE_CONFIG: Record<string, { emoji: string; gradientColors: string[] }
   'differently-abled': { emoji: '♿', gradientColors: [colors.brand.pink, colors.deepPink, '#BE185D'] },
 };
 
-export default function HeroesZonePage() {
+function HeroesZonePage() {
   const router = useRouter();
   const { profile: profileParam } = useLocalSearchParams<{ profile?: string }>();
   const insets = useSafeAreaInsets();
@@ -563,3 +564,5 @@ const styles = StyleSheet.create({
   ctaGradient: { paddingVertical: Spacing.base, alignItems: 'center', justifyContent: 'center' },
   ctaButtonText: { ...Typography.button, color: colors.background.primary, fontWeight: '600' },
 });
+
+export default withErrorBoundary(HeroesZonePage, 'OffersZonesHeroes');

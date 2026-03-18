@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback, useMemo, useRef, useLayoutEffect } from 'react';
 import {
   View,
@@ -34,7 +35,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { searchHistoryService } from '@/services/searchHistoryService';
 import { Spacing } from '@/constants/DesignSystem';
 
-export default function SearchPage() {
+function SearchPage() {
   const params = useLocalSearchParams();
   const initialQuery = (params.q as string) || '';
 
@@ -449,3 +450,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+
+export default withErrorBoundary(SearchPage, 'Search');

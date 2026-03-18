@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Coin Hunt Game - Converted from V2 Web
  * Exact match to Rez_v-2-main/src/pages/earn/CoinHunt.jsx
@@ -426,4 +427,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CoinHuntScreen;
+export default withErrorBoundary(CoinHuntScreen, 'CoinHunt');

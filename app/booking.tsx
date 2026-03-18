@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -82,7 +83,7 @@ interface ActiveDeal {
   discount?: string;
 }
 
-export default function BookingPage() {
+function BookingPage() {
   // URL params: storeId (required), bookingType ('table' | 'service'), productId (for service)
   // Redemption params: redemptionCode, redemptionId, dealCashback, dealCoins, dealDiscount
   const {
@@ -1659,3 +1660,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(BookingPage, 'Booking');

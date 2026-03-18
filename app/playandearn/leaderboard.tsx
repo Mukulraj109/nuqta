@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
@@ -1354,4 +1355,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Leaderboard;
+export default withErrorBoundary(Leaderboard, 'PlayandearnLeaderboard');

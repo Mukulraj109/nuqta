@@ -1,4 +1,5 @@
 import { colors } from '@/constants/theme';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
@@ -1321,4 +1322,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Quiz;
+export default withErrorBoundary(Quiz, 'Quiz');

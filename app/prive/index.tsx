@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Privé Home Screen
  *
@@ -11,7 +12,7 @@ import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PriveSectionContainer } from '@/components/prive/PriveSectionContainer';
 
-export default function PriveHomeScreen() {
+function PriveHomeScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <PriveSectionContainer />
@@ -25,3 +26,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.midGrayAlt,
   },
 });
+
+export default withErrorBoundary(PriveHomeScreen, 'PriveIndex');

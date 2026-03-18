@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
@@ -69,7 +70,7 @@ interface EarningsHistoryResponse {
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-export default function EarningsHistoryPage() {
+function EarningsHistoryPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const user = useAuthUser();
@@ -1078,3 +1079,5 @@ const styles = StyleSheet.create({
   },
 });
 
+
+export default withErrorBoundary(EarningsHistoryPage, 'EarningsHistory');

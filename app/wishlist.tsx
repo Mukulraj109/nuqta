@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Wishlist Page
 // Page for managing user's wishlists with saved deals support
 
@@ -62,7 +63,7 @@ const getDaysUntilExpiry = (validUntil?: string): number | null => {
 };
 
 // Helper to format discount value - note: currencySymbol must be passed as parameter
-const formatDiscountValue = (snapshot?: DiscountSnapshot, currencySymbol: string = '₹'): string => {
+const formatDiscountValue = (snapshot?: DiscountSnapshot, currencySymbol: string): string => {
   if (!snapshot) return '';
   if (snapshot.type === 'percentage') {
     return `${snapshot.value}% OFF`;
@@ -81,7 +82,7 @@ interface WishlistData {
   updatedAt: string;
 }
 
-export default function WishlistPage() {
+function WishlistPage() {
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -1511,3 +1512,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(WishlistPage, 'Wishlist');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View,
@@ -135,7 +136,7 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries = 2): Promise<T> {
 }
 
 // ─── Main Component ─────────────────────────────────────────
-export default function TrendingOffersPage() {
+function TrendingOffersPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const clickingRef = useRef(false);
@@ -1510,3 +1511,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0EBE4',
   },
 });
+
+export default withErrorBoundary(TrendingOffersPage, 'CashStoreTrending');

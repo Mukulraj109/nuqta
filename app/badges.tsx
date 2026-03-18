@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Badges/Achievements Screen - Converted from V2 Web
  * Exact match to Rez_v-2-main/src/pages/earn/Achievements.jsx
@@ -695,4 +696,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BadgesScreen;
+export default withErrorBoundary(BadgesScreen, 'Badges');

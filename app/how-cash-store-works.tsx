@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * How Cash Store Works Page
  *
@@ -25,7 +26,7 @@ import {
   CashStoreFooterCTA,
 } from '@/components/how-cash-store-works';
 
-export default function HowCashStoreWorksScreen() {
+function HowCashStoreWorksScreen() {
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
@@ -80,3 +81,5 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
 });
+
+export default withErrorBoundary(HowCashStoreWorksScreen, 'HowCashStoreWorks');

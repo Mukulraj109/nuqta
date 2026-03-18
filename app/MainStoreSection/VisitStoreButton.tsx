@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useRef } from 'react';
 import { View, Pressable, StyleSheet, Animated, Dimensions, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -22,7 +23,7 @@ interface VisitStoreButtonProps {
   loading?: boolean;
 }
 
-export default function VisitStoreButton({
+function VisitStoreButton({
   title = "Visit store",
   onPress,
   disabled = false,
@@ -184,3 +185,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+export default withErrorBoundary(VisitStoreButton, 'MainStoreSectionVisitStoreButton');

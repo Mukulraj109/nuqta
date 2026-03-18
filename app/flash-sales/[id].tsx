@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Flash Sale Detail Page
 // Dynamic route for individual flash sale (Lightning Deal) details
 
@@ -62,7 +63,7 @@ interface FlashSale {
   purchaseCount: number;
 }
 
-export default function FlashSaleDetailPage() {
+function FlashSaleDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const isAuthenticated = useIsAuthenticated();
@@ -1311,3 +1312,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(FlashSaleDetailPage, 'FlashSalesId');

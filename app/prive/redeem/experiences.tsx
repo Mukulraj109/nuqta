@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Experiences Redemption Page
  * Redeem coins for exclusive experiences
@@ -18,7 +19,7 @@ import { colors } from '@/constants/theme';
 
 const generateIdempotencyKey = () => `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
 
-export default function ExperiencesScreen() {
+function ExperiencesScreen() {
   const router = useRouter();
   const { userData, refresh } = usePriveSection();
   const refreshWallet = useRefreshWallet();
@@ -548,3 +549,5 @@ const styles = StyleSheet.create({
     color: PRIVE_COLORS.gold.primary,
   },
 });
+
+export default withErrorBoundary(ExperiencesScreen, 'PriveRedeemExperiences');

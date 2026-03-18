@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, Pressable,
@@ -12,7 +13,7 @@ import { SectionListSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function BenefitsScreen() {
+function BenefitsScreen() {
   const router = useRouter();
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -229,3 +230,5 @@ const styles = StyleSheet.create({
   },
   ctaText: { fontSize: 15, fontWeight: '600', color: PRIVE_COLORS.gold.primary },
 });
+
+export default withErrorBoundary(BenefitsScreen, 'PriveBenefits');

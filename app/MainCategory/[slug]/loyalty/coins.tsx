@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Shared Coins Balance & History Page
  * /MainCategory/[slug]/loyalty/coins
@@ -50,7 +51,7 @@ const TYPE_CONFIG: Record<string, { icon: string; color: string; prefix: string 
   expired: { icon: 'time-outline', color: SHARED_COLORS.textSecondary, prefix: '-' },
 };
 
-export default function ElectronicsCoinsPage() {
+function ElectronicsCoinsPage() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -313,3 +314,5 @@ const styles = StyleSheet.create({
   emptyTitle: { ...Typography.bodyLarge, fontWeight: '600', color: Colors.text.primary, marginTop: Spacing.base },
   emptySubtitle: { ...Typography.bodySmall, color: Colors.text.tertiary, marginTop: Spacing.xs, textAlign: 'center' },
 });
+
+export default withErrorBoundary(ElectronicsCoinsPage, 'MainCategorySlugLoyaltyCoins');

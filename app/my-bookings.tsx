@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // My Bookings Page
 // Shows user's service bookings with travel-specific enhancements
 
@@ -753,4 +754,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyBookingsPage;
+export default withErrorBoundary(MyBookingsPage, 'MyBookings');

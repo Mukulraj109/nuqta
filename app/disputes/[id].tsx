@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -48,7 +49,7 @@ const REASON_LABELS: Record<string, string> = {
   other: 'Other',
 };
 
-export default function DisputeDetailScreen() {
+function DisputeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { isAuthenticated, authLoading } = useAuth();
@@ -273,3 +274,5 @@ const styles = StyleSheet.create({
   },
   addEvidenceBtnText: { fontSize: 15, fontWeight: '600', color: colors.text.inverse },
 });
+
+export default withErrorBoundary(DisputeDetailScreen, 'DisputesId');

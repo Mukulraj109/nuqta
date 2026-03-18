@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React from 'react';
 import { View, StyleSheet, StatusBar, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,7 +7,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { colors, spacing, borderRadius, shadows } from '@/constants/theme';
 import { useBackButton } from '@/hooks/useSafeNavigation';
 
-export default function VerificationPendingPage() {
+function VerificationPendingPage() {
   const router = useRouter();
   useBackButton(() => true);
 
@@ -84,3 +85,5 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 });
+
+export default withErrorBoundary(VerificationPendingPage, 'OnboardingVerificationPending');

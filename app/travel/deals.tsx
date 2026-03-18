@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Hot Deals Page - All featured travel deals
  */
@@ -306,4 +307,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HotDealsPage;
+export default withErrorBoundary(HotDealsPage, 'TravelDeals');

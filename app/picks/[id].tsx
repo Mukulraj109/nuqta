@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Creator Pick Detail Page
 // Production-ready page showing a creator's product recommendation
 
@@ -830,4 +831,4 @@ const s = StyleSheet.create({
   chevronMarginTop: { marginTop: 8 },
 });
 
-export default CreatorPickDetail;
+export default withErrorBoundary(CreatorPickDetail, 'PicksId');

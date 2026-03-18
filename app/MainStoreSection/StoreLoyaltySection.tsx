@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreLoyaltySection.tsx - Loyalty progress section
 import React from "react";
 import {
@@ -23,7 +24,7 @@ export interface StoreLoyaltySectionProps {
   onViewDetails?: () => void;
 }
 
-export default function StoreLoyaltySection({
+function StoreLoyaltySection({
   visitsCompleted = 4,
   totalVisitsRequired = 5,
   nextReward = "Free Coffee",
@@ -143,3 +144,5 @@ const styles = StyleSheet.create({
     color: "#FF9500",
   },
 });
+
+export default withErrorBoundary(StoreLoyaltySection, 'MainStoreSectionStoreLoyaltySection');

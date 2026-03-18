@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Mall Index Page
  *
@@ -11,7 +12,7 @@ import { useRouter } from 'expo-router';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { useHomeTab } from '@/contexts/HomeTabContext';
 
-export default function MallIndex() {
+function MallIndex() {
   const router = useRouter();
   const { setActiveTab } = useHomeTab();
 
@@ -37,3 +38,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F9FF',
   },
 });
+
+export default withErrorBoundary(MallIndex, 'MallIndex');

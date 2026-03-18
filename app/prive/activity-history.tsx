@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Privé Activity History Page
  * Campaign and activity history with real data from API
@@ -17,7 +18,7 @@ import { TransactionListSkeleton } from '@/components/skeletons';
 import priveApi, { TransactionItem } from '@/services/priveApi';
 import { colors } from '@/constants/theme';
 
-export default function ActivityHistoryScreen() {
+function ActivityHistoryScreen() {
   const [transactions, setTransactions] = useState<TransactionItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -294,3 +295,5 @@ const styles = StyleSheet.create({
     color: PRIVE_COLORS.status.error,
   },
 });
+
+export default withErrorBoundary(ActivityHistoryScreen, 'PriveActivityHistory');

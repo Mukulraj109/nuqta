@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Call Support Page
 // Phone support options with callback request — config-driven
 
@@ -31,7 +32,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@
 
 type PageState = 'loading' | 'error' | 'form' | 'submitting' | 'success';
 
-export default function CallSupportPage() {
+function CallSupportPage() {
   const router = useRouter();
   const user = useAuthUser();
 
@@ -991,3 +992,5 @@ const styles = StyleSheet.create({
     color: Colors.text.white,
   },
 });
+
+export default withErrorBoundary(CallSupportPage, 'SupportCall');

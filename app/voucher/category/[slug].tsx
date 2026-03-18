@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
@@ -71,7 +72,7 @@ const CATEGORY_INFO: { [key: string]: { icon: string; gradient: string[]; bgColo
   sports: { icon: '⚽', gradient: [colors.tealGreen, '#0D9488'], bgColor: 'rgba(20, 184, 166, 0.1)' },
 };
 
-export default function VoucherCategoryPage() {
+function VoucherCategoryPage() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -790,3 +791,5 @@ const styles = StyleSheet.create({
     height: 60,
   },
 });
+
+export default withErrorBoundary(VoucherCategoryPage, 'VoucherCategorySlug');

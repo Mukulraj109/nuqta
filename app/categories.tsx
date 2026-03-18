@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * All Categories Page - Browse all shopping categories
  * Connected to /api/categories
@@ -465,4 +466,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoriesPage;
+export default withErrorBoundary(CategoriesPage, 'Categories');

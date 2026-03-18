@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Support Hub Page
 // Main customer support hub with quick actions, tickets, and FAQs
 
@@ -13,7 +14,7 @@ import { Colors, Spacing, Gradients } from '@/constants/DesignSystem';
 import { SectionListSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
 
-export default function SupportHubPage() {
+function SupportHubPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -698,3 +699,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(SupportHubPage, 'SupportIndex');

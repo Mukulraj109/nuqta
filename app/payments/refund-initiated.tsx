@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Refund Initiated Page
 // Refund status and tracking
 
@@ -122,7 +123,7 @@ function mapRefundResponse(raw: any): RefundDetails {
   };
 }
 
-export default function RefundInitiatedPage() {
+function RefundInitiatedPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -676,3 +677,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(RefundInitiatedPage, 'PaymentsRefundInitiated');

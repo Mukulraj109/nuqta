@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Prive Offers Page (Dark Theme)
  *
@@ -33,7 +34,7 @@ const DarkColors = {
   border: '#2C2C2E',
 };
 
-export default function PriveOffersScreen() {
+function PriveOffersScreen() {
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -182,3 +183,5 @@ const styles = StyleSheet.create({
     backgroundColor: DarkColors.backgroundSecondary,
   },
 });
+
+export default withErrorBoundary(PriveOffersScreen, 'PriveOffersIndex');

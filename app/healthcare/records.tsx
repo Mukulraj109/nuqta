@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Health Records Page
  * Full management of health documents - upload, view, share, archive
@@ -773,4 +774,4 @@ const styles = StyleSheet.create({
   actionButtonText: { ...Typography.caption, fontWeight: '600', color: Colors.text.inverse, marginLeft: Spacing.xs },
 });
 
-export default HealthRecordsPage;
+export default withErrorBoundary(HealthRecordsPage, 'HealthcareRecords');

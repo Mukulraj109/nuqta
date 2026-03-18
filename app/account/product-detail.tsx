@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -17,7 +18,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
-export default function ProductDetailScreen() {
+function ProductDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -532,3 +533,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(ProductDetailScreen, 'AccountProductDetail');

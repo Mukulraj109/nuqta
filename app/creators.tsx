@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
@@ -154,7 +155,7 @@ const CreatorCard = React.memo(({ creator, onPress }: { creator: Creator; onPres
 // MAIN COMPONENT
 // ============================================
 
-export default function CreatorsPage() {
+function CreatorsPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -742,3 +743,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(CreatorsPage, 'Creators');

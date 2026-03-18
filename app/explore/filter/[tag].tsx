@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -644,4 +645,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TagFilterPage;
+export default withErrorBoundary(TagFilterPage, 'ExploreFilterTag');

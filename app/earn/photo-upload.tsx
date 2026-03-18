@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Photo Upload to Earn Page
 // Upload store/product photos and earn coins after moderation
 
@@ -34,7 +35,7 @@ interface StoreSearchResult {
   logo?: string;
 }
 
-export default function PhotoUploadPage() {
+function PhotoUploadPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('upload');
 
@@ -467,3 +468,5 @@ const styles = StyleSheet.create({
   emptyText: { ...Typography.h4, color: Colors.text.secondary, marginTop: Spacing.md },
   emptySubtext: { ...Typography.bodySmall, color: Colors.text.tertiary, marginTop: Spacing.sm, textAlign: 'center' },
 });
+
+export default withErrorBoundary(PhotoUploadPage, 'EarnPhotoUpload');

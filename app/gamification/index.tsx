@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -20,7 +21,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { colors } from '@/constants/theme';
 import { platformAlertSimple } from '@/utils/platformAlert';
 
-export default function GamificationDashboard() {
+function GamificationDashboard() {
   const coinBalance = useRezBalance();
   const refreshWallet = useRefreshWallet();
   const [loading, setLoading] = useState(true);
@@ -764,3 +765,5 @@ const styles = StyleSheet.create({
     ...Typography.bodyLarge,
   },
 });
+
+export default withErrorBoundary(GamificationDashboard, 'GamificationIndex');

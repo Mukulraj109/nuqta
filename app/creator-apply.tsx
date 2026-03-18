@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Creator Application Page
 // Multi-step form for applying as a creator
 
@@ -39,7 +40,7 @@ const socialPlatforms = [
   { id: 'tiktok', name: 'TikTok', icon: 'musical-notes' },
 ];
 
-export default function CreatorApplyPage() {
+function CreatorApplyPage() {
   const router = useRouter();
   const [step, setStep] = useState(0); // 0=check eligibility, 1=category, 2=profile, 3=social, 4=review
   const [loading, setLoading] = useState(true);
@@ -1006,3 +1007,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(CreatorApplyPage, 'CreatorApply');

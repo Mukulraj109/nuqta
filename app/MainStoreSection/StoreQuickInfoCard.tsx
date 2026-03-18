@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // StoreQuickInfoCard.tsx - Store info card with description, hours, location
 import React from "react";
 import {
@@ -44,7 +45,7 @@ interface StoreQuickInfoCardProps {
   };
 }
 
-export default function StoreQuickInfoCard({
+function StoreQuickInfoCard({
   storeName,
   description,
   isVerified = false,
@@ -275,3 +276,5 @@ const styles = StyleSheet.create({
     color: colors.lightMustard,
   },
 });
+
+export default withErrorBoundary(StoreQuickInfoCard, 'MainStoreSectionStoreQuickInfoCard');

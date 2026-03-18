@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // ImageDetailScreen.tsx - Modern Image Detail View with Product Tags
 import React, { useEffect, useState, useCallback } from 'react';
 import {
@@ -29,7 +30,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // ReZ Brand Colors
 
-export default function ImageDetailScreen() {
+function ImageDetailScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
@@ -698,3 +699,5 @@ const styles = StyleSheet.create({
     }),
   },
 });
+
+export default withErrorBoundary(ImageDetailScreen, 'ImageDetailScreen');

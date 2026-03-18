@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, StyleSheet, Platform, ScrollView } from 'react-native';
 import analyticsService from '@/services/analyticsService';
@@ -30,7 +31,7 @@ const categories: CategoryItem[] = [
   { id: 'medicine', name: 'Medicine', icon: 'medical-outline', isEnabled: false, color: Colors.text.tertiary },
 ];
 
-export default function CategorySelectionScreen() {
+function CategorySelectionScreen() {
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
   const { updateUserData } = useOnboarding();
@@ -415,3 +416,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default withErrorBoundary(CategorySelectionScreen, 'OnboardingCategorySelection');

@@ -18,10 +18,10 @@ export interface CountryCode {
   name: string;
 }
 
-// Supported countries - Dubai first as default
+// Supported countries - India first as default
 export const COUNTRY_CODES: CountryCode[] = [
-  { code: 'AE', dialCode: '+971', flag: '🇦🇪', name: 'UAE' },
   { code: 'IN', dialCode: '+91', flag: '🇮🇳', name: 'India' },
+  { code: 'AE', dialCode: '+971', flag: '🇦🇪', name: 'UAE' },
   { code: 'CN', dialCode: '+86', flag: '🇨🇳', name: 'China' },
   { code: 'US', dialCode: '+1', flag: '🇺🇸', name: 'USA' },
   { code: 'GB', dialCode: '+44', flag: '🇬🇧', name: 'UK' },

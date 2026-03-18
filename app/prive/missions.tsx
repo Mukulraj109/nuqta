@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, Pressable,
@@ -15,7 +16,7 @@ import { catchAndReport } from '@/utils/catchAndReport';
 
 type Tab = 'available' | 'active' | 'completed';
 
-export default function MissionsScreen() {
+function MissionsScreen() {
   const [activeTab, setActiveTab] = useState<Tab>('available');
   const [available, setAvailable] = useState<any[]>([]);
   const [active, setActive] = useState<any[]>([]);
@@ -277,3 +278,5 @@ const styles = StyleSheet.create({
   },
   completedText: { fontSize: 12, color: PRIVE_COLORS.status.success, fontWeight: '500' },
 });
+
+export default withErrorBoundary(MissionsScreen, 'PriveMissions');

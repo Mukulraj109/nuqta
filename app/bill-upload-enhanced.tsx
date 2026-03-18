@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Enhanced Bill Upload Page
 // Users can upload bills with OCR verification and cashback calculation
 
@@ -37,7 +38,7 @@ const CameraType = {
 
 type CameraTypeValue = typeof CameraType[keyof typeof CameraType];
 
-export default function EnhancedBillUploadPage() {
+function EnhancedBillUploadPage() {
   const router = useRouter();
   const navigation = useNavigation();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -723,3 +724,5 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
 });
+
+export default withErrorBoundary(EnhancedBillUploadPage, 'BillUploadEnhanced');

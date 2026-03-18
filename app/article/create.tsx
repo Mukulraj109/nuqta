@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Create Article Page - Coming Soon Placeholder
 
 import React from 'react';
@@ -14,7 +15,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 
-export default function CreateArticlePage() {
+function CreateArticlePage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -117,3 +118,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(CreateArticlePage, 'ArticleCreate');

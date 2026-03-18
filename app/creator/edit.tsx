@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Creator Edit Profile Page
 // Allows creators to edit their display name, bio, avatar, cover image, tags, and social links
 
@@ -34,7 +35,7 @@ interface SocialLink {
   url: string;
 }
 
-export default function CreatorEditProfilePage() {
+function CreatorEditProfilePage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
@@ -577,3 +578,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(CreatorEditProfilePage, 'CreatorEdit');

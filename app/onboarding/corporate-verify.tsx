@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback } from 'react';
 import {
   View,
@@ -18,7 +19,7 @@ import * as identityApi from '@/services/identityApi';
 import analyticsService, { IdentityAnalyticsEvents } from '@/services/analyticsService';
 import { platformAlertSimple } from '@/utils/platformAlert';
 
-export default function CorporateVerifyPage() {
+function CorporateVerifyPage() {
   const router = useRouter();
   const { setIdentity } = useUserIdentityStore();
 
@@ -214,3 +215,5 @@ const styles = StyleSheet.create({
   verifyButtonDisabled: { opacity: 0.6 },
   verifyButtonText: { fontSize: 16, fontWeight: '700', color: '#fff' },
 });
+
+export default withErrorBoundary(CorporateVerifyPage, 'OnboardingCorporateVerify');

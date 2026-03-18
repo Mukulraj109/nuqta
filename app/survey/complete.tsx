@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
@@ -16,7 +17,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 
-export default function SurveyCompletePage() {
+function SurveyCompletePage() {
   const router = useRouter();
   const { coinsEarned, timeSpent, surveyTitle } = useLocalSearchParams<{
     coinsEarned: string;
@@ -419,3 +420,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(SurveyCompletePage, 'SurveyComplete');

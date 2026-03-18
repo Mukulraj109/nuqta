@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * All Collections Page
  *
@@ -92,7 +93,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ collection, onPress }) 
   );
 };
 
-export default function AllCollectionsPage() {
+function AllCollectionsPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -303,3 +304,5 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.8)',
   },
 });
+
+export default withErrorBoundary(AllCollectionsPage, 'MallCollectionsIndex');

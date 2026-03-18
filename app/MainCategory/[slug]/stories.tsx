@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Shared Stories / UGC Gallery Page
  * /MainCategory/[slug]/stories
@@ -54,7 +55,7 @@ const BASE_FILTERS = [
   { id: 'reviews', label: 'Reviews' },
 ];
 
-export default function CategoryStoriesPage() {
+function CategoryStoriesPage() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -339,3 +340,5 @@ const styles = StyleSheet.create({
   cardAction: { flexDirection: 'row', alignItems: 'center', gap: Spacing.xs },
   cardActionText: { ...Typography.bodySmall, color: Colors.text.tertiary },
 });
+
+export default withErrorBoundary(CategoryStoriesPage, 'MainCategorySlugStories');

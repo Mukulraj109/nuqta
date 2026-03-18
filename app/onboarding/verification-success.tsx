@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, StatusBar, Pressable, Platform } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -24,7 +25,7 @@ const PROVISIONAL_BENEFITS = [
   'Provisional campus access',
 ];
 
-export default function VerificationSuccessPage() {
+function VerificationSuccessPage() {
   const router = useRouter();
   const { zone, type } = useLocalSearchParams<{ zone: string; type: string }>();
   const user = useAuthUser();
@@ -240,3 +241,5 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 });
+
+export default withErrorBoundary(VerificationSuccessPage, 'OnboardingVerificationSuccess');

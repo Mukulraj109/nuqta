@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Store Coins Page (Branded Coins)
 // Shows all store-specific branded coins earned by the user
 // Branded coins are merchant-specific and stored in wallet.brandedCoins
@@ -48,7 +49,7 @@ interface StoreCoinSummary {
   storeCount: number;
 }
 
-export default function StorePromoCoinsPage() {
+function StorePromoCoinsPage() {
   const brandedCoinsFromCtx = useBrandedCoins();
   const walletLoading = useWalletLoading();
   const refreshWallet = useRefreshWallet();
@@ -542,3 +543,5 @@ const styles = StyleSheet.create({
   },
 });
 
+
+export default withErrorBoundary(StorePromoCoinsPage, 'ProfileStorePromoCoins');

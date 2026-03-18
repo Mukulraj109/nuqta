@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React from 'react';
 import {
   View,
@@ -32,7 +33,7 @@ function getStepIndex(status: string): number {
   return map[status] ?? 0;
 }
 
-export default function DineInTrackingScreen() {
+function DineInTrackingScreen() {
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -232,3 +233,5 @@ const styles = StyleSheet.create({
   addMoreBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginHorizontal: Spacing.base, paddingVertical: 14, borderRadius: BorderRadius.md, borderWidth: 1.5, borderColor: Colors.nileBlue, borderStyle: 'dashed', gap: Spacing.sm },
   addMoreText: { ...Typography.body, fontWeight: '600', color: Colors.nileBlue },
 });
+
+export default withErrorBoundary(DineInTrackingScreen, 'DineinTracking');

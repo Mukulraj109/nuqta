@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors } from '@/constants/theme';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
@@ -1703,7 +1704,7 @@ const styles = StyleSheet.create({
 });
 
 // Wrap component with ErrorBoundary for production safety
-export default function StoreVisitPage() {
+function StoreVisitPage() {
   return (
     <ErrorBoundary
       onError={(error, errorInfo) => {
@@ -1715,3 +1716,5 @@ export default function StoreVisitPage() {
     </ErrorBoundary>
   );
 }
+
+export default withErrorBoundary(StoreVisitPage, 'StoreVisit');

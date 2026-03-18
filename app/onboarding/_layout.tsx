@@ -21,6 +21,9 @@ export default function OnboardingLayout() {
       <Stack.Screen name="student-verify" options={{ headerShown: false }} />
       <Stack.Screen name="corporate-verify" options={{ headerShown: false }} />
       <Stack.Screen name="other-verify" options={{ headerShown: false }} />
+      <Stack.Screen name="defence-verify" options={{ headerShown: false }} />
+      <Stack.Screen name="healthcare-verify" options={{ headerShown: false }} />
+      <Stack.Screen name="teacher-verify" options={{ headerShown: false }} />
       <Stack.Screen name="verification-success" options={{ headerShown: false }} />
       <Stack.Screen name="verification-pending" options={{ headerShown: false }} />
     </Stack>

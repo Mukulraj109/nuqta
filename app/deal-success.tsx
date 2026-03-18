@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Deal Success Page - Handles Stripe deep link redirect after payment
  * Route: /deal-success?session_id=xxx&campaignId=xxx&dealIndex=xxx
@@ -30,7 +31,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { colors } from '@/constants/theme';
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function DealSuccessPage() {
+function DealSuccessPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
 
@@ -486,3 +487,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+export default withErrorBoundary(DealSuccessPage, 'DealSuccess');

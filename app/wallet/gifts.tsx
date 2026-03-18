@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Received & Sent Gifts Page
 // View received gifts (with claim flow) and sent gifts history
 
@@ -56,7 +57,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }
   expired: { label: 'Expired', color: colors.neutral[500], bg: colors.neutral[100] },
 };
 
-export default function GiftsPage() {
+function GiftsPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'received' | 'sent'>('received');
   const [receivedGifts, setReceivedGifts] = useState<Gift[]>([]);
@@ -482,3 +483,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(GiftsPage, 'WalletGifts');

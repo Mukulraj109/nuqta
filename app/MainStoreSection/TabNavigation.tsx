@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // TabNavigation.tsx - Redesigned tab navigation for MainStorePage
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -38,7 +39,7 @@ interface TabNavigationProps {
   menuTabLabel?: string;
 }
 
-export default function TabNavigation({
+function TabNavigation({
   activeTab,
   onTabChange,
   compact = false,
@@ -231,3 +232,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+export default withErrorBoundary(TabNavigation, 'MainStoreSectionTabNavigation');

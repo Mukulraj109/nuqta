@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Store EMI Info Page
 // EMI options for store purchases
 
@@ -42,7 +43,7 @@ const PARTNER_BANKS: Bank[] = [
   { id: '5', name: 'Kotak', logo: '🏦', noCostTenures: [3, 6] },
 ];
 
-export default function StoreEMIInfoPage() {
+function StoreEMIInfoPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -507,3 +508,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(StoreEMIInfoPage, 'StoreEmiInfo');

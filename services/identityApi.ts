@@ -118,6 +118,49 @@ export async function submitCorporateVerification(data: {
 }
 
 /**
+ * Submit defence verification
+ */
+export async function submitDefenceVerification(data: {
+  documentType: string;
+  serviceType: string;
+  serviceNumber?: string;
+}): Promise<VerificationResult> {
+  const response = await apiClient.post<VerificationResult>(
+    '/zones/defence/verify',
+    data
+  );
+  return assertSuccess<VerificationResult>(response, 'Defence verification failed');
+}
+
+/**
+ * Submit healthcare verification
+ */
+export async function submitHealthcareVerification(data: {
+  documentType: string;
+  profession: string;
+}): Promise<VerificationResult> {
+  const response = await apiClient.post<VerificationResult>(
+    '/zones/healthcare/verify',
+    data
+  );
+  return assertSuccess<VerificationResult>(response, 'Healthcare verification failed');
+}
+
+/**
+ * Submit teacher verification
+ */
+export async function submitTeacherVerification(data: {
+  documentType: string;
+  instituteName: string;
+}): Promise<VerificationResult> {
+  const response = await apiClient.post<VerificationResult>(
+    '/zones/teacher/verify',
+    data
+  );
+  return assertSuccess<VerificationResult>(response, 'Teacher verification failed');
+}
+
+/**
  * Search institutions for autocomplete (uses public search)
  */
 export async function searchInstitutions(
@@ -159,7 +202,7 @@ export async function getStudentOffers(
   limit = 20
 ): Promise<{ offers: any[]; total: number }> {
   const response = await apiClient.get<{ offers: any[] }>(
-    `/offers/exclusive?exclusiveZone=student&page=${page}&limit=${limit}`
+    `/offers/exclusive-zones/student/offers?limit=${limit}`
   );
   return {
     offers: response.data?.offers || [],
@@ -175,7 +218,7 @@ export async function getCorporateOffers(
   limit = 20
 ): Promise<{ offers: any[]; total: number }> {
   const response = await apiClient.get<{ offers: any[] }>(
-    `/offers/exclusive?exclusiveZone=corporate&page=${page}&limit=${limit}`
+    `/offers/exclusive-zones/corporate/offers?limit=${limit}`
   );
   return {
     offers: response.data?.offers || [],

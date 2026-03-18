@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback, useMemo } from 'react';
 import {
   View,
@@ -122,7 +123,7 @@ const isUpcoming = (d: Date) => d >= new Date(new Date().setHours(0, 0, 0, 0));
 // ══════════════════════════════════════════════════════════════
 //  MAIN COMPONENT
 // ══════════════════════════════════════════════════════════════
-export default function BookingsPage() {
+function BookingsPage() {
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const tintColor = useThemeColor({}, 'tint');
@@ -1315,3 +1316,5 @@ const styles = StyleSheet.create({
     color: C.primary,
   },
 });
+
+export default withErrorBoundary(BookingsPage, 'BookingsPage');

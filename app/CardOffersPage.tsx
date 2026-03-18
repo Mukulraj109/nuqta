@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // CardOffersPage.tsx
 // Modern card offers page with consistent design system
 
@@ -40,7 +41,7 @@ import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
-export default function CardOffersPage() {
+function CardOffersPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const storeId = (params.storeId as string) || '';
@@ -1217,3 +1218,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(CardOffersPage, 'CardOffersPage');

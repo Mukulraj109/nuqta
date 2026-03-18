@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Admin Dashboard - Social Media Posts Review
 // Allows admins to approve, reject, and credit social media posts
 
@@ -51,7 +52,7 @@ interface Stats {
   credited: number;
 }
 
-export default function AdminSocialMediaPosts() {
+function AdminSocialMediaPosts() {
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -984,3 +985,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(AdminSocialMediaPosts, 'AdminSocialMediaPosts');

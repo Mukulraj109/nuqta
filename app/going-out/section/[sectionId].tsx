@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -30,7 +31,7 @@ interface SectionProduct {
   cashbackPercentage?: number;
 }
 
-export default function GoingOutSectionPage() {
+function GoingOutSectionPage() {
   const router = useRouter();
   const { goBack } = useSafeNavigation();
   const { sectionId } = useLocalSearchParams<{ sectionId: string }>();
@@ -268,3 +269,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(GoingOutSectionPage, 'GoingOutSectionSectionId');

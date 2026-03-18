@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import {
   View,
@@ -73,7 +74,7 @@ function transformToCashStoreBrand(brand: any): CashStoreBrand {
 }
 
 // ─── Main Component ─────────────────────────────────────────
-export default function CashStoreBrandsPage() {
+function CashStoreBrandsPage() {
   const router = useRouter();
   const { filter } = useLocalSearchParams<{ filter?: string }>();
   const insets = useSafeAreaInsets();
@@ -1061,3 +1062,5 @@ const styles = StyleSheet.create({
     gap: 0,
   },
 });
+
+export default withErrorBoundary(CashStoreBrandsPage, 'CashStoreBrands');

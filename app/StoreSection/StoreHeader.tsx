@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { View, Pressable, StyleSheet, Animated, ActivityIndicator, Share, Platform, ScrollView, Dimensions, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
@@ -637,4 +638,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(StoreHeader);
+export default withErrorBoundary(React.memo(StoreHeader), 'StoreSectionStoreHeader');

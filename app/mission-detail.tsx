@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Mission Detail Screen
  * Shows full details of a challenge/mission with progress, leaderboard, and rewards
@@ -888,4 +889,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MissionDetailScreen;
+export default withErrorBoundary(MissionDetailScreen, 'MissionDetail');

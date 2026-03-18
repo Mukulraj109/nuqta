@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors } from '@/constants/theme';
 import React, { useEffect, useState } from 'react';
 import {
@@ -36,7 +37,7 @@ import { categoriesApi } from '@/services/categoriesApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
-export default function CategoryPage() {
+function CategoryPage() {
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const { state, actions } = useCategory();
@@ -589,3 +590,4 @@ const styles = StyleSheet.create({
     height: 100,
   },
 });
+export default withErrorBoundary(CategoryPage, 'CategorySlugIndex');

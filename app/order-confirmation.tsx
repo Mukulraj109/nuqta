@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Order Confirmation Page
 // Shows order success, summary, and next actions
 
@@ -28,7 +29,7 @@ import RewardsBreakdownCard from '@/components/rewards/RewardsBreakdownCard';
 import ConfettiOverlay from '@/components/ui/ConfettiOverlay';
 import { colors } from '@/constants/theme';
 
-export default function OrderConfirmationPage() {
+function OrderConfirmationPage() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const orderId = params.orderId as string;
@@ -865,3 +866,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(OrderConfirmationPage, 'OrderConfirmation');

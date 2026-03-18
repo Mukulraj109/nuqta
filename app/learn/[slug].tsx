@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
@@ -499,4 +500,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LearnDetailPage;
+export default withErrorBoundary(LearnDetailPage, 'LearnSlug');

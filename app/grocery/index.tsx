@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Grocery & Essentials Hub Page
  * Main entry point for grocery section with API integration
@@ -782,4 +783,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroceryPage;
+export default withErrorBoundary(GroceryPage, 'GroceryIndex');

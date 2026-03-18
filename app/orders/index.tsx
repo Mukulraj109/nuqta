@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
 import { useFocusEffect } from 'expo-router';
 import {
@@ -313,7 +314,7 @@ const OrderSkeleton = () => (
 // MAIN COMPONENT
 // ============================================================================
 
-export default function OrdersListScreen() {
+function OrdersListScreen() {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [orders, setOrders] = useState<Order[]>([]);
@@ -910,3 +911,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(OrdersListScreen, 'OrdersIndex');

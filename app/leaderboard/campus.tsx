@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { View, StyleSheet, FlatList, Pressable, ActivityIndicator, Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -9,7 +10,7 @@ import { useAuthUser } from '@/stores';
 import * as identityApi from '@/services/identityApi';
 import analyticsService, { IdentityAnalyticsEvents } from '@/services/analyticsService';
 
-export default function CampusLeaderboardPage() {
+function CampusLeaderboardPage() {
   const router = useRouter();
   const user = useAuthUser();
   const { instituteName } = useUserIdentityStore();
@@ -139,3 +140,5 @@ const styles = StyleSheet.create({
   emptyState: { alignItems: 'center', marginTop: 60 },
   emptyText: { fontSize: 14, color: colors.text.tertiary },
 });
+
+export default withErrorBoundary(CampusLeaderboardPage, 'CampusLeaderboard');

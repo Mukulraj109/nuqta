@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Test Pages Navigation
 // Developer screen to test all 47 pages
 
@@ -149,7 +150,7 @@ const PAGE_CATEGORIES: PageCategory[] = [
   },
 ];
 
-export default function TestPagesScreen() {
+function TestPagesScreen() {
   const router = useRouter();
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
@@ -430,3 +431,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withErrorBoundary(TestPagesScreen, 'DevTestPages');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Alliance Store Page
 // Partner alliance stores with combined loyalty - connected to real backend data
 
@@ -35,7 +36,7 @@ interface AllianceStore {
   isVerified?: boolean;
 }
 
-export default function AllianceStorePage() {
+function AllianceStorePage() {
   const router = useRouter();
   const [stores, setStores] = useState<AllianceStore[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -520,3 +521,5 @@ const styles = StyleSheet.create({
     color: colors.neutral[400],
   },
 });
+
+export default withErrorBoundary(AllianceStorePage, 'MallAllianceStore');

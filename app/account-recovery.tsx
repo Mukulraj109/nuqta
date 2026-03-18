@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Account Recovery Page
 // Help users recover access to their account
 
@@ -24,7 +25,7 @@ import { colors } from '@/constants/theme';
 type RecoveryMethod = 'phone' | 'email';
 type Step = 'method' | 'input' | 'otp' | 'success';
 
-export default function AccountRecoveryPage() {
+function AccountRecoveryPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>('method');
   const [method, setMethod] = useState<RecoveryMethod>('phone');
@@ -497,3 +498,5 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
 });
+
+export default withErrorBoundary(AccountRecoveryPage, 'AccountRecovery');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // View All Offers Page
 // Displays all offers in a grid layout with the same header as offers page
 
@@ -30,7 +31,7 @@ const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 60) / 2; // 2 cards per row with padding
 const PAGE_LIMIT = 20;
 
-export default function ViewAllOffersScreen() {
+function ViewAllOffersScreen() {
   const router = useRouter();
   const { category, discount, title } = useLocalSearchParams<{
     category?: string;
@@ -616,3 +617,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default withErrorBoundary(ViewAllOffersScreen, 'OffersViewAll');

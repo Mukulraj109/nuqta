@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
@@ -100,7 +101,7 @@ const medicineCategories: MedicineCategory[] = [
   { id: 'ayurveda', name: 'Ayurveda', icon: 'leaf', color: colors.successScale[700] },
 ];
 
-export default function PharmacyPage() {
+function PharmacyPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -1479,3 +1480,5 @@ const styles = StyleSheet.create({
     color: Colors.text.inverse,
   },
 });
+
+export default withErrorBoundary(PharmacyPage, 'HealthcarePharmacy');

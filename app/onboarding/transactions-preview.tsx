@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React from 'react';
 import { View, Text, Pressable, StyleSheet, Platform, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -70,7 +71,7 @@ const brands: BrandItem[] = [
   },
 ];
 
-export default function TransactionsPreviewScreen() {
+function TransactionsPreviewScreen() {
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
   const actions = useAuthActions();
@@ -571,3 +572,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default withErrorBoundary(TransactionsPreviewScreen, 'OnboardingTransactionsPreview');

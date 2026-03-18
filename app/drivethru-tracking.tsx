@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useCallback } from 'react';
 import {
   View,
@@ -33,7 +34,7 @@ function getStepIndex(status: string): number {
   return map[status] ?? 0;
 }
 
-export default function DriveThruTrackingScreen() {
+function DriveThruTrackingScreen() {
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -252,3 +253,5 @@ const styles = StyleSheet.create({
   totalLabel: { ...Typography.body, fontSize: 15, fontWeight: '700', color: Colors.nileBlue },
   totalValue: { ...Typography.body, fontSize: 15, fontWeight: '700', color: Colors.nileBlue },
 });
+
+export default withErrorBoundary(DriveThruTrackingScreen, 'DrivethruTracking');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Healthcare Category Page - Dynamic route
  * Handles doctors, teleconsult, insurance, offers
@@ -747,4 +748,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HealthcareCategoryPage;
+export default withErrorBoundary(HealthcareCategoryPage, 'HealthcareCategory');

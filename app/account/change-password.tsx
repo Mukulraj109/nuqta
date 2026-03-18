@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Change Password Page
 // Allows users to change their password with current password verification
 
@@ -22,7 +23,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
-export default function ChangePasswordPage() {
+function ChangePasswordPage() {
   const router = useRouter();
   const actions = useAuthActions();
   const [formData, setFormData] = useState({
@@ -459,3 +460,5 @@ const styles = StyleSheet.create({
     height: 20,
   },
 });
+
+export default withErrorBoundary(ChangePasswordPage, 'AccountChangePassword');

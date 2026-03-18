@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Insurance Page
  * Browse insurance plans with cashback - API-driven
@@ -42,7 +43,7 @@ const TYPE_META: Record<string, { icon: string; color: string; label: string }> 
   business: { icon: 'briefcase', color: colors.warningScale[400], label: 'Business Insurance' },
 };
 
-export default function InsurancePage() {
+function InsurancePage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -856,3 +857,5 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
   },
 });
+
+export default withErrorBoundary(InsurancePage, 'Insurance');

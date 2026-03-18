@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { ScrollView, StyleSheet, View, Modal, Pressable, ActivityIndicator, Platform, Dimensions } from 'react-native';
 import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
@@ -184,7 +185,7 @@ function formatReviewDate(dateString: string): string {
   return `${Math.floor(diffDays / 365)} year${Math.floor(diffDays / 365) > 1 ? 's' : ''} ago`;
 }
 
-export default function StorePage() {
+function StorePage() {
   const params = useLocalSearchParams();
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
@@ -1250,3 +1251,4 @@ const styles = StyleSheet.create({
     color: Colors.gold,
   },
 });
+export default withErrorBoundary(StorePage, 'ProductPage');

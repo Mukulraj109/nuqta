@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Dynamic Exclusive Zone Page
  *
@@ -220,7 +221,7 @@ function resolveIonicon(
 // Component
 // ---------------------------------------------------------------------------
 
-export default function ExclusiveZonePage() {
+function ExclusiveZonePage() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -908,3 +909,5 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xs,
   },
 });
+
+export default withErrorBoundary(ExclusiveZonePage, 'OffersZonesSlugIndex');

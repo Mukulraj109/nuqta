@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Travel Category Page - Dynamic route
  */
@@ -346,4 +347,4 @@ const styles = StyleSheet.create({
   bookButtonText: { ...Typography.body, fontWeight: '700', color: Colors.text.inverse },
 });
 
-export default TravelCategoryPage;
+export default withErrorBoundary(TravelCategoryPage, 'TravelCategory');

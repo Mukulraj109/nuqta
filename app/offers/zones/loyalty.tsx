@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Loyalty Rewards Page
  * Production-ready loyalty progress and rewards page
@@ -180,7 +181,7 @@ const getRemainingLabel = (milestone: LoyaltyMilestone, currencySymbol: string):
   }
 };
 
-export default function LoyaltyRewardsPage() {
+function LoyaltyRewardsPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -1061,3 +1062,5 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xs,
   },
 });
+
+export default withErrorBoundary(LoyaltyRewardsPage, 'OffersZonesLoyalty');

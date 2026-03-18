@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Cashback Page
 // View and manage cashback earnings — Cash Store theme
 
@@ -31,7 +32,7 @@ import { colors } from '@/constants/theme';
 
 type TabType = 'all' | 'pending' | 'credited' | 'expired';
 
-export default function CashbackPage() {
+function CashbackPage() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -1310,3 +1311,5 @@ const styles = StyleSheet.create({
     marginTop: Spacing.md,
   },
 });
+
+export default withErrorBoundary(CashbackPage, 'AccountCashback');

@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 /**
  * Pay In Store - Offers Screen
  *
@@ -35,7 +36,7 @@ import { borderRadius, colors, shadows, spacing, typography } from '@/constants/
 
 type TabKey = 'all' | 'store' | 'bank' | 'rez';
 
-export default function OffersScreen() {
+function OffersScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<OffersScreenParams>();
   const { storeId, storeName, storeLogo, amount } = params;
@@ -735,3 +736,5 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
   },
 });
+
+export default withErrorBoundary(OffersScreen, 'PayInStoreOffers');

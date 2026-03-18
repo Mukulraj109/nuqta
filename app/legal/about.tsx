@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // About Nuqta Screen
 // Company information and app details
 
@@ -28,7 +29,7 @@ const SOCIAL_LINKS = {
   linkedin: 'https://linkedin.com/company/nuqtaapp',
 };
 
-export default function AboutPage() {
+function AboutPage() {
   const router = useRouter();
   const appVersion = Constants.expoConfig?.version || '1.0.0';
   const buildNumber = Constants.expoConfig?.ios?.buildNumber || Constants.expoConfig?.android?.versionCode || '1';
@@ -334,3 +335,5 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
 });
+
+export default withErrorBoundary(AboutPage, 'LegalAbout');

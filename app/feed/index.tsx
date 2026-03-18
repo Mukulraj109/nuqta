@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
@@ -580,4 +581,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ActivityFeedPage;
+export default withErrorBoundary(ActivityFeedPage, 'FeedIndex');

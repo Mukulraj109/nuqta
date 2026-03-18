@@ -1,3 +1,4 @@
+import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Billing History Page
 // View subscription payment history and download invoices
 
@@ -16,7 +17,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
-export default function BillingHistoryPage() {
+function BillingHistoryPage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -457,3 +458,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default withErrorBoundary(BillingHistoryPage, 'SubscriptionBilling');
