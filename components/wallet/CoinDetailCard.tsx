@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.background.primary,
-    borderRadius: BorderRadius.lg,
+    borderRadius: BorderRadius.md,
     padding: 12,
     marginBottom: 8,
     borderWidth: 1,
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 42,
     height: 42,
-    borderRadius: 14,
+    borderRadius: BorderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,

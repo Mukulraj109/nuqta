@@ -273,12 +273,7 @@ export default function SignInScreen() {
             accessibilityLabel={authLoading ? "Sending OTP" : "Send OTP to phone number"}
             accessibilityRole="button"
           >
-            <LinearGradient
-              colors={authLoading ? [colors.neutral[300], colors.neutral[300]] : [Colors.gold, Colors.nileBlue]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.primaryButton}
-            >
+            <View style={[styles.primaryButton, { backgroundColor: authLoading ? colors.neutral[300] : colors.brand.purple }]}>
               {authLoading ? (
                 <LoadingSpinner size="small" color={Colors.text.inverse} />
               ) : (
@@ -287,7 +282,7 @@ export default function SignInScreen() {
                   <Ionicons name="arrow-forward" size={20} color={Colors.text.inverse} />
                 </>
               )}
-            </LinearGradient>
+            </View>
           </Pressable>
         </View>
       </View>
@@ -392,12 +387,7 @@ export default function SignInScreen() {
             accessibilityLabel={authLoading ? "Verifying OTP" : "Verify OTP and sign in"}
             accessibilityRole="button"
           >
-            <LinearGradient
-              colors={authLoading ? [colors.neutral[300], colors.neutral[300]] : [Colors.gold, Colors.nileBlue]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.primaryButton}
-            >
+            <View style={[styles.primaryButton, { backgroundColor: authLoading ? colors.neutral[300] : colors.brand.purple }]}>
               {authLoading ? (
                 <LoadingSpinner size="small" color={Colors.text.inverse} />
               ) : (
@@ -406,7 +396,7 @@ export default function SignInScreen() {
                   <Ionicons name="checkmark-circle" size={20} color={Colors.text.inverse} />
                 </>
               )}
-            </LinearGradient>
+            </View>
           </Pressable>
         </View>
       </View>

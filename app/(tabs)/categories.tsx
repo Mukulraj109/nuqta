@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.background.primary,
     borderRadius: BorderRadius.md,
-    paddingHorizontal: 14,
+    paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.md,
     gap: 10,
     ...Platform.select({

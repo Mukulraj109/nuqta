@@ -12,7 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
 import CategoryCashbackGrid from './CategoryCashbackGrid';
-import { colors } from '@/constants/theme';
+import { colors, spacing } from '@/constants/theme';
 
 // Updated to 4 tabs
 export type TabId = 'near-u' | 'mall' | 'cash' | 'prive';
@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
   // Tabs
   tabsRow: {
     flexDirection: 'row',
-    paddingHorizontal: 12,
+    paddingHorizontal: spacing.base,
     gap: 6,
     marginBottom: 4,
     zIndex: 2,
@@ -602,7 +602,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 12,
-    paddingHorizontal: 12,
+    paddingHorizontal: spacing.base,
     paddingVertical: 8,
     ...Platform.select({
       ios: {

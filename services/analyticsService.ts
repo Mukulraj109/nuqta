@@ -366,3 +366,32 @@ function getAnalyticsService(): AnalyticsService {
 
 const analyticsService = getAnalyticsService();
 export default analyticsService;
+
+// Identity Layer Analytics Events
+export const IdentityAnalyticsEvents = {
+  // Onboarding funnel
+  IDENTITY_GATE_SEEN: 'identity_gate_seen',
+  IDENTITY_SELECTED: 'identity_selected',
+  IDENTITY_SKIP_CLICKED: 'identity_skip_clicked',
+  VERIFICATION_STARTED: 'verification_started',
+  VERIFICATION_COMPLETED: 'verification_completed',
+  VERIFICATION_SKIPPED: 'verification_skipped',
+  ZONE_UNLOCK_SEEN: 'zone_unlock_seen',
+  FIRST_OFFER_CLICKED: 'first_offer_clicked',
+
+  // Retention
+  NOTIF_RECEIVED: 'notif_received',
+  NOTIF_OPENED: 'notif_opened',
+  DEAL_FROM_NOTIF_CLICKED: 'deal_from_notif_clicked',
+
+  // Growth
+  LEADERBOARD_OPENED: 'leaderboard_opened',
+  LEADERBOARD_SHARED: 'leaderboard_shared',
+  INSTITUTE_REFERRAL_STARTED: 'institute_referral_started',
+  INSTITUTE_REFERRAL_SUBMITTED: 'institute_referral_submitted',
+  FEATURE_LEVEL_UPGRADED: 'feature_level_upgraded',
+
+  // Banner interactions
+  VERIFY_PROMPT_DISMISSED: 'verification_prompt_dismissed',
+  INSTITUTE_BANNER_DISMISSED: 'institute_banner_dismissed',
+} as const;

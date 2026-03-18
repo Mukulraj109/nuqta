@@ -1046,7 +1046,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   referralTitle: {
-    fontSize: 18,
+    ...Typography.h4,
     fontWeight: '700',
     color: 'white',
     marginBottom: 4,
@@ -1091,7 +1091,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loyaltyPoints: {
-    fontSize: 18,
+    ...Typography.h4,
     fontWeight: '700',
     color: PROFILE_COLORS.text,
     marginBottom: 2,
@@ -1215,7 +1215,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   percentageText: {
-    fontSize: 18,
+    ...Typography.h4,
     fontWeight: '700',
     color: PROFILE_COLORS.primary,
   },
@@ -1378,7 +1378,7 @@ const styles = StyleSheet.create({
     marginBottom: PROFILE_SPACING.md,
   },
   statsTitle: {
-    fontSize: 18,
+    ...Typography.h4,
     fontWeight: '700',
     color: PROFILE_COLORS.text,
   },
@@ -1400,7 +1400,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statNumber: {
-    fontSize: 18,
+    ...Typography.h4,
     fontWeight: '700',
     color: PROFILE_COLORS.primary,
     marginBottom: 4,

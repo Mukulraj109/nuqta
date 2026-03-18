@@ -296,7 +296,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
   // Render a regular tab item
   const renderTab = (tab: { name: string; route: string; icon: string; isActive: boolean }, index?: number) => {
     // Theme-aware tab colors
-    const activeColor = isPriveActive ? colors.brand.goldAccent : isDark ? colors.lightMustard : colors.nileBlue;
+    const activeColor = isPriveActive ? colors.brand.goldAccent : isDark ? colors.lightMustard : colors.secondary[600];
     const inactiveColor = isPriveActive ? '#A0A0A0' : isDark ? colors.neutral[500] : colors.neutral[500];
 
     return (

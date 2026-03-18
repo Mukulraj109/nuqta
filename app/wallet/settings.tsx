@@ -1,7 +1,7 @@
 // Wallet Settings Page
 // Toggle auto-topup, low balance alerts, configure thresholds
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   ScrollView,
@@ -50,6 +50,8 @@ export default function WalletSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const mountedRef = useRef(true);
+  useEffect(() => { return () => { mountedRef.current = false; }; }, []);
 
   // Populate settings from WalletContext rawBackendData
   useEffect(() => {
@@ -80,14 +82,14 @@ export default function WalletSettingsPage() {
     setSaving(true);
     try {
       const res = await walletApi.updateSettings(settings);
-      if (res?.success) {
+      if (mountedRef.current && res?.success) {
         platformAlertSimple('Saved', 'Wallet settings updated');
         setDirty(false);
       }
     } catch {
-      platformAlertSimple('Error', 'Failed to save settings. Try again.');
+      if (mountedRef.current) platformAlertSimple('Error', 'Failed to save settings. Try again.');
     } finally {
-      setSaving(false);
+      if (mountedRef.current) setSaving(false);
     }
   };
 

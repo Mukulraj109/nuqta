@@ -60,7 +60,7 @@ function Button({
   const isInteractive = !disabled && !loading;
 
   const variantBg = useMemo<Record<ButtonVariant, string>>(() => ({
-    primary: colors.primary[500],
+    primary: colors.brand.purple,
     secondary: colors.secondary[600],
     outline: 'transparent',
     ghost: 'transparent',
@@ -68,10 +68,10 @@ function Button({
   }), [colors]);
 
   const variantText = useMemo<Record<ButtonVariant, string>>(() => ({
-    primary: colors.secondary[600],
+    primary: colors.text.inverse,
     secondary: colors.text.inverse,
-    outline: colors.primary[700],
-    ghost: colors.primary[700],
+    outline: colors.brand.purple,
+    ghost: colors.brand.purple,
     danger: colors.text.inverse,
   }), [colors]);
 
@@ -118,7 +118,7 @@ function Button({
     paddingHorizontal: sizeConfig.paddingH,
     ...(variant === 'outline' && {
       borderWidth: 1.5,
-      borderColor: colors.primary[500],
+      borderColor: colors.brand.purple,
     }),
     ...(!isOutlineOrGhost && shadows.subtle),
     ...(isOutlineOrGhost && { shadowOpacity: 0, elevation: 0 }),

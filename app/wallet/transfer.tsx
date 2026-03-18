@@ -60,6 +60,8 @@ export default function TransferPage() {
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [idempotencyKey, setIdempotencyKey] = useState(() => generateIdempotencyKey('transfer'));
   const submittingRef = useRef(false);
+  const mountedRef = useRef(true);
+  useEffect(() => { return () => { mountedRef.current = false; }; }, []);
 
   // Fetch recent recipients (and re-fetch on search)
   const fetchRecipients = useCallback(async (search?: string) => {
@@ -160,6 +162,7 @@ export default function TransferPage() {
         return;
       }
 
+      if (!mountedRef.current) return;
       if (data.requiresOtp) {
         setPendingTransferId(data.transferId);
         setStep('otp');
@@ -170,6 +173,7 @@ export default function TransferPage() {
         setStep('success');
       }
     } catch (error: any) {
+      if (!mountedRef.current) return;
       // Regenerate idempotency key on failure so retry creates a fresh transfer
       setIdempotencyKey(generateIdempotencyKey('transfer'));
       const parsed = parseWalletError(error);
@@ -181,7 +185,7 @@ export default function TransferPage() {
         handleWalletError(error, 'Transfer Failed');
       }
     } finally {
-      setLoading(false);
+      if (mountedRef.current) setLoading(false);
       submittingRef.current = false;
     }
   };

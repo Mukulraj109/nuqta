@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#10B981',
   },
   dotCurrent: {
-    backgroundColor: '#7C3AED',
+    backgroundColor: colors.brand.purple,
     width: 22,
     height: 22,
     borderRadius: 11,
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   labelCurrent: {
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '700',
   },
   timestamp: {
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   },
   estimate: {
     fontSize: 11,
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '500',
     marginTop: 2,
   },

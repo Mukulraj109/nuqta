@@ -1043,7 +1043,7 @@ const viewStyles = StyleSheet.create({
   headerCoinText: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.text.primary,
+    color: colors.brand.amberDeep,
   },
   headerIconButton: {
     width: 32,

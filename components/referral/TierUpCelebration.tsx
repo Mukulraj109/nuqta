@@ -25,7 +25,7 @@ function TierUpCelebration({ visible, tierName, bonusCoins, onDismiss }: TierUpC
         <ConfettiOverlay visible={visible} />
         <View style={styles.card}>
           <LinearGradient
-            colors={['#7C3AED', '#4F46E5']}
+            colors={[colors.brand.purple, colors.brand.indigo]}
             style={styles.gradient}
           >
             {/* Badge */}
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 340,
     ...Platform.select({
-      ios: { shadowColor: '#7C3AED', shadowOpacity: 0.3, shadowRadius: 16, shadowOffset: { width: 0, height: 8 } },
+      ios: { shadowColor: colors.brand.purple, shadowOpacity: 0.3, shadowRadius: 16, shadowOffset: { width: 0, height: 8 } },
       android: { elevation: 8 },
     }),
   },
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#7C3AED',
+    color: colors.brand.purple,
   },
 });
 

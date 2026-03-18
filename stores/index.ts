@@ -24,6 +24,7 @@ export { useOffersThemeStore } from './offersThemeStore';
 export { useAlertStore } from './alertStore';
 export { useSocketStore } from './socketStore';
 export { usePriveStore } from './priveStore';
+export { useUserIdentityStore } from './userIdentityStore';
 
 // Granular selectors — use these for maximum performance
 export * from './selectors';

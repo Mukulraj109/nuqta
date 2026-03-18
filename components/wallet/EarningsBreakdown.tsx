@@ -83,7 +83,7 @@ function EarningsBreakdown({
     try {
       return formatPrice(amount);
     } catch {
-      return `${currencySymbol}${amount.toFixed(2)}`;
+      return `${currencySymbol}${Math.floor(amount).toLocaleString('en-IN')}`;
     }
   };
 

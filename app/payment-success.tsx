@@ -30,6 +30,7 @@ interface OrderDetails {
   id: string;
   orderNumber: string;
   status: string;
+  storeId?: string;
   storeName?: string;
   items: Array<{
     name: string;
@@ -123,10 +124,19 @@ export default function PaymentSuccessPage() {
               `Order ${orderData.orderNumber?.slice(-4) || ''}`;
 
 
+            // Extract store ID from various possible locations
+            const extractedStoreId =
+              (orderData.store && typeof orderData.store === 'object' ? (orderData.store._id || orderData.store.id) : null) ||
+              (typeof orderData.store === 'string' ? orderData.store : null) ||
+              orderData.storeId ||
+              orderData.items?.[0]?.store?.id ||
+              '';
+
             fetchedOrders.push({
               id: orderData.id || orderData._id,
               orderNumber: orderData.orderNumber || `NUQ${Date.now().toString().slice(-8)}`,
               status: orderData.status || 'placed',
+              storeId: extractedStoreId,
               storeName: extractedStoreName,
               items: orderData.items || [],
               totals: {
@@ -600,10 +610,27 @@ export default function PaymentSuccessPage() {
               </ThemedText>
             </Pressable>
 
+            {/* Rate Your Experience - shown for single-store orders with a known store */}
+            {!isMultiStoreOrder && order?.storeId ? (
+              <Pressable
+                style={styles.reviewButton}
+                onPress={() =>
+                  router.push(
+                    `/ReviewPage?storeId=${order.storeId}&storeName=${encodeURIComponent(order.storeName || '')}` as any
+                  )
+                }
+                accessibilityLabel="Rate your experience"
+                accessibilityRole="button"
+              >
+                <Ionicons name="star-outline" size={18} color={Colors.nileBlue} />
+                <ThemedText style={styles.reviewButtonText}>Rate Your Experience</ThemedText>
+              </Pressable>
+            ) : null}
+
             <Pressable
               style={styles.homeButton}
               onPress={handleGoHome}
-             
+
               accessibilityLabel="Back to home"
               accessibilityRole="button"
             >
@@ -876,6 +903,22 @@ const styles = StyleSheet.create({
     }),
   },
   trackButtonText: {
+    color: NUQTA_COLORS.nileBlue,
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  reviewButton: {
+    backgroundColor: colors.background.primary,
+    borderRadius: 14,
+    paddingVertical: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    borderWidth: 1.5,
+    borderColor: NUQTA_COLORS.nileBlue,
+  },
+  reviewButtonText: {
     color: NUQTA_COLORS.nileBlue,
     fontSize: 15,
     fontWeight: '700',

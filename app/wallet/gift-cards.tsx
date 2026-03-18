@@ -80,6 +80,8 @@ export default function GiftCardsPage() {
   const [error, setError] = useState<string | null>(null);
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mountedRef = useRef(true);
+  useEffect(() => { return () => { mountedRef.current = false; }; }, []);
 
   // Debounce search query
   useEffect(() => {
@@ -101,14 +103,16 @@ export default function GiftCardsPage() {
       if (debouncedSearch.trim()) params.search = debouncedSearch.trim();
       const response = await walletApi.getGiftCardCatalog(params);
       const data = response?.data;
-      setCatalogCards(data?.giftCards ?? []);
-      if (data?.categories?.length) {
-        setCategories(['All', ...data.categories]);
+      if (mountedRef.current) {
+        setCatalogCards(data?.giftCards ?? []);
+        if (data?.categories?.length) {
+          setCategories(['All', ...data.categories]);
+        }
       }
     } catch (err: any) {
-      setError('Failed to load gift cards. Pull down to retry.');
+      if (mountedRef.current) setError('Failed to load gift cards. Pull down to retry.');
     } finally {
-      setCatalogLoading(false);
+      if (mountedRef.current) setCatalogLoading(false);
     }
   }, [selectedCategory, debouncedSearch]);
 
@@ -116,11 +120,11 @@ export default function GiftCardsPage() {
     setMyCardsLoading(true);
     try {
       const response = await walletApi.getMyGiftCards();
-      setMyGiftCards(response?.data?.giftCards ?? []);
+      if (mountedRef.current) setMyGiftCards(response?.data?.giftCards ?? []);
     } catch (err: any) {
-      setMyGiftCards([]);
+      if (mountedRef.current) setMyGiftCards([]);
     } finally {
-      setMyCardsLoading(false);
+      if (mountedRef.current) setMyCardsLoading(false);
     }
   }, []);
 
@@ -157,15 +161,17 @@ export default function GiftCardsPage() {
         amount: numAmount,
         idempotencyKey,
       });
-      setIdempotencyKey(generateIdempotencyKey('gift-card'));
-      platformAlert('Success', 'Gift card purchased successfully!');
-      setSelectedCard(null);
-      setAmount('');
-      setActiveTab('my');
+      if (mountedRef.current) {
+        setIdempotencyKey(generateIdempotencyKey('gift-card'));
+        platformAlert('Success', 'Gift card purchased successfully!');
+        setSelectedCard(null);
+        setAmount('');
+        setActiveTab('my');
+      }
     } catch (err: any) {
-      handleWalletError(err, 'Purchase Failed');
+      if (mountedRef.current) handleWalletError(err, 'Purchase Failed');
     } finally {
-      setLoading(false);
+      if (mountedRef.current) setLoading(false);
       submittingRef.current = false;
     }
   };

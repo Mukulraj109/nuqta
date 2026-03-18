@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   percentage: {
-    fontSize: 32,
+    fontSize: 34,
     fontWeight: "800",
     color: colors.background.primary,
     letterSpacing: -0.5,

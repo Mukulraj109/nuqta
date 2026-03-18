@@ -59,19 +59,10 @@ export default function NotificationPermissionPage() {
   }, []);
 
   const finishOnboarding = async () => {
-    if (!user?.isOnboarded) {
-      try {
-        await actions.completeOnboarding({
-          preferences: {
-            notifications: { push: true, email: true, sms: true },
-            theme: 'light',
-          },
-        });
-      } catch {
-        // Continue to home even if onboarding API fails
-      }
-    }
-    router.replace('/(tabs)');
+    // Don't call completeOnboarding() here — it sets isOnboarded=true which
+    // triggers a redirect to /(tabs) before identity-select can render.
+    // completeOnboarding() is called in identity-select.tsx instead.
+    router.replace('/onboarding/identity-select');
   };
 
   const checkExistingPermission = async () => {

@@ -62,7 +62,7 @@ function Input({
             borderColor: colors.border.default,
             backgroundColor: colors.background.primary,
           },
-          isFocused && { borderColor: colors.primary[500], borderWidth: 2 },
+          isFocused && { borderColor: colors.brand.purple, borderWidth: 2 },
           error ? { borderColor: colors.error } : undefined,
         ]}
       >
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: borderRadius.sm,
+    borderRadius: borderRadius.md,
   },
   input: {
     flex: 1,

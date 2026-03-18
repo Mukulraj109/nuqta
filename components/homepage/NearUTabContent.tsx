@@ -16,6 +16,10 @@ import LazySection from '@/components/homepage/LazySection';
 import { SectionSkeleton } from '@/components/homepage/skeletons';
 import HomeSavingsSummaryCard from '@/components/homepage/HomeSavingsSummaryCard';
 
+// Identity Layer - renders at top of NearU tab (self-gates: null for general users)
+import IdentitySectionContainer from '@/components/homepage/identity/IdentitySectionContainer';
+import IdentityPromptModal from '@/components/homepage/identity/IdentityPromptModal';
+
 // Tier 1: Above the fold - render immediately (static imports)
 import QuickActionsSection from '@/components/homepage/QuickActionsSection';
 import HowRezWorksCard from '@/components/homepage/HowRezWorksCard';
@@ -440,6 +444,10 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
 
   return (
     <>
+      {/* ===== IDENTITY LAYER: Personalized segment content ===== */}
+      <IdentityPromptModal />
+      <IdentitySectionContainer />
+
       {/* ===== TIER 1: Above the fold - render immediately ===== */}
       <HomeSavingsSummaryCard
         totalSaved={totalSaved ?? 0}

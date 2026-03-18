@@ -37,7 +37,7 @@ const COIN_TYPES: CoinType[] = [
     id: 'rez',
     name: `${BRAND.COIN_NAME}`,
     icon: 'star',
-    color: '#7C3AED',
+    color: colors.brand.purple,
     description: 'Your universal reward coins. Use them anywhere on the platform.',
     howToEarn: ['Shopping at partner stores', 'Daily check-ins', 'Referrals', 'Bill uploads'],
     howToUse: 'Redeem at any store or convert to vouchers',

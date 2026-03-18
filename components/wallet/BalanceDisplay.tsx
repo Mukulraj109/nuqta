@@ -10,6 +10,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { CoinChip } from './CoinChip';
 import { WalletData, CoinType } from '@/types/wallet';
 import { Colors, Spacing, BorderRadius, Shadows } from '@/constants/DesignSystem';
+import { colors } from '@/constants/theme';
 import { BRAND } from '@/constants/brand';
 
 const BALANCE_HIDDEN_KEY = '@wallet_balance_hidden';
@@ -72,7 +73,7 @@ export const BalanceDisplay: React.FC<BalanceDisplayProps> = React.memo(({ walle
   const promoCoin = walletData.coins?.find(c => c.type === 'promo');
   const brandedTotal = Number(walletData.brandedCoinsTotal) || 0;
 
-  const displayBalance = isHidden ? '****' : `${BRAND.CURRENCY_CODE} ${Number.isFinite(animatedBalance) ? animatedBalance.toLocaleString() : '0'}`;
+  const displayBalance = isHidden ? '****' : `${BRAND.CURRENCY_CODE} ${Number.isFinite(animatedBalance) ? animatedBalance.toLocaleString('en-IN') : '0'}`;
 
   return (
     <View style={styles.container}>
@@ -140,9 +141,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   balanceText: {
-    color: Colors.nileBlue,
-    fontSize: 20,
-    fontWeight: '700',
+    color: colors.primary[500],
+    fontSize: 32,
+    fontWeight: '800',
     letterSpacing: -0.3,
   },
   eyeButton: {

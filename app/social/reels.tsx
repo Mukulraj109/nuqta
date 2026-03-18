@@ -90,6 +90,7 @@ export default function ReelsPage() {
   const [likedReels, setLikedReels] = useState<Set<string>>(new Set());
   const [activeTab, setActiveTab] = useState<FeedTab>('forYou');
   const [bookmarkedReels, setBookmarkedReels] = useState<Set<string>>(new Set());
+  const [screenFocused, setScreenFocused] = useState(true);
   const flatListRef = useRef<FlashList>(null);
   const likeAnimations = useRef<Map<string, Animated.Value>>(new Map());
 
@@ -131,6 +132,14 @@ export default function ReelsPage() {
     useCallback(() => {
       fetchReels(1, false);
     }, [fetchReels])
+  );
+
+  // Pause video playback when the screen loses focus (tab switch, navigation away)
+  useFocusEffect(
+    useCallback(() => {
+      setScreenFocused(true);
+      return () => setScreenFocused(false);
+    }, [])
   );
 
   const handleLoadMore = () => {
@@ -239,7 +248,7 @@ export default function ReelsPage() {
   const renderReel = useCallback(({ item, index }: { item: UgcReel; index: number }) => {
     const isLiked = likedReels.has(item.id);
     const isBookmarked = bookmarkedReels.has(item.id);
-    const isActive = index === currentIndex;
+    const isActive = index === currentIndex && screenFocused;
     const likeScale = getLikeAnimation(item.id);
 
     return (
@@ -392,7 +401,7 @@ export default function ReelsPage() {
         </View>
       </View>
     );
-  }, [currentIndex, likedReels, bookmarkedReels, router, handleLike, handleBookmark, handleShare]);
+  }, [currentIndex, likedReels, bookmarkedReels, screenFocused, router, handleLike, handleBookmark, handleShare]);
 
   const renderEmpty = () => {
     if (loading) return null;

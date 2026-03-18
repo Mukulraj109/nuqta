@@ -22,7 +22,7 @@ export const useSearchPage = () => {
     suggestions: [],
     activeFilters: {},
     availableFilters: [],
-    sortBy: 'relevance',
+    sortBy: 'savings',
     searchHistory: [],
     recentSearches: [],
     showSuggestions: false,

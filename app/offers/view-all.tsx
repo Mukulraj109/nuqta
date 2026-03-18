@@ -1,14 +1,15 @@
 // View All Offers Page
 // Displays all offers in a grid layout with the same header as offers page
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
-  ScrollView,
+  FlatList,
   StyleSheet,
   Pressable,
   Dimensions,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -17,17 +18,17 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/ThemedText';
-import { useOffersPage } from '@/hooks/useOffersPage';
 import { shareOffersPage } from '@/utils/shareUtils';
 import { Offer } from '@/services/realOffersApi';
 import { useAuthUser } from '@/stores/selectors';
 import realOffersApi from '@/services/realOffersApi';
 import { CardGridSkeleton } from '@/components/skeletons';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 60) / 2; // 2 cards per row with padding
+const PAGE_LIMIT = 20;
 
 export default function ViewAllOffersScreen() {
   const router = useRouter();
@@ -40,9 +41,16 @@ export default function ViewAllOffersScreen() {
   const [allOffers, setAllOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFavorited, setIsFavorited] = useState(false);
   const [userPoints, setUserPoints] = useState(0);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
+
+  // Ref to track the current filter params and prevent stale appends
+  const filterRef = useRef({ category, discount });
 
   // Get category display name
   const getCategoryTitle = () => {
@@ -67,166 +75,131 @@ export default function ViewAllOffersScreen() {
     try {
       const response = await realOffersApi.getOffersPageData();
       if (response.success && response.data) {
-        const points = response.data.userEngagement?.userPoints || 
-                       response.data.userPoints || 
+        const points = response.data.userEngagement?.userPoints ||
+                       response.data.userPoints ||
                        user?.wallet?.balance || 0;
         setUserPoints(points);
       }
-    } catch (error) {
+    } catch {
       // Fallback to auth state
       setUserPoints(user?.wallet?.balance || 0);
     }
   };
 
-  const loadAllOffers = async () => {
+  const fetchOffers = useCallback(async (pageNum: number, append: boolean = false) => {
     try {
-      setLoading(true);
-      setError(null);
+      if (pageNum === 1) {
+        setLoading(true);
+        setError(null);
+      } else {
+        setLoadingMore(true);
+      }
 
-      // Fetch offers by category if specified, otherwise fetch all
-      let allOffersData: Offer[] = [];
+      // Capture filter state at the time of this request
+      const currentFilter = { category, discount };
 
-      // Handle discount filter
-      if (discount) {
-        // Fetch all offers and filter by discount
-        let currentPage = 1;
-        const pageLimit = 50;
-        let hasMore = true;
+      const apiParams: Record<string, any> = {
+        page: pageNum,
+        limit: PAGE_LIMIT,
+      };
 
-        while (hasMore && currentPage <= 10) {
-          const response = await realOffersApi.getOffers({
-            page: currentPage,
-            limit: pageLimit,
-          });
+      if (category) {
+        apiParams.category = category;
+      }
 
-          if (response.success && response.data) {
-            const offers = response.data.data || response.data || [];
+      const response = await realOffersApi.getOffers(apiParams);
 
-            if (Array.isArray(offers)) {
-              // Filter by discount percentage
-              const filteredOffers = offers.filter((offer: Offer) => {
-                if (discount === 'free_delivery') {
-                  return offer.isFreeDelivery === true;
-                }
-                const discountValue = parseInt(discount);
-                if (discountValue === 25) {
-                  return offer.discountPercentage >= 25 && offer.discountPercentage < 50;
-                } else if (discountValue === 50) {
-                  return offer.discountPercentage >= 50 && offer.discountPercentage < 80;
-                } else if (discountValue === 80) {
-                  return offer.discountPercentage >= 80;
-                }
-                return offer.discountPercentage >= discountValue;
-              });
+      // If filters changed while we were fetching, discard this response
+      if (filterRef.current.category !== currentFilter.category ||
+          filterRef.current.discount !== currentFilter.discount) {
+        return;
+      }
 
-              allOffersData = [...allOffersData, ...filteredOffers];
-              if (offers.length < pageLimit) {
-                hasMore = false;
-              } else {
-                currentPage++;
-              }
-            } else {
-              hasMore = false;
-            }
-          } else {
-            hasMore = false;
-            if (currentPage === 1) {
-              setError(response.message || 'Failed to load offers');
-            }
-          }
+      if (response.success && response.data) {
+        const responseData = response.data as any;
+        let offers: Offer[] = [];
+
+        // Handle both paginated and array responses
+        if (Array.isArray(responseData)) {
+          offers = responseData;
+        } else if (responseData.items && Array.isArray(responseData.items)) {
+          offers = responseData.items;
+          setTotalCount(responseData.totalCount || 0);
+        } else if (responseData.data && Array.isArray(responseData.data)) {
+          offers = responseData.data;
         }
-      } else if (category) {
-        // Fetch offers by specific category
-        let currentPage = 1;
-        const pageLimit = 50;
-        let hasMore = true;
 
-        // Fetch all offers of this category in batches
-        while (hasMore && currentPage <= 10) {
-          const response = await realOffersApi.getOffers({
-            category: category,
-            page: currentPage,
-            limit: pageLimit,
+        // Apply client-side discount filter if needed
+        if (discount) {
+          offers = offers.filter((offer: any) => {
+            if (discount === 'free_delivery') {
+              return offer.isFreeDelivery === true;
+            }
+            const discountValue = parseInt(discount);
+            if (discountValue === 25) {
+              return offer.discountPercentage >= 25 && offer.discountPercentage < 50;
+            } else if (discountValue === 50) {
+              return offer.discountPercentage >= 50 && offer.discountPercentage < 80;
+            } else if (discountValue === 80) {
+              return offer.discountPercentage >= 80;
+            }
+            return offer.discountPercentage >= discountValue;
           });
+        }
 
-          if (response.success && response.data) {
-            const offers = response.data.data || response.data || [];
+        const newHasMore = offers.length >= PAGE_LIMIT;
+        setHasMore(newHasMore);
 
-            if (Array.isArray(offers)) {
-              allOffersData = [...allOffersData, ...offers];
-              if (offers.length < pageLimit) {
-                hasMore = false;
-              } else {
-                currentPage++;
-              }
-            } else {
-              hasMore = false;
-            }
-          } else {
-            hasMore = false;
-            if (currentPage === 1) {
-              setError(response.message || 'Failed to load offers');
-            }
-          }
+        if (append) {
+          setAllOffers(prev => [...prev, ...offers]);
+        } else {
+          setAllOffers(offers);
+        }
+
+        if (!append && offers.length === 0) {
+          setError('No offers found');
         }
       } else {
-        // Fetch all offers from API (max limit is 50, so we'll fetch in batches)
-        let currentPage = 1;
-        const pageLimit = 50; // API max limit
-        let hasMore = true;
-
-        // Fetch offers in batches until we get all
-        while (hasMore && currentPage <= 10) { // Max 10 pages to avoid infinite loops
-          const response = await realOffersApi.getOffers({
-            page: currentPage,
-            limit: pageLimit,
-          });
-
-          if (response.success && response.data) {
-            const offers = response.data.data || response.data || [];
-            
-            if (Array.isArray(offers)) {
-              allOffersData = [...allOffersData, ...offers];
-              // If we got less than the limit, we've reached the end
-              if (offers.length < pageLimit) {
-                hasMore = false;
-              } else {
-                currentPage++;
-              }
-            } else {
-              hasMore = false;
-            }
-          } else {
-            hasMore = false;
-            if (currentPage === 1) {
-              setError(response.message || 'Failed to load offers');
-            }
-          }
+        if (pageNum === 1) {
+          setError((response as any).message || 'Failed to load offers');
         }
+        setHasMore(false);
       }
-
-      setAllOffers(allOffersData);
-      
-      if (allOffersData.length === 0 && !error) {
-        setError('No offers found');
+    } catch {
+      if (pageNum === 1) {
+        setError('Failed to load offers');
       }
-    } catch (error) {
-      setError('Failed to load offers');
+      setHasMore(false);
     } finally {
       setLoading(false);
       setRefreshing(false);
+      setLoadingMore(false);
     }
-  };
+  }, [category, discount]);
 
+  // Reset and refetch when filters change
   useEffect(() => {
-    loadAllOffers();
+    filterRef.current = { category, discount };
+    setPage(1);
+    setHasMore(true);
+    setAllOffers([]);
+    fetchOffers(1, false);
     fetchUserPoints();
-  }, [category, discount]); // Reload when category or discount changes
+  }, [category, discount]);
 
-  const handleRefresh = () => {
+  const handleRefresh = useCallback(() => {
     setRefreshing(true);
-    loadAllOffers();
-  };
+    setPage(1);
+    setHasMore(true);
+    fetchOffers(1, false);
+  }, [fetchOffers]);
+
+  const handleLoadMore = useCallback(() => {
+    if (loadingMore || !hasMore || loading) return;
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchOffers(nextPage, true);
+  }, [page, loadingMore, hasMore, loading, fetchOffers]);
 
   const handleBack = () => {
     router.back();
@@ -235,7 +208,7 @@ export default function ViewAllOffersScreen() {
   const handleShare = async () => {
     try {
       await shareOffersPage();
-    } catch (error) {
+    } catch {
       // silently handle
     }
   };
@@ -244,15 +217,15 @@ export default function ViewAllOffersScreen() {
     setIsFavorited(!isFavorited);
   };
 
-  const handleOfferPress = (offer: Offer) => {
+  const handleOfferPress = useCallback((offer: Offer) => {
     router.push(`/offers/${offer._id}` as any);
-  };
+  }, [router]);
 
-  const ProductCard = ({ offer }: { offer: Offer }) => {
+  const ProductCard = React.memo(({ offer }: { offer: Offer }) => {
     const [imageError, setImageError] = React.useState(false);
 
     return (
-      <Pressable 
+      <Pressable
         style={styles.productCard}
         onPress={() => handleOfferPress(offer)}
       >
@@ -261,8 +234,8 @@ export default function ViewAllOffersScreen() {
             <Ionicons name="image-outline" size={32} color="#ccc" />
           </View>
         ) : (
-          <CachedImage 
-            source={offer.image} 
+          <CachedImage
+            source={offer.image}
             style={styles.productImage}
             contentFit="cover"
             onError={() => {
@@ -273,7 +246,7 @@ export default function ViewAllOffersScreen() {
             }}
           />
         )}
-        
+
         <View style={styles.productInfo}>
           <ThemedText style={styles.productTitle} numberOfLines={2}>
             {offer.title}
@@ -295,7 +268,60 @@ export default function ViewAllOffersScreen() {
         </View>
       </Pressable>
     );
-  };
+  });
+
+  const renderItem = useCallback(({ item }: { item: Offer }) => (
+    <ProductCard offer={item} />
+  ), [handleOfferPress]);
+
+  const ListHeader = useCallback(() => (
+    <>
+      {/* Section Header */}
+      <View style={styles.sectionHeader}>
+        <ThemedText style={styles.sectionTitle}>{getCategoryTitle()}</ThemedText>
+        <ThemedText style={styles.offersCount}>
+          {totalCount > 0 ? `${totalCount} offers` : `${allOffers.length} offers`}
+        </ThemedText>
+      </View>
+
+      {/* Loading State (initial load only) */}
+      {loading && (
+        <CardGridSkeleton />
+      )}
+
+      {/* Error State */}
+      {error && !loading && (
+        <View style={styles.errorContainer}>
+          <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
+          <ThemedText style={styles.errorText}>{error}</ThemedText>
+          <Pressable style={styles.retryButton} onPress={() => { setPage(1); setHasMore(true); fetchOffers(1, false); }}>
+            <ThemedText style={styles.retryButtonText}>Retry</ThemedText>
+          </Pressable>
+        </View>
+      )}
+    </>
+  ), [loading, error, allOffers.length, totalCount, category, title, discount]);
+
+  const ListFooter = useCallback(() => {
+    if (!loadingMore) return null;
+    return (
+      <View style={styles.footerLoader}>
+        <ActivityIndicator size="small" color={Colors.brand.purple} />
+      </View>
+    );
+  }, [loadingMore]);
+
+  const ListEmpty = useCallback(() => {
+    if (loading || error) return null;
+    return (
+      <View style={styles.emptyContainer}>
+        <Ionicons name="ticket-outline" size={64} color="#ccc" />
+        <ThemedText style={styles.emptyText}>No offers available</ThemedText>
+      </View>
+    );
+  }, [loading, error]);
+
+  const keyExtractor = useCallback((item: Offer) => item._id, []);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -308,9 +334,9 @@ export default function ViewAllOffersScreen() {
           <Pressable onPress={handleBack} style={styles.backButton}>
             <Ionicons name="chevron-back" size={24} color={Colors.text.inverse} />
           </Pressable>
-          
+
           <View style={styles.headerCenter}>
-            <Pressable 
+            <Pressable
               style={styles.pointsContainer}
               onPress={() => router.push('/coins')}
             >
@@ -318,16 +344,16 @@ export default function ViewAllOffersScreen() {
               <ThemedText style={styles.pointsText}>{userPoints}</ThemedText>
             </Pressable>
           </View>
-          
+
           <View style={styles.headerRight}>
             <Pressable onPress={handleShare} style={styles.headerButton}>
               <Ionicons name="share-outline" size={20} color={Colors.text.inverse} />
             </Pressable>
             <Pressable onPress={handleFavorite} style={styles.headerButton}>
-              <Ionicons 
-                name={isFavorited ? "heart" : "heart-outline"} 
-                size={20} 
-                color={isFavorited ? colors.error : "white"} 
+              <Ionicons
+                name={isFavorited ? "heart" : "heart-outline"}
+                size={20}
+                color={isFavorited ? colors.error : "white"}
               />
             </Pressable>
           </View>
@@ -349,54 +375,25 @@ export default function ViewAllOffersScreen() {
         <View style={styles.scallopedInner} />
       </View>
 
-      {/* Content */}
-      <ScrollView 
-        style={styles.content}
-        showsVerticalScrollIndicator={false}
+      {/* Content - FlatList with virtualization */}
+      <FlatList
+        data={loading ? [] : allOffers}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        numColumns={2}
+        columnWrapperStyle={styles.columnWrapper}
         contentContainerStyle={styles.contentContainer}
+        ListHeaderComponent={ListHeader}
+        ListFooterComponent={ListFooter}
+        ListEmptyComponent={ListEmpty}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.3}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
-      >
-        {/* Section Header */}
-        <View style={styles.sectionHeader}>
-          <ThemedText style={styles.sectionTitle}>{getCategoryTitle()}</ThemedText>
-          <ThemedText style={styles.offersCount}>{allOffers.length} offers</ThemedText>
-        </View>
-
-        {/* Loading State */}
-        {loading && (
-          <CardGridSkeleton />
-        )}
-
-        {/* Error State */}
-        {error && (
-          <View style={styles.errorContainer}>
-            <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
-            <ThemedText style={styles.errorText}>{error}</ThemedText>
-            <Pressable style={styles.retryButton} onPress={loadAllOffers}>
-              <ThemedText style={styles.retryButtonText}>Retry</ThemedText>
-            </Pressable>
-          </View>
-        )}
-
-        {/* Offers Grid */}
-        {!loading && !error && (
-          <View style={styles.productsGrid}>
-            {allOffers.map((offer) => (
-              <ProductCard key={offer._id} offer={offer} />
-            ))}
-          </View>
-        )}
-
-        {/* Empty State */}
-        {!loading && !error && allOffers.length === 0 && (
-          <View style={styles.emptyContainer}>
-            <Ionicons name="ticket-outline" size={64} color="#ccc" />
-            <ThemedText style={styles.emptyText}>No offers available</ThemedText>
-          </View>
-        )}
-      </ScrollView>
+        style={styles.content}
+      />
     </SafeAreaView>
   );
 }
@@ -506,7 +503,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: Spacing.base,
-    paddingBottom: Spacing['2xl'],
+    paddingBottom: 120,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -523,11 +520,10 @@ const styles = StyleSheet.create({
     ...Typography.body,
     color: Colors.text.tertiary,
   },
-  productsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  columnWrapper: {
     justifyContent: 'space-between',
     gap: 15,
+    marginBottom: 10,
   },
   productCard: {
     width: CARD_WIDTH,
@@ -539,7 +535,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    marginBottom: 10,
   },
   productImage: {
     width: '100%',
@@ -583,16 +578,6 @@ const styles = StyleSheet.create({
     ...Typography.bodySmall,
     color: Colors.text.tertiary,
   },
-  loadingContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 40,
-    gap: Spacing.md,
-  },
-  loadingText: {
-    ...Typography.bodyLarge,
-    color: Colors.text.tertiary,
-  },
   errorContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -625,5 +610,9 @@ const styles = StyleSheet.create({
   emptyText: {
     ...Typography.bodyLarge,
     color: Colors.text.tertiary,
+  },
+  footerLoader: {
+    paddingVertical: 20,
+    alignItems: 'center',
   },
 });

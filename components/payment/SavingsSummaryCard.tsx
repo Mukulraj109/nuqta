@@ -225,10 +225,8 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.lg,
   },
   totalAmount: {
-    fontSize: 36,
-    fontWeight: '800',
-    color: colors.nuqta.nileBlue,
-    letterSpacing: -1,
+    ...typography.priceLarge,
+    color: '#FFFFFF',
   },
   breakdownContainer: {
     marginBottom: spacing.md,

@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#E74C3C',
+    color: colors.error,
     marginBottom: 12,
     textAlign: 'center',
   },

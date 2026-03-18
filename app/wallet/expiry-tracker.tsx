@@ -1,7 +1,7 @@
 // Coin Expiry Tracker Page
 // Enhanced expiry tracking with timeline
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import {
   View,
@@ -66,6 +66,8 @@ export default function ExpiryTrackerPage() {
   const [error, setError] = useState<string | null>(null);
   const [grouped, setGrouped] = useState<GroupedCoins>({ thisWeek: [], thisMonth: [], nextMonth: [] });
   const [totalExpiringSoon, setTotalExpiringSoon] = useState(0);
+  const mountedRef = useRef(true);
+  useEffect(() => { return () => { mountedRef.current = false; }; }, []);
 
   const fetchExpiringCoins = useCallback(async () => {
     try {
@@ -85,10 +87,12 @@ export default function ExpiryTrackerPage() {
       const thisMonth = (expiringCoins.this_month?.coins || []).map(mapCoin);
       const nextMonth = (expiringCoins.next_month?.coins || []).map(mapCoin);
 
-      setGrouped({ thisWeek, thisMonth, nextMonth });
-      setTotalExpiringSoon(expiringCoins.this_week?.totalAmount || 0);
+      if (mountedRef.current) {
+        setGrouped({ thisWeek, thisMonth, nextMonth });
+        setTotalExpiringSoon(expiringCoins.this_week?.totalAmount || 0);
+      }
     } catch (err: any) {
-      setError(err?.message || 'Failed to load expiring coins');
+      if (mountedRef.current) setError(err?.message || 'Failed to load expiring coins');
       platformAlertSimple('Error', 'Could not load expiring coins. Pull down to retry.');
     }
   }, []);
@@ -101,7 +105,7 @@ export default function ExpiryTrackerPage() {
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchExpiringCoins();
-    setRefreshing(false);
+    if (mountedRef.current) setRefreshing(false);
   }, [fetchExpiringCoins]);
 
   const getProgressWidth = (daysLeft: number) => {
