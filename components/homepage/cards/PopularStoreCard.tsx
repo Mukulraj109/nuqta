@@ -8,7 +8,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import FastImage from '@/components/common/FastImage';
+import CachedImage from '@/components/ui/CachedImage';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 
@@ -119,11 +119,11 @@ function PopularStoreCard({ store, onPress, width = 170 }: PopularStoreCardProps
           {/* Store Logo */}
           <View style={styles.logoContainer}>
             {logoUrl ? (
-              <FastImage
+              <CachedImage
                 source={{ uri: logoUrl }}
                 style={styles.logo}
-                resizeMode="cover"
-                showLoader={true}
+                contentFit="cover"
+                transition={200}
               />
             ) : (
               <View style={[styles.logo, styles.placeholderLogo]}>

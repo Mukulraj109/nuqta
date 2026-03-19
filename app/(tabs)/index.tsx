@@ -16,6 +16,8 @@ import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   useGetCurrencySymbol,
+  useGetCurrency,
+  useGetLocale,
   useAuthUser,
   useAuthActions,
   useIsAuthenticated,
@@ -201,6 +203,8 @@ function HomeScreen() {
   // Zustand selectors — each only re-renders when its specific value changes
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
+  const getCurrency = useGetCurrency();
+  const getLocale = useGetLocale();
   const { state, actions, getUserContext: getHomepageUserContext } = useHomepage();
   const { handleItemPress, handleAddToCart } = useHomepageNavigation();
   const { user: profileUser, isModalVisible, showModal, hideModal } = useProfile();
@@ -320,8 +324,8 @@ function HomeScreen() {
       authActions.completeOnboarding({
         preferences: {
           notifications: { push: true, email: true, sms: true },
-          currency: 'AED',
-          language: 'en',
+          currency: getCurrency(),
+          language: getLocale().split('-')[0] || 'en',
         },
       }).catch(() => {
         // If completeOnboarding API fails, reset so it can retry on next render

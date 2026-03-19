@@ -422,7 +422,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
         },
       ]
     : [
-        // V2 tabs: Home · Explore · [REZ Pay] · Save · You
+        // V2 tabs: Home · Explore · [REZ Pay] · Deals · You
         {
           name: 'Home',
           route: '/(tabs)',
@@ -445,10 +445,10 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
           isCenter: true,
         },
         {
-          name: 'Save',
-          route: '/saved-offers',
-          icon: 'bookmark-outline',
-          isActive: activeTab === 'Save',
+          name: 'Deals',
+          route: '/deals',
+          icon: 'flash-outline',
+          isActive: activeTab === 'Deals',
           isCenter: false,
         },
         {

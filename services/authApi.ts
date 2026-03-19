@@ -39,6 +39,7 @@ export interface User {
   };
   preferences: {
     language?: string;
+    currency?: string;
     notifications?: {
       push?: boolean;
       email?: boolean;

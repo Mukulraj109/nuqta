@@ -312,6 +312,22 @@ export const profileIconGridItems: ProfileIconGridItem[] = [
 // Profile Page Menu List (as shown in screenshot 4)
 export const profileMenuListItems: ProfileMenuListItem[] = [
   {
+    id: 'categories',
+    title: 'Categories',
+    icon: 'grid-outline',
+    route: '/categories',
+    description: 'Browse all product and service categories',
+    showArrow: true,
+  },
+  {
+    id: 'play_and_earn',
+    title: 'Play & Earn',
+    icon: 'game-controller-outline',
+    route: '/(tabs)/play',
+    description: 'Play games and earn rewards',
+    showArrow: true,
+  },
+  {
     id: 'order_transaction_history',
     title: 'Order/Transaction History',
     icon: 'time-outline',

@@ -101,7 +101,7 @@ function FriendsRedeemedPage() {
         seen.set(o.friend.id, o.friend);
       }
     });
-    return [{ id: 'all', name: 'All Friends', avatar: '' }, ...Array.from(seen.values())];
+    return [{ id: 'all', name: 'Everyone', avatar: '' }, ...Array.from(seen.values())];
   }, [offers]);
 
   const fetchOffers = useCallback(async (pageNum: number, append = false) => {
@@ -258,14 +258,14 @@ function FriendsRedeemedPage() {
           <Pressable style={styles.backButton} onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
-          <ThemedText style={styles.headerTitle}>Friends' Deals</ThemedText>
+          <ThemedText style={styles.headerTitle}>People Saving Near You</ThemedText>
           <View style={styles.placeholder} />
         </View>
 
         <View style={styles.statsContainer}>
           <View style={styles.statItem}>
             <ThemedText style={styles.statValue}>{totalItems}</ThemedText>
-            <ThemedText style={styles.statLabel}>Friends Saved</ThemedText>
+            <ThemedText style={styles.statLabel}>People Saved</ThemedText>
           </View>
           <View style={styles.statDivider} />
           <View style={styles.statItem}>

@@ -47,9 +47,40 @@ import {
   DeferredGamification,
   DeferredCart,
 } from './DeferredProviders';
+import { useIsAuthenticated } from '@/stores/selectors';
+import { useAuth } from '@/contexts/AuthContext';
+import { useUserIdentityStore } from '@/stores/userIdentityStore';
+import { fetchIdentityFromProfile } from '@/services/identityApi';
 
 const RewardPopupManager = React.lazy(() => import('@/components/gamification/RewardPopupManager'));
 const BottomNavigation = React.lazy(() => import('@/components/navigation/BottomNavigation'));
+
+/**
+ * Hydrates identity store on auth ready — ensures featureLevel is correct
+ * regardless of which screen loads first (deep links, non-home screens).
+ */
+const IdentityHydrator = React.memo(function IdentityHydrator() {
+  const isAuthenticated = useIsAuthenticated();
+  let authLoading = false;
+  try {
+    const auth = useAuth();
+    authLoading = auth?.loading ?? false;
+  } catch {
+    // useAuth may not be available yet
+  }
+
+  useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
+
+    fetchIdentityFromProfile()
+      .then((data) => {
+        if (data) useUserIdentityStore.getState().hydrateFromBackend(data);
+      })
+      .catch(() => {});
+  }, [isAuthenticated, authLoading]);
+
+  return null;
+});
 
 interface AppProvidersProps {
   onErrorBoundaryError: (error: Error, errorInfo: React.ErrorInfo) => void;
@@ -69,6 +100,7 @@ function AppProviders({
     <QueryClientProvider client={queryClient}>
     <ErrorBoundary onError={onErrorBoundaryError}>
       <AuthProvider>
+        <IdentityHydrator />
         <DeferredWallet>
           <DeferredGamification>
             <DeferredSocket>

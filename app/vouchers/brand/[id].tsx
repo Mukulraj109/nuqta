@@ -27,7 +27,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { getStripePromise } from '@/utils/lazyImports';
 import realVouchersApi from '@/services/realVouchersApi';
 import apiClient from '@/services/apiClient';
-import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useGetCurrencySymbol, useRefreshWallet } from '@/stores/selectors';
 import { StripeCardForm } from '@/components/payment';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
@@ -79,6 +79,7 @@ function VoucherBrandDetailPage() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
+  const refreshWallet = useRefreshWallet();
 
   const [brand, setBrand] = useState<VoucherBrand | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -155,6 +156,7 @@ function VoucherBrandDetailPage() {
 
       if (response.success) {
         if (!isMounted()) return;
+        refreshWallet().catch(() => {});
         setConfirmModal({
           visible: true,
           title: 'Purchase Successful!',
@@ -255,6 +257,7 @@ function VoucherBrandDetailPage() {
 
       if (confirmResponse.success) {
         if (!isMounted()) return;
+        refreshWallet().catch(() => {});
         setConfirmModal({
           visible: true,
           title: 'Purchase Successful!',

@@ -111,14 +111,17 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
   const totalBalance = walletData?.totalBalance ?? 0;
 
   useEffect(() => {
+    let cancelled = false;
     trackWalletViewed();
     // Auto-show coin education on first wallet visit
     AsyncStorage.getItem('wallet_education_seen').then(seen => {
+      if (cancelled) return;
       if (!seen) {
         setCoinEducationVisible(true);
         AsyncStorage.setItem('wallet_education_seen', '1').catch(() => {});
       }
     }).catch(() => {});
+    return () => { cancelled = true; };
   }, [trackWalletViewed]);
 
   // Refresh wallet data when screen regains focus (e.g., after a transaction)

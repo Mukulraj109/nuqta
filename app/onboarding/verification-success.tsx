@@ -12,6 +12,9 @@ import analyticsService, { IdentityAnalyticsEvents } from '@/services/analyticsS
 import { useBackButton } from '@/hooks/useSafeNavigation';
 import { useAuthUser, useAuthActions } from '@/stores/selectors';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useQueryClient } from '@tanstack/react-query';
+import { useUserIdentityStore } from '@/stores/userIdentityStore';
+import { fetchIdentityFromProfile } from '@/services/identityApi';
 
 const INSTANT_BENEFITS = [
   '120+ exclusive deals unlocked',
@@ -29,6 +32,7 @@ const PROVISIONAL_BENEFITS = [
 function VerificationSuccessPage() {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { zone, type } = useLocalSearchParams<{ zone: string; type: string }>();
   const user = useAuthUser();
   const actions = useAuthActions();
@@ -75,6 +79,18 @@ function VerificationSuccessPage() {
         // (tabs)/index.tsx has a fallback that retries
       }
     }
+    // Invalidate cached data so home screen shows post-verification content
+    queryClient.invalidateQueries({ queryKey: ['offers'] });
+    queryClient.invalidateQueries({ queryKey: ['home'] });
+    queryClient.invalidateQueries({ queryKey: ['zones'] });
+
+    // Re-hydrate identity so featureLevel is correct immediately
+    fetchIdentityFromProfile()
+      .then((data) => {
+        if (data) useUserIdentityStore.getState().hydrateFromBackend(data);
+      })
+      .catch(() => {});
+
     router.replace('/(tabs)');
   };
 

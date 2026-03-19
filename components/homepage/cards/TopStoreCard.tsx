@@ -9,7 +9,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import FastImage from '@/components/common/FastImage';
+import CachedImage from '@/components/ui/CachedImage';
 import { colors } from '@/constants/theme';
 
 export interface TopStoreCardProps {
@@ -106,11 +106,11 @@ function TopStoreCard({ store, onPress, width = 180 }: TopStoreCardProps) {
         {/* Store Image */}
         <View style={styles.imageContainer}>
           {imageUrl ? (
-            <FastImage
+            <CachedImage
               source={{ uri: imageUrl }}
               style={styles.image}
-              resizeMode="cover"
-              showLoader={true}
+              contentFit="cover"
+              transition={200}
             />
           ) : (
             <View style={[styles.image, styles.placeholderImage]}>
