@@ -19,6 +19,7 @@ import programApi from '../../services/programApi';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { catchAndWarn } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const SocialImpactEventDetail = () => {
   const router = useRouter();
@@ -30,6 +31,7 @@ const SocialImpactEventDetail = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [loading, setLoading] = useState(true);
   const [eventData, setEventData] = useState<any>(null);
+  const isMounted = useIsMounted();
 
   // Fetch event details
   useEffect(() => {
@@ -42,6 +44,7 @@ const SocialImpactEventDetail = () => {
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -51,7 +54,9 @@ const SocialImpactEventDetail = () => {
   const handleRegister = async () => {
     try {
       await programApi.registerForSocialImpact(id);
+      if (!isMounted()) return;
       setIsRegistered(true);
+      if (!isMounted()) return;
       setShowConfirmation(true);
     } catch (error) {
       // silently handle
@@ -253,7 +258,11 @@ const SocialImpactEventDetail = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: isDark ? colors.text.primary : Colors.background.primary }]}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Header */}
         <View style={[styles.header, { backgroundColor: isDark ? 'rgba(0,0,0,0.95)' : 'rgba(255,255,255,0.95)' }]}>
           <View style={styles.headerContent}>

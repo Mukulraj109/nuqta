@@ -46,6 +46,7 @@ import apiClient from '@/services/apiClient';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { groceryQuickActions } from '@/data/category/groceryCategoryData';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   primaryGreen: colors.success,
@@ -220,6 +221,7 @@ const StoreCard = ({ store, variant = 'default' }: { store: any; variant?: 'defa
 const ProductCard = ({ product, currencySymbol }: { product: any; currencySymbol: string }) => {
   const router = useRouter();
   const [isAdding, setIsAdding] = useState(false);
+  const isMounted = useIsMounted();
   const originalPrice = product.originalPrice || product.pricing?.original;
   const sellingPrice = product.pricing?.selling || product.price;
   const discount = originalPrice && originalPrice > sellingPrice
@@ -241,6 +243,7 @@ const ProductCard = ({ product, currencySymbol }: { product: any; currencySymbol
         : 'Could not add to cart. Please try again.';
       platformAlertSimple('Error', message);
     } finally {
+      if (!isMounted()) return;
       setIsAdding(false);
     }
   };
@@ -339,11 +342,13 @@ function GroceryCategoryPage() {
       // Backend returns { suggestions: [...], placeholders: [...] }
       const suggestions = res.data?.suggestions || [];
       if (suggestions.length > 0) {
+        if (!isMounted()) return;
         setSmartSuggestions(suggestions.map((s: any) => s.text || s.title || s));
       } else {
         setSmartSuggestions([]);
       }
     } catch {
+      if (!isMounted()) return;
       setSmartSuggestions([]);
     }
   }, [slug]);
@@ -361,11 +366,13 @@ function GroceryCategoryPage() {
           return catSlug === slug || catSlug.includes('grocery') || catName.includes('grocery')
             || catName.includes('supermarket') || catName.includes('kirana');
         });
+        if (!isMounted()) return;
         setNewStores(groceryStores.slice(0, 8));
       }
     } catch {
       // No new stores available
     } finally {
+      if (!isMounted()) return;
       setIsLoadingNewStores(false);
     }
   }, [slug]);
@@ -373,6 +380,7 @@ function GroceryCategoryPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await Promise.all([refetch(), fetchSuggestions(), fetchNewStores()]);
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

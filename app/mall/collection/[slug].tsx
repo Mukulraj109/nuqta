@@ -25,10 +25,13 @@ import BrandFullWidthCard from '../../../components/mall/pages/BrandFullWidthCar
 import MallEmptyState from '../../../components/mall/pages/MallEmptyState';
 import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkeleton';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function CollectionBrandsPage() {
   const params = useLocalSearchParams<{ slug: string }>();
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+  const isMounted = useIsMounted();
+
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -53,19 +56,27 @@ function CollectionBrandsPage() {
       setError(null);
       const result = await mallApi.getBrandsByCollection(slug, pageNum, LIMIT);
 
+      if (!isMounted()) return;
       setCollection(result.collection);
+      if (!isMounted()) return;
       setTotal(result.total);
 
       if (append) {
+        if (!isMounted()) return;
         setBrands(prev => [...prev, ...result.brands]);
       } else {
+        if (!isMounted()) return;
         setBrands(result.brands);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load collection');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
+      if (!isMounted()) return;
       setIsLoadingMore(false);
     }
   }, [slug]);
@@ -306,7 +317,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingBottom: Spacing.xl,
-  },
+  paddingBottom: 120, },
   listHeader: {
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.md,

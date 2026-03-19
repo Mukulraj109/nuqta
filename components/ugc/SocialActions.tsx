@@ -3,6 +3,7 @@ import { View, Pressable, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface SocialActionsProps {
   videoId: string;
@@ -33,6 +34,7 @@ function SocialActions({
   const [bookmarking, setBookmarking] = useState(false);
   const [likeScale] = useState(new Animated.Value(1));
   const [bookmarkScale] = useState(new Animated.Value(1));
+  const isMounted = useIsMounted();
 
   const handleLike = async () => {
     if (liking) return;
@@ -58,6 +60,7 @@ function SocialActions({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLiking(false);
     }
   };
@@ -86,6 +89,7 @@ function SocialActions({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setBookmarking(false);
     }
   };

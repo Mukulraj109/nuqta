@@ -28,6 +28,7 @@ import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { catchAndWarn } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Nuqta Brand Colors
 const COLORS = {
@@ -93,6 +94,7 @@ const formatEventDate = (dateString?: string): string => {
 };
 
 function SocialImpactEventDetail() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
 
@@ -128,14 +130,19 @@ function SocialImpactEventDetail() {
       const response = await socialImpactApi.getEventById(id);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setEvent(response.data);
       } else {
+        if (!isMounted()) return;
         setError('Event not found');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load event');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [id]);
@@ -164,9 +171,12 @@ function SocialImpactEventDetail() {
       const response = await socialImpactApi.registerForEvent(id);
 
       if (response.success) {
+        if (!isMounted()) return;
         setModalState('success');
+        if (!isMounted()) return;
         setModalMessage('Registration successful!');
         // Update local state
+        if (!isMounted()) return;
         setEvent(prev => prev ? {
           ...prev,
           isEnrolled: true,
@@ -182,13 +192,18 @@ function SocialImpactEventDetail() {
           setShowModal(false);
         }, 1500);
       } else {
+        if (!isMounted()) return;
         setModalState('error');
+        if (!isMounted()) return;
         setModalMessage(response.message || 'Registration failed');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setModalState('error');
+      if (!isMounted()) return;
       setModalMessage(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setActionLoading(false);
     }
   };
@@ -210,9 +225,12 @@ function SocialImpactEventDetail() {
           const response = await socialImpactApi.cancelRegistration(id);
 
           if (response.success) {
+            if (!isMounted()) return;
             setModalState('success');
+            if (!isMounted()) return;
             setModalMessage('Registration cancelled');
             // Update local state
+            if (!isMounted()) return;
             setEvent(prev => prev ? {
               ...prev,
               isEnrolled: false,
@@ -228,13 +246,18 @@ function SocialImpactEventDetail() {
               setShowModal(false);
             }, 1500);
           } else {
+            if (!isMounted()) return;
             setModalState('error');
+            if (!isMounted()) return;
             setModalMessage(response.message || 'Cancellation failed');
           }
         } catch (err: any) {
+          if (!isMounted()) return;
           setModalState('error');
+          if (!isMounted()) return;
           setModalMessage(err.message || 'Something went wrong');
         } finally {
+          if (!isMounted()) return;
           setActionLoading(false);
         }
       },
@@ -302,17 +325,26 @@ function SocialImpactEventDetail() {
         setQrPayload(response.data.qrPayload);
         startCheckInPolling();
       } else {
+        if (!isMounted()) return;
         setShowCheckInModal(false);
+        if (!isMounted()) return;
         setModalState('error');
+        if (!isMounted()) return;
         setModalMessage('Failed to generate QR code');
+        if (!isMounted()) return;
         setShowModal(true);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setShowCheckInModal(false);
+      if (!isMounted()) return;
       setModalState('error');
+      if (!isMounted()) return;
       setModalMessage(err.message || 'Failed to generate QR code');
+      if (!isMounted()) return;
       setShowModal(true);
     } finally {
+      if (!isMounted()) return;
       setQrLoading(false);
     }
   };
@@ -331,17 +363,26 @@ function SocialImpactEventDetail() {
         setShowModal(true);
         setTimeout(() => setShowModal(false), 1500);
       } else {
+        if (!isMounted()) return;
         setShowCheckInModal(false);
+        if (!isMounted()) return;
         setModalState('error');
+        if (!isMounted()) return;
         setModalMessage(response.message || 'Invalid OTP');
+        if (!isMounted()) return;
         setShowModal(true);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setShowCheckInModal(false);
+      if (!isMounted()) return;
       setModalState('error');
+      if (!isMounted()) return;
       setModalMessage(err.message || 'OTP verification failed');
+      if (!isMounted()) return;
       setShowModal(true);
     } finally {
+      if (!isMounted()) return;
       setOtpLoading(false);
     }
   };
@@ -352,10 +393,15 @@ function SocialImpactEventDetail() {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
+        if (!isMounted()) return;
         setShowCheckInModal(false);
+        if (!isMounted()) return;
         setModalState('error');
+        if (!isMounted()) return;
         setModalMessage('Location permission is required for geo check-in. Please enable it in your device Settings.');
+        if (!isMounted()) return;
         setShowModal(true);
+        if (!isMounted()) return;
         setGeoLoading(false);
         return;
       }
@@ -366,24 +412,38 @@ function SocialImpactEventDetail() {
         location.coords.longitude
       );
       if (response.success) {
+        if (!isMounted()) return;
         setShowCheckInModal(false);
+        if (!isMounted()) return;
         setEvent(prev => prev ? { ...prev, enrollmentStatus: 'checked_in' } : null);
+        if (!isMounted()) return;
         setModalState('success');
+        if (!isMounted()) return;
         setModalMessage('Location verified! You are checked in.');
+        if (!isMounted()) return;
         setShowModal(true);
         setTimeout(() => setShowModal(false), 1500);
       } else {
+        if (!isMounted()) return;
         setShowCheckInModal(false);
+        if (!isMounted()) return;
         setModalState('error');
+        if (!isMounted()) return;
         setModalMessage(response.message || 'Location verification failed');
+        if (!isMounted()) return;
         setShowModal(true);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setShowCheckInModal(false);
+      if (!isMounted()) return;
       setModalState('error');
+      if (!isMounted()) return;
       setModalMessage(err.message || 'Geo check-in failed');
+      if (!isMounted()) return;
       setShowModal(true);
     } finally {
+      if (!isMounted()) return;
       setGeoLoading(false);
     }
   };

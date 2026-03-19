@@ -25,6 +25,7 @@ import { productsApi } from '@/services/productsApi';
 import { cartApi } from '@/services/cartApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   white: Colors.background.primary,
@@ -175,6 +176,7 @@ interface Product {
 }
 
 const GroceryCategoryPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { category } = useLocalSearchParams<{ category: string }>();
 
@@ -240,10 +242,13 @@ const GroceryCategoryPage: React.FC = () => {
       if (response.success && response.data) {
         const newProducts = response.data.products || [];
         if (append) {
+          if (!isMounted()) return;
           setProducts(prev => [...prev, ...newProducts]);
         } else {
+          if (!isMounted()) return;
           setProducts(newProducts);
         }
+        if (!isMounted()) return;
         setPagination({
           current: response.data.pagination?.current || page,
           pages: response.data.pagination?.pages || 1,
@@ -252,19 +257,27 @@ const GroceryCategoryPage: React.FC = () => {
       } else {
         // If API fails, use fallback data
         if (page === 1) {
+          if (!isMounted()) return;
           setProducts(getFallbackProducts(categorySlug));
+          if (!isMounted()) return;
           setPagination({ current: 1, pages: 1, total: 10 });
         }
       }
     } catch (err: any) {
       if (page === 1) {
+        if (!isMounted()) return;
         setProducts(getFallbackProducts(categorySlug));
+        if (!isMounted()) return;
         setPagination({ current: 1, pages: 1, total: 10 });
       }
+      if (!isMounted()) return;
       setError('Unable to load products. Showing cached data.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [categorySlug, searchQuery, selectedFilter, config.tags]);
@@ -441,6 +454,7 @@ const GroceryCategoryPage: React.FC = () => {
         <ProductsGridSkeleton count={6} />
       ) : (
         <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl

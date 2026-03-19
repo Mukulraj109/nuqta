@@ -25,6 +25,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@
 import realOffersApi from '@/services/realOffersApi';
 import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -68,6 +69,7 @@ const PROFILE_CONFIG: Record<string, { emoji: string; gradientColors: string[] }
 };
 
 function HeroesZonePage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { profile: profileParam } = useLocalSearchParams<{ profile?: string }>();
   const insets = useSafeAreaInsets();
@@ -114,6 +116,7 @@ function HeroesZonePage() {
       const response = await realOffersApi.getSpecialProfileOffers(slug);
       if (response.success && response.data) {
         const offersData = response.data.offers || response.data;
+        if (!isMounted()) return;
         setProfileOffers(prev => ({
           ...prev,
           [slug]: Array.isArray(offersData) ? offersData : [],
@@ -122,6 +125,7 @@ function HeroesZonePage() {
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoadingOffers(null);
     }
   };
@@ -134,11 +138,14 @@ function HeroesZonePage() {
       const response = await realOffersApi.getSpecialProfiles();
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setProfiles(response.data);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load profiles. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -151,11 +158,13 @@ function HeroesZonePage() {
       const response = await realOffersApi.getSpecialProfileOffers(profileSlug);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setProfileOffers(prev => ({ ...prev, [profileSlug]: response.data }));
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoadingOffers(null);
     }
   };

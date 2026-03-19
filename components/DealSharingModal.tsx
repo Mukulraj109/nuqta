@@ -17,6 +17,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Deal } from '@/types/deals';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface DealSharingModalProps {
   visible: boolean;
@@ -43,6 +44,7 @@ function DealSharingModal({
   const currencySymbol = getCurrencySymbol();
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
   const [copyFeedback, setCopyFeedback] = useState(false);
+  const isMounted = useIsMounted();
   
   const slideAnim = useRef(new Animated.Value(screenData.height)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -180,6 +182,7 @@ ${deal.description || 'Don\'t miss out on this incredible offer!'}
         try {
           const { message, url } = generateShareContent(deal, storeName);
           const shareText = `${message}\n\n${url}`;
+          if (!isMounted()) return;
           await Clipboard.setString(shareText);
           setCopyFeedback(true);
         } catch (error) {

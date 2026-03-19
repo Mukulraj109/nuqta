@@ -24,6 +24,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ScheduledDrop {
   id: string;
@@ -60,10 +61,13 @@ function ScheduledDropsPage() {
     } catch {
       // keep existing data
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     fetchDrops();
@@ -148,11 +152,13 @@ function ScheduledDropsPage() {
       } catch {
         platformAlertSimple('Error', 'Something went wrong. Please try again.');
       } finally {
+        if (!isMounted()) return;
         setClaimingId(null);
       }
     } else if (drop.source === 'surprise_drop') {
       // Surprise coin drop — claim via gamification API
       try {
+        if (!isMounted()) return;
         setClaimingId(drop.id);
         const result = await gamificationApi.claimSurpriseDrop(drop.id);
         if (result.success && result.data) {
@@ -164,6 +170,7 @@ function ScheduledDropsPage() {
       } catch {
         platformAlertSimple('Error', 'Something went wrong. Please try again.');
       } finally {
+        if (!isMounted()) return;
         setClaimingId(null);
       }
     }
@@ -378,7 +385,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing['3xl'],
+    paddingBottom: 120,
   },
   calendarSection: {
     marginBottom: Spacing.lg,

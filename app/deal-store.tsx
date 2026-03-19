@@ -23,7 +23,9 @@ import { campaignsApi, DealCategory, CampaignDeal } from '@/services/campaignsAp
 import CoinIcon from '@/components/ui/CoinIcon';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const DealStorePage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -58,11 +60,13 @@ const DealStorePage: React.FC = () => {
           return index === firstIndex;
         });
         
+        if (!isMounted()) return;
         setDealCategories(uniqueCategories);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -218,7 +222,8 @@ const DealStorePage: React.FC = () => {
         </ScrollView>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
         {/* Deal Categories */}
         {filteredDealCategories.length > 0 ? (
           filteredDealCategories.map((category) => (

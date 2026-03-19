@@ -21,6 +21,7 @@ import { showAlert, alertOk } from '@/utils/alert';
 import ProjectSubmissionForm from '@/components/projects/ProjectSubmissionForm';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ProjectSubmission {
   _id: string;
@@ -117,6 +118,7 @@ function ProjectDetailPage() {
       headerShown: false,
     });
   }, [navigation]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadProject();
@@ -142,6 +144,7 @@ function ProjectDetailPage() {
 
       if (response.success && response.data) {
         const projectData = response.data.project || response.data as any;
+        if (!isMounted()) return;
         setProject(projectData);
         
         // Check if user has a submission for this project
@@ -150,8 +153,10 @@ function ProjectDetailPage() {
             const userId = typeof sub.user === 'string' ? sub.user : sub.user?._id;
             return userId === user?.id;
           });
+          if (!isMounted()) return;
           setUserSubmission(submission || null);
         } else {
+          if (!isMounted()) return;
           setUserSubmission(null);
         }
         
@@ -166,6 +171,7 @@ function ProjectDetailPage() {
       showAlert('Error', 'Failed to load project details');
       router.back();
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

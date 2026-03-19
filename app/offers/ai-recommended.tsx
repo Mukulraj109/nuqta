@@ -23,6 +23,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { CachedImage } from '@/components/ui/CachedImage';
 import apiClient from '@/services/apiClient';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface BackendOffer {
   _id: string;
@@ -99,6 +100,7 @@ function mapOffer(offer: BackendOffer): MappedOffer {
 }
 
 function AIRecommendedPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -126,20 +128,27 @@ function AIRecommendedPage() {
       if (response.success && response.data) {
         const rawOffers = Array.isArray(response.data) ? response.data : (response.data as any).data || [];
         const mapped = rawOffers.map(mapOffer);
+        if (!isMounted()) return;
         setOffers(prev => append ? [...prev, ...mapped] : mapped);
 
         // Handle pagination metadata
         if (Array.isArray(response.data)) {
+          if (!isMounted()) return;
           setHasMore(rawOffers.length >= PAGE_LIMIT);
         } else {
+          if (!isMounted()) return;
           setHasMore((response.data as any).hasNextPage ?? rawOffers.length >= PAGE_LIMIT);
         }
       } else {
+        if (!isMounted()) return;
         if (!append) setOffers([]);
+        if (!isMounted()) return;
         setError('Failed to load recommendations');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       if (!append) setOffers([]);
+      if (!isMounted()) return;
       setError(err?.message || 'Something went wrong');
     }
   }, []);
@@ -155,6 +164,7 @@ function AIRecommendedPage() {
     setRefreshing(true);
     setPage(1);
     await fetchOffers(1);
+    if (!isMounted()) return;
     setRefreshing(false);
   }, [fetchOffers]);
 

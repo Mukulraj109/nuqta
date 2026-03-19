@@ -28,6 +28,7 @@ import { confirmAlert, alertOk } from '@/utils/alert';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ─── Brand Colors ─────────────────────────────────────────────
 const C = {
@@ -124,6 +125,7 @@ const isUpcoming = (d: Date) => d >= new Date(new Date().setHours(0, 0, 0, 0));
 //  MAIN COMPONENT
 // ══════════════════════════════════════════════════════════════
 function BookingsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const tintColor = useThemeColor({}, 'tint');
@@ -326,13 +328,19 @@ function BookingsPage() {
         }
       });
 
+      if (!isMounted()) return;
       setTablePage({ page: 2, hasMore: tHasMore });
+      if (!isMounted()) return;
       setEventPage({ offset: PAGE_SIZE, hasMore: eHasMore });
+      if (!isMounted()) return;
       setServicePage({ page: 2, hasMore: sHasMore });
+      if (!isMounted()) return;
       setAllBookings(sortBookings(unified));
     } catch (error: any) {
+      if (!isMounted()) return;
       setLoadError(error.message || 'Failed to load bookings');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [isAuthenticated, refreshing, fetchPage]);
@@ -370,13 +378,18 @@ function BookingsPage() {
         }
       });
 
+      if (!isMounted()) return;
       setTablePage({ page: tNextPage, hasMore: tHasMore });
+      if (!isMounted()) return;
       setEventPage({ offset: eNextOffset, hasMore: eHasMore });
+      if (!isMounted()) return;
       setServicePage({ page: sNextPage, hasMore: sHasMore });
+      if (!isMounted()) return;
       setAllBookings((prev) => sortBookings([...prev, ...newItems]));
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [loadingMore, tablePage, eventPage, servicePage, fetchPage]);
@@ -393,6 +406,7 @@ function BookingsPage() {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await loadBookings();
+    if (!isMounted()) return;
     setRefreshing(false);
   }, [loadBookings]);
 

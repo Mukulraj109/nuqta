@@ -23,6 +23,7 @@ import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { useRouter } from 'expo-router';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Premium Design Tokens from TASK.md - Mustard & Gold Theme
 const GLASS = {
@@ -66,6 +67,7 @@ function FollowStoreSection({
   isFollowingProp,
   onFollowChange,
 }: FollowStoreSectionProps) {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -166,6 +168,7 @@ function FollowStoreSection({
         }
       } catch (error) {
       } finally {
+        if (!isMounted()) return;
         setIsCheckingStatus(false);
       }
     };
@@ -257,11 +260,13 @@ function FollowStoreSection({
         }
       }
     } catch (error) {
+      if (!isMounted()) return;
       setIsFollowing(wasFollowing);
       onFollowChange?.(wasFollowing);
       triggerNotification('Error');
       showAlert('Error', 'Something went wrong. Please try again.', undefined, 'error');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

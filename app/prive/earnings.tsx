@@ -28,6 +28,7 @@ import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/pr
 import { PriveSkeletonBlock } from '@/components/prive/PriveSkeletonBlock';
 import priveApi, { EarningItem, EarningsSummary } from '@/services/priveApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // --- Icon maps ---
 
@@ -107,6 +108,7 @@ function EarningsScreen() {
 
   // Filter state
   const [selectedTimeRange, setSelectedTimeRange] = useState<number | undefined>(undefined);
+  const isMounted = useIsMounted();
 
   // --- Data fetching ---
 

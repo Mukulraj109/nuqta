@@ -30,6 +30,7 @@ import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { errorReporter } from '@/utils/errorReporter';
 import ErrorState from '@/components/common/ErrorState';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 type CouponTab = 'available' | 'my-coupons' | 'expired';
@@ -59,6 +60,7 @@ const getRefName = (ref: string | { _id: string; name: string; [key: string]: an
 };
 
 function CouponsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -119,8 +121,10 @@ function CouponsPage() {
         await loadMyCoupons('expired');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load coupons. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -177,6 +181,7 @@ function CouponsPage() {
     setCodeInput('');
     setActiveFilter(null);
     await loadData();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -193,6 +198,7 @@ function CouponsPage() {
       if (response.success && response.data) {
         setSearchResults(response.data.coupons);
       } else {
+        if (!isMounted()) return;
         setSearchResults([]);
       }
     } catch (err) {
@@ -201,8 +207,10 @@ function CouponsPage() {
         { context: 'CouponsPage.handleSearchCode' },
         'warning'
       );
+      if (!isMounted()) return;
       setSearchResults([]);
     } finally {
+      if (!isMounted()) return;
       setSearching(false);
     }
   };
@@ -243,6 +251,7 @@ function CouponsPage() {
       platformAlertSimple('Error', 'Something went wrong. Please try again.');
       await loadAvailableCoupons();
     } finally {
+      if (!isMounted()) return;
       setClaimingId(null);
     }
   };
@@ -264,6 +273,7 @@ function CouponsPage() {
           { context: 'CouponsPage.handleRemoveCoupon' },
           'warning'
         );
+        if (!isMounted()) return;
         setMyCoupons(prev);
         platformAlertSimple('Error', 'Something went wrong');
       }
@@ -1110,8 +1120,8 @@ const s = StyleSheet.create({
   searchClearText: { fontSize: Typography.bodySmall.fontSize + 1, fontWeight: '600', color: C.accent },
 
   // Filter chips
-  filterScroll: { marginBottom: Spacing.base },
-  filterRow: { gap: Spacing.sm },
+  filterScroll: { height: 44, marginBottom: Spacing.base },
+  filterRow: { gap: Spacing.sm, alignItems: 'center' as const },
   filterChip: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: BorderRadius.xl, backgroundColor: C.card, borderWidth: 1, borderColor: C.border },
   filterChipActive: { backgroundColor: C.headerDark, borderColor: C.headerDark },
   filterChipText: { ...Typography.bodySmall, fontWeight: '500', color: C.textSecondary },

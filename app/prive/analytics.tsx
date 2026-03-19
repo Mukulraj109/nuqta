@@ -13,6 +13,7 @@ import usePriveEligibility from '@/hooks/usePriveEligibility';
 import priveApi from '@/services/priveApi';
 import { colors } from '@/constants/theme';
 import { catchAndReport } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function AnalyticsScreen() {
   const { tier } = usePriveEligibility();
@@ -27,11 +28,13 @@ function AnalyticsScreen() {
   const fetchData = useCallback(async () => {
     try {
       const response = await priveApi.getAnalytics(period);
+      if (!isMounted()) return;
       if (response.success && response.data) setData(response.data);
-    } catch (e) { catchAndReport(e, setError, 'Analytics/fetchData'); }
-    finally { setIsLoading(false); setIsRefreshing(false); }
+    } catch (e) { if (!isMounted()) return; catchAndReport(e, setError, 'Analytics/fetchData'); }
+    finally { if (!isMounted()) return; setIsLoading(false); setIsRefreshing(false); }
   }, [period]);
 
+  const isMounted = useIsMounted();
   useEffect(() => { setIsLoading(true); fetchData(); }, [fetchData]);
   const onRefresh = () => { setIsRefreshing(true); fetchData(); };
 
@@ -84,6 +87,7 @@ function AnalyticsScreen() {
     <View style={styles.container}>
       <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor={PRIVE_COLORS.gold.primary} />}

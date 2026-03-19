@@ -9,6 +9,7 @@ import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import surveysApiService, { SurveyDetail, SurveyQuestion, SurveyAnswer } from '@/services/surveysApi';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   primary: colors.brand.green, // Survey-specific green — keep unique
@@ -30,6 +31,7 @@ function SurveyTakePage() {
   const [answers, setAnswers] = useState<Record<string, string | string[] | number>>({});
   const [error, setError] = useState<string | null>(null);
   const [startTime] = useState(Date.now());
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadSurvey();
@@ -40,15 +42,19 @@ function SurveyTakePage() {
     setLoading(true);
     try {
       const data = await surveysApiService.getSurveyById(id);
+      if (!isMounted()) return;
       setSurvey(data);
 
       // Resume from existing session if available
       if (data.existingSession) {
+        if (!isMounted()) return;
         setCurrentIndex(data.existingSession.currentQuestionIndex);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load survey');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -130,6 +136,7 @@ function SurveyTakePage() {
     } catch (err: any) {
       platformAlertSimple('Error', err.message || 'Failed to submit survey');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };
@@ -353,7 +360,11 @@ function SurveyTakePage() {
           <View style={[styles.progressBar, { width: `${progress}%` }]} />
         </View>
 
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
           {/* Question */}
           <View style={styles.questionSection}>
             <View style={styles.questionHeader}>

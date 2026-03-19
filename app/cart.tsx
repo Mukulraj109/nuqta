@@ -39,6 +39,7 @@ import { CartItemSkeleton } from '@/components/common/SkeletonLoader';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Helper function to format time slot for display
 const formatTimeSlot = (start: string, end?: string): string => {
@@ -58,6 +59,7 @@ const formatTimeSlot = (start: string, end?: string): string => {
 };
 
 function CartPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams<{ offerRedemptionCode?: string }>();
   const cartState = useCartStore((s) => s.state);
@@ -291,6 +293,7 @@ function CartPage() {
       const response = await cartApi.unlockItem(productId);
 
       if (response.success) {
+        if (!isMounted()) return;
         setLockedProducts(prev => prev.filter(item => item.id !== itemId));
         platformAlertSimple('Success', 'Item unlocked successfully');
       } else {
@@ -375,6 +378,7 @@ function CartPage() {
 
     // If there are any issues, show validation modal
     if (validationResult.issues.length > 0 || !validationResult.canCheckout) {
+      if (!isMounted()) return;
       setShowValidationModal(true);
       return;
     }
@@ -405,6 +409,7 @@ function CartPage() {
 
   const handleRemoveInvalidItems = async () => {
     await removeInvalidItems();
+    if (!isMounted()) return;
     setShowValidationModal(false);
   };
 

@@ -16,6 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import financialServicesApi, { FinancialServiceCategory } from '@/services/financialServicesApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_GAP = 10;
@@ -32,6 +33,7 @@ const FinancialServicesSection: React.FC = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<FinancialServiceCategory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     fetchCategories();
@@ -42,11 +44,13 @@ const FinancialServicesSection: React.FC = () => {
       setIsLoading(true);
       const response = await financialServicesApi.getCategories();
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setCategories(response.data);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

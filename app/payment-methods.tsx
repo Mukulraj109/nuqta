@@ -9,7 +9,6 @@ import {
   Platform,
   TextInput,
   Dimensions,
-  Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -99,7 +98,11 @@ function PaymentMethodsPage() {
         </View>
       </LinearGradient>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Recent Methods */}
         <View style={styles.section}>
           <ThemedText style={styles.sectionTitle}>Recent Methods</ThemedText>

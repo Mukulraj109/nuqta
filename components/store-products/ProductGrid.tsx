@@ -444,7 +444,7 @@ function ProductGrid({
     const productId = (product as any)._id || product.id;
     const productUrl = Platform.OS === 'web'
       ? `${window.location.origin}/product-page?cardId=${productId}&cardType=product`
-      : `nuqta://product/${productId}`;
+      : `rez://product/${productId}`;
 
     try {
       const shareMessage = `Check out ${product.name} at ${storeData?.name || storeName || 'this store'} for ${currencySymbol}${product.price.current}${product.price.original ? ` (was ${currencySymbol}${product.price.original})` : ''}`;

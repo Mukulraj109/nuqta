@@ -14,6 +14,7 @@ import { useRouter } from 'expo-router';
 import exploreApi, { ExploreStatsSummary } from '@/services/exploreApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -53,6 +54,7 @@ const steps = [
 ];
 
 const EarnLikeThem = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [stats, setStats] = useState<ExploreStatsSummary | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -70,11 +72,14 @@ const EarnLikeThem = () => {
       if (response.success && response.data) {
         setStats(response.data);
       } else {
+        if (!isMounted()) return;
         setError('Failed to load stats');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load stats');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

@@ -21,6 +21,7 @@ import { platformAlertConfirm } from '@/utils/platformAlert';
 import { CardGridSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
 
@@ -45,11 +46,14 @@ function SavedOffersScreen() {
     } catch (err: any) {
       logger.error('[SavedOffers] Error:', err);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [isAuthenticated]);
 
+  const isMounted = useIsMounted();
   useEffect(() => { fetchSavedOffers(); }, [fetchSavedOffers]);
 
   const handleRemove = async (offerId: string) => {
@@ -60,6 +64,7 @@ function SavedOffersScreen() {
     if (!confirmed) return;
     try {
       await realOffersApi.removeOfferFromFavorites(offerId);
+      if (!isMounted()) return;
       setOffers(prev => prev.filter(o => (o._id || o.id) !== offerId));
     } catch (err: any) {
       logger.error('[SavedOffers] Remove error:', err);
@@ -79,7 +84,7 @@ function SavedOffersScreen() {
           <Pressable style={styles.headerBtn} onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
           </Pressable>
-          <ThemedText style={styles.headerTitle}>Saved Offers</ThemedText>
+          <ThemedText style={styles.headerTitle}>Save</ThemedText>
           <View style={styles.headerBtn} />
         </View>
         <View style={styles.emptyContainer}>
@@ -109,7 +114,7 @@ function SavedOffersScreen() {
         <Pressable style={styles.headerBtn} onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
         </Pressable>
-        <ThemedText style={styles.headerTitle}>Saved Offers</ThemedText>
+        <ThemedText style={styles.headerTitle}>Save</ThemedText>
         <View style={styles.headerBtn}>
           {offers.length > 0 && (
             <View style={styles.countBadge}>
@@ -213,7 +218,7 @@ const styles = StyleSheet.create({
   countBadge: { backgroundColor: Colors.info, borderRadius: 10, paddingHorizontal: Spacing.sm, paddingVertical: 2 },
   countText: { color: Colors.text.inverse, fontSize: Typography.bodySmall.fontSize, fontWeight: '600' },
   scroll: { flex: 1 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: Spacing.base, gap: Spacing.md, paddingBottom: Spacing.lg },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: Spacing.base, gap: Spacing.md, paddingBottom: 120 },
   card: { width: CARD_WIDTH, backgroundColor: Colors.background.primary, borderRadius: BorderRadius.md, overflow: 'hidden', borderWidth: 1, borderColor: Colors.border.default },
   imageContainer: { position: 'relative' },
   cardImage: { width: '100%', height: CARD_WIDTH * 0.7, backgroundColor: Colors.background.secondary },

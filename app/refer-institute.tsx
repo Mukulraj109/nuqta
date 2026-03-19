@@ -12,6 +12,7 @@ import * as identityApi from '@/services/identityApi';
 import analyticsService, { IdentityAnalyticsEvents } from '@/services/analyticsService';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { useEffect } from 'react';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type InstituteType = 'college' | 'company';
 
@@ -23,6 +24,7 @@ function ReferInstitutePage() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     analyticsService.track(IdentityAnalyticsEvents.INSTITUTE_REFERRAL_STARTED);
@@ -47,10 +49,12 @@ function ReferInstitutePage() {
         instituteName: instituteName.trim(),
       });
 
+      if (!isMounted()) return;
       setSubmitted(true);
     } catch (e: any) {
       platformAlertSimple('Error', e?.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [instituteName, instituteType, city, email]);

@@ -1,6 +1,6 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, StyleSheet, Platform, TextInput } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Platform, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native';
 import analyticsService from '@/services/analyticsService';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -13,8 +13,10 @@ import ReferralHandler from '@/utils/referralHandler';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 // Nuqta Design System Colors
 function RegistrationScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams<{ referralCode?: string }>();
   const authLoading = useAuthLoading();
@@ -42,6 +44,7 @@ function RegistrationScreen() {
       try {
         const storedReferral = await ReferralHandler.getStoredReferralCode();
         if (storedReferral?.code) {
+          if (!isMounted()) return;
           setFormData(prev => ({ ...prev, referralCode: storedReferral.code }));
         }
       } catch (error) {
@@ -107,9 +110,11 @@ function RegistrationScreen() {
       if (errorMessage.toLowerCase().includes('already') &&
           (errorMessage.toLowerCase().includes('registered') ||
            errorMessage.toLowerCase().includes('exists'))) {
+        if (!isMounted()) return;
         setShowExistingUserMessage(true);
       } else if (errorMessage.toLowerCase().includes('phone')) {
         // Show phone number error in the UI
+        if (!isMounted()) return;
         setErrors(prev => ({ ...prev, phoneNumber: errorMessage }));
       } else {
         platformAlertSimple('Error', errorMessage);
@@ -142,7 +147,15 @@ function RegistrationScreen() {
         <View style={[styles.circle, styles.circleGold]} />
       </View>
 
-      <View style={styles.content}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+      <ScrollView
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
         {showExistingUserMessage ? (
           // Existing User Message
           <View style={styles.glassCard}>
@@ -292,7 +305,8 @@ function RegistrationScreen() {
             </Pressable>
           </View>
         )}
-      </View>
+      </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }
@@ -302,7 +316,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     paddingHorizontal: Spacing.xl,
     paddingVertical: 40,

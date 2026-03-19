@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { storeSearchService } from '@/services/storeSearchService';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface SearchSuggestion {
   id: string;
@@ -39,6 +40,7 @@ const StoreSearchBar: React.FC<StoreSearchBarProps> = ({
   const [loading, setLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const isMounted = useIsMounted();
   
   const searchTimeoutRef = useRef<any>(null);
   const inputRef = useRef<TextInput>(null);
@@ -109,13 +111,16 @@ const StoreSearchBar: React.FC<StoreSearchBarProps> = ({
       // const storeResults = await storeSearchService.searchStores(searchQuery);
       
       const allSuggestions = [...quickMatches, ...locationMatches];
+      if (!isMounted()) return;
       setSuggestions(allSuggestions);
       setShowSuggestions(allSuggestions.length > 0);
       setSelectedIndex(-1);
     } catch (error) {
+      if (!isMounted()) return;
       setSuggestions([]);
       setShowSuggestions(false);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

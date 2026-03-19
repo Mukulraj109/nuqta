@@ -13,7 +13,6 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  Image,
   Dimensions,
   Animated,
   RefreshControl,
@@ -28,6 +27,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import realOffersApi from '@/services/realOffersApi';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -182,6 +182,7 @@ const getRemainingLabel = (milestone: LoyaltyMilestone, currencySymbol: string):
 };
 
 function LoyaltyRewardsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -230,12 +231,17 @@ function LoyaltyRewardsPage() {
       const active = mergedMilestones.filter((m: LoyaltyMilestone) => !m.isCompleted);
       const completed = mergedMilestones.filter((m: LoyaltyMilestone) => m.isCompleted);
 
+      if (!isMounted()) return;
       setMilestones(active);
+      if (!isMounted()) return;
       setCompletedMilestones(completed);
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load loyalty milestones');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   };
@@ -257,7 +263,7 @@ function LoyaltyRewardsPage() {
   const almostDoneCount = milestones.filter(m => (m.progress || 0) >= 70).length;
 
   const handleMilestonePress = (milestone: LoyaltyMilestone) => {
-    // TODO: Navigate to milestone detail or show modal
+    router.push(`/offers/milestone/${milestone._id}` as any);
   };
 
   const renderMilestoneCard = (milestone: LoyaltyMilestone) => {

@@ -36,6 +36,7 @@ import BusAmenities from '../../components/bus/BusAmenities';
 import BusCancellationPolicy from '../../components/bus/BusCancellationPolicy';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -114,6 +115,7 @@ interface BookingData {
 }
 
 function BusDetailsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
@@ -160,6 +162,7 @@ function BusDetailsPage() {
       const response = await productsApi.getProductById(id as string);
 
       if (!response.success || !response.data) {
+        if (!isMounted()) return;
         setError('Bus not found');
         return;
       }
@@ -351,10 +354,13 @@ function BusDetailsPage() {
         classOptions: buildClassOptions(),
       };
 
+      if (!isMounted()) return;
       setBus(busDetails);
     } catch (error) {
+      if (!isMounted()) return;
       setError('Failed to load bus details. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

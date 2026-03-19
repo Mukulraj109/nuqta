@@ -14,7 +14,9 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 function LocationPermissionScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
   const { updateUserData, setLoading, state } = useOnboarding();
@@ -43,6 +45,7 @@ function LocationPermissionScreen() {
           () => setPermissionRequested(false),
           'Try Again'
         );
+        if (!isMounted()) return;
         setLoading(false);
         setPermissionRequested(false);
         return;
@@ -74,6 +77,7 @@ function LocationPermissionScreen() {
         'Retry'
       );
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -108,7 +112,7 @@ function LocationPermissionScreen() {
 
             <View style={styles.underlineContainer}>
               <LinearGradient
-                colors={[Colors.gold, Colors.goldDark]}
+                colors={[Colors.gold, '#B8860B']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.underline}
@@ -143,7 +147,7 @@ function LocationPermissionScreen() {
                   </View>
                   <View style={[styles.storeIcon, styles.store2]}>
                     <LinearGradient
-                      colors={[Colors.gold, Colors.goldDark]}
+                      colors={[Colors.gold, '#B8860B']}
                       style={styles.storeIconInner}
                     >
                       <Ionicons name="cart" size={12} color={colors.background.primary} />
@@ -164,7 +168,7 @@ function LocationPermissionScreen() {
               {/* Location Pin */}
               <View style={styles.locationPin}>
                 <LinearGradient
-                  colors={[Colors.gold, Colors.goldDark]}
+                  colors={[Colors.gold, '#B8860B']}
                   style={styles.pinTop}
                 >
                   <Ionicons name="location" size={16} color={colors.background.primary} />

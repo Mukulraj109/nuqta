@@ -27,6 +27,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import realOffersApi from '@/services/realOffersApi';
 import logger from '@/utils/logger';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -223,6 +224,7 @@ function resolveIonicon(
 
 function ExclusiveZonePage() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -291,6 +293,7 @@ function ExclusiveZonePage() {
       if (zonesResponse.success && zonesResponse.data) {
         const zone = zonesResponse.data.find((z: any) => z.slug === slug);
         if (zone) {
+          if (!isMounted()) return;
           setZoneInfo({
             name: zone.name,
             slug: zone.slug,
@@ -311,12 +314,15 @@ function ExclusiveZonePage() {
       if (offersResponse.success && offersResponse.data) {
         const offersData = offersResponse.data.offers || offersResponse.data;
         const offersArray = Array.isArray(offersData) ? offersData : [];
+        if (!isMounted()) return;
         setOffers(offersArray);
       }
     } catch (err: any) {
       logger.error('Error fetching zone data', err instanceof Error ? err : new Error(String(err)), 'ExclusiveZonePage');
+      if (!isMounted()) return;
       setError('Failed to load offers. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

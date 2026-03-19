@@ -2,6 +2,7 @@
 // Custom hook for managing product recommendations
 
 import { useState, useEffect, useCallback } from 'react';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import recommendationService, {
   ProductRecommendation,
   BundleItem
@@ -33,6 +34,8 @@ export function useRecommendations({
   autoFetch = true,
   trackView = true
 }: UseRecommendationsOptions): UseRecommendationsResult {
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [similar, setSimilar] = useState<ProductRecommendation[]>([]);
   const [frequentlyBought, setFrequentlyBought] = useState<BundleItem[]>([]);
   const [bundles, setBundles] = useState<BundleItem[]>([]);
@@ -122,17 +125,19 @@ export function useRecommendations({
 
   // Track product view
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (productId && trackView) {
       recommendationService.trackProductView(productId);
     }
-  }, [productId, trackView]);
+  }, [productId, trackView, authLoading, isAuthenticated]);
 
   // Auto-fetch on mount if enabled
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (productId && autoFetch) {
       fetchAll();
     }
-  }, [productId, autoFetch, fetchAll]);
+  }, [productId, autoFetch, fetchAll, authLoading, isAuthenticated]);
 
   return {
     similar,
@@ -167,6 +172,8 @@ export function usePersonalizedRecommendations({
   limit = 10,
   excludeProducts = []
 }: UsePersonalizedRecommendationsOptions = {}): UsePersonalizedRecommendationsResult {
+  const isAuthenticatedP = useIsAuthenticated();
+  const authLoadingP = useAuthLoading();
   const [recommendations, setRecommendations] = useState<ProductRecommendation[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -260,10 +267,11 @@ export function usePersonalizedRecommendations({
 
   // Auto-fetch on mount if enabled
   useEffect(() => {
+    if (authLoadingP || !isAuthenticatedP) return;
     if (autoFetch) {
       fetch();
     }
-  }, [autoFetch, fetch]);
+  }, [autoFetch, fetch, authLoadingP, isAuthenticatedP]);
 
   return {
     recommendations,

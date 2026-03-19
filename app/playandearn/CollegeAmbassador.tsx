@@ -17,6 +17,7 @@ import programApi from '../../services/programApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -28,6 +29,7 @@ const CollegeAmbassador = () => {
   const [loading, setLoading] = useState(true);
   const [programs, setPrograms] = useState<any[]>([]);
   const [myPrograms, setMyPrograms] = useState<any[]>([]);
+  const isMounted = useIsMounted();
 
   // Fetch college programs
   useEffect(() => {
@@ -39,14 +41,17 @@ const CollegeAmbassador = () => {
         ]);
 
         if (programsRes.data) {
+          if (!isMounted()) return;
           setPrograms(programsRes.data);
         }
         if (myProgramsRes.data) {
+          if (!isMounted()) return;
           setMyPrograms(myProgramsRes.data.filter(p => p.type === 'college_ambassador'));
         }
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -248,7 +253,11 @@ const CollegeAmbassador = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: isDark ? colors.text.primary : Colors.background.primary }]}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Header */}
         <View style={[styles.header, { backgroundColor: isDark ? 'rgba(0,0,0,0.95)' : 'rgba(255,255,255,0.95)' }]}>
           <View style={styles.headerContent}>

@@ -26,6 +26,7 @@ import couponService from '../../services/couponApi';
 import type { Coupon } from '../../services/couponApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ─── Types ──────────────────────────────────────────────────
 type ActiveTab = 'gift-cards' | 'coupons';
@@ -47,6 +48,7 @@ const PAGE_SIZE = 20;
 
 // ─── Main Component ─────────────────────────────────────────
 function BuyCouponsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -145,15 +147,20 @@ function BuyCouponsPage() {
         }));
 
         if (append) {
+          if (!isMounted()) return;
           setGiftCards(prev => [...prev, ...mapped]);
         } else {
+          if (!isMounted()) return;
           setGiftCards(mapped);
         }
+        if (!isMounted()) return;
         setTotalGiftCards(total);
+        if (!isMounted()) return;
         setGiftCardsHasMore(mapped.length >= PAGE_SIZE);
       }
     } catch (err) {
       if (!append) {
+        if (!isMounted()) return;
         setGiftCardsError('Unable to load gift cards. Pull down to retry.');
       }
     }
@@ -177,15 +184,18 @@ function BuyCouponsPage() {
       if (debouncedSearch.length >= 2) {
         response = await couponService.searchCoupons({ q: debouncedSearch });
         if (response.success && response.data) {
+          if (!isMounted()) return;
           setCoupons((response.data as any)?.coupons || []);
         }
       } else {
         response = await couponService.getAvailableCoupons();
         if (response.success && response.data) {
+          if (!isMounted()) return;
           setCoupons((response.data as any)?.coupons || []);
         }
       }
     } catch (err) {
+      if (!isMounted()) return;
       setCouponsError('Unable to load coupons. Pull down to retry.');
     }
   }, [debouncedSearch]);
@@ -211,6 +221,7 @@ function BuyCouponsPage() {
     setGiftCardsRefreshing(true);
     setGiftCardsPage(1);
     await fetchGiftCards(1, false);
+    if (!isMounted()) return;
     setGiftCardsRefreshing(false);
   }, [fetchGiftCards]);
 
@@ -237,6 +248,7 @@ function BuyCouponsPage() {
   const handleCouponRefresh = useCallback(async () => {
     setCouponsRefreshing(true);
     await fetchCoupons();
+    if (!isMounted()) return;
     setCouponsRefreshing(false);
   }, [fetchCoupons]);
 
@@ -251,6 +263,7 @@ function BuyCouponsPage() {
     } catch (err: any) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setClaimingCouponId(null);
     }
   }, [claimingCouponId]);
@@ -308,7 +321,6 @@ function BuyCouponsPage() {
           <Pressable
             onPress={() => handleCategorySelect('all')}
             style={[styles.chip, selectedCategory === 'all' && styles.chipActive]}
-           
           >
             <Ionicons name="apps" size={12} color={selectedCategory === 'all' ? Colors.text.inverse : '#7C8A97'} />
             <Text style={[styles.chipText, selectedCategory === 'all' && styles.chipTextActive]}>All</Text>
@@ -320,7 +332,6 @@ function BuyCouponsPage() {
                 key={cat}
                 onPress={() => handleCategorySelect(cat)}
                 style={[styles.chip, isActive && styles.chipActive]}
-               
               >
                 <Text style={[styles.chipText, isActive && styles.chipTextActive]}>
                   {cat}
@@ -414,7 +425,6 @@ function BuyCouponsPage() {
               isFirstSearch.current = true;
             }}
             style={styles.emptyResetBtn}
-           
           >
             <Text style={styles.emptyResetText}>Clear filters</Text>
           </Pressable>
@@ -548,7 +558,6 @@ function BuyCouponsPage() {
           <Pressable
             onPress={() => handleTabSwitch('gift-cards')}
             style={[styles.tab, activeTab === 'gift-cards' && styles.tabActive]}
-           
           >
             <Ionicons
               name="gift-outline"
@@ -562,7 +571,6 @@ function BuyCouponsPage() {
           <Pressable
             onPress={() => handleTabSwitch('coupons')}
             style={[styles.tab, activeTab === 'coupons' && styles.tabActive]}
-           
           >
             <Ionicons
               name="pricetag-outline"
@@ -882,7 +890,6 @@ const CouponCard = React.memo(({
             <Pressable
               onPress={onViewMyCoupons}
               style={styles.claimedGuide}
-             
             >
               <Ionicons name="checkmark-circle" size={14} color={colors.success} />
               <Text style={styles.claimedGuideText}>
@@ -945,7 +952,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F4F1ED',
   },
   listContent: {
-    paddingBottom: 40,
+    paddingBottom: 120,
   },
   couponListContent: {
     paddingBottom: 40,

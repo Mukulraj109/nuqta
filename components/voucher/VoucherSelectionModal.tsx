@@ -18,6 +18,7 @@ import couponService, { UserCoupon } from '@/services/couponApi';
 import vouchersService from '@/services/realVouchersApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface VoucherOption {
   id: string;
@@ -58,6 +59,7 @@ function VoucherSelectionModal({
   const [activeTab, setActiveTab] = useState<'all' | 'coupons' | 'vouchers'>('all');
   const [vouchers, setVouchers] = useState<VoucherOption[]>([]);
   const [bestOffer, setBestOffer] = useState<VoucherOption | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (visible) {
@@ -129,13 +131,16 @@ function VoucherSelectionModal({
       const best = findBestOffer(allVouchers);
       if (best) {
         best.isBestOffer = true;
+        if (!isMounted()) return;
         setBestOffer(best);
       }
 
+      if (!isMounted()) return;
       setVouchers(allVouchers);
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

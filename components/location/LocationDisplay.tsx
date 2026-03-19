@@ -13,6 +13,7 @@ import { webLocationService } from '@/services/webLocationService';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { useRegionState } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface LocationDisplayProps {
   showCoordinates?: boolean;
@@ -53,6 +54,7 @@ function LocationDisplay({
   const { permissionStatus, requestPermission } = useLocationPermission();
   const regionState = useRegionState();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const isMounted = useIsMounted();
 
   // Web-specific location state
   const [webLocation, setWebLocation] = useState<any>(sharedWebLocation);
@@ -77,10 +79,12 @@ function LocationDisplay({
         setWebLoading(true);
         sharedWebLocationPromise.then(location => {
           if (location) {
+            if (!isMounted()) return;
             setWebLocation(location);
           }
           setWebLoading(false);
         }).catch(() => {
+          if (!isMounted()) return;
           setWebLoading(false);
         });
       } else {
@@ -133,14 +137,17 @@ function LocationDisplay({
           // Notify all instances of location change
           notifyLocationChange(location);
         } else {
+          if (!isMounted()) return;
           setWebError('Failed to get location data');
         }
 
         return location;
       } catch (error) {
+        if (!isMounted()) return;
         setWebError(`Location error: ${error.message || 'Unknown error'}`);
         return null;
       } finally {
+        if (!isMounted()) return;
         setWebLoading(false);
         isInitializing = false;
       }
@@ -173,6 +180,7 @@ function LocationDisplay({
             [{ text: 'OK' }],
             'warning'
           );
+          if (!isMounted()) return;
           setWebError('Permission denied');
           setIsRefreshing(false);
           return;
@@ -198,6 +206,7 @@ function LocationDisplay({
               'info'
             );
           }
+          if (!isMounted()) return;
           setIsRefreshing(false);
           return;
         }
@@ -208,6 +217,7 @@ function LocationDisplay({
           // Update shared state and notify all instances
           notifyLocationChange(location);
         } else {
+          if (!isMounted()) return;
           setWebError('Failed to get location');
           showAlert(
             'Location Error',
@@ -217,6 +227,7 @@ function LocationDisplay({
           );
         }
       } catch (error: any) {
+        if (!isMounted()) return;
         setWebError('Location not available');
         // Check if it's a permission error
         if (error?.code === 1 || error?.message?.includes('denied')) {
@@ -235,6 +246,7 @@ function LocationDisplay({
           );
         }
       } finally {
+        if (!isMounted()) return;
         setIsRefreshing(false);
       }
     } else {
@@ -252,6 +264,7 @@ function LocationDisplay({
         }
       }
 
+      if (!isMounted()) return;
       setIsRefreshing(true);
       try {
         await refreshLocation();
@@ -263,6 +276,7 @@ function LocationDisplay({
           'error'
         );
       } finally {
+        if (!isMounted()) return;
         setIsRefreshing(false);
       }
     }

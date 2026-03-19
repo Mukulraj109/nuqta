@@ -21,6 +21,7 @@ import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { catchAndReport } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 interface DeliveryPartner {
   name: string;
   phone: string;
@@ -94,11 +95,13 @@ function DetailedOrderTrackingPage() {
   const [isCancelling, setIsCancelling] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [linkError, setLinkError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   // Handle refresh
   const handleRefresh = async () => {
     setIsRefreshing(true);
     await refresh();
+    if (!isMounted()) return;
     setIsRefreshing(false);
   };
 
@@ -196,6 +199,7 @@ function DetailedOrderTrackingPage() {
         } catch (error) {
           platformAlertSimple('Error', 'Failed to cancel order. Please try again.');
         } finally {
+          if (!isMounted()) return;
           setIsCancelling(false);
         }
       }

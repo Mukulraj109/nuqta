@@ -14,6 +14,7 @@ import { ThemedText } from '@/components/ThemedText';
 import * as Clipboard from 'expo-clipboard';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 /**
  * ProductShareModal Component
@@ -63,6 +64,7 @@ export const ProductShareModal: React.FC<ProductShareModalProps> = ({
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [isCopied, setIsCopied] = useState(false);
+  const isMounted = useIsMounted();
 
   // Generate share URL with referral code
   const generateShareUrl = (): string => {
@@ -104,9 +106,11 @@ export const ProductShareModal: React.FC<ProductShareModalProps> = ({
    */
   const handleCopyLink = async () => {
     try {
+      if (!isMounted()) return;
       await Clipboard.setStringAsync(generateShareUrl());
       setIsCopied(true);
 
+      if (!isMounted()) return;
       setTimeout(() => {
         setIsCopied(false);
       }, 2000);

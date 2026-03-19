@@ -24,6 +24,7 @@ import reviewService from '@/services/reviewApi';
 import { UserReview } from '@/types/review.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type FilterTab = 'all' | 'pending' | 'approved' | 'rejected';
 
@@ -35,6 +36,7 @@ const FILTER_TABS: { key: FilterTab; label: string }[] = [
 ];
 
 function MyReviewsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [reviews, setReviews] = useState<UserReview[]>([]);
   const [loading, setLoading] = useState(true);
@@ -65,20 +67,26 @@ function MyReviewsPage() {
 
       if (response.success && response.data) {
         if (isRefresh) {
+          if (!isMounted()) return;
           setReviews(response.data.reviews || []);
         } else {
+          if (!isMounted()) return;
           setReviews(prev => [...prev, ...(response.data?.reviews || [])]);
         }
 
+        if (!isMounted()) return;
         setHasMore(response.data.pagination?.hasNextPage || false);
         setError(null);
       } else {
         throw new Error(response.message || 'Failed to load reviews');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load reviews');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   };

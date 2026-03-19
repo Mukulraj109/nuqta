@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import cashbackService, { CashbackCampaign } from '@/services/cashbackApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -106,6 +107,7 @@ const CategoryCashbackGrid: React.FC<CategoryCashbackGridProps> = memo(({ onCate
   const hasFreshCache =
     cachedCashbackRates &&
     now - cachedCashbackRatesAt < CASHBACK_RATES_CACHE_TTL_MS;
+  const isMounted = useIsMounted();
   const [cashbackRates, setCashbackRates] = useState<Record<string, number>>(
     hasFreshCache ? (cachedCashbackRates as Record<string, number>) : {}
   );
@@ -148,18 +150,12 @@ const CategoryCashbackGrid: React.FC<CategoryCashbackGridProps> = memo(({ onCate
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
-
     fetchCashbackRates()
       .then((rates) => {
-        if (!isMounted) return;
+        if (!isMounted()) return;
         setCashbackRates(rates);
       })
       .catch(() => {});
-
-    return () => {
-      isMounted = false;
-    };
   }, [fetchCashbackRates]);
 
   // Get cashback rate for a category (API rate or default)

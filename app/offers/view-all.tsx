@@ -26,12 +26,14 @@ import realOffersApi from '@/services/realOffersApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 60) / 2; // 2 cards per row with padding
 const PAGE_LIMIT = 20;
 
 function ViewAllOffersScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { category, discount, title } = useLocalSearchParams<{
     category?: string;
@@ -79,10 +81,12 @@ function ViewAllOffersScreen() {
         const points = response.data.userEngagement?.userPoints ||
                        response.data.userPoints ||
                        user?.wallet?.balance || 0;
+        if (!isMounted()) return;
         setUserPoints(points);
       }
     } catch {
       // Fallback to auth state
+      if (!isMounted()) return;
       setUserPoints(user?.wallet?.balance || 0);
     }
   };
@@ -125,6 +129,7 @@ function ViewAllOffersScreen() {
           offers = responseData;
         } else if (responseData.items && Array.isArray(responseData.items)) {
           offers = responseData.items;
+          if (!isMounted()) return;
           setTotalCount(responseData.totalCount || 0);
         } else if (responseData.data && Array.isArray(responseData.data)) {
           offers = responseData.data;
@@ -149,31 +154,42 @@ function ViewAllOffersScreen() {
         }
 
         const newHasMore = offers.length >= PAGE_LIMIT;
+        if (!isMounted()) return;
         setHasMore(newHasMore);
 
         if (append) {
+          if (!isMounted()) return;
           setAllOffers(prev => [...prev, ...offers]);
         } else {
+          if (!isMounted()) return;
           setAllOffers(offers);
         }
 
         if (!append && offers.length === 0) {
+          if (!isMounted()) return;
           setError('No offers found');
         }
       } else {
         if (pageNum === 1) {
+          if (!isMounted()) return;
           setError((response as any).message || 'Failed to load offers');
         }
+        if (!isMounted()) return;
         setHasMore(false);
       }
     } catch {
       if (pageNum === 1) {
+        if (!isMounted()) return;
         setError('Failed to load offers');
       }
+      if (!isMounted()) return;
       setHasMore(false);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [category, discount]);

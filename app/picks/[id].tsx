@@ -28,6 +28,7 @@ import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 const NUQTA_COIN = BRAND.COIN_IMAGE;
@@ -99,6 +100,7 @@ const CreatorPickDetail = () => {
             } catch (err: any) {
               platformAlert('Error', err.message || 'Something went wrong');
             } finally {
+              if (!isMounted()) return;
               setDeleting(false);
             }
           },
@@ -131,15 +133,19 @@ const CreatorPickDetail = () => {
           }
         }
       } else {
+        if (!isMounted()) return;
         setError(pickResponse.error || 'Pick not found');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError(err instanceof Error ? err.message : 'Failed to load pick details');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [id]);
 
+  const isMounted = useIsMounted();
   useEffect(() => { fetchPickData(); }, [fetchPickData]);
 
   const estimatedCoins = pick
@@ -398,7 +404,7 @@ const CreatorPickDetail = () => {
               {(pick.status === 'draft' || pick.status === 'rejected') && (
                 <Pressable
                   style={s.editPickBtn}
-                  onPress={() => {/* TODO: navigate to pick edit page */}}
+                  onPress={() => router.push(`/picks/edit/${id}` as any)}
                  
                 >
                   <Ionicons name="create-outline" size={16} color={Colors.nileBlue} />

@@ -11,7 +11,6 @@ import {
   Pressable,
   TextInput,
   ActivityIndicator,
-  Image,
   SafeAreaView,
   StatusBar,
   Platform,
@@ -30,6 +29,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { catchAndWarn } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface SocialPost {
   id: string;
@@ -74,6 +74,7 @@ function SocialMediaPage() {
     postsSubmitted: 0,
     approvalRate: 0,
   });
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     // Wait for auth to finish loading
@@ -98,11 +99,13 @@ function SocialMediaPage() {
       const delivered = (response.data?.orders || []).filter((order: Order) =>
         order.status === 'delivered' || order.status === 'cancelled'
       );
+      if (!isMounted()) return;
       setCompletedOrders(delivered);
 
     } catch (error: any) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoadingOrders(false);
     }
   };
@@ -123,6 +126,7 @@ function SocialMediaPage() {
       ]);
 
       // Set earnings data
+      if (!isMounted()) return;
       setEarnings({
         totalEarned: earningsData.totalEarned || 0,
         pendingAmount: earningsData.pendingAmount || 0,
@@ -143,6 +147,7 @@ function SocialMediaPage() {
         orderNumber: post.metadata?.orderNumber,
       }));
 
+      if (!isMounted()) return;
       setPosts(transformedPosts);
 
     } catch (error: any) {
@@ -156,6 +161,7 @@ function SocialMediaPage() {
       const errorMessage = error.response?.data?.message || 'Failed to load social media data';
       platformAlertSimple('Error', errorMessage);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -188,7 +194,9 @@ function SocialMediaPage() {
       platformAlertSimple('Success', successMessage);
 
       // Clear form and reload data
+      if (!isMounted()) return;
       setPostUrl('');
+      if (!isMounted()) return;
       setSelectedOrderId(undefined);
       loadData();
 
@@ -196,6 +204,7 @@ function SocialMediaPage() {
 
       platformAlertSimple('Error', 'Failed to submit post. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };
@@ -291,7 +300,11 @@ function SocialMediaPage() {
           </Pressable>
         </View>
 
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
           {activeTab === 'earn' ? (
             <>
               {/* Earnings Summary */}

@@ -18,6 +18,7 @@ import { useRouter } from 'expo-router';
 import { experiencesApi } from '@/services/experiencesApi';
 import { getTheme } from '@/constants/experienceThemes';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -25,6 +26,7 @@ const ShopByExperienceSection: React.FC = () => {
   const router = useRouter();
   const [experiences, setExperiences] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   // Fallback experiences if API fails or is empty
   const FALLBACK_EXPERIENCES = [
@@ -69,6 +71,7 @@ const ShopByExperienceSection: React.FC = () => {
                 iconColor: theme.iconColor
               };
             });
+            if (!isMounted()) return;
             setExperiences([...apiItems, ...extraItems]);
           } else {
             setExperiences(apiItems);
@@ -86,6 +89,7 @@ const ShopByExperienceSection: React.FC = () => {
           }));
         }
       } catch (error) {
+        if (!isMounted()) return;
         setExperiences(FALLBACK_EXPERIENCES.map(f => {
           const theme = getTheme(f.slug);
           return {
@@ -96,6 +100,7 @@ const ShopByExperienceSection: React.FC = () => {
           };
         }));
       } finally {
+        if (!isMounted()) return;
         setIsLoading(false);
       }
     };

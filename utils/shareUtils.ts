@@ -4,11 +4,11 @@ import * as Linking from 'expo-linking';
 
 // App configuration for sharing
 const APP_CONFIG = {
-  name: 'REZ App',
-  deepLinkPrefix: 'rez-app://',
-  webUrl: 'https://rez-app.com', // Replace with your actual web URL
-  playStoreUrl: 'https://play.google.com/store/apps/details?id=com.yourapp.rez',
-  appStoreUrl: 'https://apps.apple.com/app/rez-app/id123456789'
+  name: 'Rez',
+  deepLinkPrefix: 'rez://',
+  webUrl: 'https://www.rezapp.com',
+  playStoreUrl: 'https://play.google.com/store/apps/details?id=com.nuqta.app',
+  appStoreUrl: 'https://apps.apple.com/app/rez/id6744404883'
 };
 
 export interface SharePageOptions {

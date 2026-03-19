@@ -13,6 +13,7 @@ import { useLocationHistory } from '@/hooks/useLocation';
 import { locationService } from '@/services/locationService';
 import { LocationStats } from '@/types/location.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface LocationAnalyticsProps {
   onViewHistory?: () => void;
@@ -29,6 +30,7 @@ function LocationAnalytics({
   const [stats, setStats] = useState<LocationStats | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadStats();
@@ -40,10 +42,13 @@ function LocationAnalytics({
 
     try {
       const locationStats = await locationService.getLocationStats();
+      if (!isMounted()) return;
       setStats(locationStats);
     } catch (error) {
+      if (!isMounted()) return;
       setError('Failed to load location statistics');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

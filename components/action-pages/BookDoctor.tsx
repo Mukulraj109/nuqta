@@ -28,6 +28,7 @@ import { storesApi } from '@/services/storesApi';
 import { useAuthUser } from '@/stores/selectors';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   blue: '#0EA5E9',
@@ -68,6 +69,7 @@ function BookDoctorPage() {
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string; service?: string }>();
   const user = useAuthUser();
 
+  const isMounted = useIsMounted();
   const [step, setStep] = useState<'clinic' | 'details' | 'confirm'>(
     params.storeId ? 'details' : 'clinic'
   );
@@ -119,11 +121,13 @@ function BookDoctorPage() {
           s.bookingConfig?.enabled ||
           s.storeVisitConfig?.enabled
         );
+        if (!isMounted()) return;
         setClinics(bookable.length > 0 ? bookable : allStores.slice(0, 20));
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -149,6 +153,7 @@ function BookDoctorPage() {
           const hour = parseInt(s.time.split(':')[0]);
           return hour >= 8 && hour <= 21;
         });
+        if (!isMounted()) return;
         setTimeSlots(serviceSlots);
         const firstAvailable = serviceSlots.find(s => s.available);
         if (firstAvailable) setSelectedTime(firstAvailable.time);
@@ -160,9 +165,11 @@ function BookDoctorPage() {
         '15:30', '16:00', '16:30', '17:00', '17:30', '18:00',
         '18:30', '19:00', '19:30', '20:00', '20:30',
       ].map(t => ({ time: t, available: true, remainingCapacity: 5 }));
+      if (!isMounted()) return;
       setTimeSlots(fallback);
       setSelectedTime('09:00');
     } finally {
+      if (!isMounted()) return;
       setIsLoadingAvailability(false);
     }
   }, []);
@@ -220,6 +227,7 @@ function BookDoctorPage() {
       });
 
       if (res.success) {
+        if (!isMounted()) return;
         setBookingId(res.data?._id || null);
         setBookingNumber(res.data?.bookingNumber || null);
         setStep('confirm');
@@ -229,6 +237,7 @@ function BookDoctorPage() {
     } catch (err: any) {
       platformAlertSimple('Error', err?.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };
@@ -321,7 +330,7 @@ function BookDoctorPage() {
             <Text style={styles.emptySubtitle}>{searchQuery ? 'Try a different search term' : 'Check back later for booking options'}</Text>
           </View>
         ) : (
-          <FlashList data={filteredClinics} keyExtractor={(item) => item._id || item.id} renderItem={renderStoreCard} contentContainerStyle={styles.storeList} showsVerticalScrollIndicator={false} estimatedItemSize={100} />
+          <FlashList data={filteredClinics} keyExtractor={(item) => item._id || item.id} renderItem={renderStoreCard} contentContainerStyle={styles.storeList} showsVerticalScrollIndicator={false} />
         )}
       </SafeAreaView>
     );

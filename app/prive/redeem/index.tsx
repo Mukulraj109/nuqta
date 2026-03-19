@@ -26,6 +26,7 @@ import { useRefreshWallet } from '@/stores/selectors';
 import priveApi, { RedeemConfig } from '@/services/priveApi';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Fallback config matching backend defaults
 const FALLBACK_CONFIG: RedeemConfig = {
@@ -104,9 +105,11 @@ function RedeemScreen() {
     } catch {
       // Use fallback silently
     } finally {
+      if (!isMounted()) return;
       setConfigLoading(false);
     }
   }, []);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     fetchConfig();
@@ -178,8 +181,10 @@ function RedeemScreen() {
         fetchConfig(),
       ]);
     } catch {
+      if (!isMounted()) return;
       setError('Failed to refresh data');
     } finally {
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [priveRefresh, refreshWallet, fetchConfig]);

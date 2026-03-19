@@ -236,14 +236,12 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
     } else {
       // Default tabs: Home, Categories, Pay in Store, Play, Earn
 
-      // Check for Categories tab - multiple formats
+      // Categories still accessible but no longer a nav tab — map to Home
       if (
-        normalizedPath === '/categories' ||
         normalizedPath === '/(tabs)/categories' ||
-        normalizedPath.startsWith('/categories/') ||
         normalizedPath.startsWith('/(tabs)/categories/')
       ) {
-        return 'Categories';
+        return 'Home';
       }
 
       // Check for Explore tab - multiple formats
@@ -256,14 +254,22 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
         return 'Explore';
       }
 
-      // Check for Earn tab - multiple formats
+      // Check for Save tab
       if (
-        normalizedPath === '/earn' ||
-        normalizedPath === '/(tabs)/earn' ||
-        normalizedPath.startsWith('/earn/') ||
-        normalizedPath.startsWith('/(tabs)/earn/')
+        normalizedPath === '/saved-offers' ||
+        normalizedPath.startsWith('/saved-offers/')
       ) {
-        return 'Earn';
+        return 'Save';
+      }
+
+      // Check for You tab
+      if (
+        normalizedPath === '/profile' ||
+        normalizedPath.startsWith('/profile/') ||
+        normalizedPath === '/account' ||
+        normalizedPath.startsWith('/account/')
+      ) {
+        return 'You';
       }
     }
 
@@ -416,27 +422,13 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
         },
       ]
     : [
-        // Default tabs: Home, Categories, Pay in Store, Explore, Earn
+        // V2 tabs: Home · Explore · [REZ Pay] · Save · You
         {
           name: 'Home',
           route: '/(tabs)',
           icon: 'home',
           isActive: activeTab === 'Home',
           isCenter: false,
-        },
-        {
-          name: 'Categories',
-          route: '/(tabs)/categories',
-          icon: 'grid-outline',
-          isActive: activeTab === 'Categories',
-          isCenter: false,
-        },
-        {
-          name: 'Pay in Store',
-          route: '/pay-in-store',
-          icon: 'qr-code',
-          isActive: false,
-          isCenter: true,
         },
         {
           name: 'Explore',
@@ -446,10 +438,24 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
           isCenter: false,
         },
         {
-          name: 'Earn',
-          route: '/(tabs)/earn',
-          icon: 'wallet',
-          isActive: activeTab === 'Earn',
+          name: 'REZ Pay',
+          route: '/pay-in-store',
+          icon: 'qr-code',
+          isActive: false,
+          isCenter: true,
+        },
+        {
+          name: 'Save',
+          route: '/saved-offers',
+          icon: 'bookmark-outline',
+          isActive: activeTab === 'Save',
+          isCenter: false,
+        },
+        {
+          name: 'You',
+          route: '/profile',
+          icon: 'person-circle-outline',
+          isActive: activeTab === 'You',
           isCenter: false,
         },
       ];

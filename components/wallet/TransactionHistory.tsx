@@ -22,6 +22,7 @@ import {
   fetchTransactions,
   walletTabs as defaultTabs
 } from '@/data/walletData';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface TransactionHistoryProps {
   onTransactionPress?: (transaction: Transaction) => void;
@@ -43,6 +44,7 @@ function TransactionHistory({
   const [hasMore, setHasMore] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [tabs, setTabs] = useState<WalletTab[]>(defaultTabs);
+  const isMounted = useIsMounted();
 
   // Load transactions for the current tab
   const loadTransactions = async (
@@ -60,16 +62,19 @@ function TransactionHistory({
       const result = await fetchTransactions(category, page, 20);
       
       if (append) {
+        if (!isMounted()) return;
         setTransactions(prev => [...prev, ...result.transactions]);
       } else {
         setTransactions(result.transactions);
       }
       
+      if (!isMounted()) return;
       setHasMore(result.hasMore);
       setCurrentPage(page);
     } catch (error) {
       // Error loading transactions - handled by UI state
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
       setIsLoadingMore(false);
     }
@@ -89,6 +94,7 @@ function TransactionHistory({
           };
         })
       );
+      if (!isMounted()) return;
       setTabs(updatedTabs);
     } catch (error) {
       // Error updating tab counts - handled silently

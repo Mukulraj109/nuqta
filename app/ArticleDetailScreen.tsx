@@ -24,6 +24,7 @@ import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -199,6 +200,7 @@ const markdownStyles = StyleSheet.create({
 });
 
 function ArticleDetailScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
@@ -384,6 +386,7 @@ function ArticleDetailScreen() {
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         bounces={true}
+        contentContainerStyle={{ paddingBottom: 120 }}
       >
         {/* Featured Image */}
         {imageUrl && (

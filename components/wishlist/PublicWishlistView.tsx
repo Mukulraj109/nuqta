@@ -27,6 +27,7 @@ import wishlistSharingService, {
 } from '@/services/wishlistSharingApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -50,6 +51,7 @@ function PublicWishlistView({
   const [comment, setComment] = useState('');
   const [isPosting, setIsPosting] = useState(false);
   const [reservations, setReservations] = useState<GiftReservation[]>([]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadWishlist();
@@ -67,10 +69,13 @@ function PublicWishlistView({
         throw new Error('Wishlist not found');
       }
 
+      if (!isMounted()) return;
       setWishlist(response.data);
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load wishlist');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
       setIsRefreshing(false);
     }
@@ -80,6 +85,7 @@ function PublicWishlistView({
     try {
       const response = await wishlistSharingService.getGiftReservations(shareCode);
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setReservations(response.data);
       }
     } catch (err) {
@@ -100,8 +106,10 @@ function PublicWishlistView({
         : await wishlistSharingService.likeWishlist(shareCode);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setIsLiked(response.data.liked);
         if (wishlist) {
+          if (!isMounted()) return;
           setWishlist({
             ...wishlist,
             likes: response.data.likes,
@@ -122,17 +130,20 @@ function PublicWishlistView({
 
       if (response.success && response.data) {
         if (wishlist) {
+          if (!isMounted()) return;
           setWishlist({
             ...wishlist,
             comments: [...wishlist.comments, response.data],
           });
         }
+        if (!isMounted()) return;
         setComment('');
         platformAlertSimple('Success', 'Comment posted!');
       }
     } catch (err) {
       platformAlertSimple('Error', 'Failed to post comment');
     } finally {
+      if (!isMounted()) return;
       setIsPosting(false);
     }
   }, [shareCode, comment, wishlist]);
@@ -145,6 +156,7 @@ function PublicWishlistView({
         });
 
         if (response.success && response.data) {
+          if (!isMounted()) return;
           setReservations([...reservations, response.data]);
           platformAlertSimple('Success', 'Gift reserved! The owner will be notified.');
         }

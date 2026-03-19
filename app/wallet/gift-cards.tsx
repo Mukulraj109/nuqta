@@ -11,7 +11,6 @@ import {
   StatusBar,
   Platform,
   TextInput,
-  Image,
   ActivityIndicator,
 } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
@@ -578,7 +577,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   listContent: {
-    paddingBottom: Spacing['3xl'],
+    paddingBottom: 120,
   },
   loadingContainer: {
     flex: 1,

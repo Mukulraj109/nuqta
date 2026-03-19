@@ -7,6 +7,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated, ViewStyle, ImageStyle } from 'react-native';
 import { Image, ImageProps } from 'expo-image';
 import { getCachedImageUri } from '@/hooks/useImagePreload';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ============================================================================
 // Types
@@ -71,9 +72,9 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   const [error, setError] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [useFallback, setUseFallback] = useState(false);
+  const isMounted = useIsMounted();
 
   const opacity = useRef(new Animated.Value(0)).current;
-  const isMounted = useRef(true);
 
   // Extract URI from source
   const getSourceUri = (src: string | { uri: string } | number): string | null => {
@@ -90,8 +91,6 @@ export const LazyImage: React.FC<LazyImageProps> = ({
 
   // Load image
   useEffect(() => {
-    isMounted.current = true;
-
     const loadImage = async () => {
       if (!mainSourceUri) {
         setLoading(false);
@@ -108,22 +107,16 @@ export const LazyImage: React.FC<LazyImageProps> = ({
           uri = await getCachedImageUri(mainSourceUri);
         }
 
-        if (isMounted.current) {
-          setImageUri(uri);
-        }
+        if (!isMounted()) return;
+        setImageUri(uri);
       } catch (err) {
-        if (isMounted.current) {
-          setError(true);
-          setLoading(false);
-        }
+        if (!isMounted()) return;
+        setError(true);
+        setLoading(false);
       }
     };
 
     loadImage();
-
-    return () => {
-      isMounted.current = false;
-    };
   }, [mainSourceUri, useCache]);
 
   // Preload image if requested

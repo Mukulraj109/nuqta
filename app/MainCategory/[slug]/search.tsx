@@ -29,6 +29,7 @@ import { storesApi } from '@/services/storesApi';
 import apiClient from '@/services/apiClient';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const SUBCATEGORY_EMOJIS: Record<string, string> = {
   'cafe': '\u2615', 'cafes': '\u2615', 'restaurant': '\uD83C\uDF7D\uFE0F', 'fast-food': '\uD83C\uDF54',
@@ -79,6 +80,7 @@ function buildQuickSuggestions(slug: string): string[] {
 }
 
 function SharedCategoryPage() {
+  const isMounted = useIsMounted();
   const { q, slug } = useLocalSearchParams<{ q?: string; slug: string }>();
   const theme = getCategoryTheme(slug || '');
   const categoryConfig = getCategoryConfig(slug || '');
@@ -155,12 +157,14 @@ function SharedCategoryPage() {
           const categoryMatch = s.category?.name?.toLowerCase().includes(queryLower);
           return nameMatch || tagMatch || categoryMatch;
         });
+        if (!isMounted()) return;
         setStores(matched);
       }
 
       // Get products from electronics search
       if (productsRes.success && productsRes.data) {
         const searchProducts = Array.isArray(productsRes.data) ? productsRes.data : (productsRes.data.products || []);
+        if (!isMounted()) return;
         setProducts(searchProducts);
       }
 
@@ -178,6 +182,7 @@ function SharedCategoryPage() {
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsSearching(false);
     }
   }, []);

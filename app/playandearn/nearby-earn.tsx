@@ -22,6 +22,7 @@ import nearbyEarnApi, { NearbyStore, EarningOpportunity } from '@/services/nearb
 import { MapViewSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width, height } = Dimensions.get('window');
 
@@ -85,6 +86,7 @@ const NearbyEarnPage = () => {
   const [locationPermission, setLocationPermission] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState(false);
   const [locationLoading, setLocationLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   // Request location permission on mount
   useEffect(() => {
@@ -92,17 +94,24 @@ const NearbyEarnPage = () => {
       try {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status === 'granted') {
+          if (!isMounted()) return;
           setLocationPermission(true);
           const loc = await Location.getCurrentPositionAsync({});
+          if (!isMounted()) return;
           setLocation({ lat: loc.coords.latitude, lng: loc.coords.longitude });
         } else {
+          if (!isMounted()) return;
           setLocationPermission(false);
+          if (!isMounted()) return;
           setLoading(false);
         }
       } catch (err) {
+        if (!isMounted()) return;
         setLocationPermission(false);
+        if (!isMounted()) return;
         setLoading(false);
       } finally {
+        if (!isMounted()) return;
         setLocationLoading(false);
       }
     })();
@@ -131,14 +140,19 @@ const NearbyEarnPage = () => {
       });
 
       if (res.success && res.data) {
+        if (!isMounted()) return;
         setStores(res.data);
       } else {
+        if (!isMounted()) return;
         setError(res.error || 'Failed to load nearby stores');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [location]);
@@ -152,13 +166,16 @@ const NearbyEarnPage = () => {
       setLocationLoading(true);
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status === 'granted') {
+        if (!isMounted()) return;
         setLocationPermission(true);
         const loc = await Location.getCurrentPositionAsync({});
+        if (!isMounted()) return;
         setLocation({ lat: loc.coords.latitude, lng: loc.coords.longitude });
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLocationLoading(false);
     }
   };
@@ -757,6 +774,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.xs,
     minHeight: 300,
+    paddingBottom: 120,
   },
   storeListContainer: {
     gap: 0,

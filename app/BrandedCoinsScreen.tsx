@@ -54,7 +54,11 @@ function BrandedCoinsScreen() {
       </LinearGradient>
 
       {/* Store Coins List */}
-      <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {brandedCoins.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons name="storefront-outline" size={48} color={colors.neutral[400]} />

@@ -25,6 +25,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const TRAVEL_SLUGS = ['flights', 'hotels', 'trains', 'bus', 'cab', 'packages'];
 
@@ -43,6 +44,7 @@ const isTravelBooking = (booking: ServiceBooking): boolean => {
 };
 
 function BookingDetailPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const bookingId = params.bookingId as string;
@@ -66,11 +68,14 @@ function BookingDetailPage() {
       if (response.success && response.data) {
         setBooking(response.data);
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to load booking');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load booking');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [bookingId]);
@@ -96,6 +101,7 @@ function BookingDetailPage() {
         } catch (err) {
           platformAlertSimple('Error', 'Failed to cancel booking');
         } finally {
+          if (!isMounted()) return;
           setCancelling(false);
         }
       }

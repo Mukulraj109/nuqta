@@ -18,6 +18,7 @@ import gamificationApi, { SpinHistoryEntry } from '@/services/gamificationApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const PRIZE_TYPE_CONFIG: Record<string, { icon: string; color: string; label: string }> = {
   coins: { icon: 'flash', color: Colors.warning, label: 'Coins' },
   cashback: { icon: 'cash', color: Colors.success, label: 'Cashback' },
@@ -46,6 +47,7 @@ function formatDate(dateStr: string): string {
 }
 
 function SpinHistoryPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -78,20 +80,28 @@ function SpinHistoryPage() {
         const { history: entries, pagination } = response.data;
 
         if (pageNum === 1 || isRefresh) {
+          if (!isMounted()) return;
           setHistory(entries);
         } else {
+          if (!isMounted()) return;
           setHistory(prev => [...prev, ...entries]);
         }
 
+        if (!isMounted()) return;
         setTotalSpins(pagination.total);
+        if (!isMounted()) return;
         setHasMore(pageNum < pagination.pages);
+        if (!isMounted()) return;
         setPage(pageNum);
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
       fetchingRef.current = false;
     }
@@ -268,6 +278,7 @@ const styles = StyleSheet.create({
   listContent: {
     padding: Spacing.base,
     flexGrow: 1,
+    paddingBottom: 120,
   },
   historyItem: {
     flexDirection: 'row',

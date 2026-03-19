@@ -25,6 +25,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { showAlert, alertOk } from '@/utils/alert';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface EarningsTransaction {
   _id: string;
@@ -71,6 +72,7 @@ interface EarningsHistoryResponse {
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 function EarningsHistoryPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const navigation = useNavigation();
   const user = useAuthUser();
@@ -136,6 +138,7 @@ function EarningsHistoryPage() {
         const newTransactions = response.data.transactions || [];
         
         if (reset) {
+          if (!isMounted()) return;
           setTransactions(newTransactions);
           // Animate cards in
           newTransactions.forEach((transaction, index) => {
@@ -150,14 +153,18 @@ function EarningsHistoryPage() {
             }).start();
           });
         } else {
+          if (!isMounted()) return;
           setTransactions(prev => [...prev, ...newTransactions]);
         }
 
         if (response.data.summary) {
+          if (!isMounted()) return;
           setSummary(response.data.summary);
         }
 
+        if (!isMounted()) return;
         setHasMore(response.data.pagination?.hasNext || false);
+        if (!isMounted()) return;
         setPage(pageNum);
 
         // Animate in
@@ -171,9 +178,12 @@ function EarningsHistoryPage() {
         throw new Error('Failed to load earnings history');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError(err instanceof Error ? err.message : 'Failed to load earnings history');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [selectedFilter, startDate, endDate, fadeAnim, slideAnim, cardAnims]);
@@ -316,6 +326,7 @@ function EarningsHistoryPage() {
     } catch (error) {
       showAlert('Error', 'Failed to export earnings history');
     } finally {
+      if (!isMounted()) return;
       setExporting(false);
     }
   };

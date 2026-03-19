@@ -18,6 +18,7 @@ import { useAddressSearch } from '@/hooks/useLocation';
 import { useLocation } from '@/contexts/LocationContext';
 import { AddressSearchResult, UserLocation } from '@/types/location.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface LocationPickerModalProps {
   visible: boolean;
@@ -35,6 +36,7 @@ function LocationPickerModal({
   currentLocation,
 }: LocationPickerModalProps) {
   const [query, setQuery] = useState('');
+  const isMounted = useIsMounted();
   const { search, searchResults, isSearching, clearResults } = useAddressSearch();
   const { getCurrentLocation } = useLocation();
   const [isGettingCurrentLocation, setIsGettingCurrentLocation] = useState(false);
@@ -92,6 +94,7 @@ function LocationPickerModal({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsGettingCurrentLocation(false);
     }
   }, [getCurrentLocation, onClose]);

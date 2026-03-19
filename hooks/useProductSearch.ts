@@ -188,14 +188,14 @@ export function useProductSearch(
 
         devLog.error('❌ [useProductSearch] Error fetching products:', err);
         setError(err.message || 'Failed to load products');
-        setProducts(append ? products : []);
+        if (!append) setProducts([]);
         setHasMore(false);
       } finally {
         setLoading(false);
         abortController.current = null;
       }
     },
-    [products]
+    []
   );
 
   // Search products with debounce - Fixed stale closure

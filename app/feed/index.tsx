@@ -23,6 +23,7 @@ import ActivityCard from '../../components/feed/ActivityCard';
 import FollowButton from '../../components/social/FollowButton';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const ActivityFeedPage = () => {
   const {
@@ -39,6 +40,7 @@ const ActivityFeedPage = () => {
   } = useSocial();
 
   const user = useAuthUser();
+  const isMounted = useIsMounted();
   const [refreshing, setRefreshing] = useState(false);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [feedFilter, setFeedFilter] = useState<'all' | 'following'>('all');
@@ -87,6 +89,7 @@ const ActivityFeedPage = () => {
     await refreshFeed();
     await loadSuggestions(10);
     clearNewPostsCount();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -452,7 +455,8 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: Spacing.base,
-    flexGrow: 1
+    flexGrow: 1,
+    paddingBottom: 120,
   },
   suggestedSection: {
     backgroundColor: Colors.background.primary,

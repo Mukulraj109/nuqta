@@ -23,6 +23,7 @@ import stripeApi from '@/services/stripeApi';
 import eventAnalytics from '@/services/eventAnalytics';
 import { useRouter } from 'expo-router';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 // Conditional import for native Stripe service
 let stripeReactNativeService: any = null;
 if (Platform.OS !== 'web') {
@@ -86,6 +87,7 @@ function WebPaymentForm({
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const [cardError, setCardError] = useState<string>('');
+  const isMounted = useIsMounted();
 
   const handlePayment = async () => {
     if (!stripe || !elements) {
@@ -111,6 +113,7 @@ function WebPaymentForm({
 
       if (pmError) {
         const errorMessage = pmError.message || 'Failed to process card details';
+        if (!isMounted()) return;
         setCardError(errorMessage);
         onError(errorMessage);
         setIsProcessing(false);
@@ -131,6 +134,7 @@ function WebPaymentForm({
 
       if (confirmError) {
         const errorMessage = confirmError.message || 'Payment failed';
+        if (!isMounted()) return;
         setCardError(errorMessage);
         onError(errorMessage);
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
@@ -140,9 +144,11 @@ function WebPaymentForm({
       }
     } catch (error: any) {
       const errorMessage = error.message || 'Payment failed';
+      if (!isMounted()) return;
       setCardError(errorMessage);
       onError(errorMessage);
     } finally {
+      if (!isMounted()) return;
       setIsProcessing(false);
     }
   };
@@ -499,6 +505,7 @@ function EventBookingModal({
     // For paid events, handle payment
     let bookingResult: any = null;
     try {
+      if (!isMounted()) return;
       setIsProcessingPayment(true);
 
       // Create booking (backend will create payment intent for paid events)
@@ -511,6 +518,7 @@ function EventBookingModal({
       const bookingId = bookingResult.booking?.id || bookingResult.booking?._id || '';
       
       // Store booking result for success modal
+      if (!isMounted()) return;
       setBookingResultData(bookingResult);
       
       // Track payment start
@@ -540,6 +548,7 @@ function EventBookingModal({
           }
           
           const stripe = await loadStripe(publishableKey);
+          if (!isMounted()) return;
           setStripePromise(stripe);
           setPaymentClientSecret(paymentData.clientSecret);
           setPaymentBookingId(bookingId);
@@ -625,6 +634,7 @@ function EventBookingModal({
         error instanceof Error ? error.message : 'Failed to process payment. Please try again.'
       );
     } finally {
+      if (!isMounted()) return;
       setIsProcessingPayment(false);
     }
   };
@@ -894,11 +904,13 @@ function EventBookingModal({
                     eventAnalytics.trackBookingComplete(event.id, bookingId, selectedSlot || undefined, 'booking_modal');
                     
                     // Show success modal
+                    if (!isMounted()) return;
                     setSuccessData({
                       bookingId,
                       paymentIntentId,
                       bookingReference: bookingResultData?.booking?.bookingReference
                     });
+                    if (!isMounted()) return;
                     setShowSuccessModal(true);
                     setShowPaymentForm(false);
                   }}

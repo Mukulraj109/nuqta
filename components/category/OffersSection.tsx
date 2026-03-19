@@ -14,6 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface OffersSectionProps {
   categorySlug: string;
@@ -57,6 +58,7 @@ function OffersSection({ categorySlug, categoryId, title, onSeeAll, filterTags }
   const [todaysDeals, setTodaysDeals] = useState<any[]>([]);
   const [coupons, setCoupons] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   const fetchOffers = useCallback(async () => {
     try {
@@ -71,6 +73,7 @@ function OffersSection({ categorySlug, categoryId, title, onSeeAll, filterTags }
       // Bank offers
       if (bankRes?.success && bankRes.data) {
         const offers = bankRes.data?.offers || (Array.isArray(bankRes.data) ? bankRes.data : []);
+        if (!isMounted()) return;
         setBankOffers(offers);
       }
 
@@ -88,6 +91,7 @@ function OffersSection({ categorySlug, categoryId, title, onSeeAll, filterTags }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [categorySlug]);
@@ -98,6 +102,7 @@ function OffersSection({ categorySlug, categoryId, title, onSeeAll, filterTags }
 
   const handleCopyCode = async (code: string) => {
     try {
+      if (!isMounted()) return;
       await Clipboard.setStringAsync(code);
       platformAlertSimple('Copied!', `Promo code ${code} copied to clipboard`);
     } catch {

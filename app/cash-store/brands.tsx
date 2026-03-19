@@ -30,6 +30,7 @@ import { CashStoreBrand, CashStoreCategoryFilter } from '../../types/cash-store.
 import CashStoreBrandCard from '../../components/cash-store/pages/CashStoreBrandCard';
 import { colors } from '@/constants/theme';
 import { catchAndWarn } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -75,6 +76,7 @@ function transformToCashStoreBrand(brand: any): CashStoreBrand {
 
 // ─── Main Component ─────────────────────────────────────────
 function CashStoreBrandsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { filter } = useLocalSearchParams<{ filter?: string }>();
   const insets = useSafeAreaInsets();
@@ -120,6 +122,7 @@ function CashStoreBrandsPage() {
   useEffect(() => {
     const loadCategories = async () => {
       const cats = await cashStoreApi.getCategories();
+      if (!isMounted()) return;
       setCategories(cats);
     };
     loadCategories();
@@ -154,12 +157,16 @@ function CashStoreBrandsPage() {
       if (append) {
         setBrands(prev => [...prev, ...mapped]);
       } else {
+        if (!isMounted()) return;
         setBrands(mapped);
       }
+      if (!isMounted()) return;
       setTotalBrands(total);
+      if (!isMounted()) return;
       setHasMore(mapped.length >= PAGE_SIZE);
     } catch (err) {
       if (!append) {
+        if (!isMounted()) return;
         setError('Unable to load brands. Pull down to retry.');
       }
     }
@@ -177,6 +184,7 @@ function CashStoreBrandsPage() {
     setIsRefreshing(true);
     setPage(1);
     await fetchBrands(1, false);
+    if (!isMounted()) return;
     setIsRefreshing(false);
   }, [fetchBrands]);
 
@@ -315,7 +323,6 @@ function CashStoreBrandsPage() {
             <Pressable
               onPress={() => handleCategorySelect('all')}
               style={styles.clearFilterBtn}
-             
             >
               <Ionicons name="close-circle" size={12} color={Colors.text.tertiary} />
               <Text style={styles.clearFilterText}>Clear</Text>
@@ -325,7 +332,6 @@ function CashStoreBrandsPage() {
         <Pressable
           onPress={() => setShowSortModal(true)}
           style={styles.sortBtn}
-         
         >
           <Ionicons name="swap-vertical" size={13} color={Colors.nileBlue} />
           <Text style={styles.sortBtnText}>{currentSortLabel}</Text>
@@ -376,7 +382,6 @@ function CashStoreBrandsPage() {
           <Pressable
             onPress={handleRefresh}
             style={styles.emptyResetBtn}
-           
           >
             <Text style={styles.emptyResetText}>Try Again</Text>
           </Pressable>
@@ -411,7 +416,6 @@ function CashStoreBrandsPage() {
               isFirstSearch.current = true;
             }}
             style={styles.emptyResetBtn}
-           
           >
             <Text style={styles.emptyResetText}>Clear filters</Text>
           </Pressable>
@@ -478,7 +482,6 @@ function CashStoreBrandsPage() {
           <Pressable
             onPress={() => setShowSortModal(true)}
             style={styles.headerSortBtn}
-           
           >
             <Ionicons name="options-outline" size={18} color={Colors.nileBlue} />
           </Pressable>
@@ -556,7 +559,6 @@ function CashStoreBrandsPage() {
               <Pressable
                 onPress={() => setShowSortModal(false)}
                 style={styles.modalCloseBtn}
-               
               >
                 <Ionicons name="close" size={18} color={Colors.text.tertiary} />
               </Pressable>
@@ -568,7 +570,6 @@ function CashStoreBrandsPage() {
                   key={option.key}
                   onPress={() => handleSortSelect(option.key)}
                   style={[styles.modalOption, isActive && styles.modalOptionActive]}
-                 
                 >
                   <View style={[styles.modalOptionIcon, isActive && styles.modalOptionIconActive]}>
                     <Ionicons

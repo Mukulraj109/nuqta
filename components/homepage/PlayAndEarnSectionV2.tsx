@@ -17,6 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import gameApi, { AvailableGame } from '@/services/gameApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -113,6 +114,7 @@ const PlayAndEarnSectionV2: React.FC = () => {
   const router = useRouter();
   const [games, setGames] = useState<AvailableGame[]>([]);
   const [loading, setLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -120,11 +122,13 @@ const PlayAndEarnSectionV2: React.FC = () => {
         const response = await gameApi.getAvailableGames();
         if (response.success && response.data?.games) {
           // Get first 2 games for display
+          if (!isMounted()) return;
           setGames(response.data.games.slice(0, 2));
         }
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };

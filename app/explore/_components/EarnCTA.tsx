@@ -16,6 +16,7 @@ import exploreApi from '@/services/exploreApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -34,6 +35,7 @@ interface EarnStats {
 }
 
 const EarnCTA = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -74,12 +76,14 @@ const EarnCTA = () => {
           earned: entry.coins || 0,
           rank: entry.rank || index + 1,
         }));
+        if (!isMounted()) return;
         setTopEarners(earners);
       }
 
       // Process stats data
       if (statsRes.success && statsRes.data) {
         const liveStats = statsRes.data;
+        if (!isMounted()) return;
         setStats({
           activeEarners: liveStats.activeUsers || 0,
           earnedToday: liveStats.earnedToday || 0,
@@ -91,6 +95,7 @@ const EarnCTA = () => {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

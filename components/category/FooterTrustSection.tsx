@@ -17,6 +17,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import userLoyaltyApi from '@/services/userLoyaltyApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface FooterTrustSectionProps {
   categorySlug?: string;
@@ -37,17 +38,20 @@ const FooterTrustSection: React.FC<FooterTrustSectionProps> = ({
   const router = useRouter();
   const [expiringCoins, setExpiringCoins] = useState(0);
   const [expiryDays, setExpiryDays] = useState(0);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     const fetchCoins = async () => {
       try {
         const res = await userLoyaltyApi.getCoinBalance();
         if (res.success && res.data?.coins) {
+          if (!isMounted()) return;
           setExpiringCoins(res.data.coins.expiring || 0);
           if (res.data.coins.expiryDate) {
             const days = Math.max(0, Math.ceil(
               (new Date(res.data.coins.expiryDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
             ));
+            if (!isMounted()) return;
             setExpiryDays(days);
           }
         }

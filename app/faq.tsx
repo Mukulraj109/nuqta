@@ -21,8 +21,10 @@ import supportService, { FAQ as FAQType, FAQCategory } from '@/services/supportA
 import { SectionListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function FAQPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
@@ -57,18 +59,23 @@ function FAQPage() {
       ]);
 
       if (faqsResponse.success && faqsResponse.data) {
+        if (!isMounted()) return;
         setFaqs(faqsResponse.data.faqs);
       } else {
         throw new Error(faqsResponse.error || 'Failed to fetch FAQs');
       }
 
       if (categoriesResponse.success && categoriesResponse.data) {
+        if (!isMounted()) return;
         setCategories(categoriesResponse.data.categories);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError(err instanceof Error ? err.message : 'Failed to load FAQs');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   };
@@ -78,6 +85,7 @@ function FAQPage() {
       const response = await supportService.searchFAQs(searchQuery, 50);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setFaqs(response.data.faqs);
       }
     } catch (err) {
@@ -309,6 +317,7 @@ function FAQPage() {
       </LinearGradient>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.content}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
       >

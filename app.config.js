@@ -16,21 +16,20 @@ const hasFirebaseConfig = hasFirebaseAndroid || hasFirebaseIos;
 module.exports = {
   expo: {
     name: BRAND_NAME,
-    slug: 'nuqta', // App store identifier — manual change only
+    slug: 'rez', // App store identifier
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
-    scheme: 'nuqta', // Deep link scheme — manual change only
+    scheme: 'rez', // Deep link scheme
     userInterfaceStyle: 'automatic',
     newArchEnabled: false,
     notification: {
-      vapidPublicKey:
-        'BKJ7f1ZYHKG3ttcLtHvgpfdQBRqf2uPGhPpGcqx7zDK6Pf6sbaPd7Koev-x-FiazRezdzFquFW3pZuEX1T8zqCk',
+      vapidPublicKey: process.env.EXPO_PUBLIC_VAPID_KEY || 'BKJ7f1ZYHKG3ttcLtHvgpfdQBRqf2uPGhPpGcqx7zDK6Pf6sbaPd7Koev-x-FiazRezdzFquFW3pZuEX1T8zqCk',
       serviceWorkerPath: '/expo-service-worker.js',
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'com.nuqta.app', // App Store identifier — manual change only
+      bundleIdentifier: 'com.rez.app', // App Store identifier
       buildNumber: '1',
       infoPlist: {
         NSCameraUsageDescription: `${BRAND_NAME} needs camera access to scan QR codes for store payments`,
@@ -46,7 +45,7 @@ module.exports = {
         backgroundColor: '#1a3a52',
       },
       edgeToEdgeEnabled: false,
-      package: 'com.nuqta.app', // Play Store identifier — manual change only
+      package: 'com.rez.app', // Play Store identifier
       versionCode: 1,
       permissions: [
         'android.permission.CAMERA',
@@ -108,7 +107,7 @@ module.exports = {
       [
         '@stripe/stripe-react-native',
         {
-          merchantIdentifier: 'merchant.com.nuqta.app', // Stripe config — manual change only
+          merchantIdentifier: 'merchant.com.rez.app', // Stripe config
           enableGooglePay: true,
         },
       ],

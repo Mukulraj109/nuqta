@@ -26,6 +26,7 @@ import { EventItem } from '@/types/homepage.types';
 import { EVENT_COLORS } from '@/constants/EventColors';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -60,6 +61,7 @@ interface DisplayEvent {
 }
 
 const EventsCategoryPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { category } = useLocalSearchParams<{ category: string }>();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -143,18 +145,27 @@ const EventsCategoryPage: React.FC = () => {
       }
 
       if (result && result.events && result.events.length > 0) {
+        if (!isMounted()) return;
         setEvents(result.events.map(transformEventToDisplay));
+        if (!isMounted()) return;
         setTotalEvents(result.total || result.events.length);
       } else {
+        if (!isMounted()) return;
         setEvents([]);
+        if (!isMounted()) return;
         setTotalEvents(0);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load events. Please try again.');
+      if (!isMounted()) return;
       setEvents([]);
+      if (!isMounted()) return;
       setTotalEvents(0);
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [categoryKey]);
@@ -281,6 +292,7 @@ const EventsCategoryPage: React.FC = () => {
       </View>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} colors={[COLORS.primary]} />

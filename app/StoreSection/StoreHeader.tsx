@@ -21,6 +21,7 @@ import {
   Timing,
 } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 
 interface StoreHeaderProps {
@@ -62,6 +63,7 @@ function StoreHeader({
   showImage = true,
   showHeaderBar = true,
 }: StoreHeaderProps) {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { refreshWishlist } = useWishlist();
   const isAuthenticated = useIsAuthenticated();
@@ -91,8 +93,10 @@ function StoreHeader({
         setIsSaved(true);
         return;
       }
+      if (!isMounted()) return;
       setIsSaved(false);
     } catch (error) {
+      if (!isMounted()) return;
       setIsSaved(false);
     }
   }, [productId, isAuthenticated]);
@@ -164,6 +168,7 @@ function StoreHeader({
           itemType: 'product',
         });
         if (response.success) {
+          if (!isMounted()) return;
           setIsSaved(true);
           triggerNotification('Success');
           await refreshWishlist();
@@ -172,6 +177,7 @@ function StoreHeader({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsWishlistLoading(false);
     }
   }, [isAuthenticated, productId, isSaved, refreshWishlist, router]);

@@ -31,6 +31,7 @@ import { usePriveEligibility } from '@/hooks/usePriveEligibility';
 import priveApi from '@/services/priveApi';
 import { ELIGIBILITY_THRESHOLDS } from '@/types/mode.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ─── Shimmer Skeleton ─────────────────────────────────────────────────────────
 const ShimmerCard = ({ index }: { index: number }) => {
@@ -230,6 +231,7 @@ function PillarsScreen() {
   const { eligibility, isLoading: hookLoading, refresh, error: hookError } = usePriveEligibility();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   // Derived pillar data from hook
   const pillarData = eligibility.pillars.map((p) => ({
@@ -252,8 +254,10 @@ function PillarsScreen() {
       await priveApi.refreshScore();
       await refresh();
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to refresh pillar data');
     } finally {
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [refresh]);

@@ -9,7 +9,7 @@ interface Props {
   onDismiss: () => void;
 }
 
-export default function VerificationPromptBanner({ onVerify, onDismiss }: Props) {
+function VerificationPromptBanner({ onVerify, onDismiss }: Props) {
   return (
     <View style={styles.container}>
       {/* Dismiss X */}
@@ -34,6 +34,8 @@ export default function VerificationPromptBanner({ onVerify, onDismiss }: Props)
     </View>
   );
 }
+
+export default React.memo(VerificationPromptBanner);
 
 const styles = StyleSheet.create({
   container: {

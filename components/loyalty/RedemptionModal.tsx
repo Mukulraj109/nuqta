@@ -19,6 +19,7 @@ import { RewardItem, RedemptionResponse } from '@/types/loyaltyRedemption.types'
 import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from 'react-native-reanimated';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface RedemptionModalProps {
   visible: boolean;
@@ -39,6 +40,7 @@ function RedemptionModal({
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<'confirm' | 'success'>('confirm');
   const [redemptionData, setRedemptionData] = useState<RedemptionResponse | null>(null);
+  const isMounted = useIsMounted();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
@@ -57,11 +59,13 @@ function RedemptionModal({
     try {
       setLoading(true);
       const result = await onRedeem(reward, quantity);
+      if (!isMounted()) return;
       setRedemptionData(result);
       setStep('success');
     } catch (error) {
       platformAlertSimple('Redemption Failed', error instanceof Error ? error.message : 'Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

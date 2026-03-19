@@ -18,6 +18,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface RetryButtonProps {
   /**
@@ -99,6 +100,7 @@ export const RetryButton: React.FC<RetryButtonProps> = ({
   accessibilityLabel,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const isMounted = useIsMounted();
 
   const handlePress = async () => {
     if (isLoading || disabled) {
@@ -114,6 +116,7 @@ export const RetryButton: React.FC<RetryButtonProps> = ({
       }
     }
 
+    if (!isMounted()) return;
     setIsLoading(true);
 
     try {
@@ -121,6 +124,7 @@ export const RetryButton: React.FC<RetryButtonProps> = ({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

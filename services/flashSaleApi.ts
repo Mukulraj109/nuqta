@@ -57,15 +57,9 @@ class FlashSaleApiService {
       const response = await apiClient.get<FlashSalesResponse>('/offers/flash-sales');
 
       if (response.success && response.data) {
-        // Handle both array response and object with data property
-        const flashSales = Array.isArray(response.data)
-          ? response.data
-          : (response.data as Record<string, unknown>).data || response.data;
-
-
         return {
           success: true,
-          data: Array.isArray(flashSales) ? flashSales : [],
+          data: Array.isArray(response.data) ? response.data : [],
         };
       }
 
@@ -93,14 +87,9 @@ class FlashSaleApiService {
       const response = await apiClient.get<FlashSalesResponse>('/flash-sales/upcoming');
 
       if (response.success && response.data) {
-        const flashSales = Array.isArray(response.data)
-          ? response.data
-          : (response.data as Record<string, unknown>).data || response.data;
-
-
         return {
           success: true,
-          data: Array.isArray(flashSales) ? flashSales : [],
+          data: Array.isArray(response.data) ? response.data : [],
         };
       }
 
@@ -128,14 +117,9 @@ class FlashSaleApiService {
       const response = await apiClient.get<FlashSalesResponse>('/flash-sales/expiring-soon', { minutes });
 
       if (response.success && response.data) {
-        const flashSales = Array.isArray(response.data)
-          ? response.data
-          : (response.data as Record<string, unknown>).data || response.data;
-
-
         return {
           success: true,
-          data: Array.isArray(flashSales) ? flashSales : [],
+          data: Array.isArray(response.data) ? response.data : [],
         };
       }
 
@@ -165,7 +149,7 @@ class FlashSaleApiService {
       if (response.success && response.data) {
         return {
           success: true,
-          data: (response.data as Record<string, unknown>).data || response.data,
+          data: response.data,
         };
       }
 

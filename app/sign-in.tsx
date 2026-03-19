@@ -23,6 +23,7 @@ import CountryCodePicker, { COUNTRY_CODES, CountryCode } from '@/components/comm
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -53,6 +54,7 @@ function SignInScreen() {
 
   const [otpTimer, setOtpTimer] = useState(0);
   const [canResendOTP, setCanResendOTP] = useState(false);
+  const isMounted = useIsMounted();
 
   // OTP timer effect
   useEffect(() => {
@@ -121,13 +123,16 @@ function SignInScreen() {
     try {
       const formattedPhone = `${selectedCountry.dialCode}${formData.phoneNumber}`;
       await actions.sendOTP(formattedPhone);
+      if (!isMounted()) return;
       setStep('otp');
+      if (!isMounted()) return;
       setOtpTimer(60);
+      if (!isMounted()) return;
       setCanResendOTP(false);
 
       platformAlertSimple(
         'OTP Sent',
-        `Verification code sent to ${selectedCountry.dialCode}${formData.phoneNumber}\n\nFor demo, use: 123456`
+        `Verification code sent to ${selectedCountry.dialCode}${formData.phoneNumber}${__DEV__ ? '\n\nFor demo, use: 123456' : ''}`
       );
     } catch (error: any) {
       const errorMessage = error?.message || authError || 'Failed to send OTP. Please try again.';
@@ -148,6 +153,7 @@ function SignInScreen() {
           'Sign Up'
         );
       } else {
+        if (!isMounted()) return;
         setErrors(prev => ({
           ...prev,
           phoneNumber: errorMessage
@@ -174,6 +180,7 @@ function SignInScreen() {
       await actions.login(formattedPhone, formData.otp);
     } catch (error: any) {
       const errorMessage = error?.message || authError || 'Invalid OTP. Please try again.';
+      if (!isMounted()) return;
       setErrors(prev => ({
         ...prev,
         otp: errorMessage
@@ -188,7 +195,9 @@ function SignInScreen() {
     try {
       const formattedPhone = `${selectedCountry.dialCode}${formData.phoneNumber}`;
       await actions.sendOTP(formattedPhone);
+      if (!isMounted()) return;
       setOtpTimer(60);
+      if (!isMounted()) return;
       setCanResendOTP(false);
       platformAlertSimple('OTP Resent', 'New verification code sent to your phone');
     } catch (error: any) {

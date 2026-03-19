@@ -23,6 +23,7 @@ import wishlistSharingService, {
   PrivacySettings,
 } from '@/services/wishlistSharingApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -112,6 +113,7 @@ function ShareModal({
 }: ShareModalProps) {
   const [shareLink, setShareLink] = useState<ShareableLink | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const isMounted = useIsMounted();
   const [privacySettings, setPrivacySettings] = useState<PrivacySettings>({
     visibility: 'public',
     allowComments: true,
@@ -135,11 +137,13 @@ function ShareModal({
       setIsLoading(true);
       const response = await wishlistSharingService.generateShareableLink(wishlistId);
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setShareLink(response.data);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to generate share link');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [wishlistId]);
@@ -148,6 +152,7 @@ function ShareModal({
     try {
       const response = await wishlistSharingService.getPrivacySettings(wishlistId);
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setPrivacySettings(response.data);
       }
     } catch (error) {
@@ -174,6 +179,7 @@ function ShareModal({
         // Revert changes
         loadPrivacySettings();
       } finally {
+        if (!isMounted()) return;
         setIsSaving(false);
       }
     },
@@ -226,6 +232,7 @@ function ShareModal({
             }
             break;
           case 'qrcode':
+            if (!isMounted()) return;
             setShowQRCode(true);
             return;
         }

@@ -23,6 +23,7 @@ import bookingApi from '@/services/bookingApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Service type icon mapping
 const SERVICE_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
@@ -62,6 +63,7 @@ interface TimeSlot {
 }
 
 function AppointmentBookingPage() {
+  const isMounted = useIsMounted();
   const { storeId } = useLocalSearchParams<{ storeId: string }>();
   const router = useRouter();
   const backgroundColor = useThemeColor({}, 'background');
@@ -107,6 +109,7 @@ function AppointmentBookingPage() {
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load store details');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -121,6 +124,7 @@ function AppointmentBookingPage() {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setServicesLoading(false);
     }
   };
@@ -289,6 +293,7 @@ You will receive a confirmation message at ${customerPhone}${customerEmail ? ` a
     } catch (error) {
       platformAlertSimple('Error', 'Failed to submit booking. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };
@@ -706,7 +711,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: Spacing.lg,
+    paddingBottom: 120,
   },
   section: {
     paddingHorizontal: Spacing.lg,

@@ -28,6 +28,7 @@ import walletApi from '@/services/walletApi';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const nuqtaCoinImage = BRAND.COIN_IMAGE;
 
@@ -63,6 +64,7 @@ function CoinDetailPage() {
   const coinInfo = COIN_TYPES[type] || COIN_TYPES.rez;
 
   const [dynamicRules, setDynamicRules] = useState<Record<string, { usageRules: string[]; earningMethods: string[] }> | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     walletApi.getCoinRules().then(res => {
@@ -150,6 +152,7 @@ function CoinDetailPage() {
       </LinearGradient>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.content}
         showsVerticalScrollIndicator={false}
         refreshControl={

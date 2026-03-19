@@ -46,8 +46,9 @@ function CashbackHeroCard({
               </>
             ) : (
               <>
-                <ThemedText style={styles.label}>Earn up to</ThemedText>
-                <ThemedText style={styles.percentage}>{cashbackPercentage}% Cashback</ThemedText>
+                <ThemedText style={styles.label}>Save up to</ThemedText>
+                <ThemedText style={styles.savingsHero}>~{currencySymbol}{Math.round((cashbackPercentage / 100) * 1000).toLocaleString('en-IN')}</ThemedText>
+                <ThemedText style={styles.percentageSecondary}>on {currencySymbol}1,000 spend ({cashbackPercentage}% Cashback)</ThemedText>
               </>
             )}
             <View style={styles.coinsRow}>

@@ -26,10 +26,12 @@ import { useAuthUser, useGetCurrencySymbol } from '@/stores/selectors';
 import type { LeaderboardData, LeaderboardEntry } from '@/types/gamification.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type Period = 'daily' | 'weekly' | 'monthly' | 'all-time';
 
 function LeaderboardPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const user = useAuthUser();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -96,12 +98,15 @@ function LeaderboardPage() {
       const response = await gamificationAPI.getLeaderboard(selectedPeriod, 50);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setLeaderboardData(response.data);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   };

@@ -9,7 +9,6 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  Image,
   ActivityIndicator,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -22,12 +21,13 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import analyticsService from '@/services/analyticsService';
 import { useAuthUser, useAuthActions } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const BENEFITS = [
   {
     icon: 'gift-outline',
-    title: 'Exclusive Offers',
-    description: 'Get notified about deals near you',
+    title: 'Nearby Deals',
+    description: 'Get alerted when stores near you offer 20%+ cashback',
   },
   {
     icon: 'cube-outline',
@@ -36,17 +36,18 @@ const BENEFITS = [
   },
   {
     icon: 'wallet-outline',
-    title: 'Coin Reminders',
-    description: 'Never miss expiring rewards',
+    title: 'Expiry Alerts',
+    description: "We'll remind you before your coins expire",
   },
   {
     icon: 'flash-outline',
     title: 'Flash Deals',
-    description: 'Be first to grab limited offers',
+    description: "Most flash deals last under 4 hours \u2014 don't miss out",
   },
 ];
 
 function NotificationPermissionPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   useBackButton(() => true); // Block back navigation
   const user = useAuthUser();
@@ -69,6 +70,7 @@ function NotificationPermissionPage() {
   const checkExistingPermission = async () => {
     try {
       const { status } = await Notifications.getPermissionsAsync();
+      if (!isMounted()) return;
       setPermissionStatus(status);
 
       // If already granted, skip this screen
@@ -111,6 +113,7 @@ function NotificationPermissionPage() {
     } catch (error) {
       await finishOnboarding();
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

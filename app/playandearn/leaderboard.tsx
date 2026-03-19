@@ -23,6 +23,7 @@ import { useAuthUser, useGetCurrencySymbol } from '@/stores/selectors';
 import TierBadge from '@/components/subscription/TierBadge';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -82,6 +83,7 @@ const Leaderboard = () => {
   const scrollViewRef = useRef<ScrollView>(null);
   const celebrationAnim = useRef(new Animated.Value(0)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
+  const isMounted = useIsMounted();
 
   // Convert entries for real-time hook
   const realtimeInitialEntries = entries.map(e => ({
@@ -159,6 +161,7 @@ const Leaderboard = () => {
           tier: 'free',
           isCurrentUser: entry.user._id === user?.id,
         }));
+        if (!isMounted()) return;
         setEntries(displayEntries);
 
         // Use pagination info to determine if more pages exist
@@ -166,11 +169,13 @@ const Leaderboard = () => {
         if (pagination) {
           setHasMore(pagination.page < pagination.pages);
         } else {
+          if (!isMounted()) return;
           setHasMore(displayEntries.length >= 50);
         }
 
         // Extract myRank from response (backend now includes it)
         if (responseData.myRank && responseData.myRank.rank > 0) {
+          if (!isMounted()) return;
           setMyRank({
             rank: responseData.myRank.rank,
             userId: user?.id || '',
@@ -180,6 +185,7 @@ const Leaderboard = () => {
             isCurrentUser: true,
           });
         } else {
+          if (!isMounted()) return;
           setMyRank(null);
         }
 
@@ -192,11 +198,16 @@ const Leaderboard = () => {
         throw new Error(leaderboardResponse.error || 'Failed to load leaderboard');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Unable to load leaderboard. Please try again.');
+      if (!isMounted()) return;
       setEntries([]);
+      if (!isMounted()) return;
       setMyRank(null);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [selectedPeriod, user?.id, user?.name]);
@@ -224,21 +235,26 @@ const Leaderboard = () => {
           isCurrentUser: entry.user._id === user?.id,
         }));
         if (newEntries.length > 0) {
+          if (!isMounted()) return;
           setEntries(prev => [...prev, ...newEntries]);
+          if (!isMounted()) return;
           setPage(nextPage);
           const pagination = response.data.pagination;
           if (pagination) {
             setHasMore(pagination.page < pagination.pages);
           } else {
+            if (!isMounted()) return;
             setHasMore(newEntries.length >= 50);
           }
         } else {
+          if (!isMounted()) return;
           setHasMore(false);
         }
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [page, loadingMore, hasMore, selectedPeriod, user?.id]);

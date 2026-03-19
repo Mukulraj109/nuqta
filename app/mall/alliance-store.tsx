@@ -24,6 +24,7 @@ import mallApi from '@/services/mallApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface AllianceStore {
   _id: string;
@@ -37,6 +38,7 @@ interface AllianceStore {
 }
 
 function AllianceStorePage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [stores, setStores] = useState<AllianceStore[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -50,11 +52,15 @@ function AllianceStorePage() {
       setError(null);
 
       const data = await mallApi.getAllianceStores(30);
+      if (!isMounted()) return;
       setStores(data || []);
     } catch (err) {
+      if (!isMounted()) return;
       setError('Unable to load alliance stores');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, []);

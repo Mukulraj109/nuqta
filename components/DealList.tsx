@@ -15,6 +15,7 @@ import { Deal, DealCategory } from '@/types/deals';
 import DealCard from '@/components/DealCard';
 import DealCardSkeleton from '@/components/DealCardSkeleton';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 export type SortOption = 'priority' | 'discount' | 'expiry' | 'alphabetical';
 export type FilterOption = 'all' | DealCategory;
@@ -49,6 +50,7 @@ function DealList({
   const [filterBy, setFilterBy] = useState<FilterOption>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const isMounted = useIsMounted();
   
   const flatListRef = useRef<FlashList<DealListItemData>>(null);
   const [screenData, setScreenData] = useState(Dimensions.get('window'));
@@ -114,6 +116,7 @@ function DealList({
       try {
         await onRefresh();
       } finally {
+        if (!isMounted()) return;
         setIsRefreshing(false);
       }
     }

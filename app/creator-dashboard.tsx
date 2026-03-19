@@ -23,6 +23,7 @@ import { ProfileSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const NUQTA_COIN = BRAND.COIN_IMAGE;
 
@@ -41,6 +42,7 @@ const tierColors: Record<string, { bg: string; text: string; border: string }> =
 };
 
 function CreatorDashboard() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -62,12 +64,15 @@ function CreatorDashboard() {
       ]);
 
       if (earningsRes.status === 'fulfilled' && earningsRes.value.success && earningsRes.value.data) {
+        if (!isMounted()) return;
         setEarnings(earningsRes.value.data);
       }
       if (picksRes.status === 'fulfilled' && picksRes.value.success && picksRes.value.data?.picks) {
+        if (!isMounted()) return;
         setPicks(picksRes.value.data.picks);
       }
       if (profileRes.status === 'fulfilled' && profileRes.value.success && profileRes.value.data) {
+        if (!isMounted()) return;
         setProfile(profileRes.value.data);
       }
 
@@ -77,9 +82,12 @@ function CreatorDashboard() {
         setError('Failed to load dashboard data');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load dashboard');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
@@ -116,6 +124,7 @@ function CreatorDashboard() {
                 platformAlert('Error', response.error || 'Failed to delete pick');
               }
             } catch (err: any) {
+              if (!isMounted()) return;
               setPicks(prevPicks); // revert
               platformAlert('Error', err.message || 'Something went wrong');
             }

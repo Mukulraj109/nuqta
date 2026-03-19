@@ -10,6 +10,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useRouter } from 'expo-router';
 import servicesService from '@/services/servicesApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const PARENT_PADDING = 16;
 
@@ -145,6 +146,7 @@ function PopularServicesSection({
   const [services, setServices] = useState<PopularService[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   const fetchPopularServices = useCallback(async () => {
     try {
@@ -153,13 +155,16 @@ function PopularServicesSection({
       const response = await servicesService.getPopularServices(limit);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setServices(response.data as PopularService[]);
       } else {
         setError('Failed to load popular services');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load popular services');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [limit]);

@@ -10,6 +10,7 @@ import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
 import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface RelatedPackagesSectionProps {
   currentPackageId: string;
@@ -23,6 +24,7 @@ const RelatedPackagesSection: React.FC<RelatedPackagesSectionProps> = ({ current
   const locale = getLocale();
   const [relatedPackages, setRelatedPackages] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadRelatedPackages();
@@ -41,11 +43,13 @@ const RelatedPackagesSection: React.FC<RelatedPackagesSectionProps> = ({ current
         const filtered = response.data.services
           .filter((pkg: any) => (pkg._id || pkg.id) !== currentPackageId)
           .slice(0, 5);
+        if (!isMounted()) return;
         setRelatedPackages(filtered);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

@@ -25,6 +25,7 @@ import apiClient from '@/services/apiClient';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   white: Colors.background.primary,
@@ -153,6 +154,7 @@ interface Store {
 const filterOptions = ['All', 'Nearby', 'Top Rated', 'Best Price'];
 
 const HealthcareCategoryPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { category } = useLocalSearchParams<{ category: string }>();
   const [selectedFilter, setSelectedFilter] = useState('All');
@@ -195,11 +197,13 @@ const HealthcareCategoryPage: React.FC = () => {
       const response = await apiClient.get(url);
 
       if (response.success && response.data?.stores) {
+        if (!isMounted()) return;
         setStores(response.data.stores);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load data. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -211,6 +215,7 @@ const HealthcareCategoryPage: React.FC = () => {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchStores();
+    if (!isMounted()) return;
     setRefreshing(false);
   }, [category, selectedFilter]);
 
@@ -429,6 +434,7 @@ const HealthcareCategoryPage: React.FC = () => {
       )}
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

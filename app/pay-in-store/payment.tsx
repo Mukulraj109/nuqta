@@ -50,11 +50,13 @@ import {
   StripeCardForm,
 } from '@/components/payment';
 import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Initialize Stripe lazily — SDK is only loaded when this promise is first awaited
 const stripePromise = getStripePromise(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
 function PaymentScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams<PaymentScreenParams>();
   const { storeId, storeName, storeLogo, amount, selectedOffers: selectedOffersParam } = params;
@@ -190,16 +192,21 @@ function PaymentScreen() {
       });
 
       if (confirmResponse.success && confirmResponse.data) {
+        if (!isMounted()) return;
         setShowUpiModal(false);
+        if (!isMounted()) return;
         setUpiId('');
         setUpiError(null);
         navigateToSuccess(confirmResponse.data);
       } else {
+        if (!isMounted()) return;
         setUpiError(confirmResponse.error || 'Payment failed. Please try again.');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setUpiError(err.message || 'Payment failed. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setUpiProcessing(false);
     }
   };
@@ -231,7 +238,9 @@ function PaymentScreen() {
         duration: 5000,
       });
     } finally {
+      if (!isMounted()) return;
       setStripeClientSecret(null);
+      if (!isMounted()) return;
       setCurrentPaymentData(null);
     }
   };
@@ -267,7 +276,9 @@ function PaymentScreen() {
       }
     }
 
+    if (!isMounted()) return;
     setStripeClientSecret(null);
+    if (!isMounted()) return;
     setCurrentPaymentData(null);
   };
 
@@ -480,9 +491,12 @@ function PaymentScreen() {
               // silently handle
             }
           }
+          if (!isMounted()) return;
           setShowUpiModal(false);
+          if (!isMounted()) return;
           setUpiId('');
           setUpiError(null);
+          if (!isMounted()) return;
           setCurrentPaymentData(null);
         }}
       >
@@ -547,9 +561,12 @@ function PaymentScreen() {
                         // silently handle
                       }
                     }
+                    if (!isMounted()) return;
                     setShowUpiModal(false);
+                    if (!isMounted()) return;
                     setUpiId('');
                     setUpiError(null);
+                    if (!isMounted()) return;
                     setCurrentPaymentData(null);
                   }}
                 >

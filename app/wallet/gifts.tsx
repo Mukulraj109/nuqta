@@ -24,6 +24,7 @@ import { handleWalletError } from '@/utils/walletErrorHandler';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Gift {
   _id: string;
@@ -72,18 +73,23 @@ function GiftsPage() {
     try {
       if (activeTab === 'received') {
         const res = await walletApi.getReceivedGifts();
+        if (!isMounted()) return;
         setReceivedGifts(res?.data?.gifts ?? []);
       } else {
         const res = await walletApi.getSentGifts();
+        if (!isMounted()) return;
         setSentGifts(res?.data?.gifts ?? []);
       }
     } catch {
       // silently fail — show empty state
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [activeTab]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     fetchGifts();
@@ -96,6 +102,7 @@ function GiftsPage() {
     );
     if (!confirmed) return;
 
+    if (!isMounted()) return;
     setClaimingId(gift._id);
     try {
       const res = await walletApi.claimGift(gift._id);
@@ -109,6 +116,7 @@ function GiftsPage() {
     } catch (err: any) {
       handleWalletError(err, 'Claim Failed');
     } finally {
+      if (!isMounted()) return;
       setClaimingId(null);
     }
   }, []);
@@ -353,7 +361,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing['3xl'],
+    paddingBottom: 120,
   },
   giftCard: {
     backgroundColor: Colors.background.primary,

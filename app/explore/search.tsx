@@ -22,12 +22,14 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
 type TabType = 'stores' | 'products';
 
 const ExploreSearchPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -67,6 +69,7 @@ const ExploreSearchPage = () => {
       ]);
 
       if (storesResponse.success && storesResponse.data) {
+        if (!isMounted()) return;
         setStores(storesResponse.data.stores || []);
       }
 
@@ -76,12 +79,16 @@ const ExploreSearchPage = () => {
           p.name.toLowerCase().includes(query.toLowerCase()) ||
           (p.store && p.store.toLowerCase().includes(query.toLowerCase()))
         );
+        if (!isMounted()) return;
         setProducts(filteredProducts);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
@@ -396,6 +403,7 @@ const styles = StyleSheet.create({
   resultsContainer: {
     paddingHorizontal: Spacing.base,
     minHeight: 300,
+    paddingBottom: 120,
   },
   centerContainer: {
     flex: 1,

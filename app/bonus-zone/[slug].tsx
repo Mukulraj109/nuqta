@@ -24,6 +24,7 @@ import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { useRefreshWallet } from '@/stores/selectors';
 import { usePressGuard } from '@/hooks/usePressGuard';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ============================================================================
 // TIMER HELPER (same pattern as BonusZoneCard)
@@ -174,6 +175,7 @@ function getRewardDescription(type: string, value: number): string {
 // ============================================================================
 
 function CampaignDetailPage() {
+  const isMounted = useIsMounted();
   const { slug, claimSuccess } = useLocalSearchParams<{ slug: string; claimSuccess?: string }>();
   const router = useRouter();
   const refreshWallet = useRefreshWallet();
@@ -214,9 +216,12 @@ function CampaignDetailPage() {
         urgentRef.current = timer.urgent;
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load campaign details');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [slug]);

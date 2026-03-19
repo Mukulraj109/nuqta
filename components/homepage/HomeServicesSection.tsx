@@ -18,6 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import homeServicesApi, { HomeServiceCategory } from '@/services/homeServicesApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_GAP = 10;
@@ -36,6 +37,7 @@ const HomeServicesSection: React.FC = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<HomeServiceCategory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   // Fetch categories from backend
   const fetchCategories = useCallback(async () => {
@@ -43,11 +45,13 @@ const HomeServicesSection: React.FC = () => {
       setIsLoading(true);
       const response = await homeServicesApi.getCategories();
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setCategories(response.data);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);

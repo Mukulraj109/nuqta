@@ -207,26 +207,27 @@ class ReviewsService {
     images?: File[],
     videos?: File[]
   ): Promise<ApiResponse<Review>> {
+    const endpoint = `/reviews/${data.targetType}/${data.targetId}`;
     if (images || videos) {
       const formData = new FormData();
       formData.append('review', JSON.stringify(data));
-      
+
       if (images) {
         images.forEach((image, index) => {
           formData.append(`images[${index}]`, image);
         });
       }
-      
+
       if (videos) {
         videos.forEach((video, index) => {
           formData.append(`videos[${index}]`, video);
         });
       }
-      
-      return apiClient.uploadFile('/reviews', formData);
+
+      return apiClient.uploadFile(endpoint, formData);
     }
-    
-    return apiClient.post('/reviews', data);
+
+    return apiClient.post(endpoint, data);
   }
 
   // Update review

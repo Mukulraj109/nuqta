@@ -28,6 +28,7 @@ import SkeletonLoader from '@/components/common/SkeletonLoader';
 import analyticsService from '@/services/analyticsService';
 import StoreVisitLoadingSkeleton from '@/components/store-visit/StoreVisitLoadingSkeleton';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Get screen dimensions for responsive design
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -318,12 +319,16 @@ function StoreVisitPageInner() {
         if (response.success && response.data) {
           setAvailableSlots(response.data.availableSlots);
         } else {
+          if (!isMounted()) return;
           setAvailableSlots([]);
         }
       } catch (err) {
+        if (!isMounted()) return;
         setAvailableSlots([]);
       } finally {
+        if (!isMounted()) return;
         setLoadingSlots(false);
+        if (!isMounted()) return;
         setSlotsLoaded(true);
       }
     };
@@ -347,13 +352,17 @@ function StoreVisitPageInner() {
       if (response.success && response.data) {
         // Backend returns { store, products, productsCount }, extract just the store
         const storeData = (response.data as any).store || response.data;
+        if (!isMounted()) return;
         setStore(storeData);
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Failed to load store details');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Unable to connect to server');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [storeId]);
@@ -368,7 +377,9 @@ function StoreVisitPageInner() {
       const response = await storeVisitApi.checkStoreAvailability(storeId);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setCrowdLevel(response.data.crowdStatus);
+        if (!isMounted()) return;
         setLastUpdated(new Date());
       } else {
         // Keep default 'Medium' if API fails
@@ -472,8 +483,11 @@ function StoreVisitPageInner() {
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setQueueNumber(response.data.queueNumber);
+        if (!isMounted()) return;
         setQueueEstimatedWait(response.data.estimatedWaitTime);
+        if (!isMounted()) return;
         setQueueSize(response.data.currentQueueSize);
 
         // Track queue number success
@@ -513,6 +527,7 @@ function StoreVisitPageInner() {
 
       showAlert('Error', error.message || 'Unable to get queue number. Please try again.', undefined, 'error');
     } finally {
+      if (!isMounted()) return;
       setGettingQueue(false);
     }
   }, [isAuthenticated, visitDetails, storeId, router, store, crowdLevel]);
@@ -676,6 +691,7 @@ function StoreVisitPageInner() {
 
       showAlert('Error', error.message || 'Unable to schedule visit. Please try again.', undefined, 'error');
     } finally {
+      if (!isMounted()) return;
       setSchedulingVisit(false);
     }
   }, [isAuthenticated, visitDetails, selectedDate, selectedTime, storeId, router, store, crowdLevel, rescheduleVisitId, paymentMethod]);
@@ -1215,7 +1231,6 @@ function StoreVisitPageInner() {
           <Pressable
             onPress={() => router.push('/my-visits')}
             style={styles.viewPlannedVisitsBtn}
-
           >
             <Ionicons name="list-outline" size={16} color={Colors.nileBlue} />
             <Text style={styles.viewPlannedVisitsText}>View My Planned Visits</Text>
@@ -1288,7 +1303,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing.base,
+    paddingBottom: 120,
   },
   loadingContainer: {
     flex: 1,
@@ -1705,6 +1720,7 @@ const styles = StyleSheet.create({
 
 // Wrap component with ErrorBoundary for production safety
 function StoreVisitPage() {
+  const isMounted = useIsMounted();
   return (
     <ErrorBoundary
       onError={(error, errorInfo) => {

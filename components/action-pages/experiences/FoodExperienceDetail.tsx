@@ -23,6 +23,7 @@ import { experiencesApi, StoreExperience } from '@/services/experiencesApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   primaryGold: colors.warningScale[400],
@@ -36,6 +37,7 @@ const COLORS = {
 function StoreCard({ store, currencySymbol }: { store: any; currencySymbol: string }) {
   const router = useRouter();
   const [imgErr, setImgErr] = useState(false);
+  const isMounted = useIsMounted();
   const imageUri = (Array.isArray(store.banner) ? store.banner[0] : store.banner) || store.logo || store.image;
 
   return (
@@ -100,14 +102,17 @@ function ExperienceDetailPage() {
       ]);
 
       if (expRes.success && expRes.data) {
+        if (!isMounted()) return;
         setExperience(expRes.data);
       }
       if (storesRes.success && storesRes.data?.stores) {
         setStores(storesRes.data.stores);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load experience. Pull down to refresh.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [id]);
@@ -117,6 +122,7 @@ function ExperienceDetailPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchData();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

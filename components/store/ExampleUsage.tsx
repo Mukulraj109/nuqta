@@ -11,6 +11,7 @@ import StorePolicies, { StorePolicy, MOCK_POLICIES } from './StorePolicies';
 import StoreContact, { StoreContactInfo, MOCK_CONTACT_INFO } from './StoreContact';
 import StoreInfoModal from './StoreInfoModal';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ============================================================================
 // EXAMPLE 1: Basic Usage with Mock Data
@@ -41,6 +42,7 @@ export const BasicExample = () => {
 
 export const ModalExample = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const isMounted = useIsMounted();
 
   return (
     <View style={styles.container}>
@@ -243,18 +245,22 @@ export const APIIntegrationExample = ({ storeId }: { storeId: string }) => {
       // Fetch policies
       const policiesResponse = await fetch(`/api/stores/${storeId}/policies`);
       const policiesData = await policiesResponse.json();
+      if (!isMounted()) return;
       setPolicies(policiesData);
 
       // Fetch contact
       const contactResponse = await fetch(`/api/stores/${storeId}/contact`);
       const contactData = await contactResponse.json();
+      if (!isMounted()) return;
       setContact(contactData);
 
     } catch (error) {
       // Fallback to mock data
+      if (!isMounted()) return;
       setPolicies(MOCK_POLICIES);
       setContact(MOCK_CONTACT_INFO);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

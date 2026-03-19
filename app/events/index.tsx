@@ -28,6 +28,7 @@ import { EVENT_COLORS } from '@/constants/EventColors';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -67,6 +68,7 @@ interface CategoryItem {
 }
 
 const EventsPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -121,6 +123,7 @@ const EventsPage: React.FC = () => {
       if (categoriesData && categoriesData.length > 0) {
         setCategories(categoriesData);
       } else {
+        if (!isMounted()) return;
         setCategories(FALLBACK_CATEGORIES);
       }
 
@@ -135,6 +138,7 @@ const EventsPage: React.FC = () => {
       if (featuredData && featuredData.length > 0) {
         setFeaturedEvents(featuredData.slice(0, 5).map(transformEventToDisplay));
       } else {
+        if (!isMounted()) return;
         setFeaturedEvents([]);
       }
 
@@ -143,15 +147,22 @@ const EventsPage: React.FC = () => {
       if (upcomingData && upcomingData.events && upcomingData.events.length > 0) {
         setUpcomingEvents(upcomingData.events.slice(0, 8).map(transformEventToDisplay));
       } else {
+        if (!isMounted()) return;
         setUpcomingEvents([]);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load events. Please try again.');
+      if (!isMounted()) return;
       setFeaturedEvents([]);
+      if (!isMounted()) return;
       setUpcomingEvents([]);
+      if (!isMounted()) return;
       setCategories(FALLBACK_CATEGORIES);
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, []);
@@ -302,6 +313,7 @@ const EventsPage: React.FC = () => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} colors={[Colors.nileBlue]} />
         }

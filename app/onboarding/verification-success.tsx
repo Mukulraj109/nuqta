@@ -11,6 +11,7 @@ import { triggerNotification } from '@/utils/haptics';
 import analyticsService, { IdentityAnalyticsEvents } from '@/services/analyticsService';
 import { useBackButton } from '@/hooks/useSafeNavigation';
 import { useAuthUser, useAuthActions } from '@/stores/selectors';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const INSTANT_BENEFITS = [
   '120+ exclusive deals unlocked',
@@ -26,6 +27,7 @@ const PROVISIONAL_BENEFITS = [
 ];
 
 function VerificationSuccessPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { zone, type } = useLocalSearchParams<{ zone: string; type: string }>();
   const user = useAuthUser();

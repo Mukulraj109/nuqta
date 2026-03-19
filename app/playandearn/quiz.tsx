@@ -23,6 +23,7 @@ import { useGamification } from '@/contexts/GamificationContext';
 import { platformAlert } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -157,6 +158,7 @@ const Quiz = () => {
 
   const progressAnim = useRef(new Animated.Value(1)).current;
   const scaleAnim = useRef(new Animated.Value(1)).current;
+  const isMounted = useIsMounted();
 
   // Fetch daily limits and wallet balance on mount
   useEffect(() => {
@@ -177,6 +179,7 @@ const Quiz = () => {
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -227,16 +230,27 @@ const Quiz = () => {
           return;
         }
 
+        if (!isMounted()) return;
         setQuizQuestions(mappedQuestions);
+        if (!isMounted()) return;
         setQuizSessionId(response.data.id);
+        if (!isMounted()) return;
         setGameState('playing');
+        if (!isMounted()) return;
         setCurrentQuestion(0);
+        if (!isMounted()) return;
         setScore(0);
+        if (!isMounted()) return;
         setSelectedAnswer(null);
+        if (!isMounted()) return;
         setTimeLeft(15);
+        if (!isMounted()) return;
         setStreak(0);
+        if (!isMounted()) return;
         setBestStreak(0);
+        if (!isMounted()) return;
         setCorrectCount(0);
+        if (!isMounted()) return;
         setAnswers([]);
         progressAnim.setValue(1);
       } else {
@@ -245,6 +259,7 @@ const Quiz = () => {
     } catch (error) {
       platformAlert('Error', 'Something went wrong while loading the quiz. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setFetchingQuestions(false);
     }
   };
@@ -313,15 +328,19 @@ const Quiz = () => {
       if (limitsResponse.data?.quiz) {
         setTodayPlays(limitsResponse.data.quiz.used);
       } else {
+        if (!isMounted()) return;
         setTodayPlays(todayPlays + 1);
       }
       // Refresh wallet then sync coins
       await refreshWallet();
       await gamificationActions.syncCoinsFromWallet();
     } catch (error) {
+      if (!isMounted()) return;
       setTodayPlays(todayPlays + 1);
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
+      if (!isMounted()) return;
       setGameState('result');
     }
   };
@@ -383,7 +402,11 @@ const Quiz = () => {
         )}
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Start Screen */}
         {gameState === 'start' && (
           <View style={styles.content}>
@@ -722,7 +745,6 @@ const Quiz = () => {
               <Pressable
                 onPress={() => router.push('/playandearn' as any)}
                 style={styles.secondaryAction}
-               
               >
                 <Ionicons name="arrow-back" size={18} color={COLORS.textMuted} />
                 <Text style={styles.secondaryActionText}>Back to Games</Text>

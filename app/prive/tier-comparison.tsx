@@ -13,6 +13,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { catchAndReport } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COMPARISON_ROWS = [
   { label: 'Coin Multiplier', key: 'coinMultiplier', format: (v: number) => `${v}x` },
@@ -32,11 +33,13 @@ function TierComparisonScreen() {
   const fetchData = useCallback(async () => {
     try {
       const response = await priveApi.getTierComparison();
+      if (!isMounted()) return;
       if (response.success && response.data) setData(response.data);
-    } catch (e) { catchAndReport(e, setError, 'TierComparison/fetchData'); }
-    finally { setIsLoading(false); setIsRefreshing(false); }
+    } catch (e) { if (!isMounted()) return; catchAndReport(e, setError, 'TierComparison/fetchData'); }
+    finally { if (!isMounted()) return; setIsLoading(false); setIsRefreshing(false); }
   }, []);
 
+  const isMounted = useIsMounted();
   useEffect(() => { fetchData(); }, [fetchData]);
   const onRefresh = () => { setIsRefreshing(true); fetchData(); };
 
@@ -64,6 +67,7 @@ function TierComparisonScreen() {
     <View style={styles.container}>
       <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor={PRIVE_COLORS.gold.primary} />}

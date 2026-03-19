@@ -19,6 +19,7 @@ import { useVoucherPurchase } from '@/hooks/useVoucherPurchase';
 import { useRezBalance, useWalletLoading, useRefreshWallet, useGetCurrencySymbol } from '@/stores/selectors';
 import logger from '@/utils/logger';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -75,6 +76,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [purchasedAmount, setPurchasedAmount] = useState<number>(0);
+  const isMounted = useIsMounted();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
@@ -161,12 +163,14 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       logger.log('✅ [Purchase Modal] Purchase successful!');
 
       // Store purchased amount for success modal
+      if (!isMounted()) return;
       setPurchasedAmount(selectedDenomination);
 
       // Refresh wallet balance
       await refreshWallet();
 
       // Show success modal
+      if (!isMounted()) return;
       setShowSuccessModal(true);
 
       // Reset denomination

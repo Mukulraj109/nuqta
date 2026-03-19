@@ -18,12 +18,14 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 import subscriptionAPI from '@/services/subscriptionApi';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { TIER_COLORS, TIER_GRADIENTS, TIER_ICONS, SubscriptionTier } from '@/types/subscription.types';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { ManageSubscriptionSkeleton } from '@/components/subscription/SubscriptionSkeleton';
 import PaymentFailedBanner from '@/components/subscription/PaymentFailedBanner';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 // StickyCTAContainer available for future use
 
 function SubscriptionManagePage() {
@@ -39,10 +41,14 @@ function SubscriptionManagePage() {
   const [stats, setStats] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+  const isMounted = useIsMounted();
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     fetchUsageStats();
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
   // Fetch usage statistics
   const fetchUsageStats = async () => {
@@ -55,6 +61,7 @@ function SubscriptionManagePage() {
     } catch (error: any) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

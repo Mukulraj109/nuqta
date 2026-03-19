@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface DeliveryInfo {
   estimatedDate: string;
@@ -22,6 +23,7 @@ function DeliveryEstimator({ productId, onCheckDelivery }: DeliveryEstimatorProp
   const [loading, setLoading] = useState(false);
   const [deliveryInfo, setDeliveryInfo] = useState<DeliveryInfo | null>(null);
   const [error, setError] = useState('');
+  const isMounted = useIsMounted();
 
   const handleCheck = async () => {
     if (pincode.length !== 6) {
@@ -35,9 +37,11 @@ function DeliveryEstimator({ productId, onCheckDelivery }: DeliveryEstimatorProp
     try {
       if (onCheckDelivery) {
         const info = await onCheckDelivery(pincode);
+        if (!isMounted()) return;
         setDeliveryInfo(info);
       } else {
         // Mock delivery estimation
+        if (!isMounted()) return;
         await new Promise(resolve => setTimeout(resolve, 500));
         const mockInfo: DeliveryInfo = {
           estimatedDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN', {
@@ -52,8 +56,10 @@ function DeliveryEstimator({ productId, onCheckDelivery }: DeliveryEstimatorProp
         setDeliveryInfo(mockInfo);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Unable to check delivery. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

@@ -23,6 +23,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const HERO_HEIGHT = 280;
@@ -76,6 +77,7 @@ function ExperienceDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [imageError, setImageError] = useState(false);
+  const isMounted = useIsMounted();
 
   const fetchExperience = useCallback(async () => {
     if (!id) return;
@@ -86,13 +88,16 @@ function ExperienceDetailPage() {
 
       if (response.success && response.data) {
         const data = response.data.experience || response.data;
+        if (!isMounted()) return;
         setExperience(data);
       } else {
         setError(response.message || 'Experience not found');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err?.message || 'Failed to load experience details');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [id]);

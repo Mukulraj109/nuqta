@@ -33,10 +33,12 @@ import apiClient from '@/services/apiClient';
 import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type TabKey = 'all' | 'store' | 'bank' | 'rez';
 
 function OffersScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams<OffersScreenParams>();
   const { storeId, storeName, storeLogo, amount } = params;
@@ -67,19 +69,25 @@ function OffersScreen() {
       const response = await apiClient.get<OffersResponse>(`/store-payment/offers/${storeId}`, { amount: numericAmount });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setOffers(response.data);
 
         // Auto-select best offer
         if (response.data.bestOffer) {
+          if (!isMounted()) return;
           setSelectedOffers([response.data.bestOffer]);
         }
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to load offers');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load offers');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   };

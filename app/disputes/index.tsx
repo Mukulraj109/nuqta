@@ -16,6 +16,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import disputeApi, { Dispute } from '@/services/disputeApi';
 import { CachedImage } from '@/components/ui/CachedImage';
 import { colors, typography, spacing, borderRadius, shadows } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const STATUS_COLORS: Record<string, string> = {
   open: colors.error,
@@ -38,6 +39,7 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 function DisputeListScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { isAuthenticated, authLoading } = useAuth();
   const [disputes, setDisputes] = useState<Dispute[]>([]);
@@ -70,7 +72,9 @@ function DisputeListScreen() {
     } catch (err) {
       if (__DEV__) console.error('Failed to fetch disputes:', err);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [authLoading, isAuthenticated]);
@@ -82,6 +86,7 @@ function DisputeListScreen() {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchDisputes(1);
+    if (!isMounted()) return;
     setRefreshing(false);
   }, [fetchDisputes]);
 

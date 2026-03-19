@@ -26,6 +26,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 interface CompareItem {
   id: string;
   name: string;
@@ -46,6 +47,7 @@ interface CompareItem {
 }
 
 const GroceryComparePage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -122,14 +124,19 @@ const GroceryComparePage: React.FC = () => {
           };
         });
 
+        if (!isMounted()) return;
         setCompareItems(items);
       } else {
+        if (!isMounted()) return;
         setCompareItems(getFallbackCompareItems());
       }
     } catch (err) {
+      if (!isMounted()) return;
       setCompareItems(getFallbackCompareItems());
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [selectedCategory]);
@@ -277,6 +284,7 @@ const GroceryComparePage: React.FC = () => {
 
       {/* Compare Items */}
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

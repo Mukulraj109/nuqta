@@ -26,6 +26,7 @@ import apiClient from '@/services/apiClient';
 import { platformAlert } from '@/utils/platformAlert';
 import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.config';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type TabType = 'upload' | 'history';
 
@@ -36,6 +37,7 @@ interface StoreSearchResult {
 }
 
 function PhotoUploadPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('upload');
 
@@ -63,6 +65,7 @@ function PhotoUploadPage() {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoadingHistory(false);
     }
   }, []);
@@ -91,6 +94,7 @@ function PhotoUploadPage() {
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setSearchingStores(false);
       }
     }, 400);
@@ -108,6 +112,7 @@ function PhotoUploadPage() {
 
     if (!result.canceled) {
       const newPhotos = result.assets.map(a => a.uri);
+      if (!isMounted()) return;
       setPhotos(prev => [...prev, ...newPhotos].slice(0, 10));
     }
   };
@@ -173,10 +178,15 @@ function PhotoUploadPage() {
       if (result.success) {
         const coins = result.data?.coinReward?.coinsAwarded || 25;
         platformAlert(`Photos uploaded! ${coins} coins pending review.`);
+        if (!isMounted()) return;
         setPhotos([]);
+        if (!isMounted()) return;
         setCaption('');
+        if (!isMounted()) return;
         setSelectedStore(null);
+        if (!isMounted()) return;
         setStoreSearch('');
+        if (!isMounted()) return;
         setActiveTab('history');
         fetchHistory();
       } else {
@@ -185,6 +195,7 @@ function PhotoUploadPage() {
     } catch (error: any) {
       platformAlert(error.message || 'Failed to upload photos');
     } finally {
+      if (!isMounted()) return;
       setUploading(false);
     }
   };
@@ -450,7 +461,7 @@ const styles = StyleSheet.create({
   uploadButton: { backgroundColor: Colors.primary[600], flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.sm, padding: Spacing.md, borderRadius: BorderRadius.md },
   uploadButtonDisabled: { opacity: 0.5 },
   uploadButtonText: { ...Typography.label, color: colors.background.primary },
-  historyList: { padding: Spacing.lg, paddingBottom: Spacing['3xl'] },
+  historyList: { padding: Spacing.lg, paddingBottom: 120 },
   historyCard: { flexDirection: 'row', backgroundColor: Colors.background.primary, borderRadius: BorderRadius.lg, padding: Spacing.md, marginBottom: Spacing.sm, gap: Spacing.md, ...Shadows.subtle },
   historyPhotos: { flexDirection: 'row', alignItems: 'center' },
   historyPhoto: { width: 48, height: 48, borderRadius: BorderRadius.md, borderWidth: 2, borderColor: colors.background.primary },

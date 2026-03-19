@@ -48,8 +48,8 @@ function AboutPage() {
     try { await Linking.openURL('mailto:support@nuqtaapp.com'); } catch (_e) { /* silently handle */ }
   };
 
-  const handlePhonePress = async () => {
-    try { await Linking.openURL('tel:1800XXXXXXX'); } catch (_e) { /* silently handle */ }
+  const handleWebsitePress = async () => {
+    try { await Linking.openURL('https://nuqtaapp.com'); } catch (_e) { /* silently handle */ }
   };
 
   return (
@@ -169,7 +169,7 @@ function AboutPage() {
         {/* Contact Card */}
         <View style={styles.card}>
           <View style={styles.cardHeader}>
-            <Ionicons name="call" size={24} color={Colors.primary[600]} />
+            <Ionicons name="mail" size={24} color={Colors.primary[600]} />
             <ThemedText style={styles.cardTitle}>Contact</ThemedText>
           </View>
           <Pressable
@@ -184,13 +184,13 @@ function AboutPage() {
           </Pressable>
           <Pressable
             style={styles.contactItem}
-            onPress={handlePhonePress}
+            onPress={handleWebsitePress}
             accessible={true}
-            accessibilityLabel="Call toll free number"
+            accessibilityLabel="Visit our website"
             accessibilityRole="link"
           >
-            <Ionicons name="call-outline" size={20} color={Colors.text.secondary} />
-            <ThemedText style={styles.contactText}>1800-XXX-XXXX (Toll Free)</ThemedText>
+            <Ionicons name="globe-outline" size={20} color={Colors.text.secondary} />
+            <ThemedText style={styles.contactText}>nuqtaapp.com</ThemedText>
           </Pressable>
         </View>
 
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: Spacing.base,
-    paddingBottom: Spacing['3xl'],
+    paddingBottom: 120,
   },
   logoSection: {
     alignItems: 'center',

@@ -14,6 +14,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 
 // Fallback gradient colors for categories
@@ -27,6 +28,7 @@ const categoryGradients: Record<string, string[]> = {
 };
 
 const TravelCategoryPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -65,24 +67,33 @@ const TravelCategoryPage: React.FC = () => {
         if (response.success && response.data) {
           const data = response.data;
           if (currentPage === 1) {
+            if (!isMounted()) return;
             setServices(data.services || []);
           } else {
+            if (!isMounted()) return;
             setServices(prev => [...prev, ...(data.services || [])]);
           }
           if (data.category) {
+            if (!isMounted()) return;
             setCategoryInfo(data.category);
           }
           if (data.pagination) {
+            if (!isMounted()) return;
             setTotalPages(data.pagination.pages);
+            if (!isMounted()) return;
             setHasMore(data.pagination.page < data.pagination.pages);
           }
+          if (!isMounted()) return;
           setError(null);
         } else {
+          if (!isMounted()) return;
           setError(response.error || 'Failed to load services');
         }
       } catch (error) {
+        if (!isMounted()) return;
         setError('Failed to load services. Please try again.');
       } finally {
+        if (!isMounted()) return;
         setIsLoading(false);
       }
     };
@@ -190,7 +201,8 @@ const TravelCategoryPage: React.FC = () => {
         </ScrollView>
       </View>
 
-      <ScrollView 
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }} 
         showsVerticalScrollIndicator={false}
         onScroll={({ nativeEvent }) => {
           const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;

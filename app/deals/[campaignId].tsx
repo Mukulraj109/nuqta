@@ -25,6 +25,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const DEAL_CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
@@ -64,6 +65,7 @@ const COLORS = {
 };
 
 const CampaignDetailPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -99,13 +101,17 @@ const CampaignDetailPage: React.FC = () => {
               : undefined,
           })),
         };
+        if (!isMounted()) return;
         setCampaign(transformedCampaign);
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Campaign not found');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load campaign');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -217,7 +223,8 @@ const CampaignDetailPage: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }} showsVerticalScrollIndicator={false} bounces={false}>
         {/* Expired Campaign Banner */}
         {isExpired && (
           <View style={styles.expiredBanner}>
@@ -256,7 +263,6 @@ const CampaignDetailPage: React.FC = () => {
           <Pressable
             onPress={() => router.back()}
             style={styles.backButton}
-           
           >
             <Ionicons name="arrow-back" size={22} color={COLORS.white} />
           </Pressable>

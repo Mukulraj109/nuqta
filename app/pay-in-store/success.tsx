@@ -301,6 +301,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: spacing.md,
     alignItems: 'center',
+    paddingBottom: 120,
   },
   successIconContainer: {
     marginTop: spacing.xl,

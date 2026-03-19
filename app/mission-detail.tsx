@@ -28,6 +28,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
 import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -109,6 +110,7 @@ const ProgressCircle: React.FC<{ progress: number; size?: number; strokeWidth?: 
 };
 
 const MissionDetailScreen: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams<{ id: string; progressId: string }>();
   const { id: challengeId, progressId } = params;
@@ -146,22 +148,30 @@ const MissionDetailScreen: React.FC = () => {
           (cp: ChallengeProgress) => cp.challenge._id === challengeId
         );
         if (challengeProgress) {
+          if (!isMounted()) return;
           setProgress(challengeProgress);
+          if (!isMounted()) return;
           setChallenge(challengeProgress.challenge);
         } else {
+          if (!isMounted()) return;
           setError('Challenge not found');
         }
       } else {
+        if (!isMounted()) return;
         setError(progressResponse.error || 'Failed to load challenge');
       }
 
       if (leaderboardResponse.success && leaderboardResponse.data) {
+        if (!isMounted()) return;
         setLeaderboard(leaderboardResponse.data);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load challenge details');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       if (isRefresh) setRefreshing(false);
     }
   }, [challengeId]);
@@ -194,6 +204,7 @@ const MissionDetailScreen: React.FC = () => {
     try {
       const response = await challengesApi.claimReward(progressId);
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setProgress(prev => prev ? { ...prev, rewardsClaimed: true } : null);
         platformAlertSimple('Rewards Claimed!', `+${response.data.coinsEarned} coins added to your wallet!`);
       } else {
@@ -202,6 +213,7 @@ const MissionDetailScreen: React.FC = () => {
     } catch (err: any) {
       platformAlertSimple('Error', err.message || 'Failed to claim rewards');
     } finally {
+      if (!isMounted()) return;
       setClaiming(false);
     }
   };
@@ -531,6 +543,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: spacing.md,
+    paddingBottom: 120,
   },
   challengeCard: {
     backgroundColor: colors.background.primary,

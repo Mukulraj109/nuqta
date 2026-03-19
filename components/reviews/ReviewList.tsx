@@ -17,6 +17,7 @@ import { Review, ReviewFilters, ReviewStats } from '@/types/review.types';
 import reviewService from '@/services/reviewApi';
 import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ReviewListProps {
   storeId: string;
@@ -43,6 +44,7 @@ function ReviewList({
   const [hasNextPage, setHasNextPage] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [filterRating, setFilterRating] = useState<FilterRating>('all');
+  const isMounted = useIsMounted();
 
   const loadReviews = useCallback(async (
     page: number = 1,
@@ -73,11 +75,13 @@ function ReviewList({
         const newReviews = response.data.reviews;
 
         if (page === 1) {
+          if (!isMounted()) return;
           setReviews(newReviews);
         } else {
           setReviews(prev => [...prev, ...newReviews]);
         }
 
+        if (!isMounted()) return;
         setRatingStats(response.data.ratingStats);
         setCurrentPage(page);
         setHasNextPage(response.data.pagination.hasNextPage);
@@ -85,6 +89,7 @@ function ReviewList({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
       setIsRefreshing(false);
       setIsLoadingMore(false);

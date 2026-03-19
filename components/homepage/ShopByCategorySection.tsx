@@ -16,6 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { categoriesApi, Category } from '@/services/categoriesApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_GAP = 12;
@@ -134,6 +135,7 @@ const ShopByCategorySection: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState<CategoryData[]>(FALLBACK_CATEGORIES);
   const [totalCategories, setTotalCategories] = useState(15);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -156,17 +158,20 @@ const ShopByCategorySection: React.FC = () => {
               badgeType: style.badgeType,
             };
           });
+          if (!isMounted()) return;
           setCategories(transformed);
 
           // Get total count
           const allResponse = await categoriesApi.getCategories({ isActive: true });
           if (allResponse.success && allResponse.data) {
+            if (!isMounted()) return;
             setTotalCategories(allResponse.data.length);
           }
         }
       } catch (error) {
         // Keep using fallback data
       } finally {
+        if (!isMounted()) return;
         setIsLoading(false);
       }
     };

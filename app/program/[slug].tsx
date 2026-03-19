@@ -29,6 +29,7 @@ import { platformAlert } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography, Shadows } from '@/constants/DesignSystem';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const VALID_SLUGS: SpecialProgramSlug[] = ['student_zone', 'corporate_perks', 'nuqta_prive'];
 
@@ -62,14 +63,18 @@ function ProgramDetailScreen() {
       if (response.success && response.data) {
         setEligibility(response.data);
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Failed to check eligibility');
       }
     } catch {
+      if (!isMounted()) return;
       setError('Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [programSlug]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (programSlug) {
@@ -94,6 +99,7 @@ function ProgramDetailScreen() {
     } catch {
       platformAlert('Error', 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setActivating(false);
     }
   };
@@ -128,7 +134,11 @@ function ProgramDetailScreen() {
     const progress = cap > 0 ? Math.min((earned / cap) * 100, 100) : 0;
 
     return (
-      <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         <View style={styles.statusBanner}>
           <LinearGradient
             colors={[iconConfig.color + '20', iconConfig.color + '10']}

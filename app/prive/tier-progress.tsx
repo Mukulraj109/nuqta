@@ -39,6 +39,7 @@ import { ELIGIBILITY_THRESHOLDS } from '@/types/mode.types';
 import priveApi from '@/services/priveApi';
 import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ─── Tier Definition (derived from ELIGIBILITY_THRESHOLDS, never hardcoded) ──
 interface TierDef {
@@ -380,6 +381,7 @@ function TierProgressScreen() {
   const { eligibility, isLoading: hookLoading, refresh, error: hookError } = usePriveEligibility();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   const isLoading = hookLoading && eligibility.score === 0 && eligibility.pillars.length === 0;
 
@@ -394,8 +396,10 @@ function TierProgressScreen() {
       await priveApi.refreshScore();
       await refresh();
     } catch {
+      if (!isMounted()) return;
       setError('Failed to refresh tier data');
     } finally {
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [refresh]);

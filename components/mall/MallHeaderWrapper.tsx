@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import mallApi from '../../services/mallApi';
 import { MallBanner } from '../../types/mall.types';
 import MallHeroBanner from './MallHeroBanner';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 /**
  * Self-contained wrapper that fetches hero banners and renders the Mall banner.
@@ -13,6 +14,7 @@ const MallHeaderWrapper: React.FC = () => {
   const router = useRouter();
   const [heroBanners, setHeroBanners] = useState<MallBanner[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     let mounted = true;
@@ -20,12 +22,14 @@ const MallHeaderWrapper: React.FC = () => {
       try {
         const banners = await mallApi.getHeroBanners();
         if (mounted) {
+          if (!isMounted()) return;
           setHeroBanners(banners);
         }
       } catch (error) {
         // silently handle
       } finally {
         if (mounted) {
+          if (!isMounted()) return;
           setIsLoading(false);
         }
       }

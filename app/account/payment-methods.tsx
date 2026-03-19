@@ -33,10 +33,12 @@ import {
 import { SectionListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type ModalMode = 'add' | 'edit' | null;
 
 function PaymentMethodsManagementPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const {
     paymentMethods,
@@ -218,12 +220,14 @@ function PaymentMethodsManagementPage() {
         if (selectedType === PaymentMethodType.CARD) {
           // Validate all required fields
           if (!cardNumber || !cardholderName || !expiryMonth || !expiryYear || !cvv) {
+            if (!isMounted()) return;
             setFormError('Please fill in all required card details');
             return;
           }
 
           // Validate card number with Luhn algorithm
           if (!validateLuhn(cardNumber)) {
+            if (!isMounted()) return;
             setFormError('Invalid card number. Please check and try again.');
             return;
           }
@@ -237,6 +241,7 @@ function PaymentMethodsManagementPage() {
 
           // Validate CVV
           if (!/^\d{3,4}$/.test(cvv)) {
+            if (!isMounted()) return;
             setFormError('CVV must be 3 or 4 digits');
             return;
           }
@@ -258,6 +263,7 @@ function PaymentMethodsManagementPage() {
           platformAlertSimple('Success', 'Card added successfully');
         } else if (selectedType === PaymentMethodType.UPI) {
           if (!upiVpa) {
+            if (!isMounted()) return;
             setFormError('Please enter UPI ID');
             return;
           }
@@ -283,6 +289,7 @@ function PaymentMethodsManagementPage() {
         } else if (selectedType === PaymentMethodType.BANK_ACCOUNT) {
           // Validate all required fields
           if (!bankName || !bankAccountHolderName || !bankAccountNumber || !bankIfscCode) {
+            if (!isMounted()) return;
             setFormError('Please fill in all required bank account details');
             return;
           }
@@ -311,11 +318,14 @@ function PaymentMethodsManagementPage() {
         }
       }
 
+      if (!isMounted()) return;
       setModalMode(null);
       resetForm();
     } catch (error) {
+      if (!isMounted()) return;
       setFormError('Failed to save payment method. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setActionLoading(false);
     }
   };

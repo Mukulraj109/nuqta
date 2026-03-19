@@ -11,8 +11,10 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function OrderDetailsScreen() {
+  const isMounted = useIsMounted();
   const { id } = useLocalSearchParams();
   const navigation = useNavigation();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -46,14 +48,18 @@ function OrderDetailsScreen() {
 
       if (response.success && response.data) {
         const mappedOrder = mapBackendOrderToFrontend(response.data);
+        if (!isMounted()) return;
         setOrder(mappedOrder);
         setError(null);
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Failed to load order');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError(err instanceof Error ? err.message : 'Failed to load order details');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -86,6 +92,7 @@ function OrderDetailsScreen() {
 
       platformAlertSimple('Error', errorMsg);
     } finally {
+      if (!isMounted()) return;
       setCancelling(false);
     }
   };

@@ -12,21 +12,25 @@ import { WalletData, CoinType } from '@/types/wallet';
 import { Colors, Spacing, BorderRadius, Shadows } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const BALANCE_HIDDEN_KEY = '@wallet_balance_hidden';
 
 interface BalanceDisplayProps {
   walletData: WalletData;
   onCoinPress?: (type: CoinType) => void;
+  currencySymbol?: string;
 }
 
-export const BalanceDisplay: React.FC<BalanceDisplayProps> = React.memo(({ walletData, onCoinPress }) => {
+export const BalanceDisplay: React.FC<BalanceDisplayProps> = React.memo(({ walletData, onCoinPress, currencySymbol = '₹' }) => {
   const [isHidden, setIsHidden] = useState(false);
+  const isMounted = useIsMounted();
   const countAnim = useRef(new Animated.Value(0)).current;
 
   // Load persisted hide state
   useEffect(() => {
     AsyncStorage.getItem(BALANCE_HIDDEN_KEY).then(val => {
+      if (!isMounted()) return;
       if (val === 'true') setIsHidden(true);
     }).catch(() => {});
   }, []);
@@ -49,6 +53,7 @@ export const BalanceDisplay: React.FC<BalanceDisplayProps> = React.memo(({ walle
   const toggleHidden = async () => {
     const newVal = !isHidden;
     setIsHidden(newVal);
+    if (!isMounted()) return;
     await AsyncStorage.setItem(BALANCE_HIDDEN_KEY, String(newVal));
   };
 
@@ -73,7 +78,13 @@ export const BalanceDisplay: React.FC<BalanceDisplayProps> = React.memo(({ walle
   const promoCoin = walletData.coins?.find(c => c.type === 'promo');
   const brandedTotal = Number(walletData.brandedCoinsTotal) || 0;
 
-  const displayBalance = isHidden ? '****' : `${BRAND.CURRENCY_CODE} ${Number.isFinite(animatedBalance) ? animatedBalance.toLocaleString('en-IN') : '0'}`;
+  const conversionRate = (walletData as any)?.conversionRate || 2;
+  const rupeeValue = Number.isFinite(animatedBalance)
+    ? Math.floor(animatedBalance / conversionRate)
+    : 0;
+  const displayBalance = isHidden
+    ? `${currencySymbol}****`
+    : `${currencySymbol}${rupeeValue.toLocaleString('en-IN')}`;
 
   return (
     <View style={styles.container}>
@@ -94,7 +105,9 @@ export const BalanceDisplay: React.FC<BalanceDisplayProps> = React.memo(({ walle
           />
         </Pressable>
       </View>
-      <ThemedText style={styles.subtitle}>Total Wallet Balance</ThemedText>
+      <ThemedText style={styles.subtitle}>
+        {isHidden ? 'Total Wallet Balance' : `${totalBalance.toLocaleString('en-IN')} ${BRAND.CURRENCY_CODE} coins`}
+      </ThemedText>
 
       {/* Coin Chips Row */}
       <View style={styles.chipRow}>

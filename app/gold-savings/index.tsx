@@ -30,6 +30,7 @@ import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { errorReporter } from '@/utils/errorReporter';
 import ErrorState from '@/components/common/ErrorState';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const GOLD_COLOR = colors.warningScale[400];
 const GOLD_DARK = colors.warningScale[700];
@@ -40,6 +41,7 @@ function generateIdempotencyKey(): string {
 }
 
 function GoldSavingsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const isAuthenticated = useIsAuthenticated();
@@ -81,11 +83,14 @@ function GoldSavingsPage() {
       setError(null);
       const response = await goldSavingsApi.getPrice();
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setGoldPrice(response.data);
       } else {
+        if (!isMounted()) return;
         setError('Failed to load gold price. Please try again.');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load gold price. Please try again.');
       errorReporter.captureError(
         err instanceof Error ? err : new Error('Failed to fetch gold price'),
@@ -93,6 +98,7 @@ function GoldSavingsPage() {
         'warning'
       );
     } finally {
+      if (!isMounted()) return;
       setLoadingPrice(false);
     }
   }, []);
@@ -104,6 +110,7 @@ function GoldSavingsPage() {
       setLoadingHolding(true);
       const response = await goldSavingsApi.getHolding();
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setHolding(response.data);
       }
     } catch (err) {
@@ -113,6 +120,7 @@ function GoldSavingsPage() {
         'warning'
       );
     } finally {
+      if (!isMounted()) return;
       setLoadingHolding(false);
     }
   }, [isAuthenticated, authLoading]);
@@ -128,12 +136,16 @@ function GoldSavingsPage() {
       if (response.success && response.data) {
         const items = response.data;
         if (append) {
+          if (!isMounted()) return;
           setTransactions(prev => [...prev, ...items]);
         } else {
+          if (!isMounted()) return;
           setTransactions(items);
         }
         const pagination = response.meta?.pagination;
+        if (!isMounted()) return;
         setTxHasMore(pagination ? pagination.page < pagination.pages : false);
+        if (!isMounted()) return;
         setTxPage(page);
       }
     } catch (err) {
@@ -143,7 +155,9 @@ function GoldSavingsPage() {
         'warning'
       );
     } finally {
+      if (!isMounted()) return;
       setLoadingTx(false);
+      if (!isMounted()) return;
       setLoadingMoreTx(false);
     }
   }, [isAuthenticated, authLoading]);
@@ -162,6 +176,7 @@ function GoldSavingsPage() {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await Promise.all([fetchPrice(), fetchHolding(), fetchTransactions(1)]);
+    if (!isMounted()) return;
     setRefreshing(false);
   }, [fetchPrice, fetchHolding, fetchTransactions]);
 
@@ -226,10 +241,12 @@ function GoldSavingsPage() {
           'Purchase Successful',
           `You bought ${result.grams.toFixed(4)} gm of gold for ${currencySymbol}${result.amount.toLocaleString()}.`
         );
+        if (!isMounted()) return;
         setAmount('');
         fetchHolding();
         fetchTransactions(1);
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Purchase failed');
         platformAlertSimple('Purchase Failed', response.message || 'Something went wrong.');
       }
@@ -239,9 +256,11 @@ function GoldSavingsPage() {
         { context: 'GoldSavingsPage.executeBuy' },
         'warning'
       );
+      if (!isMounted()) return;
       setError('Purchase failed. Please try again.');
       platformAlertSimple('Error', 'Purchase failed. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setProcessing(false);
       processingRef.current = false;
     }
@@ -262,10 +281,12 @@ function GoldSavingsPage() {
           'Sale Successful',
           `You sold ${result.grams.toFixed(4)} gm of gold for ${currencySymbol}${result.amount.toFixed(2)}.`
         );
+        if (!isMounted()) return;
         setAmount('');
         fetchHolding();
         fetchTransactions(1);
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Sale failed');
         platformAlertSimple('Sale Failed', response.message || 'Something went wrong.');
       }
@@ -275,9 +296,11 @@ function GoldSavingsPage() {
         { context: 'GoldSavingsPage.executeSell' },
         'warning'
       );
+      if (!isMounted()) return;
       setError('Sale failed. Please try again.');
       platformAlertSimple('Error', 'Sale failed. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setProcessing(false);
       processingRef.current = false;
     }
@@ -362,6 +385,7 @@ function GoldSavingsPage() {
       )}
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.content}
         showsVerticalScrollIndicator={false}
         refreshControl={

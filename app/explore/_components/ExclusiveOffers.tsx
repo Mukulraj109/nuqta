@@ -17,6 +17,7 @@ import mallApi from '@/services/mallApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.75;
 
@@ -35,6 +36,7 @@ interface Offer {
 }
 
 const ExclusiveOffers = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [offers, setOffers] = useState<Offer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -66,8 +68,10 @@ const ExclusiveOffers = () => {
         setOffers(transformedOffers);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load offers');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

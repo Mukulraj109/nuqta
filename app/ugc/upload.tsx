@@ -23,6 +23,9 @@ import { useAuthUser } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { fileUploadService } from '@/services/fileUploadService';
+import ugcApi from '@/services/ugcApi';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface UploadForm {
   mediaUri: string | null;
@@ -46,6 +49,7 @@ function UGCUploadScreen() {
   });
 
   const [tagInput, setTagInput] = useState('');
+  const isMounted = useIsMounted();
 
   // Request permissions on mount
   React.useEffect(() => {
@@ -77,6 +81,7 @@ function UGCUploadScreen() {
 
       if (!result.canceled && result.assets[0]) {
         const asset = result.assets[0];
+        if (!isMounted()) return;
         setForm({
           ...form,
           mediaUri: asset.uri,
@@ -99,6 +104,7 @@ function UGCUploadScreen() {
 
       if (!result.canceled && result.assets[0]) {
         const asset = result.assets[0];
+        if (!isMounted()) return;
         setForm({
           ...form,
           mediaUri: asset.uri,
@@ -142,15 +148,40 @@ function UGCUploadScreen() {
     try {
       setUploading(true);
 
-      // TODO: Implement actual upload to backend
-      // For now, simulate upload
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Step 1: Upload media file to get a hosted URL
+      const uploadResult = await fileUploadService.uploadFile(
+        {
+          uri: form.mediaUri,
+          type: form.mediaType || 'image',
+          fileName: `ugc_${Date.now()}.${form.mediaType === 'video' ? 'mp4' : 'jpg'}`,
+          mimeType: form.mediaType === 'video' ? 'video/mp4' : 'image/jpeg',
+        },
+        'ugc'
+      );
 
-      platformAlertSimple('Success!', 'Your content has been uploaded successfully.');
+      // Step 2: Create the UGC reel via backend API
+      const response = await ugcApi.createReel({
+        title: form.caption.trim().substring(0, 100),
+        description: form.caption.trim(),
+        videoUrl: uploadResult.url,
+        thumbnailUrl: uploadResult.thumbnailUrl,
+        tags: form.tags,
+      });
+
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to create post');
+      }
+
+      const coinMsg = response.data?.coinReward
+        ? `\nYou earned ${response.data.coinReward.coinsAwarded} coins!`
+        : '';
+      platformAlertSimple('Success!', `Your content has been submitted for review.${coinMsg}`);
       router.back();
-    } catch (error) {
-      platformAlertSimple('Upload Failed', 'Failed to upload content. Please try again.');
+    } catch (error: any) {
+      const message = error?.message || 'Failed to upload content. Please try again.';
+      platformAlertSimple('Upload Failed', message);
     } finally {
+      if (!isMounted()) return;
       setUploading(false);
     }
   };
@@ -201,7 +232,11 @@ function UGCUploadScreen() {
         </Pressable>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Media Section */}
         <View style={styles.section}>
           <ThemedText style={styles.sectionTitle}>Media</ThemedText>

@@ -19,6 +19,7 @@ import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDa
 import { formatPrice } from '@/utils/priceFormatter';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ShoppableProductCardProps {
   product: any; // Can be ProductItem or backend product structure
@@ -45,6 +46,7 @@ function ShoppableProductCard({
   const currencySymbol = getCurrencySymbol();
   const [isAdding, setIsAdding] = useState(false);
   const [scaleAnim] = useState(new Animated.Value(1));
+  const isMounted = useIsMounted();
 
   // Normalize price and rating using utility functions
   const normalizedPrice = normalizeProductPrice(product);
@@ -116,6 +118,7 @@ function ShoppableProductCard({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsAdding(false);
     }
   }, [onAddToCart, isInStock, scaleAnim]);

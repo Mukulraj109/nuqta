@@ -26,8 +26,10 @@ const ArticleSection = React.lazy(() => import('@/components/playPage/ArticleSec
 const UGCVideoSection = React.lazy(() => import('@/components/playPage/UGCVideoSection'));
 import logger from '@/utils/logger';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function PlayScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { state, actions } = usePlayPageData();
   const { preloadVideos, isPreloaded } = useVideoPreload();
@@ -58,6 +60,7 @@ function PlayScreen() {
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setArticles(response.data.articles);
         logger.debug(`✅ [PlayPage] Loaded ${response.data.articles.length} articles`);
       } else {
@@ -65,8 +68,10 @@ function PlayScreen() {
       }
     } catch (error) {
       logger.error('❌ [PlayPage] Failed to fetch articles:', error instanceof Error ? error : undefined);
+      if (!isMounted()) return;
       setArticlesError('Failed to load articles');
     } finally {
+      if (!isMounted()) return;
       setArticlesLoading(false);
     }
   }, []);

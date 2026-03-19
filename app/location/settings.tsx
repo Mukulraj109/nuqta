@@ -19,8 +19,10 @@ import LocationDisplay from '@/components/location/LocationDisplay';
 import TimeDisplay from '@/components/location/TimeDisplay';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function LocationSettingsScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { permissionStatus, requestPermission } = useLocationPermission();
   const { currentLocation } = useCurrentLocation();
@@ -166,7 +168,11 @@ function LocationSettingsScreen() {
         <View style={styles.headerRight} />
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Current Location */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Current Location</Text>

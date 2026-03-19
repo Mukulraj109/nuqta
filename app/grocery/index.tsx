@@ -27,6 +27,7 @@ import { storesApi } from '@/services/storesApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -96,6 +97,7 @@ interface Stats {
 }
 
 const GroceryPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -138,6 +140,7 @@ const GroceryPage: React.FC = () => {
               count: sub.productCount || 0,
             };
           });
+          if (!isMounted()) return;
           setCategories(mappedCategories.length > 0 ? mappedCategories : defaultCategories);
         }
       }
@@ -159,6 +162,7 @@ const GroceryPage: React.FC = () => {
           logo: store.logo,
         }));
 
+        if (!isMounted()) return;
         setFeaturedStores(mappedStores.slice(0, 5));
 
         // Filter quick delivery stores
@@ -178,6 +182,7 @@ const GroceryPage: React.FC = () => {
             image: store.banner || store.image || undefined,
             logo: store.logo,
           }));
+        if (!isMounted()) return;
         setQuickStores(quick.slice(0, 4));
 
         // Calculate stats
@@ -186,6 +191,7 @@ const GroceryPage: React.FC = () => {
           ...stores.map((s: any) => s.operationalInfo?.deliveryTime?.min || 30),
           10
         );
+        if (!isMounted()) return;
         setStats({
           storeCount: stores.length,
           maxCashback,
@@ -193,14 +199,20 @@ const GroceryPage: React.FC = () => {
         });
       } else {
         // Use fallback data
+        if (!isMounted()) return;
         setFeaturedStores(getFallbackStores());
+        if (!isMounted()) return;
         setQuickStores(getFallbackStores().slice(0, 3));
       }
     } catch (err) {
+      if (!isMounted()) return;
       setFeaturedStores(getFallbackStores());
+      if (!isMounted()) return;
       setQuickStores(getFallbackStores().slice(0, 3));
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
@@ -287,6 +299,7 @@ const GroceryPage: React.FC = () => {
       </LinearGradient>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

@@ -27,6 +27,7 @@ import { platformAlert } from '@/utils/platformAlert';
 import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.config';
 import { FormPageSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface PendingReview {
   id: string;
@@ -39,6 +40,7 @@ interface PendingReview {
 }
 
 function ReviewToEarnPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [pendingReviews, setPendingReviews] = useState<PendingReview[]>([]);
   const [potentialEarnings, setPotentialEarnings] = useState(0);
@@ -68,12 +70,15 @@ function ReviewToEarnPage() {
           coins: item.coins || 20,
           bonusCoins: item.type === 'product' ? 10 : 5,
         }));
+        if (!isMounted()) return;
         setPendingReviews(items);
+        if (!isMounted()) return;
         setPotentialEarnings(response.data.potentialEarnings || 0);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, []);
@@ -94,6 +99,7 @@ function ReviewToEarnPage() {
 
     if (!result.canceled) {
       const newPhotos = result.assets.map(a => a.uri);
+      if (!isMounted()) return;
       setPhotos(prev => [...prev, ...newPhotos].slice(0, 5));
     }
   };
@@ -154,9 +160,13 @@ function ReviewToEarnPage() {
 
       if (response.success) {
         platformAlert('Review Submitted!', `You earned ${calculateCoins()} coins for your review!`);
+        if (!isMounted()) return;
         setSelectedItem(null);
+        if (!isMounted()) return;
         setRating(0);
+        if (!isMounted()) return;
         setReview('');
+        if (!isMounted()) return;
         setPhotos([]);
         // Refresh list to remove the reviewed item
         fetchReviewableItems();
@@ -166,6 +176,7 @@ function ReviewToEarnPage() {
     } catch (error: any) {
       platformAlert('Error', 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };
@@ -470,7 +481,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing['3xl'],
+    paddingBottom: 120,
   },
   tipsCard: {
     flexDirection: 'row',

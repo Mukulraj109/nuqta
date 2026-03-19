@@ -28,6 +28,7 @@ import MallEmptyState from '../../../components/mall/pages/MallEmptyState';
 import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkeleton';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -94,6 +95,7 @@ const CollectionCard: React.FC<CollectionCardProps> = ({ collection, onPress }) 
 };
 
 function AllCollectionsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -106,11 +108,15 @@ function AllCollectionsPage() {
     try {
       setError(null);
       const data = await mallApi.getCollections(50);
+      if (!isMounted()) return;
       setCollections(data);
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load collections');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, []);
@@ -214,7 +220,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing.xl,
+    paddingBottom: 120,
   },
   listHeader: {
     marginBottom: Spacing.base,

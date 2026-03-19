@@ -19,6 +19,7 @@ import { useRouter } from 'expo-router';
 import { COLORS } from './constants';
 import reviewsService from '@/services/reviewsApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ReviewItem {
   _id: string;
@@ -71,6 +72,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ maxItems = 6 }) => {
   const router = useRouter();
   const [reviews, setReviews] = useState<ReviewItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   const fetchReviews = useCallback(async () => {
     try {
@@ -82,11 +84,13 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({ maxItems = 6 }) => {
         const withImages = data.filter((r: any) =>
           (Array.isArray(r.images) && r.images.length > 0) || r.image
         );
+        if (!isMounted()) return;
         setReviews(withImages.slice(0, maxItems));
       }
     } catch {
       // Silent fail — section just won't render
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [maxItems]);

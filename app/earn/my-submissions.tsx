@@ -27,6 +27,7 @@ import pollApi, { PollVoteHistory } from '@/services/pollApi';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type FilterType = 'all' | 'photos' | 'reels' | 'comments' | 'votes';
 
@@ -101,6 +102,7 @@ const TYPE_CONFIG = {
 };
 
 function MySubmissionsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [filter, setFilter] = useState<FilterType>('all');
   const [submissions, setSubmissions] = useState<SubmissionItem[]>([]);
@@ -193,11 +195,14 @@ function MySubmissionsPage() {
       // Sort by date descending
       items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
+      if (!isMounted()) return;
       setSubmissions(items);
+      if (!isMounted()) return;
       setTotals({ photos: photoCount, reels: reelCount, comments: commentCount, votes: voteCount, totalCoins });
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, []);
@@ -580,7 +585,7 @@ const styles = StyleSheet.create({
   // ==================== CARDS ====================
   listContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing['3xl'],
+    paddingBottom: 120,
   },
   card: {
     flexDirection: 'row',

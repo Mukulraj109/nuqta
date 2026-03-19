@@ -17,6 +17,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -28,6 +29,7 @@ const categoryConfigs = [
 ];
 
 const SmartPicks = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -78,8 +80,10 @@ const SmartPicks = () => {
         }
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load smart picks');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

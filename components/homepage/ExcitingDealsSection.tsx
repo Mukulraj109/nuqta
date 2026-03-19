@@ -21,6 +21,7 @@ import { useCurrentRegionId, useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 import OfferTile from '@/components/offers/OfferTile';
 import { calculateSaveAmount } from '@/utils/savingsCalculator';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2.3;
@@ -136,6 +137,7 @@ const ExcitingDealsSection: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dealCategories, setDealCategories] = useState<DealCategory[]>([]);
+  const isMounted = useIsMounted();
   const currencySymbol = getCurrencySymbol();
 
   const fetchDeals = useCallback(async () => {
@@ -164,13 +166,16 @@ const ExcitingDealsSection: React.FC = () => {
           })) || [],
         }));
 
+        if (!isMounted()) return;
         setDealCategories(processedCategories);
       } else {
         setDealCategories([]);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err?.message || 'Failed to load deals');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);

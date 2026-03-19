@@ -5,6 +5,7 @@ import { RechargeWalletCardProps } from "@/types/profile";
 import { useRegion } from "@/contexts/RegionContext";
 import paymentService from "@/services/paymentService";
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const RechargeWalletCard: React.FC<RechargeWalletCardProps> = ({
   cashbackText = "Upto 10% cashback on wallet recharge",
@@ -19,6 +20,7 @@ const RechargeWalletCard: React.FC<RechargeWalletCardProps> = ({
   const [selectedAmount, setSelectedAmount] = useState<"other" | number>(amountOptions[0] ?? "other");
   const [customAmount, setCustomAmount] = useState(amountOptions[0]?.toString() ?? "");
   const [cashbackPreview, setCashbackPreview] = useState<{ cashback: number; percentage: number; payableAmount?: number } | null>(null);
+  const isMounted = useIsMounted();
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const finalAmount = selectedAmount === "other" ? Number(customAmount) : selectedAmount;
@@ -33,15 +35,18 @@ const RechargeWalletCard: React.FC<RechargeWalletCardProps> = ({
     try {
       const res = await paymentService.previewCashback(amount);
       if (res.success && res.data) {
+        if (!isMounted()) return;
         setCashbackPreview({
           cashback: res.data.cashback || res.data.discountAmount || 0,
           percentage: res.data.cashbackPercentage || res.data.discountPercentage || 0,
           payableAmount: res.data.payableAmount
         });
       } else {
+        if (!isMounted()) return;
         setCashbackPreview(null);
       }
     } catch {
+      if (!isMounted()) return;
       setCashbackPreview(null);
     }
   }, []);

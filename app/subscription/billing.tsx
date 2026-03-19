@@ -16,6 +16,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function BillingHistoryPage() {
   const router = useRouter();
@@ -30,6 +31,7 @@ function BillingHistoryPage() {
     limit: 20,
     hasMore: false,
   });
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadBillingData();
@@ -45,12 +47,16 @@ function BillingHistoryPage() {
         subscriptionAPI.getBillingSummary(),
       ]);
 
+      if (!isMounted()) return;
       setTransactions(historyData.history);
+      if (!isMounted()) return;
       setPagination(historyData.pagination);
+      if (!isMounted()) return;
       setSummary(summaryData);
     } catch (error: any) {
       platformAlertSimple('Error', error.message || 'Failed to load billing history');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -58,6 +64,7 @@ function BillingHistoryPage() {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await loadBillingData();
+    if (!isMounted()) return;
     setRefreshing(false);
   }, []);
 
@@ -99,7 +106,9 @@ function BillingHistoryPage() {
         limit: pagination.limit,
       });
 
+      if (!isMounted()) return;
       setTransactions([...transactions, ...historyData.history]);
+      if (!isMounted()) return;
       setPagination(historyData.pagination);
     } catch (error: any) {
       // silently handle

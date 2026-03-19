@@ -22,6 +22,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import walletApi from '@/services/walletApi';
 import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface TopupModalProps {
   visible: boolean;
@@ -43,6 +44,7 @@ function TopupModal({
   const [customAmount, setCustomAmount] = useState('');
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const isMounted = useIsMounted();
 
   const handleAmountSelect = (amount: number) => {
     setSelectedAmount(amount);
@@ -104,6 +106,7 @@ function TopupModal({
 
       const newBalance = res.data.wallet?.balance?.total;
 
+      if (!isMounted()) return;
       setLoading(false);
       setSelectedAmount(null);
       setCustomAmount('');
@@ -120,6 +123,7 @@ function TopupModal({
           : `${currencySymbol}${amount.toLocaleString()} has been added to your wallet`
       );
     } catch (error: any) {
+      if (!isMounted()) return;
       setLoading(false);
       platformAlertSimple(
         'Topup Failed',

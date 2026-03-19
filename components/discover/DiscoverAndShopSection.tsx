@@ -23,6 +23,7 @@ import DiscoverAndShopHeader from './DiscoverAndShopHeader';
 import DiscoverAndShopTabBar from './DiscoverAndShopTabBar';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -67,6 +68,7 @@ function DiscoverAndShopSection({
   const currencySymbol = getCurrencySymbol();
   const [activeTab, setActiveTab] = useState<DiscoverTabType>(initialTab);
   const [refreshing, setRefreshing] = useState(false);
+  const isMounted = useIsMounted();
   // Track liked and bookmarked states for optimistic UI updates
   const [likedReels, setLikedReels] = useState<Set<string>>(new Set());
   const [bookmarkedReels, setBookmarkedReels] = useState<Set<string>>(new Set());
@@ -112,6 +114,7 @@ function DiscoverAndShopSection({
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     await actions.fetchTabContent(activeTab, true);
+    if (!isMounted()) return;
     setRefreshing(false);
   }, [activeTab, actions]);
 
@@ -225,6 +228,7 @@ function DiscoverAndShopSection({
       const response = await realVideosApi.toggleVideoLike(reelId);
       if (!response.success) {
         // Revert on error
+        if (!isMounted()) return;
         setLikedReels(prev => {
           const newSet = new Set(prev);
           if (isLiked) {
@@ -237,6 +241,7 @@ function DiscoverAndShopSection({
       }
     } catch (error) {
       // Revert on error
+      if (!isMounted()) return;
       setLikedReels(prev => {
         const newSet = new Set(prev);
         if (isLiked) {
@@ -247,6 +252,7 @@ function DiscoverAndShopSection({
         return newSet;
       });
     } finally {
+      if (!isMounted()) return;
       setProcessingReels(prev => {
         const newSet = new Set(prev);
         newSet.delete(reelId);
@@ -279,6 +285,7 @@ function DiscoverAndShopSection({
       const response = await realVideosApi.toggleBookmark(reelId);
       if (!response.success) {
         // Revert on error
+        if (!isMounted()) return;
         setBookmarkedReels(prev => {
           const newSet = new Set(prev);
           if (isBookmarked) {
@@ -291,6 +298,7 @@ function DiscoverAndShopSection({
       }
     } catch (error) {
       // Revert on error
+      if (!isMounted()) return;
       setBookmarkedReels(prev => {
         const newSet = new Set(prev);
         if (isBookmarked) {
@@ -301,6 +309,7 @@ function DiscoverAndShopSection({
         return newSet;
       });
     } finally {
+      if (!isMounted()) return;
       setProcessingReels(prev => {
         const newSet = new Set(prev);
         newSet.delete(reelId);

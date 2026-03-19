@@ -22,10 +22,12 @@ import logger from '@/utils/logger';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
 function BankOfferDetailScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const isAuthenticated = useIsAuthenticated();
@@ -53,8 +55,10 @@ function BankOfferDetailScreen() {
       }
     } catch (err: any) {
       logger.error('[BankOfferDetail] Error:', err);
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load offer');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -111,7 +115,11 @@ function BankOfferDetailScreen() {
         </Pressable>
       </View>
 
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scroll}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Bank Logo & Info */}
         <LinearGradient
           colors={['#1E40AF', colors.infoScale[400]]}

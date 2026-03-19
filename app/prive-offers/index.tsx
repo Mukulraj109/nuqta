@@ -11,6 +11,7 @@ import {
   StyleSheet,
   Pressable,
   StatusBar,
+  Share,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -23,6 +24,8 @@ import { useAuthUser, useIsAuthenticated, useRezBalance, useRefreshWallet } from
 import { NuqtaCoin as ReZCoin } from '@/components/homepage/ReZCoin';
 import { Spacing, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Dark theme colors
 const DarkColors = {
@@ -47,7 +50,14 @@ function PriveOffersScreen() {
   };
 
   const handleShare = async () => {
-    // TODO: Implement share functionality
+    try {
+      await Share.share({
+        message: `Check out exclusive Prive offers on ${BRAND.APP_NAME}! Redeem your coins for premium rewards.`,
+        title: `${BRAND.APP_NAME} Prive Offers`,
+      });
+    } catch (_error) {
+      // User cancelled share or share failed silently
+    }
   };
 
   const handleFavorite = () => {
@@ -57,6 +67,7 @@ function PriveOffersScreen() {
   const handleRefresh = useCallback(async () => {
     await refreshWallet();
   }, [refreshWallet]);
+  const isMounted = useIsMounted();
 
   return (
     <OffersThemeProvider mode="dark">

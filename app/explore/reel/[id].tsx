@@ -553,6 +553,7 @@ const ReelDetailPage = () => {
         <Text style={styles.commentsTitle}>Comments ({comments.length})</Text>
 
         <FlashList
+        contentContainerStyle={{ paddingBottom: 120 }}
           data={comments}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}

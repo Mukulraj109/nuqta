@@ -16,6 +16,7 @@ import {
   IconSize,
   Timing,
 } from "@/constants/DesignSystem";
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ActionButtonProps {
   label: string;
@@ -53,6 +54,7 @@ const actions: ActionButtonProps[] = [
 ];
 
 function Section2({ dynamicData, cardType }: Section2Props){
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [showContactModal, setShowContactModal] = useState(false);
 

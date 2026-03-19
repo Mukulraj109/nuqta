@@ -9,6 +9,7 @@ import React from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import FrequentlyBoughtTogether from './FrequentlyBoughtTogether';
 import { ProductItem } from '@/types/homepage.types';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Example 1: Product Detail Page Integration
 export function ProductDetailPageExample() {
@@ -96,6 +97,7 @@ export function MainStorePageExample() {
 export function DynamicProductExample() {
   const [currentProduct, setCurrentProduct] = React.useState<ProductItem | null>(null);
   const [loading, setLoading] = React.useState(true);
+  const isMounted = useIsMounted();
 
   React.useEffect(() => {
     // Load product from API
@@ -110,6 +112,7 @@ export function DynamicProductExample() {
       // setCurrentProduct(response.data);
 
       // For demo purposes, using mock data
+      if (!isMounted()) return;
       setCurrentProduct({
         id: '507f1f77bcf86cd799439033',
         type: 'product',
@@ -132,6 +135,7 @@ export function DynamicProductExample() {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

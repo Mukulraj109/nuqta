@@ -30,6 +30,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { CardGridSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const CATEGORIES = [
   { key: 'all', label: 'All' },
   { key: 'shopping', label: 'Shopping' },
@@ -78,6 +79,7 @@ function transformCoupon(coupon: Coupon): DisplayCoupon {
 }
 
 function CouponsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -111,14 +113,18 @@ function CouponsPage() {
 
       if (response.success && response.data) {
         const rawCoupons = response.data.coupons || [];
+        if (!isMounted()) return;
         setCoupons(rawCoupons.map(transformCoupon));
       }
     } catch (err) {
       if (coupons.length === 0) {
+        if (!isMounted()) return;
         setError('Unable to load coupons. Pull down to retry.');
       }
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [coupons.length]);
@@ -157,6 +163,7 @@ function CouponsPage() {
   const handleCopyCoupon = useCallback(async (code: string) => {
     try {
       await Clipboard.setString(code);
+      if (!isMounted()) return;
       setCopiedCode(code);
       platformAlertSimple('Copied!', `Coupon code "${code}" copied to clipboard`);
       setTimeout(() => setCopiedCode(null), 3000);
@@ -329,7 +336,6 @@ function CouponsPage() {
           <Pressable
             onPress={handleRefresh}
             style={styles.retryButton}
-           
           >
             <Text style={styles.retryText}>Try Again</Text>
           </Pressable>
@@ -467,7 +473,7 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.md,
-    paddingBottom: 32,
+    paddingBottom: 120,
   },
   loadingContainer: {
     flex: 1,

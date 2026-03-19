@@ -436,7 +436,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: Spacing.lg,
+    paddingBottom: 120,
   },
   section: {
     marginTop: Spacing.xl,

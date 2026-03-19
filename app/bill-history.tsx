@@ -24,6 +24,7 @@ import { TransactionListSkeleton } from '@/components/skeletons';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Bill {
   _id: string;
@@ -55,6 +56,7 @@ interface Bill {
 type FilterStatus = 'all' | 'pending' | 'approved' | 'rejected';
 
 function BillHistoryPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const navigation = useNavigation();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -123,14 +125,18 @@ function BillHistoryPage() {
         if (append) {
           setBills(prev => [...prev, ...newBills]);
         } else {
+          if (!isMounted()) return;
           setBills(newBills);
         }
+        if (!isMounted()) return;
         setPage(pageNum);
         const pagination = data?.pagination;
+        if (!isMounted()) return;
         setHasMore(pagination ? (pagination.page < pagination.pages) : newBills.length >= 20);
 
         // Update stats from response if available, or compute from first page
         if (data?.stats) {
+          if (!isMounted()) return;
           setStats(data.stats);
         } else if (pageNum === 1 && activeFilter === 'all') {
           const total = pagination?.total || newBills.length;
@@ -140,14 +146,18 @@ function BillHistoryPage() {
           const totalCashback = newBills
             .filter((b: Bill) => b.verificationStatus === 'approved' && b.cashbackAmount)
             .reduce((sum: number, b: Bill) => sum + (b.cashbackAmount || 0), 0);
+          if (!isMounted()) return;
           setStats({ total, pending, totalCashback });
         }
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   };

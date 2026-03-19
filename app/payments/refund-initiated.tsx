@@ -21,6 +21,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface RefundStep {
   id: string;
@@ -154,6 +155,7 @@ function RefundInitiatedPage() {
         if (response.success && response.data) {
           setRefund(mapRefundResponse(response.data));
         } else {
+          if (!isMounted()) return;
           setError('Refund not found');
         }
       } else if (orderId) {
@@ -166,15 +168,19 @@ function RefundInitiatedPage() {
           ) || response.data.refunds[0];
           setRefund(mapRefundResponse(match));
         } else {
+          if (!isMounted()) return;
           setError('No refunds found');
         }
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err?.message || 'Failed to load refund details');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [refundId, orderId]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (authLoading || !isAuthenticated) return;
@@ -184,6 +190,7 @@ function RefundInitiatedPage() {
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchRefund();
+    if (!isMounted()) return;
     setRefreshing(false);
   }, [fetchRefund]);
 

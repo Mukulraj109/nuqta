@@ -16,6 +16,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import disputeApi from '@/services/disputeApi';
 import { platformAlert } from '@/utils/platformAlert';
 import { colors, typography, spacing, borderRadius } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const REASONS = [
   { key: 'item_not_received', label: 'Item Not Received', icon: 'cube-outline' },
@@ -29,6 +30,7 @@ const REASONS = [
 ] as const;
 
 function CreateDisputeScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { isAuthenticated } = useAuth();
   const params = useLocalSearchParams<{
@@ -70,6 +72,7 @@ function CreateDisputeScreen() {
       } catch (err: any) {
         platformAlert('Error', err.message || 'Failed to add evidence');
       } finally {
+        if (!isMounted()) return;
         setSubmitting(false);
       }
       return;
@@ -89,6 +92,7 @@ function CreateDisputeScreen() {
       return;
     }
 
+    if (!isMounted()) return;
     setSubmitting(true);
     try {
       const response = await disputeApi.createDispute({
@@ -111,6 +115,7 @@ function CreateDisputeScreen() {
     } catch (err: any) {
       platformAlert('Error', err.message || 'Failed to submit dispute');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   }, [isAuthenticated, reason, description, params, isAddingEvidence]);

@@ -26,6 +26,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Category configurations
@@ -88,6 +89,7 @@ interface DisplayStore {
 }
 
 const StoresPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
 
@@ -143,16 +145,23 @@ const StoresPage: React.FC = () => {
 
       if (response.success && response.data?.stores) {
         const transformedStores = response.data.stores.map(transformStore);
+        if (!isMounted()) return;
         setStores(transformedStores);
+        if (!isMounted()) return;
         setFilteredStores(transformedStores);
       } else {
+        if (!isMounted()) return;
         setStores([]);
+        if (!isMounted()) return;
         setFilteredStores([]);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load stores');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [config.tags]);
@@ -271,6 +280,7 @@ const StoresPage: React.FC = () => {
       </View>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

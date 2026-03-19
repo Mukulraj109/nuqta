@@ -20,6 +20,7 @@ import {
 import { storesApi } from "@/services/storesApi";
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 export interface NearbyStore {
   id: string;
@@ -55,6 +56,7 @@ function NearbyStoresSection({
   userLat,
   userLng,
 }: NearbyStoresSectionProps) {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [stores, setStores] = useState<NearbyStore[]>(propStores || []);
   const [loading, setLoading] = useState(false);
@@ -84,12 +86,14 @@ function NearbyStoresSection({
           }));
 
         if (nearbyStores.length > 0) {
+          if (!isMounted()) return;
           setStores(nearbyStores);
         }
       }
     } catch (error: any) {
       // API failed — keep empty state (no fake data fallback)
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

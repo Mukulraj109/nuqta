@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui';
 import { Ionicons } from '@expo/vector-icons';
 import { borderRadius, colors, spacing, typography } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 /**
  * Question Interface
@@ -93,6 +94,7 @@ function QASection({
   const [questionText, setQuestionText] = useState('');
   const [answerText, setAnswerText] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const isMounted = useIsMounted();
 
   /**
    * Handle ask question submission
@@ -103,11 +105,13 @@ function QASection({
     setSubmitting(true);
     try {
       await onAskQuestion(questionText);
+      if (!isMounted()) return;
       setQuestionText('');
       setShowAskModal(false);
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };
@@ -121,11 +125,13 @@ function QASection({
     setSubmitting(true);
     try {
       await onAnswerQuestion(questionId, answerText);
+      if (!isMounted()) return;
       setAnswerText('');
       setActiveAnswer(null);
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };

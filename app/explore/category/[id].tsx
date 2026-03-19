@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import exploreApi, { ExploreStore, Category } from '@/services/exploreApi';
+import { useIsMounted } from '@/hooks/useIsMounted';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 
@@ -68,6 +69,7 @@ const filterChips = [
 ];
 
 const CategoryDetailPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const [selectedFilter, setSelectedFilter] = useState('all');
@@ -99,7 +101,9 @@ const CategoryDetailPage = () => {
         exploreApi.getStoresByCategory(categorySlug, { limit: 20 }),
       ]);
 
+      if (!isMounted()) return;
       if (categoryResponse.success && categoryResponse.data) {
+        if (!isMounted()) return;
         setCategoryInfo(categoryResponse.data);
       }
 
@@ -114,7 +118,9 @@ const CategoryDetailPage = () => {
           if (cbValue > maxCb) maxCb = cbValue;
           if (store.offer) offersLive++;
         });
+        if (!isMounted()) return;
         if (maxCb > 0) setMaxCashback(`${maxCb}%`);
+        if (!isMounted()) return;
         if (offersLive > 0) setOffersCount(offersLive);
 
         // Apply local filtering based on selected filter
@@ -128,14 +134,19 @@ const CategoryDetailPage = () => {
           });
         }
 
+        if (!isMounted()) return;
         setStores(fetchedStores);
       } else {
+        if (!isMounted()) return;
         setError(storesResponse.error || 'Failed to fetch stores');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [id, selectedFilter]);
@@ -507,6 +518,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.sm,
     minHeight: 200,
+    paddingBottom: 120,
   },
   loadingContainer: {
     justifyContent: 'center',

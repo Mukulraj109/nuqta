@@ -20,6 +20,7 @@ import {
 } from '../../types/referral.types';
 import { ProfileSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -39,6 +40,7 @@ function ReferralDashboard() {
   } | null>(null);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [userRank, setUserRank] = useState<{ rank: number; totalReferrals: number } | null>(null);
+  const isMounted = useIsMounted();
   const [qrData, setQrData] = useState<{
     qrCode: string;
     referralLink: string;
@@ -61,17 +63,23 @@ function ReferralDashboard() {
       ]);
 
       if (results[0].status === 'fulfilled' && results[0].value) {
+        if (!isMounted()) return;
         setStats(results[0].value.stats);
+        if (!isMounted()) return;
         setProgress(results[0].value.progress);
       }
       if (results[1].status === 'fulfilled' && results[1].value) {
+        if (!isMounted()) return;
         setRewards(results[1].value);
       }
       if (results[2].status === 'fulfilled' && results[2].value) {
+        if (!isMounted()) return;
         setLeaderboard(results[2].value.leaderboard || []);
+        if (!isMounted()) return;
         setUserRank(results[2].value.userRank || null);
       }
       if (results[3].status === 'fulfilled' && results[3].value) {
+        if (!isMounted()) return;
         setQrData(results[3].value);
       }
 
@@ -83,6 +91,7 @@ function ReferralDashboard() {
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load referral data');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -90,6 +99,7 @@ function ReferralDashboard() {
   const onRefresh = async () => {
     setRefreshing(true);
     await loadData();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -129,6 +139,7 @@ function ReferralDashboard() {
 
   return (
     <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
       style={styles.container}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -295,7 +306,7 @@ function ReferralDashboard() {
                 }
                 accessibilityLabel={`Claim ${reward.description}`}
                 accessibilityRole="button"
-                accessibilityHint={`Claims your reward of ${reward.amount > 0 ? currencySymbol + reward.amount : 'premium access'}`}
+                accessibilityHint={`Claims your reward of ${(reward.amount ?? 0) > 0 ? currencySymbol + reward.amount : 'premium access'}`}
               >
                 <Text style={styles.claimButtonText}>Claim</Text>
               </Pressable>

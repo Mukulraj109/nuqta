@@ -14,6 +14,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useProductQuestions } from '@/hooks/useProductQuestions';
 import { ProductQuestion } from '@/services/questionsApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 /**
  * ProductQASection Component
@@ -39,6 +40,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
   const [questionText, setQuestionText] = useState('');
   const [answerText, setAnswerText] = useState<{ [key: string]: string }>({});
   const [expandedQuestions, setExpandedQuestions] = useState<Set<string>>(new Set());
+  const isMounted = useIsMounted();
 
   const {
     questions,
@@ -69,6 +71,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
 
     try {
       await askQuestion(questionText);
+      if (!isMounted()) return;
       setQuestionText('');
       setShowAskQuestion(false);
       platformAlertSimple('Success', 'Your question has been posted!');
@@ -90,6 +93,7 @@ export const ProductQASection: React.FC<ProductQASectionProps> = ({ productId, p
 
     try {
       await answerQuestion(questionId, answer);
+      if (!isMounted()) return;
       setAnswerText(prev => ({ ...prev, [questionId]: '' }));
       platformAlertSimple('Success', 'Your answer has been posted!');
     } catch (error) {

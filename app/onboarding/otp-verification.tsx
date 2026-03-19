@@ -10,7 +10,9 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 function OTPVerificationScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { phoneNumber } = useLocalSearchParams<{ phoneNumber: string }>();
   const user = useAuthUser();
@@ -97,6 +99,7 @@ function OTPVerificationScreen() {
 
       analyticsService.track('otp_verified');
 
+      if (!isMounted()) return;
       await new Promise(resolve => setTimeout(resolve, 100));
 
       if (user?.isOnboarded) {
@@ -107,6 +110,7 @@ function OTPVerificationScreen() {
     } catch (error: any) {
       const errorMessage = error?.message || authError || 'Invalid OTP. Please check and try again.';
       platformAlertSimple('Invalid OTP', errorMessage);
+      if (!isMounted()) return;
       setOtp(['', '', '', '', '', '']);
       inputRefs.current[0]?.focus();
       actions.clearError();
@@ -118,8 +122,11 @@ function OTPVerificationScreen() {
 
     try {
       await actions.sendOTP(phoneNumber);
+      if (!isMounted()) return;
       setTimer(30);
+      if (!isMounted()) return;
       setCanResend(false);
+      if (!isMounted()) return;
       setTimerKey(k => k + 1); // Restart interval cleanly
       platformAlertSimple('Success', 'OTP has been resent to your phone number');
     } catch (error: any) {

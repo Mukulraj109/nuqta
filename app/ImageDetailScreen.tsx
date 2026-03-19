@@ -25,12 +25,14 @@ import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // ReZ Brand Colors
 
 function ImageDetailScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
@@ -92,7 +94,9 @@ function ImageDetailScreen() {
       await realVideosApi.toggleVideoLike(image._id);
     } catch (error) {
       // Revert on error
+      if (!isMounted()) return;
       setIsLiked(!newLikedState);
+      if (!isMounted()) return;
       setLikesCount(prev => newLikedState ? Math.max(0, prev - 1) : prev + 1);
     }
   }, [image, isLiked]);
@@ -107,6 +111,7 @@ function ImageDetailScreen() {
     try {
       await realVideosApi.toggleBookmark(image._id);
     } catch (error) {
+      if (!isMounted()) return;
       setIsBookmarked(!newBookmarkedState);
     }
   }, [image, isBookmarked]);
@@ -225,6 +230,7 @@ function ImageDetailScreen() {
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         bounces={true}
+        contentContainerStyle={{ paddingBottom: 120 }}
       >
         {/* Creator Info */}
         <View style={styles.creatorSection}>

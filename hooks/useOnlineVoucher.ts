@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { BRAND } from '@/constants/brand';
-import { useRezBalance } from '@/stores/selectors';
+import { useRezBalance, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import NetInfo from '@react-native-community/netinfo';
 import {
   VoucherState,
@@ -52,6 +52,8 @@ const CATEGORY_COLORS: { [key: string]: { color: string; backgroundColor: string
 export const useOnlineVoucher = (): UseVoucherReturn => {
   const router = useRouter();
   const rezBalance = useRezBalance();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [state, setState] = useState<VoucherState>(VoucherData.initialState);
   const searchAbortControllerRef = useRef<AbortController | null>(null);
 
@@ -68,10 +70,11 @@ export const useOnlineVoucher = (): UseVoucherReturn => {
   const isMountedRef = useRef(true);
   useEffect(() => {
     isMountedRef.current = true;
+    if (authLoading || !isAuthenticated) return;
     initializeVoucherData();
     initializeHeroCarousel();
     return () => { isMountedRef.current = false; };
-  }, []);
+  }, [authLoading, isAuthenticated]);
 
   const initializeHeroCarousel = useCallback(async () => {
     try {
@@ -408,11 +411,10 @@ export const useOnlineVoucher = (): UseVoucherReturn => {
 
   const refreshData = useCallback(async () => {
     await Promise.all([
-      loadUserCoins(),
       initializeVoucherData(),
       initializeHeroCarousel()
     ]);
-  }, [loadUserCoins, initializeVoucherData, initializeHeroCarousel]);
+  }, [initializeVoucherData, initializeHeroCarousel]);
 
   const updateFilters = useCallback(async (newFilters: Partial<FilterOptions>) => {
     setState(prev => ({

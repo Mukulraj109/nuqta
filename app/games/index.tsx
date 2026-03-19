@@ -22,6 +22,7 @@ import { SkeletonBox } from '@/components/earn/SkeletonLoader';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const NUQTA_COIN = BRAND.COIN_IMAGE;
 
 const { width } = Dimensions.get('window');
@@ -43,6 +44,7 @@ const GAME_COLORS: [string, string][] = [
 ];
 
 function GamesPage() {
+  const isMounted = useIsMounted();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [games, setGames] = useState<AvailableGame[]>([]);
@@ -65,13 +67,17 @@ function GamesPage() {
       ]);
 
       if (gamesRes.success && gamesRes.data?.games) {
+        if (!isMounted()) return;
         setGames(gamesRes.data.games);
+        if (!isMounted()) return;
         setTodaysEarnings(gamesRes.data.todaysEarnings || 0);
       }
     } catch (err) {
       if (!silent) platformAlert('Error', 'Failed to load games. Pull to refresh.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [isAuthenticated, refreshWallet]);
@@ -110,6 +116,7 @@ function GamesPage() {
         }}
       />
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.container}
         showsVerticalScrollIndicator={false}
         refreshControl={

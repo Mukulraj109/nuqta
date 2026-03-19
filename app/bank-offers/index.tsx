@@ -20,6 +20,7 @@ import logger from '@/utils/logger';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -60,6 +61,7 @@ function formatDate(iso?: string): string {
 }
 
 function BankOffersListScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
 
   const [offers, setOffers] = useState<BankOffer[]>([]);
@@ -74,13 +76,17 @@ function BankOffersListScreen() {
       if (response.success && response.data) {
         setOffers(Array.isArray(response.data) ? response.data : []);
       } else {
+        if (!isMounted()) return;
         setOffers([]);
       }
     } catch (err: any) {
       logger.error('[BankOffers] Error fetching offers:', err);
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load bank offers');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
@@ -369,6 +375,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.xs,
+    paddingBottom: 120,
   },
 
   // Empty State

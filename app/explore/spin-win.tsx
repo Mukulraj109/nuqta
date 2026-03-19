@@ -25,6 +25,7 @@ import { platformAlert } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -42,6 +43,7 @@ function getTimeUntilReset(): string {
 }
 
 function SpinWinPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { actions: gamificationActions } = useGamification();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -97,21 +99,29 @@ function SpinWinPage() {
       if (wheelResponse.success && wheelResponse.data) {
         const data = wheelResponse.data;
         if (data.segments && data.segments.length > 0) {
+          if (!isMounted()) return;
           setPrizes(data.segments);
           setError(null);
         } else {
+          if (!isMounted()) return;
           setError('Unable to load spin wheel prizes');
         }
         // Use spinsRemaining from the wheel data (single source of truth)
+        if (!isMounted()) return;
         setSpinsLeft(data.spinsRemaining);
+        if (!isMounted()) return;
         setTodayCoinsWon(data.stats.todayCoinsWon);
       } else {
+        if (!isMounted()) return;
         setError(wheelResponse.error || 'Unable to load spin wheel data');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Unable to load spin wheel. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
       fetchingRef.current = false;
       hasFetchedRef.current = true;
@@ -147,6 +157,7 @@ function SpinWinPage() {
         const fullSpins = 5;
         const newRotation = currentRotation + (fullSpins * 360) + (360 - prizeAngle);
 
+        if (!isMounted()) return;
         setCurrentRotation(newRotation);
 
         const actualCoinsWon = coinsAdded || rewardValue || 0;
@@ -158,9 +169,13 @@ function SpinWinPage() {
           easing: Easing.out(Easing.cubic),
           useNativeDriver: true,
         }).start(() => {
+          if (!isMounted()) return;
           setSpinning(false);
+          if (!isMounted()) return;
           setWonPrize(selectedPrize);
+          if (!isMounted()) return;
           setSpinsLeft(spinsRemaining);
+          if (!isMounted()) return;
           setTodayCoinsWon(prev => prev + actualCoinsWon);
           refreshWallet();
           gamificationActions.syncCoinsFromWallet();
@@ -170,10 +185,12 @@ function SpinWinPage() {
           }
         });
       } else {
+        if (!isMounted()) return;
         setSpinning(false);
         platformAlert('Spin Failed', response.error || 'Unable to spin. Please try again.');
       }
     } catch (error: any) {
+      if (!isMounted()) return;
       setSpinning(false);
       platformAlert('Error', error.message || 'Something went wrong');
     }
@@ -219,6 +236,7 @@ function SpinWinPage() {
       </View>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[Colors.warning]} />

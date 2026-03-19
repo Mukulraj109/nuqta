@@ -36,12 +36,14 @@ import {
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
 type TabType = 'available' | 'my-groups' | 'products';
 
 const GroupBuyPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -71,6 +73,7 @@ const GroupBuyPage = () => {
         await groupBuying.refreshMyGroups();
       }
     } finally {
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   };
@@ -83,11 +86,14 @@ const GroupBuyPage = () => {
         'Group Created!',
         'Your group has been created. Share it with friends to unlock bigger discounts!',
         () => {
+          if (!isMounted()) return;
           setSelectedGroup(group);
+          if (!isMounted()) return;
           setShowShareModal(true);
         },
         'Share Now'
       );
+      if (!isMounted()) return;
       setActiveTab('my-groups');
     } else if (groupBuying.error) {
       platformAlertSimple('Error', groupBuying.error);
@@ -113,8 +119,11 @@ const GroupBuyPage = () => {
           };
           const joinedGroup = await groupBuying.joinGroup(joinData);
           if (joinedGroup) {
+            if (!isMounted()) return;
             setJoinCode('');
+            if (!isMounted()) return;
             setShowJoinInput(false);
+            if (!isMounted()) return;
             setActiveTab('my-groups');
             platformAlertSimple('Success!', 'You have joined the group');
           } else if (groupBuying.error) {
@@ -154,6 +163,7 @@ const GroupBuyPage = () => {
         const success = await groupBuying.leaveGroup(groupId);
         if (success) {
           platformAlertSimple('Success', 'You have left the group');
+          if (!isMounted()) return;
           setExpandedGroupId(null);
         } else if (groupBuying.error) {
           platformAlertSimple('Error', groupBuying.error);
@@ -189,6 +199,7 @@ const GroupBuyPage = () => {
 
     return (
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         refreshControl={

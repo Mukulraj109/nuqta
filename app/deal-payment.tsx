@@ -27,7 +27,9 @@ import { getCurrencySymbol } from '@/config/payment';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const DealPaymentPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const user = useAuthUser();
@@ -93,7 +95,9 @@ const DealPaymentPage: React.FC = () => {
       (url.includes('rez.app') && url.includes('/cancel'));
 
     if (isCancelUrl) {
+      if (!isMounted()) return;
       setShowWebView(false);
+      if (!isMounted()) return;
       setPaymentStatus('failed');
       platformAlertConfirm('Payment Cancelled', 'You cancelled the payment.', () => setPaymentStatus('pending'), 'Try Again');
     }
@@ -125,6 +129,7 @@ const DealPaymentPage: React.FC = () => {
       });
 
       if (verifyResponse.success && verifyResponse.data?.redemption) {
+        if (!isMounted()) return;
         setPaymentStatus('success');
         // Haptic feedback on successful deal payment
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
@@ -142,6 +147,7 @@ const DealPaymentPage: React.FC = () => {
         return verifyPayment(retryCount + 1);
       } else {
         // Max retries reached, show pending message
+        if (!isMounted()) return;
         setPaymentStatus('pending');
         platformAlertConfirm(
           'Payment Processing',
@@ -158,6 +164,7 @@ const DealPaymentPage: React.FC = () => {
         return verifyPayment(retryCount + 1);
       }
 
+      if (!isMounted()) return;
       setPaymentStatus('failed');
       platformAlertConfirm(
         'Verification Issue',

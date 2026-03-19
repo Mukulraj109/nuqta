@@ -28,6 +28,7 @@ import { storesApi } from '@/services/storesApi';
 import { useAuthUser } from '@/stores/selectors';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   orange: colors.brand.orange,
@@ -68,6 +69,7 @@ function BookClassPage() {
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string }>();
   const user = useAuthUser();
 
+  const isMounted = useIsMounted();
   const [step, setStep] = useState<'salon' | 'details' | 'confirm'>(
     params.storeId ? 'details' : 'salon'
   );
@@ -119,11 +121,13 @@ function BookClassPage() {
           s.bookingConfig?.enabled ||
           s.storeVisitConfig?.enabled
         );
+        if (!isMounted()) return;
         setSalons(bookable.length > 0 ? bookable : allStores.slice(0, 20));
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -149,6 +153,7 @@ function BookClassPage() {
           const hour = parseInt(s.time.split(':')[0]);
           return hour >= 6 && hour <= 22;
         });
+        if (!isMounted()) return;
         setTimeSlots(serviceSlots);
         const firstAvailable = serviceSlots.find(s => s.available);
         if (firstAvailable) setSelectedTime(firstAvailable.time);
@@ -161,9 +166,11 @@ function BookClassPage() {
         '16:00', '16:30', '17:00', '17:30', '18:00', '18:30',
         '19:00', '19:30', '20:00', '20:30', '21:00',
       ].map(t => ({ time: t, available: true, remainingCapacity: 10 }));
+      if (!isMounted()) return;
       setTimeSlots(fallback);
       setSelectedTime('07:00');
     } finally {
+      if (!isMounted()) return;
       setIsLoadingAvailability(false);
     }
   }, []);
@@ -221,6 +228,7 @@ function BookClassPage() {
       });
 
       if (res.success) {
+        if (!isMounted()) return;
         setBookingId(res.data?._id || null);
         setBookingNumber(res.data?.bookingNumber || null);
         setStep('confirm');
@@ -230,6 +238,7 @@ function BookClassPage() {
     } catch (err: any) {
       platformAlertSimple('Error', err?.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };
@@ -356,7 +365,6 @@ function BookClassPage() {
             renderItem={renderStoreCard}
             contentContainerStyle={styles.storeList}
             showsVerticalScrollIndicator={false}
-            estimatedItemSize={110}
           />
         )}
       </SafeAreaView>

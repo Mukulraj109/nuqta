@@ -19,6 +19,7 @@ import { mapBackendOrderToFrontend } from '@/utils/dataMappers';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type OrderStatus = 'all' | 'placed' | 'confirmed' | 'preparing' | 'ready' | 'dispatched' | 'delivered' | 'cancelled' | 'returned' | 'refunded';
 
@@ -31,6 +32,7 @@ interface FilterState {
 function OrdersListScreen() {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
+  const isMounted = useIsMounted();
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,19 +77,26 @@ function OrdersListScreen() {
         const mappedOrders = response.data.orders.map(mapBackendOrderToFrontend);
 
         if (refresh || pageNum === 1) {
+          if (!isMounted()) return;
           setOrders(mappedOrders);
         } else {
+          if (!isMounted()) return;
           setOrders(prev => [...prev, ...mappedOrders]);
         }
 
+        if (!isMounted()) return;
         setHasMore(response.data.pagination.current < response.data.pagination.pages);
+        if (!isMounted()) return;
         setPage(pageNum);
         setError(null);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError(err instanceof Error ? err.message : 'Failed to load orders');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   };
@@ -360,6 +369,7 @@ function OrdersListScreen() {
 
       {/* Orders List */}
       <FlashList
+        contentContainerStyle={{ paddingBottom: 120 }}
         data={filteredOrders}
         renderItem={renderOrderItem}
         keyExtractor={item => item.id}

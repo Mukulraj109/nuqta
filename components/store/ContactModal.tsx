@@ -18,6 +18,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ContactModalProps {
   visible: boolean;
@@ -35,6 +36,7 @@ function ContactModal({
   storeName,
 }: ContactModalProps) {
   const [copiedField, setCopiedField] = useState<'phone' | 'email' | null>(null);
+  const isMounted = useIsMounted();
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
@@ -86,9 +88,11 @@ function ContactModal({
         }
       } else {
         // Expo Clipboard for React Native
+        if (!isMounted()) return;
         await Clipboard.setStringAsync(text);
       }
       
+      if (!isMounted()) return;
       setCopiedField(field);
       setTimeout(() => {
         setCopiedField(null);

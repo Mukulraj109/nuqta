@@ -17,6 +17,7 @@ import { useRefreshWallet, useGetCurrencySymbol } from '@/stores/selectors';
 import { GIFT_CARDS, GiftCardOption } from '@/constants/priveCatalog';
 import { coinToFiatValue } from '@/constants/priveConversion';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const generateIdempotencyKey = () => `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
 
@@ -31,6 +32,7 @@ function GiftCardsScreen() {
   // Fetch catalog from backend, fallback to constants
   const [giftCards, setGiftCards] = useState<GiftCardOption[]>(GIFT_CARDS);
   const [conversionRate, setConversionRate] = useState(0.10);
+  const isMounted = useIsMounted();
   useEffect(() => {
     (async () => {
       try {
@@ -39,9 +41,11 @@ function GiftCardsScreen() {
           priveApi.getRedeemConfig(),
         ]);
         if (catalogRes.success && catalogRes.data?.giftCards) {
+          if (!isMounted()) return;
           setGiftCards(catalogRes.data.giftCards as unknown as GiftCardOption[]);
         }
         if (configRes.success && configRes.data?.conversionRates?.gift_card) {
+          if (!isMounted()) return;
           setConversionRate(configRes.data.conversionRates.gift_card);
         }
       } catch {
@@ -91,7 +95,9 @@ function GiftCardsScreen() {
           });
 
           if (response.success && response.data) {
+            if (!isMounted()) return;
             setGeneratedVoucher(response.data.voucher);
+            if (!isMounted()) return;
             setShowVoucherModal(true);
             refresh();
             refreshWallet().catch(() => {});
@@ -101,6 +107,7 @@ function GiftCardsScreen() {
         } catch (error: any) {
           platformAlertSimple('Error', error.message || 'Failed to redeem coins');
         } finally {
+          if (!isMounted()) return;
           setIsRedeeming(false);
         }
       }
@@ -133,7 +140,11 @@ function GiftCardsScreen() {
           <Text style={styles.balanceAmount}>{availableCoins.toLocaleString()} coins</Text>
         </View>
 
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
           {/* Card Selection */}
           <Text style={styles.sectionTitle}>Select Brand</Text>
           <View style={styles.cardsGrid}>

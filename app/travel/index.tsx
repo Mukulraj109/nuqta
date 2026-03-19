@@ -25,6 +25,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SW } = Dimensions.get('window');
 const CARD_W = (SW - 48) / 2;
@@ -165,6 +166,7 @@ interface PopularService {
 
 // ─── Main Component ──────────────────────────────────────────────────────────
 const TravelPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const cs = getCurrencySymbol();
@@ -191,6 +193,7 @@ const TravelPage: React.FC = () => {
 
       // Categories
       if (catRes.success && catRes.data) {
+        if (!isMounted()) return;
         setCategories(catRes.data);
       }
 
@@ -217,6 +220,7 @@ const TravelPage: React.FC = () => {
             storeName: svc.store?.name,
           };
         });
+        if (!isMounted()) return;
         setFeaturedDeals(transformed);
       }
 
@@ -232,11 +236,13 @@ const TravelPage: React.FC = () => {
           image: svc.images?.[0] || '',
           rating: svc.ratings?.average || 0,
         }));
+        if (!isMounted()) return;
         setPopularServices(popular);
       }
 
       // Stats
       if (statsRes.success && statsRes.data) {
+        if (!isMounted()) return;
         setStats({
           serviceCount: statsRes.data.serviceCount || statsRes.data.hotels || 0,
           maxCashback: statsRes.data.maxCashback || 0,
@@ -245,10 +251,13 @@ const TravelPage: React.FC = () => {
       }
     } catch (err) {
       if (categories.length === 0) {
+        if (!isMounted()) return;
         setError('Unable to load travel services');
       }
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, []);
@@ -286,7 +295,6 @@ const TravelPage: React.FC = () => {
         <Pressable
           onPress={() => { setIsLoading(true); fetchTravelData(); }}
           style={s.errorRetryBtn}
-
         >
           <Text style={s.errorRetryBtnText}>Try Again</Text>
         </Pressable>
@@ -866,7 +874,7 @@ const s = StyleSheet.create({
   errorRetryBtn: { backgroundColor: C.cyan600, paddingHorizontal: 28, paddingVertical: 12, borderRadius: 24 },
   errorRetryBtnText: { fontSize: 14, fontWeight: '600', color: C.white },
   headerTitleWrap: { flex: 1, marginLeft: 12 },
-  scrollContentPadding: { paddingBottom: 100 },
+  scrollContentPadding: { paddingBottom: 120 },
   sectionTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   horizontalScrollPadding: { paddingLeft: 16, paddingRight: 4 },
   dealRatingRow: { flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 2 },

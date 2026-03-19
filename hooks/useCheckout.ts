@@ -26,7 +26,7 @@ import storesApi from '@/services/storesApi';
 import { createRazorpayPayment } from '@/services/razorpayApi';
 import { mapBackendCartToFrontend, mapFrontendCheckoutToBackendOrder } from '@/utils/dataMappers';
 import { showToast } from '@/components/common/ToastManager';
-import { useCartActions, useCartState, useGetCurrencySymbol, useWalletData, useRawWalletData, useRefreshWallet } from '@/stores/selectors';
+import { useCartActions, useCartState, useGetCurrencySymbol, useWalletData, useRawWalletData, useRefreshWallet, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import {
   TAX_RATE,
   PLATFORM_FEE,
@@ -108,6 +108,8 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
   const walletData = useWalletData();
   const walletRawData = useRawWalletData();
   const refreshSharedWallet = useRefreshWallet();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const queryClient = useQueryClient();
   // Refs to access latest wallet data inside async callbacks (avoids stale closure)
   const walletDataRef = useRef(walletData);
@@ -122,9 +124,10 @@ export const useCheckout = (retryOrderId?: string): UseCheckoutReturn => {
   const hasInitializedRef = useRef(false);
   useEffect(() => {
     isMountedRef.current = true;
+    if (authLoading || !isAuthenticated) return;
     initializeCheckout().then(() => { hasInitializedRef.current = true; });
     return () => { isMountedRef.current = false; };
-  }, []);
+  }, [authLoading, isAuthenticated]);
 
   // Refresh wallet data when user returns to checkout (e.g., after failed payment or back from address screen)
   useFocusEffect(

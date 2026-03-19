@@ -20,12 +20,14 @@ import exploreApi, { VerifiedReview } from '@/services/exploreApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
 type SortType = 'recent' | 'highest' | 'lowest';
 
 const AllReviewsPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -68,18 +70,26 @@ const AllReviewsPage = () => {
         }
 
         if (pageNum === 1) {
+          if (!isMounted()) return;
           setReviews(newReviews);
         } else {
+          if (!isMounted()) return;
           setReviews(prev => [...prev, ...newReviews]);
         }
+        if (!isMounted()) return;
         setTotal(response.data.total || newReviews.length);
+        if (!isMounted()) return;
         setHasMore(response.data.hasMore || false);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [sortBy]);
@@ -390,6 +400,7 @@ const styles = StyleSheet.create({
   reviewsContainer: {
     padding: Spacing.base,
     minHeight: 300,
+    paddingBottom: 120,
   },
   centerContainer: {
     flex: 1,

@@ -3,7 +3,7 @@ import { InteractionManager } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { BRAND } from '@/constants/brand';
-import { useRezBalance, useWalletData, useBrandedCoins, useRefreshWallet, useSavingsInsights, useGetCurrencySymbol, useRegionState } from '@/stores/selectors';
+import { useRezBalance, useWalletData, useBrandedCoins, useRefreshWallet, useSavingsInsights, useGetCurrencySymbol, useRegionState, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/lib/queryKeys';
 import { formatTimeLeft } from '@/types/playandearn.types';
@@ -236,6 +236,9 @@ export function usePlayAndEarnData() {
       .replace(/\u062F\.\u0625\s*/g, currencySymbol);
   }, [currencySymbol]);
 
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
+
   const rezCoins = useRezBalance();
   const walletData = useWalletData();
   const brandedCoinsFromCtx = useBrandedCoins();
@@ -258,10 +261,11 @@ export function usePlayAndEarnData() {
   // Exclusive zones (fetched from API)
   const [exclusiveZones, setExclusiveZones] = useState<any[]>([]);
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     realOffersApi.getExclusiveZones().then(res => {
       if (res.success && res.data) setExclusiveZones(res.data);
     }).catch(() => {});
-  }, []);
+  }, [authLoading, isAuthenticated]);
 
   // Liked picks (local state, not from API)
   const [likedPicks, setLikedPicks] = useState<Set<string>>(new Set());

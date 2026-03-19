@@ -18,6 +18,7 @@ import { TIER_NAMES } from '@/types/subscription.types';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type CancellationReason =
   | 'too_expensive'
@@ -53,6 +54,7 @@ function CancelFeedbackPage() {
   const [cancellationType, setCancellationType] = useState<CancellationType>('end_of_cycle');
   const [isCancelling, setIsCancelling] = useState(false);
   const [showRetentionOffer, setShowRetentionOffer] = useState(false);
+  const isMounted = useIsMounted();
 
   const steps: Step[] = [
     { id: 'reason', title: 'Tell us why', icon: 'chatbubble-outline' },
@@ -177,6 +179,7 @@ function CancelFeedbackPage() {
     } catch (error: any) {
       platformAlertSimple('Error', error.message || 'Failed to cancel subscription');
     } finally {
+      if (!isMounted()) return;
       setIsCancelling(false);
     }
   };

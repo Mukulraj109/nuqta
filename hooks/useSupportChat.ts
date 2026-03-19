@@ -8,6 +8,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSocket } from '@/contexts/SocketContext';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import supportChatApi from '@/services/supportChatApi';
 import { queryKeys } from '@/lib/queryKeys';
 import { useTicketHistory, useChatMessages } from '@/hooks/queries/useSupportData';
@@ -41,6 +42,8 @@ const STORAGE_KEYS = {
 
 export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
   const queryClient = useQueryClient();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // Use the app's existing SocketContext socket (already connected & proven to work)
   const { socket: contextSocket } = useSocket();
@@ -150,12 +153,13 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
   // ==================== Initialization ====================
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     initializeConnection();
 
     return () => {
       cleanup();
     };
-  }, []);
+  }, [authLoading, isAuthenticated]);
 
   const initializeConnection = async () => {
     try {
@@ -988,6 +992,7 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
 
   // Load initial ticket if provided via URL param
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (initialTicketId && !currentTicket) {
       activeTicketIdRef.current = initialTicketId;
       supportChatApi.getTicket(initialTicketId).then((ticket) => {
@@ -1008,7 +1013,7 @@ export function useSupportChat(initialTicketId?: string): UseSupportChatReturn {
         }
       });
     }
-  }, [initialTicketId]);
+  }, [initialTicketId, authLoading, isAuthenticated]);
 
   // ==================== Return ====================
 

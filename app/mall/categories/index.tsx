@@ -26,6 +26,7 @@ import MallEmptyState from '../../../components/mall/pages/MallEmptyState';
 import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkeleton';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
@@ -60,6 +61,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category, onPress }) => {
 };
 
 function AllCategoriesPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -72,11 +74,15 @@ function AllCategoriesPage() {
     try {
       setError(null);
       const data = await mallApi.getCategories();
+      if (!isMounted()) return;
       setCategories(data);
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load categories');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, []);
@@ -181,7 +187,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing.xl,
+    paddingBottom: 120,
   },
   row: {
     justifyContent: 'space-between',

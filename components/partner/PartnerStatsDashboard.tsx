@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import partnerApi, { PartnerStats } from '@/services/partnerApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface PartnerStatsDashboardProps {
   compact?: boolean;
@@ -37,6 +38,7 @@ function PartnerStatsDashboard({
   const [stats, setStats] = useState<PartnerStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     fetchStats();
@@ -47,11 +49,14 @@ function PartnerStatsDashboard({
       setError(null);
       const response = await partnerApi.getStats();
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setStats(response.data);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load stats');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

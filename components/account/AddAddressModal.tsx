@@ -18,6 +18,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ACCOUNT_COLORS } from '@/types/account.types';
 import { AddressType, AddressCreate } from '@/services/addressApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface AddAddressModalProps {
   visible: boolean;
@@ -38,6 +39,7 @@ function AddAddressModal({ visible, onClose, onAdd }: AddAddressModalProps) {
   const [instructions, setInstructions] = useState('');
   const [isDefault, setIsDefault] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMounted = useIsMounted();
 
   const resetForm = () => {
     setType(AddressType.HOME);
@@ -113,6 +115,7 @@ function AddAddressModal({ visible, onClose, onAdd }: AddAddressModalProps) {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };

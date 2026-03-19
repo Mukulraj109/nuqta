@@ -17,6 +17,7 @@ import gamificationAPI from '@/services/gamificationApi';
 import type { SpinWheelSegment, SpinWheelResult } from '@/types/gamification.types';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 const WHEEL_SIZE = width * 0.85;
@@ -44,6 +45,7 @@ function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelPro
   const [isSpinning, setIsSpinning] = useState(false);
   const [canSpin, setCanSpin] = useState(true);
   const [nextSpinTime, setNextSpinTime] = useState<string | null>(null);
+  const isMounted = useIsMounted();
   const rotateAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -55,8 +57,10 @@ function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelPro
     try {
       const response = await gamificationAPI.canSpinWheel();
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setCanSpin(response.data.canSpin);
         if (!response.data.canSpin && response.data.nextSpinAt) {
+          if (!isMounted()) return;
           setNextSpinTime(response.data.nextSpinAt);
         }
       }
@@ -89,6 +93,7 @@ function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelPro
           duration: 4000,
           useNativeDriver: true,
         }).start(() => {
+          if (!isMounted()) return;
           setIsSpinning(false);
           setCanSpin(false);
 
@@ -111,6 +116,7 @@ function SpinWheel({ segments = DEFAULT_SEGMENTS, onSpinComplete }: SpinWheelPro
         throw new Error(response.error || 'Failed to spin wheel');
       }
     } catch (error: any) {
+      if (!isMounted()) return;
       setIsSpinning(false);
       platformAlert('Error', error.message || 'Failed to spin wheel. Please try again.');
     }

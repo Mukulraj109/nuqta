@@ -16,6 +16,7 @@ import { showToast } from '@/components/common/ToastManager';
 import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDataNormalizer';
 import { formatPrice } from '@/utils/priceFormatter';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface CategoryCardProps {
   item: CategoryItem;
@@ -37,6 +38,7 @@ function CategoryCard({
   cardStyle = 'elevated',
 }: CategoryCardProps) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const isMounted = useIsMounted();
   const cartState = useCartState();
   const cartActions = useCartActions();
   const [, forceUpdate] = useState({});
@@ -130,6 +132,7 @@ function CategoryCard({
         duration: 3000
       });
     } finally {
+      if (!isMounted()) return;
       setIsAddingToCart(false);
     }
   };

@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import exploreApi, { FeaturedComparison } from '@/services/exploreApi';
+import { useIsMounted } from '@/hooks/useIsMounted';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 
 const { width } = Dimensions.get('window');
@@ -38,6 +39,7 @@ interface ComparisonItem {
 }
 
 const ComparePage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [comparisons, setComparisons] = useState<ComparisonItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,14 +74,19 @@ const ComparePage = () => {
           })),
           bestDeal: comp.stores.length > 0 ? comp.stores[0].name : undefined,
         }];
+        if (!isMounted()) return;
         setComparisons(comparisonList);
       } else {
+        if (!isMounted()) return;
         setComparisons([]);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
@@ -345,6 +352,7 @@ const styles = StyleSheet.create({
   comparisonsContainer: {
     padding: Spacing.base,
     minHeight: 300,
+    paddingBottom: 120,
   },
   centerContainer: {
     flex: 1,

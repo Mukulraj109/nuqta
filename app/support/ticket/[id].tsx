@@ -24,6 +24,7 @@ import supportService, { SupportTicket } from '@/services/supportApi';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function TicketDetailPage() {
   const router = useRouter();
@@ -54,6 +55,7 @@ function TicketDetailPage() {
       // silently handle
     }
   }, [id]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     setLoading(true);
@@ -76,6 +78,7 @@ function TicketDetailPage() {
   const handleRefresh = async () => {
     setRefreshing(true);
     await loadTicket();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -95,6 +98,7 @@ function TicketDetailPage() {
     } catch (error) {
       platformAlertSimple('Error', 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setSending(false);
     }
   };
@@ -114,6 +118,7 @@ function TicketDetailPage() {
         } catch (error) {
           platformAlertSimple('Error', 'Failed to close ticket.');
         } finally {
+          if (!isMounted()) return;
           setClosing(false);
         }
       },
@@ -136,6 +141,7 @@ function TicketDetailPage() {
         } catch (error) {
           platformAlertSimple('Error', 'Failed to reopen ticket.');
         } finally {
+          if (!isMounted()) return;
           setReopening(false);
         }
       },
@@ -156,6 +162,7 @@ function TicketDetailPage() {
     } catch (error) {
       platformAlertSimple('Error', 'Failed to submit rating.');
     } finally {
+      if (!isMounted()) return;
       setSubmittingRating(false);
     }
   };

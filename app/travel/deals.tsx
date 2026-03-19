@@ -23,6 +23,7 @@ import travelApi, { TravelService } from '@/services/travelApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   white: Colors.background.primary,
@@ -37,6 +38,7 @@ const COLORS = {
 };
 
 const HotDealsPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -49,12 +51,15 @@ const HotDealsPage: React.FC = () => {
       setIsLoading(true);
       const response = await travelApi.getFeatured(20);
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setDeals(response.data);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, []);
@@ -216,6 +221,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.base,
+    paddingBottom: 120,
   },
   dealsGrid: {
     flexDirection: 'row',

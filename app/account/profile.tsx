@@ -26,6 +26,7 @@ import { useSecurity } from '@/contexts/SecurityContext';
 import { useAppPreferences } from '@/contexts/AppPreferencesContext';
 import userSettingsApi from '@/services/userSettingsApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface UserSettings {
   _id: string;
@@ -58,6 +59,7 @@ interface UserSettings {
 }
 
 function AccountProfilePage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const user = useAuthUser();
   const { settings: notificationSettings, updateSettings: updateNotificationSettings } = useNotifications();
@@ -80,6 +82,7 @@ function AccountProfilePage() {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -87,6 +90,7 @@ function AccountProfilePage() {
   const handleRefresh = async () => {
     setRefreshing(true);
     await loadSettings();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -229,6 +233,7 @@ function AccountProfilePage() {
 
       {/* Content */}
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.content}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />

@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRegionState, useSetRegion } from '@/stores/selectors';
 import type { RegionId } from '@/stores/regionStore';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Region data with flags
 const REGIONS: { id: RegionId; name: string; flag: string; description: string }[] = [
@@ -42,6 +43,7 @@ export function RegionSelector({
   const setRegion = useSetRegion();
   const [modalVisible, setModalVisible] = useState(false);
   const [isChanging, setIsChanging] = useState(false);
+  const isMounted = useIsMounted();
 
   const currentRegionData = REGIONS.find(r => r.id === state.currentRegion) || REGIONS[0];
 
@@ -57,12 +59,14 @@ export function RegionSelector({
       async () => {
         setIsChanging(true);
         try {
+          if (!isMounted()) return;
           await setRegion(regionId);
           onRegionChange?.(regionId);
           setModalVisible(false);
         } catch (error) {
           platformAlertSimple('Error', 'Failed to change region. Please try again.');
         } finally {
+          if (!isMounted()) return;
           setIsChanging(false);
         }
       },
@@ -212,10 +216,12 @@ export function RegionSelectorPage() {
       async () => {
         setIsChanging(true);
         try {
+          if (!isMounted()) return;
           await setRegion(regionId);
         } catch (error) {
           platformAlertSimple('Error', 'Failed to change region');
         } finally {
+          if (!isMounted()) return;
           setIsChanging(false);
         }
       },

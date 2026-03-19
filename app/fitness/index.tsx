@@ -24,6 +24,7 @@ import { Ionicons } from '@expo/vector-icons';
 import apiClient from '@/services/apiClient';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Static categories for navigation (icons and colors)
@@ -61,6 +62,7 @@ interface Stats {
 }
 
 const FitnessPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -94,13 +96,16 @@ const FitnessPage: React.FC = () => {
         { _id: 'nutrition', name: 'Nutrition', slug: 'nutrition', storeCount: 100 },
       ];
 
+      if (!isMounted()) return;
       setCategories(builtCategories);
+      if (!isMounted()) return;
       setFeaturedGyms(gymsData.slice(0, 5));
 
       // Calculate stats
       const allStores = [...gymsData, ...studiosData, ...trainersData, ...storesData];
       const maxCashback = Math.max(...allStores.map((s: any) => s.offers?.cashback || 0), 0);
 
+      if (!isMounted()) return;
       setStats({
         totalGyms: gymsData.length + studiosData.length,
         maxCashback: maxCashback || 35,
@@ -109,6 +114,7 @@ const FitnessPage: React.FC = () => {
 
     } catch (error) {
       // Set fallback data
+      if (!isMounted()) return;
       setCategories([
         { _id: 'gyms', name: 'Gyms', slug: 'gyms', storeCount: 0 },
         { _id: 'studios', name: 'Fitness Studios', slug: 'studios', storeCount: 0 },
@@ -118,7 +124,9 @@ const FitnessPage: React.FC = () => {
         { _id: 'nutrition', name: 'Nutrition', slug: 'nutrition', storeCount: 100 },
       ]);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
@@ -201,6 +209,7 @@ const FitnessPage: React.FC = () => {
       </LinearGradient>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface InstagramCardProps {
   productData?: {
@@ -30,6 +31,7 @@ interface InstagramCardProps {
 }
 
 function InstagramCard({ productData, disabled = false, onError }: InstagramCardProps) {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { width } = Dimensions.get('window');
   const responsiveMargin = width < 360 ? 16 : 20;
@@ -82,6 +84,7 @@ function InstagramCard({ productData, disabled = false, onError }: InstagramCard
       // Show user-friendly error
       platformAlertSimple('Navigation Error', 'Unable to open the earn page. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsNavigating(false);
     }
   };

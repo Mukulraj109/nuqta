@@ -16,6 +16,7 @@ import storeVouchersApi from '@/services/storeVouchersApi';
 import discountsApi from '@/services/discountsApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Premium Glass Design Tokens - Mustard & Gold Theme
 const GLASS = {
@@ -70,6 +71,7 @@ export default memo(function CombinedSection78({
   dynamicData,
   cardType,
 }: CombinedSection78Props) {
+  const isMounted = useIsMounted();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
@@ -119,17 +121,20 @@ export default memo(function CombinedSection78({
       });
 
       if (vouchersResponse.success && vouchersResponse.data?.vouchers?.length > 0) {
+        if (!isMounted()) return;
         setVoucher(vouchersResponse.data.vouchers[0]);
       } else {
         const discountsResponse = await discountsApi.getBillPaymentDiscounts(5000);
 
         if (discountsResponse.success && discountsResponse.data?.length > 0) {
+          if (!isMounted()) return;
           setVoucher(discountsResponse.data[0]);
         }
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -166,6 +171,7 @@ export default memo(function CombinedSection78({
       const errorMessage = error?.response?.data?.message || error?.message || 'Unable to add voucher. Please try again.';
       platformAlertSimple('Error', errorMessage);
     } finally {
+      if (!isMounted()) return;
       setIsAddingVoucher(false);
     }
   };

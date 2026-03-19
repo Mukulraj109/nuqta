@@ -30,6 +30,7 @@ import healthRecordsApi, { HealthRecord, HealthRecordsFilters } from '@/services
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -45,6 +46,7 @@ const recordTypes: Record<string, { icon: string; color: string; label: string }
 };
 
 const HealthRecordsPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -86,13 +88,17 @@ const HealthRecordsPage: React.FC = () => {
 
       const response = await healthRecordsApi.getRecords(filters);
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setRecords(response.data.records);
+        if (!isMounted()) return;
         setTypeCounts(response.data.typeCounts);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   };
@@ -115,6 +121,7 @@ const HealthRecordsPage: React.FC = () => {
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
         const file = result.assets[0];
+        if (!isMounted()) return;
         setSelectedFile({
           uri: file.uri,
           name: file.name,
@@ -143,6 +150,7 @@ const HealthRecordsPage: React.FC = () => {
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
         const image = result.assets[0];
+        if (!isMounted()) return;
         setSelectedFile({
           uri: image.uri,
           name: `scan_${Date.now()}.jpg`,
@@ -182,8 +190,11 @@ const HealthRecordsPage: React.FC = () => {
       });
 
       if (response.success) {
+        if (!isMounted()) return;
         setShowUploadModal(false);
+        if (!isMounted()) return;
         setUploadForm({ title: '', recordType: 'prescription', description: '', issuedBy: '', tags: '' });
+        if (!isMounted()) return;
         setSelectedFile(null);
         fetchRecords();
         platformAlertSimple('Success', 'Health record uploaded successfully!');
@@ -191,6 +202,7 @@ const HealthRecordsPage: React.FC = () => {
     } catch (error: any) {
       platformAlertSimple('Error', error.message || 'Failed to upload record');
     } finally {
+      if (!isMounted()) return;
       setUploadLoading(false);
     }
   };
@@ -204,7 +216,9 @@ const HealthRecordsPage: React.FC = () => {
         try {
           const response = await healthRecordsApi.deleteRecord(recordId);
           if (response.success) {
+            if (!isMounted()) return;
             setShowRecordModal(false);
+            if (!isMounted()) return;
             setSelectedRecord(null);
             fetchRecords();
           }
@@ -219,7 +233,9 @@ const HealthRecordsPage: React.FC = () => {
     try {
       const response = await healthRecordsApi.archiveRecord(recordId, !isArchived);
       if (response.success) {
+        if (!isMounted()) return;
         setShowRecordModal(false);
+        if (!isMounted()) return;
         setSelectedRecord(null);
         fetchRecords();
         platformAlertSimple('Success', isArchived ? 'Record unarchived' : 'Record archived');

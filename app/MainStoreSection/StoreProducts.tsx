@@ -24,6 +24,7 @@ import productsApi, { Product } from '@/services/productsApi';
 import { RetryButton } from '@/components/common/RetryButton';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Premium Glass Design Tokens - Mustard & Gold Theme
 const GLASS = {
@@ -67,6 +68,7 @@ const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 84) / 2;
 
 function StoreProducts({ storeId, storeName }: StoreProductsProps) {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -107,11 +109,14 @@ function StoreProducts({ storeId, storeName }: StoreProductsProps) {
           setError('Invalid product data structure');
         }
       } else {
+        if (!isMounted()) return;
         setError('No products found');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError('Failed to load products');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -344,7 +349,6 @@ function StoreProducts({ storeId, storeName }: StoreProductsProps) {
           <Pressable
             onPress={handleViewAll}
             style={styles.viewAllButton}
-           
           >
             <Text style={styles.viewAllText}>View All ({products.length})</Text>
             <Ionicons name="chevron-forward" size={14} color={COLORS.primary} />

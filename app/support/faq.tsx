@@ -14,6 +14,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Gradients, Spacing } from '@/constants/DesignSystem';
 import { SectionListSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function FAQPage() {
   const router = useRouter();
@@ -35,6 +36,7 @@ function FAQPage() {
 
   // Track feedback for FAQs
   const [faqFeedback, setFaqFeedback] = useState<{ [key: string]: boolean | null }>({});
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadData();
@@ -61,15 +63,18 @@ function FAQPage() {
       ]);
 
       if (faqsResponse.success && faqsResponse.data) {
+        if (!isMounted()) return;
         setAllFAQs(faqsResponse.data.faqs);
       }
 
       if (categoriesResponse.success && categoriesResponse.data) {
+        if (!isMounted()) return;
         setCategories(categoriesResponse.data.categories);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load FAQs. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -77,6 +82,7 @@ function FAQPage() {
   const handleRefresh = async () => {
     setRefreshing(true);
     await loadData();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -122,6 +128,7 @@ function FAQPage() {
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setSearching(false);
       }
     },
@@ -148,12 +155,14 @@ function FAQPage() {
       }
     }
 
+    if (!isMounted()) return;
     setExpandedFAQs(newExpanded);
   };
 
   const handleFAQFeedback = async (faqId: string, helpful: boolean) => {
     try {
       await supportService.markFAQHelpful(faqId, helpful);
+      if (!isMounted()) return;
       setFaqFeedback(prev => ({ ...prev, [faqId]: helpful }));
 
       // Show success feedback

@@ -22,8 +22,10 @@ import { getCategoryTheme, SHARED_COLORS, TIER_COLORS } from '@/config/categoryT
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function LoyaltyHubPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = useMemo(() => getCategoryTheme(slug || 'electronics'), [slug]);
@@ -50,6 +52,7 @@ function LoyaltyHubPage() {
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -59,6 +62,7 @@ function LoyaltyHubPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchLoyalty();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -88,6 +92,7 @@ function LoyaltyHubPage() {
         platformAlertSimple('Error', msg || 'Could not check in');
       }
     } finally {
+      if (!isMounted()) return;
       setCheckingIn(false);
     }
   };

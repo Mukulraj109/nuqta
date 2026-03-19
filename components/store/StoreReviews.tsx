@@ -14,6 +14,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { storeSearchService, Review, ReviewStats } from '@/services/storeSearchService';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -45,6 +46,7 @@ const StoreReviews: React.FC<StoreReviewsProps> = ({
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const isMounted = useIsMounted();
 
   // Load reviews when component mounts or filters change
   useEffect(() => {
@@ -66,10 +68,12 @@ const StoreReviews: React.FC<StoreReviewsProps> = ({
 
       if (response.success) {
         if (append) {
+          if (!isMounted()) return;
           setReviews(prev => [...prev, ...response.data.reviews]);
         } else {
           setReviews(response.data.reviews);
         }
+        if (!isMounted()) return;
         setRatingStats(response.data.ratingStats);
         setHasMore(response.data.pagination.hasNextPage);
         setPage(pageNum);
@@ -77,6 +81,7 @@ const StoreReviews: React.FC<StoreReviewsProps> = ({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load reviews. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -92,6 +97,7 @@ const StoreReviews: React.FC<StoreReviewsProps> = ({
       const response = await storeSearchService.markReviewHelpful(reviewId);
       if (response.success) {
         // Update the review in the list
+        if (!isMounted()) return;
         setReviews(prev => prev.map(review => 
           review._id === reviewId 
             ? { ...review, helpful: response.data.helpful }

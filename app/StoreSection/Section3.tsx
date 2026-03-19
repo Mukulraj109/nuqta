@@ -19,6 +19,7 @@ import {
   Timing,
 } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = SCREEN_WIDTH * 0.7; // 70% of screen width
@@ -30,6 +31,7 @@ interface Section3Props {
 }
 
 export default memo(function Section3({ productPrice = 1000, storeId }: Section3Props) {
+  const isMounted = useIsMounted();
   const cartActions = useCartActions();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -52,13 +54,17 @@ export default memo(function Section3({ productPrice = 1000, storeId }: Section3
       const response = await discountsApi.getBillPaymentDiscounts(productPrice, storeId);
 
       if (response.success && response.data && response.data.length > 0) {
+        if (!isMounted()) return;
         setDiscounts(response.data);
       } else {
+        if (!isMounted()) return;
         setDiscounts([]);
       }
     } catch (error) {
+      if (!isMounted()) return;
       setError('Unable to load discounts');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -103,22 +109,26 @@ export default memo(function Section3({ productPrice = 1000, storeId }: Section3
 
         const discountAmount = discount.type === 'percentage' ? `${discount.value}%` : `${currencySymbol}${discount.value}`;
         platformAlert('Discount Applied!', `You'll save ${discountAmount} on your order!`);
+        if (!isMounted()) return;
         setShowDetailsModal(false);
       } else {
         if (productPrice && productPrice < discount.minOrderValue) {
           platformAlert('Minimum Order Required', `Add ${currencySymbol}${discount.minOrderValue - productPrice} more to unlock this discount.`);
+          if (!isMounted()) return;
           setIsApplying(false);
           return;
         }
 
         triggerNotification('Success');
         platformAlert('Discount Available', `This discount will be automatically applied at checkout.`);
+        if (!isMounted()) return;
         setShowDetailsModal(false);
       }
     } catch (error: any) {
       triggerNotification('Error');
       platformAlert('Error', error?.message || 'Unable to apply discount.');
     } finally {
+      if (!isMounted()) return;
       setIsApplying(false);
     }
   };

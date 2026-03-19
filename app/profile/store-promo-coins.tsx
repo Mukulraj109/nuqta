@@ -24,6 +24,7 @@ import { useBrandedCoins, useWalletLoading, useRefreshWallet } from '@/stores/se
 import { showToast } from '@/components/common/ToastManager';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Store coin display item (mapped from BackendBrandedCoin)
 interface StoreCoinItem {
@@ -62,6 +63,7 @@ function StorePromoCoinsPage() {
     totalUsed: 0,
     storeCount: 0,
   });
+  const isMounted = useIsMounted();
 
   // Derive store coins from WalletContext brandedCoins
   useEffect(() => {
@@ -362,6 +364,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.base,
+    paddingBottom: 120,
   },
   summaryContainer: {
     marginBottom: Spacing.base,

@@ -21,6 +21,7 @@ import { useGetCurrencySymbol, useFormatPrice } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface EarningsBreakdownProps {
   onViewDetails?: () => void;
@@ -89,6 +90,7 @@ function EarningsBreakdown({
 
   const [state, setState] = useState<EarningsState>({ status: 'loading' });
   const [isExpanded, setIsExpanded] = useState(!compact);
+  const isMounted = useIsMounted();
   const shimmerAnim = useRef(new Animated.Value(0)).current;
 
   // Shimmer animation loop
@@ -135,11 +137,13 @@ function EarningsBreakdown({
         const hasAnyEarnings = mapped.total > 0 || mapped.pending > 0;
 
         if (hasAnyEarnings) {
+          if (!isMounted()) return;
           setState({ status: 'loaded', data: mapped });
         } else {
           setState({ status: 'empty' });
         }
       } else {
+        if (!isMounted()) return;
         setState({ status: 'empty' });
       }
     } catch (error: any) {
@@ -147,6 +151,7 @@ function EarningsBreakdown({
         state.status === 'loaded' || state.status === 'refreshing'
           ? state.data
           : undefined;
+      if (!isMounted()) return;
       setState({
         status: 'error',
         error: error?.message || 'Failed to load earnings',

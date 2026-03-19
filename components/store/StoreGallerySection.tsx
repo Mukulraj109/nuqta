@@ -22,6 +22,7 @@ import analyticsService from '@/services/analyticsService';
 import GalleryImagePreloader from './GalleryImagePreloader';
 import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const ITEM_SIZE = (SCREEN_WIDTH - 48) / 3; // 3 columns with padding
@@ -43,6 +44,7 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [retryCount, setRetryCount] = useState(0);
   const [viewMode, setViewMode] = useState<'categories' | 'grid'>('categories'); // Show categories or grid
+  const isMounted = useIsMounted();
 
   // Extract unique tags from all gallery items
   const availableTags = useMemo(() => {
@@ -101,6 +103,7 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
         sortBy: 'order',
         sortOrder: 'asc',
       });
+      if (!isMounted()) return;
       setAllGalleryItems(response.items);
       setRetryCount(0); // Reset retry count on success
       
@@ -111,6 +114,7 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
         category: selectedCategory,
       });
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load gallery');
       setAllGalleryItems([]);
       
@@ -124,12 +128,14 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
       
       // Auto-retry logic (max 3 retries)
       if (!retry && retryCount < 3) {
+        if (!isMounted()) return;
         setTimeout(() => {
           setRetryCount(prev => prev + 1);
           loadGallery(true);
         }, 2000 * (retryCount + 1)); // Exponential backoff
       }
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -159,6 +165,7 @@ function StoreGallerySection({ storeId }: StoreGallerySectionProps) {
   const loadCategories = async () => {
     try {
       const cats = await storeGalleryApi.getCategories(storeId);
+      if (!isMounted()) return;
       setCategories(cats);
     } catch (error) {
       // silently handle

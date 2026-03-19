@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import partnerApi, { ClaimableOffer } from '@/services/partnerApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface PartnerVouchersSectionProps {
   onVoucherCopied?: (code: string) => void;
@@ -41,6 +42,7 @@ function PartnerVouchersSection({
   const [offers, setOffers] = useState<ClaimableOffer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     fetchPartnerOffers();
@@ -56,17 +58,21 @@ function PartnerVouchersSection({
         const claimedOffers = response.data.offers.filter(
           (offer) => offer.claimed && (offer as any).voucherCode
         );
+        if (!isMounted()) return;
         setOffers(claimedOffers);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load partner vouchers');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
 
   const handleCopyCode = async (voucherCode: string) => {
     try {
+      if (!isMounted()) return;
       await Clipboard.setStringAsync(voucherCode);
       platformAlertSimple('Copied!', `Voucher code ${voucherCode} copied to clipboard`);
       onVoucherCopied?.(voucherCode);

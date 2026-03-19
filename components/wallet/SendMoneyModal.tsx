@@ -21,6 +21,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import walletApi from '@/services/walletApi';
 import { generateIdempotencyKey } from '@/utils/idempotencyKey';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface SendMoneyModalProps {
   visible: boolean;
@@ -46,6 +47,7 @@ function SendMoneyModal({
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<'input' | 'confirm'>('input');
   const [idempotencyKey, setIdempotencyKey] = useState(() => generateIdempotencyKey('send-money'));
+  const isMounted = useIsMounted();
 
   const handleAmountChange = (text: string) => {
     // Only allow numbers
@@ -146,6 +148,7 @@ function SendMoneyModal({
       }
 
       // Regenerate idempotency key for the next transfer
+      if (!isMounted()) return;
       setIdempotencyKey(generateIdempotencyKey('send-money'));
 
       setLoading(false);
@@ -157,6 +160,7 @@ function SendMoneyModal({
       );
       onSuccess(amountNum, recipient);
     } catch (error: any) {
+      if (!isMounted()) return;
       setLoading(false);
       platformAlertSimple(
         'Transfer Failed',

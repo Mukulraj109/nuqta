@@ -29,6 +29,7 @@ import apiClient from '@/services/apiClient';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 
 // Category configuration for UI
@@ -68,6 +69,7 @@ interface UserLocation {
 type FilterType = 'all' | 'nearby' | 'top-rated' | 'best-cashback';
 
 const FitnessCategoryPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -119,7 +121,9 @@ const FitnessCategoryPage: React.FC = () => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
+        if (!isMounted()) return;
         setLocationError('Location permission denied');
+        if (!isMounted()) return;
         setLocationLoading(false);
         return null;
       }
@@ -132,11 +136,15 @@ const FitnessCategoryPage: React.FC = () => {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       };
+      if (!isMounted()) return;
       setUserLocation(coords);
+      if (!isMounted()) return;
       setLocationLoading(false);
       return coords;
     } catch (error) {
+      if (!isMounted()) return;
       setLocationError('Failed to get location');
+      if (!isMounted()) return;
       setLocationLoading(false);
       return null;
     }
@@ -172,15 +180,22 @@ const FitnessCategoryPage: React.FC = () => {
         });
       }
 
+      if (!isMounted()) return;
       setItems(storesData);
+      if (!isMounted()) return;
       setTotalCount(total);
       applyFilter(storesData, selectedFilter);
     } catch (error) {
+      if (!isMounted()) return;
       setItems([]);
+      if (!isMounted()) return;
       setFilteredItems([]);
+      if (!isMounted()) return;
       setTotalCount(0);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [category, userLocation]);
@@ -240,6 +255,7 @@ const FitnessCategoryPage: React.FC = () => {
         fetchStores();
       }
     }
+    if (!isMounted()) return;
     setSelectedFilter(filterId);
   };
 
@@ -292,10 +308,13 @@ const FitnessCategoryPage: React.FC = () => {
         )
       );
 
+      if (!isMounted()) return;
       setSearchResults(results);
     } catch (error) {
+      if (!isMounted()) return;
       setSearchResults([]);
     } finally {
+      if (!isMounted()) return;
       setIsSearching(false);
     }
   };
@@ -406,6 +425,7 @@ const FitnessCategoryPage: React.FC = () => {
       )}
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

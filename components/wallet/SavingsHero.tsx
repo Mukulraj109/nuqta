@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#FFFFFF',
+    color: '#ffcd57',
     marginTop: 4,
   },
   pill: {
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   pillText: {
     fontSize: 12,
-    color: '#FFFFFF',
+    color: '#ffcd57',
     fontWeight: '600',
   },
 });

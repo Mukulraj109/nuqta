@@ -14,7 +14,7 @@ import {
 import { categoryTabs as defaultCategoryTabs } from '@/data/playPageData';
 import realVideosApi from '@/services/realVideosApi';
 import { transformVideosToUGC, getFeaturedVideo } from '@/utils/videoTransformers';
-import { useAuthUser } from '@/stores/selectors';
+import { useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 
 const devLog = {
   log: __DEV__ ? console.log.bind(console) : () => {},
@@ -47,6 +47,8 @@ export function usePlayPageData(): UsePlayPageData {
   const [state, setState] = useState<PlayPageState>(initialState);
   const router = useRouter();
   const user = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const abortControllerRef = useRef<AbortController | null>(null);
   const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isMountedRef = useRef(true);
@@ -426,6 +428,7 @@ export function usePlayPageData(): UsePlayPageData {
 
   // Initialize data on mount and cleanup on unmount
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     refreshVideos();
 
     // Cleanup function
@@ -433,7 +436,7 @@ export function usePlayPageData(): UsePlayPageData {
       cleanupAbortController();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [authLoading, isAuthenticated]);
 
   // iOS-specific video management
   useEffect(() => {

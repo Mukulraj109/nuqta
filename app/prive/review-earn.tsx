@@ -27,6 +27,7 @@ import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/pr
 import priveApi, { PriveReviewableItem, PriveReviewDashboard } from '@/services/priveApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Shimmer skeleton block for loading state
 const SkeletonBlock: React.FC<{ width: number | string; height: number; borderRadius?: number; style?: any }> = ({
@@ -76,17 +77,23 @@ function PriveReviewEarnPage() {
       const response = await priveApi.getReviewDashboard({ page: 1, limit: 20 });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setDashboard(response.data);
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to load review dashboard');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     fetchDashboard();
@@ -261,6 +268,7 @@ function PriveReviewEarnPage() {
   return (
     <View style={styles.container}>
       <FlashList
+        contentContainerStyle={{ paddingBottom: 120 }}
         data={filteredItems}
         keyExtractor={(item) => `${item.type}-${item.id}`}
         renderItem={renderItem}

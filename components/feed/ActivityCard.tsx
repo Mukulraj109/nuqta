@@ -16,6 +16,7 @@ import * as activityFeedApi from '../../services/activityFeedApi';
 import FollowButton from '../social/FollowButton';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ActivityCardProps {
   activity: Activity;
@@ -33,6 +34,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
   const [isLoadingComments, setIsLoadingComments] = useState(false);
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [stats, setStats] = useState({ likes: 0, comments: 0, shares: 0 });
+  const isMounted = useIsMounted();
 
   // Load activity stats
   React.useEffect(() => {
@@ -42,6 +44,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
   const loadStats = async () => {
     try {
       const activityStats = await activityFeedApi.getActivityStats(activity._id);
+      if (!isMounted()) return;
       setStats(activityStats);
     } catch (error) {
       // silently handle
@@ -54,10 +57,12 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
     try {
       setIsLoadingComments(true);
       const { comments: fetchedComments } = await activityFeedApi.getActivityComments(activity._id, 1, 20);
+      if (!isMounted()) return;
       setComments(fetchedComments);
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoadingComments(false);
     }
   };
@@ -83,14 +88,17 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onLike, onComment
     try {
       setIsSubmittingComment(true);
       await onComment(activity._id, commentText);
+      if (!isMounted()) return;
       setCommentText('');
 
       // Reload comments
       await loadComments();
+      if (!isMounted()) return;
       setStats(prev => ({ ...prev, comments: prev.comments + 1 }));
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsSubmittingComment(false);
     }
   };

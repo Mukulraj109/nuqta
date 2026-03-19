@@ -576,6 +576,8 @@ class EnhancedApiClient {
    * Print statistics
    */
   printStats(): void {
+    if (!__DEV__) return;
+
     console.log('\n┌─────────────────────────────────────────┐');
     console.log('│     ENHANCED API CLIENT STATISTICS     │');
     console.log('└─────────────────────────────────────────┘');

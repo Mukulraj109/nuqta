@@ -92,7 +92,12 @@ export function LocationProvider({ children }: LocationProviderProps) {
 
   // Initialize location context
   useEffect(() => {
-    initializeLocation();
+    let cancelled = false;
+    const init = async () => {
+      if (!cancelled) await initializeLocation();
+    };
+    init();
+    return () => { cancelled = true; };
   }, []);
 
   const initializeLocation = async () => {

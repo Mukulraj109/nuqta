@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface PayYourBillCardProps {
   storeId: string;
@@ -33,6 +34,7 @@ const PayYourBillCard: React.FC<PayYourBillCardProps> = ({
   const currencySymbol = getCurrencySymbol();
   const router = useRouter();
   const [loading, setLoading] = useState<'quick' | 'upload' | null>(null);
+  const isMounted = useIsMounted();
 
   const handleQuickPay = async () => {
     setLoading('quick');
@@ -46,6 +48,7 @@ const PayYourBillCard: React.FC<PayYourBillCardProps> = ({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to initiate quick pay');
     } finally {
+      if (!isMounted()) return;
       setLoading(null);
     }
   };
@@ -62,6 +65,7 @@ const PayYourBillCard: React.FC<PayYourBillCardProps> = ({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to open bill upload');
     } finally {
+      if (!isMounted()) return;
       setLoading(null);
     }
   };

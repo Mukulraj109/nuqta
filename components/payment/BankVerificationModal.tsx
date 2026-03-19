@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import paymentVerificationService from '@/services/paymentVerificationService';
 import type { BankVerificationResponse, MicroDepositVerification } from '@/types/paymentVerification.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface BankVerificationModalProps {
   visible: boolean;
@@ -45,6 +46,7 @@ function BankVerificationModal({
   const [amount1, setAmount1] = useState('');
   const [amount2, setAmount2] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (visible) {
@@ -66,15 +68,18 @@ function BankVerificationModal({
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setVerificationData(response.data);
         setStep('waiting');
       } else {
         throw new Error(response.error || 'Failed to initiate bank verification');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to verify bank account');
       onError(err.message || 'Failed to verify bank account');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -108,6 +113,7 @@ function BankVerificationModal({
       if (response.success && response.data) {
         if (response.data.status === 'VERIFIED') {
           onSuccess();
+          if (!isMounted()) return;
           setTimeout(onClose, 1500);
         } else {
           throw new Error('Amounts do not match. Please check your bank statement.');
@@ -116,9 +122,11 @@ function BankVerificationModal({
         throw new Error(response.error || 'Failed to verify deposits');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to verify deposits');
       setStep('waiting');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

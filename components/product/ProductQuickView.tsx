@@ -22,6 +22,7 @@ import { useToast } from '@/hooks/useToast';
 import productsApi from '@/services/productsApi';
 import { VariantSelection } from '@/components/cart/ProductVariantModal';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -67,6 +68,7 @@ function ProductQuickView({
   const [selectedVariant, setSelectedVariant] = useState<VariantSelection | undefined>();
   const [expandedDescription, setExpandedDescription] = useState(false);
   const [addingToCart, setAddingToCart] = useState(false);
+  const isMounted = useIsMounted();
 
   const slideAnim = useRef(new Animated.Value(SCREEN_WIDTH)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -115,13 +117,16 @@ function ProductQuickView({
       const response = await productsApi.getProductById(productId);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setProduct(response.data as ProductDetails);
       } else {
         setError('Failed to load product details');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load product. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -177,6 +182,7 @@ function ProductQuickView({
     } catch (error) {
       showError('Failed to add to cart. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setAddingToCart(false);
     }
   };

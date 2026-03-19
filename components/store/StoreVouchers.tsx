@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import storeVouchersApi, { StoreVoucher } from '@/services/storeVouchersApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface StoreVouchersProps {
   storeId: string;
@@ -31,6 +32,7 @@ const StoreVouchers: React.FC<StoreVouchersProps> = ({
   const [vouchers, setVouchers] = useState<StoreVoucher[]>([]);
   const [loading, setLoading] = useState(true);
   const [claimingId, setClaimingId] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadVouchers();
@@ -45,11 +47,13 @@ const StoreVouchers: React.FC<StoreVouchersProps> = ({
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setVouchers(response.data.vouchers || []);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -72,6 +76,7 @@ const StoreVouchers: React.FC<StoreVouchersProps> = ({
       if (response.success) {
         platformAlertSimple('Success', 'Voucher claimed successfully!');
         // Update local state
+        if (!isMounted()) return;
         setVouchers(prev =>
           prev.map(v =>
             v._id === voucher._id ? { ...v, isAssigned: true, canRedeem: false } : v
@@ -84,6 +89,7 @@ const StoreVouchers: React.FC<StoreVouchersProps> = ({
     } catch (error: any) {
       platformAlertSimple('Error', error.message || 'Failed to claim voucher');
     } finally {
+      if (!isMounted()) return;
       setClaimingId(null);
     }
   };

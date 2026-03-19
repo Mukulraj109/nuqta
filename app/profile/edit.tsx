@@ -20,6 +20,7 @@ import { uploadProfileImage } from '@/services/imageUploadService';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive, platformAlertError } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ProfileFormData {
   name: string;
@@ -53,6 +54,7 @@ function ProfileEditPage() {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [showGenderModal, setShowGenderModal] = useState(false);
+  const isMounted = useIsMounted();
 
   const genderOptions = [
     { label: 'Male', value: 'male' },
@@ -156,6 +158,7 @@ function ProfileEditPage() {
       });
 
       if (!result.canceled && result.assets[0]) {
+        if (!isMounted()) return;
         setUploadingImage(true);
 
         // Try upload with retry logic (Cloudinary is slow from your location)
@@ -187,6 +190,7 @@ function ProfileEditPage() {
     } catch (error) {
       platformAlertSimple('Error', error instanceof Error ? error.message : 'An error occurred while uploading the image');
     } finally {
+      if (!isMounted()) return;
       setUploadingImage(false);
     }
   };
@@ -227,6 +231,7 @@ function ProfileEditPage() {
       const message = error instanceof Error ? error.message : 'Unknown error';
       platformAlertError('Validation Error', message);
     } finally {
+      if (!isMounted()) return;
       setIsSaving(false);
     }
   };

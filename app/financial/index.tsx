@@ -30,6 +30,7 @@ import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Fallback categories (used if API fails)
@@ -58,6 +59,7 @@ interface DisplayService {
 }
 
 const FinancialPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -87,6 +89,7 @@ const FinancialPage: React.FC = () => {
       ]);
 
       if (categoriesRes.status === 'fulfilled' && categoriesRes.value.success && categoriesRes.value.data) {
+        if (!isMounted()) return;
         setCategories(categoriesRes.value.data);
         trackEvent('financial_categories_loaded', {
           count: categoriesRes.value.data.length,
@@ -105,6 +108,7 @@ const FinancialPage: React.FC = () => {
               : '5%',
           image: service.images?.[0] || undefined,
         }));
+        if (!isMounted()) return;
         setFeaturedServices(transformed);
         trackEvent('financial_featured_loaded', {
           count: transformed.length,
@@ -112,6 +116,7 @@ const FinancialPage: React.FC = () => {
       }
 
       if (statsRes.status === 'fulfilled' && statsRes.value.success && statsRes.value.data) {
+        if (!isMounted()) return;
         setStats({
           billers: statsRes.value.data.totalBillers || 100,
           maxCashback: statsRes.value.data.maxCashback || 10,
@@ -123,7 +128,9 @@ const FinancialPage: React.FC = () => {
       });
       // Keep fallback data
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [isOffline, trackEvent]);
@@ -212,6 +219,7 @@ const FinancialPage: React.FC = () => {
       </LinearGradient>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} colors={[Colors.brand.purple]} />

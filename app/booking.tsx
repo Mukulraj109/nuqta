@@ -6,7 +6,6 @@ import {
   ScrollView,
   Pressable,
   ActivityIndicator,
-  Alert,
   Platform,
   TextInput,
   KeyboardAvoidingView,
@@ -32,6 +31,10 @@ import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
 import { colors } from '@/constants/theme';
 import BookingRewardBanner from '@/components/booking/BookingRewardBanner';
+import serviceBookingService from '@/services/serviceBookingApi';
+import tableBookingApi from '@/services/tableBookingApi';
+import { platformAlertSimple } from '@/utils/platformAlert';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -84,6 +87,7 @@ interface ActiveDeal {
 }
 
 function BookingPage() {
+  const isMounted = useIsMounted();
   // URL params: storeId (required), bookingType ('table' | 'service'), productId (for service)
   // Redemption params: redemptionCode, redemptionId, dealCashback, dealCoins, dealDiscount
   const {
@@ -205,17 +209,22 @@ function BookingPage() {
               setValidatedDeal(null);
             }
           } else {
+            if (!isMounted()) return;
             setDealValidationError('Deal not found');
+            if (!isMounted()) return;
             setValidatedDeal(null);
           }
         } catch (err) {
           // Don't block booking if validation fails, but warn user
+          if (!isMounted()) return;
           setDealValidationError('Could not verify deal status');
         }
       }
     } catch (error) {
+      if (!isMounted()) return;
       setErrorMessage('Failed to load details. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -290,48 +299,85 @@ function BookingPage() {
     setSubmitting(true);
 
     try {
-      // TODO: Replace with actual API call
-      // For now, simulate API call with redemption info
-      const bookingData = {
-        storeId,
-        date: selectedDate.toISOString(),
-        time: selectedTime24h,
-        numberOfPeople: parseInt(numberOfPeople),
-        customerName,
-        customerPhone,
-        customerEmail,
-        notes,
-        // Include redemption info if present and validated
-        ...(validatedDeal && {
-          redemptionCode: validatedDeal.redemptionCode,
-          redemptionId: validatedDeal.redemptionId,
-        }),
-      };
+      if (isServiceBooking && service) {
+        // --- Service Booking: POST /api/service-bookings ---
+        const durationMinutes = service.serviceDetails?.duration || 60;
+        const [startH, startM] = (selectedTime24h || '09:00').split(':').map(Number);
+        const endDate = new Date(2000, 0, 1, startH, startM + durationMinutes);
+        const endTime = `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
 
+        // Format date as YYYY-MM-DD
+        const bookingDateStr = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
 
-      // For now, simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+        const response = await serviceBookingService.createBooking({
+          serviceId: service._id,
+          bookingDate: bookingDateStr,
+          timeSlot: { start: selectedTime24h || '09:00', end: endTime },
+          serviceType: service.serviceDetails?.serviceType || 'store',
+          customerNotes: JSON.stringify({
+            customerName,
+            customerPhone,
+            customerEmail,
+            numberOfPeople: parseInt(numberOfPeople),
+            notes,
+            ...(validatedDeal && {
+              redemptionCode: validatedDeal.redemptionCode,
+              redemptionId: validatedDeal.redemptionId,
+            }),
+          }),
+          paymentMethod: 'cash',
+        });
+
+        if (!response.success) {
+          if (!isMounted()) return;
+          setSubmitting(false);
+          platformAlertSimple('Booking Failed', response.error || 'Failed to create booking. Please try again.');
+          return;
+        }
+      } else {
+        // --- Table Booking: POST /api/table-bookings ---
+        const bookingDateStr = selectedDate.toISOString();
+
+        const response = await tableBookingApi.createTableBooking({
+          storeId: storeId as string,
+          bookingDate: bookingDateStr,
+          bookingTime: selectedTime24h || '09:00',
+          partySize: parseInt(numberOfPeople),
+          customerName,
+          customerPhone,
+          customerEmail: customerEmail || undefined,
+          specialRequests: notes || undefined,
+        });
+
+        if (!response.success) {
+          if (!isMounted()) return;
+          setSubmitting(false);
+          platformAlertSimple('Booking Failed', response.message || 'Failed to create booking. Please try again.');
+          return;
+        }
+      }
 
       // Mark redemption as used if there was a validated deal
       if (validatedDeal) {
         try {
-          const useResponse = await campaignsApi.useRedemption(validatedDeal.redemptionCode);
-          if (useResponse.success) {
-          } else {
-          }
+          await campaignsApi.useRedemption(validatedDeal.redemptionCode);
         } catch (err) {
-          // silently handle
+          // silently handle — booking already succeeded
         }
       }
 
+      if (!isMounted()) return;
       setSubmitting(false);
+      if (!isMounted()) return;
       setShowSuccessModal(true);
 
       // Track booking_complete event
       try { analytics.trackEvent(ANALYTICS_EVENTS.BOOKING_COMPLETED, { store_id: storeId, date: selectedDate?.toISOString(), time: selectedTime, party_size: parseInt(numberOfPeople) }); } catch {}
-    } catch (error) {
+    } catch (error: any) {
+      if (!isMounted()) return;
       setSubmitting(false);
-      setErrorMessage('Failed to create booking. Please try again.');
+      const message = error?.message || 'Failed to create booking. Please try again.';
+      platformAlertSimple('Booking Error', message);
     }
   };
 
@@ -401,13 +447,17 @@ function BookingPage() {
       });
 
       if (response.success) {
+        if (!isMounted()) return;
         setShowAddedToCartModal(true);
       } else {
+        if (!isMounted()) return;
         setErrorMessage(response.message || 'Failed to add service to cart');
       }
     } catch (error) {
+      if (!isMounted()) return;
       setErrorMessage('Failed to add service to cart. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setAddingToCart(false);
     }
   };

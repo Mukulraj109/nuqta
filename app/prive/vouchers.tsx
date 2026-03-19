@@ -27,6 +27,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertConfirm, platformAlertSimple } from '@/utils/platformAlert';
 import priveApi, { Voucher } from '@/services/priveApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type FilterStatus = 'all' | 'active' | 'used' | 'expired';
 
@@ -83,24 +84,34 @@ function VouchersScreen() {
         const { vouchers: newVouchers, stats, pagination } = response.data;
 
         if (pageNum === 1) {
+          if (!isMounted()) return;
           setVouchers(newVouchers);
         } else {
+          if (!isMounted()) return;
           setVouchers(prev => [...prev, ...newVouchers]);
         }
 
+        if (!isMounted()) return;
         setActiveCount(stats.active);
+        if (!isMounted()) return;
         setHasMore(pagination.page < pagination.pages);
+        if (!isMounted()) return;
         setPage(pageNum);
       } else {
+        if (!isMounted()) return;
         setError('Failed to load vouchers');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load vouchers');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [filter]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     fetchVouchers(1);
@@ -191,6 +202,7 @@ function VouchersScreen() {
           </View>
         ) : (
           <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
             style={styles.content}
             showsVerticalScrollIndicator={false}
             refreshControl={
@@ -402,15 +414,21 @@ function VouchersScreen() {
                                   platformAlertSimple('Done', 'Voucher marked as used');
                                 } else {
                                   // Revert on failure
+                                  if (!isMounted()) return;
                                   setVouchers(prevVouchers);
+                                  if (!isMounted()) return;
                                   setActiveCount(prevActiveCount);
+                                  if (!isMounted()) return;
                                   setSelectedVoucher(selectedVoucher);
                                   platformAlertSimple('Error', 'Failed to mark voucher as used');
                                 }
                               } catch {
                                 // Revert on error
+                                if (!isMounted()) return;
                                 setVouchers(prevVouchers);
+                                if (!isMounted()) return;
                                 setActiveCount(prevActiveCount);
+                                if (!isMounted()) return;
                                 setSelectedVoucher(selectedVoucher);
                                 platformAlertSimple('Error', 'Failed to mark voucher as used');
                               }

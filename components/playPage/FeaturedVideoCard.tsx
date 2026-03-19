@@ -6,6 +6,7 @@ import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
 import { ThemedText } from '@/components/ThemedText';
 import { FeaturedVideoCardProps, PLAY_PAGE_COLORS } from '@/types/playPage.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -20,6 +21,7 @@ function FeaturedVideoCard({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
+  const isMounted = useIsMounted();
 
   // Cleanup video resources on unmount
   useEffect(() => {
@@ -34,6 +36,7 @@ function FeaturedVideoCard({
         try {
           if (autoPlay && isPlaying) {
             // iOS requires specific configuration for auto-play
+            if (!isMounted()) return;
             await videoRef.current.setStatusAsync({
               shouldPlay: true,
               isLooping: true,
@@ -41,11 +44,13 @@ function FeaturedVideoCard({
               volume: 0, // Ensure muted
             });
           } else {
+            if (!isMounted()) return;
             await videoRef.current.setStatusAsync({
               shouldPlay: false,
             });
           }
         } catch (error) {
+          if (!isMounted()) return;
           setHasError(true);
         }
       }

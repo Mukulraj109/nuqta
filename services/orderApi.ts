@@ -101,9 +101,9 @@ class OrderApiService {
    */
   async requestReturn(orderId: string, reason: string, items: string[]): Promise<ApiResponse<Order>> {
     try {
-      return await apiClient.post(`${this.baseUrl}/${orderId}/return`, {
+      return await apiClient.post(`${this.baseUrl}/${orderId}/refund-request`, {
         reason,
-        items,
+        refundItems: items.map(itemId => ({ itemId, quantity: 1 })),
       });
     } catch (error) {
       return {

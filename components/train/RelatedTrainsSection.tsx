@@ -10,6 +10,7 @@ import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
 import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Route {
   from: string;
@@ -29,6 +30,7 @@ const RelatedTrainsSection: React.FC<RelatedTrainsSectionProps> = ({ currentTrai
   const locale = getLocale();
   const [relatedTrains, setRelatedTrains] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadRelatedTrains();
@@ -48,11 +50,13 @@ const RelatedTrainsSection: React.FC<RelatedTrainsSectionProps> = ({ currentTrai
         const filtered = response.data.services
           .filter((train: any) => (train._id || train.id) !== currentTrainId)
           .slice(0, 5);
+        if (!isMounted()) return;
         setRelatedTrains(filtered);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

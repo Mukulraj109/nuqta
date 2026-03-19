@@ -27,6 +27,7 @@ import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { errorReporter } from '@/utils/errorReporter';
 import ErrorState from '@/components/common/ErrorState';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const FOOD_CATEGORY_SLUG = 'food-dining';
@@ -77,6 +78,7 @@ interface FoodOffer {
 
 // ---------- Component ----------
 const FoodPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const authLoading = useAuthLoading();
 
@@ -117,6 +119,7 @@ const FoodPage: React.FC = () => {
       if (response.success && response.data) {
         const parentCat = response.data as any;
         const children = parentCat.childCategories || [];
+        if (!isMounted()) return;
         setSubcategories(
           children
             .filter((c: any) => c.isActive !== false)
@@ -130,10 +133,13 @@ const FoodPage: React.FC = () => {
             }))
         );
         // Also use parent stats if available
+        if (!isMounted()) return;
         if (parentCat.storeCount) setTotalStores(parentCat.storeCount);
+        if (!isMounted()) return;
         if (parentCat.maxCashback) setMaxCashback(parentCat.maxCashback);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load food categories. Please try again.');
       errorReporter.captureError(
         err instanceof Error ? err : new Error('Failed to fetch food subcategories'),
@@ -141,6 +147,7 @@ const FoodPage: React.FC = () => {
         'warning'
       );
     } finally {
+      if (!isMounted()) return;
       setLoadingSubcategories(false);
     }
   }, []);
@@ -164,23 +171,29 @@ const FoodPage: React.FC = () => {
         const stores: FoodStore[] = data.stores || (Array.isArray(data) ? data : []);
 
         if (append) {
+          if (!isMounted()) return;
           setFeaturedStores(prev => [...prev, ...stores]);
         } else {
+          if (!isMounted()) return;
           setFeaturedStores(stores);
         }
 
         // Pagination metadata
         const meta = response.meta?.pagination || data.pagination;
         if (meta) {
+          if (!isMounted()) return;
           setTotalStores(meta.total || 0);
+          if (!isMounted()) return;
           setHasMoreStores(page < (meta.pages || meta.totalPages || 1));
         } else {
+          if (!isMounted()) return;
           setHasMoreStores(stores.length === PAGE_LIMIT);
         }
 
         // Compute max cashback from returned stores
         if (!append && stores.length > 0) {
           const mc = Math.max(...stores.map((s: FoodStore) => s.offers?.cashback || 0), 0);
+          if (!isMounted()) return;
           if (mc > maxCashback) setMaxCashback(mc);
         }
       }
@@ -191,7 +204,9 @@ const FoodPage: React.FC = () => {
         'warning'
       );
     } finally {
+      if (!isMounted()) return;
       if (page === 1) setLoadingStores(false);
+      if (!isMounted()) return;
       else setLoadingMoreStores(false);
     }
   }, [maxCashback]);
@@ -204,6 +219,7 @@ const FoodPage: React.FC = () => {
       if (response.success && response.data) {
         const data = response.data as any;
         const items: CuisineCount[] = data.cuisines || (Array.isArray(data) ? data : []);
+        if (!isMounted()) return;
         setCuisines(items.slice(0, 8)); // Show top 8 cuisines
       }
     } catch (err) {
@@ -213,6 +229,7 @@ const FoodPage: React.FC = () => {
         'warning'
       );
     } finally {
+      if (!isMounted()) return;
       setLoadingCuisines(false);
     }
   }, []);
@@ -224,6 +241,7 @@ const FoodPage: React.FC = () => {
       const response = await apiClient.get<any>('/offers/featured', { limit: 6 });
       if (response.success && response.data) {
         const items = Array.isArray(response.data) ? response.data : response.data.offers || [];
+        if (!isMounted()) return;
         setOffers(items.slice(0, 6));
       }
     } catch (err) {
@@ -233,6 +251,7 @@ const FoodPage: React.FC = () => {
         'warning'
       );
     } finally {
+      if (!isMounted()) return;
       setLoadingOffers(false);
     }
   }, []);
@@ -393,7 +412,7 @@ const FoodPage: React.FC = () => {
         </ScrollView>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
         {/* Offers Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -602,7 +621,6 @@ const FoodPage: React.FC = () => {
           </LinearGradient>
         </View>
 
-        <View style={{ height: 120 }} />
       </ScrollView>
     </View>
   );

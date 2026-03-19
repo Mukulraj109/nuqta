@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: Spacing.lg,
+    paddingBottom: 120,
   },
   searchResultsContainer: {
     flex: 1,

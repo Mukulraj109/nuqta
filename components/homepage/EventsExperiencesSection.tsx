@@ -17,6 +17,7 @@ import { useRouter } from 'expo-router';
 import eventsApiService from '@/services/eventsApi';
 import { useRegionState } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_GAP = 8;
@@ -86,6 +87,7 @@ const EventsExperiencesSection: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState<EventCategoryConfig[]>(FALLBACK_CATEGORIES);
   const [featuredEvent, setFeaturedEvent] = useState<{ title: string; discount?: string } | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     const fetchEventData = async () => {
@@ -99,6 +101,7 @@ const EventsExperiencesSection: React.FC = () => {
           // Get a featured movie event if available
           const movieEvent = featuredEvents.find(e => e.category?.toLowerCase() === 'movies');
           if (movieEvent) {
+            if (!isMounted()) return;
             setFeaturedEvent({
               title: movieEvent.title,
               discount: movieEvent.price?.isFree ? 'Free Entry' : 'Up to 20% off',
@@ -108,6 +111,7 @@ const EventsExperiencesSection: React.FC = () => {
       } catch (error) {
         // Keep using fallback data
       } finally {
+        if (!isMounted()) return;
         setIsLoading(false);
       }
     };

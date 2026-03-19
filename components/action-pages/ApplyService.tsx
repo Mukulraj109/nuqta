@@ -27,6 +27,7 @@ import { storesApi } from '@/services/storesApi';
 import { useAuthUser } from '@/stores/selectors';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   teal: colors.tealGreen,
@@ -67,6 +68,7 @@ function ApplyServicePage() {
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string; service?: string }>();
   const user = useAuthUser();
 
+  const isMounted = useIsMounted();
   const [step, setStep] = useState<'type' | 'provider' | 'details' | 'docs' | 'confirm'>(
     params.service ? 'provider' : 'type'
   );
@@ -108,11 +110,13 @@ function ApplyServicePage() {
       const res = await storesApi.getStoresBySubcategorySlug('financial-lifestyle', 50);
       if (res.success && res.data) {
         const allStores = Array.isArray(res.data) ? res.data : (res.data.stores || []);
+        if (!isMounted()) return;
         setProviders(allStores.slice(0, 30));
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -150,6 +154,7 @@ function ApplyServicePage() {
         specialRequests: `Product: ${PRODUCT_TYPES.find(t => t.id === selectedType)?.label || selectedType}. ${annualIncome ? `Income: ${annualIncome}. ` : ''}${loanAmount ? `Amount: ${loanAmount}. ` : ''}${specialRequests.trim()}`,
       });
       if (res.success) {
+        if (!isMounted()) return;
         setApplicationId(res.data?._id || res.data?.bookingNumber || null);
         setStep('confirm');
       } else {
@@ -158,6 +163,7 @@ function ApplyServicePage() {
     } catch (err: any) {
       platformAlertSimple('Error', err?.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };
@@ -239,7 +245,7 @@ function ApplyServicePage() {
         ) : filteredProviders.length === 0 ? (
           <View style={styles.emptyContainer}><Ionicons name="business-outline" size={48} color={COLORS.border} /><Text style={styles.emptyTitle}>{searchQuery ? 'No matches found' : 'No providers available'}</Text><Text style={styles.emptySubtitle}>{searchQuery ? 'Try a different search term' : 'Check back later'}</Text></View>
         ) : (
-          <FlashList data={filteredProviders} keyExtractor={(item) => item._id || item.id} renderItem={renderProviderCard} contentContainerStyle={styles.storeList} showsVerticalScrollIndicator={false} estimatedItemSize={100} />
+          <FlashList data={filteredProviders} keyExtractor={(item) => item._id || item.id} renderItem={renderProviderCard} contentContainerStyle={styles.storeList} showsVerticalScrollIndicator={false} />
         )}
       </SafeAreaView>
     );

@@ -21,6 +21,7 @@ import {
   UploadOptions,
   UploadProgress
 } from '@/services/fileUploadService';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface FileUploaderProps {
   uploadType: 'profile' | 'ugc' | 'review';
@@ -57,6 +58,7 @@ function FileUploader({
 }: FileUploaderProps) {
   const [uploads, setUploads] = useState<FileUpload[]>([]);
   const [isSelecting, setIsSelecting] = useState(false);
+  const isMounted = useIsMounted();
 
   const handleSelectFiles = useCallback(async () => {
     if (isSelecting) return;
@@ -102,6 +104,7 @@ function FileUploader({
         isUploading: false,
       }));
 
+      if (!isMounted()) return;
       setUploads(prev => [...prev, ...newUploads]);
 
       // Start uploading
@@ -109,6 +112,7 @@ function FileUploader({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to select files. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsSelecting(false);
     }
   }, [isSelecting, uploads.length, maxFiles, maxSizeMB, allowedTypes, options]);
@@ -124,6 +128,7 @@ function FileUploader({
           upload.file,
           uploadType,
           (progress: UploadProgress) => {
+            if (!isMounted()) return;
             setUploads(prev => prev.map(u => 
               u.id === upload.id 
                 ? { ...u, uploadProgress: progress.percentage }
@@ -132,6 +137,7 @@ function FileUploader({
           }
         );
 
+        if (!isMounted()) return;
         setUploads(prev => prev.map(u => 
           u.id === upload.id 
             ? { 
@@ -144,6 +150,7 @@ function FileUploader({
             : u
         ));
       } catch (error) {
+        if (!isMounted()) return;
         setUploads(prev => prev.map(u => 
           u.id === upload.id 
             ? { 

@@ -22,11 +22,13 @@ import ArticleCard from '@/components/playPage/ArticleCard';
 import articlesService from '@/services/articlesApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
 
 function ArticlesPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -60,14 +62,18 @@ function ArticlesPage() {
       });
 
       if (response.success && response.data.articles) {
+        if (!isMounted()) return;
         setArticles(response.data.articles);
       } else {
         throw new Error(response.message || 'Failed to fetch articles');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load articles');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [selectedCategory]);

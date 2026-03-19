@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import exploreApi, { ExploreStats } from '@/services/exploreApi';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useIsMounted } from '@/hooks/useIsMounted';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 
 const { width } = Dimensions.get('window');
@@ -45,6 +46,7 @@ const formatNumber = (num: number): string => {
 };
 
 const SocialProofStrip = () => {
+  const isMounted = useIsMounted();
   const scrollX = useRef(new Animated.Value(0)).current;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [proofItems, setProofItems] = useState<ProofItem[]>([]);
@@ -111,12 +113,14 @@ const SocialProofStrip = () => {
 
         // Only set items if we have some data
         if (items.length > 0) {
+          if (!isMounted()) return;
           setProofItems(items);
         }
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

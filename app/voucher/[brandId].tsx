@@ -26,6 +26,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { platformAlertSimple } from '@/utils/platformAlert';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width, height } = Dimensions.get('window');
 
@@ -45,6 +46,7 @@ function BrandDetailPage() {
   const slideAnim = useRef(new Animated.Value(30)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     let isMounted = true;
@@ -128,11 +130,14 @@ function BrandDetailPage() {
         offers: [],
       };
 
+      if (!isMounted()) return;
       setDenominations(brandRes.data.denominations || [100, 500, 1000, 2000]);
+      if (!isMounted()) return;
       setBrand(brandData);
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -667,7 +672,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: Spacing.lg,
+    paddingBottom: 120,
   },
 
   // Hero Section

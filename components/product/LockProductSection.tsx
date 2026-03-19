@@ -32,6 +32,7 @@ import DurationChips, {
   calculateLockFee,
 } from './DurationChips';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface LockProductSectionProps {
   /** Product ID */
@@ -95,6 +96,7 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const isMounted = useIsMounted();
 
   const totalPrice = productPrice * quantity;
   const lockFee = calculateLockFee(totalPrice, selectedDuration);
@@ -139,13 +141,16 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
           message: response.data.lockDetails.message,
         });
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to lock item');
         triggerNotification('Error');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to lock item. Please try again.');
       triggerNotification('Error');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [
@@ -168,10 +173,12 @@ export const LockProductSection: React.FC<LockProductSectionProps> = ({
     setIsAddingToCart(true);
     try {
       await onAddToCart();
+      if (!isMounted()) return;
       setIsAddingToCart(false);
       triggerNotification('Success');
     } catch (err) {
       triggerNotification('Error');
+      if (!isMounted()) return;
       setIsAddingToCart(false);
     }
   }, [onAddToCart, isAddingToCart, isInCart]);

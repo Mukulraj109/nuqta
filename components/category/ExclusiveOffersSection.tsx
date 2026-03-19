@@ -19,6 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import exclusiveOffersApi, { ExclusiveOffer } from '@/services/exclusiveOffersApi';
 import { exclusiveOffersData } from '@/data/categoryDummyData';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ExclusiveOffersSectionProps {
   categorySlug?: string;
@@ -73,6 +74,7 @@ const ExclusiveOffersSection: React.FC<ExclusiveOffersSectionProps> = ({
   const router = useRouter();
   const [apiOffers, setApiOffers] = useState<ExclusiveOffer[]>([]);
   const [loading, setLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (offers) {
@@ -88,6 +90,7 @@ const ExclusiveOffersSection: React.FC<ExclusiveOffersSectionProps> = ({
           categorySlug ? { category: categorySlug, limit: 10 } : { limit: 10 }
         );
         if (response.success && response.data?.offers?.length > 0) {
+          if (!isMounted()) return;
           setApiOffers(response.data.offers);
         } else {
           // Fallback to dummy data if API returns empty
@@ -95,8 +98,10 @@ const ExclusiveOffersSection: React.FC<ExclusiveOffersSectionProps> = ({
         }
       } catch (err) {
         // Fallback to dummy data on error
+        if (!isMounted()) return;
         setApiOffers(exclusiveOffersData as any);
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };

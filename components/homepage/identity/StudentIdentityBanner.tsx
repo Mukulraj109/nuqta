@@ -7,15 +7,13 @@ import { colors, spacing, borderRadius } from '@/constants/theme';
 interface Props {
   institutionName: string;
   monthlySaved: number;
-  nearbyDealsCount: number;
   onSeeLeaderboard: () => void;
   onSeeDeals: () => void;
 }
 
-export default function StudentIdentityBanner({
+function StudentIdentityBanner({
   institutionName,
   monthlySaved,
-  nearbyDealsCount,
   onSeeLeaderboard,
   onSeeDeals,
 }: Props) {
@@ -56,6 +54,8 @@ export default function StudentIdentityBanner({
     </LinearGradient>
   );
 }
+
+export default React.memo(StudentIdentityBanner);
 
 const styles = StyleSheet.create({
   container: {

@@ -15,6 +15,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import paymentVerificationService from '@/services/paymentVerificationService';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface OTPVerificationModalProps {
   visible: boolean;
@@ -42,6 +43,7 @@ function OTPVerificationModal({
   const [resendTimer, setResendTimer] = useState(60);
   const [attemptsRemaining, setAttemptsRemaining] = useState(3);
   const [maskedContact, setMaskedContact] = useState('');
+  const isMounted = useIsMounted();
 
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
@@ -79,6 +81,7 @@ function OTPVerificationModal({
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setVerificationId(response.data.verificationId);
         setMaskedContact(response.data.maskedContact);
         setResendTimer(response.data.resendAvailableIn);
@@ -93,6 +96,7 @@ function OTPVerificationModal({
         platformAlertSimple('Error', error.message || 'Failed to send OTP');
       }
     } finally {
+      if (!isMounted()) return;
       setIsSendingOTP(false);
     }
   };
@@ -144,6 +148,7 @@ function OTPVerificationModal({
 
       if (response.success && response.data?.verified) {
         onSuccess();
+        if (!isMounted()) return;
         setTimeout(onClose, 1000);
       } else {
         const remaining = response.data?.attemptsRemaining || attemptsRemaining - 1;
@@ -153,6 +158,7 @@ function OTPVerificationModal({
           platformAlertSimple('Too Many Attempts', 'You\'ve exceeded the maximum number of attempts. Please try again later.');
         } else {
           platformAlertSimple('Invalid OTP', `${response.data?.error || 'The OTP you entered is incorrect'}. ${remaining} ${remaining === 1 ? 'attempt' : 'attempts'} remaining.`);
+          if (!isMounted()) return;
           setOtp(['', '', '', '', '', '']);
           inputRefs.current[0]?.focus();
         }
@@ -160,6 +166,7 @@ function OTPVerificationModal({
     } catch (error: any) {
       platformAlertSimple('Verification Failed', error.message || 'Failed to verify OTP');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

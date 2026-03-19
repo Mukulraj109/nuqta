@@ -26,6 +26,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { useIsMounted } from '@/hooks/useIsMounted';
 // ReZ Premium Design System Colors
 function PartnerProfilePage() {
   const { goBack } = useSafeNavigation();
@@ -44,6 +45,7 @@ function PartnerProfilePage() {
     error: null,
   });
   const [refreshing, setRefreshing] = useState(false);
+  const isMounted = useIsMounted();
   const [levelUpModal, setLevelUpModal] = useState<{
     visible: boolean;
     oldLevel: number;
@@ -74,11 +76,14 @@ function PartnerProfilePage() {
       if (dashboardResponse.success && dashboardResponse.data) {
         // Check if user is enrolled in the partner program
         if (dashboardResponse.data.enrolled === false) {
+          if (!isMounted()) return;
           setEnrolled(false);
+          if (!isMounted()) return;
           setPartnerState(prev => ({ ...prev, loading: false, error: null }));
           return;
         }
 
+        if (!isMounted()) return;
         setEnrolled(true);
 
         const benefitsResponse = await partnerApi.getBenefits();
@@ -86,13 +91,14 @@ function PartnerProfilePage() {
           ? benefitsResponse.data.allLevels
           : [];
 
+        if (!isMounted()) return;
         setPartnerState({
-          profile: dashboardResponse.data.profile,
-          milestones: dashboardResponse.data.milestones,
-          tasks: dashboardResponse.data.tasks,
-          jackpotProgress: dashboardResponse.data.jackpotProgress,
-          claimableOffers: dashboardResponse.data.claimableOffers,
-          faqs: dashboardResponse.data.faqs,
+          profile: dashboardResponse.data.profile as any,
+          milestones: dashboardResponse.data.milestones as any,
+          tasks: dashboardResponse.data.tasks as any,
+          jackpotProgress: dashboardResponse.data.jackpotProgress as any,
+          claimableOffers: dashboardResponse.data.claimableOffers as any,
+          faqs: dashboardResponse.data.faqs as any,
           levels: levelsWithBenefits,
           loading: false,
           error: null,
@@ -101,6 +107,7 @@ function PartnerProfilePage() {
         throw new Error(dashboardResponse.error || 'Failed to load partner data');
       }
     } catch (error) {
+      if (!isMounted()) return;
       setPartnerState(prev => ({
         ...prev,
         loading: false,
@@ -115,6 +122,7 @@ function PartnerProfilePage() {
       const response = await partnerApi.enrollPartner();
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setEnrolled(true);
         toast.success('Welcome to the Partner Program!');
         // Reload full dashboard data after enrollment
@@ -125,6 +133,7 @@ function PartnerProfilePage() {
     } catch (error) {
       platformAlertSimple('Error', 'Failed to join the Partner Program. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setEnrolling(false);
     }
   };
@@ -158,6 +167,7 @@ function PartnerProfilePage() {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await loadPartnerData();
+    if (!isMounted()) return;
     setRefreshing(false);
   }, []);
 
@@ -252,7 +262,7 @@ function PartnerProfilePage() {
     }
 
     if (!milestone.achieved) {
-      const remaining = milestone.spendAmount - (partnerState.profile?.totalSpent || 0);
+      const remaining = (milestone.spendAmount ?? 0) - ((partnerState.profile as any)?.totalSpent || 0);
       platformAlertSimple(
         milestone.title,
         `${milestone.description}\n\nSpend ${currencySymbol}${remaining.toLocaleString()} more to unlock this jackpot!`
@@ -265,7 +275,7 @@ function PartnerProfilePage() {
       `${milestone.title}\n\nReward: ${milestone.reward.title}\nValue: ${currencySymbol}${milestone.reward.value}`,
       async () => {
         try {
-          const response = await partnerApi.claimJackpotReward(milestone.spendAmount);
+          const response = await partnerApi.claimJackpotReward(milestone.spendAmount ?? 0);
 
           if (response.success) {
             platformAlertSimple(
@@ -559,7 +569,7 @@ function PartnerProfilePage() {
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statValue}>{currencySymbol}{profile?.totalSpent?.toLocaleString() || '0'}</Text>
+                <Text style={styles.statValue}>{currencySymbol}{(profile as any)?.totalSpent?.toLocaleString() || '0'}</Text>
                 <Text style={styles.statLabel}>Spent</Text>
               </View>
               <View style={styles.statDivider} />
@@ -733,7 +743,7 @@ function PartnerProfilePage() {
         {/* Jackpot Timeline */}
         <JackpotTimeline
           milestones={partnerState.jackpotProgress}
-          currentSpent={profile?.totalSpent || 0}
+          currentSpent={(profile as any)?.totalSpent || 0}
           onMilestonePress={handleJackpotMilestonePress}
         />
 

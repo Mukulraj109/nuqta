@@ -19,6 +19,7 @@ import socialImpactApi, { UserEnrollment } from '@/services/socialImpactApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: string }> = {
   registered: { label: 'Registered', color: Colors.info, icon: 'checkmark-circle' },
   checked_in: { label: 'Checked In', color: Colors.warning, icon: 'location' },
@@ -61,9 +62,11 @@ function MyParticipationsScreen() {
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [activeTab]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     setLoading(true);
@@ -73,6 +76,7 @@ function MyParticipationsScreen() {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchEnrollments();
+    if (!isMounted()) return;
     setRefreshing(false);
   }, [fetchEnrollments]);
 

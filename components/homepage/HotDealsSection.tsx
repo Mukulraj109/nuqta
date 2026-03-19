@@ -13,6 +13,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useRouter } from 'expo-router';
 import { productApi, HomepageProduct } from '@/services/productApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth } = Dimensions.get('window');
 // Parent content has padding: 20 on each side, so available width is screenWidth - 40
@@ -44,6 +45,7 @@ function HotDealsSection({
   const hasFreshCache = !!(
     cachedEntry && now - cachedEntry.at < HOT_DEALS_CACHE_TTL_MS
   );
+  const isMounted = useIsMounted();
   const [products, setProducts] = useState<HotDealProduct[]>(
     hasFreshCache ? cachedEntry!.data : []
   );
@@ -84,7 +86,6 @@ function HotDealsSection({
   }, [limit]);
 
   useEffect(() => {
-    let isMounted = true;
     setError(null);
 
     if (
@@ -97,21 +98,17 @@ function HotDealsSection({
 
     fetchHotDeals()
       .then((data) => {
-        if (!isMounted) return;
+        if (!isMounted()) return;
         setProducts(data);
       })
       .catch(() => {
-        if (!isMounted) return;
+        if (!isMounted()) return;
         setError('Failed to load hot deals');
       })
       .finally(() => {
-        if (!isMounted) return;
+        if (!isMounted()) return;
         setLoading(false);
       });
-
-    return () => {
-      isMounted = false;
-    };
   }, [fetchHotDeals]);
 
   const handleViewAll = () => {
@@ -207,7 +204,7 @@ function HotDealsSection({
           keyExtractor={keyExtractor}
           numColumns={2}
           scrollEnabled={false}
-          contentContainerStyle={styles.listContent}
+          contentContainerStyle={styles.listContent as any}
           estimatedItemSize={220}
           initialNumToRender={6}
           maxToRenderPerBatch={8}

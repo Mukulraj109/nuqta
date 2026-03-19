@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { router } from 'expo-router';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import {
   EarnSocialState,
   UseEarnSocialReturn,
@@ -10,6 +11,8 @@ import {
 import EarnSocialData from '@/data/earnSocialData';
 
 export const useEarnFromSocialMedia = (orderId?: string): UseEarnSocialReturn => {
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [state, setState] = useState<EarnSocialState>(EarnSocialData.initialState);
   const [contextOrderId] = useState(orderId);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -30,8 +33,9 @@ export const useEarnFromSocialMedia = (orderId?: string): UseEarnSocialReturn =>
 
   // Initialize data on mount
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     initializeEarnSocialData();
-  }, []);
+  }, [authLoading, isAuthenticated]);
 
   const initializeEarnSocialData = useCallback(async () => {
     setState(prev => ({ ...prev, loading: true }));

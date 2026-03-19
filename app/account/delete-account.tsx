@@ -22,8 +22,10 @@ import apiClient from '@/services/apiClient';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function DeleteAccountPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const actions = useAuthActions();
   const [confirmationText, setConfirmationText] = useState('');
@@ -69,6 +71,7 @@ function DeleteAccountPage() {
       const errorMessage = error.response?.data?.message || 'Failed to delete account. Please try again.';
       platformAlertSimple('Error', errorMessage);
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

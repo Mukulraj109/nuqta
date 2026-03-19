@@ -20,6 +20,7 @@ import { getProductId } from '@/types/product-unified.types';
 import { formatPrice as formatPriceUtil } from '@/utils/priceFormatter';
 import CachedImage from '@/components/ui/CachedImage';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function ProductCard({
   product,
@@ -34,6 +35,7 @@ function ProductCard({
   const { subscribe, subscribing } = useStockNotifications();
   const { showSuccess, showError } = useToast();
   const [isTogglingWishlist, setIsTogglingWishlist] = useState(false);
+  const isMounted = useIsMounted();
 
   // Stock status
   const stock = product.inventory?.stock ?? (product.availabilityStatus === 'out_of_stock' ? 0 : 100);
@@ -124,6 +126,7 @@ function ProductCard({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsTogglingWishlist(false);
     }
   }, [isTogglingWishlist, isInWishlist, productId, removeFromWishlist, addToWishlist, product.name, product.image, price.current, price.original, priceData.discount, product.rating, product.brand, product.category, isOutOfStock, isLowStock]);

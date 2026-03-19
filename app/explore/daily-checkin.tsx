@@ -1215,7 +1215,7 @@ const styles = StyleSheet.create({
     color: Colors.text.primary,
   },
   scrollContent: {
-    paddingBottom: Spacing.xl,
+    paddingBottom: 120,
   },
   loadingContainer: {
     flex: 1,

@@ -35,7 +35,6 @@ import RecommendationCard from '@/components/homepage/cards/RecommendationCard';
 import QuickReorderSection from '@/components/homepage/QuickReorderSection';
 
 // Tier 2: Near fold - static imports (LazySection still controls mount timing)
-import QuickReorder from '@/components/home/QuickReorder';
 import PlayAndEarnSectionV2 from '@/components/homepage/PlayAndEarnSectionV2';
 import BonusZoneHighlight from '@/components/homepage/BonusZoneHighlight';
 import NewOnRezSection from '@/components/homepage/NewOnRezSection';
@@ -198,6 +197,8 @@ interface NearUTabContentProps {
   totalSaved?: number;
   thisMonthSaved?: number;
   currencySymbol?: string;
+  featureLevel?: number;
+  hasCompletedFirstOrder?: boolean;
 }
 
 const NearUTabContent: React.FC<NearUTabContentProps> = ({
@@ -218,6 +219,8 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
   totalSaved,
   thisMonthSaved,
   currencySymbol,
+  featureLevel = 1,
+  hasCompletedFirstOrder = false,
 }) => {
   const router = useRouter();
   // Memoize card renderers
@@ -462,20 +465,26 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
       />
       <ShopByCategorySection />
 
-      {/* Quick Reorder — compact cards, above the fold */}
-      <QuickReorderSection />
+      {/* Quick Reorder — compact cards, above the fold (Level 3+ / has order history) */}
+      {(featureLevel >= 3 || hasCompletedFirstOrder) && (
+        <QuickReorderSection />
+      )}
 
       {/* ===== TIER 2: Near fold - static imports, LazySection controls mount ===== */}
       <HowRezWorksCard />
       <EarnRezCoinsSection />
-      <LazySection sectionId="quick-reorder" scrollY={scrollY} height={180}
-        renderSection={() => <QuickReorder limit={5} />} />
-      <LazySection sectionId="play-earn-v2" scrollY={scrollY} height={250}
-        renderSection={() => <PlayAndEarnSectionV2 />} />
-      <LazySection sectionId="bonus-zone" scrollY={scrollY} height={200}
-        renderSection={() => <BonusZoneHighlight />} />
-      <LazySection sectionId="streaks" scrollY={scrollY} height={200}
-        renderSection={() => <Suspense fallback={<SuspensePlaceholder height={200} />}><StreaksGamification /></Suspense>} />
+      {featureLevel >= 5 && (
+        <LazySection sectionId="play-earn-v2" scrollY={scrollY} height={250}
+          renderSection={() => <PlayAndEarnSectionV2 />} />
+      )}
+      {featureLevel >= 2 && (
+        <LazySection sectionId="bonus-zone" scrollY={scrollY} height={200}
+          renderSection={() => <BonusZoneHighlight />} />
+      )}
+      {featureLevel >= 2 && (
+        <LazySection sectionId="streaks" scrollY={scrollY} height={200}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={200} />}><StreaksGamification /></Suspense>} />
+      )}
       <LazySection sectionId="new-on-rez" scrollY={scrollY} height={300}
         renderSection={() => <NewOnRezSection />} />
       <LazySection sectionId="events-experiences" scrollY={scrollY} height={300}
@@ -599,8 +608,10 @@ const NearUTabContent: React.FC<NearUTabContentProps> = ({
       <LazySection sectionId="featured-categories" scrollY={scrollY} height={400}
         renderSection={() => <Suspense fallback={<SuspensePlaceholder height={400} />}><FeaturedCategoriesContainer productsPerCategory={10} /></Suspense>} />
 
-      <LazySection sectionId="feature-highlights" scrollY={scrollY} height={200}
-        renderSection={() => <Suspense fallback={<SuspensePlaceholder height={200} />}><FeatureHighlights /></Suspense>} />
+      {featureLevel >= 5 && (
+        <LazySection sectionId="feature-highlights" scrollY={scrollY} height={200}
+          renderSection={() => <Suspense fallback={<SuspensePlaceholder height={200} />}><FeatureHighlights /></Suspense>} />
+      )}
 
       <LazySection sectionId="wallet-snapshot" scrollY={scrollY} height={200}
         renderSection={() => <Suspense fallback={<SuspensePlaceholder height={200} />}><WalletSnapshotCard /></Suspense>} />

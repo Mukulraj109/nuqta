@@ -24,6 +24,7 @@ import {
 } from '@/types/validation.types';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -39,6 +40,7 @@ function CartValidation({
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [isRemoving, setIsRemoving] = useState(false);
+  const isMounted = useIsMounted();
 
   const hasErrors = validationResult?.issues.some(issue => issue.severity === 'error') ?? false;
   const hasWarnings = validationResult?.issues.some(issue => issue.severity === 'warning') ?? false;
@@ -63,6 +65,7 @@ function CartValidation({
             } catch (error) {
               // silently handle
             } finally {
+              if (!isMounted()) return;
               setIsRemoving(false);
             }
           },

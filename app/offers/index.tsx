@@ -21,6 +21,7 @@ import { Colors, Spacing, Typography, Shadows, BorderRadius } from '@/constants/
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -34,6 +35,7 @@ const PALETTE = {
 };
 
 function OffersScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();

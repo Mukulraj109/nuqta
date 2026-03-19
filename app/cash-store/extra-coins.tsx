@@ -26,6 +26,7 @@ import BonusZoneCard from '../../components/earn/BonusZoneCard';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = SCREEN_WIDTH - 64;
@@ -158,6 +159,7 @@ const SkeletonBlock = React.memo(({ width: w, height: h, style, index = 0 }: {
 
 // ─── Main Component ─────────────────────────────────────────
 function ExtraCoinsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -202,9 +204,11 @@ function ExtraCoinsPage() {
         if (res.success && res.data) setStreak(res.data);
       }
       if (results[2].status === 'fulfilled') {
+        if (!isMounted()) return;
         setCampaigns((results[2].value || []).filter((c: Campaign) => c.isActive));
       }
       if (results[3].status === 'fulfilled') {
+        if (!isMounted()) return;
         setCoinDrops((results[3].value || []).filter((d: CoinDrop) => d.isActive));
       }
       if (results[4].status === 'fulfilled') {
@@ -213,9 +217,11 @@ function ExtraCoinsPage() {
       }
 
       if (results.every((r) => r.status === 'rejected')) {
+        if (!isMounted()) return;
         setError('Unable to load data. Please try again.');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Something went wrong. Please try again.');
     }
   }, []);
@@ -228,6 +234,7 @@ function ExtraCoinsPage() {
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
     await fetchData();
+    if (!isMounted()) return;
     setIsRefreshing(false);
   }, [fetchData]);
 
@@ -247,6 +254,7 @@ function ExtraCoinsPage() {
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsCheckingIn(false);
     }
   }, [isCheckingIn, streak?.hasCheckedInToday]);
@@ -553,7 +561,6 @@ function ExtraCoinsPage() {
                 <Pressable
                   onPress={() => router.push('/bonus-zone' as any)}
                   style={styles.seeAllBtn}
-                 
                 >
                   <Text style={styles.seeAllText}>View All</Text>
                   <Ionicons name="chevron-forward" size={14} color={Colors.nileBlue} />

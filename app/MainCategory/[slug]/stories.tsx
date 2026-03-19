@@ -26,6 +26,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface UGCItem {
   _id: string;
@@ -56,6 +57,7 @@ const BASE_FILTERS = [
 ];
 
 function CategoryStoriesPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -125,10 +127,12 @@ function CategoryStoriesPage() {
       }
 
       combined.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      if (!isMounted()) return;
       setItems(combined);
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -138,6 +142,7 @@ function CategoryStoriesPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchUGC();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

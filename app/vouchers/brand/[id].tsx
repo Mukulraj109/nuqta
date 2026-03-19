@@ -32,6 +32,7 @@ import { StripeCardForm } from '@/components/payment';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Initialize Stripe lazily — only if key is configured
 const stripeKey = process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY;
@@ -112,15 +113,20 @@ function VoucherBrandDetailPage() {
           setSelectedDenomination((response.data as any).denominations[0]);
         }
       } else {
+        if (!isMounted()) return;
         setError('Brand not found');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load brand details');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [id]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     fetchBrand();
@@ -148,6 +154,7 @@ function VoucherBrandDetailPage() {
       });
 
       if (response.success) {
+        if (!isMounted()) return;
         setConfirmModal({
           visible: true,
           title: 'Purchase Successful!',
@@ -155,6 +162,7 @@ function VoucherBrandDetailPage() {
           type: 'success',
         });
       } else {
+        if (!isMounted()) return;
         setConfirmModal({
           visible: true,
           title: 'Purchase Failed',
@@ -163,6 +171,7 @@ function VoucherBrandDetailPage() {
         });
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setConfirmModal({
         visible: true,
         title: 'Purchase Failed',
@@ -170,6 +179,7 @@ function VoucherBrandDetailPage() {
         type: 'error',
       });
     } finally {
+      if (!isMounted()) return;
       setIsPurchasing(false);
     }
   }, [brand, selectedDenomination]);
@@ -196,9 +206,12 @@ function VoucherBrandDetailPage() {
         });
 
         if (response.success && response.data?.clientSecret) {
+          if (!isMounted()) return;
           setStripeClientSecret(response.data.clientSecret);
+          if (!isMounted()) return;
           setShowStripeModal(true);
         } else {
+          if (!isMounted()) return;
           setConfirmModal({
             visible: true,
             title: 'Payment Error',
@@ -207,6 +220,7 @@ function VoucherBrandDetailPage() {
           });
         }
       } catch (err: any) {
+        if (!isMounted()) return;
         setConfirmModal({
           visible: true,
           title: 'Payment Error',
@@ -214,10 +228,12 @@ function VoucherBrandDetailPage() {
           type: 'error',
         });
       } finally {
+        if (!isMounted()) return;
         setIsPurchasing(false);
       }
     } else {
       // Wallet payment: show confirm modal
+      if (!isMounted()) return;
       setConfirmModal({
         visible: true,
         title: 'Buy Gift Card',
@@ -238,6 +254,7 @@ function VoucherBrandDetailPage() {
       });
 
       if (confirmResponse.success) {
+        if (!isMounted()) return;
         setConfirmModal({
           visible: true,
           title: 'Purchase Successful!',
@@ -245,6 +262,7 @@ function VoucherBrandDetailPage() {
           type: 'success',
         });
       } else {
+        if (!isMounted()) return;
         setConfirmModal({
           visible: true,
           title: 'Confirmation Failed',
@@ -253,6 +271,7 @@ function VoucherBrandDetailPage() {
         });
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setConfirmModal({
         visible: true,
         title: 'Confirmation Error',
@@ -260,7 +279,9 @@ function VoucherBrandDetailPage() {
         type: 'error',
       });
     } finally {
+      if (!isMounted()) return;
       setIsPurchasing(false);
+      if (!isMounted()) return;
       setStripeClientSecret(null);
     }
   }, [brand]);
@@ -320,6 +341,7 @@ function VoucherBrandDetailPage() {
       </View>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} colors={[COLORS.peach]} />

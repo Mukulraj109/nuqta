@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface StripeCardFormProps {
   clientSecret: string;
@@ -47,6 +48,7 @@ function StripeCardForm({
   const [cardNumberComplete, setCardNumberComplete] = useState(false);
   const [cardExpiryComplete, setCardExpiryComplete] = useState(false);
   const [cardCvcComplete, setCardCvcComplete] = useState(false);
+  const isMounted = useIsMounted();
 
   const handleSubmit = async () => {
     if (!stripe || !elements) {
@@ -95,6 +97,7 @@ function StripeCardForm({
           errorMessage = confirmError.message || 'Card payment failed. Please check your card details.';
         }
 
+        if (!isMounted()) return;
         setCardError(errorMessage);
         onError(errorMessage);
       } else if (paymentIntent) {
@@ -106,6 +109,7 @@ function StripeCardForm({
           onSuccess(paymentIntent.id);
         } else {
           const errorMsg = `Payment not completed. Status: ${paymentIntent.status}`;
+          if (!isMounted()) return;
           setCardError(errorMsg);
           onError(errorMsg);
         }
@@ -113,9 +117,11 @@ function StripeCardForm({
     } catch (err: any) {
       if (__DEV__) {
       }
+      if (!isMounted()) return;
       setCardError(err.message || 'An error occurred');
       onError(err.message || 'An error occurred');
     } finally {
+      if (!isMounted()) return;
       setIsProcessing(false);
     }
   };

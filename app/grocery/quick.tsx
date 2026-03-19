@@ -27,6 +27,7 @@ import { cartApi } from '@/services/cartApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 interface QuickStore {
   id: string;
   name: string;
@@ -49,6 +50,7 @@ interface QuickProduct {
 }
 
 const QuickDeliveryPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
 
   // State
@@ -103,8 +105,10 @@ const QuickDeliveryPage: React.FC = () => {
             isOpen: true,
           }));
 
+        if (!isMounted()) return;
         setQuickStores(fastStores.length > 0 ? fastStores : getFallbackQuickStores());
       } else {
+        if (!isMounted()) return;
         setQuickStores(getFallbackQuickStores());
       }
 
@@ -128,15 +132,21 @@ const QuickDeliveryPage: React.FC = () => {
             percentage: product.cashback?.percentage || 5,
           },
         }));
+        if (!isMounted()) return;
         setQuickProducts(mappedProducts);
       } else {
+        if (!isMounted()) return;
         setQuickProducts(getFallbackProducts());
       }
     } catch (err) {
+      if (!isMounted()) return;
       setQuickStores(getFallbackQuickStores());
+      if (!isMounted()) return;
       setQuickProducts(getFallbackProducts());
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [selectedCategory]);
@@ -277,6 +287,7 @@ const QuickDeliveryPage: React.FC = () => {
       {/* Products */}
       <ScrollView
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

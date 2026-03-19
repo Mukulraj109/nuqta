@@ -11,6 +11,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Store Payment type for store payments
 interface StorePaymentDetail {
@@ -50,6 +51,7 @@ const TransactionDetailPage = () => {
   const [storePayment, setStorePayment] = useState<StorePaymentDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   // Check if the ID is a store payment ID (starts with "SP-")
   const isStorePayment = id?.startsWith('SP-');
@@ -68,6 +70,7 @@ const TransactionDetailPage = () => {
       if (isStorePayment) {
         // Fetch store payment details
         const paymentData = await storePaymentApi.getPaymentDetails(id);
+        if (!isMounted()) return;
         setStorePayment(paymentData);
       } else {
         // Fetch wallet transaction
@@ -75,12 +78,15 @@ const TransactionDetailPage = () => {
         if (response.success && response.data) {
           setTransaction(response.data.transaction);
         } else {
+          if (!isMounted()) return;
           setError(response.error || 'Transaction not found');
         }
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -238,7 +244,11 @@ Balance After: ${transaction.balanceAfter} ${transaction.currency}
           </View>
         </LinearGradient>
 
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
           {/* Payment Breakdown */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Payment Breakdown</Text>

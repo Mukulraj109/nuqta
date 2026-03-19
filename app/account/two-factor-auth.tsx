@@ -23,6 +23,7 @@ import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } f
 import userSettingsApi from '@/services/userSettingsApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type TwoFactorMethod = '2FA_SMS' | '2FA_EMAIL' | '2FA_APP';
 
@@ -63,6 +64,7 @@ const TWO_FACTOR_OPTIONS: TwoFactorOption[] = [
 ];
 
 function TwoFactorAuthPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { 
     securitySettings, 
@@ -94,11 +96,13 @@ function TwoFactorAuthPage() {
       const success = await enableTwoFactorAuth(selectedMethod);
       
       if (success) {
+        if (!isMounted()) return;
         setShowBackupCodes(true);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to enable two-factor authentication.');
     } finally {
+      if (!isMounted()) return;
       setIsVerifying(false);
     }
   };
@@ -144,6 +148,7 @@ function TwoFactorAuthPage() {
     } catch (error) {
       platformAlertSimple('Error', 'Invalid verification code. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsVerifying(false);
     }
   };
@@ -423,6 +428,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.base,
+    paddingBottom: 120,
   },
   loadingContainer: {
     flex: 1,

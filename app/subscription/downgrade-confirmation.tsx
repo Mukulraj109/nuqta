@@ -16,6 +16,7 @@ import { SubscriptionTier, TIER_NAMES, TIER_COLORS } from '@/types/subscription.
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function DowngradeConfirmationPage() {
   const router = useRouter();
@@ -29,6 +30,7 @@ function DowngradeConfirmationPage() {
 
   const [understood, setUnderstood] = useState(false);
   const [isDowngrading, setIsDowngrading] = useState(false);
+  const isMounted = useIsMounted();
 
   const calculateCredit = () => {
     const daysRemaining = computed.daysRemaining;
@@ -122,6 +124,7 @@ function DowngradeConfirmationPage() {
     } catch (error: any) {
       platformAlertSimple('Downgrade Failed', error.message || 'Failed to process downgrade');
     } finally {
+      if (!isMounted()) return;
       setIsDowngrading(false);
     }
   };

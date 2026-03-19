@@ -17,6 +17,7 @@ import storeVouchersApi, { StoreVoucher } from '@/services/storeVouchersApi';
 import VoucherCardSkeleton from '@/components/skeletons/VoucherCardSkeleton';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface VouchersSectionProps {
   storeId: string;
@@ -29,6 +30,7 @@ const VouchersSection: React.FC<VouchersSectionProps> = ({ storeId, storeName })
   const router = useRouter();
   const [vouchers, setVouchers] = useState<StoreVoucher[]>([]);
   const [loading, setLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadVouchers();
@@ -40,12 +42,15 @@ const VouchersSection: React.FC<VouchersSectionProps> = ({ storeId, storeName })
       const response = await storeVouchersApi.getStoreVouchers(storeId, { limit: 5 });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setVouchers(response.data.vouchers || []);
       }
     } catch (error) {
       // Load mock vouchers as fallback
+      if (!isMounted()) return;
       setVouchers(getMockVouchers(storeId));
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

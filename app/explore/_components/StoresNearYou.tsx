@@ -15,11 +15,13 @@ import { useRouter } from 'expo-router';
 import exploreApi from '../../../services/exploreApi';
 import apiClient from '@/services/apiClient';
 import { useCurrentLocation } from '@/hooks/useLocation';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 const { width } = Dimensions.get('window');
 
 const StoresNearYou = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { currentLocation, isLoading: isLocationLoading } = useCurrentLocation();
   const [stores, setStores] = useState<any[]>([]);
@@ -67,12 +69,15 @@ const StoresNearYou = () => {
               hasQuickDelivery: item.deliveryTime && parseInt(item.deliveryTime) <= 60,
               isFavorite: false,
             }));
+            if (!isMounted()) return;
             setStores(transformed);
           }
         }
       } catch (err) {
+        if (!isMounted()) return;
         setError('Failed to load nearby stores');
       } finally {
+        if (!isMounted()) return;
         setIsLoading(false);
       }
     };
@@ -106,6 +111,7 @@ const StoresNearYou = () => {
       await apiClient.post(`/favorites/store/${storeId}/toggle`);
     } catch (err) {
       // Revert on error
+      if (!isMounted()) return;
       setStores(prev => prev.map(s =>
         s.id === storeId ? { ...s, isFavorite: !s.isFavorite } : s
       ));

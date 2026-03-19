@@ -20,6 +20,7 @@ import { LoyaltyData } from '@/data/categoryDummyData';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface StreakLoyaltySectionProps {
   data?: LoyaltyData;
@@ -85,6 +86,7 @@ const StreakLoyaltySection: React.FC<StreakLoyaltySectionProps> = ({
   const authLoading = useAuthLoading();
   const [apiData, setApiData] = useState<LoyaltyData | null>(null);
   const [loading, setLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (data) {
@@ -115,13 +117,16 @@ const StreakLoyaltySection: React.FC<StreakLoyaltySectionProps> = ({
                 : 0,
             };
           }
+          if (!isMounted()) return;
           setApiData(converted);
         } else {
           setApiData(null);
         }
       } catch (err) {
+        if (!isMounted()) return;
         setApiData(null);
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };

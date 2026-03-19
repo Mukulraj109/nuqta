@@ -18,7 +18,9 @@ import { platformAlert } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 function QuizPage() {
+  const isMounted = useIsMounted();
   const [gameComplete, setGameComplete] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [coinsEarned, setCoinsEarned] = useState(0);
@@ -88,7 +90,6 @@ function QuizPage() {
               <Pressable
                 onPress={() => router.back()}
                 style={styles.backButton}
-               
               >
                 <Ionicons name="arrow-back" size={24} color="white" />
               </Pressable>
@@ -184,7 +185,6 @@ function QuizPage() {
             <Pressable
               onPress={handleBackPress}
               style={styles.backButton}
-             
             >
               <Ionicons name="arrow-back" size={24} color="white" />
             </Pressable>

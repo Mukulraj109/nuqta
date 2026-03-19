@@ -21,6 +21,7 @@ import asyncStorageService from '@/services/asyncStorageService';
 import { storesApi } from '@/services/storesApi';
 import { useLocation } from '@/contexts/LocationContext';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface StoreItem {
   _id?: string;
@@ -122,6 +123,7 @@ const PersonalizedSections: React.FC = () => {
   const [favoriteStores, setFavoriteStores] = useState<StoreItem[]>([]);
   const [nearbyStores, setNearbyStores] = useState<StoreItem[]>([]);
   const [isLoadingNearby, setIsLoadingNearby] = useState(false);
+  const isMounted = useIsMounted();
 
   const fetchLocalData = useCallback(async () => {
     try {
@@ -134,6 +136,7 @@ const PersonalizedSections: React.FC = () => {
       const recentStores = recent
         .filter((item: any) => item.type === 'store' || item.storeId || item._id)
         .slice(0, 8);
+      if (!isMounted()) return;
       setRecentlyViewed(recentStores);
 
       // Favorites already sorted by asyncStorageService
@@ -150,11 +153,13 @@ const PersonalizedSections: React.FC = () => {
       const response = await storesApi.getNearbyStores(latitude, longitude, 5, 8);
       if (response.success && response.data) {
         const stores = Array.isArray(response.data) ? response.data : (response.data as any)?.stores || [];
+        if (!isMounted()) return;
         setNearbyStores(stores);
       }
     } catch {
       // Silent fail
     } finally {
+      if (!isMounted()) return;
       setIsLoadingNearby(false);
     }
   }, [latitude, longitude]);

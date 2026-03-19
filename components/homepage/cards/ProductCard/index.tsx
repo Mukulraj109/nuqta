@@ -21,6 +21,7 @@ import ProductImage from './ProductImage';
 import ProductInfo from './ProductInfo';
 import ProductActions from './ProductActions';
 import { styles } from './styles';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 /**
  * ProductCard Component
@@ -43,6 +44,7 @@ function ProductCard({
   const { subscribe, subscribing } = useStockNotifications();
   const { showSuccess, showError } = useToast();
   const [isTogglingWishlist, setIsTogglingWishlist] = useState(false);
+  const isMounted = useIsMounted();
 
   // Stock status
   const stock = product.inventory?.stock ?? (product.availabilityStatus === 'out_of_stock' ? 0 : 100);
@@ -129,6 +131,7 @@ function ProductCard({
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setIsTogglingWishlist(false);
       }
     },

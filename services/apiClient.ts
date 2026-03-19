@@ -92,7 +92,14 @@ class ApiClient {
   constructor() {
     // Use environment variable or fallback to user backend localhost
     // On Android emulators, remap localhost to 10.0.2.2 (host machine)
-    this.baseURL = resolveBaseURL(process.env.EXPO_PUBLIC_API_BASE_URL || process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001/api');
+    const resolvedURL = resolveBaseURL(process.env.EXPO_PUBLIC_API_BASE_URL || process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5001/api');
+
+    // In production, enforce HTTPS to prevent credential leakage over plaintext
+    if (process.env.EXPO_PUBLIC_ENVIRONMENT === 'production' && !resolvedURL.startsWith('https://')) {
+      throw new Error(`[ApiClient] FATAL: Production API URL must use HTTPS. Got: ${resolvedURL}`);
+    }
+
+    this.baseURL = resolvedURL;
     this.defaultHeaders = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',

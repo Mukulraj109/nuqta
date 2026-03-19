@@ -19,6 +19,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import RatingStars from './RatingStars';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ProductReviewFormProps {
   productId: string;
@@ -50,6 +51,7 @@ function ProductReviewForm({
   const [usageTime, setUsageTime] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const isMounted = useIsMounted();
 
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
@@ -92,6 +94,7 @@ function ProductReviewForm({
       });
 
       // Reset form on success
+      if (!isMounted()) return;
       setRating(0);
       setTitle('');
       setContent('');
@@ -103,6 +106,7 @@ function ProductReviewForm({
     } catch (error) {
       // Error is handled in the parent hook
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };
@@ -136,6 +140,7 @@ function ProductReviewForm({
           return;
         }
 
+        if (!isMounted()) return;
         setImages(prev => [...prev, imageUri]);
 
       }

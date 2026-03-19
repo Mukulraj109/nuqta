@@ -11,6 +11,7 @@ import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } f
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const categoryEmojis: Record<string, string> = {
   'Shopping': '📦',
@@ -42,16 +43,20 @@ function SurveyDetailPage() {
     setLoading(true);
     try {
       const data = await surveyApiService.getSurveyById(id);
+      if (!isMounted()) return;
       setSurvey(data);
       if (data.existingSession) {
+        if (!isMounted()) return;
         setCurrentQuestion(data.existingSession.currentQuestionIndex);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load survey. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [id]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadSurvey();
@@ -61,15 +66,20 @@ function SurveyDetailPage() {
     setStarting(true);
     try {
       const session = await surveyApiService.startSurvey(id!);
+      if (!isMounted()) return;
       setStartTime(new Date());
+      if (!isMounted()) return;
       setShowQuestions(true);
       if (session.resumed && session.answers) {
+        if (!isMounted()) return;
         setAnswers(session.answers);
+        if (!isMounted()) return;
         setCurrentQuestion(session.currentQuestionIndex);
       }
     } catch (error: any) {
       platformAlertSimple('Error', error.message || 'Failed to start survey');
     } finally {
+      if (!isMounted()) return;
       setStarting(false);
     }
   };
@@ -136,6 +146,7 @@ function SurveyDetailPage() {
     } catch (error: any) {
       platformAlertSimple('Error', error.message || 'Failed to submit survey');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };
@@ -222,7 +233,11 @@ function SurveyDetailPage() {
             <View style={[styles.progressBar, { width: `${progress}%` }]} />
           </View>
 
-          <ScrollView style={styles.questionContainer} showsVerticalScrollIndicator={false}>
+          <ScrollView
+        style={styles.questionContainer}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
             {/* Question */}
             <View style={styles.questionCard}>
               <Text style={styles.questionText}>{question.question}</Text>

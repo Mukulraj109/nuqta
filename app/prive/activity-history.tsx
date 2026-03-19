@@ -17,6 +17,7 @@ import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/pr
 import { TransactionListSkeleton } from '@/components/skeletons';
 import priveApi, { TransactionItem } from '@/services/priveApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function ActivityHistoryScreen() {
   const [transactions, setTransactions] = useState<TransactionItem[]>([]);
@@ -41,12 +42,16 @@ function ActivityHistoryScreen() {
         setHasMore(newItems.length === 20);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load activity data');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, []);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     // Fetch stats from dashboard

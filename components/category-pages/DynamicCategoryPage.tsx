@@ -59,6 +59,7 @@ import type {
   PageConfigServiceType,
 } from '@/services/categoriesApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Per-section error boundary: isolates crashes so one section doesn't blank the whole page
 class SectionErrorBoundary extends React.Component<
@@ -193,6 +194,7 @@ const StoreCard = ({
   const currencySymbol = getCurrencySymbol();
   const isCompact = variant === 'compact';
   const [imageError, setImageError] = useState(false);
+  const isMounted = useIsMounted();
 
   const getImageUri = (): string | undefined => {
     if (store.banner) {
@@ -411,6 +413,7 @@ const ServiceTypeCard = ({ serviceType, onPress }: { serviceType: PageConfigServ
 // Main Component
 // ============================================
 function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -589,6 +592,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
             if (!storeId) return;
             counts[storeId] = (counts[storeId] || 0) + 1;
           });
+          if (!isMounted()) return;
           setVisitCounts(counts);
         }
       } catch (err) {
@@ -606,6 +610,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
           categoriesApi.getRecentOrders(slug, 5),
         ]);
         if (statsRes.success && statsRes.data) {
+          if (!isMounted()) return;
           setLoyaltyStats(statsRes.data);
         }
         if (ordersRes.success && ordersRes.data?.orders) {
@@ -624,6 +629,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
       try {
         const res = await ordersApi.getOrders({ limit: 10, sort: 'newest' });
         if (res.success && res.data?.orders) {
+          if (!isMounted()) return;
           setMyOrders(res.data.orders);
         }
       } catch (err) {
@@ -699,15 +705,18 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
               bookingType: store.bookingType,
               isDineIn: store.bookingType === 'RESTAURANT' || false,
             }));
+            if (!isMounted()) return;
             setTabStores(formatted);
           } else {
             setTabStores([]);
           }
         } catch (err) {
           if (fetchId !== tabFetchIdRef.current) return;
+          if (!isMounted()) return;
           setTabStores([]);
         } finally {
           if (fetchId === tabFetchIdRef.current) {
+            if (!isMounted()) return;
             setIsLoadingTabStores(false);
           }
         }
@@ -803,6 +812,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
           location: store.location,
           category: store.category,
         }));
+        if (!isMounted()) return;
         setExtraStores(prev => [...prev, ...formatted]);
         setAllStoresPage(nextPage);
         if (formatted.length < STORES_PER_PAGE) setHasMoreStores(false);
@@ -812,6 +822,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
     } catch (err) {
       // Silently fail
     } finally {
+      if (!isMounted()) return;
       setIsLoadingMore(false);
     }
   }, [allStoresPage, isLoadingMore, hasMoreStores, slug, STORES_PER_PAGE]);
@@ -829,6 +840,7 @@ function DynamicCategoryPage({ slug }: DynamicCategoryPageProps) {
   const onRefresh = async () => {
     setRefreshing(true);
     await Promise.all([refetchConfig(), refetchData()]);
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

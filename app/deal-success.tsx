@@ -29,9 +29,11 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width: screenWidth } = Dimensions.get('window');
 
 function DealSuccessPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
 
@@ -104,10 +106,15 @@ function DealSuccessPage() {
 
       if (response.success && response.data?.redemption) {
         const redemption = response.data.redemption;
+        if (!isMounted()) return;
         setRedemptionCode(redemption.code);
+        if (!isMounted()) return;
         setExpiresAt(redemption.expiresAt);
+        if (!isMounted()) return;
         setPurchaseAmount(redemption.purchaseAmount || 0);
+        if (!isMounted()) return;
         setPurchaseCurrency(redemption.purchaseCurrency || 'USD');
+        if (!isMounted()) return;
         setDealStore(redemption.dealSnapshot?.store || redemption.campaignSnapshot?.title || 'Deal');
 
         // Animate success
@@ -129,6 +136,7 @@ function DealSuccessPage() {
         await new Promise(resolve => setTimeout(resolve, baseDelay * Math.pow(2, retryCount)));
         return verifyPayment(retryCount + 1);
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Payment verification failed. Please check My Deals.');
       }
     } catch (err: any) {
@@ -138,14 +146,17 @@ function DealSuccessPage() {
         return verifyPayment(retryCount + 1);
       }
 
+      if (!isMounted()) return;
       setError(err.message || 'Failed to verify payment. Please check My Deals.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
 
   const handleCopyCode = async () => {
     await Clipboard.setStringAsync(redemptionCode);
+    if (!isMounted()) return;
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
   };

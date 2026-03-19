@@ -2,7 +2,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback } from 'react';
 import {
   View, StyleSheet, StatusBar, ScrollView, TextInput,
-  Pressable, ActivityIndicator, Platform,
+  Pressable, ActivityIndicator, Platform, KeyboardAvoidingView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -12,6 +12,7 @@ import { useUserIdentityStore } from '@/stores/userIdentityStore';
 import * as identityApi from '@/services/identityApi';
 import analyticsService, { IdentityAnalyticsEvents } from '@/services/analyticsService';
 import { platformAlertSimple } from '@/utils/platformAlert';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const DOC_TYPES = [
   { value: 'school_id', label: 'School ID' },
@@ -22,6 +23,7 @@ const DOC_TYPES = [
 const ACCENT = colors.warningScale[600];
 
 function TeacherVerifyPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { setIdentity } = useUserIdentityStore();
 
@@ -48,6 +50,7 @@ function TeacherVerifyPage() {
         type: 'teacher', autoVerified: result.autoVerified, provisional: result.provisionalUnlock,
       });
 
+      if (!isMounted()) return;
       setIdentity({ segment: 'verified_teacher', featureLevel: 2, verificationSegment: 'provisional' });
 
       router.push({
@@ -56,9 +59,11 @@ function TeacherVerifyPage() {
       } as any);
     } catch (e: any) {
       const msg = e?.message || 'Verification failed. Please try again.';
+      if (!isMounted()) return;
       setError(msg);
       platformAlertSimple('Error', msg);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [instituteName, documentType, setIdentity, router]);
@@ -78,6 +83,10 @@ function TeacherVerifyPage() {
         <ThemedText style={styles.headerSubtitle}>Your details are private and never shared</ThemedText>
       </View>
 
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
       <ScrollView style={styles.body} contentContainerStyle={styles.bodyContent} keyboardShouldPersistTaps="handled">
         <View style={styles.inputGroup}>
           <ThemedText style={styles.label}>Institution Name</ThemedText>
@@ -133,6 +142,7 @@ function TeacherVerifyPage() {
           )}
         </Pressable>
       </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }

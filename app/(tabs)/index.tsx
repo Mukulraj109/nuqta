@@ -36,6 +36,7 @@ import {
   useRegisterScrollToTop,
 } from '@/stores';
 import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
+import { useUserIdentityStore } from '@/stores/userIdentityStore';
 
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { colors, spacing, borderRadius, shadows, typography } from '@/constants/theme';
@@ -72,6 +73,7 @@ import { BRAND } from '@/constants/brand';
 
 // ProfileMenuModal eagerly loaded — React.lazy + Suspense(null) causes modal to not appear on Android
 import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Lazy-loaded components (below-the-fold / modals / secondary content)
 const HomeTabSection = React.lazy(() => import('@/components/homepage/HomeTabSection'));
@@ -194,6 +196,7 @@ const BadgeAvatar: React.FC<BadgeAvatarProps> = React.memo(({ size = 24, color }
 });
 
 function HomeScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   // Zustand selectors — each only re-renders when its specific value changes
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -209,6 +212,7 @@ function HomeScreen() {
   const isAuthenticated = useIsAuthenticated();
   const authActions = useAuthActions();
   const userPoints = useRezBalance();
+  const { featureLevel } = useUserIdentityStore();
   const walletData = useWalletData();
   const refreshWallet = useRefreshWallet();
   const isWalletLoading = useWalletLoading();
@@ -349,6 +353,7 @@ function HomeScreen() {
       .catch(e => ({ status: 'rejected' as const, reason: e }));
 
     if (contextResult.status === 'fulfilled' && contextResult.value.success && contextResult.value.data) {
+      if (!isMounted()) return;
       setStatsState({
         voucherCount: contextResult.value.data.voucherCount || 0,
         newOffersCount: contextResult.value.data.offersCount || 0,
@@ -433,6 +438,7 @@ function HomeScreen() {
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setRefreshing(false);
       }
     },
@@ -489,6 +495,7 @@ function HomeScreen() {
         state: selectedLocation.state,
         pincode: selectedLocation.pincode,
       });
+      if (!isMounted()) return;
       setIsLocationModalVisible(false);
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update location. Please try again.');
@@ -573,7 +580,7 @@ function HomeScreen() {
                 Animated.timing(animatedOpacity, {
                   toValue: newState ? 1 : 0,
                   duration: 300,
-                  useNativeDriver: false,
+                  useNativeDriver: true,
                 }),
               ]).start();
             }}
@@ -733,7 +740,7 @@ function HomeScreen() {
                   Animated.timing(animatedOpacity, {
                     toValue: 0,
                     duration: 200,
-                    useNativeDriver: false,
+                    useNativeDriver: true,
                   }),
                 ]).start(() => {
                   setIsLocationModalVisible(true);
@@ -805,6 +812,7 @@ function HomeScreen() {
             style={viewStyles.locationBannerBtn}
             onPress={async () => {
               await requestLocPermission();
+              if (!isMounted()) return;
               setLocationBannerDismissed(true);
             }}
           >
@@ -851,6 +859,8 @@ function HomeScreen() {
               totalSaved={totalSaved}
               thisMonthSaved={savingsInsights?.thisMonth ?? 0}
               currencySymbol={currencySymbol}
+              featureLevel={featureLevel}
+              hasCompletedFirstOrder={featureLevel >= 3}
             />
           </Suspense>
         )}

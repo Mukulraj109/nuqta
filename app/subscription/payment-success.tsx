@@ -21,6 +21,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { showToast } from '@/components/common/ToastManager';
 import { Platform } from 'react-native';
 import subscriptionAPI from '@/services/subscriptionApi';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function PaymentSuccessPage() {
   const router = useRouter();
@@ -37,6 +38,7 @@ function PaymentSuccessPage() {
       headerShown: false,
     });
   }, [navigation]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     // Reload subscription data to get updated status
@@ -93,6 +95,7 @@ function PaymentSuccessPage() {
         if (!freshSubscription || freshSubscription._id === 'free-default') {
         }
 
+        if (!isMounted()) return;
         setSubscriptionData(freshSubscription);
 
         // Haptic feedback on successful subscription payment
@@ -101,12 +104,14 @@ function PaymentSuccessPage() {
         // Also update context
         await actions.loadSubscription(true);
 
+        if (!isMounted()) return;
         setLoading(false);
 
         if (Platform.OS === 'web') {
           showToast({ message: 'Payment successful! Your subscription is now active.', type: 'success', duration: 5000 });
         }
       } catch (error) {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };

@@ -26,6 +26,7 @@ import { catchAndReport } from '@/utils/catchAndReport';
 
 import { Colors, Spacing, BorderRadius } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const FASHION_SLUG = 'fashion';
@@ -88,6 +89,7 @@ function getProductImage(p: any): string {
 // ─── Component ──────────────────────────────────────────────────
 
 const FashionPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const authLoading = useAuthLoading();
@@ -110,11 +112,8 @@ const FashionPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const isMounted = useRef(true);
 
-  useEffect(() => {
-    return () => { isMounted.current = false; };
-  }, []);
+
 
   // ── Fetch category info + subcategories ──────────────────────
   const fetchCategoryData = useCallback(async () => {
@@ -131,7 +130,9 @@ const FashionPage: React.FC = () => {
             icon: c.icon,
             image: c.image,
           }));
+        if (!isMounted()) return;
         setSubcategories(children);
+        if (!isMounted()) return;
         setCategoryStats({
           productCount: cat.productCount || 0,
           storeCount: cat.storeCount || 0,
@@ -159,7 +160,7 @@ const FashionPage: React.FC = () => {
             : 'popularity',
       });
 
-      if (!isMounted.current) return;
+      if (!isMounted()) return;
 
       if (res.success) {
         // The endpoint returns via sendPaginated — data is the array in first element
@@ -182,25 +183,32 @@ const FashionPage: React.FC = () => {
         }));
 
         if (append) {
+          if (!isMounted()) return;
           setProducts(prev => [...prev, ...mapped]);
         } else {
+          if (!isMounted()) return;
           setProducts(mapped);
         }
 
         // Determine hasMore from pagination meta or array length
         const total = res.meta?.pagination?.total ?? null;
         if (total !== null) {
+          if (!isMounted()) return;
           setHasMore(page * PRODUCTS_PER_PAGE < total);
         } else {
+          if (!isMounted()) return;
           setHasMore(mapped.length === PRODUCTS_PER_PAGE);
         }
+        if (!isMounted()) return;
         setCurrentPage(page);
       }
     } catch (_) {
       // fail silently
     } finally {
-      if (isMounted.current) {
+      if (isMounted()) {
+        if (!isMounted()) return;
         setLoadingInitial(false);
+        if (!isMounted()) return;
         setLoadingMore(false);
       }
     }
@@ -210,9 +218,10 @@ const FashionPage: React.FC = () => {
   const fetchTrending = useCallback(async () => {
     try {
       const res = await apiClient.get<any>('/products/trending', { category: FASHION_SLUG, limit: 6 });
-      if (!isMounted.current) return;
+      if (!isMounted()) return;
       if (res.success) {
         const raw: any[] = Array.isArray(res.data) ? res.data : res.data?.products || [];
+        if (!isMounted()) return;
         setTrendingProducts(raw.map((p: any) => ({
           id: p._id?.toString() || p.id,
           _id: p._id?.toString() || p.id,
@@ -237,9 +246,10 @@ const FashionPage: React.FC = () => {
   const fetchStores = useCallback(async () => {
     try {
       const res = await apiClient.get<any>('/stores', { category: FASHION_SLUG, limit: 8, sortBy: 'rating' });
-      if (!isMounted.current) return;
+      if (!isMounted()) return;
       if (res.success) {
         const raw: any[] = Array.isArray(res.data) ? res.data : res.data?.stores || [];
+        if (!isMounted()) return;
         setStores(raw.map((s: any) => ({
           _id: s._id?.toString() || s.id,
           name: s.name,

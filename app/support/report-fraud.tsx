@@ -23,6 +23,7 @@ import supportService from '@/services/supportApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
 import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.config';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const FRAUD_TYPES = [
   { id: 'fake_offer', label: 'Fake Offer/Discount', icon: 'pricetag-outline' },
@@ -55,6 +56,7 @@ function ReportFraudPage() {
 
     if (!result.canceled) {
       const newImages = result.assets.map(a => a.uri);
+      if (!isMounted()) return;
       setEvidence(prev => [...prev, ...newImages].slice(0, 5));
     }
   };
@@ -64,6 +66,7 @@ function ReportFraudPage() {
   };
 
   const [uploadingImages, setUploadingImages] = useState(false);
+  const isMounted = useIsMounted();
 
   const [idempotencyKey] = useState(() => {
     if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
@@ -110,6 +113,7 @@ function ReportFraudPage() {
         } catch (uploadError) {
           platformAlertSimple('Upload Error', 'Failed to upload evidence images. Submitting report without images.');
         } finally {
+          if (!isMounted()) return;
           setUploadingImages(false);
         }
       }
@@ -126,7 +130,9 @@ function ReportFraudPage() {
       });
 
       if (response.success && response.data?.ticket) {
+        if (!isMounted()) return;
         setReportId(response.data.ticket.ticketNumber);
+        if (!isMounted()) return;
         setSubmitted(true);
       } else {
         platformAlertSimple('Error', 'Failed to submit report. Please try again.');
@@ -134,6 +140,7 @@ function ReportFraudPage() {
     } catch (error) {
       platformAlertSimple('Error', 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

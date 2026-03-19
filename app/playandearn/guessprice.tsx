@@ -22,6 +22,7 @@ import { useGetCurrencySymbol, useRezBalance, useRefreshWallet, useAdjustBalance
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -138,6 +139,7 @@ const GuessPrice = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   const scaleAnim = useRef(new Animated.Value(1)).current;
+  const isMounted = useIsMounted();
 
   // Fetch daily limits and wallet balance
   useEffect(() => {
@@ -158,6 +160,7 @@ const GuessPrice = () => {
       } catch (err) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -203,13 +206,18 @@ const GuessPrice = () => {
           setGameState('error');
         }
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to start game');
+        if (!isMounted()) return;
         setGameState('error');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Unable to start game. Please try again.');
+      if (!isMounted()) return;
       setGameState('error');
     } finally {
+      if (!isMounted()) return;
       setStartingGame(false);
     }
   };
@@ -262,7 +270,9 @@ const GuessPrice = () => {
       Animated.timing(scaleAnim, { toValue: 1, duration: 150, useNativeDriver: true }),
     ]).start();
 
+    if (!isMounted()) return;
     setScore(score + earnedCoins);
+    if (!isMounted()) return;
     setFeedback({ message, earnedCoins, actualPrice, difference, percentDiff: percentDiff.toFixed(1) });
 
     setTimeout(async () => {
@@ -277,10 +287,12 @@ const GuessPrice = () => {
           if (limitsResponse.data?.guess_price) {
             setTodayPlays(limitsResponse.data.guess_price.used);
           } else {
+            if (!isMounted()) return;
             setTodayPlays(todayPlays + 1);
           }
           await gamificationActions.syncCoinsFromWallet();
         } catch (err) {
+          if (!isMounted()) return;
           setTodayPlays(todayPlays + 1);
         }
       }
@@ -325,7 +337,11 @@ const GuessPrice = () => {
         )}
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Start Screen */}
         {gameState === 'start' && (
           <View style={styles.content}>
@@ -591,7 +607,6 @@ const GuessPrice = () => {
               <Pressable
                 onPress={() => router.push('/playandearn' as any)}
                 style={styles.secondaryAction}
-               
               >
                 <Ionicons name="arrow-back" size={18} color={COLORS.textMuted} />
                 <Text style={styles.secondaryActionText}>Back to Games</Text>

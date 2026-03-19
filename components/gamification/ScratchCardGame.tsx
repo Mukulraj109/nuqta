@@ -20,6 +20,7 @@ import { useGamification } from '@/contexts/GamificationContext';
 import type { ScratchCardPrize } from '@/types/gamification.types';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.85;
@@ -45,6 +46,7 @@ function ScratchCardGame({
   const [nextAvailableTime, setNextAvailableTime] = useState<string | null>(null);
   const [prize, setPrize] = useState<ScratchCardPrize | null>(null);
   const [cardId, setCardId] = useState<string | null>(null);
+  const isMounted = useIsMounted();
   const scratchOpacity = useRef(new Animated.Value(1)).current;
   const prizeScale = useRef(new Animated.Value(0.5)).current;
   const { actions: gamificationActions } = useGamification();
@@ -60,12 +62,15 @@ function ScratchCardGame({
       const response = await gamificationAPI.canCreateScratchCard();
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setCanCreate(response.data.canCreate);
         setNextAvailableTime(response.data.nextAvailableAt || null);
       }
     } catch (error: any) {
+      if (!isMounted()) return;
       setCanCreate(true); // Allow on error as fallback
     } finally {
+      if (!isMounted()) return;
       setEligibilityLoading(false);
     }
   };
@@ -82,6 +87,7 @@ function ScratchCardGame({
       const response = await gamificationAPI.createScratchCard();
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setCardId(response.data.id);
         setPrize(response.data.prize);
         setIsLoading(false);
@@ -89,6 +95,7 @@ function ScratchCardGame({
       }
       return false;
     } catch (error: any) {
+      if (!isMounted()) return;
       setIsLoading(false);
       const errorMessage = error.response?.data?.message || error.message || 'Failed to create scratch card';
       platformAlert('Error', errorMessage);
@@ -141,6 +148,7 @@ function ScratchCardGame({
         }
 
         // Show success alert
+        if (!isMounted()) return;
         setTimeout(() => {
           platformAlert(
             'Prize Revealed! 🎉',
@@ -160,8 +168,10 @@ function ScratchCardGame({
         }, 600);
       }
 
+      if (!isMounted()) return;
       setIsLoading(false);
     } catch (error: any) {
+      if (!isMounted()) return;
       setIsLoading(false);
       const errorMessage = error.response?.data?.message || error.message || 'Failed to scratch card';
       platformAlert('Error', errorMessage);

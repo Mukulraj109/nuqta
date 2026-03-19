@@ -17,6 +17,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 import { colors } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
@@ -68,6 +69,7 @@ const formatTimeAgo = (dateString?: string): string => {
 };
 
 const UGCPostsFeed = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -110,11 +112,14 @@ const UGCPostsFeed = () => {
           // Use real isLiked status from backend
           isLiked: video.isLiked || false,
         }));
+        if (!isMounted()) return;
         setUgcPosts(transformed);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load posts');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -153,6 +158,7 @@ const UGCPostsFeed = () => {
 
       // Update with actual server response if available
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setUgcPosts(prev => prev.map(post => {
           if (post.id === postId) {
             return {
@@ -166,6 +172,7 @@ const UGCPostsFeed = () => {
       }
     } catch (error) {
       // Revert on error
+      if (!isMounted()) return;
       setUgcPosts(prev => prev.map(post => {
         if (post.id === postId) {
           return {

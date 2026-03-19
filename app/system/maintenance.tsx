@@ -9,14 +9,15 @@ import {
   Pressable,
   StatusBar,
   Platform,
-  Image,
   ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import apiClient from '@/services/apiClient';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { platformAlertSimple } from '@/utils/platformAlert';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function MaintenancePage() {
   const router = useRouter();
@@ -28,6 +29,7 @@ function MaintenancePage() {
   const [timeRemaining, setTimeRemaining] = useState<string>('');
   const [isRetrying, setIsRetrying] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const isMounted = useIsMounted();
 
   // Calculate time remaining
   useEffect(() => {
@@ -62,22 +64,18 @@ function MaintenancePage() {
     setRetryCount(prev => prev + 1);
 
     try {
-      // In production, check the health endpoint
-      // const response = await fetch(`${API_URL}/health`);
-      // if (response.ok) { router.replace('/'); }
-
-      // Simulate API check
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      // For demo, after 3 retries, assume maintenance is over
-      if (retryCount >= 2) {
+      const response = await apiClient.get('/health');
+      if (response.success) {
         router.replace('/');
+        return;
       }
-    } catch (error) {
+    } catch (_error) {
+      // Server still down — stay on maintenance page
     } finally {
+      if (!isMounted()) return;
       setIsRetrying(false);
     }
-  }, [retryCount, router]);
+  }, [router]);
 
   const handleNotifyMe = () => {
     // In production, register for push notification when maintenance ends

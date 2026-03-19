@@ -27,6 +27,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 interface LabTest {
   _id: string;
@@ -84,6 +85,7 @@ const testCategories = [
 ];
 
 const LabTestsPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -130,15 +132,18 @@ const LabTestsPage: React.FC = () => {
       });
 
       if (testsResponse.success && testsResponse.data) {
+        if (!isMounted()) return;
         setTests(testsResponse.data.products || []);
       }
 
       if (providersResponse.success && providersResponse.data) {
+        if (!isMounted()) return;
         setProviders(providersResponse.data.stores || []);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -563,7 +568,7 @@ const LabTestsPage: React.FC = () => {
 
       {renderCategoryFilters()}
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
         {selectedCategory === 'all' && (
           <>
             {renderPopularPackages()}
@@ -608,7 +613,7 @@ const styles = StyleSheet.create({
   searchInput: { flex: 1, paddingVertical: 10, paddingHorizontal: Spacing.sm, fontSize: Typography.body.fontSize, color: Colors.nileBlue },
 
   categoryScroll: { backgroundColor: Colors.background.secondary },
-  categoryContainer: { paddingHorizontal: Spacing.base, paddingVertical: Spacing.md },
+  categoryContainer: { paddingHorizontal: Spacing.base, paddingVertical: Spacing.md},
   categoryChip: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, paddingVertical: Spacing.sm, marginRight: Spacing.sm, borderRadius: BorderRadius.xl, backgroundColor: Colors.background.primary, borderWidth: 1, borderColor: Colors.border.default },
   categoryIcon: { fontSize: Typography.bodyLarge.fontSize, marginRight: 6 },
   categoryText: { fontSize: Typography.bodySmall.fontSize, fontWeight: '500', color: Colors.text.tertiary },

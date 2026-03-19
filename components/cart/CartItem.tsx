@@ -17,6 +17,7 @@ import QuantitySelector from '@/components/cart/QuantitySelector';
 import { useToast } from '@/hooks/useToast';
 import { useCartActions, useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function CartItem({
   item,
@@ -30,6 +31,7 @@ function CartItem({
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const [isUpdating, setIsUpdating] = useState(false);
+  const isMounted = useIsMounted();
   const router = useRouter();
 
   // Cart context and toast
@@ -139,6 +141,7 @@ function CartItem({
     } catch (error) {
       showError('Failed to update quantity');
     } finally {
+      if (!isMounted()) return;
       setIsUpdating(false);
     }
   };

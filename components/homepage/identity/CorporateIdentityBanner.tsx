@@ -7,21 +7,19 @@ import { colors, spacing, borderRadius } from '@/constants/theme';
 interface Props {
   companyName: string;
   monthlySaved: number;
-  nearbyDealsCount: number;
   onSeeLeaderboard: () => void;
   onSeeDeals: () => void;
 }
 
-export default function CorporateIdentityBanner({
+function CorporateIdentityBanner({
   companyName,
   monthlySaved,
-  nearbyDealsCount,
   onSeeLeaderboard,
   onSeeDeals,
 }: Props) {
   return (
     <LinearGradient
-      colors={[colors.secondary[700], colors.brand.purple]}
+      colors={[colors.secondary[600], colors.secondary[800]]}
       style={styles.container}
     >
       <View style={styles.badge}>
@@ -52,6 +50,8 @@ export default function CorporateIdentityBanner({
     </LinearGradient>
   );
 }
+
+export default React.memo(CorporateIdentityBanner);
 
 const styles = StyleSheet.create({
   container: {

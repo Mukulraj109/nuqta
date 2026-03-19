@@ -24,6 +24,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
 import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.config';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const FEEDBACK_CATEGORIES = [
   { id: 'bug', label: 'Bug Report', icon: 'bug-outline' },
@@ -57,6 +58,7 @@ function FeedbackPage() {
 
     if (!result.canceled) {
       const newImages = result.assets.map(a => a.uri);
+      if (!isMounted()) return;
       setScreenshots(prev => [...prev, ...newImages].slice(0, 3));
     }
   };
@@ -66,6 +68,7 @@ function FeedbackPage() {
   };
 
   const [uploadingImages, setUploadingImages] = useState(false);
+  const isMounted = useIsMounted();
 
   const [idempotencyKey] = useState(() => {
     if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
@@ -112,6 +115,7 @@ function FeedbackPage() {
         } catch (uploadError) {
           platformAlertSimple('Upload Error', 'Failed to upload screenshots. Submitting feedback without images.');
         } finally {
+          if (!isMounted()) return;
           setUploadingImages(false);
         }
       }
@@ -127,6 +131,7 @@ function FeedbackPage() {
       });
 
       if (response.success) {
+        if (!isMounted()) return;
         setSubmitted(true);
       } else {
         platformAlertSimple('Error', 'Failed to submit feedback. Please try again.');
@@ -134,6 +139,7 @@ function FeedbackPage() {
     } catch (error) {
       platformAlertSimple('Error', 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

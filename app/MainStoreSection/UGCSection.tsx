@@ -44,6 +44,7 @@ import {
   Gradients,
   Typography,
 } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Optional (recommended) — enable silent autoplay on iOS in your app root
 // import { Audio } from 'expo-av';
@@ -449,6 +450,7 @@ function UGCSection({
   showDescriptions = false,
   maxDescriptionLength = 120,
 }: UGCSectionProps) {
+  const isMounted = useIsMounted();
   const { width } = Dimensions.get('window');
   const isTablet = width >= 768;
   const isLargeTablet = width >= 1024;
@@ -498,15 +500,20 @@ function UGCSection({
 
       if (response.success && response.data?.content) {
         const transformedContent = response.data.content.map(transformUGCMedia);
+        if (!isMounted()) return;
         setUgcContent(transformedContent);
       } else {
+        if (!isMounted()) return;
         setUgcContent([]); // Set empty array instead of error
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      if (!isMounted()) return;
       setError(errorMessage);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [storeId]); // propImages removed to prevent infinite loop if parent passes unstable reference
@@ -552,6 +559,7 @@ function UGCSection({
 
       if (!response.success) {
         // Revert on failure
+        if (!isMounted()) return;
         setUgcContent(prev =>
           prev.map(ugc =>
             ugc.id === item.id
@@ -566,6 +574,7 @@ function UGCSection({
       }
     } catch (err) {
       // Revert on error
+      if (!isMounted()) return;
       setUgcContent(prev =>
         prev.map(ugc =>
           ugc.id === item.id
@@ -597,6 +606,7 @@ function UGCSection({
 
       if (!response.success && !response.data) {
         // Revert on failure
+        if (!isMounted()) return;
         setUgcContent(prev =>
           prev.map(ugc =>
             ugc.id === item.id
@@ -619,6 +629,7 @@ function UGCSection({
       }
     } catch (err) {
       // Revert on error
+      if (!isMounted()) return;
       setUgcContent(prev =>
         prev.map(ugc =>
           ugc.id === item.id

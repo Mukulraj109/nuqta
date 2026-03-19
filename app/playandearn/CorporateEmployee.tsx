@@ -18,6 +18,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -30,6 +31,7 @@ const CorporateEmployee = () => {
   const [activeTab, setActiveTab] = useState('challenges');
   const [loading, setLoading] = useState(true);
   const [programs, setPrograms] = useState<any[]>([]);
+  const isMounted = useIsMounted();
 
   // Fetch corporate programs
   useEffect(() => {
@@ -42,6 +44,7 @@ const CorporateEmployee = () => {
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -213,7 +216,11 @@ const CorporateEmployee = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: isDark ? colors.text.primary : Colors.background.primary }]}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Header */}
         <View style={[styles.header, { backgroundColor: isDark ? 'rgba(0,0,0,0.95)' : 'rgba(255,255,255,0.95)' }]}>
           <View style={styles.headerContent}>

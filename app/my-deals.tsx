@@ -29,6 +29,7 @@ import { useIsAuthenticated } from '@/stores/selectors';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -95,6 +96,7 @@ const STATUS_CONFIG: Record<string, { color: string; bgColor: string; label: str
 type FilterStatus = 'all' | 'active' | 'used' | 'expired';
 
 const MyDealsPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
 
@@ -128,8 +130,10 @@ const MyDealsPage: React.FC = () => {
 
       if (response.success && response.data) {
         if (reset) {
+          if (!isMounted()) return;
           setRedemptions(response.data.redemptions);
         } else {
+          if (!isMounted()) return;
           setRedemptions(prev => [...prev, ...response.data!.redemptions]);
         }
 
@@ -141,18 +145,24 @@ const MyDealsPage: React.FC = () => {
           else if (r.status === 'cancelled') acc.cancelled++;
           return acc;
         }, { active: 0, used: 0, expired: 0, cancelled: 0 });
+        if (!isMounted()) return;
         setSummary(calculatedSummary);
 
         const { page: currentPg, totalPages } = response.data.pagination;
+        if (!isMounted()) return;
         setHasMore(currentPg < totalPages);
         setError(null);
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Failed to load deals');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load deals');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [isAuthenticated, selectedFilter, page]);

@@ -19,10 +19,12 @@ import articlesService from '@/services/articlesApi';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 function ArticleDetailPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams();
 
@@ -46,13 +48,17 @@ function ArticleDetailPage() {
       const response = await articlesService.getArticleById(id as string);
 
       if (response.success && response.data.article) {
+        if (!isMounted()) return;
         setArticle(response.data.article as any);
       } else {
+        if (!isMounted()) return;
         setError('Article not found');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load article');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -150,6 +156,7 @@ function ArticleDetailPage() {
       </Pressable>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
         bounces={true}

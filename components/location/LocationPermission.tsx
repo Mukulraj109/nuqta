@@ -8,6 +8,7 @@ import {
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { useLocationPermission, useLocationInit } from '@/hooks/useLocation';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface LocationPermissionProps {
   onPermissionGranted?: () => void;
@@ -31,6 +32,7 @@ function LocationPermission({
   const { permissionStatus, isRequesting, requestPermission } = useLocationPermission();
   const { isInitializing, initializeLocation } = useLocationInit();
   const [isProcessing, setIsProcessing] = useState(false);
+  const isMounted = useIsMounted();
 
   const handleRequestPermission = async () => {
     setIsProcessing(true);
@@ -47,6 +49,7 @@ function LocationPermission({
     } catch (error) {
       platformAlertSimple('Permission Error', 'Failed to request location permission. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsProcessing(false);
     }
   };

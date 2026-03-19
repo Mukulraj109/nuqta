@@ -15,6 +15,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import apiClient from '@/services/apiClient';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_GAP = 10;
@@ -35,6 +36,7 @@ interface FitnessStats {
 const FitnessSportsSection: React.FC = () => {
   const router = useRouter();
   const [stats, setStats] = useState<FitnessStats>({ maxCashback: 25, activeStudioCount: 0 });
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -45,6 +47,7 @@ const FitnessSportsSection: React.FC = () => {
 
         if (stores.length > 0) {
           const maxCashback = Math.max(...stores.map((s: any) => s.offers?.cashback || 0));
+          if (!isMounted()) return;
           setStats(prev => ({ ...prev, maxCashback: maxCashback || 25 }));
         }
       } catch (error) {

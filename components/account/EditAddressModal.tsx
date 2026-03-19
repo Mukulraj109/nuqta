@@ -18,6 +18,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ACCOUNT_COLORS } from '@/types/account.types';
 import { Address, AddressType, AddressUpdate } from '@/services/addressApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface EditAddressModalProps {
   visible: boolean;
@@ -39,6 +40,7 @@ function EditAddressModal({ visible, address, onClose, onUpdate }: EditAddressMo
   const [instructions, setInstructions] = useState('');
   const [isDefault, setIsDefault] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMounted = useIsMounted();
 
   // Populate form when address changes
   useEffect(() => {
@@ -132,6 +134,7 @@ function EditAddressModal({ visible, address, onClose, onUpdate }: EditAddressMo
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };

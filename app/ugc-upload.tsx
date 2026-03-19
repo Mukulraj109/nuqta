@@ -29,6 +29,7 @@ import { PRODUCT_TAGGING_RULES } from '@/types/ugc-upload.types';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -55,6 +56,7 @@ function UGCUploadScreen() {
   } = useVideoUpload();
 
   const [hashtagInput, setHashtagInput] = useState('');
+  const isMounted = useIsMounted();
 
   const handleBack = () => {
     if (isUploading) {
@@ -455,7 +457,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.lg,
-    paddingBottom: 40,
+    paddingBottom: 120,
   },
   formContainer: {
     gap: Spacing.xl,

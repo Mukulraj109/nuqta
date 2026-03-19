@@ -19,6 +19,7 @@ import { ThemedText } from '@/components/ThemedText';
 import logger from '@/utils/logger';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -69,6 +70,7 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
   const currencySymbol = getCurrencySymbol();
   const [copySuccess, setCopySuccess] = useState(false);
   const [marking, setMarking] = useState(false);
+  const isMounted = useIsMounted();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
@@ -116,6 +118,7 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
     if (!voucher) return;
 
     try {
+      if (!isMounted()) return;
       await Clipboard.setStringAsync(voucher.voucherCode);
       setCopySuccess(true);
 
@@ -170,6 +173,7 @@ export const OnlineRedemptionModal: React.FC<OnlineRedemptionModalProps> = ({
           logger.error('Failed to mark as used:', error);
           platformAlertSimple('Error', 'Failed to mark voucher as used');
         } finally {
+          if (!isMounted()) return;
           setMarking(false);
         }
       },

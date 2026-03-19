@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useAuthUser, useIsAuthenticated, useAuthLoading, useAuthError, useAuthActions } from '@/stores/selectors';
 import { getAuthToken, getRefreshToken, getUser } from '@/utils/authStorage';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function AuthDebugger() {
   const user = useAuthUser();
@@ -12,6 +13,7 @@ function AuthDebugger() {
   const actions = useAuthActions();
   const [storageData, setStorageData] = useState<any>({});
   const [isVisible, setIsVisible] = useState(false);
+  const isMounted = useIsMounted();
 
   const checkStorageData = async () => {
     try {
@@ -24,6 +26,7 @@ function AuthDebugger() {
       // Safely parse user data
       const parsedUser = user || null;
 
+      if (!isMounted()) return;
       setStorageData({
         accessToken: token ? 'exists' : 'missing',
         refreshToken: refreshToken ? 'exists' : 'missing',

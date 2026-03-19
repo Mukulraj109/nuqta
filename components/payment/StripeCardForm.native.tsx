@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useStripe } from '@stripe/stripe-react-native';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface StripeCardFormProps {
   clientSecret: string;
@@ -30,6 +31,7 @@ function StripeCardForm({
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
   const [postalCode, setPostalCode] = useState('');
+  const isMounted = useIsMounted();
 
   const formatCardNumber = (text: string) => {
     const cleaned = text.replace(/\s/g, '');
@@ -85,6 +87,7 @@ function StripeCardForm({
       });
 
       if (error) {
+        if (!isMounted()) return;
         setCardError(error.message || 'Payment failed');
         onError(error.message || 'Payment failed');
       } else if (paymentIntent) {
@@ -93,6 +96,7 @@ function StripeCardForm({
           onSuccess(paymentIntent.id);
         } else {
           const errorMsg = `Payment not completed. Status: ${paymentIntent.status}`;
+          if (!isMounted()) return;
           setCardError(errorMsg);
           onError(errorMsg);
         }
@@ -102,9 +106,11 @@ function StripeCardForm({
         onError(errorMsg);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setCardError(err.message || 'An error occurred');
       onError(err.message || 'An error occurred');
     } finally {
+      if (!isMounted()) return;
       setIsProcessing(false);
     }
   };

@@ -36,6 +36,7 @@ import CabAmenities from '../../components/cab/CabAmenities';
 import CabCancellationPolicy from '../../components/cab/CabCancellationPolicy';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -113,6 +114,7 @@ interface BookingData {
 }
 
 function CabDetailsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
@@ -159,6 +161,7 @@ function CabDetailsPage() {
       const response = await productsApi.getProductById(id as string);
 
       if (!response.success || !response.data) {
+        if (!isMounted()) return;
         setError('Cab not found');
         return;
       }
@@ -351,10 +354,13 @@ function CabDetailsPage() {
         vehicleOptions: buildVehicleOptions(),
       };
 
+      if (!isMounted()) return;
       setCab(cabDetails);
     } catch (error) {
+      if (!isMounted()) return;
       setError('Failed to load cab details. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

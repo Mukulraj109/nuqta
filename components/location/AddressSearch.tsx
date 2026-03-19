@@ -11,6 +11,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { useAddressSearch } from '@/hooks/useLocation';
 import { AddressSearchResult } from '@/types/location.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface AddressSearchProps {
   placeholder?: string;
@@ -40,6 +41,7 @@ function AddressSearch({
   const { search, searchResults, isSearching, clearResults } = useAddressSearch();
   const [query, setQuery] = useState('');
   const [showResultsList, setShowResultsList] = useState(false);
+  const isMounted = useIsMounted();
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   // Debounced search
@@ -67,6 +69,7 @@ function AddressSearch({
   const performSearch = async (searchQuery: string) => {
     try {
       const results = await search(searchQuery);
+      if (!isMounted()) return;
       setShowResultsList(showResults && results.length > 0);
       onSearch?.(searchQuery);
     } catch (error) {

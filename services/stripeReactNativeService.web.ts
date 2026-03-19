@@ -67,7 +67,7 @@ class StripeReactNativeService {
         throw new Error('Stripe is not properly configured');
       }
 
-      const response = await apiClient.post('/payment/stripe/create-intent', {
+      const response = await apiClient.post('/payment/create-checkout-session', {
         orderId,
         amount: Math.round(amount * 100), // Convert to cents/paise
         currency: currency.toLowerCase(),
@@ -139,7 +139,7 @@ class StripeReactNativeService {
     paymentIntentId: string
   ): Promise<PaymentResponse> {
     try {
-      const response = await apiClient.post('/payment/stripe/verify', {
+      const response = await apiClient.post('/payment/verify-stripe-payment', {
         orderId,
         paymentIntentId,
       });
@@ -194,7 +194,7 @@ class StripeReactNativeService {
    */
   async checkPaymentStatus(paymentIntentId: string): Promise<PaymentResponse> {
     try {
-      const response = await apiClient.get(`/payment/stripe/status/${paymentIntentId}`);
+      const response = await apiClient.get(`/payment/status/${paymentIntentId}`);
 
       if (response.success && response.data) {
         return response.data as PaymentResponse;

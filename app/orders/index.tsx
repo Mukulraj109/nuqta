@@ -24,6 +24,7 @@ import SkeletonLoader from '@/components/common/SkeletonLoader';
 import { useGetCurrencySymbol } from '@/stores';
 import { Colors, Spacing, Gradients, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ============================================================================
 // STATUS HELPERS
@@ -317,6 +318,7 @@ const OrderSkeleton = () => (
 function OrdersListScreen() {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
+  const isMounted = useIsMounted();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -373,23 +375,30 @@ function OrdersListScreen() {
         const mappedOrders = response.data.orders.map(mapBackendOrderToFrontend);
 
         if (refresh || pageNum === 1) {
+          if (!isMounted()) return;
           setOrders(mappedOrders);
         } else {
           // Deduplicate on append
+          if (!isMounted()) return;
           setOrders(prev => {
             const ids = new Set(prev.map(o => o.id));
             return [...prev, ...mappedOrders.filter(o => !ids.has(o.id))];
           });
         }
 
+        if (!isMounted()) return;
         setHasMore(response.data.pagination.current < response.data.pagination.pages);
+        if (!isMounted()) return;
         setPage(pageNum);
         setError(null);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError(err instanceof Error ? err.message : 'Failed to load orders');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   };

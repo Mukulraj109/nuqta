@@ -27,9 +27,12 @@ import lockDealApi, { LockPriceDeal, UserLockDeal } from '@/services/lockDealApi
 import { DetailPageSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const LockDealDetailPage: React.FC = () => {
+  const isMounted = useIsMounted();
+
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [deal, setDeal] = useState<LockPriceDeal | null>(null);
@@ -46,12 +49,15 @@ const LockDealDetailPage: React.FC = () => {
       setIsLoading(true);
       const response = await lockDealApi.getDealById(id!);
       if (response?.data) {
+        if (!isMounted()) return;
         setDeal(response.data.deal);
+        if (!isMounted()) return;
         setUserLock(response.data.userLock);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load deal details');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -82,6 +88,7 @@ const LockDealDetailPage: React.FC = () => {
     if (!confirmed) return;
 
     try {
+      if (!isMounted()) return;
       setIsLocking(true);
       const response = await lockDealApi.initiateLock(deal._id);
 
@@ -103,6 +110,7 @@ const LockDealDetailPage: React.FC = () => {
     } catch (error: any) {
       platformAlertSimple('Error', error?.message || 'Failed to initiate lock. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLocking(false);
     }
   };
@@ -451,7 +459,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: Spacing.xl,
-  },
+  paddingBottom: 120, },
 
   // Deal Image
   dealImage: {

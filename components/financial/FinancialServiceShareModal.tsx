@@ -20,6 +20,7 @@ import { Share } from 'react-native';
 import { useComprehensiveAnalytics } from '@/hooks/useComprehensiveAnalytics';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   white: colors.background.primary,
@@ -57,11 +58,12 @@ export const FinancialServiceShareModal: React.FC<FinancialServiceShareModalProp
 }) => {
   const { trackEvent } = useComprehensiveAnalytics();
   const [isCopied, setIsCopied] = useState(false);
+  const isMounted = useIsMounted();
 
   const generateShareUrl = (): string => {
     const baseUrl = Platform.OS === 'web' && typeof window !== 'undefined'
       ? `${window.location.origin}/financial/service/${serviceId}`
-      : `nuqta://financial/service/${serviceId}`;
+      : `rez://financial/service/${serviceId}`;
     return baseUrl;
   };
 
@@ -96,6 +98,7 @@ export const FinancialServiceShareModal: React.FC<FinancialServiceShareModalProp
 
   const handleCopyLink = async () => {
     try {
+      if (!isMounted()) return;
       await Clipboard.setStringAsync(generateShareUrl());
       setIsCopied(true);
       trackEvent(ANALYTICS_EVENTS.SERVICE_VIEWED, {

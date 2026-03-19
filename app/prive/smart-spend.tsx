@@ -23,6 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/priveTheme';
 import { PriveSkeletonBlock } from '@/components/prive/PriveSkeletonBlock';
 import priveApi, { SmartSpendItem, SmartSpendSection } from '@/services/priveApi';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - PRIVE_SPACING.lg * 2 - PRIVE_SPACING.md) / 2;
@@ -40,6 +41,7 @@ function SmartSpendScreen() {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const isMounted = useIsMounted();
 
   // Fetch catalog
   const fetchCatalog = useCallback(async (pageNum: number = 1, refresh: boolean = false) => {
@@ -61,6 +63,7 @@ function SmartSpendScreen() {
         if (pageNum === 1) {
           setItems(newItems);
         } else {
+          if (!isMounted()) return;
           setItems(prev => {
             const existingIds = new Set(prev.map(i => i._id));
             const unique = newItems.filter(i => !existingIds.has(i._id));
@@ -69,11 +72,14 @@ function SmartSpendScreen() {
         }
 
         if (pageNum === 1 && response.data.sections) {
+          if (!isMounted()) return;
           setSections(response.data.sections);
         }
 
         const pagination = response.data.pagination;
+        if (!isMounted()) return;
         setHasMore(pageNum < (pagination?.totalPages || 1));
+        if (!isMounted()) return;
         setPage(pageNum);
       } else {
         if (pageNum === 1) setError('Failed to load Smart Spend catalog');
@@ -81,8 +87,11 @@ function SmartSpendScreen() {
     } catch (err) {
       if (pageNum === 1) setError('Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
+      if (!isMounted()) return;
       setIsLoadingMore(false);
     }
   }, [selectedSection]);

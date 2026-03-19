@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Pressable, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { checkFollowStatus, toggleFollow } from '../../services/activityFeedApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface FollowButtonProps {
   userId: string;
@@ -13,6 +14,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({ userId, onFollowChange, sty
   const [isFollowing, setIsFollowing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingStatus, setIsCheckingStatus] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadFollowStatus();
@@ -22,10 +24,12 @@ const FollowButton: React.FC<FollowButtonProps> = ({ userId, onFollowChange, sty
     try {
       setIsCheckingStatus(true);
       const status = await checkFollowStatus(userId);
+      if (!isMounted()) return;
       setIsFollowing(status);
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsCheckingStatus(false);
     }
   };
@@ -36,6 +40,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({ userId, onFollowChange, sty
     try {
       setIsLoading(true);
       const result = await toggleFollow(userId);
+      if (!isMounted()) return;
       setIsFollowing(result.following);
 
       if (onFollowChange) {
@@ -44,6 +49,7 @@ const FollowButton: React.FC<FollowButtonProps> = ({ userId, onFollowChange, sty
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

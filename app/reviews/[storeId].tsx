@@ -21,6 +21,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import reviewsApi from '@/services/reviewsApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Review {
   _id: string;
@@ -92,26 +93,36 @@ function ReviewsPage() {
         if (pageNum === 1) {
           setReviews(newReviews);
         } else {
+          if (!isMounted()) return;
           setReviews(prev => [...prev, ...newReviews]);
         }
+        if (!isMounted()) return;
         setStats(response.data.stats || null);
+        if (!isMounted()) return;
         setPage(pageNum);
+        if (!isMounted()) return;
         setHasMore(newReviews.length >= 20);
 
         if (newReviews.length > 0 && !storeName) {
+          if (!isMounted()) return;
           setStoreName('Store Reviews');
         }
       } else {
         if (pageNum === 1) setError(response.error || 'Failed to load reviews');
+        if (!isMounted()) return;
         setHasMore(false);
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load reviews';
       if (pageNum === 1) setError(errorMessage);
+      if (!isMounted()) return;
       setHasMore(false);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [storeId, storeName]);
@@ -121,6 +132,7 @@ function ReviewsPage() {
       fetchReviews(false, page + 1);
     }
   }, [loadingMore, hasMore, loading, page, fetchReviews]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (storeId) {

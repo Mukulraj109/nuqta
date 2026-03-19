@@ -15,10 +15,12 @@ import exploreApi, { HotProduct } from '../../../services/exploreApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
 
 const HotRightNow = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [hotDeals, setHotDeals] = useState<HotProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,11 +39,14 @@ const HotRightNow = () => {
       const products = response.data?.products || response.data || [];
 
       if (response.success && Array.isArray(products) && products.length > 0) {
+        if (!isMounted()) return;
         setHotDeals(products);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load hot deals');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

@@ -24,6 +24,7 @@ import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/pr
 import priveApi, { PriveOffer } from '@/services/priveApi';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const IMAGE_HEIGHT = 220;
@@ -59,14 +60,18 @@ function PriveOfferDetailScreen() {
       if (response.success && response.data) {
         setOffer(response.data);
       } else {
+        if (!isMounted()) return;
         setError('Offer not found');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load offer details');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [id]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     fetchOffer();
@@ -387,7 +392,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: PRIVE_SPACING.xl,
-    paddingBottom: PRIVE_SPACING.lg,
+    paddingBottom: 120,
   },
 
   // Cover Image

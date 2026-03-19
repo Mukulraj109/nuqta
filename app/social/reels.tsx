@@ -28,6 +28,7 @@ import reelApi from '@/services/reelApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -94,6 +95,7 @@ function ReelsPage() {
   const [screenFocused, setScreenFocused] = useState(true);
   const flatListRef = useRef<FlashList>(null);
   const likeAnimations = useRef<Map<string, Animated.Value>>(new Map());
+  const isMounted = useIsMounted();
 
   const MAX_LIKE_ANIMATIONS = 50;
   const getLikeAnimation = (reelId: string) => {
@@ -119,12 +121,16 @@ function ReelsPage() {
         setHasMore(result.data.pagination.hasMore);
         setPage(pageNum);
       } else {
+        if (!isMounted()) return;
         setHasMore(false);
       }
     } catch (error) {
+      if (!isMounted()) return;
       setHasMore(false);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, []);
@@ -201,6 +207,7 @@ function ReelsPage() {
       await reelApi.toggleBookmark(reelId);
     } catch (error) {
       // Revert
+      if (!isMounted()) return;
       setBookmarkedReels(prev => {
         const newSet = new Set(prev);
         if (wasBookmarked) newSet.add(reelId);
@@ -213,6 +220,7 @@ function ReelsPage() {
   const handleShare = useCallback(async (reel: UgcReel) => {
     try {
       await reelApi.shareReel(reel.id);
+      if (!isMounted()) return;
       setReels(prev => prev.map(r =>
         r.id === reel.id ? { ...r, shares: r.shares + 1 } : r
       ));

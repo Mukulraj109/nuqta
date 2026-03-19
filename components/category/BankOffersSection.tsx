@@ -19,6 +19,7 @@ import bankOffersApi, { BankOffer } from '@/services/bankOffersApi';
 import { bankOffersData } from '@/data/categoryDummyData';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface BankOffersSectionProps {
   categorySlug?: string;
@@ -81,6 +82,7 @@ const BankOffersSection: React.FC<BankOffersSectionProps> = ({
   const currencySymbol = getCurrencySymbol();
   const [apiOffers, setApiOffers] = useState<BankOffer[]>([]);
   const [loading, setLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (offers) {
@@ -96,6 +98,7 @@ const BankOffersSection: React.FC<BankOffersSectionProps> = ({
           categorySlug ? { category: categorySlug, limit: 10 } : { limit: 10 }
         );
         if (response.success && response.data?.offers?.length > 0) {
+          if (!isMounted()) return;
           setApiOffers(response.data.offers);
         } else {
           // Fallback to dummy data if API returns empty
@@ -103,8 +106,10 @@ const BankOffersSection: React.FC<BankOffersSectionProps> = ({
         }
       } catch (err) {
         // Fallback to dummy data on error
+        if (!isMounted()) return;
         setApiOffers(bankOffersData as any);
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };

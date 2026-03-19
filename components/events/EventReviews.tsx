@@ -19,6 +19,7 @@ import eventReviewApi, { EventReviewData } from '@/services/eventReviewApi';
 import StarRating from './StarRating';
 import EventReviewCard from './EventReviewCard';
 import EventReviewForm from './EventReviewForm';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface EventReviewsProps {
   eventId: string;
@@ -39,6 +40,7 @@ const EventReviews: React.FC<EventReviewsProps> = ({ eventId, eventTitle }) => {
   const [canReview, setCanReview] = useState(false);
   const [hasBooking, setHasBooking] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('newest');
+  const isMounted = useIsMounted();
   const [pagination, setPagination] = useState({
     current: 1,
     pages: 1,
@@ -63,15 +65,19 @@ const EventReviews: React.FC<EventReviewsProps> = ({ eventId, eventTitle }) => {
       const data = await eventReviewApi.getEventReviews(eventId, page, 10, sort);
 
       if (page === 1) {
+        if (!isMounted()) return;
         setReviews(data.reviews);
       } else {
         setReviews(prev => [...prev, ...data.reviews]);
       }
+      if (!isMounted()) return;
       setPagination(data.pagination);
       setSummary(data.summary);
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load reviews');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
       setLoadingMore(false);
     }
@@ -86,6 +92,7 @@ const EventReviews: React.FC<EventReviewsProps> = ({ eventId, eventTitle }) => {
 
     try {
       const data = await eventReviewApi.getUserReview(eventId);
+      if (!isMounted()) return;
       setUserReview(data.review);
       setCanReview(data.canReview);
       setHasBooking(data.hasBooking);
@@ -119,6 +126,7 @@ const EventReviews: React.FC<EventReviewsProps> = ({ eventId, eventTitle }) => {
         await eventReviewApi.submitReview(eventId, data);
         platformAlertSimple('Success', 'Thank you for your review!');
       }
+      if (!isMounted()) return;
       setShowReviewForm(false);
       setEditingReview(null);
       loadReviews(1);

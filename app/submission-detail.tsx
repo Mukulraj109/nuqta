@@ -23,6 +23,7 @@ import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { catchAndWarn } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -73,6 +74,7 @@ function SubmissionDetailPage() {
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
+  const isMounted = useIsMounted();
 
   // Hide the default navigation header
   React.useLayoutEffect(() => {
@@ -96,6 +98,7 @@ function SubmissionDetailPage() {
 
       if (response.success && response.data) {
         const projectData = response.data.project || response.data as any;
+        if (!isMounted()) return;
         setProject(projectData);
 
         // Find the specific submission
@@ -105,6 +108,7 @@ function SubmissionDetailPage() {
           );
           
           if (foundSubmission) {
+            if (!isMounted()) return;
             setSubmission(foundSubmission);
             
             Animated.parallel([
@@ -126,6 +130,7 @@ function SubmissionDetailPage() {
       showAlert('Error', 'Failed to load submission details');
       router.back();
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -533,7 +538,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 40,
+    paddingBottom: 120,
   },
   content: {
     padding: Spacing.lg,

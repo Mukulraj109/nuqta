@@ -23,8 +23,10 @@ import type { SpinWheelSegment, SpinWheelResult } from '@/types/gamification.typ
 import { GamePageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function SpinWheelPage() {
+  const isMounted = useIsMounted();
   const [loading, setLoading] = useState(true);
   const [segments, setSegments] = useState<SpinWheelSegment[]>([]);
   const [spinsRemaining, setSpinsRemaining] = useState(0);
@@ -48,20 +50,27 @@ function SpinWheelPage() {
       const response = await gamificationAPI.getSpinWheelData();
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setSegments(response.data.segments || getDefaultSegments());
         // ✅ FIX: Check for undefined/null, not falsy (0 is valid!)
+        if (!isMounted()) return;
         setSpinsRemaining(response.data.spinsRemaining !== undefined ? response.data.spinsRemaining : 3);
       } else {
         // Fallback to default segments
+        if (!isMounted()) return;
         setSegments(getDefaultSegments());
+        if (!isMounted()) return;
         setSpinsRemaining(3);
       }
     } catch (error: any) {
       platformAlert('Error', 'Failed to load spin wheel data. Using default configuration.');
       // Use default segments on error
+      if (!isMounted()) return;
       setSegments(getDefaultSegments());
+      if (!isMounted()) return;
       setSpinsRemaining(3);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -149,6 +158,7 @@ function SpinWheelPage() {
       await loadSpinWheelData();
 
       // Show result modal with animation
+      if (!isMounted()) return;
       setShowResult(true);
     } catch (error: any) {
       // Non-critical error, just log it
@@ -183,7 +193,6 @@ function SpinWheelPage() {
             <Pressable
               onPress={handleBackPress}
               style={styles.backButton}
-             
             >
               <Ionicons name="arrow-back" size={24} color="white" />
             </Pressable>
@@ -292,7 +301,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.secondary,
   },
   contentContainer: {
-    paddingBottom: 40,
+    paddingBottom: 120,
   },
   loadingContainer: {
     flex: 1,

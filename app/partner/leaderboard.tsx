@@ -18,6 +18,7 @@ import partnerApi, { PartnerStats } from '@/services/partnerApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 interface TopPerformer {
   _id: string;
   name: string;
@@ -29,6 +30,7 @@ interface TopPerformer {
 }
 
 function PartnerLeaderboard() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [stats, setStats] = useState<PartnerStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -40,14 +42,19 @@ function PartnerLeaderboard() {
       setError(null);
       const response = await partnerApi.getStats();
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setStats(response.data);
       } else {
+        if (!isMounted()) return;
         setError('Failed to load leaderboard data');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Unable to connect. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
@@ -179,6 +186,7 @@ function PartnerLeaderboard() {
       </View>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.content}
         showsVerticalScrollIndicator={false}
         refreshControl={

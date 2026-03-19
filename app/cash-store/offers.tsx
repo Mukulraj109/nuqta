@@ -24,6 +24,7 @@ import realVouchersApi from '../../services/realVouchersApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -168,6 +169,7 @@ const SkeletonBlock = React.memo(({ width: w, height: h, style, index = 0 }: {
 
 // ─── Main Component ─────────────────────────────────────────
 function OffersPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -201,6 +203,7 @@ function OffersPage() {
 
       // 1. Double Cashback campaigns
       if (results[0].status === 'fulfilled') {
+        if (!isMounted()) return;
         setCampaigns(
           (results[0].value || []).filter((c: Campaign) => c.isActive)
         );
@@ -209,6 +212,7 @@ function OffersPage() {
 
       // 2. Coin drops
       if (results[1].status === 'fulfilled') {
+        if (!isMounted()) return;
         setCoinDrops(
           (results[1].value || []).filter((d: CoinDrop) => d.isActive)
         );
@@ -219,6 +223,7 @@ function OffersPage() {
       if (results[2].status === 'fulfilled') {
         const res = results[2].value;
         const arr = res?.data?.coupons || res?.data || [];
+        if (!isMounted()) return;
         setFeaturedCoupons(Array.isArray(arr) ? arr.slice(0, 4) : []);
       } else {
       }
@@ -226,6 +231,7 @@ function OffersPage() {
       // 4. Trending data (high cashback brands)
       if (results[3].status === 'fulfilled') {
         const trending = results[3].value;
+        if (!isMounted()) return;
         setHighCashbackBrands((trending?.highCashbackBrands || []).slice(0, 6));
       } else {
       }
@@ -236,6 +242,7 @@ function OffersPage() {
         setError('Unable to load offers. Please try again.');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Something went wrong. Please try again.');
     }
   }, []);
@@ -248,6 +255,7 @@ function OffersPage() {
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
     await fetchData();
+    if (!isMounted()) return;
     setIsRefreshing(false);
   }, [fetchData]);
 
@@ -336,7 +344,6 @@ function OffersPage() {
             <Pressable
               onPress={handleRefresh}
               style={styles.retryBtn}
-             
             >
               <Ionicons name="refresh" size={14} color={Colors.text.inverse} />
               <Text style={styles.retryText}>Try Again</Text>
@@ -368,7 +375,6 @@ function OffersPage() {
             <Pressable
               onPress={() => router.push('/cash-store' as any)}
               style={styles.browseBtn}
-             
             >
               <Text style={styles.browseBtnText}>Browse Cash Store</Text>
               <Ionicons name="arrow-forward" size={14} color={Colors.text.inverse} />
@@ -416,7 +422,6 @@ function OffersPage() {
                   <Pressable
                     onPress={() => router.push('/account/coupons' as any)}
                     style={styles.seeAllBtn}
-                   
                   >
                     <Text style={styles.seeAllText}>See All</Text>
                     <Ionicons name="chevron-forward" size={14} color={Colors.nileBlue} />
@@ -480,7 +485,6 @@ function OffersPage() {
                   <Pressable
                     onPress={() => router.push('/offers/double-cashback' as any)}
                     style={styles.seeAllBtn}
-                   
                   >
                     <Text style={styles.seeAllText}>See All</Text>
                     <Ionicons name="chevron-forward" size={14} color={Colors.nileBlue} />
@@ -640,7 +644,6 @@ function OffersPage() {
                   <Pressable
                     onPress={() => router.push('/cash-store/brands' as any)}
                     style={styles.seeAllBtn}
-                   
                   >
                     <Text style={styles.seeAllText}>See All</Text>
                     <Ionicons name="chevron-forward" size={14} color={Colors.nileBlue} />
@@ -729,6 +732,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: 120,
   },
 
   // ── Sticky Header ──

@@ -14,6 +14,7 @@ import { useRouter } from 'expo-router';
 import flashSaleApi, { FlashSaleItem } from '@/services/flashSaleApi';
 import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface FlashSaleProduct {
   id: string;
@@ -109,6 +110,7 @@ const calculateTimeLeft = (endTime: Date): { hours: number; minutes: number; sec
 // Skeleton card component
 const SkeletonCard: React.FC = () => {
   const [shimmerAnim] = useState(new Animated.Value(0));
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     const shimmerAnimation = Animated.loop(
@@ -182,6 +184,7 @@ const FlashSales: React.FC<FlashSalesProps> = ({
           .map(transformFlashSaleData)
           .filter(product => product && product.stock > 0 && product.price > 0); // Only show items with stock and valid price
 
+        if (!isMounted()) return;
         setProducts(transformedProducts);
 
         // Find earliest end time for countdown
@@ -191,6 +194,7 @@ const FlashSales: React.FC<FlashSalesProps> = ({
             transformedProducts[0].endTime
           );
           earliestEndTime.current = earliest;
+          if (!isMounted()) return;
           setTimeLeft(calculateTimeLeft(earliest));
         }
       } else {
@@ -198,8 +202,10 @@ const FlashSales: React.FC<FlashSalesProps> = ({
         setProducts([]);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err?.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, []);

@@ -18,6 +18,7 @@ import apiClient from '../../services/apiClient';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface CourierPreferences {
   preferredCourier: 'any' | 'delhivery' | 'bluedart' | 'ekart' | 'dtdc' | 'fedex';
@@ -61,6 +62,7 @@ const COURIERS = [
 const WEEKDAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
 function CourierPreferencesScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -78,16 +80,21 @@ function CourierPreferencesScreen() {
       const response = await apiClient.get('/user-settings/courier');
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setPreferences(response.data as CourierPreferences);
+        if (!isMounted()) return;
         setShowAlternateContact(!!(response.data as CourierPreferences).alternateContact?.name);
       } else {
         // Set default preferences if none exist
+        if (!isMounted()) return;
         setPreferences(getDefaultPreferences());
       }
     } catch (error) {
       // Set default preferences on error
+      if (!isMounted()) return;
       setPreferences(getDefaultPreferences());
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -130,17 +137,21 @@ function CourierPreferencesScreen() {
       if (!response.success) {
         platformAlertSimple('Error', 'Failed to update courier preferences. Please try again.');
         // Revert to previous state
+        if (!isMounted()) return;
         setPreferences(preferences);
       } else {
         // Show success message
+        if (!isMounted()) return;
         setShowSuccessMessage(true);
         setTimeout(() => setShowSuccessMessage(false), 2000);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update courier preferences. Please check your connection and try again.');
       // Revert to previous state
+      if (!isMounted()) return;
       setPreferences(preferences);
     } finally {
+      if (!isMounted()) return;
       setSaving(false);
     }
   };

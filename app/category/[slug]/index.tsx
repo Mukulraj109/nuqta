@@ -37,7 +37,9 @@ import { categoriesApi } from '@/services/categoriesApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 function CategoryPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const { state, actions } = useCategory();
@@ -81,6 +83,7 @@ function CategoryPage() {
   const handleRefresh = async () => {
     setRefreshing(true);
     await loadCategoryData();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -295,6 +298,7 @@ function CategoryPage() {
         />
 
         <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
           style={styles.content}
           showsVerticalScrollIndicator={false}
           refreshControl={

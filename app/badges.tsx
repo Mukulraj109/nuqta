@@ -26,6 +26,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { achievementApi, Achievement as ApiAchievement } from '@/services/achievementApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48 - 12) / 2;
@@ -72,6 +73,7 @@ const TIER_COLORS: Record<string, string> = {
 };
 
 const BadgesScreen: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState('All');
   const [achievements, setAchievements] = useState<Achievement[]>([]);
@@ -130,7 +132,9 @@ const BadgesScreen: React.FC = () => {
             progress: a.unlocked ? 100 : a.progress,
           }));
 
+        if (!isMounted()) return;
         setAchievements(mapped);
+        if (!isMounted()) return;
         setStats({
           unlocked: response.data.summary.unlocked,
           total: response.data.summary.total,
@@ -138,12 +142,16 @@ const BadgesScreen: React.FC = () => {
           completionPercent: Math.round(response.data.summary.completionPercentage),
         });
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to load achievements');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
       fetchingRef.current = false;
     }

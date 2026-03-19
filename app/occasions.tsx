@@ -23,6 +23,7 @@ import categoryMetadataApi, { Occasion } from '@/services/categoryMetadataApi';
 import { getOccasionsForCategory, getAllOccasions } from '@/data/categoryDummyData';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
@@ -107,6 +108,7 @@ const OccasionCard = ({
 };
 
 function OccasionsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const categorySlug = params.category as string;
@@ -126,15 +128,20 @@ function OccasionsPage() {
       const slug = categorySlug || '';
       const response = await categoryMetadataApi.getOccasions(slug);
       if (response.success && response.data?.occasions?.length > 0) {
+        if (!isMounted()) return;
         setOccasions(response.data.occasions);
       } else {
         // No occasions available from API — show empty state instead of dummy data
+        if (!isMounted()) return;
         setOccasions([]);
       }
     } catch (error) {
+      if (!isMounted()) return;
       setOccasions([]);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   };

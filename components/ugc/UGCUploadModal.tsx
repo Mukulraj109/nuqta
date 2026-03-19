@@ -26,6 +26,7 @@ import * as Haptics from 'expo-haptics';
 import { Video } from 'expo-av';
 import ugcApi, { CreateUGCRequest } from '@/services/ugcApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -83,6 +84,7 @@ function UGCUploadModal({
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadedContentId, setUploadedContentId] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   // Animation values
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -202,6 +204,7 @@ function UGCUploadModal({
         const type: MediaType = asset.type === 'video' ? 'video' : 'photo';
 
         if (validateFile(asset.uri, type, asset.fileSize)) {
+          if (!isMounted()) return;
           setSelectedMedia({
             uri: asset.uri,
             type,
@@ -211,6 +214,7 @@ function UGCUploadModal({
             fileSize: asset.fileSize,
             fileName: asset.fileName,
           });
+          if (!isMounted()) return;
           setCurrentStep('preview');
           if (Platform.OS !== 'web') {
             try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) { catchSilent(e, 'UGCUploadModal/haptics'); }
@@ -218,6 +222,7 @@ function UGCUploadModal({
         }
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to capture media. Please try again.');
     }
   };
@@ -241,6 +246,7 @@ function UGCUploadModal({
         const type: MediaType = asset.type === 'video' ? 'video' : 'photo';
 
         if (validateFile(asset.uri, type, asset.fileSize)) {
+          if (!isMounted()) return;
           setSelectedMedia({
             uri: asset.uri,
             type,
@@ -250,6 +256,7 @@ function UGCUploadModal({
             fileSize: asset.fileSize,
             fileName: asset.fileName,
           });
+          if (!isMounted()) return;
           setCurrentStep('preview');
           if (Platform.OS !== 'web') {
             try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {}); } catch (e) { catchSilent(e, 'UGCUploadModal/haptics'); }
@@ -257,6 +264,7 @@ function UGCUploadModal({
         }
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to select media. Please try again.');
     }
   };
@@ -354,9 +362,11 @@ function UGCUploadModal({
       // Upload to backend
       const response = await ugcApi.create(requestData, formData);
 
+      if (!isMounted()) return;
       setUploadProgress(100);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setUploadedContentId(response.data.content._id);
         setCurrentStep('success');
 
@@ -374,6 +384,7 @@ function UGCUploadModal({
 
         // Auto close after 3 seconds
         if (autoCloseTimeoutRef.current) clearTimeout(autoCloseTimeoutRef.current);
+        if (!isMounted()) return;
         autoCloseTimeoutRef.current = setTimeout(() => {
           handleClose();
           if (onUploadSuccess && uploadedContentId) {
@@ -384,6 +395,7 @@ function UGCUploadModal({
         throw new Error(response.message || 'Upload failed');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to upload content. Please try again.');
       setCurrentStep('details');
       if (Platform.OS !== 'web') {
@@ -391,6 +403,7 @@ function UGCUploadModal({
       }
     } finally {
       if (progressInterval) clearInterval(progressInterval);
+      if (!isMounted()) return;
       setIsUploading(false);
     }
   };

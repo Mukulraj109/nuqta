@@ -12,6 +12,7 @@ import priveApi from '@/services/priveApi';
 import { SectionListSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function BenefitsScreen() {
   const router = useRouter();
@@ -28,11 +29,13 @@ function BenefitsScreen() {
         setData(response.data);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err?.message || 'Failed to load benefits');
     }
     finally { setIsLoading(false); setIsRefreshing(false); }
   }, []);
 
+  const isMounted = useIsMounted();
   useEffect(() => { fetchData(); }, [fetchData]);
   const onRefresh = () => { setIsRefreshing(true); fetchData(); };
 
@@ -74,6 +77,7 @@ function BenefitsScreen() {
     <View style={styles.container}>
       <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor={PRIVE_COLORS.gold.primary} />}

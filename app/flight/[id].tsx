@@ -32,6 +32,7 @@ import FlightBookingConfirmation from '../../components/flight/FlightBookingConf
 import RelatedFlightsSection from '../../components/flight/RelatedFlightsSection';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -126,6 +127,7 @@ const amenityIconMap: Record<string, keyof typeof Ionicons.glyphMap> = {
 };
 
 function FlightDetailsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
@@ -165,6 +167,7 @@ function FlightDetailsPage() {
       const response = await productsApi.getProductById(id as string);
 
       if (!response.success || !response.data) {
+        if (!isMounted()) return;
         setError('Flight not found');
         return;
       }
@@ -277,6 +280,7 @@ function FlightDetailsPage() {
         };
       };
 
+      if (!isMounted()) return;
       setFlight({
         id: productData.id || productData._id,
         name: productData.name,
@@ -309,8 +313,10 @@ function FlightDetailsPage() {
         classOptions: buildClassOptions(),
       });
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load flight details. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -388,7 +394,11 @@ function FlightDetailsPage() {
   // ─── Main Content ───────────────────────────────────────────────
   return (
     <SafeAreaView style={s.container}>
-      <ScrollView style={s.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={s.scroll}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
 
         {/* ── Hero Image ───────────────────────────────── */}
         <View style={s.hero}>

@@ -19,6 +19,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
 import { FoodStoreCard } from '@/components/food-dining';
 import { COLORS } from '@/components/food-dining/constants';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 export default function FastDeliveryPage() {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function FastDeliveryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   const fetchStores = useCallback(async () => {
     try {
@@ -50,11 +52,14 @@ export default function FastDeliveryPage() {
           const timeB = parseInt(b.operationalInfo?.deliveryTime) || 60;
           return timeA - timeB;
         });
+        if (!isMounted()) return;
         setStores(fastStores);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load. Pull down to refresh.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -64,6 +69,7 @@ export default function FastDeliveryPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchStores();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

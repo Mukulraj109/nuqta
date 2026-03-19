@@ -22,6 +22,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { IWhatsNewStory } from '@/types/whatsNew.types';
 import whatsNewApi from '@/services/whatsNewApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const SLIDE_DURATION = 5000; // 5 seconds per slide
@@ -37,6 +38,7 @@ const WhatsNewStoriesFlow: React.FC<WhatsNewStoriesFlowProps> = ({ onClose }) =>
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+  const isMounted = useIsMounted();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const progressTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -49,6 +51,7 @@ const WhatsNewStoriesFlow: React.FC<WhatsNewStoriesFlowProps> = ({ onClose }) =>
       try {
         const response = await whatsNewApi.getStories(true);
         if (response.success && response.data.length > 0) {
+          if (!isMounted()) return;
           setStories(response.data);
         } else {
           onClose();
@@ -56,6 +59,7 @@ const WhatsNewStoriesFlow: React.FC<WhatsNewStoriesFlowProps> = ({ onClose }) =>
       } catch (error) {
         onClose();
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };

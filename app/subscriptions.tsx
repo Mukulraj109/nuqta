@@ -27,6 +27,7 @@ import type { SubscriptionTier, CurrentSubscription } from '@/services/subscript
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { TierCard, BenefitsTable, ValueCalculator } from '@/components/subscriptions';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function SubscriptionsPage() {
   const router = useRouter();
@@ -49,25 +50,32 @@ function SubscriptionsPage() {
 
       // Always fetch tiers (public endpoint)
       const tiersData = await subscriptionApi.getAvailableTiers();
+      if (!isMounted()) return;
       setTiers(tiersData || []);
 
       // Fetch current subscription only if authenticated
       if (isAuthenticated && !authLoading) {
         try {
           const subData = await subscriptionApi.getCurrentSubscription();
+          if (!isMounted()) return;
           setCurrentSub(subData || null);
         } catch {
           // User may not have a subscription — that's fine
+          if (!isMounted()) return;
           setCurrentSub(null);
         }
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError('Unable to load subscription plans. Pull to refresh.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [isAuthenticated, authLoading]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (!authLoading) {

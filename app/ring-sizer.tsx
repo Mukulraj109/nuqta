@@ -10,7 +10,6 @@ import {
   Pressable,
   StatusBar,
   Dimensions,
-  Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -21,6 +20,7 @@ import ringSizeApi from '@/services/ringSizeApi';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -80,6 +80,7 @@ function RingSizerPage() {
 
   const [saving, setSaving] = useState(false);
   const [savedSize, setSavedSize] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   // Load saved ring size on mount
   useEffect(() => {
@@ -112,6 +113,7 @@ function RingSizerPage() {
       const response = await ringSizeApi.saveRingSize(size.size, selectedMethod);
 
       if (response.success) {
+        if (!isMounted()) return;
         setSavedSize(size.size);
         platformAlertSimple(
           'Success',
@@ -134,6 +136,7 @@ function RingSizerPage() {
         'Retry'
       );
     } finally {
+      if (!isMounted()) return;
       setSaving(false);
     }
   }, [saving, selectedMethod]);
@@ -298,7 +301,11 @@ function RingSizerPage() {
         </View>
       </LinearGradient>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Saved Ring Size Banner */}
         {savedSize && (
           <View style={styles.savedSizeBanner}>

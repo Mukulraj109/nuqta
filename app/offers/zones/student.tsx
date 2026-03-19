@@ -27,6 +27,7 @@ import realOffersApi from '@/services/realOffersApi';
 import verificationService, { VerificationStatus } from '@/services/verificationApi';
 import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const ZONE_SLUG = 'student';
@@ -86,6 +87,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 function StudentZonePage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const user = useAuthUser();
@@ -136,6 +138,7 @@ function StudentZonePage() {
     try {
       const response = await verificationService.getZoneStatus('student');
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setVerificationStatus(response.data);
       }
     } catch (error) {
@@ -158,6 +161,7 @@ function StudentZonePage() {
       if (zonesResponse.success && zonesResponse.data) {
         const zone = zonesResponse.data.find((z: any) => z.slug === ZONE_SLUG);
         if (zone) {
+          if (!isMounted()) return;
           setZoneInfo({
             name: zone.name,
             description: zone.description,
@@ -176,6 +180,7 @@ function StudentZonePage() {
       if (offersResponse.success && offersResponse.data) {
         const offersData = offersResponse.data.offers || offersResponse.data;
         const offersArray = Array.isArray(offersData) ? offersData : [];
+        if (!isMounted()) return;
         setOffers(offersArray);
 
         // Generate dynamic categories from offers
@@ -188,11 +193,14 @@ function StudentZonePage() {
             label: CATEGORY_LABELS[cat as string] || (cat as string).charAt(0).toUpperCase() + (cat as string).slice(1),
           })),
         ];
+        if (!isMounted()) return;
         setCategories(dynamicCategories);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load offers. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

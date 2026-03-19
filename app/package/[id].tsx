@@ -36,6 +36,7 @@ import PackageInfoCard from '../../components/package/PackageInfoCard';
 import PackageAmenities from '../../components/package/PackageAmenities';
 import PackageCancellationPolicy from '../../components/package/PackageCancellationPolicy';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -108,6 +109,7 @@ interface BookingData {
 }
 
 function PackageDetailsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
@@ -154,6 +156,7 @@ function PackageDetailsPage() {
       const response = await productsApi.getProductById(id as string);
 
       if (!response.success || !response.data) {
+        if (!isMounted()) return;
         setError('Package not found');
         return;
       }
@@ -316,10 +319,13 @@ function PackageDetailsPage() {
         accommodationOptions: buildAccommodationOptions(),
       };
 
+      if (!isMounted()) return;
       setPackageData(packageDetails);
     } catch (error) {
+      if (!isMounted()) return;
       setError('Failed to load package details. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

@@ -16,6 +16,7 @@ import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { HeaderBackButton } from '@/components/navigation/SafeBackButton';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 60) / 2;
@@ -39,6 +40,7 @@ function AchievementsPage() {
   const [selectedAchievement, setSelectedAchievement] = useState<Achievement | null>(null);
   const [isRecalculating, setIsRecalculating] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   // Handle authentication errors
   useEffect(() => {
@@ -52,6 +54,7 @@ function AchievementsPage() {
   const handleRecalculate = async () => {
     setIsRecalculating(true);
     const success = await recalculateAchievements();
+    if (!isMounted()) return;
     setIsRecalculating(false);
     if (success) {
 
@@ -62,6 +65,7 @@ function AchievementsPage() {
     try {
 
       await authActions.checkAuthStatus();
+      if (!isMounted()) return;
       setAuthError(null);
       // Retry achievements fetch after auth refresh
       await refetch();

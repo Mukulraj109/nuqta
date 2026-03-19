@@ -18,6 +18,7 @@ import BonusZoneCard from '@/components/earn/BonusZoneCard';
 import { useGetCurrencySymbol, useRegionState } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ============================================
 // FILTER TABS
@@ -43,6 +44,7 @@ const FILTER_TABS: FilterTab[] = [
 // ============================================
 
 function BonusZonePage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const regionState = useRegionState();
@@ -63,9 +65,12 @@ function BonusZonePage() {
         setCampaigns(response.data.campaigns);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load campaigns');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [regionState?.currentRegion]);

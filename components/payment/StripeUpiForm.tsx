@@ -5,6 +5,7 @@ import { useStripe } from '@stripe/stripe-react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface StripeUpiFormProps {
   clientSecret: string;
@@ -28,6 +29,7 @@ function StripeUpiForm({
   const [upiError, setUpiError] = useState<string>('');
   const [upiId, setUpiId] = useState<string>('');
   const [paymentMethod, setPaymentMethod] = useState<'vpa' | 'qr'>('vpa');
+  const isMounted = useIsMounted();
 
   const validateUpiId = (id: string): boolean => {
     // UPI ID format: username@bankname
@@ -60,6 +62,7 @@ function StripeUpiForm({
       });
 
       if (error) {
+        if (!isMounted()) return;
         setUpiError(error.message || 'UPI payment failed');
         onError(error.message || 'UPI payment failed');
       } else if (paymentIntent) {
@@ -70,6 +73,7 @@ function StripeUpiForm({
         } else if (paymentIntent.status === 'Processing') {
 
           // For UPI, payment may be processing - we should poll or use webhooks
+          if (!isMounted()) return;
           setUpiError('Payment is being processed. Please wait...');
           // Poll for payment status
           pollPaymentStatus(paymentIntent.id);
@@ -80,9 +84,11 @@ function StripeUpiForm({
         onError('Payment could not be completed');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setUpiError(err.message || 'An error occurred');
       onError(err.message || 'An error occurred');
     } finally {
+      if (!isMounted()) return;
       setIsProcessing(false);
     }
   };
@@ -111,12 +117,14 @@ function StripeUpiForm({
           onSuccess(paymentIntent.id);
         } else if (paymentIntent?.status === 'Processing') {
           // Continue polling
+          if (!isMounted()) return;
           setTimeout(checkStatus, 5000); // Check every 5 seconds
         } else {
           setUpiError('Payment was not completed. Please try again.');
           setIsProcessing(false);
         }
       } catch (err) {
+        if (!isMounted()) return;
         setIsProcessing(false);
       }
     };

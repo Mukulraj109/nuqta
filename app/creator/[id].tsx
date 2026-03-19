@@ -28,6 +28,7 @@ import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSys
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { catchAndWarn } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 const NUQTA_COIN = BRAND.COIN_IMAGE;
@@ -82,6 +83,7 @@ const PickCard = React.memo(({ pick, onPress }: { pick: CreatorPick; onPress: ()
 // ============================================
 
 function CreatorProfilePage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const user = useAuthUser();
@@ -117,6 +119,7 @@ function CreatorProfilePage() {
       ]);
 
       if (profileResponse.success && profileResponse.data) {
+        if (!isMounted()) return;
         setCreator(profileResponse.data);
 
         // Check follow status (skip for own profile)
@@ -129,15 +132,19 @@ function CreatorProfilePage() {
           }
         }
       } else {
+        if (!isMounted()) return;
         setError(profileResponse.error || 'Creator not found');
       }
 
       if (picksResponse.success && picksResponse.data?.picks) {
+        if (!isMounted()) return;
         setPicks(picksResponse.data.picks);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load creator profile');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [id]);
@@ -158,11 +165,14 @@ function CreatorProfilePage() {
       if (response.success && response.data) {
         setIsFollowing(response.data.isFollowing);
       } else {
+        if (!isMounted()) return;
         setIsFollowing(wasFollowing); // revert
       }
     } catch {
+      if (!isMounted()) return;
       setIsFollowing(wasFollowing); // revert
     } finally {
+      if (!isMounted()) return;
       setFollowLoading(false);
     }
   }, [id, isFollowing, followLoading]);

@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import categoriesApi, { Category } from '@/services/categoriesApi';
 import CategorySectionCard from './cards/CategorySectionCard';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface BestDiscountSectionProps {
   title?: string;
@@ -32,6 +33,7 @@ function BestDiscountSection({
   const hasFreshCache = !!(
     cachedEntry && now - cachedEntry.at < BEST_DISCOUNT_CACHE_TTL_MS
   );
+  const isMounted = useIsMounted();
   const [categories, setCategories] = useState<Category[]>(
     hasFreshCache ? cachedEntry!.data : []
   );
@@ -73,7 +75,6 @@ function BestDiscountSection({
   }, [limit]);
 
   useEffect(() => {
-    let isMounted = true;
     setError(null);
 
     if (
@@ -86,21 +87,17 @@ function BestDiscountSection({
 
     fetchCategories()
       .then((data) => {
-        if (!isMounted) return;
+        if (!isMounted()) return;
         setCategories(data);
       })
       .catch(() => {
-        if (!isMounted) return;
+        if (!isMounted()) return;
         setError('Failed to load categories');
       })
       .finally(() => {
-        if (!isMounted) return;
+        if (!isMounted()) return;
         setLoading(false);
       });
-
-    return () => {
-      isMounted = false;
-    };
   }, [fetchCategories]);
 
   const handleViewAll = useCallback(() => {
@@ -168,7 +165,7 @@ function BestDiscountSection({
           keyExtractor={keyExtractor}
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.listContent}
+          contentContainerStyle={styles.listContent as any}
           estimatedItemSize={150}
           initialNumToRender={4}
           maxToRenderPerBatch={6}

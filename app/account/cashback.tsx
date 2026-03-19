@@ -29,10 +29,12 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type TabType = 'all' | 'pending' | 'credited' | 'expired';
 
 function CashbackPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -93,27 +95,34 @@ function CashbackPage() {
       ]);
 
       if (summaryRes.status === 'fulfilled' && summaryRes.value.success && summaryRes.value.data) {
+        if (!isMounted()) return;
         setSummary(summaryRes.value.data);
       } else if (summaryRes.status === 'rejected') {
+        if (!isMounted()) return;
         setError('Failed to load cashback summary');
       }
 
       if (pendingRes.status === 'fulfilled' && pendingRes.value.success && pendingRes.value.data) {
+        if (!isMounted()) return;
         setPendingReady(pendingRes.value.data.cashbacks || []);
       }
 
       if (expiringSoonRes.status === 'fulfilled' && expiringSoonRes.value.success && expiringSoonRes.value.data) {
+        if (!isMounted()) return;
         setExpiringSoon(expiringSoonRes.value.data.cashbacks || []);
       }
 
       if (campaignsRes.status === 'fulfilled' && campaignsRes.value.success && campaignsRes.value.data) {
+        if (!isMounted()) return;
         setCampaigns(campaignsRes.value.data.campaigns || []);
       }
 
       await loadCashbackHistory();
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load cashback data. Pull down to retry.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -127,13 +136,18 @@ function CashbackPage() {
       const response = await cashbackService.getCashbackHistory(filters);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setCashbacks(response.data.cashbacks || []);
+        if (!isMounted()) return;
         setHistoryTotal(response.data.total || 0);
+        if (!isMounted()) return;
         setHistoryPage(1);
       } else {
+        if (!isMounted()) return;
         setCashbacks([]);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setCashbacks([]);
     }
   };
@@ -141,6 +155,7 @@ function CashbackPage() {
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
     await loadData();
+    if (!isMounted()) return;
     setRefreshing(false);
   }, []);
 
@@ -168,6 +183,7 @@ function CashbackPage() {
         } catch {
           platformAlertSimple('Error', 'Failed to redeem cashback. Please try again.');
         } finally {
+          if (!isMounted()) return;
           setIsRedeeming(false);
         }
       },
@@ -269,6 +285,7 @@ function CashbackPage() {
       </View>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.content}
         showsVerticalScrollIndicator={false}
         refreshControl={

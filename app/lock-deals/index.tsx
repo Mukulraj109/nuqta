@@ -28,6 +28,7 @@ import lockDealApi, { LockPriceDeal, LockDealFilters } from '@/services/lockDeal
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
@@ -36,6 +37,7 @@ const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
 type FilterTab = 'all' | 'featured' | 'ending_soon';
 
 const LockDealsPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [deals, setDeals] = useState<LockPriceDeal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -68,8 +70,8 @@ const LockDealsPage: React.FC = () => {
       const response = await lockDealApi.getDeals(filters);
 
       if (response?.data) {
-        const newDeals = response.data.data || [];
-        const pagination = response.data.pagination;
+        const newDeals = Array.isArray(response.data) ? response.data : response.data.data || [];
+        const pagination = response.data?.pagination || response.meta?.pagination;
 
         if (reset) {
           // For "ending_soon", sort by validUntil
@@ -78,19 +80,26 @@ const LockDealsPage: React.FC = () => {
               new Date(a.validUntil).getTime() - new Date(b.validUntil).getTime()
             );
           }
+          if (!isMounted()) return;
           setDeals(newDeals);
         } else {
+          if (!isMounted()) return;
           setDeals(prev => [...prev, ...newDeals]);
         }
 
+        if (!isMounted()) return;
         setTotal(pagination?.total || 0);
+        if (!isMounted()) return;
         setHasMore(pagination ? pagination.page < pagination.pages : false);
+        if (!isMounted()) return;
         setPage(reset ? 2 : page + 1);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   };
@@ -387,7 +396,7 @@ const styles = StyleSheet.create({
     color: Colors.text.tertiary,
   },
   listContent: {
-    paddingBottom: Spacing.xl,
+    paddingBottom: 120,
   },
 
   // Hero Banner

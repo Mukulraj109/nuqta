@@ -24,6 +24,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -59,6 +60,7 @@ const TYPE_COLORS: Record<string, { bg: string; text: string; icon: string }> = 
 };
 
 const AllCampaignsPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -86,11 +88,13 @@ const AllCampaignsPage: React.FC = () => {
       const response = await campaignsApi.getActiveCampaigns({ limit: 50 });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setCampaigns(response.data.campaigns);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -98,6 +102,7 @@ const AllCampaignsPage: React.FC = () => {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchCampaigns();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -468,6 +473,7 @@ const styles = StyleSheet.create({
   // Content
   scrollContent: {
     padding: Spacing.base,
+    paddingBottom: 120,
   },
   campaignsGrid: {
     gap: Spacing.base,

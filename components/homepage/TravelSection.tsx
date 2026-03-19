@@ -17,6 +17,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import travelApi, { TravelServiceCategory } from '@/services/travelApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_GAP = 10;
@@ -33,6 +34,7 @@ const TravelSection: React.FC = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<TravelServiceCategory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   // Fetch categories from backend
   const fetchCategories = useCallback(async () => {
@@ -40,11 +42,13 @@ const TravelSection: React.FC = () => {
       setIsLoading(true);
       const response = await travelApi.getCategories();
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setCategories(response.data);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);

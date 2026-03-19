@@ -29,6 +29,7 @@ import { useAuthUser } from '@/stores/selectors';
 import analyticsService from '@/services/analyticsService';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type PageState = 'loading' | 'error' | 'form' | 'submitting' | 'success';
 
@@ -51,6 +52,7 @@ function CallSupportPage() {
 
   // Touch tracking for inline validation
   const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({});
+  const isMounted = useIsMounted();
 
   const [idempotencyKey] = useState(() => {
     if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
@@ -67,11 +69,15 @@ function CallSupportPage() {
         setConfig(response.data);
         setPageState('form');
       } else {
+        if (!isMounted()) return;
         setConfigError('Unable to load support information');
+        if (!isMounted()) return;
         setPageState('error');
       }
     } catch (error) {
+      if (!isMounted()) return;
       setConfigError('Unable to connect. Please check your connection and try again.');
+      if (!isMounted()) return;
       setPageState('error');
     }
   }, []);
@@ -235,7 +241,9 @@ function CallSupportPage() {
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setCallbackResult(response.data);
+        if (!isMounted()) return;
         setPageState('success');
         analyticsService.track('callback_success', {
           ticketNumber: response.data.ticketNumber,
@@ -243,15 +251,18 @@ function CallSupportPage() {
         });
       } else {
         platformAlertSimple('Error', 'Failed to request callback. Please try again.');
+        if (!isMounted()) return;
         setPageState('form');
         analyticsService.track('callback_failure', { reason: 'api_error' });
       }
     } catch (error: any) {
       const msg = error?.message || 'Something went wrong. Please try again.';
       platformAlertSimple('Error', msg);
+      if (!isMounted()) return;
       setPageState('form');
       analyticsService.track('callback_failure', { reason: 'exception' });
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

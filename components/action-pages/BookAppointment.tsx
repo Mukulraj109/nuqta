@@ -28,6 +28,7 @@ import { storesApi } from '@/services/storesApi';
 import { useAuthUser } from '@/stores/selectors';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   pink: colors.brand.pink,
@@ -68,6 +69,7 @@ function BookAppointmentPage() {
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string }>();
   const user = useAuthUser();
 
+  const isMounted = useIsMounted();
   const [step, setStep] = useState<'salon' | 'details' | 'confirm'>(
     params.storeId ? 'details' : 'salon'
   );
@@ -119,11 +121,13 @@ function BookAppointmentPage() {
           s.bookingConfig?.enabled ||
           s.storeVisitConfig?.enabled
         );
+        if (!isMounted()) return;
         setSalons(bookable.length > 0 ? bookable : allStores.slice(0, 20));
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -149,6 +153,7 @@ function BookAppointmentPage() {
           const hour = parseInt(s.time.split(':')[0]);
           return hour >= 9 && hour <= 20;
         });
+        if (!isMounted()) return;
         setTimeSlots(serviceSlots);
         const firstAvailable = serviceSlots.find(s => s.available);
         if (firstAvailable) setSelectedTime(firstAvailable.time);
@@ -159,9 +164,11 @@ function BookAppointmentPage() {
         '12:00', '13:00', '14:00', '14:30', '15:00', '15:30',
         '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00',
       ].map(t => ({ time: t, available: true, remainingCapacity: 10 }));
+      if (!isMounted()) return;
       setTimeSlots(fallback);
       setSelectedTime('10:00');
     } finally {
+      if (!isMounted()) return;
       setIsLoadingAvailability(false);
     }
   }, []);
@@ -219,6 +226,7 @@ function BookAppointmentPage() {
       });
 
       if (res.success) {
+        if (!isMounted()) return;
         setBookingId(res.data?._id || null);
         setBookingNumber(res.data?.bookingNumber || null);
         setStep('confirm');
@@ -228,6 +236,7 @@ function BookAppointmentPage() {
     } catch (err: any) {
       platformAlertSimple('Error', err?.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };
@@ -354,7 +363,6 @@ function BookAppointmentPage() {
             renderItem={renderStoreCard}
             contentContainerStyle={styles.storeList}
             showsVerticalScrollIndicator={false}
-            estimatedItemSize={100}
           />
         )}
       </SafeAreaView>

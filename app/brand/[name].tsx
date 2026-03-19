@@ -27,6 +27,7 @@ import { DetailPageSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Brand configurations
@@ -84,6 +85,7 @@ interface Product {
 }
 
 const BrandPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { name } = useLocalSearchParams<{ name: string }>();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -132,14 +134,19 @@ const BrandPage: React.FC = () => {
       });
 
       if (response.success && response.data?.products) {
+        if (!isMounted()) return;
         setProducts(response.data.products.map(transformProduct));
       } else {
+        if (!isMounted()) return;
         setProducts([]);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load products');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [brandConfig.tags]);
@@ -203,6 +210,7 @@ const BrandPage: React.FC = () => {
       </LinearGradient>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

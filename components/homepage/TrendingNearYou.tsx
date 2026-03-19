@@ -15,6 +15,7 @@ import { useRouter } from 'expo-router';
 import { storesApi } from '@/services/storesApi';
 import { useCurrentRegionId } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Web Video Component - renders native HTML5 video on web platform
 const WebVideoPlayer: React.FC<{ uri: string; poster?: string }> = ({ uri, poster }) => {
@@ -104,6 +105,7 @@ const AutoPlayVideo: React.FC<{
   const videoRef = useRef<Video>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showPoster, setShowPoster] = useState(true);
+  const isMounted = useIsMounted();
 
   // Cleanup video resources on unmount
   useEffect(() => {
@@ -117,6 +119,7 @@ const AutoPlayVideo: React.FC<{
       if (isLoaded && videoRef.current) {
         try {
           await videoRef.current.playAsync();
+          if (!isMounted()) return;
           setShowPoster(false);
         } catch (err) {
         }
@@ -297,13 +300,16 @@ const TrendingNearYou: React.FC<TrendingNearYouProps> = ({
         const transformedStores = response.data.stores
           .filter((store: any) => store && store._id) // Filter out undefined/null stores
           .map(transformStoreData);
+        if (!isMounted()) return;
         setStores(transformedStores);
       } else {
         setError(response.error || 'Failed to load trending stores');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err?.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, []);

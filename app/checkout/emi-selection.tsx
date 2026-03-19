@@ -20,6 +20,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface EMIOption {
   tenure: number;
@@ -47,6 +48,7 @@ const getDefaultBanks = (currencySymbol: string): Bank[] => [
 ];
 
 function EMISelectionPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const amount = parseInt(params.amount as string) || 50000;
@@ -65,6 +67,7 @@ function EMISelectionPage() {
       } catch {
         // Fallback to hardcoded list — already set as default
       } finally {
+        if (!isMounted()) return;
         setLoadingBanks(false);
       }
     };

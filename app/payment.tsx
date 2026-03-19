@@ -32,6 +32,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { FormPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Initialize Stripe lazily — SDK is only loaded when this promise is first awaited
 const stripePromise = getStripePromise(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
@@ -81,6 +82,7 @@ function PaymentPage() {
   const [processingStatus, setProcessingStatus] = useState('Initiating payment...');
   const lastPaymentRef = useRef<PaymentResponse | null>(null);
   const pollingAbortedRef = useRef(false);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     return () => { pollingAbortedRef.current = true; };
@@ -125,6 +127,7 @@ function PaymentPage() {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoadingService(false);
     }
   };
@@ -172,6 +175,7 @@ function PaymentPage() {
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load payment methods. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -258,11 +262,14 @@ function PaymentPage() {
         throw new Error('No client secret returned from payment gateway');
       }
 
+      if (!isMounted()) return;
       setStripeClientSecret(clientSecret);
+      if (!isMounted()) return;
       setShowStripeCardModal(true);
     } catch (error) {
       platformAlertSimple('Payment Failed', error instanceof Error ? error.message : 'Payment initiation failed');
     } finally {
+      if (!isMounted()) return;
       setIsProcessing(false);
     }
   };
@@ -314,6 +321,7 @@ function PaymentPage() {
       if (!paymentData) throw new Error('Failed to create payment');
 
       lastPaymentRef.current = paymentData;
+      if (!isMounted()) return;
       setProcessingStatus('Waiting for payment confirmation...');
 
       // Poll for real status from backend (aborts if component unmounts)
@@ -349,9 +357,12 @@ function PaymentPage() {
       }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Payment failed. Please try again.';
+      if (!isMounted()) return;
       setPaymentError(errorMsg);
+      if (!isMounted()) return;
       setCurrentStep('failed');
     } finally {
+      if (!isMounted()) return;
       setIsProcessing(false);
     }
   };

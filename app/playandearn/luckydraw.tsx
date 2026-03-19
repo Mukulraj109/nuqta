@@ -21,6 +21,7 @@ import { useRezBalance, useRefreshWallet, useAdjustBalance } from '@/stores/sele
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -120,6 +121,7 @@ const LuckyDraw = () => {
   const [error, setError] = useState<string | null>(null);
   const spinValue = useRef(new Animated.Value(0)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
+  const isMounted = useIsMounted();
 
   const prizes: Prize[] = [
     { id: 1, name: '1000 Coins', value: 1000, icon: '💰', chance: 5, color: [COLORS.amber, COLORS.amberDark] },
@@ -147,6 +149,7 @@ const LuckyDraw = () => {
       } catch (err) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -197,8 +200,11 @@ const LuckyDraw = () => {
           await refreshWallet();
           await gamificationActions.syncCoinsFromWallet();
         } else {
+          if (!isMounted()) return;
           setSpinning(false);
+          if (!isMounted()) return;
           setError(response.error || 'Failed to get spin result');
+          if (!isMounted()) return;
           setGameState('error');
         }
       }, 3000);
@@ -245,7 +251,11 @@ const LuckyDraw = () => {
         </Pressable>
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         <View style={styles.content}>
           {/* Hero */}
           <LinearGradient
@@ -348,7 +358,6 @@ const LuckyDraw = () => {
               <Pressable
                 onPress={() => router.push('/playandearn' as any)}
                 style={styles.secondaryAction}
-               
               >
                 <Ionicons name="arrow-back" size={18} color={COLORS.textMuted} />
                 <Text style={styles.secondaryActionText}>Back to Games</Text>
@@ -373,7 +382,6 @@ const LuckyDraw = () => {
               <Pressable
                 onPress={() => router.push('/playandearn' as any)}
                 style={styles.secondaryAction}
-               
               >
                 <Ionicons name="arrow-back" size={18} color={COLORS.textMuted} />
                 <Text style={styles.secondaryActionText}>Back to Games</Text>

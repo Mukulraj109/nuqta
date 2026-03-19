@@ -23,6 +23,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const NUQTA_COIN = BRAND.COIN_IMAGE;
 
 const GAME_TYPE_ROUTES: Record<string, string> = {
@@ -72,6 +73,7 @@ const TournamentDetail = () => {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const { onLeaderboardUpdate, onScoreUpdate } = useTournamentSocket(id || null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     const unsubLeaderboard = onLeaderboardUpdate((data) => {
@@ -124,12 +126,16 @@ const TournamentDetail = () => {
         else setError('Tournament not found');
         if (leaderboardRes.data) setLeaderboard(Array.isArray(leaderboardRes.data) ? leaderboardRes.data : []);
         if (myRankRes.data) {
+          if (!isMounted()) return;
           setMyRank(myRankRes.data);
+          if (!isMounted()) return;
           setIsJoined(true); // If we have rank data, user has joined
         }
       } catch (err) {
+        if (!isMounted()) return;
         setError('Failed to load tournament');
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -166,6 +172,7 @@ const TournamentDetail = () => {
     } catch (err: any) {
       platformAlertSimple('Error', err.message || 'Failed to join tournament');
     } finally {
+      if (!isMounted()) return;
       setJoining(false);
     }
   };
@@ -204,7 +211,8 @@ const TournamentDetail = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
         {/* Hero Header */}
         <LinearGradient
           colors={[colors.nileBlue, '#234B6B']}

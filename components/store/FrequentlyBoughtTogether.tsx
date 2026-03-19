@@ -17,6 +17,7 @@ import ProductVariantModal, { VariantSelection } from '@/components/cart/Product
 import productsService from '@/services/productsApi';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 export interface BundleProduct extends ProductItem {
   bundleDiscount?: number; // Additional discount when bundled
@@ -43,6 +44,7 @@ function FrequentlyBoughtTogether({
   const [variantModalVisible, setVariantModalVisible] = useState(false);
   const [pendingProduct, setPendingProduct] = useState<ProductItem | null>(null);
   const [pendingVariant, setPendingVariant] = useState<VariantSelection | null>(null);
+  const isMounted = useIsMounted();
 
   const cartActions = useCartActions();
   const { showSuccess, showError } = useToast();
@@ -134,6 +136,7 @@ function FrequentlyBoughtTogether({
             purchaseCorrelation: 0.8,
           }));
 
+        if (!isMounted()) return;
         setBundleProducts(products);
       } else {
         // No mock data - just show empty if API returns nothing
@@ -141,8 +144,10 @@ function FrequentlyBoughtTogether({
       }
     } catch (error) {
       // No mock data on error - just show empty
+      if (!isMounted()) return;
       setBundleProducts([]);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -328,6 +333,7 @@ function FrequentlyBoughtTogether({
     } catch (error) {
       showError('Failed to add items to cart');
     } finally {
+      if (!isMounted()) return;
       setAddingToCart(false);
     }
   };
@@ -382,6 +388,7 @@ function FrequentlyBoughtTogether({
     } catch (error) {
       showError('Failed to add item to cart');
     } finally {
+      if (!isMounted()) return;
       setPendingProduct(null);
       setPendingVariant(null);
       setAddingToCart(false);

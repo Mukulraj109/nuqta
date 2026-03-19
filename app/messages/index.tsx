@@ -24,8 +24,10 @@ import { Conversation, ConversationFilter } from '@/types/messaging.types';
 import { useSocket } from '@/contexts/SocketContext';
 import { MessagingSocketEvents } from '@/types/messaging.types';
 import { ChatSkeleton } from '@/components/skeletons';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function MessagesIndexPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { socket } = useSocket();
 
@@ -60,21 +62,30 @@ function MessagesIndexPage() {
         const newConversations = response.data.conversations;
 
         if (append) {
+          if (!isMounted()) return;
           setConversations(prev => [...prev, ...newConversations]);
         } else {
+          if (!isMounted()) return;
           setConversations(newConversations);
         }
 
+        if (!isMounted()) return;
         setHasMore(response.data.pagination.current < response.data.pagination.pages);
+        if (!isMounted()) return;
         setCurrentPage(page);
+        if (!isMounted()) return;
         setTotalUnread(response.data.summary.unreadCount);
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to load conversations');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError(err instanceof Error ? err.message : 'Failed to load conversations');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [searchQuery, activeFilter]);

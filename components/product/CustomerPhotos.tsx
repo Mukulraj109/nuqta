@@ -14,6 +14,7 @@ import { Button } from '@/components/ui';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 /**
  * Customer Photo Interface
@@ -71,6 +72,7 @@ function CustomerPhotos({
 }: CustomerPhotosProps) {
   const [selectedPhoto, setSelectedPhoto] = useState<CustomerPhoto | null>(null);
   const [uploading, setUploading] = useState(false);
+  const isMounted = useIsMounted();
 
   /**
    * Request media library permissions
@@ -128,6 +130,7 @@ function CustomerPhotos({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to upload photo. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setUploading(false);
     }
   };

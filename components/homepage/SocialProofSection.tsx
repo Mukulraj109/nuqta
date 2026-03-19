@@ -14,6 +14,7 @@ import * as Location from 'expo-location';
 import socialProofApi from '@/services/socialProofApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -67,6 +68,7 @@ const SocialProofSection: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userCity, setUserCity] = useState<string>('');
+  const isMounted = useIsMounted();
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const slideAnim = useRef(new Animated.Value(0)).current;
@@ -96,6 +98,7 @@ const SocialProofSection: React.FC = () => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
+        if (!isMounted()) return;
         setIsLoading(false);
         return;
       }
@@ -108,6 +111,7 @@ const SocialProofSection: React.FC = () => {
       try {
         const geocode = await Location.reverseGeocodeAsync({ latitude, longitude });
         city = geocode?.[0]?.city || geocode?.[0]?.region || '';
+        if (!isMounted()) return;
         setUserCity(city);
       } catch (geocodeError) {
         // Geocoding not available, continue without city name
@@ -122,6 +126,7 @@ const SocialProofSection: React.FC = () => {
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setActivities(response.data.activities || []);
         setStoreAggregates(response.data.storeAggregates || []);
         setCityWideStats(response.data.cityWideStats || null);
@@ -129,6 +134,7 @@ const SocialProofSection: React.FC = () => {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);

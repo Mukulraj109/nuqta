@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  Image,
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
@@ -14,6 +13,7 @@ import { useRouter } from 'expo-router';
 import exploreApi, { FeaturedComparison } from '@/services/exploreApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -28,6 +28,7 @@ interface CompareOption {
 }
 
 const CompareDecide = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [comparison, setComparison] = useState<FeaturedComparison | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +46,7 @@ const CompareDecide = () => {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

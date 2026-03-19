@@ -24,6 +24,7 @@ import serviceCategoriesApi, {
 } from '@/services/serviceCategoriesApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_GAP = 12;
 const PARENT_PADDING = 16;
@@ -163,33 +164,44 @@ function ServiceCategoryPage() {
       if (response.success && response.data) {
         const { services: newServices, category: categoryData, pagination } = response.data;
 
+        if (!isMounted()) return;
         setCategory(categoryData as any);
 
         // Safely handle services array
         const servicesArray = Array.isArray(newServices) ? newServices : [];
 
         if (pageNum === 1) {
+          if (!isMounted()) return;
           setServices(servicesArray);
         } else {
+          if (!isMounted()) return;
           setServices(prev => [...prev, ...servicesArray]);
         }
 
         // Safely handle pagination
         const totalPages = pagination?.pages || 1;
         const currentPage = pagination?.page || 1;
+        if (!isMounted()) return;
         setHasMore(currentPage < totalPages);
+        if (!isMounted()) return;
         setPage(pageNum);
       } else {
+        if (!isMounted()) return;
         setError('Failed to load services');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load services');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [categorySlug, sortBy]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (categorySlug) {
@@ -576,6 +588,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: PARENT_PADDING,
+    paddingBottom: 120,
   },
   servicesGrid: {
     flexDirection: 'row',

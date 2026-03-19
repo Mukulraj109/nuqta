@@ -81,6 +81,7 @@ import logger from '@/utils/logger';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Constants
 const FORM_STORAGE_KEY = '@bill_upload_draft';
@@ -132,6 +133,7 @@ interface ToastConfig {
  * Main Bill Upload Component
  */
 function BillUploadPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const navigation = useNavigation();
   const { bonusCampaignSlug } = useLocalSearchParams<{ bonusCampaignSlug?: string }>();
@@ -246,8 +248,10 @@ function BillUploadPage() {
     try {
       // Request camera permissions
       const { status } = await ExpoCamera.Camera.requestCameraPermissionsAsync();
+      if (!isMounted()) return;
       setHasPermission(status === 'granted');
     } catch (e) {
+      if (!isMounted()) return;
       setHasPermission(false);
     }
 
@@ -339,6 +343,7 @@ function BillUploadPage() {
       logger.error('Error loading merchants:', error);
       showToast('Failed to load merchants', 'error');
     } finally {
+      if (!isMounted()) return;
       setIsLoadingMerchants(false);
     }
   };
@@ -503,6 +508,7 @@ function BillUploadPage() {
   const openCamera = async () => {
     if (hasPermission === null) {
       const { status } = await ExpoCamera.Camera.requestCameraPermissionsAsync();
+      if (!isMounted()) return;
       setHasPermission(status === 'granted');
       if (status !== 'granted') {
         showToast('Camera permission is required', 'error');
@@ -515,6 +521,7 @@ function BillUploadPage() {
       return;
     }
 
+    if (!isMounted()) return;
     setShowCamera(true);
   };
 
@@ -529,6 +536,7 @@ function BillUploadPage() {
         });
 
         if (photo && photo.uri) {
+          if (!isMounted()) return;
           setShowCamera(false);
 
           // Compress image before quality check
@@ -729,9 +737,11 @@ function BillUploadPage() {
           // Add to offline queue
           await addToQueue(uploadData, formData.billImage!);
 
+          if (!isMounted()) return;
           setShowProgressModal(false);
           await clearSavedFormData();
 
+          if (!isMounted()) return;
           setToast({
             visible: true,
             message: `Bill queued for upload when online. ${pendingCount + 1} bill(s) in queue.`,
@@ -755,6 +765,7 @@ function BillUploadPage() {
           return;
         } catch (queueError) {
           logger.error('❌ [BILL UPLOAD] Failed to add to queue:', queueError);
+          if (!isMounted()) return;
           setShowProgressModal(false);
           showToast('Failed to queue bill for upload. Please try again.', 'error');
           setIsValidating(false);
@@ -765,6 +776,7 @@ function BillUploadPage() {
       // Device is online - proceed with immediate upload
       const success = await billUploadHook.startUpload(uploadData);
 
+      if (!isMounted()) return;
       setShowProgressModal(false);
 
       if (success) {
@@ -772,6 +784,7 @@ function BillUploadPage() {
         await clearSavedFormData();
 
         // Show success toast with actions
+        if (!isMounted()) return;
         setToast({
           visible: true,
           message: 'Bill uploaded successfully! Your cashback will be credited after verification.',
@@ -795,6 +808,7 @@ function BillUploadPage() {
           ? getUserErrorMessage(billUploadHook.error.code as BillUploadErrorType)
           : 'Failed to upload bill';
 
+        if (!isMounted()) return;
         setToast({
           visible: true,
           message: errorMessage,
@@ -819,6 +833,7 @@ function BillUploadPage() {
                   onPress: async () => {
                     setShowProgressModal(true);
                     await billUploadHook.retryUpload();
+                    if (!isMounted()) return;
                     setShowProgressModal(false);
                   },
                 }
@@ -832,6 +847,7 @@ function BillUploadPage() {
       }
     } catch (error) {
       logger.error('Error uploading bill:', error);
+      if (!isMounted()) return;
       setShowProgressModal(false);
       showToast('An unexpected error occurred', 'error');
     } finally {

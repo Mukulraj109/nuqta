@@ -13,6 +13,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { Colors, Spacing, Gradients } from '@/constants/DesignSystem';
 import { SectionListSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function SupportHubPage() {
   const router = useRouter();
@@ -25,6 +26,7 @@ function SupportHubPage() {
     byStatus: {} as { [key: string]: number },
     byCategory: {} as { [key: string]: number },
   });
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadData();
@@ -40,19 +42,23 @@ function SupportHubPage() {
       ]);
 
       if (ticketsResponse.success && ticketsResponse.data) {
+        if (!isMounted()) return;
         setActiveTickets(ticketsResponse.data.tickets);
       }
 
       if (summaryResponse.success && summaryResponse.data) {
+        if (!isMounted()) return;
         setSummary(summaryResponse.data);
       }
 
       if (faqsResponse.success && faqsResponse.data) {
+        if (!isMounted()) return;
         setPopularFAQs(faqsResponse.data.faqs);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -60,6 +66,7 @@ function SupportHubPage() {
   const handleRefresh = async () => {
     setRefreshing(true);
     await loadData();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

@@ -57,7 +57,12 @@ class SubscriptionAPI {
       const response = await apiClient.get<SubscriptionTier[]>('/subscriptions/tiers');
       return response.data || [];
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] getAvailableTiers failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -73,7 +78,12 @@ class SubscriptionAPI {
 
       return subscription as CurrentSubscription;
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] getCurrentSubscription failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -99,13 +109,12 @@ class SubscriptionAPI {
 
       return response.data as { subscription: CurrentSubscription; paymentUrl: string };
     } catch (error: any) {
-
-      // Check if it's an authentication error
-      if (error.response?.status === 401 || error.response?.status === 403) {
-        throw new Error('Please log in to subscribe to a plan. You must be authenticated to purchase a subscription.');
-      }
-
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] subscribeToPlan failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -120,7 +129,12 @@ class SubscriptionAPI {
       const response = await apiClient.post<{ subscription: CurrentSubscription; proratedAmount: number }>('/subscriptions/upgrade', { newTier });
       return response.data as { subscription: CurrentSubscription; proratedAmount: number };
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] upgradeSubscription failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -145,7 +159,12 @@ class SubscriptionAPI {
       });
       return response.data;
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] initiateUpgrade failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -164,7 +183,12 @@ class SubscriptionAPI {
       });
       return response.data;
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] confirmUpgrade failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -180,7 +204,12 @@ class SubscriptionAPI {
       const response = await apiClient.post<{ subscription: CurrentSubscription; effectiveDate: string; creditAmount: number }>('/subscriptions/downgrade', { newTier });
       return response.data as { subscription: CurrentSubscription; effectiveDate: string; creditAmount: number };
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] downgradeSubscription failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -203,7 +232,12 @@ class SubscriptionAPI {
       });
       return response.data as { subscription: CurrentSubscription; accessUntil: string; reactivationEligibleUntil: string };
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] cancelSubscription failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -215,7 +249,12 @@ class SubscriptionAPI {
       const response = await apiClient.post<CurrentSubscription>('/subscriptions/renew');
       return response.data as CurrentSubscription;
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] renewSubscription failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -227,7 +266,12 @@ class SubscriptionAPI {
       const response = await apiClient.get<any>('/subscriptions/benefits');
       return response.data;
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] getSubscriptionBenefits failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -269,7 +313,12 @@ class SubscriptionAPI {
         isActive: boolean;
       };
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] getSubscriptionUsage failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -281,7 +330,12 @@ class SubscriptionAPI {
       const response = await apiClient.get<ValueProposition>(`/subscriptions/value-proposition/${tier}`);
       return response.data as ValueProposition;
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] getValueProposition failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -293,7 +347,12 @@ class SubscriptionAPI {
       const response = await apiClient.patch<CurrentSubscription>('/subscriptions/auto-renew', { autoRenew });
       return response.data as CurrentSubscription;
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] toggleAutoRenew failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -380,7 +439,12 @@ class SubscriptionAPI {
         };
       };
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] getBillingHistory failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -416,7 +480,12 @@ class SubscriptionAPI {
         lastPayment: string | null;
       };
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] getBillingSummary failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -428,7 +497,12 @@ class SubscriptionAPI {
       const response = await apiClient.get<Invoice>(`/billing/invoice/${transactionId}`);
       return response.data as Invoice;
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] getInvoice failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 
@@ -442,7 +516,12 @@ class SubscriptionAPI {
       });
       return response.data;
     } catch (error: any) {
-      throw error;
+      if (__DEV__) console.warn('[SubscriptionAPI] downloadInvoice failed:', error?.message);
+      return {
+        success: false,
+        message: error?.response?.data?.message || error?.message || 'Operation failed',
+        data: null,
+      } as any;
     }
   }
 }

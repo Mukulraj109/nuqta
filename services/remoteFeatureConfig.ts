@@ -108,7 +108,9 @@ class RemoteFeatureConfig {
         this.loaded = true;
 
         // Persist to AsyncStorage
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(response.data)).catch(() => {});
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(response.data)).catch((err) => {
+          if (__DEV__) console.warn('[FeatureConfig] Failed to persist flags:', err);
+        });
       }
     } catch (error) {
       // Non-blocking — use cached flags

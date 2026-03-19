@@ -17,6 +17,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { EVENT_COLORS } from '@/constants/EventColors';
 import StarRating from './StarRating';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface EventReviewFormProps {
   onSubmit: (data: { rating: number; title: string; review: string }) => Promise<void>;
@@ -40,6 +41,7 @@ const EventReviewForm: React.FC<EventReviewFormProps> = ({
   const [review, setReview] = useState(initialData?.review || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ rating?: string; title?: string; review?: string }>({});
+  const isMounted = useIsMounted();
 
   const validateForm = (): boolean => {
     const newErrors: typeof errors = {};
@@ -81,6 +83,7 @@ const EventReviewForm: React.FC<EventReviewFormProps> = ({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };

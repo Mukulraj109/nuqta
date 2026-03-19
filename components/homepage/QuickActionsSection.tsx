@@ -107,9 +107,19 @@ function QuickActionsSection({
           </View>
         );
       case 'wallet':
+        if (walletBalance > 0) {
+          return (
+            <View style={[styles.valuePill, { backgroundColor: greyBg }]}>
+              <Text style={[styles.valueNumber, { color: colors.primary[700] }]}>
+                {Math.floor(walletBalance).toLocaleString('en-IN')}
+              </Text>
+              <Text style={[styles.valueLabel, { color: colors.primary[700] }]}>RC</Text>
+            </View>
+          );
+        }
         return (
           <View style={[styles.valuePill, styles.walletPill, { backgroundColor: greyBg }]}>
-            <Text style={[styles.valueText, { color: greyText }]}>Load</Text>
+            <Text style={[styles.valueText, { color: greyText }]}>Add</Text>
             <View style={[styles.plusButton, { backgroundColor: greyText }]}>
               <Ionicons name="add" size={10} color={colors.background.primary} />
             </View>

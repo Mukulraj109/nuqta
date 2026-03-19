@@ -30,6 +30,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -64,6 +65,7 @@ interface FlashSale {
 }
 
 function FlashSaleDetailPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const isAuthenticated = useIsAuthenticated();
@@ -136,15 +138,20 @@ function FlashSaleDetailPage() {
       const response = await realOffersApi.getFlashSaleById(flashSaleId);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setFlashSale(response.data);
+        if (!isMounted()) return;
         setImageError(false);
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Failed to load flash sale details');
       }
     } catch (error) {
       logger.error('Error loading flash sale details:', error);
+      if (!isMounted()) return;
       setError('Failed to load flash sale details');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -153,7 +160,9 @@ function FlashSaleDetailPage() {
     if (!flashSale?.promoCode) return;
 
     await Clipboard.setStringAsync(flashSale.promoCode);
+    if (!isMounted()) return;
     setCopiedCode(true);
+    if (!isMounted()) return;
     setTimeout(() => setCopiedCode(false), 2000);
   };
 
@@ -218,6 +227,7 @@ function FlashSaleDetailPage() {
         error.message || 'Failed to initiate payment. Please try again.'
       );
     } finally {
+      if (!isMounted()) return;
       setIsProcessingPayment(false);
     }
   };
@@ -676,6 +686,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: 120,
   },
   loadingGradient: {
     flex: 1,

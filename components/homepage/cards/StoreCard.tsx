@@ -448,7 +448,11 @@ function StoreCard({
           <View style={styles.footer}>
             <View style={styles.cashbackContainer}>
               <ThemedText style={styles.cashbackText}>
-                Up to {store.cashback?.percentage || 10}% cash back
+                {(() => {
+                  const pct = store.cashback?.percentage || 10;
+                  const est = Math.round((pct / 100) * 1000);
+                  return `Save ~${currencySymbol}${est.toLocaleString()} on ${currencySymbol}1,000`;
+                })()}
               </ThemedText>
             </View>
 

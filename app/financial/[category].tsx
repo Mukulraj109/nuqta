@@ -17,6 +17,7 @@ import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 
 // Fallback data
@@ -30,6 +31,7 @@ const fallbackCategoryData: Record<string, any> = {
 };
 
 const FinancialCategoryPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { category } = useLocalSearchParams<{ category: string }>();
   const { trackEvent, trackScreen } = useComprehensiveAnalytics();
@@ -62,8 +64,10 @@ const FinancialCategoryPage: React.FC = () => {
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setServices(response.data.services);
         if (response.data.category) {
+          if (!isMounted()) return;
           setCategoryInfo({
             _id: response.data.category._id,
             id: response.data.category.slug,
@@ -90,7 +94,9 @@ const FinancialCategoryPage: React.FC = () => {
         error: error.message || 'Unknown error',
       });
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [categorySlug, selectedFilter, isOffline, trackEvent]);
@@ -164,7 +170,8 @@ const FinancialCategoryPage: React.FC = () => {
         </View>
       </LinearGradient>
 
-      <ScrollView 
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }} 
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} colors={[Colors.brand.purple]} />

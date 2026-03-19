@@ -23,6 +23,7 @@ import tableBookingApi from '@/services/tableBookingApi';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -64,6 +65,7 @@ interface DateItem {
 }
 
 function TableBookingPage() {
+  const isMounted = useIsMounted();
   const { storeId } = useLocalSearchParams();
   const router = useRouter();
   const backgroundColor = useThemeColor({}, 'background');
@@ -98,6 +100,7 @@ function TableBookingPage() {
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load store details');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -270,6 +273,7 @@ function TableBookingPage() {
     } catch (error: any) {
       platformAlertSimple('Booking Failed', error.message || 'Unable to create booking. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };
@@ -358,7 +362,7 @@ function TableBookingPage() {
         </View>
       </LinearGradient>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
         {/* Date Selection */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>

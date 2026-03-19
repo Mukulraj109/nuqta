@@ -20,6 +20,7 @@ import { useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -96,7 +97,6 @@ const AnimatedCoin: React.FC<{ coin: Coin; onCatch: () => void }> = ({ coin, onC
     <Pressable
       onPress={onCatch}
       style={[styles.coinButton, { left: `${coin.x}%`, top: `${coin.y}%` }]}
-     
     >
       <Animated.View style={{ transform: [{ scale: Animated.multiply(scaleAnim, pulseAnim) }] }}>
         <LinearGradient
@@ -176,6 +176,7 @@ const CoinHunt = () => {
         gameApi.getDailyLimits(),
         refreshWallet(),
       ]);
+      const isMounted = useIsMounted();
 
       if (limitsResponse.data) {
         const huntLimits = limitsResponse.data.coin_hunt;
@@ -185,8 +186,10 @@ const CoinHunt = () => {
         }
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load game data. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -234,9 +237,11 @@ const CoinHunt = () => {
         }
         await gamificationActions.syncCoinsFromWallet();
       } catch (err) {
+        if (!isMounted()) return;
         setTodayPlays(todayPlays + 1);
       }
     } else {
+      if (!isMounted()) return;
       setTodayPlays(todayPlays + 1);
     }
   };
@@ -281,8 +286,10 @@ const CoinHunt = () => {
       if (response.data?.sessionId) {
         setSessionId(response.data.sessionId);
       }
+      if (!isMounted()) return;
       setGameState('playing');
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to start the game. Please try again.');
     }
   };
@@ -336,7 +343,11 @@ const CoinHunt = () => {
         )}
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Start Screen */}
         {gameState === 'start' && (
           <View style={styles.content}>
@@ -598,7 +609,6 @@ const CoinHunt = () => {
               <Pressable
                 onPress={() => router.push('/playandearn' as any)}
                 style={styles.secondaryAction}
-               
               >
                 <Ionicons name="arrow-back" size={18} color={COLORS.textMuted} />
                 <Text style={styles.secondaryActionText}>Back to Games</Text>

@@ -22,6 +22,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { storesApi } from '@/services/storesApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   primaryGold: colors.warningScale[400],
@@ -36,6 +37,7 @@ const COLORS = {
 function StoreCard({ store, currencySymbol }: { store: any; currencySymbol: string }) {
   const router = useRouter();
   const [imageError, setImageError] = useState(false);
+  const isMounted = useIsMounted();
   const imageUri = store.banner?.[0] || store.banner || store.logo || store.image;
   const cashbackPercent = store.offers?.cashback || 0;
 
@@ -121,11 +123,13 @@ export default function GroceryFastDeliveryPage() {
           const timeB = parseInt(b.operationalInfo?.deliveryTime) || 60;
           return timeA - timeB;
         });
+        if (!isMounted()) return;
         setStores(fastStores);
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -135,6 +139,7 @@ export default function GroceryFastDeliveryPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchStores();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

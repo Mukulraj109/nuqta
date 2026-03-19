@@ -11,7 +11,6 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  Image,
   Platform,
   Dimensions,
   TextInput,
@@ -25,11 +24,11 @@ import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
-import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Booking types
@@ -131,6 +130,7 @@ const SAMPLE_CLASSES: FitnessClass[] = [
 ];
 
 const FitnessBookingPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -183,10 +183,12 @@ const FitnessBookingPage: React.FC = () => {
     try {
       const response = await apiClient.get(`/stores/${storeId}`);
       const storeData = (response.data as any)?.store || response.data;
+      if (!isMounted()) return;
       setStore(storeData);
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [storeId]);
@@ -316,17 +318,59 @@ const FitnessBookingPage: React.FC = () => {
     setSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Build booking date and time slot based on active tab
+      let bookingDate: string;
+      let timeSlot: { start: string; end: string };
+      let customerNotes = `Booking type: ${activeTab}`;
 
-      // TODO: Replace with actual booking API
-      // const response = await apiClient.post('/bookings/fitness', { ... });
+      switch (activeTab) {
+        case 'membership':
+          bookingDate = new Date().toISOString().split('T')[0];
+          timeSlot = { start: '09:00', end: '10:00' };
+          customerNotes += ` | Plan: ${selectedPlan?.name} (${selectedPlan?.duration})`;
+          break;
+        case 'classes':
+          bookingDate = selectedDate.toISOString().split('T')[0];
+          timeSlot = { start: selectedClass?.time || '09:00', end: selectedClass?.time || '10:00' };
+          customerNotes += ` | Class: ${selectedClass?.name} with ${selectedClass?.instructor}`;
+          break;
+        case 'trainer':
+          bookingDate = selectedTrainerDate.toISOString().split('T')[0];
+          timeSlot = { start: selectedTimeSlot || '09:00', end: selectedTimeSlot || '10:00' };
+          customerNotes += ` | Session type: ${sessionType}`;
+          break;
+        case 'daypass':
+          bookingDate = dayPassDate.toISOString().split('T')[0];
+          timeSlot = { start: '06:00', end: '22:00' };
+          customerNotes += ` | Day passes: ${dayPassCount}`;
+          break;
+        default:
+          bookingDate = new Date().toISOString().split('T')[0];
+          timeSlot = { start: '09:00', end: '10:00' };
+      }
 
+      customerNotes += ` | Customer: ${customerName}, Phone: ${customerPhone}`;
+      if (customerEmail) customerNotes += `, Email: ${customerEmail}`;
+
+      await apiClient.post('/service-bookings', {
+        serviceId: storeId,
+        bookingDate,
+        timeSlot,
+        serviceType: 'store',
+        customerNotes,
+        paymentMethod: 'online',
+      });
+
+      if (!isMounted()) return;
       setSubmitting(false);
+      if (!isMounted()) return;
       setShowSuccessModal(true);
-    } catch (error) {
+    } catch (error: any) {
+      if (!isMounted()) return;
       setSubmitting(false);
-      setErrorMessage('Failed to complete booking. Please try again.');
+      const message = error?.response?.data?.message || error?.message || 'Failed to complete booking. Please try again.';
+      if (!isMounted()) return;
+      setErrorMessage(message);
     }
   };
 

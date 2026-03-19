@@ -28,6 +28,7 @@ import { videoUploadService } from '@/services/videoUploadService';
 import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.config';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type ContentType = 'post' | 'reel' | 'story';
 
@@ -67,6 +68,7 @@ function UploadPage() {
 
     if (!result.canceled) {
       const newMedia = result.assets.map(a => a.uri);
+      if (!isMounted()) return;
       setMedia(prev => [...prev, ...newMedia].slice(0, contentType === 'reel' ? 1 : 10));
     }
   };
@@ -89,6 +91,7 @@ function UploadPage() {
   const [storeSearchResults, setStoreSearchResults] = useState<TaggedStore[]>([]);
   const [showStoreSearch, setShowStoreSearch] = useState(false);
   const [searchingStores, setSearchingStores] = useState(false);
+  const isMounted = useIsMounted();
 
   // Product search with debounce
   React.useEffect(() => {
@@ -204,16 +207,14 @@ function UploadPage() {
       } catch (error: any) {
         platformAlert('Error', 'Something went wrong. Please try again.');
       } finally {
+        if (!isMounted()) return;
         setUploading(false);
       }
       return;
     }
 
-    // For posts/stories — placeholder for now
-    setUploading(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setUploading(false);
-    router.back();
+    // Posts/stories upload — coming soon
+    platformAlert('Coming Soon', 'Post and story uploads will be available soon. You can upload reels now!');
   };
 
   return (
@@ -246,7 +247,11 @@ function UploadPage() {
         </View>
       </LinearGradient>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Content Type Selector */}
         <View style={styles.typeSelector}>
           {(['post', 'reel', 'story'] as ContentType[]).map(type => (

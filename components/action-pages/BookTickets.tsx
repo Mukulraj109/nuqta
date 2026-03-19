@@ -28,6 +28,7 @@ import { storesApi } from '@/services/storesApi';
 import { useAuthUser } from '@/stores/selectors';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   violet: colors.brand.purpleLight,
@@ -75,6 +76,7 @@ function BookTicketsPage() {
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string; service?: string }>();
   const user = useAuthUser();
 
+  const isMounted = useIsMounted();
   const [step, setStep] = useState<'venue' | 'details' | 'seats' | 'confirm'>(
     params.storeId ? 'details' : 'venue'
   );
@@ -126,11 +128,13 @@ function BookTicketsPage() {
           s.bookingType === 'SERVICE' || s.bookingType === 'CONSULTATION' ||
           s.bookingConfig?.enabled || s.storeVisitConfig?.enabled
         );
+        if (!isMounted()) return;
         setVenues(bookable.length > 0 ? bookable : allStores.slice(0, 20));
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -154,6 +158,7 @@ function BookTicketsPage() {
           const hour = parseInt(s.time.split(':')[0]);
           return hour >= 9 && hour <= 23;
         });
+        if (!isMounted()) return;
         setTimeSlots(eventSlots);
         const firstAvailable = eventSlots.find(s => s.available);
         if (firstAvailable) setSelectedTime(firstAvailable.time);
@@ -163,9 +168,11 @@ function BookTicketsPage() {
         '10:00', '11:00', '12:00', '13:00', '14:00', '15:00',
         '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00',
       ].map(t => ({ time: t, available: true, remainingCapacity: 50 }));
+      if (!isMounted()) return;
       setTimeSlots(fallback);
       setSelectedTime('18:00');
     } finally {
+      if (!isMounted()) return;
       setIsLoadingAvailability(false);
     }
   }, []);
@@ -218,6 +225,7 @@ function BookTicketsPage() {
       });
 
       if (res.success) {
+        if (!isMounted()) return;
         setBookingId(res.data?._id || null);
         setBookingNumber(res.data?.bookingNumber || null);
         setStep('confirm');
@@ -227,6 +235,7 @@ function BookTicketsPage() {
     } catch (err: any) {
       platformAlertSimple('Error', err?.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };
@@ -323,7 +332,7 @@ function BookTicketsPage() {
             <Text style={styles.emptySubtitle}>{searchQuery ? 'Try a different search term' : 'Check back later for booking options'}</Text>
           </View>
         ) : (
-          <FlashList data={filteredVenues} keyExtractor={(item) => item._id || item.id} renderItem={renderStoreCard} contentContainerStyle={styles.storeList} showsVerticalScrollIndicator={false} estimatedItemSize={110} />
+          <FlashList data={filteredVenues} keyExtractor={(item) => item._id || item.id} renderItem={renderStoreCard} contentContainerStyle={styles.storeList} showsVerticalScrollIndicator={false} />
         )}
       </SafeAreaView>
     );

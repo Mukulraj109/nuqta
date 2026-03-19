@@ -30,6 +30,7 @@ import { shouldCountView, recordView } from '@/utils/viewTracker';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -37,6 +38,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const FALLBACK_VIDEO_URL = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
 function UGCDetailScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const videoRef = useRef<Video | null>(null);
@@ -134,11 +136,14 @@ function UGCDetailScreen() {
           };
           setVideo(normalizedVideo);
         } else {
+          if (!isMounted()) return;
           setError('Video not found');
         }
       } catch (err) {
+        if (!isMounted()) return;
         setError('Failed to load video');
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     });
@@ -180,6 +185,7 @@ function UGCDetailScreen() {
           .then(response => {
             if (cancelled) return;
             if (response.success && response.data) {
+              if (!isMounted()) return;
               setIsFollowing(response.data.inWishlist || false);
             }
           })
@@ -203,6 +209,7 @@ function UGCDetailScreen() {
         wishlistApi.checkWishlistStatus('store', storeIdToCheck)
           .then(response => {
             if (response.success && response.data) {
+              if (!isMounted()) return;
               setIsFollowing(response.data.inWishlist || false);
             }
           })
@@ -227,6 +234,7 @@ function UGCDetailScreen() {
         } else if (video?.videoUrl) {
           // Auto-play when video is ready and screen is focused
           await videoRef.current.playAsync();
+          if (!isMounted()) return;
           setIsPlaying(true);
         }
       } catch (err) {
@@ -366,9 +374,11 @@ function UGCDetailScreen() {
         try {
           if (isPlaying) {
             await videoRef.current.pauseAsync();
+            if (!isMounted()) return;
             setIsPlaying(false);
           } else {
             await videoRef.current.playAsync();
+            if (!isMounted()) return;
             setIsPlaying(true);
           }
         } catch (err) {
@@ -461,7 +471,9 @@ function UGCDetailScreen() {
         setLikesCount(response.data.totalLikes ?? response.data.likeCount);
       }
     } catch (error) {
+      if (!isMounted()) return;
       setIsLiked(!isLiked);
+      if (!isMounted()) return;
       setLikesCount(prev => isLiked ? prev + 1 : Math.max(0, prev - 1));
     }
   }, [isAuthenticated, isLiked, video?._id, likeScale, router]);
@@ -483,13 +495,16 @@ function UGCDetailScreen() {
       const response = await realVideosApi.toggleBookmark(video._id);
 
       if (response?.success && response?.data) {
+        if (!isMounted()) return;
         setIsBookmarked(response.data.isBookmarked);
       } else if (response?.data?.isBookmarked !== undefined) {
+        if (!isMounted()) return;
         setIsBookmarked(response.data.isBookmarked);
       }
       // If API fails silently, keep the optimistic update
     } catch (error) {
       // Revert on error
+      if (!isMounted()) return;
       setIsBookmarked(isBookmarked);
     }
   }, [isAuthenticated, isBookmarked, video?._id, router]);
@@ -533,6 +548,7 @@ function UGCDetailScreen() {
       }
     } catch (error) {
       // Revert on error
+      if (!isMounted()) return;
       setIsFollowing(wasFollowing);
       showAlert('Error', wasFollowing ? 'Failed to unfollow' : 'Failed to follow');
     }
@@ -563,6 +579,7 @@ function UGCDetailScreen() {
         try {
           await realVideosApi.trackView(video._id);
           await recordView(video._id);
+          if (!isMounted()) return;
           setViewsCount(prev => prev + 1);
         } catch (error) {
           // Silently handle view tracking errors
@@ -694,6 +711,7 @@ function UGCDetailScreen() {
             if (videoRef.current) {
               try {
                 await videoRef.current.playAsync();
+                if (!isMounted()) return;
                 setIsPlaying(true);
               } catch (e) {
                 // Silently handle play errors
@@ -783,7 +801,12 @@ function UGCDetailScreen() {
       <View style={styles.socialActions}>
         {/* Creator Avatar */}
         <View style={styles.creatorAvatarContainer}>
-          <Pressable onPress={() => {}}>
+          <Pressable onPress={() => {
+            const creatorId = video?.creator?._id || (video?.creator as any)?.id;
+            if (creatorId) {
+              router.push(`/creator/${creatorId}` as any);
+            }
+          }}>
             <CachedImage
               source={creatorAvatar}
               style={styles.creatorAvatar}

@@ -37,6 +37,7 @@ import { useWalletData, useRezBalance, useTotalBalance, useBrandedCoins, useWall
 import priveApi, { TransactionItem } from '@/services/priveApi';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const WALLET_CACHE_KEY = 'prive_wallet_cache';
 
@@ -210,6 +211,7 @@ function PriveWalletScreen() {
   const [error, setError] = useState<string | null>(null);
   const [isStale, setIsStale] = useState(false);
   const [cachedCoins, setCachedCoins] = useState<{ total: number; rez: number; prive: number; branded: number } | null>(null);
+  const isMounted = useIsMounted();
 
   // Derive coin balances from WalletContext
   const priveCoin = walletData?.coins?.find((c: any) => c.type === 'prive');
@@ -279,9 +281,12 @@ function PriveWalletScreen() {
 
           if (isFirstPage) {
             const ids = new Set(newTransactions.map((t) => t.id));
+            if (!isMounted()) return;
             setTransactions(newTransactions);
+            if (!isMounted()) return;
             setSeenIds(ids);
           } else {
+            if (!isMounted()) return;
             setTransactions((prev) => {
               const deduped = newTransactions.filter((t) => !seenIds.has(t.id));
               const updatedIds = new Set(seenIds);
@@ -291,13 +296,18 @@ function PriveWalletScreen() {
             });
           }
 
+          if (!isMounted()) return;
           setCursor(pagination.nextCursor ?? undefined);
+          if (!isMounted()) return;
           setHasMore(pagination.hasMore ?? false);
         }
       } catch (err: any) {
+        if (!isMounted()) return;
         setError(err?.message || 'Failed to load transactions');
       } finally {
+        if (!isMounted()) return;
         setIsLoadingTransactions(false);
+        if (!isMounted()) return;
         setIsRefreshing(false);
       }
     },
@@ -311,6 +321,7 @@ function PriveWalletScreen() {
   const handleRefresh = async () => {
     setIsRefreshing(true);
     await Promise.all([refreshWallet(), fetchTransactions(undefined, true)]);
+    if (!isMounted()) return;
     setIsRefreshing(false);
   };
 

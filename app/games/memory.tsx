@@ -25,6 +25,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const CARD_EMOJIS = ['🍎', '🍋', '🍇', '🍒', '🌟', '🎯', '🎨', '🎵'];
 const GRID_SIZE = 4; // 4x4 = 16 cards = 8 pairs
@@ -60,6 +61,7 @@ function createDeck(): Card[] {
 }
 
 function MemoryPage() {
+  const isMounted = useIsMounted();
   const [gameState, setGameState] = useState<GameState>('idle');
   const [cards, setCards] = useState<Card[]>(createDeck());
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
@@ -109,6 +111,7 @@ function MemoryPage() {
         difficulty: 'easy',
       });
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setSessionId(response.data.sessionId || response.data._id || '');
       }
     } catch (error) {
@@ -117,15 +120,25 @@ function MemoryPage() {
 
     // Reset game state
     const newDeck = createDeck();
+    if (!isMounted()) return;
     setCards(newDeck);
+    if (!isMounted()) return;
     setFlippedCards([]);
+    if (!isMounted()) return;
     setMatches(0);
+    if (!isMounted()) return;
     setAttempts(0);
+    if (!isMounted()) return;
     setTimer(0);
+    if (!isMounted()) return;
     setCoinsEarned(0);
+    if (!isMounted()) return;
     setCanFlip(true);
+    if (!isMounted()) return;
     flipAnimations.forEach(anim => anim.setValue(0));
+    if (!isMounted()) return;
     setGameState('playing');
+    if (!isMounted()) return;
     setLoading(false);
   };
 
@@ -140,6 +153,7 @@ function MemoryPage() {
       });
       if (response.success && response.data) {
         const earned = response.data.coins || response.data.coinsEarned || 0;
+        if (!isMounted()) return;
         setCoinsEarned(earned);
         // Haptic feedback on coins earned
         if (earned > 0) {
@@ -387,7 +401,6 @@ function MemoryPage() {
             <Pressable
               onPress={handleBackPress}
               style={styles.headerBackButton}
-             
             >
               <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
             </Pressable>
@@ -445,6 +458,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: 120,
   },
   gradient: {
     flex: 1,

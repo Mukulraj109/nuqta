@@ -28,6 +28,7 @@ import eventsApiService from '@/services/eventsApi';
 import { alertOk } from '@/utils/alert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const C = Colors;
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -64,6 +65,7 @@ const STATUS_CONFIG: Record<string, { color: string; bg: string; icon: string }>
 };
 
 function MyEventsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const [activeTab, setActiveTab] = useState<TabType>('upcoming');
@@ -81,17 +83,22 @@ function MyEventsPage() {
       const result = await eventsApiService.getMyEvents(tab === 'favorites' ? 'favorites' : tab === 'past' ? 'past' : 'upcoming');
 
       if (tab === 'upcoming') {
+        if (!isMounted()) return;
         setUpcomingBookings(result?.bookings || []);
       } else if (tab === 'past') {
+        if (!isMounted()) return;
         setPastBookings(result?.bookings || []);
       } else {
         // Backend returns { events: [...], tab: 'favorites' } for favorites tab
+        if (!isMounted()) return;
         setFavorites(result?.events || result?.favorites || result?.bookings || []);
       }
     } catch (error) {
       alertOk('Error', 'Failed to load events. Pull down to refresh.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [isAuthenticated]);
@@ -141,6 +148,7 @@ function MyEventsPage() {
     } catch (error: any) {
       alertOk('Check-in Failed', error.message || 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setCheckingIn(null);
     }
   };

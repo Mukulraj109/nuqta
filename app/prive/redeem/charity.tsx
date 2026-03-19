@@ -18,6 +18,7 @@ import { useRefreshWallet, useGetCurrencySymbol } from '@/stores/selectors';
 import { CHARITIES, Charity, DONATION_AMOUNTS } from '@/constants/priveCatalog';
 import { coinToFiatValue } from '@/constants/priveConversion';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const generateIdempotencyKey = () => `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
 
@@ -33,6 +34,7 @@ function CharityScreen() {
   const [charities, setCharities] = useState<Charity[]>(CHARITIES);
   const [donationAmounts, setDonationAmounts] = useState<number[]>(DONATION_AMOUNTS);
   const [conversionRate, setConversionRate] = useState(0.15);
+  const isMounted = useIsMounted();
   useEffect(() => {
     (async () => {
       try {
@@ -45,6 +47,7 @@ function CharityScreen() {
           if (catalogRes.data.donationAmounts) setDonationAmounts(catalogRes.data.donationAmounts);
         }
         if (configRes.success && configRes.data?.conversionRates?.charity) {
+          if (!isMounted()) return;
           setConversionRate(configRes.data.conversionRates.charity);
         }
       } catch {
@@ -90,7 +93,9 @@ function CharityScreen() {
           });
 
           if (response.success && response.data) {
+            if (!isMounted()) return;
             setGeneratedVoucher(response.data.voucher);
+            if (!isMounted()) return;
             setShowVoucherModal(true);
             refresh();
             refreshWallet().catch(() => {});
@@ -100,6 +105,7 @@ function CharityScreen() {
         } catch (error: any) {
           platformAlertSimple('Error', error.message || 'Failed to process donation');
         } finally {
+          if (!isMounted()) return;
           setIsRedeeming(false);
         }
       },
@@ -133,7 +139,11 @@ function CharityScreen() {
           <Text style={styles.balanceAmount}>{availableCoins.toLocaleString()} coins</Text>
         </View>
 
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
           {/* Hero */}
           <View style={styles.heroCard}>
             <Text style={styles.heroIcon}>💝</Text>

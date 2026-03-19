@@ -10,6 +10,7 @@ import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
 import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Location {
   city: string;
@@ -29,6 +30,7 @@ const RelatedHotelsSection: React.FC<RelatedHotelsSectionProps> = ({ currentHote
   const locale = getLocale();
   const [relatedHotels, setRelatedHotels] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadRelatedHotels();
@@ -48,11 +50,13 @@ const RelatedHotelsSection: React.FC<RelatedHotelsSectionProps> = ({ currentHote
         const filtered = response.data.services
           .filter((hotel: any) => (hotel._id || hotel.id) !== currentHotelId)
           .slice(0, 5);
+        if (!isMounted()) return;
         setRelatedHotels(filtered);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

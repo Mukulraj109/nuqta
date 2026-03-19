@@ -112,7 +112,7 @@ export interface GiftReservation {
 }
 
 class WishlistSharingService {
-  private static readonly APP_DEEP_LINK = 'nuqta://wishlist/';
+  private static readonly APP_DEEP_LINK = 'rez://wishlist/';
   private static readonly WEB_BASE_URL = 'https://www.rezapp.com/wishlist/';
 
   /**

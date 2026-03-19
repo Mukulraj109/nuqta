@@ -14,12 +14,14 @@ import QRCode from 'react-native-qrcode-svg';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const QRCodePage = () => {
   const router = useRouter();
   const user = useAuthUser();
   const [activeTab, setActiveTab] = useState<'profile' | 'wallet'>('profile');
   const getCurrencySymbol = useGetCurrencySymbol();
+  const isMounted = useIsMounted();
   const currencySymbol = getCurrencySymbol();
 
   // Generate profile link
@@ -48,8 +50,7 @@ const QRCodePage = () => {
   };
 
   const handleScan = () => {
-    // TODO: Implement QR scanner
-    platformAlertSimple('Scan QR Code', 'QR code scanner will open camera to scan codes');
+    router.push('/pay-in-store' as any);
   };
 
   return (

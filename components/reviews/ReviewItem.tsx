@@ -15,6 +15,7 @@ import { Review } from '@/types/review.types';
 import reviewService from '@/services/reviewApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ReviewItemProps {
   review: Review;
@@ -47,6 +48,7 @@ function ReviewItem({
   const [isHelpful, setIsHelpful] = useState(false);
   const [helpfulCount, setHelpfulCount] = useState(review.helpful || 0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const isMounted = useIsMounted();
 
   // Get user info - handle different backend response formats
   const userName = review.user?.profile?.name || review.user?.name || 'Anonymous';
@@ -86,6 +88,7 @@ function ReviewItem({
       const response = await reviewService.markReviewHelpful(reviewId);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setIsHelpful(true);
         const newCount = response.data.helpful;
         setHelpfulCount(newCount);
@@ -94,6 +97,7 @@ function ReviewItem({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to mark review as helpful');
     } finally {
+      if (!isMounted()) return;
       setIsProcessing(false);
     }
   };

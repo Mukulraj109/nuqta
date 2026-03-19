@@ -24,6 +24,7 @@ import { TransactionListSkeleton } from '@/components/skeletons';
 import CashbackTimeline, { TimelineStep } from '@/components/wallet/CashbackTimeline';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface TransactionItemProps {
   transaction: TransactionResponse;
@@ -197,18 +198,24 @@ function TransactionsPage() {
 
       if (response.success && response.data) {
         if (page === 1) {
+          if (!isMounted()) return;
           setTransactions(response.data.transactions);
         } else {
+          if (!isMounted()) return;
           setTransactions(prev => [...prev, ...response.data!.transactions]);
         }
+        if (!isMounted()) return;
         setPagination(response.data.pagination);
       } else {
         throw new Error(response.error || 'Failed to load transactions');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError(err instanceof Error ? err.message : 'Failed to load transactions');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [filters]);
@@ -235,6 +242,7 @@ function TransactionsPage() {
     setFilters(prev => ({ ...prev, ...newFilters, page: 1 }));
     setShowFilters(false);
   }, []);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadTransactions();
@@ -404,6 +412,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: Spacing.base,
+    paddingBottom: 120,
   },
   transactionItem: {
     flexDirection: 'row',

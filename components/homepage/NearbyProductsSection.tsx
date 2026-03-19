@@ -13,6 +13,7 @@ import * as Location from 'expo-location';
 import { productApi, HomepageProduct } from '@/services/productApi';
 import HomepageProductCard from './cards/HomepageProductCard';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface NearbyProductsSectionProps {
   title?: string;
@@ -30,6 +31,7 @@ function NearbyProductsSection({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
   const [userLocation, setUserLocation] = useState<{
     longitude: number;
     latitude: number;
@@ -42,6 +44,7 @@ function NearbyProductsSection({
       const { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status !== 'granted') {
+        if (!isMounted()) return;
         setLocationError('Location permission denied');
         setLoading(false);
         return null;
@@ -57,9 +60,11 @@ function NearbyProductsSection({
         latitude: location.coords.latitude,
       };
 
+      if (!isMounted()) return;
       setUserLocation(coords);
       return coords;
     } catch (err) {
+      if (!isMounted()) return;
       setLocationError('Could not get your location');
       setLoading(false);
       return null;
@@ -80,13 +85,16 @@ function NearbyProductsSection({
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setProducts(response.data);
       } else {
         setError('Failed to load nearby products');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load nearby products');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [radius, limit]);
@@ -189,7 +197,7 @@ function NearbyProductsSection({
           keyExtractor={keyExtractor}
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.listContent}
+          contentContainerStyle={styles.listContent as any}
           estimatedItemSize={220}
           initialNumToRender={4}
           maxToRenderPerBatch={6}

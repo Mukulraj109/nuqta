@@ -29,12 +29,16 @@ import { HeaderBackButton } from '@/components/navigation/SafeBackButton';
 import { useReorder } from '@/hooks/useReorder';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type ProductStatus = 'all' | 'delivered' | 'in_transit' | 'cancelled';
 
 interface PurchasedProduct {
   id: string;
+  _id?: string;
   productId: string;
+  storeId?: string;
+  store?: { _id?: string; id?: string };
   orderId: string;
   name: string;
   image: string;
@@ -51,6 +55,7 @@ interface PurchasedProduct {
 }
 
 const MyProductsPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const navigation = useNavigation();
   const isAuthenticated = useIsAuthenticated();
@@ -144,22 +149,33 @@ const MyProductsPage = () => {
           }))
         );
         if (append) {
+          if (!isMounted()) return;
           setProducts(prev => [...prev, ...mappedProducts]);
         } else {
+          if (!isMounted()) return;
           setProducts(mappedProducts);
         }
+        if (!isMounted()) return;
         setPage(pageNum);
+        if (!isMounted()) return;
         setHasMore((response.data.orders?.length || 0) >= 20);
       } else {
+        if (!isMounted()) return;
         if (!append) setProducts([]);
+        if (!isMounted()) return;
         setHasMore(false);
       }
     } catch (error: any) {
+      if (!isMounted()) return;
       if (!append) setProducts([]);
+      if (!isMounted()) return;
       setHasMore(false);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [activeTab, authLoading, isAuthenticated]);
@@ -240,6 +256,7 @@ const MyProductsPage = () => {
               await refreshCart();
 
               // Show result modal with details
+              if (!isMounted()) return;
               setReorderModalData({
                 addedCount: validation.items.filter(item => item.isAvailable).length,
                 skippedCount: validation.unavailableItems.length,
@@ -248,11 +265,14 @@ const MyProductsPage = () => {
                   reason: item.reason
                 }))
               });
+              if (!isMounted()) return;
               setShowReorderModal(true);
 
               // If all items were added, navigate to cart
               if (validation.unavailableItems.length === 0) {
+                if (!isMounted()) return;
                 setTimeout(() => {
+                  if (!isMounted()) return;
                   setShowReorderModal(false);
                   router.push('/cart' as any);
                 }, 2000);
@@ -270,20 +290,25 @@ const MyProductsPage = () => {
               'An unexpected error occurred while reordering.'
             );
           } finally {
+            if (!isMounted()) return;
             setReorderingProductId(null);
           }
         },
         'Reorder'
       );
     } catch (error) {
+      if (!isMounted()) return;
       setReorderingProductId(null);
     }
   }, [reordering, reorderFull, validation, reorderError, refreshCart, router]);
 
   const handleReview = useCallback((product: PurchasedProduct) => {
-    // TODO: Navigate to review page
-
-    router.push('/ReviewPage' as any);
+    const storeId = product.storeId || product.store?._id || product.store?.id;
+    if (storeId) {
+      router.push(`/reviews/${storeId}?productId=${product._id || product.id}` as any);
+    } else {
+      router.push('/ReviewPage' as any);
+    }
   }, [router]);
 
   const renderProduct = useCallback(({ item }: { item: PurchasedProduct }) => {
@@ -627,6 +652,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: Spacing.base,
+    paddingBottom: 120,
   },
   productCard: {
     backgroundColor: Colors.background.primary,

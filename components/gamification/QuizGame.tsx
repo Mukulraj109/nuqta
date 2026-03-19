@@ -16,6 +16,7 @@ import { ThemedText } from '@/components/ThemedText';
 import gamificationAPI from '@/services/gamificationApi';
 import type { QuizGame as QuizGameType, QuizQuestion } from '@/types/gamification.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface QuizGameProps {
   difficulty?: 'easy' | 'medium' | 'hard';
@@ -32,6 +33,7 @@ function QuizGame({ difficulty, category, onGameComplete }: QuizGameProps) {
   const [score, setScore] = useState(0);
   const [totalCoins, setTotalCoins] = useState(0);
   const [lastTournamentUpdate, setLastTournamentUpdate] = useState<any>(null);
+  const isMounted = useIsMounted();
   const progressAnim = useRef(new Animated.Value(0)).current;
   const timerInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -47,8 +49,10 @@ function QuizGame({ difficulty, category, onGameComplete }: QuizGameProps) {
     try {
       const response = await gamificationAPI.startQuiz(difficulty, category);
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setGameData(response.data);
         if (response.data.questions.length > 0) {
+          if (!isMounted()) return;
           setCurrentQuestion(response.data.questions[0]);
           startTimer(response.data.questions[0].timeLimit);
         }
@@ -98,10 +102,12 @@ function QuizGame({ difficulty, category, onGameComplete }: QuizGameProps) {
       if (response.success && response.data) {
         const { isCorrect, coinsEarned, currentScore, nextQuestion, gameCompleted } = response.data;
         if ((response.data as any).tournamentUpdate) {
+          if (!isMounted()) return;
           setLastTournamentUpdate((response.data as any).tournamentUpdate);
         }
 
         // Update score and coins
+        if (!isMounted()) return;
         setScore(currentScore);
         if (coinsEarned > 0) {
           setTotalCoins((prev) => prev + coinsEarned);
@@ -119,6 +125,7 @@ function QuizGame({ difficulty, category, onGameComplete }: QuizGameProps) {
               if (gameCompleted) {
                 handleGameComplete();
               } else if (nextQuestion) {
+                if (!isMounted()) return;
                 setCurrentQuestion(nextQuestion);
                 setSelectedAnswer(null);
                 startTimer(nextQuestion.timeLimit);
@@ -130,6 +137,7 @@ function QuizGame({ difficulty, category, onGameComplete }: QuizGameProps) {
     } catch (error: any) {
       platformAlert('Error', error.message || 'Failed to submit answer');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };

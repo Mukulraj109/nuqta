@@ -495,17 +495,17 @@ class StoresService {
     return apiClient.get('/stores/categories');
   }
 
-  // Follow a store
+  // Follow/unfollow a store (toggle)
   async followStore(storeId: string): Promise<ApiResponse<{ message: string }>> {
-    return apiClient.post(`/stores/${storeId}/follow`);
+    return apiClient.post(`/favorites/store/${storeId}/toggle`);
   }
 
-  // Unfollow a store
+  // Unfollow a store (same toggle endpoint)
   async unfollowStore(storeId: string): Promise<ApiResponse<{ message: string }>> {
-    return apiClient.delete(`/stores/${storeId}/follow`);
+    return apiClient.post(`/favorites/store/${storeId}/toggle`);
   }
 
-  // Get user's followed stores
+  // Get user's followed/favorited stores
   async getFollowedStores(
     page: number = 1,
     limit: number = 20
@@ -518,7 +518,7 @@ class StoresService {
       limit: number;
     };
   }>> {
-    return apiClient.get('/stores/following', { page, limit });
+    return apiClient.get('/favorites/user/my-favorites', { type: 'store', page, limit });
   }
 
   // Check if user follows a store
@@ -526,7 +526,7 @@ class StoresService {
     following: boolean;
     followedAt?: string;
   }>> {
-    return apiClient.get(`/stores/${storeId}/follow-status`);
+    return apiClient.get(`/favorites/store/${storeId}/status`);
   }
 
   // Get store products

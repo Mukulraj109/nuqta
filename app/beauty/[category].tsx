@@ -25,6 +25,7 @@ import productsApi from '@/services/productsApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 
 // Category configuration with API tags
@@ -100,6 +101,7 @@ interface DisplayItem {
 }
 
 const BeautyCategoryPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { category } = useLocalSearchParams<{ category: string }>();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -174,11 +176,15 @@ const BeautyCategoryPage: React.FC = () => {
 
         if (response.success && response.data?.stores && response.data.stores.length > 0) {
           const transformedItems = response.data.stores.map(transformStoreToItem);
+          if (!isMounted()) return;
           setItems(transformedItems);
+          if (!isMounted()) return;
           setFilteredItems(transformedItems);
         } else {
           // No data found
+          if (!isMounted()) return;
           setItems([]);
+          if (!isMounted()) return;
           setFilteredItems([]);
         }
       } else {
@@ -190,19 +196,28 @@ const BeautyCategoryPage: React.FC = () => {
 
         if (response.success && response.data?.products && response.data.products.length > 0) {
           const transformedItems = response.data.products.map(transformProductToItem);
+          if (!isMounted()) return;
           setItems(transformedItems);
+          if (!isMounted()) return;
           setFilteredItems(transformedItems);
         } else {
+          if (!isMounted()) return;
           setItems([]);
+          if (!isMounted()) return;
           setFilteredItems([]);
         }
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load data');
+      if (!isMounted()) return;
       setItems([]);
+      if (!isMounted()) return;
       setFilteredItems([]);
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [category, config]);
@@ -352,6 +367,7 @@ const BeautyCategoryPage: React.FC = () => {
       </View>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

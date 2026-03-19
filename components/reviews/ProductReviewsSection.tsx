@@ -21,6 +21,7 @@ import ProductReviewForm from './ProductReviewForm';
 import type { Review } from '@/services/reviewsApi';
 import type { ReviewsResponse } from '@/services/reviewsApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ProductReviewsSectionProps {
   productId: string;
@@ -68,6 +69,7 @@ function ProductReviewsSection({
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [showSortModal, setShowSortModal] = useState(false);
   const [editingReview, setEditingReview] = useState<Review | null>(null);
+  const isMounted = useIsMounted();
 
   const handleWriteReview = () => {
     setShowReviewForm(true);
@@ -80,6 +82,7 @@ function ProductReviewsSection({
 
   const handleSubmitReview = async (data: any) => {
     await onSubmitReview(data);
+    if (!isMounted()) return;
     setShowReviewForm(false);
     setEditingReview(null);
   };

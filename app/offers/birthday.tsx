@@ -13,6 +13,7 @@ import {
   Pressable,
   StatusBar,
   Platform,
+  Share,
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
@@ -27,6 +28,7 @@ import apiClient from '@/services/apiClient';
 import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -40,6 +42,7 @@ interface BirthdayDeal {
 }
 
 function BirthdayRewardsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const user = useAuthUser();
@@ -72,6 +75,7 @@ function BirthdayRewardsPage() {
           description: offer.description || '',
           image: offer.images?.[0] || offer.store?.logo,
         }));
+        if (!isMounted()) return;
         setDeals(mapped);
       }
 
@@ -82,19 +86,24 @@ function BirthdayRewardsPage() {
         const now = new Date();
         const thisYearBday = new Date(now.getFullYear(), dob.getMonth(), dob.getDate());
         if (thisYearBday < now) {
+          if (!isMounted()) return;
           thisYearBday.setFullYear(thisYearBday.getFullYear() + 1);
         }
         const diffMs = thisYearBday.getTime() - now.getTime();
         const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
+        if (!isMounted()) return;
         setBirthdayDate(dob.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }));
+        if (!isMounted()) return;
         setDaysUntil(diffDays);
         // Birthday week = within 3 days before or after
+        if (!isMounted()) return;
         setBirthdayActive(diffDays <= 3 || diffDays >= 362);
       }
     } catch {
       // Silently handle — empty state will show
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [user]);
@@ -295,7 +304,14 @@ function BirthdayRewardsPage() {
               Invite friends & both get bonus coins
             </ThemedText>
           </View>
-          <Pressable style={styles.shareButton}>
+          <Pressable style={styles.shareButton} onPress={async () => {
+            try {
+              await Share.share({
+                message: `It's my birthday! Check out my birthday rewards on ${BRAND.APP_NAME}!`,
+                title: 'Birthday Rewards',
+              });
+            } catch (_e) {}
+          }}>
             <ThemedText style={styles.shareButtonText}>Share</ThemedText>
           </Pressable>
         </View>
@@ -305,8 +321,14 @@ function BirthdayRewardsPage() {
       <View style={styles.fixedCTA}>
         <Pressable
           style={styles.ctaButton}
-          onPress={() => {}}
-         
+          onPress={() => {
+            if (deals.length > 0) {
+              // Navigate to first unclaimed deal
+              const firstDeal = deals[0];
+              handleClaimGift(firstDeal);
+            }
+          }}
+
         >
           <LinearGradient
             colors={[colors.warningScale[400], colors.brand.pink]}

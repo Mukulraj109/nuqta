@@ -24,10 +24,12 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import offerCommentApi, { CommentableOffer, MyCommentItem } from '@/services/offerCommentApi';
 import { platformAlert } from '@/utils/platformAlert';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type TabType = 'offers' | 'my-comments';
 
 function OfferCommentsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('offers');
   const [offers, setOffers] = useState<CommentableOffer[]>([]);
@@ -47,6 +49,7 @@ function OfferCommentsPage() {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, []);
@@ -102,6 +105,7 @@ function OfferCommentsPage() {
     } catch (error: any) {
       platformAlert('Error', 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };
@@ -383,7 +387,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing['3xl'],
+    paddingBottom: 120,
   },
   offerCard: {
     backgroundColor: Colors.background.primary,

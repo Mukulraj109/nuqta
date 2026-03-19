@@ -49,7 +49,11 @@ function CoinPage() {
       </LinearGradient>
 
       {/* Cards */}
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scroll}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {coinCardImages.map((img, i) => (
           <View key={i} style={styles.cardWrap}>
             <Pressable style={styles.cardBtn}>

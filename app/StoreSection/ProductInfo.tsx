@@ -20,6 +20,7 @@ import LockProductSection from "@/components/product/LockProductSection";
 import { useLocation } from "@/contexts/LocationContext";
 import { useCartActions } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Haversine formula for distance calculation between two coordinates
 function calculateDistance(
@@ -84,6 +85,7 @@ export default memo(function ProductScreen({
   isLocked = false,
   onLockSuccess,
 }: ProductInfoProps) {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { state: locationState } = useLocation();
   const cartActions = useCartActions();
@@ -220,7 +222,10 @@ export default memo(function ProductScreen({
     setActive("book");
     const half = containerWidthRef.current / 2;
     animateTo(half);
-    // TODO: Implement booking flow
+    const storeId = dynamicData?.store?._id || dynamicData?.store?.id || dynamicData?.storeId;
+    if (storeId) {
+      router.push(`/booking?storeId=${storeId}` as any);
+    }
   };
 
   // If no productId, show loading state instead of returning null (to maintain hooks order)

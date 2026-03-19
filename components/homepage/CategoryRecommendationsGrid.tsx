@@ -16,6 +16,7 @@ import storesApi from '@/services/storesApi';
 import { ProductItem } from '@/types/homepage.types';
 import { useRecommendationTracking } from '@/contexts/RecommendationContext';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2; // 2 columns with padding
@@ -57,6 +58,7 @@ function CategoryRecommendationsGrid({
   const [recommendations, setRecommendations] = useState<RecommendationCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadRecommendations();
@@ -251,6 +253,7 @@ function CategoryRecommendationsGrid({
       // If we got data, use it
       if (cards.length > 0) {
         const finalCards = cards.slice(0, limit);
+        if (!isMounted()) return;
         setRecommendations(finalCards);
 
         // DIVERSITY FIX: Track shown items globally (Amazon/Flipkart strategy)
@@ -269,8 +272,10 @@ function CategoryRecommendationsGrid({
         setError('No recommendations available at the moment');
       }
     } catch (error) {
+      if (!isMounted()) return;
       setError('Failed to load recommendations');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

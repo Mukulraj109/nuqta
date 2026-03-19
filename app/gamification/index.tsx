@@ -20,10 +20,12 @@ import coinSyncService from '@/services/coinSyncService';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { platformAlertSimple } from '@/utils/platformAlert';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function GamificationDashboard() {
   const coinBalance = useRezBalance();
   const refreshWallet = useRefreshWallet();
+  const isMounted = useIsMounted();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState<'challenges' | 'achievements' | 'leaderboards'>('challenges');
@@ -48,9 +50,13 @@ function GamificationDashboard() {
         apiClient.get('/gamification/stats'),
       ]);
 
+      if (!isMounted()) return;
       setChallenges((challengesRes.data as any)?.data || []);
+      if (!isMounted()) return;
       setAchievements((achievementsRes.data as any)?.data || []);
+      if (!isMounted()) return;
       setStreaks((streaksRes.data as any)?.data || {});
+      if (!isMounted()) return;
       setStats((statsRes.data as any)?.data || {});
 
       // Refresh wallet balance via context
@@ -58,7 +64,9 @@ function GamificationDashboard() {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   };

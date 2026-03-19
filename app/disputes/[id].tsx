@@ -17,6 +17,7 @@ import { platformAlert } from '@/utils/platformAlert';
 import { colors, typography, spacing, borderRadius, shadows } from '@/constants/theme';
 import ScreenSkeleton from '@/components/common/ScreenSkeleton';
 import ScreenError from '@/components/common/ScreenError';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const STATUS_COLORS: Record<string, string> = {
   open: colors.error,
@@ -50,6 +51,7 @@ const REASON_LABELS: Record<string, string> = {
 };
 
 function DisputeDetailScreen() {
+  const isMounted = useIsMounted();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { isAuthenticated, authLoading } = useAuth();
@@ -70,11 +72,14 @@ function DisputeDetailScreen() {
       if (response.success && response.data) {
         setDispute(response.data as any);
       } else {
+        if (!isMounted()) return;
         setError('Dispute not found');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err?.message || 'Failed to load dispute');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

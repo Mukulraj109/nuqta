@@ -22,10 +22,12 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import logger from '@/utils/logger';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 function FlashSaleSuccessPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -66,9 +68,13 @@ function FlashSaleSuccessPage() {
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setVoucherCode(response.data.voucherCode);
+        if (!isMounted()) return;
         setPromoCode(response.data.promoCode);
+        if (!isMounted()) return;
         setExpiresAt(response.data.expiresAt);
+        if (!isMounted()) return;
         setAmount(response.data.amount);
 
         // Animate success
@@ -86,19 +92,24 @@ function FlashSaleSuccessPage() {
           }),
         ]).start();
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Payment verification failed');
       }
     } catch (err: any) {
       logger.error('Error verifying payment:', err);
+      if (!isMounted()) return;
       setError(err.message || 'Failed to verify payment');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
 
   const handleCopyCode = async (code: string) => {
     await Clipboard.setStringAsync(code);
+    if (!isMounted()) return;
     setCopiedCode(true);
+    if (!isMounted()) return;
     setTimeout(() => setCopiedCode(false), 2000);
   };
 

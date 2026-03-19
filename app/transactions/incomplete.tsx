@@ -23,6 +23,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const INCOMPLETE_STATUSES = ['pending', 'payment_failed', 'cancelled', 'payment_pending'];
 
 const IncompleteTransactionsPage = () => {
@@ -53,18 +54,23 @@ const IncompleteTransactionsPage = () => {
         const incompleteOrders = response.data.orders.filter((order: Order) =>
           INCOMPLETE_STATUSES.includes(order.status as any)
         );
+        if (!isMounted()) return;
         setOrders(incompleteOrders);
       } else {
         throw new Error(response.message || 'Failed to fetch orders');
       }
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || err.message || 'Failed to fetch incomplete transactions';
+      if (!isMounted()) return;
       setError(errorMessage);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
+  const isMounted = useIsMounted();
 
   React.useEffect(() => {
     fetchIncompleteOrders();
@@ -279,6 +285,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: Spacing.base,
+    paddingBottom: 120,
   },
   orderCard: {
     backgroundColor: Colors.background.primary,

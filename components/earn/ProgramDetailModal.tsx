@@ -36,6 +36,7 @@ import specialProgramApi, {
 import { platformAlert } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Typography, Shadows } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -64,6 +65,7 @@ export const ProgramDetailModal: React.FC<ProgramDetailModalProps> = ({
   const [activating, setActivating] = useState(false);
   const [eligibility, setEligibility] = useState<EligibilityResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   const fetchEligibility = useCallback(async () => {
     if (!programSlug) return;
@@ -72,13 +74,16 @@ export const ProgramDetailModal: React.FC<ProgramDetailModalProps> = ({
     try {
       const response = await specialProgramApi.checkEligibility(programSlug);
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setEligibility(response.data);
       } else {
         setError(response.message || 'Failed to check eligibility');
       }
     } catch (e) {
+      if (!isMounted()) return;
       setError('Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [programSlug]);
@@ -109,6 +114,7 @@ export const ProgramDetailModal: React.FC<ProgramDetailModalProps> = ({
     } catch (e) {
       platformAlert('Error', 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setActivating(false);
     }
   };

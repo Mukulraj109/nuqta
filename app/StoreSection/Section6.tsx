@@ -19,6 +19,7 @@ import {
 } from '@/constants/DesignSystem';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Section6Props {
   dynamicData?: {
@@ -36,6 +37,7 @@ interface Section6Props {
 }
 
 export default memo(function Section6({ dynamicData, cardType }: Section6Props) {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -84,11 +86,14 @@ export default memo(function Section6({ dynamicData, cardType }: Section6Props) 
       });
 
       if (response.success && response.data?.vouchers) {
+        if (!isMounted()) return;
         setVoucherCount(response.data.vouchers.length);
       } else {
+        if (!isMounted()) return;
         setVoucherCount(0);
       }
     } catch (error) {
+      if (!isMounted()) return;
       setVoucherCount(0);
     }
   };
@@ -105,17 +110,21 @@ export default memo(function Section6({ dynamicData, cardType }: Section6Props) 
       });
 
       if (response.success && response.data?.vouchers) {
+        if (!isMounted()) return;
         setVouchers(response.data.vouchers);
         // Update count from detailed fetch as well
+        if (!isMounted()) return;
         setVoucherCount(response.data.vouchers.length);
         // Auto-select first voucher if available
         if (response.data.vouchers.length > 0) {
+          if (!isMounted()) return;
           setSelectedVoucher(response.data.vouchers[0]);
         }
       }
     } catch (error) {
       // Silent fail - show empty state
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -167,6 +176,7 @@ export default memo(function Section6({ dynamicData, cardType }: Section6Props) 
         await fetchVoucherCount();
 
         // Close the details panel after successful add
+        if (!isMounted()) return;
         setShowDetails(false);
       } else {
         // Error haptic
@@ -179,6 +189,7 @@ export default memo(function Section6({ dynamicData, cardType }: Section6Props) 
       const errorMessage = error?.response?.data?.message || error?.message || 'Unable to add voucher. Please try again.';
       platformAlert('Error', errorMessage);
     } finally {
+      if (!isMounted()) return;
       setIsAddingVoucher(false);
     }
   };

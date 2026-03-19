@@ -21,6 +21,7 @@ import surveyApiService, { Survey, SurveyCategory, UserSurveyStats } from '@/ser
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 // Category emoji mapping
 const categoryEmojis: Record<string, string> = {
   'Shopping': '📦',
@@ -81,16 +82,22 @@ function SurveysPage() {
         surveyApiService.getCategories(),
         surveyApiService.getUserStats(),
       ]);
+      if (!isMounted()) return;
       setSurveys(surveysData);
+      if (!isMounted()) return;
       setCategories(categoriesData);
+      if (!isMounted()) return;
       setUserStats(statsData);
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [activeCategory]);
+  const isMounted = useIsMounted();
 
   // Initial load
   useEffect(() => {
@@ -175,6 +182,7 @@ function SurveysPage() {
 
         <ScrollView
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 120 }}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

@@ -23,6 +23,7 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const SETTINGS_STORAGE_KEY = 'app_settings';
 
@@ -59,6 +60,7 @@ function SettingsPage() {
   const router = useRouter();
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+  const isMounted = useIsMounted();
 
   // Load persisted settings on mount
   useEffect(() => {
@@ -72,6 +74,7 @@ function SettingsPage() {
       } catch (e) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setSettingsLoaded(true);
       }
     })();
@@ -123,6 +126,7 @@ function SettingsPage() {
       });
 
       if (result.success) {
+        if (!isMounted()) return;
         setSettings(prev => ({ ...prev, biometrics: true }));
         platformAlertSimple('Enabled', 'Biometric authentication has been enabled.');
       }
@@ -520,7 +524,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: Spacing.lg,
+    paddingBottom: 120,
   },
   section: {
     marginTop: Spacing.xl,

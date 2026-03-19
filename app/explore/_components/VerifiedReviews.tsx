@@ -13,10 +13,12 @@ import exploreApi, { VerifiedReview } from '@/services/exploreApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 
+import { useIsMounted } from '@/hooks/useIsMounted';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 const { width } = Dimensions.get('window');
 
 const VerifiedReviews = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -34,11 +36,14 @@ const VerifiedReviews = () => {
       setError(null);
       const response = await exploreApi.getVerifiedReviews({ limit: 3 });
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setReviews(response.data?.reviews || []);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load reviews');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

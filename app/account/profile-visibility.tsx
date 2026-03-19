@@ -21,6 +21,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 type VisibilityOption = 'PUBLIC' | 'FRIENDS' | 'PRIVATE';
 
 interface VisibilityOptionData {
@@ -56,6 +57,7 @@ const VISIBILITY_OPTIONS: VisibilityOptionData[] = [
 ];
 
 function ProfileVisibilityPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { privacySettings, updatePrivacySettings, isLoading } = useSecurity();
   const [selectedVisibility, setSelectedVisibility] = useState<VisibilityOption>('FRIENDS');
@@ -80,6 +82,7 @@ function ProfileVisibilityPage() {
         platformAlertSimple('Error', 'Failed to update profile visibility. Please try again.');
         // Revert on failure
         if (privacySettings) {
+          if (!isMounted()) return;
           setSelectedVisibility(privacySettings.profileVisibility);
         }
       }
@@ -87,6 +90,7 @@ function ProfileVisibilityPage() {
       platformAlertSimple('Error', 'Failed to update profile visibility. Please try again.');
       // Revert on failure
       if (privacySettings) {
+        if (!isMounted()) return;
         setSelectedVisibility(privacySettings.profileVisibility);
       }
     }
@@ -243,6 +247,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.base,
+    paddingBottom: 120,
   },
   loadingContainer: {
     flex: 1,

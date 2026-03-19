@@ -1,6 +1,7 @@
 import React, { useState, useEffect, ComponentType } from 'react';
 import { Platform } from 'react-native';
 import SectionLoader from './SectionLoader';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface LazyLoadWrapperProps {
   importFn: () => Promise<{ default: ComponentType<any> }>;
@@ -33,6 +34,7 @@ export default function LazyLoadWrapper({
 }: LazyLoadWrapperProps) {
   const [Component, setComponent] = useState<ComponentType<any> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     let isMounted = true;
@@ -41,11 +43,13 @@ export default function LazyLoadWrapper({
       try {
         const module = await importFn();
         if (isMounted) {
+          if (!isMounted()) return;
           setComponent(() => module.default);
           setIsLoading(false);
         }
       } catch (error) {
         if (isMounted) {
+          if (!isMounted()) return;
           setIsLoading(false);
         }
       }

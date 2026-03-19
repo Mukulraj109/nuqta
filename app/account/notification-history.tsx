@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import notificationService from '../../services/notificationService';
 import { NotificationListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface NotificationHistoryItem {
   id: string;
@@ -29,6 +30,7 @@ interface NotificationHistoryItem {
 const PAGE_LIMIT = 20;
 
 function NotificationHistoryScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -66,23 +68,32 @@ function NotificationHistoryScreen() {
         }));
 
         if (pageNum === 1) {
+          if (!isMounted()) return;
           setNotifications(transformedNotifications);
         } else {
+          if (!isMounted()) return;
           setNotifications(prev => [...prev, ...transformedNotifications]);
         }
 
+        if (!isMounted()) return;
         setPage(pageNum);
+        if (!isMounted()) return;
         setHasMore(transformedNotifications.length >= PAGE_LIMIT);
       } else {
         if (pageNum === 1) setNotifications([]);
+        if (!isMounted()) return;
         setHasMore(false);
       }
     } catch (error) {
       if (pageNum === 1) setNotifications([]);
+      if (!isMounted()) return;
       setHasMore(false);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   };
@@ -177,6 +188,7 @@ function NotificationHistoryScreen() {
       await notificationService.markAsRead([notificationId]);
       
       // Update local state
+      if (!isMounted()) return;
       setNotifications(prev => 
         prev.map(notification => 
           notification.id === notificationId 
@@ -195,12 +207,14 @@ function NotificationHistoryScreen() {
       await notificationService.markAsRead();
       
       // Update local state
+      if (!isMounted()) return;
       setNotifications(prev => 
         prev.map(notification => ({ ...notification, read: true }))
       );
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setMarkingAllAsRead(false);
     }
   };

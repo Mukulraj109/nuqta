@@ -309,7 +309,6 @@ const styles = StyleSheet.create({
   categoriesContent: {
     paddingHorizontal: Spacing.base,
     gap: 10,
-    paddingBottom: Spacing.md,
   },
   categoryPill: {
     flexDirection: 'row',
@@ -348,7 +347,7 @@ const styles = StyleSheet.create({
   },
   gridContent: {
     paddingTop: Spacing.sm,
-    paddingBottom: Spacing.xl,
+    paddingBottom: 120,
   },
   emptyContainer: {
     flex: 1,

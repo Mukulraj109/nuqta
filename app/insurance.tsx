@@ -33,6 +33,7 @@ import {
 } from '@/services/insuranceApi';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const TYPE_META: Record<string, { icon: string; color: string; label: string }> = {
   health: { icon: 'medkit', color: Colors.error, label: 'Health Insurance' },
@@ -44,6 +45,7 @@ const TYPE_META: Record<string, { icon: string; color: string; label: string }> 
 };
 
 function InsurancePage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -69,10 +71,12 @@ function InsurancePage() {
     (async () => {
       try {
         const data = await getInsuranceTypes();
+        if (!isMounted()) return;
         if (!cancelled) setTypes(data);
       } catch {
         // Types will remain empty, UI shows empty state
       } finally {
+        if (!isMounted()) return;
         if (!cancelled) setTypesLoading(false);
       }
     })();
@@ -85,10 +89,12 @@ function InsurancePage() {
     (async () => {
       try {
         const data = await getFeaturedPlans();
+        if (!isMounted()) return;
         if (!cancelled) setFeaturedPlans(data);
       } catch {
         // Featured will remain empty
       } finally {
+        if (!isMounted()) return;
         if (!cancelled) setFeaturedLoading(false);
       }
     })();
@@ -109,15 +115,21 @@ function InsurancePage() {
       });
 
       if (append) {
+        if (!isMounted()) return;
         setPlans((prev) => [...prev, ...result.plans]);
       } else {
+        if (!isMounted()) return;
         setPlans(result.plans);
       }
+      if (!isMounted()) return;
       setHasMore(pageNum < result.pagination.pages);
     } catch {
+      if (!isMounted()) return;
       if (!append) setPlans([]);
     } finally {
+      if (!isMounted()) return;
       setPlansLoading(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [selectedType]);
@@ -479,6 +491,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     flexGrow: 1,
+    paddingBottom: 120,
   },
   banner: {
     margin: Spacing.base,

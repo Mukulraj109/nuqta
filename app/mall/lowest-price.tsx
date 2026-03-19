@@ -25,6 +25,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import searchService from '@/services/searchApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface SellerOption {
   storeId: string;
@@ -55,6 +56,7 @@ const POPULAR_QUERIES = [
 ];
 
 function LowestPricePage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -85,12 +87,17 @@ function LowestPricePage() {
         (p: GroupedProduct) => p.sellers && p.sellers.length >= 2
       );
 
+      if (!isMounted()) return;
       setProducts(multiSellerProducts);
+      if (!isMounted()) return;
       setSummary(data?.summary || null);
     } catch (err) {
+      if (!isMounted()) return;
       setError('Unable to load price comparisons');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, []);

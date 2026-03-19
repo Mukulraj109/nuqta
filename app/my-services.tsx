@@ -21,6 +21,7 @@ import projectsService from '@/services/realProjectsApi';
 import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ServiceProject {
   id: string;
@@ -33,6 +34,7 @@ interface ServiceProject {
 }
 
 const MyServicesPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const authLoading = useAuthLoading();
@@ -78,15 +80,21 @@ const MyServicesPage = () => {
                  submission.content?.type === 'text' ? 'content' : 'review') as 'video' | 'content' | 'review'
         }));
 
+        if (!isMounted()) return;
         setProjects(mappedProjects);
       } else {
+        if (!isMounted()) return;
         setProjects([]);
       }
     } catch (error: any) {
+      if (!isMounted()) return;
       setProjects([]);
+      if (!isMounted()) return;
       setErrorMessage('Unable to load services. Pull to refresh.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [authLoading, isAuthenticated]);
@@ -149,8 +157,7 @@ const MyServicesPage = () => {
     <Pressable
       style={styles.projectCard}
       onPress={() => {
-        // TODO: Navigate to project details
-
+        router.push(`/earning-projects/${item._id || item.id}` as any);
       }}
      
     >

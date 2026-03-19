@@ -19,6 +19,7 @@ import * as ImagePicker from 'expo-image-picker';
 import paymentVerificationService from '@/services/paymentVerificationService';
 import { DocumentType, type KYCDocumentUpload } from '@/types/paymentVerification.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface KYCUploadModalProps {
   visible: boolean;
@@ -46,6 +47,7 @@ function KYCUploadModal({
   const [frontImage, setFrontImage] = useState<string | null>(null);
   const [backImage, setBackImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const isMounted = useIsMounted();
 
   const selectedDoc = DOCUMENT_TYPES.find(d => d.type === selectedDocType)!;
 
@@ -68,6 +70,7 @@ function KYCUploadModal({
       if (!result.canceled && result.assets[0]) {
         const imageUri = result.assets[0].uri;
         if (side === 'front') {
+          if (!isMounted()) return;
           setFrontImage(imageUri);
         } else {
           setBackImage(imageUri);
@@ -110,6 +113,7 @@ function KYCUploadModal({
       onError(error.message || 'Failed to upload documents');
       platformAlertSimple('Upload Failed', error.message || 'Failed to upload documents');
     } finally {
+      if (!isMounted()) return;
       setIsUploading(false);
     }
   };

@@ -15,6 +15,7 @@ import { StoreExperienceCard, StoreExperienceCardProps } from './cards/StoreExpe
 import { experiencesApi } from '@/services/experiencesApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Fallback store experience configurations generator - Nuqta palette
 const getFallbackStoreExperiences = (currencySymbol: string): StoreExperienceCardProps[] => [
@@ -78,6 +79,7 @@ const StoreExperiencesSection: React.FC<StoreExperiencesSectionProps> = memo(({
   const fallbackExperiences = getFallbackStoreExperiences(currencySymbol);
   const [isLoading, setIsLoading] = useState(true);
   const [experiences, setExperiences] = useState<StoreExperienceCardProps[]>(fallbackExperiences);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     const fetchExperiences = async () => {
@@ -102,11 +104,13 @@ const StoreExperiencesSection: React.FC<StoreExperiencesSectionProps> = memo(({
             } as StoreExperienceCardProps;
           });
 
+          if (!isMounted()) return;
           setExperiences(transformedExperiences);
         }
       } catch (error) {
         // Keep using fallback data
       } finally {
+        if (!isMounted()) return;
         setIsLoading(false);
       }
     };

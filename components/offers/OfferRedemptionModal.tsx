@@ -25,6 +25,7 @@ import { LightningDeal } from '@/types/offers.types';
 import realOffersApi from '@/services/realOffersApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -67,6 +68,7 @@ export const OfferRedemptionModal: React.FC<OfferRedemptionModalProps> = ({
   const [copySuccess, setCopySuccess] = useState(false);
   const [redeeming, setRedeeming] = useState(false);
   const [redemptionCode, setRedemptionCode] = useState<string | null>(null);
+  const isMounted = useIsMounted();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
@@ -120,6 +122,7 @@ export const OfferRedemptionModal: React.FC<OfferRedemptionModalProps> = ({
     if (!codeToCopy) return;
 
     try {
+      if (!isMounted()) return;
       await Clipboard.setStringAsync(codeToCopy);
       setCopySuccess(true);
 
@@ -141,6 +144,7 @@ export const OfferRedemptionModal: React.FC<OfferRedemptionModalProps> = ({
 
       if (response.success && response.data) {
         const { voucher } = response.data;
+        if (!isMounted()) return;
         setRedemptionCode(voucher.voucherCode || offer.promoCode);
 
         platformAlertSimple(
@@ -154,6 +158,7 @@ export const OfferRedemptionModal: React.FC<OfferRedemptionModalProps> = ({
       } else {
         // If API fails, still show the promo code if available
         if (offer.promoCode) {
+          if (!isMounted()) return;
           setRedemptionCode(offer.promoCode);
         } else {
           platformAlertSimple('Error', 'Failed to redeem offer. Please try again.');
@@ -162,12 +167,14 @@ export const OfferRedemptionModal: React.FC<OfferRedemptionModalProps> = ({
     } catch (error) {
       // Fallback to showing existing promo code
       if (offer.promoCode) {
+        if (!isMounted()) return;
         setRedemptionCode(offer.promoCode);
         platformAlertSimple('Promo Code', `Use code: ${offer.promoCode}`);
       } else {
         platformAlertSimple('Error', 'Failed to redeem offer. Please try again.');
       }
     } finally {
+      if (!isMounted()) return;
       setRedeeming(false);
     }
   };

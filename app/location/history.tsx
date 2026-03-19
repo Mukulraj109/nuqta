@@ -18,8 +18,10 @@ import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformA
 import { LocationHistoryEntry } from '@/types/location.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function LocationHistoryScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { locationHistory, isLoading, error, loadHistory, clearHistory } = useLocationHistory();
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -33,6 +35,7 @@ function LocationHistoryScreen() {
     try {
       await loadHistory();
     } finally {
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   };
@@ -183,6 +186,7 @@ function LocationHistoryScreen() {
           renderErrorState()
         ) : (
           <FlashList
+        contentContainerStyle={{ paddingBottom: 120 }}
             data={locationHistory}
             renderItem={renderHistoryItem}
             keyExtractor={(item, index) => `${item.timestamp.getTime()}-${index}`}

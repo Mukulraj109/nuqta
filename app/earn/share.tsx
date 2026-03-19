@@ -25,6 +25,7 @@ import { BRAND } from '@/constants/brand';
 import shareApi, { ShareableItem } from '../../services/shareApi';
 import { platformAlert } from '@/utils/platformAlert';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ShareableContent {
   id: string;
@@ -46,6 +47,7 @@ const SHARE_PLATFORMS = [
 ];
 
 function ShareToEarnPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [selectedContent, setSelectedContent] = useState<ShareableContent | null>(null);
   const [totalEarned, setTotalEarned] = useState(0);
@@ -63,7 +65,9 @@ function ShareToEarnPage() {
         ]);
 
         if (statsRes.data) {
+          if (!isMounted()) return;
           setTotalEarned(statsRes.data.totalCoinsEarned);
+          if (!isMounted()) return;
           setTotalShares(statsRes.data.totalShares);
         }
 
@@ -117,11 +121,13 @@ function ShareToEarnPage() {
               image: p.image || '',
             });
           });
+          if (!isMounted()) return;
           setShareableContent(items);
         }
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -164,8 +170,11 @@ function ShareToEarnPage() {
         });
       }
 
+      if (!isMounted()) return;
       setTotalEarned(prev => prev + content.coins);
+      if (!isMounted()) return;
       setTotalShares(prev => prev + 1);
+      if (!isMounted()) return;
       setSelectedContent(null);
     } catch (error) {
       // silently handle
@@ -400,7 +409,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing['3xl'],
+    paddingBottom: 120,
   },
   howItWorks: {
     backgroundColor: Colors.background.primary,

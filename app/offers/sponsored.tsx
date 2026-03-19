@@ -22,6 +22,7 @@ import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stor
 import apiClient from '@/services/apiClient';
 import { CachedImage } from '@/components/ui/CachedImage';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface BankOfferRaw {
   _id: string;
@@ -83,6 +84,7 @@ function mapBankOfferToSponsored(offer: BankOfferRaw, currencySymbol: string): S
 }
 
 function SponsoredCashbackPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -119,14 +121,19 @@ function SponsoredCashbackPage() {
         : rawOffers.length >= PAGE_LIMIT;
 
       if (append) {
+        if (!isMounted()) return;
         setOffers((prev) => [...prev, ...mapped]);
       } else {
+        if (!isMounted()) return;
         setOffers(mapped);
       }
+      if (!isMounted()) return;
       setHasMore(hasNextPage);
+      if (!isMounted()) return;
       setPage(pageNum);
     } catch (err: any) {
       if (!append) {
+        if (!isMounted()) return;
         setError(err?.message || 'Failed to load offers');
       }
     }
@@ -147,6 +154,7 @@ function SponsoredCashbackPage() {
     setPage(1);
     setHasMore(true);
     await fetchOffers(1, false);
+    if (!isMounted()) return;
     setRefreshing(false);
   }, [fetchOffers]);
 

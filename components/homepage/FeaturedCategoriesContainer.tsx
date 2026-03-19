@@ -5,6 +5,7 @@ import categoriesApi, { Category } from '@/services/categoriesApi';
 import CategoryProductsSection from './CategoryProductsSection';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface FeaturedCategoriesContainerProps {
   productsPerCategory?: number;
@@ -16,6 +17,7 @@ function FeaturedCategoriesContainer({
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   const fetchFeaturedCategories = useCallback(async () => {
     try {
@@ -26,13 +28,16 @@ function FeaturedCategoriesContainer({
 
       if (response.success && response.data && response.data.length > 0) {
         // Use whatever featured categories the API returns (up to 5)
+        if (!isMounted()) return;
         setCategories(response.data.slice(0, 5));
       } else {
         setError('Failed to load categories');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load categories');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, []);

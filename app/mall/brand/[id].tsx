@@ -31,6 +31,7 @@ import { MallBrand, BrandBadge, BrandTier } from '../../../types/mall.types';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const HERO_HEIGHT = SCREEN_HEIGHT * 0.35;
@@ -54,6 +55,7 @@ const TIER_COLORS: Record<BrandTier, { gradient: string[]; badge: string }> = {
 function BrandDetailPage() {
   const params = useLocalSearchParams<{ id: string }>();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -97,6 +99,7 @@ function BrandDetailPage() {
         } catch {}
       }
 
+      if (!isMounted()) return;
       setBrand(data);
     } catch (err: any) {
       // Try as store ID before showing error
@@ -107,9 +110,12 @@ function BrandDetailPage() {
           return;
         }
       } catch {}
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load brand');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [id]);
@@ -187,6 +193,7 @@ function BrandDetailPage() {
 
       <View style={styles.container}>
         <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           refreshControl={

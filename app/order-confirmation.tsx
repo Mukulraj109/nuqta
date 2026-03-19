@@ -28,8 +28,10 @@ import usePostOrderRewards from '@/hooks/usePostOrderRewards';
 import RewardsBreakdownCard from '@/components/rewards/RewardsBreakdownCard';
 import ConfettiOverlay from '@/components/ui/ConfettiOverlay';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function OrderConfirmationPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const orderId = params.orderId as string;
@@ -99,13 +101,17 @@ function OrderConfirmationPage() {
         // Haptic feedback on order confirmation
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
 
+        if (!isMounted()) return;
         setOrder(response.data);
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to load order details');
       }
     } catch (error) {
+      if (!isMounted()) return;
       setError(error instanceof Error ? error.message : 'Failed to load order');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

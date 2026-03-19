@@ -15,6 +15,7 @@ import bonusZoneApi, { BonusClaim } from '@/services/bonusZoneApi';
 import { TransactionListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ============================================
 // STATUS HELPERS
@@ -121,6 +122,7 @@ function ClaimRow({ claim, onPress }: { claim: BonusClaim; onPress: () => void }
 // ============================================
 
 function BonusZoneHistoryPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [claims, setClaims] = useState<BonusClaim[]>([]);
   const [loading, setLoading] = useState(true);
@@ -156,10 +158,14 @@ function BonusZoneHistoryPage() {
         setHasMore(pagination ? pagination.page < pagination.pages : false);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load claim history');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [activeFilter]);

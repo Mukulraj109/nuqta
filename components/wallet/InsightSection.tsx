@@ -12,9 +12,10 @@ import { colors } from '@/constants/theme';
 
 interface InsightSectionProps {
   walletData: WalletData;
+  currencySymbol?: string;
 }
 
-export const InsightSection: React.FC<InsightSectionProps> = ({ walletData }) => {
+export const InsightSection: React.FC<InsightSectionProps> = ({ walletData, currencySymbol = '₹' }) => {
   const rawEarned = walletData.savingsInsights?.thisMonth;
   const earned = Number.isFinite(rawEarned) ? rawEarned! : 0;
   const rawSaved = walletData.savingsInsights?.totalSaved;
@@ -35,23 +36,25 @@ export const InsightSection: React.FC<InsightSectionProps> = ({ walletData }) =>
         <View style={styles.row}>
           <InsightTile
             label="Earned This Month"
-            value={earned.toLocaleString()}
+            value={`${currencySymbol}${earned.toLocaleString('en-IN')}`}
             icon="arrow-down-circle"
             iconColor={colors.successScale[700]}
             trend={earned > 0 ? 'up' : 'neutral'}
           />
           <InsightTile
             label="Total Saved"
-            value={totalSaved.toLocaleString()}
+            value={`${currencySymbol}${totalSaved.toLocaleString('en-IN')}`}
             icon="wallet"
             iconColor={Colors.nileBlue}
           />
-          <InsightTile
-            label="Avg Per Visit"
-            value={avgPerVisit.toLocaleString()}
-            icon="analytics"
-            iconColor={colors.brand.indigo}
-          />
+          {avgPerVisit > 0 && (
+            <InsightTile
+              label="Avg Per Visit"
+              value={`${currencySymbol}${avgPerVisit.toLocaleString('en-IN')}`}
+              icon="analytics"
+              iconColor={colors.brand.indigo}
+            />
+          )}
         </View>
       )}
     </View>

@@ -24,6 +24,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -35,6 +36,7 @@ const sortOptions = [
 ];
 
 const ExploreHotPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -61,14 +63,19 @@ const ExploreHotPage = () => {
 
       if (response.success && response.data) {
         const products = response.data.products || [];
+        if (!isMounted()) return;
         setRawHotItems(products);
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to fetch hot deals');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
@@ -125,6 +132,7 @@ const ExploreHotPage = () => {
       }
     } catch (err) {
       // Revert on error
+      if (!isMounted()) return;
       setWishlistedIds(prev => {
         const next = new Set(prev);
         if (isWishlisted) {

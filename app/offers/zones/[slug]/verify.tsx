@@ -18,6 +18,7 @@ import apiClient from '@/services/apiClient';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Colors
 const COLORS = {
@@ -111,6 +112,7 @@ const ZONE_CONFIG: Record<string, {
 
 function ZoneVerifyScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
+  const isMounted = useIsMounted();
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -133,6 +135,7 @@ function ZoneVerifyScreen() {
       const response = await apiClient.get<any>(`/zones/${slug}/eligibility`);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setEligibility(response.data);
 
         // If already eligible, redirect to zone page
@@ -141,8 +144,10 @@ function ZoneVerifyScreen() {
         }
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to check eligibility');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [slug, router]);
@@ -175,11 +180,14 @@ function ZoneVerifyScreen() {
         platformAlertSimple('Verification Submitted', 'Your verification request has been submitted. You will be notified once it is reviewed.');
         router.back();
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Failed to submit verification');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to submit verification');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };
@@ -578,6 +586,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: Spacing.base,
     gap: Spacing.base,
+    paddingBottom: 120,
   },
   zoneCard: {
     borderRadius: BorderRadius.xl,

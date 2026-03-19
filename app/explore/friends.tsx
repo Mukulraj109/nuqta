@@ -21,6 +21,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -35,6 +36,7 @@ interface FriendItem {
 }
 
 const FriendsActivityPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -57,6 +59,7 @@ const FriendsActivityPage = () => {
       const response = await exploreApi.getCommunityActivity({ limit: 20 });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setActivities(response.data.activities || []);
 
         // Extract friends from activities
@@ -77,12 +80,16 @@ const FriendsActivityPage = () => {
             }
           }
         });
+        if (!isMounted()) return;
         setFriends(Array.from(friendsMap.values()));
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
@@ -422,6 +429,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: Spacing.base,
     minHeight: 300,
+    paddingBottom: 120,
   },
   centerContainer: {
     flex: 1,

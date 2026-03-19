@@ -23,6 +23,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -93,6 +94,7 @@ function getCategoryIcon(cat: string): string {
 
 // ─── Component ──────────────────────────────────────────────
 function DoubleCashbackPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -120,11 +122,15 @@ function DoubleCashbackPage() {
         const end = new Date(c.endTime).getTime();
         return c.isActive && start <= now && end > now;
       });
+      if (!isMounted()) return;
       setCampaigns(active);
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load campaigns');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
@@ -192,6 +198,7 @@ function DoubleCashbackPage() {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <StatusBar barStyle="light-content" />
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={{ flex: 1 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor={colors.background.primary} />}
         showsVerticalScrollIndicator={false}

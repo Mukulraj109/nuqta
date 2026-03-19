@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { experiencesApi, StoreExperience } from '@/services/experiencesApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ExperiencesSectionProps {
   categorySlug: string;
@@ -50,6 +51,7 @@ function ExperiencesSection({ categorySlug, pageConfig }: ExperiencesSectionProp
 
   const [experiences, setExperiences] = useState<StoreExperience[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   // Use pageConfig benefits if available, otherwise fall back to hardcoded defaults
   const benefits = pageConfig?.experienceBenefits?.length ? pageConfig.experienceBenefits : DEFAULT_EXPERIENCE_BENEFITS;
@@ -59,11 +61,13 @@ function ExperiencesSection({ categorySlug, pageConfig }: ExperiencesSectionProp
       setIsLoading(true);
       const response = await experiencesApi.getExperiences({ featured: true, limit: 10, category: categorySlug });
       if (response.success && response.data?.experiences) {
+        if (!isMounted()) return;
         setExperiences(response.data.experiences);
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [categorySlug]);

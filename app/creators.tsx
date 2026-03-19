@@ -19,6 +19,7 @@ import { useRouter } from 'expo-router';
 import creatorsApi, { Creator } from '@/services/creatorsApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -156,6 +157,7 @@ const CreatorCard = React.memo(({ creator, onPress }: { creator: Creator; onPres
 // ============================================
 
 function CreatorsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');

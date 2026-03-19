@@ -17,10 +17,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import learningApi, { LearningContent } from '@/services/learningApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
 const LearnDetailPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
 
@@ -39,13 +41,17 @@ const LearnDetailPage = () => {
       setError('');
       const response = await learningApi.getContentBySlug(slug);
       if (response?.data?.content) {
+        if (!isMounted()) return;
         setContent(response.data.content);
       } else {
+        if (!isMounted()) return;
         setError('Content not found');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load content');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [slug]);
@@ -88,6 +94,7 @@ const LearnDetailPage = () => {
     } catch (err: any) {
       platformAlertSimple('Error', err.message || 'Failed to complete content');
     } finally {
+      if (!isMounted()) return;
       setCompleting(false);
     }
   };

@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
+import { colors } from '@/constants/theme';
 
 interface CoinProportionBarProps {
   rezBalance: number;
@@ -14,10 +15,10 @@ interface CoinProportionBarProps {
 }
 
 const COLORS = {
-  rez: '#ffcd57',
-  promo: '#8B5CF6',
-  branded: '#F59E0B',
-  empty: '#E5E7EB',
+  rez: colors.primary[500],
+  promo: colors.brand.purpleLight,
+  branded: colors.brand.orange,
+  empty: colors.neutral[200],
 };
 
 function CoinProportionBar({
@@ -77,7 +78,7 @@ function CoinProportionBar({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     padding: 16,
     marginHorizontal: 16,
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     overflow: 'hidden',
     flexDirection: 'row',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: colors.border.primary,
   },
   segment: {
     height: 8,
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
   },
   legendText: {
     fontSize: 12,
-    color: '#374151',
+    color: colors.text.primary,
   },
 });
 

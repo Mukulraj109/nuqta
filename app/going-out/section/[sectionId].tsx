@@ -20,6 +20,7 @@ import productsApi from '@/services/productsApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 interface SectionProduct {
   _id: string;
   name: string;
@@ -32,6 +33,7 @@ interface SectionProduct {
 }
 
 function GoingOutSectionPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { goBack } = useSafeNavigation();
   const { sectionId } = useLocalSearchParams<{ sectionId: string }>();
@@ -54,13 +56,17 @@ function GoingOutSectionPage() {
 
       if (response.success && response.data) {
         const newProducts = response.data.products || response.data || [];
+        if (!isMounted()) return;
         setProducts(prev => append ? [...prev, ...newProducts] : newProducts);
+        if (!isMounted()) return;
         setHasMore(newProducts.length >= 20);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [sectionId]);

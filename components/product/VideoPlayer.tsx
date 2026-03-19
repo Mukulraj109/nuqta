@@ -4,6 +4,7 @@ import { Video, ResizeMode, AVPlaybackStatus } from 'expo-av';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 /**
  * VideoPlayer Component
@@ -42,6 +43,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isMuted, setIsMuted] = useState(muted);
+  const isMounted = useIsMounted();
 
   /**
    * Handle video playback status
@@ -80,6 +82,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (!videoRef.current) return;
 
     try {
+      if (!isMounted()) return;
       await videoRef.current.setIsMutedAsync(!isMuted);
       setIsMuted(!isMuted);
     } catch (error) {

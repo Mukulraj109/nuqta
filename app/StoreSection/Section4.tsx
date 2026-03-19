@@ -20,6 +20,7 @@ import { ThemedText } from "@/components/ThemedText";
 import discountsApi, { Discount } from "@/services/discountsApi";
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Premium Glass Design Tokens - Mustard & Gold Theme
 const GLASS = {
@@ -57,6 +58,7 @@ export default memo(function Section4({
   testID,
   onPress,
 }: Section4Props) {
+  const isMounted = useIsMounted();
   const [loading, setLoading] = useState<boolean>(true);
   const [errored, setErrored] = useState<boolean>(false);
   const [imageLoading, setImageLoading] = useState<boolean>(true);
@@ -98,27 +100,37 @@ export default memo(function Section4({
       });
 
       if (response.success && response.data?.discounts && response.data.discounts.length > 0) {
+        if (!isMounted()) return;
         setCardOffers(response.data.discounts);
 
         const bestOffer = response.data.discounts[0];
         const maxDiscount = bestOffer.type === 'percentage' ? bestOffer.value : null;
 
         if (maxDiscount) {
+          if (!isMounted()) return;
           setTitle(`Upto ${maxDiscount}% card offers`);
         }
 
         const offersCount = response.data.discounts.length;
+        if (!isMounted()) return;
         setSubtitle(`On ${offersCount} card & payment offer${offersCount > 1 ? 's' : ''}`);
       } else {
+        if (!isMounted()) return;
         setTitle(initialTitle);
+        if (!isMounted()) return;
         setSubtitle(initialSubtitle);
+        if (!isMounted()) return;
         setCardOffers([]);
       }
     } catch (error) {
+      if (!isMounted()) return;
       setTitle(initialTitle);
+      if (!isMounted()) return;
       setSubtitle(initialSubtitle);
+      if (!isMounted()) return;
       setCardOffers([]);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

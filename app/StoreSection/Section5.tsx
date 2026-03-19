@@ -18,6 +18,7 @@ import {
   IconSize,
   Timing,
 } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Modal types
 type ModalType = 'success' | 'error' | 'info' | 'warning' | null;
@@ -72,6 +73,7 @@ interface Section5Props {
 }
 
 function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Props) {
+  const isMounted = useIsMounted();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [isSaving, setIsSaving] = useState(false);
@@ -164,6 +166,7 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
     }
 
     // If we get here, item is not saved
+    if (!isMounted()) return;
     setIsSaved(false);
   }, [discountData, dynamicData, isAuthenticated]);
 
@@ -251,6 +254,7 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
         });
 
         if (response.success) {
+          if (!isMounted()) return;
           setIsSaved(true);
           triggerNotification('Success');
           await refreshWishlist(); // Sync with header
@@ -282,6 +286,7 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
         });
 
         if (response.success) {
+          if (!isMounted()) return;
           setIsSaved(true);
           triggerNotification('Success');
           await refreshWishlist(); // Sync with header
@@ -295,6 +300,7 @@ function Section5({ discountData, storeInfo, dynamicData, cardType }: Section5Pr
       triggerNotification('Error');
       showModal('error', 'Error', 'Unable to save deal. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsSaving(false);
     }
   };

@@ -61,16 +61,18 @@ function StoreActionButtons({
     triggerImpact('Light');
     if (onUploadBill) {
       onUploadBill();
+    } else {
+      router.push(storeId ? `/bill-upload?storeId=${storeId}` as any : '/bill-upload');
     }
-    // TODO: Navigate to upload bill screen
   };
 
   const handleViewOffers = () => {
     triggerImpact('Light');
     if (onViewOffers) {
       onViewOffers();
+    } else if (storeId) {
+      router.push(`/store/${storeId}/offers` as any);
     }
-    // TODO: Scroll to offers section or open modal
   };
 
   return (

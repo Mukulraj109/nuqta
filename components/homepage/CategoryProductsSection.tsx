@@ -14,6 +14,7 @@ import CategoryProductCard from './cards/CategoryProductCard';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface CategoryProductsSectionProps {
   categorySlug: string;
@@ -37,6 +38,7 @@ function CategoryProductsSection({
   const hasFreshCache = !!(
     cachedEntry && now - cachedEntry.at < CATEGORY_PRODUCTS_CACHE_TTL_MS
   );
+  const isMounted = useIsMounted();
   const [products, setProducts] = useState<HomepageProduct[]>(
     hasFreshCache ? cachedEntry!.data : []
   );
@@ -76,7 +78,6 @@ function CategoryProductsSection({
   }, [cacheKey, categorySlug, limit]);
 
   useEffect(() => {
-    let isMounted = true;
     setError(null);
 
     if (
@@ -89,21 +90,17 @@ function CategoryProductsSection({
 
     fetchProducts()
       .then((data) => {
-        if (!isMounted) return;
+        if (!isMounted()) return;
         setProducts(data);
       })
       .catch(() => {
-        if (!isMounted) return;
+        if (!isMounted()) return;
         setError('Failed to load products');
       })
       .finally(() => {
-        if (!isMounted) return;
+        if (!isMounted()) return;
         setLoading(false);
       });
-
-    return () => {
-      isMounted = false;
-    };
   }, [fetchProducts]);
 
   const handleViewAll = () => {
@@ -172,7 +169,7 @@ function CategoryProductsSection({
           keyExtractor={keyExtractor}
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.listContent}
+          contentContainerStyle={styles.listContent as any}
           estimatedItemSize={220}
           initialNumToRender={4}
           maxToRenderPerBatch={6}

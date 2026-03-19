@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import serviceBookingApi from '@/services/serviceBookingApi';
 import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface CabDetails {
   id: string;
@@ -82,6 +83,7 @@ const CabBookingFlow: React.FC<CabBookingFlowProps> = ({
   const locale = getLocale();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMounted = useIsMounted();
   
   // Step 1: Pickup/Dropoff & Date
   const [pickupDate, setPickupDate] = useState(new Date());
@@ -252,6 +254,7 @@ const CabBookingFlow: React.FC<CabBookingFlowProps> = ({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to complete booking. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };

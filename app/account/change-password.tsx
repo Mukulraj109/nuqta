@@ -23,7 +23,9 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 function ChangePasswordPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const actions = useAuthActions();
   const [formData, setFormData] = useState({
@@ -104,6 +106,7 @@ function ChangePasswordPage() {
       const errorMessage = error.response?.data?.message || 'Failed to change password. Please try again.';
       platformAlertSimple('Error', errorMessage);
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

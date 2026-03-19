@@ -19,6 +19,7 @@ import { useRouter } from 'expo-router';
 import storeMessagingService from '@/services/storeMessagingApi';
 import { colors } from '@/constants/theme';
 import { catchAndWarn } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ContactStoreModalProps {
   visible: boolean;
@@ -45,6 +46,7 @@ function ContactStoreModal({
   const [isStoreOnline, setIsStoreOnline] = useState(false);
   const [responseTime, setResponseTime] = useState('Usually replies in a few hours');
   const [loading, setLoading] = useState(false);
+  const isMounted = useIsMounted();
 
   // Load store availability
   useEffect(() => {
@@ -57,10 +59,12 @@ function ContactStoreModal({
     try {
       const response = await storeMessagingService.getStoreAvailability(storeId);
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setIsStoreOnline(response.data.isOnline && response.data.isOpen);
         if (response.data.averageResponseTime) {
           const minutes = response.data.averageResponseTime;
           if (minutes < 5) {
+            if (!isMounted()) return;
             setResponseTime('Usually replies instantly');
           } else if (minutes < 30) {
             setResponseTime(`Usually replies in ${minutes} minutes`);
@@ -111,6 +115,7 @@ function ContactStoreModal({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to start conversation. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

@@ -21,6 +21,7 @@ import apiClient from '@/services/apiClient';
 import userLoyaltyApi from '@/services/userLoyaltyApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface CoinTransaction {
   amount: number;
@@ -52,6 +53,7 @@ const TYPE_CONFIG: Record<string, { icon: string; color: string; prefix: string 
 };
 
 function ElectronicsCoinsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -81,6 +83,7 @@ function ElectronicsCoinsPage() {
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -90,6 +93,7 @@ function ElectronicsCoinsPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchCoins();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

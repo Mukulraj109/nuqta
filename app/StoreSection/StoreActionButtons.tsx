@@ -40,6 +40,7 @@ import {
   IconSize,
   Timing,
 } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ExtendedStoreActionButtonsProps extends StoreActionButtonsProps {
   // Control which button group to show: 'all' | 'buy-lock' | 'store-actions'
@@ -71,6 +72,7 @@ function StoreActionButtons({
   buttonGroup = 'all',
 }: ExtendedStoreActionButtonsProps) {
 
+  const isMounted = useIsMounted();
   const { width } = Dimensions.get('window');
   const backgroundColor = useThemeColor({}, 'background');
   const router = useRouter();

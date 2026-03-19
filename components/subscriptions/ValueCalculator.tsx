@@ -10,6 +10,7 @@ import { Colors, Spacing, BorderRadius } from '@/constants/DesignSystem';
 import subscriptionApi from '@/services/subscriptionApi';
 import type { SubscriptionTier, ValueProposition } from '@/services/subscriptionApi';
 import PaybackProgressBar from './PaybackProgressBar';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ValueCalculatorProps {
   selectedTier: SubscriptionTier | null;
@@ -22,6 +23,7 @@ function ValueCalculator({ selectedTier, currencySymbol, isAuthenticated, select
   const [data, setData] = useState<ValueProposition | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const isMounted = useIsMounted();
 
   const fetchValue = useCallback(async (tierName: string) => {
     if (!isAuthenticated) return;
@@ -31,11 +33,13 @@ function ValueCalculator({ selectedTier, currencySymbol, isAuthenticated, select
     setError(false);
     try {
       const result = await subscriptionApi.getValueProposition(tierName as 'premium' | 'vip');
+      if (!isMounted()) return;
       setData(result);
     } catch {
       setError(true);
       setData(null);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [isAuthenticated]);

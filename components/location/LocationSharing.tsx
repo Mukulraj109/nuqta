@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { LocationCoordinates } from '@/types/location.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface LocationSharingProps {
   onShare?: (location: LocationCoordinates) => void;
@@ -27,6 +28,7 @@ function LocationSharing({
 }: LocationSharingProps) {
   const { currentLocation } = useCurrentLocation();
   const [isSharing, setIsSharing] = useState(false);
+  const isMounted = useIsMounted();
 
   const formatLocationForSharing = (coordinates: LocationCoordinates) => {
     return `📍 My Location: ${coordinates.latitude.toFixed(6)}, ${coordinates.longitude.toFixed(6)}\n\nShared via ${BRAND.APP_NAME} App`;
@@ -59,6 +61,7 @@ function LocationSharing({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to share location');
     } finally {
+      if (!isMounted()) return;
       setIsSharing(false);
     }
   };
@@ -71,6 +74,7 @@ function LocationSharing({
 
     try {
       const locationText = `${currentLocation.coordinates.latitude.toFixed(6)}, ${currentLocation.coordinates.longitude.toFixed(6)}`;
+      if (!isMounted()) return;
       await Clipboard.setString(locationText);
       
       platformAlertSimple('Copied', 'Location coordinates copied to clipboard');

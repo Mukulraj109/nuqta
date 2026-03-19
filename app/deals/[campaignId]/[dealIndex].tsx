@@ -30,6 +30,7 @@ import { useIsAuthenticated } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { useGetCurrencySymbol as useGetCurrencySymbolFromStore } from '@/stores/selectors';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -71,6 +72,7 @@ const COLORS = {
 const FALLBACK_DEAL_IMAGE = undefined;
 
 const DealDetailPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const isAuthenticated = useIsAuthenticated();
@@ -147,7 +149,9 @@ const DealDetailPage: React.FC = () => {
           );
 
           if (existingRedemption) {
+            if (!isMounted()) return;
             setAlreadyRedeemed(true);
+            if (!isMounted()) return;
             setExistingRedemptionCode(existingRedemption.code);
           }
         }
@@ -168,6 +172,7 @@ const DealDetailPage: React.FC = () => {
 
       if (response.success && response.data) {
         const campaignData = response.data;
+        if (!isMounted()) return;
         setCampaign(campaignData);
 
         if (campaignData.deals && campaignData.deals[dealIndex]) {
@@ -178,16 +183,21 @@ const DealDetailPage: React.FC = () => {
               ? (typeof dealData.storeId === 'string' ? dealData.storeId : String(dealData.storeId))
               : undefined,
           };
+          if (!isMounted()) return;
           setDeal(transformedDeal);
         } else {
+          if (!isMounted()) return;
           setError('Deal not found');
         }
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Campaign not found');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load deal');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -273,17 +283,20 @@ const DealDetailPage: React.FC = () => {
 
         // Check for "already redeemed" error
         if (errorMsg.toLowerCase().includes('already redeemed') || errorMsg.toLowerCase().includes('already purchased')) {
+          if (!isMounted()) return;
           setSuccessModalData({
             title: 'Already Redeemed',
             message: 'You have already redeemed this deal.',
             showViewDeals: true,
           });
         } else {
+          if (!isMounted()) return;
           setSuccessModalData({
             title: 'Redemption Failed',
             message: errorMsg,
           });
         }
+        if (!isMounted()) return;
         setShowSuccessModal(true);
         return;
       }
@@ -339,6 +352,7 @@ const DealDetailPage: React.FC = () => {
         const redemptionCode = response.data.redemption.code;
 
         // Show success modal (works on both web and native)
+        if (!isMounted()) return;
         setSuccessModalData({
           title: 'Deal Redeemed!',
           message: storeId
@@ -349,38 +363,46 @@ const DealDetailPage: React.FC = () => {
           showVisitStore: !!storeId,
           storeId,
         });
+        if (!isMounted()) return;
         setShowSuccessModal(true);
       } else {
         // Response was successful but no redemption data - shouldn't happen normally
+        if (!isMounted()) return;
         setSuccessModalData({
           title: 'Redemption Issue',
           message: 'Something unexpected happened. Please check My Deals or try again.',
           showViewDeals: true,
         });
+        if (!isMounted()) return;
         setShowSuccessModal(true);
       }
     } catch (error: any) {
       // Handle "already redeemed" error
       if (error.message?.includes('already redeemed') || error.message?.includes('already purchased')) {
+        if (!isMounted()) return;
         setSuccessModalData({
           title: 'Already Redeemed',
           message: 'You have already redeemed this deal. Check My Deals.',
           showViewDeals: true,
         });
+        if (!isMounted()) return;
         setShowSuccessModal(true);
       } else {
         // Use native Alert for errors on mobile, modal for web
         if (Platform.OS === 'web') {
+          if (!isMounted()) return;
           setSuccessModalData({
             title: 'Redemption Failed',
             message: error.message || 'Please try again.',
           });
+          if (!isMounted()) return;
           setShowSuccessModal(true);
         } else {
           platformAlertSimple('Redemption Failed', error.message || 'Please try again.');
         }
       }
     } finally {
+      if (!isMounted()) return;
       setIsRedeeming(false);
     }
   };
@@ -398,6 +420,7 @@ const DealDetailPage: React.FC = () => {
       setIsLiked(!isLiked);
       await apiClient.post('/campaigns/deals/track', { campaignId: campaign?._id || campaignId, dealIndex, action: 'like' });
     } catch (error) {
+      if (!isMounted()) return;
       setIsLiked(!isLiked);
     }
   };
@@ -511,7 +534,8 @@ const DealDetailPage: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }} showsVerticalScrollIndicator={false} bounces={false}>
         {/* Premium Hero Section */}
         <View style={styles.heroSection}>
           <CachedImage source={deal.image || FALLBACK_DEAL_IMAGE} style={styles.heroImage} contentFit="cover" />

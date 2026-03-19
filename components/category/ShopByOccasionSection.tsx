@@ -18,6 +18,7 @@ import { useRouter } from 'expo-router';
 import categoryMetadataApi, { Occasion } from '@/services/categoryMetadataApi';
 import { getOccasionsForCategory } from '@/data/categoryDummyData';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ShopByOccasionSectionProps {
   categorySlug: string;
@@ -100,6 +101,7 @@ const ShopByOccasionSection: React.FC<ShopByOccasionSectionProps> = ({
   const router = useRouter();
   const [apiOccasions, setApiOccasions] = useState<Occasion[]>([]);
   const [loading, setLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (occasions) {
@@ -113,6 +115,7 @@ const ShopByOccasionSection: React.FC<ShopByOccasionSectionProps> = ({
         setLoading(true);
         const response = await categoryMetadataApi.getOccasions(categorySlug);
         if (response.success && response.data?.occasions?.length > 0) {
+          if (!isMounted()) return;
           setApiOccasions(response.data.occasions);
         } else {
           // Fallback to dummy data if API returns empty
@@ -122,8 +125,10 @@ const ShopByOccasionSection: React.FC<ShopByOccasionSectionProps> = ({
       } catch (err) {
         // Fallback to dummy data on error
         const fallbackOccasions = getOccasionsForCategory(categorySlug);
+        if (!isMounted()) return;
         setApiOccasions(fallbackOccasions);
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };

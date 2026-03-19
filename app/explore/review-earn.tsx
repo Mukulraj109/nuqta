@@ -19,6 +19,7 @@ import gamificationApi, { ReviewableItem } from '@/services/gamificationApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const reviewTips = [
   { icon: 'star', tip: 'Rate honestly from 1-5 stars' },
@@ -28,6 +29,7 @@ const reviewTips = [
 ];
 
 function ReviewEarnPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [filter, setFilter] = useState<'all' | 'store' | 'product'>('all');
@@ -52,15 +54,21 @@ function ReviewEarnPage() {
       const response = await gamificationApi.getReviewableItems();
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setReviewableItems(response.data.items);
+        if (!isMounted()) return;
         setPotentialEarnings(response.data.potentialEarnings);
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to load reviewable items');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
@@ -102,6 +110,7 @@ function ReviewEarnPage() {
       </View>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[Colors.warning]} />

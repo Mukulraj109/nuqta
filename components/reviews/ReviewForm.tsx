@@ -20,6 +20,7 @@ import reviewService from '@/services/reviewApi';
 import SuccessModal from '@/components/common/SuccessModal';
 import ErrorModal from '@/components/common/ErrorModal';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ReviewFormProps {
   storeId: string;
@@ -47,6 +48,7 @@ function ReviewForm({
   const [successMessage, setSuccessMessage] = useState('');
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const isMounted = useIsMounted();
 
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
@@ -101,6 +103,7 @@ function ReviewForm({
 
       if (response.success && response.data?.review) {
         // Set success message and show modal
+        if (!isMounted()) return;
         setSuccessMessage(
           isEdit 
             ? 'Review updated successfully! It will be visible after merchant approval.' 
@@ -114,9 +117,11 @@ function ReviewForm({
       }
     } catch (error: any) {
       // Show error in modal (works on both web and mobile)
+      if (!isMounted()) return;
       setErrorMessage(error.message || 'Failed to submit review. Please try again.');
       setShowErrorModal(true);
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };
@@ -152,6 +157,7 @@ function ReviewForm({
       }
 
       const imageUri = result.assets[0].uri;
+      if (!isMounted()) return;
       setIsUploadingImage(true);
 
       try {
@@ -159,6 +165,7 @@ function ReviewForm({
         const uploadResponse = await reviewService.uploadReviewImage(imageUri);
         
         if (uploadResponse.success && uploadResponse.data?.url) {
+          if (!isMounted()) return;
           setImages(prev => [...prev, uploadResponse.data!.url]);
         } else {
           throw new Error(uploadResponse.error || 'Failed to upload image');
@@ -166,10 +173,12 @@ function ReviewForm({
       } catch (uploadError: any) {
         platformAlertSimple('Upload Failed', uploadError.message || 'Failed to upload image. Please try again.');
       } finally {
+        if (!isMounted()) return;
         setIsUploadingImage(false);
       }
     } catch (error: any) {
       platformAlertSimple('Error', 'Failed to pick image. Please try again.');
+      if (!isMounted()) return;
       setIsUploadingImage(false);
     }
   };

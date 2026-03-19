@@ -25,6 +25,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function ReferralSharePage() {
   const router = useRouter();
@@ -37,6 +38,7 @@ function ReferralSharePage() {
   const [referralLink, setReferralLink] = useState('');
   const [qrCode, setQrCode] = useState('');
   const [currentTier, setCurrentTier] = useState('STARTER');
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadData();
@@ -63,6 +65,7 @@ function ReferralSharePage() {
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load referral data');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -70,6 +73,7 @@ function ReferralSharePage() {
   const handleCopyCode = async () => {
     if (!referralCode) return;
     await Clipboard.setStringAsync(referralCode);
+    if (!isMounted()) return;
     setIsCopied(true);
     platformAlertSimple('Copied!', 'Referral code copied to clipboard');
     setTimeout(() => setIsCopied(false), 3000);
@@ -163,7 +167,11 @@ function ReferralSharePage() {
         </Text>
       </LinearGradient>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* QR Code Section */}
         {referralLink ? (
           <View style={styles.qrSection}>

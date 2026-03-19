@@ -17,6 +17,7 @@ import { useStockNotifications } from '@/hooks/useStockNotifications';
 import FastImage from '@/components/common/FastImage';
 import { formatPrice } from '@/utils/priceFormatter';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Custom comparison function for React.memo
 const arePropsEqual = (prevProps: RecommendationCardProps, nextProps: RecommendationCardProps) => {
@@ -49,6 +50,7 @@ function RecommendationCard({
   const { subscribe, subscribing } = useStockNotifications();
   const [, forceUpdate] = useState({});
   const [isTogglingWishlist, setIsTogglingWishlist] = useState(false);
+  const isMounted = useIsMounted();
 
   // Stock status
   const stock = recommendation.inventory?.stock ?? (recommendation.availabilityStatus === 'out_of_stock' ? 0 : 100);
@@ -137,6 +139,7 @@ function RecommendationCard({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsTogglingWishlist(false);
     }
   }, [isTogglingWishlist, productId, isInWishlist, removeFromWishlist, addToWishlist, recommendation, discountPercentage, isOutOfStock, isLowStock]);

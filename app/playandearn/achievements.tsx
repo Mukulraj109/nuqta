@@ -17,6 +17,7 @@ import achievementApi from '../../services/achievementApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -42,6 +43,7 @@ const Achievements = () => {
 
   const [categories, setCategories] = useState<string[]>(['All']);
   const [activeCategory, setActiveCategory] = useState('All');
+  const isMounted = useIsMounted();
 
   const getCategoryFromType = (type: string): string => {
     const upper = type.toUpperCase();
@@ -94,14 +96,18 @@ const Achievements = () => {
         // Non-critical: achievements still display without streak enhancement
       }
 
+      if (!isMounted()) return;
       setAchievements(mapped);
 
       // Extract unique categories and prepend 'All'
       const uniqueCategories = [...new Set(mapped.map(a => a.category))];
+      if (!isMounted()) return;
       setCategories(['All', ...uniqueCategories]);
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load achievements. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -133,7 +139,7 @@ const Achievements = () => {
         </View>
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 120 }}>
         {/* Stats */}
         <View style={styles.statsContainer}>
           <LinearGradient
@@ -383,7 +389,6 @@ const styles = StyleSheet.create({
   categoryContainer: {
     flexDirection: 'row',
     gap: Spacing.sm,
-    paddingBottom: Spacing.sm,
   },
   categoryButton: {
     paddingHorizontal: Spacing.base,

@@ -20,6 +20,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import apiClient from '@/services/apiClient';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface FriendOffer {
   id: string;
@@ -75,6 +76,7 @@ function mapRedemptionToFriendOffer(item: any, currencySymbol: string): FriendOf
 }
 
 function FriendsRedeemedPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -124,8 +126,11 @@ function FriendsRedeemedPage() {
         const mapped = response.data.redemptions.map((r: any) =>
           mapRedemptionToFriendOffer(r, currencySymbol)
         );
+        if (!isMounted()) return;
         setOffers(prev => append ? [...prev, ...mapped] : mapped);
+        if (!isMounted()) return;
         setHasMore(response.data.pagination.hasNextPage);
+        if (!isMounted()) return;
         setTotalItems(response.data.pagination.totalItems);
 
         // Compute total saved from all loaded offers
@@ -134,8 +139,10 @@ function FriendsRedeemedPage() {
             const amount = parseFloat(o.savedAmount.replace(/[^0-9.]/g, '')) || 0;
             return sum + amount;
           }, 0);
+          if (!isMounted()) return;
           setTotalSaved(saved);
         } else {
+          if (!isMounted()) return;
           setTotalSaved(prev => {
             const newSaved = mapped.reduce((sum: number, o: FriendOffer) => {
               const amount = parseFloat(o.savedAmount.replace(/[^0-9.]/g, '')) || 0;
@@ -146,9 +153,12 @@ function FriendsRedeemedPage() {
         }
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err?.message || 'Failed to load friend offers');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [authLoading, currencySymbol]);
@@ -418,7 +428,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing['3xl'],
+    paddingBottom: 120,
   },
   offerCard: {
     backgroundColor: Colors.background.primary,

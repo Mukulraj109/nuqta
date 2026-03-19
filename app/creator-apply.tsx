@@ -23,6 +23,7 @@ import { useRouter } from 'expo-router';
 import creatorsApi, { EligibilityResult } from '@/services/creatorsApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const categoryOptions = [
   { id: 'fashion', name: 'Fashion', icon: 'shirt-outline' },
@@ -41,6 +42,7 @@ const socialPlatforms = [
 ];
 
 function CreatorApplyPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [step, setStep] = useState(0); // 0=check eligibility, 1=category, 2=profile, 3=social, 4=review
   const [loading, setLoading] = useState(true);
@@ -77,6 +79,7 @@ function CreatorApplyPage() {
       const response = await creatorsApi.checkEligibility();
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setEligibility(response.data);
 
         // If they have an existing approved profile, redirect directly
@@ -87,20 +90,25 @@ function CreatorApplyPage() {
 
         // If pending, show status
         if (response.data.existingProfile?.status === 'pending') {
+          if (!isMounted()) return;
           setStep(-1); // pending status view
           return;
         }
 
         // If eligible, move to step 1
         if (response.data.eligible) {
+          if (!isMounted()) return;
           setStep(1);
         }
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to check eligibility');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to check eligibility');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -151,6 +159,7 @@ function CreatorApplyPage() {
       });
 
       if (response.success) {
+        if (!isMounted()) return;
         setStep(5); // success view
       } else {
         platformAlertSimple('Application Failed', response.error || 'Please try again later.');
@@ -158,6 +167,7 @@ function CreatorApplyPage() {
     } catch (err: any) {
       platformAlertSimple('Error', err.message || 'Failed to submit application.');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };
@@ -221,7 +231,11 @@ function CreatorApplyPage() {
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
         <Header onBack={() => router.back()} title="Become a Creator" />
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
           <View style={styles.eligibilityCard}>
             <View style={[styles.statusIcon, { backgroundColor: Colors.warningScale[50] }]}>
               <Ionicons name={needsVideos ? 'videocam-outline' : 'rocket-outline'} size={48} color={colors.warningScale[700]} />

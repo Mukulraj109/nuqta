@@ -43,6 +43,7 @@ const PlayAndEarn = () => {
       <Stack.Screen options={{ headerShown: false }} />
       <View style={styles.container}>
         <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           refreshControl={

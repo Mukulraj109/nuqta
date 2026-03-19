@@ -15,6 +15,7 @@ import { useLocationFeatures, useCurrentLocation } from '@/hooks/useLocation';
 import { locationService } from '@/services/locationService';
 import { LocationCoordinates } from '@/types/location.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface NearbyStore {
   id: string;
@@ -58,6 +59,7 @@ function NearbyStores({
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   const loadNearbyStores = async (isRefresh = false) => {
     if (!currentLocation) {
@@ -97,10 +99,13 @@ function NearbyStores({
         hours: store.hours,
       }));
 
+      if (!isMounted()) return;
       setStores(transformedStores);
     } catch (error) {
+      if (!isMounted()) return;
       setError('Failed to load nearby stores');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
       setIsRefreshing(false);
     }

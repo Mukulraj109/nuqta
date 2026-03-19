@@ -10,7 +10,7 @@ interface Props {
   onDismiss: () => void;
 }
 
-export default function InstituteNotOnboardedBanner({
+function InstituteNotOnboardedBanner({
   onRefer,
   onExplore,
   onDismiss,
@@ -29,7 +29,7 @@ export default function InstituteNotOnboardedBanner({
           </ThemedText>
           <ThemedText style={styles.body}>
             You can still save on all public deals.{'\n'}
-            Refer your college — get coins when they join.
+            Refer your college — earn ₹300 when they join REZ.
           </ThemedText>
         </View>
       </View>
@@ -45,6 +45,8 @@ export default function InstituteNotOnboardedBanner({
     </View>
   );
 }
+
+export default React.memo(InstituteNotOnboardedBanner);
 
 const styles = StyleSheet.create({
   container: {

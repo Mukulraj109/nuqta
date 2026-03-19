@@ -22,6 +22,7 @@ import realVouchersApi from '@/services/realVouchersApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width, height } = Dimensions.get('window');
 
@@ -84,6 +85,7 @@ function VoucherCategoryPage() {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
   const headerScale = useRef(new Animated.Value(0.95)).current;
+  const isMounted = useIsMounted();
 
   const categoryInfo = slug ? CATEGORY_INFO[slug.toLowerCase()] : null;
   const categoryName = slug ? slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ') : 'Category';
@@ -133,7 +135,9 @@ function VoucherCategoryPage() {
       });
 
       if (!brandsRes.success || !brandsRes.data) {
+        if (!isMounted()) return;
         setError('Failed to load brands. Please try again.');
+        if (!isMounted()) return;
         setBrands([]);
         return;
       }
@@ -160,12 +164,17 @@ function VoucherCategoryPage() {
         return b.cashbackRate - a.cashbackRate;
       });
 
+      if (!isMounted()) return;
       setBrands(transformedBrands);
     } catch (error) {
+      if (!isMounted()) return;
       setError('Failed to load brands. Please try again.');
+      if (!isMounted()) return;
       setBrands([]);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   };
@@ -548,6 +557,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingTop: Spacing.sm,
+    paddingBottom: 120,
   },
 
   // Loading

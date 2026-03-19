@@ -16,6 +16,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { useRefreshWallet, useGetCurrencySymbol } from '@/stores/selectors';
 import { EXPERIENCES, Experience } from '@/constants/priveCatalog';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const generateIdempotencyKey = () => `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
 
@@ -29,6 +30,7 @@ function ExperiencesScreen() {
 
   // Fetch catalog from backend, fallback to constants
   const [experiences, setExperiences] = useState<Experience[]>(EXPERIENCES);
+  const isMounted = useIsMounted();
   useEffect(() => {
     (async () => {
       try {
@@ -72,7 +74,9 @@ function ExperiencesScreen() {
           });
 
           if (response.success && response.data) {
+            if (!isMounted()) return;
             setGeneratedVoucher(response.data.voucher);
+            if (!isMounted()) return;
             setShowVoucherModal(true);
             refresh();
             refreshWallet().catch(() => {});
@@ -82,6 +86,7 @@ function ExperiencesScreen() {
         } catch (error: any) {
           platformAlertSimple('Error', error.message || 'Failed to redeem coins');
         } finally {
+          if (!isMounted()) return;
           setIsRedeeming(false);
         }
       }
@@ -110,7 +115,11 @@ function ExperiencesScreen() {
           <Text style={styles.balanceAmount}>{availableCoins.toLocaleString()} coins</Text>
         </View>
 
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
           <Text style={styles.sectionTitle}>Exclusive Experiences</Text>
           <Text style={styles.sectionSubtitle}>
             Premium experiences curated for Prive members

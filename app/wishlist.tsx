@@ -30,6 +30,7 @@ import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { WishlistItemSkeleton } from '@/components/common/SkeletonLoader';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface WishlistItem {
   id: string;
@@ -99,6 +100,7 @@ function WishlistPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [selectedWishlistForShare, setSelectedWishlistForShare] = useState<WishlistData | null>(null);
+  const isMounted = useIsMounted();
 
   // Helper to normalize MongoDB ObjectId to string
   const normalizeId = (id: any): string => {
@@ -329,16 +331,20 @@ function WishlistPage() {
         ...(emptyWishlists.length > 0 ? [emptyWishlists[0]] : [])
       ];
 
+      if (!isMounted()) return;
       setWishlists(filteredWishlists);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch wishlists';
       if (!errorMessage.includes('401') && !errorMessage.includes('Access token')) {
         setError(errorMessage);
       } else {
+        if (!isMounted()) return;
         setWishlists([]);
       }
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [isAuthenticated]);
@@ -387,12 +393,14 @@ function WishlistPage() {
         throw new Error('Failed to create wishlist');
       }
 
+      if (!isMounted()) return;
       setShowCreateModal(false);
       showAlert('Success', 'Wishlist created successfully!', undefined, 'success');
       await fetchWishlists();
     } catch (err) {
       showAlert('Error', 'Failed to create wishlist. Please try again.', undefined, 'error');
     } finally {
+      if (!isMounted()) return;
       setIsCreating(false);
     }
   }, [newWishlistName, newWishlistDescription, fetchWishlists]);
@@ -1058,6 +1066,7 @@ const styles = StyleSheet.create({
   },
   itemsRow: {
     paddingVertical: 4,
+    paddingBottom: 120,
   },
 
   // Deal Card

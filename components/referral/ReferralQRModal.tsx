@@ -20,6 +20,7 @@ import ViewShot from 'react-native-view-shot';
 import { ThemedText } from '@/components/ThemedText';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ReferralQRModalProps {
   visible: boolean;
@@ -45,6 +46,7 @@ function ReferralQRModal({
   const currencySymbol = getCurrencySymbol();
 
   const [isDownloading, setIsDownloading] = useState(false);
+  const isMounted = useIsMounted();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(300)).current;
   const viewShotRef = useRef<ViewShot>(null);
@@ -121,6 +123,7 @@ function ReferralQRModal({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to download QR code. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsDownloading(false);
     }
   };

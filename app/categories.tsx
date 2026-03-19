@@ -24,6 +24,7 @@ import categoriesApi, { Category } from '@/services/categoriesApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -128,6 +129,7 @@ interface CategorySection {
 }
 
 const CategoriesPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -185,12 +187,15 @@ const CategoriesPage: React.FC = () => {
         if (groupedSections.length > 0) {
           setSections(groupedSections);
         }
+        if (!isMounted()) return;
         setTotalCategories(response.data.length);
       }
     } catch (error) {
       // Keep fallback data
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, []);
@@ -254,6 +259,7 @@ const CategoriesPage: React.FC = () => {
       </LinearGradient>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} colors={[COLORS.cyan500]} />

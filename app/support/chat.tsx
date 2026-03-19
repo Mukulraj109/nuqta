@@ -23,6 +23,7 @@ import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } f
 import { Colors, Spacing } from '@/constants/DesignSystem';
 import analyticsService from '@/services/analyticsService';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function SupportChatPage() {
   const router = useRouter();
@@ -66,6 +67,7 @@ function SupportChatPage() {
 
   const [showOptions, setShowOptions] = useState(false);
   const [initializingTicket, setInitializingTicket] = useState(false);
+  const isMounted = useIsMounted();
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -107,6 +109,7 @@ function SupportChatPage() {
       router.setParams({ ticketId: ticket.id });
     }
 
+    if (!isMounted()) return;
     setInitializingTicket(false);
   };
 
@@ -182,6 +185,7 @@ function SupportChatPage() {
       }
     }
 
+    if (!isMounted()) return;
     setShowOptions(false);
   };
 
@@ -206,6 +210,7 @@ function SupportChatPage() {
       }
     }
 
+    if (!isMounted()) return;
     setShowOptions(false);
   };
 

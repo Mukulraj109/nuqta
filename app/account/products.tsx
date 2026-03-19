@@ -16,8 +16,10 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import userProductService, { UserProduct } from '../../services/userProductApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function ProductsScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [products, setProducts] = useState<UserProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,15 +39,21 @@ function ProductsScreen() {
       const response = await userProductService.getUserProducts(filters);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setProducts(response.data);
       } else {
+        if (!isMounted()) return;
         setError('Failed to load products. Please try again.');
+        if (!isMounted()) return;
         setProducts([]);
       }
     } catch (error) {
+      if (!isMounted()) return;
       setError('Failed to load products. Please check your connection and try again.');
+      if (!isMounted()) return;
       setProducts([]);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -53,6 +61,7 @@ function ProductsScreen() {
   const onRefresh = async () => {
     setRefreshing(true);
     await loadProducts();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

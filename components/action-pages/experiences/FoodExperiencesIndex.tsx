@@ -17,6 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { experiencesApi, StoreExperience } from '@/services/experiencesApi';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   primaryGold: colors.warningScale[400],
@@ -39,6 +40,7 @@ function ExperiencesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   const fetchExperiences = useCallback(async () => {
     try {
@@ -46,11 +48,14 @@ function ExperiencesPage() {
       setError(null);
       const res = await experiencesApi.getExperiences({ limit: 50 });
       if (res.success && res.data?.experiences) {
+        if (!isMounted()) return;
         setExperiences(res.data.experiences);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load experiences. Pull down to refresh.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -60,6 +65,7 @@ function ExperiencesPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchExperiences();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

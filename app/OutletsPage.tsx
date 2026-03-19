@@ -18,10 +18,12 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 function OutletsPage() {
+  const isMounted = useIsMounted();
   const params = useLocalSearchParams();
   const router = useRouter();
   const [outlets, setOutlets] = useState<Outlet[]>([]);
@@ -46,14 +48,19 @@ function OutletsPage() {
       const response = await outletsApi.getOutletsByStore(storeId);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setOutlets(response.data.outlets || []);
+        if (!isMounted()) return;
         setTotalCount(response.data.total || 0);
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Failed to load outlets');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError('Unable to load outlets. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -141,7 +148,6 @@ function OutletsPage() {
         <Pressable
           onPress={() => router.back()}
           style={styles.backButton}
-         
         >
           <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
         </Pressable>
@@ -431,6 +437,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.base,
+    paddingBottom: 120,
   },
   loadingContainer: {
     flex: 1,

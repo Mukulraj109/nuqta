@@ -25,6 +25,7 @@ import coinSyncService from '@/services/coinSyncService';
 import logger from '@/utils/logger';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -68,6 +69,7 @@ interface ChallengeDetailData {
 }
 
 function ChallengeDetailPage() {
+  const isMounted = useIsMounted();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<ChallengeDetailData | null>(null);
@@ -156,10 +158,12 @@ function ChallengeDetailPage() {
 
         if (challenge) {
           logger.debug('✅ [Challenge Detail] Found available challenge:', challenge.title);
+          if (!isMounted()) return;
           setData({
             challenge,
             userProgress: null,
           });
+          if (!isMounted()) return;
           setLoading(false);
           return;
         }
@@ -176,6 +180,7 @@ function ChallengeDetailPage() {
         return;
       }
 
+      if (!isMounted()) return;
       setData({
         challenge,
         userProgress: progress || null,
@@ -185,6 +190,7 @@ function ChallengeDetailPage() {
       showAlert('Error', 'Failed to load challenge details', undefined, 'error');
       router.back();
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -258,11 +264,13 @@ function ChallengeDetailPage() {
         refreshWallet();
 
         // Show celebration modal
+        if (!isMounted()) return;
         setClaimData({
           coins: coinsEarned,
           beforeBalance,
           afterBalance,
         });
+        if (!isMounted()) return;
         setShowClaimModal(true);
       } else {
         showAlert('Error', response.message || 'Failed to claim reward', undefined, 'error');
@@ -271,6 +279,7 @@ function ChallengeDetailPage() {
       logger.error('❌ [Challenge Detail] Error claiming reward:', error);
       showAlert('Error', 'Failed to claim reward', undefined, 'error');
     } finally {
+      if (!isMounted()) return;
       setClaiming(false);
     }
   };
@@ -392,7 +401,11 @@ function ChallengeDetailPage() {
         }}
       />
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Hero Section */}
         <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple, colors.brand.purpleDeep]} style={styles.heroSection}>
           <View style={styles.iconContainer}>

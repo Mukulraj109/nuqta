@@ -30,6 +30,7 @@ import { platformAlert, platformAlertSimple } from '@/utils/platformAlert';
 import { SkeletonBox } from '@/components/earn/SkeletonLoader';
 import { BRAND } from '@/constants/brand';
 import { borderRadius, colors, shadows, spacing, typography } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -289,6 +290,7 @@ const MissionCard: React.FC<{
 };
 
 const MissionsScreen: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -350,24 +352,31 @@ const MissionsScreen: React.FC = () => {
           };
         });
 
+        if (!isMounted()) return;
         setAllMissions(mapped);
 
+        if (!isMounted()) return;
         setStats({
           completed: challengeStats.totalCompleted || 0,
           coinsEarned: challengeStats.totalCoinsEarned || 0,
           active: challengeStats.activeChallenges || mapped.filter(m => !m.completed && !m.claimed).length,
         });
       } else {
+        if (!isMounted()) return;
         setError(unifiedResponse.error || 'Failed to load missions');
       }
 
       if (streakResponse.success && streakResponse.data) {
+        if (!isMounted()) return;
         setStreak(streakResponse.data.current);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load missions');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       if (isRefresh) setRefreshing(false);
     }
   }, []);
@@ -397,12 +406,15 @@ const MissionsScreen: React.FC = () => {
     setClaiming(progressId);
     try {
       const response = await challengesApi.claimReward(progressId);
+      if (!isMounted()) return;
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setAllMissions(prev =>
           prev.map(m =>
             m.progressId === progressId ? { ...m, claimed: true } : m
           )
         );
+        if (!isMounted()) return;
         setStats(prev => ({
           ...prev,
           coinsEarned: prev.coinsEarned + (response.data?.coinsEarned || 0),
@@ -418,6 +430,7 @@ const MissionsScreen: React.FC = () => {
     } catch (err: any) {
       platformAlertSimple('Error', err.message || 'Failed to claim rewards');
     } finally {
+      if (!isMounted()) return;
       setClaiming(null);
     }
   };
@@ -599,7 +612,6 @@ const MissionsScreen: React.FC = () => {
               <Pressable
                 onPress={() => fetchMissions()}
                 style={styles.retryButton}
-               
               >
                 <Text style={styles.retryText}>Try Again</Text>
               </Pressable>
@@ -801,6 +813,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingTop: spacing.md,
+    paddingBottom: 120,
   },
   statsRow: {
     flexDirection: 'row',

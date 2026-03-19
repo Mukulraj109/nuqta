@@ -44,11 +44,13 @@ import { Colors, Spacing, BorderRadius, Typography, Gradients } from '@/constant
 import walletApi from '@/services/walletApi';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const WalletScreen: React.FC<WalletScreenProps> = ({
   onNavigateBack,
   onCoinPress,
 }) => {
+  const isMounted = useIsMounted();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
   const authLoading = useAuthLoading();
@@ -383,6 +385,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
 
         {/* Scrollable Content */}
         <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
           style={styles.scroll}
           showsVerticalScrollIndicator={false}
           refreshControl={
@@ -412,6 +415,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
           <BalanceDisplay
             walletData={walletData}
             onCoinPress={handleCoinTypePress}
+            currencySymbol={currencySymbol}
           />
 
           {/* Coin Proportion Bar */}
@@ -456,7 +460,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
           {!walletData.isFrozen && <StickyQuickActions />}
           {/* Coin Detail Cards */}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, marginBottom: 4 }}>
-            <Text style={{ fontSize: 15, fontWeight: '700', color: '#111827' }}>Your Coins</Text>
+            <Text style={{ fontSize: 15, fontWeight: '700', color: colors.text.primary }}>Your Savings Breakdown</Text>
             <Pressable onPress={() => setCoinEducationVisible(true)} hitSlop={8}>
               <Ionicons name="help-circle-outline" size={20} color={colors.neutral[400]} />
             </Pressable>
@@ -486,7 +490,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
           )}
 
           {/* Wallet Insights */}
-          <InsightSection walletData={walletData} />
+          <InsightSection walletData={walletData} currencySymbol={currencySymbol} />
 
           {/* Recharge with Discount */}
           <RechargeWalletCard

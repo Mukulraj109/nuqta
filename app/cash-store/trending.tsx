@@ -26,6 +26,7 @@ import cashStoreApi from '../../services/cashStoreApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { catchAndWarn } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -137,6 +138,7 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries = 2): Promise<T> {
 
 // ─── Main Component ─────────────────────────────────────────
 function TrendingOffersPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const clickingRef = useRef(false);
@@ -171,10 +173,14 @@ function TrendingOffersPage() {
         .map(transformOffer)
         .filter(o => !isExpired(o.validUntil));
 
+      if (!isMounted()) return;
       setActiveOffers(offers);
+      if (!isMounted()) return;
       setPopularBrands((result.popularBrands || []).map(transformBrand));
+      if (!isMounted()) return;
       setHighCashbackBrands((result.highCashbackBrands || []).map(transformBrand));
     } catch (err) {
+      if (!isMounted()) return;
       setError('Unable to load trending offers. Pull down to retry.');
     }
   }, []);
@@ -187,6 +193,7 @@ function TrendingOffersPage() {
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
     await fetchData();
+    if (!isMounted()) return;
     setIsRefreshing(false);
   }, [fetchData]);
 
@@ -223,6 +230,7 @@ function TrendingOffersPage() {
         );
       }
     } finally {
+      if (!isMounted()) return;
       setTrackingBrandId(null);
       setTimeout(() => { clickingRef.current = false; }, 1000);
     }
@@ -261,6 +269,7 @@ function TrendingOffersPage() {
         );
       }
     } finally {
+      if (!isMounted()) return;
       setTrackingBrandId(null);
       setTimeout(() => { clickingRef.current = false; }, 1000);
     }
@@ -377,7 +386,6 @@ function TrendingOffersPage() {
               <Pressable
                 onPress={handleRefresh}
                 style={styles.retryBtn}
-               
               >
                 <Ionicons name="refresh" size={14} color={Colors.text.inverse} />
                 <Text style={styles.retryBtnText}>Try Again</Text>

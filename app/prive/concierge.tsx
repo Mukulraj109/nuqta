@@ -13,6 +13,7 @@ import { ChatSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { catchAndReport } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function ConciergeScreen() {
   const { tier } = usePriveEligibility();
@@ -37,6 +38,7 @@ function ConciergeScreen() {
     finally { setIsLoading(false); setIsRefreshing(false); }
   }, []);
 
+  const isMounted = useIsMounted();
   useEffect(() => { fetchTickets(); }, [fetchTickets]);
   const onRefresh = () => { setIsRefreshing(true); fetchTickets(); };
 
@@ -50,8 +52,11 @@ function ConciergeScreen() {
         message: message.trim(),
       });
       if (res.success) {
+        if (!isMounted()) return;
         setSubject('');
+        if (!isMounted()) return;
         setMessage('');
+        if (!isMounted()) return;
         setShowForm(false);
         await fetchTickets();
       }
@@ -94,6 +99,7 @@ function ConciergeScreen() {
     <View style={styles.container}>
       <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor={PRIVE_COLORS.gold.primary} />}

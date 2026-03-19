@@ -20,6 +20,7 @@ import {
 } from '@/styles/subscriptionStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface TrialBannerProps {
   daysRemaining: number;
@@ -57,6 +58,7 @@ function TrialBanner({
   const [dismissed, setDismissed] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(1));
   const [slideAnim] = useState(new Animated.Value(0));
+  const isMounted = useIsMounted();
 
   const trialConfig = TRIAL_BENEFITS[tier] || TRIAL_BENEFITS.free;
   const isLastDay = daysRemaining <= 1;
@@ -100,6 +102,7 @@ function TrialBanner({
   // Store dismissal preference
   const handleSaveDismissal = async () => {
     try {
+      if (!isMounted()) return;
       await AsyncStorage.setItem(
         `trial_banner_dismissed_${tier}`,
         JSON.stringify({

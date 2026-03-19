@@ -9,6 +9,7 @@ import { useUserIdentityStore } from '@/stores/userIdentityStore';
 import { useAuthUser, useIsAuthenticated } from '@/stores';
 import * as identityApi from '@/services/identityApi';
 import analyticsService, { IdentityAnalyticsEvents } from '@/services/analyticsService';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const STORAGE_KEY = 'identity_prompt_shown';
 
@@ -24,6 +25,7 @@ export default function IdentityPromptModal() {
   const isAuthenticated = useIsAuthenticated();
   const { statedIdentity, setIdentity } = useUserIdentityStore();
   const [visible, setVisible] = useState(false);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (!isAuthenticated || !user) return;
@@ -33,6 +35,7 @@ export default function IdentityPromptModal() {
     // Check if already shown
     AsyncStorage.getItem(STORAGE_KEY).then((val) => {
       if (!val) {
+        if (!isMounted()) return;
         setVisible(true);
         analyticsService.track(IdentityAnalyticsEvents.IDENTITY_GATE_SEEN, { source: 'modal' });
       }
@@ -42,7 +45,9 @@ export default function IdentityPromptModal() {
   const handleSelect = async (id: 'student' | 'corporate' | 'general') => {
     analyticsService.track(IdentityAnalyticsEvents.IDENTITY_SELECTED, { choice: id, source: 'modal' });
     setIdentity({ statedIdentity: id });
+    if (!isMounted()) return;
     identityApi.setStatedIdentity(id).catch(() => {});
+    if (!isMounted()) return;
     await AsyncStorage.setItem(STORAGE_KEY, 'true');
     setVisible(false);
 
@@ -55,7 +60,9 @@ export default function IdentityPromptModal() {
 
   const handleDismiss = async () => {
     setIdentity({ statedIdentity: 'general' });
+    if (!isMounted()) return;
     identityApi.setStatedIdentity('general').catch(() => {});
+    if (!isMounted()) return;
     await AsyncStorage.setItem(STORAGE_KEY, 'true');
     setVisible(false);
   };

@@ -38,6 +38,7 @@ import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import FinancialServiceShareModal from '@/components/financial/FinancialServiceShareModal';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   white: Colors.background.primary,
@@ -59,6 +60,7 @@ const QUICK_AMOUNTS = [100, 200, 500, 1000, 2000, 5000];
 interface FinancialServiceDetailPageProps {}
 
 const FinancialServiceDetailPage: React.FC<FinancialServiceDetailPageProps> = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const refreshCart = useRefreshCart();
@@ -114,6 +116,7 @@ const FinancialServiceDetailPage: React.FC<FinancialServiceDetailPageProps> = ()
       const response = await financialServicesApi.getById(id);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setService(response.data);
         
         // Track service view
@@ -124,6 +127,7 @@ const FinancialServiceDetailPage: React.FC<FinancialServiceDetailPageProps> = ()
           cashback_percentage: response.data.cashback?.percentage || 0,
         });
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Service not found');
         trackEvent('financial_service_error', {
           service_id: id,
@@ -131,13 +135,16 @@ const FinancialServiceDetailPage: React.FC<FinancialServiceDetailPageProps> = ()
         });
       }
     } catch (error: any) {
+      if (!isMounted()) return;
       setError('Failed to load service. Please try again.');
       trackEvent('financial_service_error', {
         service_id: id,
         error: error.message || 'Unknown error',
       });
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [id, isOffline, trackEvent]);
@@ -675,6 +682,7 @@ const FinancialServiceDetailPage: React.FC<FinancialServiceDetailPageProps> = ()
       </LinearGradient>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.content}
         showsVerticalScrollIndicator={false}
         refreshControl={

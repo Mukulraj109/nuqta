@@ -24,6 +24,7 @@ import {
   Typography,
 } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface CardOffersSectionProps {
   storeId?: string;
@@ -45,6 +46,7 @@ function CardOffersSection({
   const [cardOffers, setCardOffers] = useState<Discount[]>([]);
   const [loading, setLoading] = useState(true);
   const [appliedOffer, setAppliedOffer] = useState<Discount | null>(null);
+  const isMounted = useIsMounted();
 
   // Get applied offer from cart context
   useEffect(() => {
@@ -76,13 +78,16 @@ function CardOffersSection({
           const eligibleOffers = response.data.discounts.filter(
             offer => orderValue >= offer.minOrderValue
           );
+          if (!isMounted()) return;
           setCardOffers(eligibleOffers);
         } else {
           setCardOffers([]);
         }
       } catch (error) {
+        if (!isMounted()) return;
         setCardOffers([]);
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };

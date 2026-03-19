@@ -21,6 +21,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const CATEGORIES = [
   { slug: 'flights', label: 'Flights', icon: 'airplane' },
@@ -58,16 +59,21 @@ function TravelSearchPage() {
         sortBy: 'rating',
       });
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setResults(response.data.services || []);
       } else {
+        if (!isMounted()) return;
         setResults([]);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setResults([]);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [selectedCategory]);
+  const isMounted = useIsMounted();
 
   const needsRoute = ['flights', 'trains', 'bus'].includes(selectedCategory);
   const needsCity = ['hotels', 'cab'].includes(selectedCategory);
@@ -342,7 +348,7 @@ const styles = StyleSheet.create({
   categoryChipText: { ...Typography.bodySmall, fontWeight: '600', color: '#94A3B8' },
   categoryChipTextActive: { color: Colors.nileBlue },
 
-  content: { padding: Spacing.base, paddingBottom: 40 },
+  content: { padding: Spacing.base, paddingBottom: 120 },
 
   searchForm: {
     backgroundColor: Colors.background.primary,

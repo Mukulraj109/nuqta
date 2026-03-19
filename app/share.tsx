@@ -26,6 +26,7 @@ import { Share } from 'react-native';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   primaryGreen: Colors.gold,
@@ -44,6 +45,7 @@ function SharePage() {
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [rating, setRating] = useState(0);
   const [isSharing, setIsSharing] = useState(false);
+  const isMounted = useIsMounted();
 
   const handleAddImage = async () => {
     try {
@@ -65,6 +67,7 @@ function SharePage() {
 
       if (!result.canceled && result.assets) {
         const newImages = result.assets.map(asset => asset.uri);
+        if (!isMounted()) return;
         setSelectedImages(prev => [...prev, ...newImages].slice(0, 5));
       }
     } catch (error: any) {
@@ -122,6 +125,7 @@ function SharePage() {
         platformAlertSimple('Error', 'Failed to share. Please try again.');
       }
     } finally {
+      if (!isMounted()) return;
       setIsSharing(false);
     }
   };
@@ -149,7 +153,11 @@ function SharePage() {
         </Pressable>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Rewards Banner */}
         <View style={styles.rewardsBanner}>
           <LinearGradient

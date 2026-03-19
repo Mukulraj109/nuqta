@@ -22,10 +22,12 @@ import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformA
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type SettingsSection = 'general' | 'notifications' | 'privacy' | 'security' | 'delivery' | 'payment' | 'preferences';
 
 function SettingsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const {
     settings,
@@ -801,6 +803,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.base,
+    paddingBottom: 120,
   },
   section: {
     backgroundColor: Colors.background.primary,

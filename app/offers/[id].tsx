@@ -19,6 +19,8 @@ import logger from '@/utils/logger';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Zone types that require verification
 const ZONE_VERIFICATION_MAP: Record<string, string> = {
@@ -39,6 +41,7 @@ const ZONE_VERIFICATION_MAP: Record<string, string> = {
 const { width: screenWidth } = Dimensions.get('window');
 
 function OfferDetailPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const isAuthenticated = useIsAuthenticated();
@@ -76,10 +79,13 @@ function OfferDetailPage() {
       const response = await realOffersApi.getOfferById(offerId);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setOffer(response.data);
+        if (!isMounted()) return;
         setIsLiked(response.data.engagement?.isLikedByUser || false);
 
         // Reset image error state when loading new offer
+        if (!isMounted()) return;
         setImageError(false);
 
         // Check if offer requires verification
@@ -108,7 +114,9 @@ function OfferDetailPage() {
         logger.log('🔐 [VERIFICATION] Zone check:', { exclusiveZone, userTypeRestriction, category: offerData.category, determinedZone: zone });
 
         if (zone) {
+          if (!isMounted()) return;
           setRequiresVerification(true);
+          if (!isMounted()) return;
           setRequiredZone(zone);
           // Check user's verification status for this zone
           if (isAuthenticated) {
@@ -121,12 +129,15 @@ function OfferDetailPage() {
           checkRedemptionStatus(offerId);
         }
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Failed to load offer details');
       }
     } catch (error) {
       logger.error('Error loading offer details:', error);
+      if (!isMounted()) return;
       setError('Failed to load offer details');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -136,6 +147,7 @@ function OfferDetailPage() {
       logger.log('🔐 [VERIFICATION] Checking verification for zone:', zone);
       const response = await verificationService.getZoneStatus(zone);
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setVerificationStatus(response.data);
         logger.log('📋 [VERIFICATION] Status:', response.data);
       }
@@ -152,7 +164,7 @@ function OfferDetailPage() {
       
       if (response.success && response.data) {
         // Handle both direct array and paginated response
-        const redemptionsArray = response.data.data || response.data || [];
+        const redemptionsArray = Array.isArray(response.data) ? response.data : response.data?.data || [];
         logger.log('📋 [REDEMPTION CHECK] Redemptions found:', redemptionsArray.length);
         logger.log('📋 [REDEMPTION CHECK] All redemptions:', redemptionsArray.map((r: any) => ({
           offerId: r.offer?._id || r.offer?.id || r.offer,
@@ -185,8 +197,10 @@ function OfferDetailPage() {
         });
         
         if (redemption) {
+          if (!isMounted()) return;
           setIsAlreadyRedeemed(true);
           const code = (redemption as any).redemptionCode || 'Check My Vouchers';
+          if (!isMounted()) return;
           setExistingVoucherCode(code);
           logger.log('✅ [REDEMPTION CHECK] User already redeemed this offer!', {
             code,
@@ -195,16 +209,20 @@ function OfferDetailPage() {
           });
         } else {
           // Make sure to reset if no active redemption found
+          if (!isMounted()) return;
           setIsAlreadyRedeemed(false);
+          if (!isMounted()) return;
           setExistingVoucherCode('');
           logger.log('ℹ️ [REDEMPTION CHECK] No active redemption found for offer:', offerId);
         }
       } else {
         logger.log('⚠️ [REDEMPTION CHECK] API response unsuccessful:', response);
+        if (!isMounted()) return;
         setIsAlreadyRedeemed(false);
       }
     } catch (error) {
       logger.error('❌ [REDEMPTION CHECK] Error checking redemption status:', error);
+      if (!isMounted()) return;
       setIsAlreadyRedeemed(false);
     }
   };
@@ -260,10 +278,13 @@ function OfferDetailPage() {
         const code = response.data.voucher?.voucherCode || 'Check My Vouchers';
         logger.log('✅ [REDEEM] Success! Voucher code:', code);
         
+        if (!isMounted()) return;
         setVoucherCode(code);
         
         // Mark as redeemed and store the code
+        if (!isMounted()) return;
         setIsAlreadyRedeemed(true);
+        if (!isMounted()) return;
         setExistingVoucherCode(code);
         
         // Re-check redemption status to ensure it's saved
@@ -271,6 +292,7 @@ function OfferDetailPage() {
           await checkRedemptionStatus(offer._id);
         }
         
+        if (!isMounted()) return;
         setShowSuccessModal(true);
       } else {
         const errorMessage = response.message || response.error || 'Failed to redeem offer';
@@ -281,6 +303,7 @@ function OfferDetailPage() {
       logger.error('❌ [REDEEM] Error:', error);
       platformAlertSimple('Error', error.message || 'Failed to redeem offer');
     } finally {
+      if (!isMounted()) return;
       setIsRedeeming(false);
     }
   };
@@ -292,7 +315,9 @@ function OfferDetailPage() {
       const response = await realOffersApi.toggleOfferLike(offer._id);
       
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setIsLiked(response.data.isLiked);
+        if (!isMounted()) return;
         setOffer(prev => prev ? {
           ...prev,
           engagement: {
@@ -313,8 +338,14 @@ function OfferDetailPage() {
     try {
       await realOffersApi.shareOffer(offer._id);
       
+      const savingsText = offer.restrictions?.maxDiscountAmount
+        ? `Save up to ${currencySymbol}${offer.restrictions.maxDiscountAmount.toLocaleString()}`
+        : offer.cashbackPercentage
+          ? `Get ${offer.cashbackPercentage}% cashback`
+          : offer.title;
+
       await Share.share({
-        message: `Check out this amazing offer!\n\n${offer.title}\n\nGet ${offer.cashbackPercentage}% cashback!`,
+        message: `${savingsText} at ${offer.store?.name || 'this store'}!\n\n${offer.title}\n\nSave with ${BRAND.APP_NAME}`,
         title: offer.title,
       });
     } catch (error) {

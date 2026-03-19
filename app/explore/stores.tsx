@@ -24,6 +24,7 @@ import { useCurrentLocation } from '@/hooks/useLocation';
 import { MapViewSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
@@ -64,6 +65,7 @@ const formatRating = (rating: number | string | undefined): string => {
 };
 
 const ExploreStoresPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -122,14 +124,19 @@ const ExploreStoresPage = () => {
       }
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setStores(response.data.stores || []);
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to fetch stores');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [selectedCategory, searchQuery]);
@@ -715,6 +722,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.md,
     minHeight: 200,
+    paddingBottom: 120,
   },
   storesContainerGrid: {
     paddingHorizontal: Spacing.base,

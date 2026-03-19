@@ -34,6 +34,7 @@ import {
 } from '@/services/rechargeApi';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ============================================
 // CONSTANTS
@@ -80,6 +81,7 @@ function RechargePage() {
   const [plansPage, setPlansPage] = useState(1);
   const [plansHasMore, setPlansHasMore] = useState(false);
   const [loadingMorePlans, setLoadingMorePlans] = useState(false);
+  const isMounted = useIsMounted();
 
   // ============================================
   // FETCH OPERATORS
@@ -98,6 +100,7 @@ function RechargePage() {
         }
       } catch (err: any) {
         if (!cancelled) {
+          if (!isMounted()) return;
           setError(err.message || 'Failed to load operators');
         }
       } finally {
@@ -128,9 +131,12 @@ function RechargePage() {
         setPlansHasMore(pagination ? pagination.page < pagination.pages : false);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load plans');
     } finally {
+      if (!isMounted()) return;
       setLoadingPlans(false);
+      if (!isMounted()) return;
       setLoadingMorePlans(false);
     }
   }, []);
@@ -183,14 +189,17 @@ function RechargePage() {
         );
       } else {
         const msg = response.message || 'Failed to initiate recharge';
+        if (!isMounted()) return;
         setError(msg);
         platformAlert('Recharge Failed', msg);
       }
     } catch (err: any) {
       const msg = err.message || 'Something went wrong';
+      if (!isMounted()) return;
       setError(msg);
       platformAlert('Error', msg);
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   }, [mobileNumber, amount, selectedOperator, selectedPlan, isAuthenticated, router]);

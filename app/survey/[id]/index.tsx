@@ -18,6 +18,7 @@ import surveysApiService, { SurveyDetail } from '@/services/surveysApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const categoryEmojis: Record<string, string> = {
   'Shopping': '📦', 'Food': '🍔', 'Fashion': '👗', 'Finance': '🏦',
   'Health': '💊', 'Technology': '📱', 'Travel': '✈️', 'Entertainment': '🎬',
@@ -37,6 +38,7 @@ function SurveyDetailPage() {
   const [loading, setLoading] = useState(true);
   const [starting, setStarting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadSurvey();
@@ -47,10 +49,13 @@ function SurveyDetailPage() {
     setLoading(true);
     try {
       const data = await surveysApiService.getSurveyById(id);
+      if (!isMounted()) return;
       setSurvey(data);
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load survey');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -68,8 +73,10 @@ function SurveyDetailPage() {
       await surveysApiService.startSurvey(id);
       router.push(`/survey/${id}/take`);
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to start survey');
     } finally {
+      if (!isMounted()) return;
       setStarting(false);
     }
   };
@@ -127,7 +134,11 @@ function SurveyDetailPage() {
           <View style={{ width: 40 }} />
         </View>
 
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
           {/* Hero Section */}
           <View style={styles.heroSection}>
             <LinearGradient

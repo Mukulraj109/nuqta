@@ -20,6 +20,7 @@ import SkeletonLoader from '@/components/common/SkeletonLoader';
 import supportService, { SupportTicket, GetTicketsFilters } from '@/services/supportApi';
 import { Colors, Spacing, Gradients, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const STATUS_FILTERS = [
   { key: 'all', label: 'All' },
@@ -64,6 +65,7 @@ function TicketsPage() {
       // silently handle
     }
   }, [activeFilter, page]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     setLoading(true);
@@ -75,6 +77,7 @@ function TicketsPage() {
     setRefreshing(true);
     setPage(1);
     await loadTickets(true);
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -101,6 +104,7 @@ function TicketsPage() {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   };

@@ -24,6 +24,7 @@ import serviceBookingApi from '@/services/serviceBookingApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import ConfettiOverlay from '@/components/ui/ConfettiOverlay';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function TravelBookingConfirmationPage() {
   const router = useRouter();
@@ -40,6 +41,7 @@ function TravelBookingConfirmationPage() {
   // Animation values
   const [successAnim] = useState(new Animated.Value(0));
   const [contentAnim] = useState(new Animated.Value(0));
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (bookingId) {
@@ -83,8 +85,10 @@ function TravelBookingConfirmationPage() {
         setError(response.error || 'Failed to load booking details');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load booking');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

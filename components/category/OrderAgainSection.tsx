@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import ordersService, { Order } from '../../services/ordersApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Use same colors as FoodDiningCategoryPage
 const COLORS = {
@@ -47,6 +48,7 @@ function OrderAgainSection({ orders: ordersProp, categorySlug, limit = 10 }: Ord
     const getCurrencySymbol = useGetCurrencySymbol();
     const currencySymbol = getCurrencySymbol();
     const [fetchedOrders, setFetchedOrders] = useState<Order[]>([]);
+    const isMounted = useIsMounted();
 
     // Fetch orders internally when categorySlug is provided and no orders prop
     useEffect(() => {
@@ -61,6 +63,7 @@ function OrderAgainSection({ orders: ordersProp, categorySlug, limit = 10 }: Ord
                     sort: 'newest',
                 });
                 if (response.success && response.data?.orders) {
+                    if (!isMounted()) return;
                     setFetchedOrders(response.data.orders);
                 }
             } catch {

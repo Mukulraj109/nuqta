@@ -32,6 +32,7 @@ import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkele
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Filter config for header styling
 const FILTER_CONFIG: Record<FilterType, {
@@ -144,6 +145,7 @@ function transformStoreToMallBrand(store: any): MallBrand {
 
 function BrandsListingPage() {
   const { filter: initialFilter } = useLocalSearchParams<{ filter?: string }>();
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -202,19 +204,26 @@ function BrandsListingPage() {
         const result = await mallApi.getMallStores({ page: pageNum, limit: 20 });
         data = result.stores.map(transformStoreToMallBrand);
         total = result.total;
+        if (!isMounted()) return;
         setTotalPages(result.pages);
       }
 
       if (append) {
+        if (!isMounted()) return;
         setBrands(prev => [...prev, ...data]);
       } else {
+        if (!isMounted()) return;
         setBrands(data);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load stores');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
+      if (!isMounted()) return;
       setIsLoadingMore(false);
     }
   }, [searchQuery, activeFilter]);
@@ -649,7 +658,7 @@ const styles = StyleSheet.create({
     color: Colors.nileBlue,
   },
   listContent: {
-    paddingBottom: Spacing.lg,
+    paddingBottom: 120,
   },
   loadingMore: {
     flexDirection: 'row',

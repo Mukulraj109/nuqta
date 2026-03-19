@@ -31,6 +31,7 @@ import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { catchAndWarn } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -102,6 +103,7 @@ interface Store {
 }
 
 const StoreDetailPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id, redemptionCode: passedRedemptionCode } = useLocalSearchParams<{ id: string; redemptionCode?: string }>();
   const isAuthenticated = useIsAuthenticated();
@@ -125,30 +127,37 @@ const StoreDetailPage: React.FC = () => {
 
       // Validate store data exists
       if (!storeData || !storeData._id) {
+        if (!isMounted()) return;
         setStore(null);
         return;
       }
 
+      if (!isMounted()) return;
       setStore(storeData);
 
       // Check if store is currently open
       const now = new Date();
       const day = now.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
       const hours = storeData.operationalInfo?.hours?.[day];
+      if (!isMounted()) return;
       setCurrentDayHours(hours && !hours.closed ? hours : null);
 
       if (hours && !hours.closed) {
         const currentTime = now.getHours() * 100 + now.getMinutes();
         const openTime = parseInt(hours.open?.replace(':', '') || '0');
         const closeTime = parseInt(hours.close?.replace(':', '') || '2359');
+        if (!isMounted()) return;
         setIsOpen(currentTime >= openTime && currentTime <= closeTime);
       }
     } catch (error: any) {
       const message = error?.response?.data?.message || error?.message || 'Failed to load store details';
       showAlert('Error', message, undefined, 'error');
+      if (!isMounted()) return;
       setStore(null);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [id]);
@@ -191,6 +200,7 @@ const StoreDetailPage: React.FC = () => {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoadingRedemptions(false);
     }
   }, [isAuthenticated, id, passedRedemptionCode, store]);

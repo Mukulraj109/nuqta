@@ -33,6 +33,7 @@ import type { RegionId } from '@/stores/regionStore';
 import { useLocation } from '@/contexts/LocationContext';
 import { UserLocation } from '@/types/location.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const MODAL_WIDTH = SCREEN_WIDTH * 0.88;
@@ -365,6 +366,7 @@ function ProfileMenuModal({
   const [showRegionPicker, setShowRegionPicker] = useState(false);
   const [showRegionConfirm, setShowRegionConfirm] = useState(false);
   const [pendingRegion, setPendingRegion] = useState<RegionId | null>(null);
+  const isMounted = useIsMounted();
 
   const currentRegionData = REGIONS_DATA.find(r => r.id === regionState.currentRegion) || REGIONS_DATA[0];
   const pendingRegionData = pendingRegion ? REGIONS_DATA.find(r => r.id === pendingRegion) : null;
@@ -400,6 +402,7 @@ function ProfileMenuModal({
         lastUpdated: new Date(),
         source: 'manual' as const,
       };
+      if (!isMounted()) return;
       await setManualLocation(newLocation);
     }
   };
@@ -408,10 +411,12 @@ function ProfileMenuModal({
     if (!pendingRegion) return;
 
     try {
+      if (!isMounted()) return;
       await setRegion(pendingRegion);
       // Update location context with the new region's default location
       await updateLocationForRegion(pendingRegion);
 
+      if (!isMounted()) return;
       setShowRegionPicker(false);
       setShowRegionConfirm(false);
       setPendingRegion(null);

@@ -39,6 +39,7 @@ import { LoadingState } from '@/components/common/LoadingState';
 import { beautyCategoryData, beautyServiceFilters, beautyModeFilters, beautyQuickActions } from '@/data/category/beautyCategoryData';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   pink: '#F9A8D4',
@@ -133,6 +134,7 @@ function BeautyCategoryPage() {
   const [activeServiceFilters, setActiveServiceFilters] = useState<string[]>([]);
   const [activeLifestyleFilters, setActiveLifestyleFilters] = useState<string[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const isMounted = useIsMounted();
 
   // Combined active filters for backward compat
   const activeModes = [...activeServiceFilters, ...activeLifestyleFilters];
@@ -141,6 +143,7 @@ function BeautyCategoryPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await refetch();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

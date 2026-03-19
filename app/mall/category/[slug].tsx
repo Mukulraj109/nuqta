@@ -30,6 +30,7 @@ import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkele
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -172,6 +173,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store, onPress, index }) => {
 function CategoryStoresPage() {
   const params = useLocalSearchParams<{ slug: string }>();
   const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -197,20 +199,29 @@ function CategoryStoresPage() {
       setError(null);
       const result = await mallApi.getMallStoresByCategorySlug(slug, pageNum, LIMIT);
 
+      if (!isMounted()) return;
       setCategory(result.category);
+      if (!isMounted()) return;
       setTotal(result.total);
+      if (!isMounted()) return;
       setTotalPages(result.pages);
 
       if (append) {
+        if (!isMounted()) return;
         setStores(prev => [...prev, ...result.stores]);
       } else {
+        if (!isMounted()) return;
         setStores(result.stores);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load category');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
+      if (!isMounted()) return;
       setIsLoadingMore(false);
     }
   }, [slug]);
@@ -423,7 +434,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   listContent: {
-    paddingBottom: Spacing.lg,
+    paddingBottom: 120,
   },
   // Hero Section
   heroSection: {

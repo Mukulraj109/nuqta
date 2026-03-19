@@ -15,8 +15,10 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const HomeServicesPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -36,17 +38,21 @@ const HomeServicesPage: React.FC = () => {
         ]);
 
         if (categoriesRes.success && categoriesRes.data) {
+          if (!isMounted()) return;
           setCategories(categoriesRes.data);
         }
         if (featuredRes.success && featuredRes.data) {
+          if (!isMounted()) return;
           setFeaturedServices(featuredRes.data);
         }
         if (statsRes.success && statsRes.data) {
+          if (!isMounted()) return;
           setStats(statsRes.data);
         }
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setIsLoading(false);
       }
     };
@@ -98,7 +104,8 @@ const HomeServicesPage: React.FC = () => {
         </View>
       </LinearGradient>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Categories</Text>
           <View style={styles.categoriesGrid}>

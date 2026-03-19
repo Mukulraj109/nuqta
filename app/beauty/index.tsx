@@ -27,6 +27,7 @@ import { catchAndReport } from '@/utils/catchAndReport';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -86,6 +87,7 @@ interface DisplayProduct {
 }
 
 const BeautyPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -145,7 +147,9 @@ const BeautyPage: React.FC = () => {
 
       // Process stores
       if (storesResponse.success && storesResponse.data?.stores) {
+        if (!isMounted()) return;
         setFeaturedSalons(storesResponse.data.stores.slice(0, 6).map(transformStoreToSalon));
+        if (!isMounted()) return;
         setStats(prev => ({
           ...prev,
           salons: storesResponse.data?.pagination?.total || storesResponse.data?.stores?.length || 0,
@@ -154,7 +158,9 @@ const BeautyPage: React.FC = () => {
 
       // Process products
       if (productsResponse.success && productsResponse.data?.products) {
+        if (!isMounted()) return;
         setTrendingProducts(productsResponse.data.products.slice(0, 8).map(transformProduct));
+        if (!isMounted()) return;
         setStats(prev => ({
           ...prev,
           products: productsResponse.data?.pagination?.total || productsResponse.data?.products?.length || 0,
@@ -163,7 +169,9 @@ const BeautyPage: React.FC = () => {
     } catch (error) {
       catchAndReport(error, setError, 'BeautyPage/fetchData');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, []);
@@ -262,6 +270,7 @@ const BeautyPage: React.FC = () => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} colors={[COLORS.pink500]} />
         }

@@ -27,6 +27,7 @@ import productComparisonApi, { ProductComparison, ComparisonProduct } from '@/se
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
 import { errorReporter } from '@/utils/errorReporter';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   primaryGold: colors.warningScale[400],
@@ -99,6 +100,7 @@ function ComparePage() {
   // Selected products
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
   const [viewPhase, setViewPhase] = useState<'landing' | 'comparing'>('landing');
+  const isMounted = useIsMounted();
 
   // Search modal
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
@@ -122,6 +124,7 @@ function ComparePage() {
       try {
         const res = await productComparisonApi.getUserComparisons({ limit: 10 });
         if (res.success && res.data?.comparisons) {
+          if (!isMounted()) return;
           setSavedComparisons(res.data.comparisons);
         }
       } catch (err) {
@@ -131,6 +134,7 @@ function ComparePage() {
           'warning'
         );
       } finally {
+        if (!isMounted()) return;
         setIsLoadingSaved(false);
       }
     };
@@ -189,6 +193,7 @@ function ComparePage() {
       if (res.success && res.data) {
         const products = Array.isArray(res.data) ? res.data : res.data?.products || [];
         const selectedIds = new Set(selectedProducts.map(p => p._id));
+        if (!isMounted()) return;
         setSearchResults(products.filter((p: any) => !selectedIds.has(p._id || p.id)));
       }
     } catch (err) {
@@ -197,8 +202,10 @@ function ComparePage() {
         { context: 'ComparePage.performSearch' },
         'warning'
       );
+      if (!isMounted()) return;
       setSearchResults([]);
     } finally {
+      if (!isMounted()) return;
       setIsSearching(false);
     }
   }, [selectedProducts]);
@@ -267,6 +274,7 @@ function ComparePage() {
       } else {
         const res = await productComparisonApi.createComparison(productIds, name);
         if (res.success && res.data?.comparison) {
+          if (!isMounted()) return;
           setCurrentComparisonId(res.data.comparison._id);
           platformAlertSimple('Saved!', 'Comparison saved to your list');
         }
@@ -274,6 +282,7 @@ function ComparePage() {
       // Refresh saved list
       const saved = await productComparisonApi.getUserComparisons({ limit: 10 });
       if (saved.success && saved.data?.comparisons) {
+        if (!isMounted()) return;
         setSavedComparisons(saved.data.comparisons);
       }
     } catch (err) {
@@ -284,6 +293,7 @@ function ComparePage() {
       );
       platformAlertSimple('Error', 'Could not save comparison');
     } finally {
+      if (!isMounted()) return;
       setIsSaving(false);
     }
   };
@@ -294,6 +304,7 @@ function ComparePage() {
       const res = await productComparisonApi.getComparisonById(comparisonId);
       if (res.success && res.data?.comparison) {
         const products = res.data.comparison.products.map(transformToSelectedProduct);
+        if (!isMounted()) return;
         setSelectedProducts(products);
         setCurrentComparisonId(comparisonId);
         setViewPhase('comparing');
@@ -312,8 +323,10 @@ function ComparePage() {
     try {
       const res = await productComparisonApi.deleteComparison(comparisonId);
       if (res.success) {
+        if (!isMounted()) return;
         setSavedComparisons(prev => prev.filter(c => c._id !== comparisonId));
         if (currentComparisonId === comparisonId) {
+          if (!isMounted()) return;
           setCurrentComparisonId(null);
         }
       }

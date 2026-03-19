@@ -28,8 +28,10 @@ import EditInstructionsModal from '@/components/account/EditInstructionsModal';
 import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformAlert';
 import userSettingsApi from '@/services/userSettingsApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function DeliverySettingsScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const {
     addresses,
@@ -100,6 +102,7 @@ function DeliverySettingsScreen() {
     try {
       await userSettingsApi.updateDeliveryPreferences({ contactlessDelivery: newValue });
     } catch (e) {
+      if (!isMounted()) return;
       setContactlessDelivery(!newValue);
       platformAlertSimple('Error', 'Failed to save preference. Please try again.');
     }
@@ -111,6 +114,7 @@ function DeliverySettingsScreen() {
     try {
       await userSettingsApi.updateDeliveryPreferences({ deliveryNotifications: newValue });
     } catch (e) {
+      if (!isMounted()) return;
       setDeliveryNotifications(!newValue);
       platformAlertSimple('Error', 'Failed to save preference. Please try again.');
     }
@@ -525,7 +529,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 20,
+    paddingBottom: 120,
   },
   section: {
     marginHorizontal: 16,

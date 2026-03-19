@@ -174,12 +174,12 @@ class NotificationsService {
 
   // Mark notification as read
   async markAsRead(notificationId: string): Promise<ApiResponse<{ message: string }>> {
-    return apiClient.patch(`/notifications/${notificationId}/read`);
+    return apiClient.patch('/notifications/read', { notificationIds: [notificationId] });
   }
 
   // Mark all notifications as read
   async markAllAsRead(): Promise<ApiResponse<{ message: string; count: number }>> {
-    return apiClient.patch('/notifications/read-all');
+    return apiClient.patch('/notifications/read');
   }
 
   // Mark notification as unread

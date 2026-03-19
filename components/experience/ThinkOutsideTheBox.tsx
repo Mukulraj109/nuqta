@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import { experiencesApi } from '@/services/experiencesApi';
 import { getTheme } from '@/constants/experienceThemes';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Props {
     experienceType?: string;
@@ -17,6 +18,7 @@ const ThinkOutsideTheBox: React.FC<Props> = ({ experienceType = 'default', searc
     const router = useRouter();
     const [items, setItems] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const isMounted = useIsMounted();
 
     const theme = getTheme(experienceType);
     const title = theme.sectionTitle || 'Think Outside the Box';
@@ -27,11 +29,13 @@ const ThinkOutsideTheBox: React.FC<Props> = ({ experienceType = 'default', searc
                 setLoading(true);
                 const response = await experiencesApi.getUniqueFinds(10, experienceType, searchQuery);
                 if (response.success && response.data) {
+                    if (!isMounted()) return;
                     setItems(response.data);
                 }
             } catch (e) {
                 // silently handle
             } finally {
+                if (!isMounted()) return;
                 setLoading(false);
             }
         };

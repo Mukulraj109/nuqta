@@ -23,6 +23,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   pink: colors.brand.pink,
@@ -74,6 +75,7 @@ function ExperienceCard({
   onPress: () => void;
 }) {
   const [imageError, setImageError] = useState(false);
+  const isMounted = useIsMounted();
   const imageUri = experience.image || experience.images?.[0];
 
   return (
@@ -201,6 +203,7 @@ function BeautyExperiencesPage() {
         const list: Experience[] = Array.isArray(response.data)
           ? response.data
           : response.data.experiences || response.data.items || [];
+        if (!isMounted()) return;
         setExperiences(list);
         setFilteredExperiences(filterByCategory(list, selectedCategory));
       } else {
@@ -208,10 +211,12 @@ function BeautyExperiencesPage() {
         setFilteredExperiences([]);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err?.message || 'Failed to load experiences');
       setExperiences([]);
       setFilteredExperiences([]);
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [filterByCategory, selectedCategory]);
@@ -227,6 +232,7 @@ function BeautyExperiencesPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchExperiences();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

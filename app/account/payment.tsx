@@ -36,6 +36,7 @@ import UPIVerificationModal from '@/components/payment/UPIVerificationModal';
 import KYCUploadModal from '@/components/payment/KYCUploadModal';
 import OTPVerificationModal from '@/components/payment/OTPVerificationModal';
 import { SectionListSkeleton } from '@/components/skeletons';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Local preferences interface for UI
 interface LocalPaymentPreferences {
@@ -46,6 +47,7 @@ interface LocalPaymentPreferences {
 }
 
 function PaymentSettingsScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { goBack } = useSafeNavigation();
 
@@ -195,8 +197,11 @@ function PaymentSettingsScreen() {
     platformAlertSimple('Success', 'Payment method verified successfully!');
 
     // Close modal
+    if (!isMounted()) return;
     setVerificationModalVisible(false);
+    if (!isMounted()) return;
     setSelectedMethodForVerification(null);
+    if (!isMounted()) return;
     setVerificationType(null);
   };
 
@@ -245,6 +250,7 @@ function PaymentSettingsScreen() {
     } catch (error) {
 
       // Revert optimistic update on error
+      if (!isMounted()) return;
       setPreferences(prev => ({
         ...prev,
         [key]: !newValue
@@ -252,6 +258,7 @@ function PaymentSettingsScreen() {
 
       platformAlertSimple('Error', `Failed to save ${key} preference. Please try again.`);
     } finally {
+      if (!isMounted()) return;
       setIsSavingPreference(false);
     }
   };
@@ -719,7 +726,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 20,
+    paddingBottom: 120,
   },
   section: {
     marginHorizontal: 20,

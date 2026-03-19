@@ -22,6 +22,7 @@ import { PRIVE_COLORS, PRIVE_SPACING, PRIVE_RADIUS } from '@/components/prive/pr
 import priveApi, { PriveOffer } from '@/services/priveApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function PriveOffersScreen() {
   const router = useRouter();
@@ -46,12 +47,16 @@ function PriveOffersScreen() {
         setError(null);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load offers');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, []);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     fetchOffers(1, true);
@@ -164,6 +169,7 @@ const styles = StyleSheet.create({
   listContent: {
     padding: PRIVE_SPACING.lg,
     gap: PRIVE_SPACING.md,
+    paddingBottom: 120,
   },
   offerCard: {
     backgroundColor: PRIVE_COLORS.background.secondary,

@@ -35,6 +35,7 @@ import Animated, {
 import { storesApi } from '@/services/storesApi';
 import CoinIcon from '@/components/ui/CoinIcon';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Video Component - uses native video for web, expo-av for mobile
 const AutoPlayVideo: React.FC<{ uri: string; poster?: string; style?: any }> = ({ uri, poster, style }) => {
@@ -164,6 +165,7 @@ const NewOnNuqtaSection: React.FC = () => {
   const [featuredStore, setFeaturedStore] = useState<NewStore | null>(null);
   const [smallStores, setSmallStores] = useState<NewStore[]>([]);
   const [horizontalStore, setHorizontalStore] = useState<NewStore | null>(null);
+  const isMounted = useIsMounted();
 
   // Store queue for rotation
   const [allStores, setAllStores] = useState<NewStore[]>([]);
@@ -487,10 +489,12 @@ const NewOnNuqtaSection: React.FC = () => {
 
           // Transform all stores for the queue
           const transformedStores = stores.map(transformStoreData);
+          if (!isMounted()) return;
           setAllStores(transformedStores);
 
           // Set initial display (first 4 stores)
           if (transformedStores.length > 0) {
+            if (!isMounted()) return;
             setFeaturedStore(transformedStores[0]);
           }
 
@@ -507,6 +511,7 @@ const NewOnNuqtaSection: React.FC = () => {
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setIsLoading(false);
       }
     };

@@ -20,6 +20,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import userLoyaltyApi, { BrandLoyalty } from '@/services/userLoyaltyApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const TIER_CONFIG: Record<string, {
   bg: string; text: string; border: string; icon: string; next: string;
@@ -44,6 +45,7 @@ const TIER_CONFIG: Record<string, {
 };
 
 function ElectronicsBrandsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -61,6 +63,7 @@ function ElectronicsBrandsPage() {
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -73,6 +76,7 @@ function ElectronicsBrandsPage() {
       await userLoyaltyApi.syncBrandLoyalty();
     } catch {}
     await fetchBrands();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useGetCurrencySymbol, useCurrentRegionId } from '@/stores/selectors';
 import { formatPrice } from '@/utils/priceFormatter';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface PopularProductsSectionProps {
   title?: string;
@@ -32,6 +33,7 @@ function PopularProductsSection({
   const [products, setProducts] = useState<HomepageProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   const fetchPopularProducts = useCallback(async () => {
     try {
@@ -42,13 +44,16 @@ function PopularProductsSection({
       if (response.success && response.data) {
         // Limit to 3 products maximum
         const maxProducts = Math.min(limit, 3);
+        if (!isMounted()) return;
         setProducts(response.data.slice(0, maxProducts));
       } else {
         setError('Failed to load popular products');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load popular products');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [limit]);

@@ -32,10 +32,12 @@ import { useAuthLoading, useGetCurrencySymbol, useIsAuthenticated, useRegionStat
 import { showToast } from '@/components/common/ToastManager';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 function EnterAmountScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams<EnterAmountParams>();
   const { storeId, storeName, storeLogo } = params;
@@ -95,6 +97,7 @@ function EnterAmountScreen() {
       }
 
       const location = await Location.getCurrentPositionAsync({});
+      if (!isMounted()) return;
       setUserLocation({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
@@ -138,13 +141,17 @@ function EnterAmountScreen() {
       setStoreError(null);
       const response = await apiClient.get<{ store: StorePaymentInfo }>(`/stores/${storeId}`);
       if (response.success && response.data?.store) {
+        if (!isMounted()) return;
         setStore(response.data.store);
       } else {
+        if (!isMounted()) return;
         setStoreError('Failed to load store details');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setStoreError(err.message || 'Failed to load store details. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -164,11 +171,13 @@ function EnterAmountScreen() {
           ...(offersData.bankOffers || []),
           ...(offersData.rezOffers || []),
         ].slice(0, 4); // Show max 4 offers in preview
+        if (!isMounted()) return;
         setOffers(allOffers);
       }
     } catch (err: any) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoadingOffers(false);
     }
   };

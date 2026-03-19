@@ -39,10 +39,12 @@ import {
   FetchedBillInfo,
   BillPaymentRecord,
 } from '@/services/billPaymentApi';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type PageStep = 'types' | 'providers' | 'input' | 'bill';
 
 function BillPaymentPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const initialType = (params.type as string) || '';
@@ -88,9 +90,11 @@ function BillPaymentPage() {
           setSelectedType(initialType);
         }
       } else {
+        if (!isMounted()) return;
         setError('Failed to load bill types. Please try again.');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load bill types. Please try again.');
       errorReporter.captureError(
         err instanceof Error ? err : new Error('Failed to fetch bill types'),
@@ -98,6 +102,7 @@ function BillPaymentPage() {
         'warning'
       );
     } finally {
+      if (!isMounted()) return;
       setLoadingTypes(false);
     }
   }, [initialType]);
@@ -130,6 +135,7 @@ function BillPaymentPage() {
           { context: 'BillPaymentPage.fetchProviders' },
           'warning'
         );
+        if (!isMounted()) return;
         setProviders([]);
       } finally {
         if (!cancelled) setLoadingProviders(false);
@@ -161,7 +167,9 @@ function BillPaymentPage() {
         'info'
       );
     } finally {
+      if (!isMounted()) return;
       setLoadingHistory(false);
+      if (!isMounted()) return;
       setLoadingMoreHistory(false);
     }
   }, [authLoading, isAuthenticated]);
@@ -194,6 +202,7 @@ function BillPaymentPage() {
       );
       platformAlert('Error', 'Failed to fetch bill. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoadingBill(false);
     }
   }, [selectedProvider, consumerNumber]);
@@ -210,8 +219,11 @@ function BillPaymentPage() {
       if (res.success) {
         platformAlert('Success', `Bill paid successfully! Cashback: ${currencySymbol}${fetchedBill.cashbackAmount.toLocaleString()}`);
         // Reset form & refresh history
+        if (!isMounted()) return;
         setFetchedBill(null);
+        if (!isMounted()) return;
         setConsumerNumber('');
+        if (!isMounted()) return;
         setSelectedProvider(null);
         loadHistory(1);
       } else {
@@ -225,6 +237,7 @@ function BillPaymentPage() {
       );
       platformAlert('Error', 'Payment failed. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoadingPay(false);
     }
   }, [fetchedBill, selectedProvider, consumerNumber, currencySymbol, loadHistory]);

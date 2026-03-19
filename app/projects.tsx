@@ -23,6 +23,7 @@ import { useAuthUser, useGetCurrencySymbol } from '@/stores/selectors';
 import { EARN_COLORS } from '@/constants/EarnPageColors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Project {
   _id: string;
@@ -106,6 +107,7 @@ function AllProjectsPage() {
   const slideAnim = useRef(new Animated.Value(30)).current;
   const searchScaleAnim = useRef(new Animated.Value(1)).current;
   const cardAnims = useRef<{ [key: string]: Animated.Value }>({}).current;
+  const isMounted = useIsMounted();
 
   const categories = [
     { label: 'All', value: null, icon: 'grid', gradient: [colors.brand.purpleLight, colors.brand.purpleMedium] },
@@ -216,6 +218,7 @@ function AllProjectsPage() {
         const newProjects = response.data.projects || [];
         
         if (reset) {
+          if (!isMounted()) return;
           setProjects(newProjects);
           // Animate cards in
           newProjects.forEach((project, index) => {
@@ -230,10 +233,13 @@ function AllProjectsPage() {
             }).start();
           });
         } else {
+          if (!isMounted()) return;
           setProjects(prev => [...prev, ...newProjects]);
         }
 
+        if (!isMounted()) return;
         setHasMore(response.data.pagination?.hasNext || false);
+        if (!isMounted()) return;
         setPage(pageNum);
 
         // Animate in
@@ -247,9 +253,12 @@ function AllProjectsPage() {
         throw new Error('Failed to load projects');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError(err instanceof Error ? err.message : 'Failed to load projects');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [selectedCategory, selectedDifficulty, searchQuery, sortBy, filterStatus, user, fadeAnim, slideAnim, cardAnims]);

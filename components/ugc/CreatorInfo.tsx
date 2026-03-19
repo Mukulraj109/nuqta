@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ThemedText';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface CreatorInfoProps {
   creatorId: string;
@@ -26,6 +27,7 @@ function CreatorInfo({
   onFollowPress,
 }: CreatorInfoProps) {
   const [following, setFollowing] = React.useState(false);
+  const isMounted = useIsMounted();
 
   const handleFollow = async () => {
     if (following) return;
@@ -36,6 +38,7 @@ function CreatorInfo({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setFollowing(false);
     }
   };

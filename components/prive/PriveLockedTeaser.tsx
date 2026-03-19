@@ -25,6 +25,7 @@ import { PRIVE_COLORS } from './priveTheme';
 import priveInviteApi from '@/services/priveInviteApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -44,6 +45,7 @@ function PriveLockedTeaser({ onAccessGranted }: PriveLockedTeaserProps) {
   const [code, setCode] = useState('');
   const [isValidating, setIsValidating] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
+  const isMounted = useIsMounted();
   const [validationResult, setValidationResult] = useState<{
     valid: boolean;
     reason?: string;
@@ -58,13 +60,16 @@ function PriveLockedTeaser({ onAccessGranted }: PriveLockedTeaserProps) {
     try {
       const response = await priveInviteApi.validateCode(code.trim());
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setValidationResult(response.data);
       } else {
         setValidationResult({ valid: false, reason: 'Failed to validate code' });
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setValidationResult({ valid: false, reason: err.message || 'Network error' });
     } finally {
+      if (!isMounted()) return;
       setIsValidating(false);
     }
   };
@@ -90,6 +95,7 @@ function PriveLockedTeaser({ onAccessGranted }: PriveLockedTeaserProps) {
     } catch (err: any) {
       platformAlertSimple('Error', err.message || 'Failed to apply invite code');
     } finally {
+      if (!isMounted()) return;
       setIsApplying(false);
     }
   };

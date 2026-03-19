@@ -22,6 +22,7 @@ import { showAlert } from '@/components/common/CrossPlatformAlert';
 import logger from '@/utils/logger';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -67,6 +68,7 @@ interface ChallengeStats {
 type TabType = 'daily' | 'weekly' | 'monthly' | 'completed';
 
 function ChallengesPage() {
+  const isMounted = useIsMounted();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('daily');
@@ -165,7 +167,9 @@ function ChallengesPage() {
       logger.debug(`🎯 [Challenges] Merged challenges: ${mergedChallenges.length}`);
       logger.debug(`✅ [Challenges] Active: ${active.length}, Completed: ${completed.length}`);
 
+      if (!isMounted()) return;
       setChallenges(active);
+      if (!isMounted()) return;
       setCompletedChallenges(completed);
 
       // Map API stats to our interface and calculate completion rate
@@ -175,6 +179,7 @@ function ChallengesPage() {
         ? ((apiStats.challengesCompleted || 0) / totalChallenges) * 100
         : 0;
 
+      if (!isMounted()) return;
       setStats({
         totalCompleted: apiStats.challengesCompleted || 0,
         totalCoinsEarned: apiStats.totalCoins || 0,
@@ -188,7 +193,9 @@ function ChallengesPage() {
       logger.error('Error loading challenges data:', error);
       showAlert('Error', 'Failed to load challenges. Please try again.', undefined, 'error');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   };
@@ -332,6 +339,7 @@ function ChallengesPage() {
         );
       }
     } finally {
+      if (!isMounted()) return;
       setClaimingId(null);
     }
   };

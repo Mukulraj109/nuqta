@@ -29,6 +29,7 @@ import { storesApi } from '@/services/storesApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { getCategoryConfig } from '@/config/categoryConfig';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Subcategory metadata for icons and colors
 const SUBCATEGORY_META: Record<string, { title: string; description: string; icon: string; color: string; emoji: string; filterTags: string[] }> = {
@@ -225,6 +226,7 @@ function StoreCard({ store, currencySymbol }: { store: any; currencySymbol: stri
 }
 
 function SharedCategoryPage() {
+  const isMounted = useIsMounted();
   const { subcategory, slug } = useLocalSearchParams<{ subcategory: string; slug: string }>();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -280,20 +282,26 @@ function SharedCategoryPage() {
       if (response.success && response.data) {
         const storesData = Array.isArray(response.data) ? response.data : (response.data.stores || []);
         const total = response.data.total || storesData.length;
+        if (!isMounted()) return;
         setTotalCount(total);
 
         if (pageNum === 1) {
+          if (!isMounted()) return;
           setStores(storesData);
         } else {
+          if (!isMounted()) return;
           setStores(prev => [...prev, ...storesData]);
         }
 
+        if (!isMounted()) return;
         setHasMore(storesData.length >= 20);
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [subcategory]);
@@ -306,6 +314,7 @@ function SharedCategoryPage() {
     setRefreshing(true);
     setPage(1);
     await fetchStores(1, true);
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

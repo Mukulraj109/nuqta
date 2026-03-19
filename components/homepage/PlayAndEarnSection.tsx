@@ -20,6 +20,7 @@ import ChallengesCard from './cards/ChallengesCard';
 import StreakRewardsCard from './cards/StreakRewardsCard';
 import SurpriseCoinDropCard from './cards/SurpriseCoinDropCard';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2; // 2 cards per row with padding
@@ -46,6 +47,7 @@ const PlayAndEarnSection: React.FC = () => {
   const [data, setData] = useState<PlayAndEarnData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   const fetchPlayAndEarnData = useCallback(async () => {
     if (!isAuthenticated) {
@@ -57,11 +59,14 @@ const PlayAndEarnSection: React.FC = () => {
       setIsLoading(true);
       const response = await gamificationApi.getPlayAndEarnData();
       if (response.success) {
+        if (!isMounted()) return;
         setData(response.data);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [isAuthenticated]);

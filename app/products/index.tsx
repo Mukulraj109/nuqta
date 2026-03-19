@@ -26,6 +26,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Category configurations
@@ -83,6 +84,7 @@ interface DisplayProduct {
 }
 
 const ProductsPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -154,16 +156,23 @@ const ProductsPage: React.FC = () => {
 
       if (response.success && response.data?.products) {
         const transformedProducts = response.data.products.map(transformProduct);
+        if (!isMounted()) return;
         setProducts(transformedProducts);
+        if (!isMounted()) return;
         setFilteredProducts(transformedProducts);
       } else {
+        if (!isMounted()) return;
         setProducts([]);
+        if (!isMounted()) return;
         setFilteredProducts([]);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load products');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, [config.tags]);
@@ -330,6 +339,7 @@ const ProductsPage: React.FC = () => {
       </View>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

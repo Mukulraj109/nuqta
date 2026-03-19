@@ -35,6 +35,7 @@ import HotelInfoCard from '../../components/hotel/HotelInfoCard';
 import HotelAmenities from '../../components/hotel/HotelAmenities';
 import HotelCancellationPolicy from '../../components/hotel/HotelCancellationPolicy';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -114,6 +115,7 @@ interface BookingData {
 }
 
 function HotelDetailsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
@@ -157,6 +159,7 @@ function HotelDetailsPage() {
       const response = await productsApi.getProductById(id as string);
 
       if (!response.success || !response.data) {
+        if (!isMounted()) return;
         setError('Hotel not found');
         return;
       }
@@ -307,10 +310,13 @@ function HotelDetailsPage() {
         roomFeatures: { beds, size: roomSize, maxGuests },
       };
 
+      if (!isMounted()) return;
       setHotel(hotelDetails);
     } catch (error) {
+      if (!isMounted()) return;
       setError('Failed to load hotel details. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

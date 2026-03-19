@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import serviceBookingApi from '@/services/serviceBookingApi';
 import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface TrainDetails {
   id: string;
@@ -80,6 +81,7 @@ const TrainBookingFlow: React.FC<TrainBookingFlowProps> = ({
   const locale = getLocale();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMounted = useIsMounted();
   
   // Step 1: Date & Passengers
   const [travelDate, setTravelDate] = useState(new Date());
@@ -252,6 +254,7 @@ const TrainBookingFlow: React.FC<TrainBookingFlowProps> = ({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to complete booking. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };

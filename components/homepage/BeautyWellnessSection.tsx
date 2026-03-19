@@ -17,6 +17,7 @@ import { useRouter } from 'expo-router';
 import storesApi from '@/services/storesApi';
 import categoriesApi from '@/services/categoriesApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   white: colors.background.primary,
@@ -84,6 +85,7 @@ const BeautyWellnessSection: React.FC = () => {
   const router = useRouter();
   const [cardData, setCardData] = useState<Record<string, CardData>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   // Fetch real data from API
   const fetchData = useCallback(async () => {
@@ -126,10 +128,12 @@ const BeautyWellnessSection: React.FC = () => {
       results.forEach((result) => {
         dataMap[result.id] = result;
       });
+      if (!isMounted()) return;
       setCardData(dataMap);
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);

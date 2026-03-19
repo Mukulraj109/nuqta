@@ -14,6 +14,7 @@ import StoreCard from '@/components/homepage/cards/StoreCard';
 import storesApi from '@/services/storesApi';
 import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const isWeb = Platform.OS === 'web';
@@ -57,6 +58,7 @@ const SimilarStoresSection: React.FC<SimilarStoresSectionProps> = ({
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
   const cardWidth = getCardWidth();
 
   const fetchSimilarStores = useCallback(async () => {
@@ -87,14 +89,17 @@ const SimilarStoresSection: React.FC<SimilarStoresSectionProps> = ({
           }
         }
 
+        if (!isMounted()) return;
         setStores(filteredStores);
       } else {
         setStores([]);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load similar stores');
       setStores([]);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [currentStoreId, currentStoreCategory, limit]);

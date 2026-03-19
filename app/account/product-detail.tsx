@@ -17,8 +17,10 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function ProductDetailScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -40,13 +42,17 @@ function ProductDetailScreen() {
       const response = await userProductService.getProductDetails(id as string);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setProduct(response.data);
       } else {
+        if (!isMounted()) return;
         setError('Failed to load product details');
       }
     } catch (error) {
+      if (!isMounted()) return;
       setError('Failed to load product details. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -174,7 +180,10 @@ function ProductDetailScreen() {
         <View style={{ width: 40 }} />
       </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Product Image */}
         <View style={styles.imageContainer}>
           <CachedImage

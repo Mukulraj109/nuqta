@@ -29,6 +29,7 @@ import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 import { GamePageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -60,6 +61,7 @@ function ScratchCardPage() {
   const hasLoadedRef = useRef(false);
   const hasAnimatedRef = useRef(false);
   const isFirstFocusRef = useRef(true);
+  const isMounted = useIsMounted();
 
   // Auth guard — runs once on mount
   useEffect(() => {
@@ -160,6 +162,7 @@ function ScratchCardPage() {
           // Non-blocking — balance will refresh on next navigation
         }
       }
+      if (!isMounted()) return;
       setIsAnimating(false);
     });
   }, [session, isAnimating, revealPrize, scratchAnim, prizeScaleAnim, gamificationActions, refreshWallet]);

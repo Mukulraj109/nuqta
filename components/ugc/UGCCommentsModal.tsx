@@ -21,6 +21,7 @@ import ugcApi, { UGCComment } from '@/services/ugcApi';
 import { useToast } from '@/hooks/useToast';
 import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -90,6 +91,7 @@ function CommentItem({
   currentUserId = 'current-user-id', // TODO: Get from auth context
 }: CommentItemProps) {
   const [showActions, setShowActions] = useState(false);
+  const isMounted = useIsMounted();
   const isOwnComment = comment.userId === currentUserId;
 
   const fullName = `${comment.user.profile.firstName} ${comment.user.profile.lastName}`;
@@ -323,11 +325,13 @@ function UGCCommentsModal({
         const newComments = response.data.comments;
 
         if (isRefreshing || pageNum === 0) {
+          if (!isMounted()) return;
           setComments(newComments);
         } else {
           setComments((prev) => [...prev, ...newComments]);
         }
 
+        if (!isMounted()) return;
         setHasMore(response.data.hasMore);
         setTotalComments(response.data.total);
         setPage(pageNum);
@@ -339,8 +343,10 @@ function UGCCommentsModal({
         setError('Failed to load comments');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load comments');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
       setLoadingMore(false);
       setRefreshing(false);
@@ -393,6 +399,7 @@ function UGCCommentsModal({
 
         if (replyingTo) {
           // Add as reply
+          if (!isMounted()) return;
           setComments((prev) =>
             prev.map((c) =>
               c._id === replyingTo._id
@@ -404,11 +411,13 @@ function UGCCommentsModal({
           // Add as new comment
           setComments((prev) => [newComment, ...prev]);
           // Scroll to top
+          if (!isMounted()) return;
           setTimeout(() => {
             flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
           }, 100);
         }
 
+        if (!isMounted()) return;
         setCommentText('');
         setReplyingTo(null);
         setTotalComments((prev) => prev + 1);
@@ -424,6 +433,7 @@ function UGCCommentsModal({
     } catch (err) {
       showError('Failed to post comment');
     } finally {
+      if (!isMounted()) return;
       setPosting(false);
     }
   };
@@ -453,6 +463,7 @@ function UGCCommentsModal({
 
       if (!response.success) {
         // Revert on error
+        if (!isMounted()) return;
         setComments((prev) => {
           const revertComment = (c: UGCComment): UGCComment => {
             if (c._id === commentId) {
@@ -488,6 +499,7 @@ function UGCCommentsModal({
 
       if (response.success) {
         // Remove from list
+        if (!isMounted()) return;
         setComments((prev) => {
           const removeComment = (list: UGCComment[]): UGCComment[] => {
             return list
@@ -500,6 +512,7 @@ function UGCCommentsModal({
           return removeComment(prev);
         });
 
+        if (!isMounted()) return;
         setTotalComments((prev) => prev - 1);
         if (onCommentCountChange) {
           onCommentCountChange(totalComments - 1);

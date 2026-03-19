@@ -29,6 +29,7 @@ import { showToast } from '@/components/common/ToastManager';
 import { getVibesForCategory, getOccasionsForCategory } from '@/data/categoryDummyData';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2;
@@ -148,6 +149,7 @@ function ShopPage() {
   const [filterColor, setFilterColor] = useState(COLORS.primaryGreen);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const isMounted = useIsMounted();
 
   // Fetch filter metadata (vibe/occasion name)
   useEffect(() => {
@@ -198,6 +200,7 @@ function ShopPage() {
             setFilterColor(occasion.color || COLORS.primaryGreen);
           }
         } else if (categorySlug) {
+          if (!isMounted()) return;
           setFilterTitle(categorySlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
         }
       } catch (error) {
@@ -265,26 +268,33 @@ function ShopPage() {
         const newProducts = response.data.products || response.data || [];
 
         if (isRefresh) {
+          if (!isMounted()) return;
           setProducts(newProducts);
         } else {
+          if (!isMounted()) return;
           setProducts(prev => [...prev, ...newProducts]);
         }
 
         // Stop pagination if fewer than limit products returned
+        if (!isMounted()) return;
         setHasMore(newProducts.length === 20);
       } else {
         // API returned unsuccessful response - stop pagination
+        if (!isMounted()) return;
         setHasMore(false);
       }
     } catch (error) {
       // Stop pagination on error to prevent infinite loop
+      if (!isMounted()) return;
       setHasMore(false);
       showToast({
         message: 'Failed to load products',
         type: 'error',
       });
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [categorySlug, vibeId, occasionId, brandId, page]);

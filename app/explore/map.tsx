@@ -21,6 +21,7 @@ import { useCurrentLocation } from '@/hooks/useLocation';
 import { MapViewSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width, height } = Dimensions.get('window');
 
@@ -43,6 +44,7 @@ const markerColors = [
 ];
 
 const ExploreMapPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedStore, setSelectedStore] = useState<string | null>(null);
@@ -98,14 +100,19 @@ const ExploreMapPage = () => {
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setStores(response.data);
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to fetch nearby stores');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [effectiveCoordinates.latitude, effectiveCoordinates.longitude]);
@@ -878,6 +885,7 @@ const styles = StyleSheet.create({
   storeListContent: {
     paddingHorizontal: 16,
     minHeight: 200,
+    paddingBottom: 120,
   },
   loadingContainer: {
     flex: 1,

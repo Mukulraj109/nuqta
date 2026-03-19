@@ -19,6 +19,7 @@ import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { FormPageSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Cross-platform alert that works on web
 const showAlert = (title: string, message: string, onOk?: () => void) => {
@@ -157,6 +158,7 @@ function VerificationPage() {
   const [loading, setLoading] = useState(false);
   const [checkingStatus, setCheckingStatus] = useState(true);
   const [verificationStatus, setVerificationStatus] = useState<VerificationStatus | null>(null);
+  const isMounted = useIsMounted();
 
   const config = ZONE_CONFIGS[zone] || ZONE_CONFIGS.student;
 
@@ -174,6 +176,7 @@ function VerificationPage() {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setCheckingStatus(false);
     }
   };
@@ -195,6 +198,7 @@ function VerificationPage() {
     });
 
     if (!result.canceled && result.assets[0]) {
+      if (!isMounted()) return;
       setDocumentImage(result.assets[0].uri);
       showAlert('Document Selected', 'Your document has been selected successfully. You can now submit your verification.');
     }
@@ -217,6 +221,7 @@ function VerificationPage() {
     });
 
     if (!result.canceled && result.assets[0]) {
+      if (!isMounted()) return;
       setDocumentImage(result.assets[0].uri);
       showAlert('Photo Captured', 'Your document photo has been captured successfully. You can now submit your verification.');
     }
@@ -317,6 +322,7 @@ function VerificationPage() {
     } catch (error: any) {
       showAlert('Error', error.message || 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

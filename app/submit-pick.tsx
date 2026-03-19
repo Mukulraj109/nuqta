@@ -27,6 +27,7 @@ import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.c
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useGetCurrencySymbol } from '@/stores/selectors';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ProductResult {
   _id: string;
@@ -100,22 +101,29 @@ function SubmitPickPage() {
 
       if (!result.canceled && result.assets[0]) {
         const asset = result.assets[0];
+        if (!isMounted()) return;
         setError(null);
 
         if (type === 'image') {
+          if (!isMounted()) return;
           setPhotoUri(asset.uri);
+          if (!isMounted()) return;
           setUploadedPhotoUrl(null);
         } else {
+          if (!isMounted()) return;
           setVideoUri(asset.uri);
+          if (!isMounted()) return;
           setUploadedVideoUrl(null);
         }
 
         await uploadToCloudinary(asset.uri, type, asset.fileName, asset.mimeType);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError('Failed to pick media: ' + err.message);
     }
   }, []);
+  const isMounted = useIsMounted();
 
   const uploadToCloudinary = async (
     uri: string,
@@ -223,19 +231,26 @@ function SubmitPickPage() {
         const total = pagination?.pages || 1;
 
         if (isFirstPage) {
+          if (!isMounted()) return;
           setSearchResults(products);
         } else {
+          if (!isMounted()) return;
           setSearchResults(prev => [...prev, ...products]);
         }
 
+        if (!isMounted()) return;
         setCurrentPage(page);
+        if (!isMounted()) return;
         setTotalPages(total);
+        if (!isMounted()) return;
         setHasMore(page < total);
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setSearching(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, []);
@@ -309,13 +324,17 @@ function SubmitPickPage() {
       });
 
       if (response.success) {
+        if (!isMounted()) return;
         setSubmitted(true);
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to submit pick');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };

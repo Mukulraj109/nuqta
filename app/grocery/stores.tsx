@@ -25,6 +25,7 @@ import { StoresListSkeleton } from '@/components/grocery/GrocerySkeleton';
 import { storesApi } from '@/services/storesApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 interface Store {
   id: string;
   _id?: string;
@@ -52,6 +53,7 @@ interface Store {
 }
 
 const GroceryStoresPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
 
   // State
@@ -95,21 +97,29 @@ const GroceryStoresPage: React.FC = () => {
           allStores = allStores.filter((s: any) => s.deliveryCategories?.organic || s.tags?.includes('organic'));
         }
 
+        if (!isMounted()) return;
         setStores(allStores);
       } else {
+        if (!isMounted()) return;
         setStores(getFallbackStores());
       }
 
       if (featuredRes.success && featuredRes.data) {
+        if (!isMounted()) return;
         setFeaturedStores(Array.isArray(featuredRes.data) ? featuredRes.data.slice(0, 3) : []);
       } else {
+        if (!isMounted()) return;
         setFeaturedStores(getFallbackStores().slice(0, 3));
       }
     } catch (err) {
+      if (!isMounted()) return;
       setStores(getFallbackStores());
+      if (!isMounted()) return;
       setFeaturedStores(getFallbackStores().slice(0, 3));
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [selectedFilter]);
@@ -323,6 +333,7 @@ const GroceryStoresPage: React.FC = () => {
       {/* Content */}
       <ScrollView
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

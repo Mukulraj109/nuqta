@@ -14,9 +14,11 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import exploreApi, { ExploreStats } from '@/services/exploreApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const { width } = Dimensions.get('window');
 
 const LiveStatsStrip = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -43,8 +45,10 @@ const LiveStatsStrip = () => {
         setStats(response.data);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load live stats');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

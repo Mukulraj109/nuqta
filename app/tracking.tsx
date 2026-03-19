@@ -24,6 +24,7 @@ import { useOrderListSocket } from '@/hooks/useOrderListSocket';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -162,6 +163,7 @@ function OrderTrackingScreen() {
 
   // Real-time order list updates via socket
   const { lastUpdate, counts: socketCounts } = useOrderListSocket();
+  const isMounted = useIsMounted();
 
   // Handle real-time order status updates
   useEffect(() => {
@@ -228,8 +230,10 @@ function OrderTrackingScreen() {
         const mapped = response.data.orders.map(mapOrderToTracking);
 
         if (loadMore) {
+          if (!isMounted()) return;
           setOrders(prev => [...prev, ...mapped]);
         } else {
+          if (!isMounted()) return;
           setOrders(mapped);
         }
 
@@ -238,6 +242,7 @@ function OrderTrackingScreen() {
 
         // Update counts from response if available
         if (response.data.counts) {
+          if (!isMounted()) return;
           setCounts(response.data.counts);
         }
       } else {
@@ -245,10 +250,14 @@ function OrderTrackingScreen() {
       }
     } catch (err: any) {
       const errorMsg = err.response?.data?.message || err.message || 'Failed to load orders';
+      if (!isMounted()) return;
       setError(errorMsg);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [selectedTab]);

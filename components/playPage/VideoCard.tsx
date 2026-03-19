@@ -10,6 +10,7 @@ import ShimmerEffect from '@/components/common/ShimmerEffect';
 import { useVideoManager } from '@/hooks/useVideoManager';
 import logger from '@/utils/logger';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -44,6 +45,7 @@ function VideoCard({
   const [isLiked, setIsLiked] = useState(item.isLiked || false); // Like state
   const [likeCount, setLikeCount] = useState(item.engagement?.likes || 0); // Like count
   const [lastTap, setLastTap] = useState<number | null>(null); // For double-tap detection
+  const isMounted = useIsMounted();
   
   // Animation values
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -82,6 +84,7 @@ function VideoCard({
           );
         } catch (error) {
           logger.warn('Video loading error:', error);
+          if (!isMounted()) return;
           setHasError(true);
         }
       }
@@ -252,6 +255,7 @@ function VideoCard({
 
     if (videoRef.current) {
       try {
+        if (!isMounted()) return;
         await videoRef.current.setIsMutedAsync(!isMuted);
         setIsMuted(!isMuted);
         logger.debug(`🔊 [VideoCard] Volume ${!isMuted ? 'muted' : 'unmuted'}`);

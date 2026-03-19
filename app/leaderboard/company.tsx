@@ -9,8 +9,10 @@ import { useUserIdentityStore } from '@/stores/userIdentityStore';
 import { useAuthUser } from '@/stores';
 import * as identityApi from '@/services/identityApi';
 import analyticsService, { IdentityAnalyticsEvents } from '@/services/analyticsService';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function CompanyLeaderboardPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const user = useAuthUser();
   const { companyName } = useUserIdentityStore();
@@ -24,7 +26,7 @@ function CompanyLeaderboardPage() {
     identityApi.getCompanyLeaderboard(companyName)
       .then(setData)
       .catch(() => {})
-      .finally(() => setLoading(false));
+      .finally(() => { if (isMounted()) setLoading(false); });
   }, [companyName]);
 
   const handleShare = async () => {

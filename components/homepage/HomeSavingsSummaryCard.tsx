@@ -34,7 +34,7 @@ const HomeSavingsSummaryCard: React.FC<HomeSavingsSummaryCardProps> = ({
     <Pressable onPress={onPress} style={({ pressed }) => [pressed && styles.pressed]}>
       <View style={styles.wrapper}>
         <LinearGradient
-          colors={['#faf1e0', '#dfebf7']}
+          colors={[colors.linen, colors.lavenderMist]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.gradient}
@@ -107,13 +107,13 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#6B7280',
+    color: colors.text.secondary,
     marginBottom: 4,
   },
   amount: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: '#ffcd57',
     marginBottom: 6,
   },
   unlockRow: {
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
   unlockText: {
     fontSize: 12,
-    color: '#7C3AED',
+    color: colors.brand.purple,
     fontWeight: '500',
   },
 
@@ -142,12 +142,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a3a52',
+    color: colors.secondary[600],
     marginBottom: 4,
   },
   emptySubtitle: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.text.secondary,
     textAlign: 'center',
     lineHeight: 18,
   },

@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.base,
-    paddingBottom: Spacing.lg,
+    paddingBottom: 120,
   },
   activityCard: {
     flexDirection: 'row',

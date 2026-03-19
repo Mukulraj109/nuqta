@@ -34,6 +34,7 @@ import { useCurrentLocation } from '@/hooks/useLocation';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { searchHistoryService } from '@/services/searchHistoryService';
 import { Spacing } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function SearchPage() {
   const params = useLocalSearchParams();
@@ -65,6 +66,7 @@ function SearchPage() {
     cashbackMin: 0,
   });
   const [recentSearches, setRecentSearches] = useState<any[]>([]);
+  const isMounted = useIsMounted();
 
   // Load recent searches
   useEffect(() => {

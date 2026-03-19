@@ -20,6 +20,7 @@ import { apiClient } from '@/utils/apiClient';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 interface OfferFromAPI {
   _id: string;
   title?: string;
@@ -58,6 +59,7 @@ function HotspotDetailPage() {
   const [offers, setOffers] = useState<OfferFromAPI[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (!params.slug) return;
@@ -70,11 +72,14 @@ function HotspotDetailPage() {
           const data = response.data as any;
           setOffers(Array.isArray(data.offers) ? data.offers : Array.isArray(data) ? data : []);
         } else {
+          if (!isMounted()) return;
           setOffers([]);
         }
       } catch (err) {
+        if (!isMounted()) return;
         setError('Failed to load offers. Please try again.');
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -333,7 +338,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: Spacing.base,
-    paddingBottom: 40,
+    paddingBottom: 120,
   },
   sectionTitle: {
     fontSize: 16,

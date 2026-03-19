@@ -6,6 +6,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { HorizontalScrollSectionProps } from '@/types/homepage.types';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import SectionSkeleton from './skeletons/SectionSkeleton';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -20,6 +21,7 @@ const HorizontalScrollSection = React.memo(function HorizontalScrollSection({
   isLoading = false,
 }: HorizontalScrollSectionProps & { isLoading?: boolean }) {
   const [refreshing, setRefreshing] = React.useState(false);
+  const isMounted = useIsMounted();
 
   const primaryColor = useThemeColor({}, 'tint');
   const textColor = useThemeColor({}, 'text');
@@ -33,6 +35,7 @@ const HorizontalScrollSection = React.memo(function HorizontalScrollSection({
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setRefreshing(false);
       }
     }

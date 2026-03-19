@@ -23,10 +23,12 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import pollApi, { Poll, PollOption, PollVoteHistory } from '@/services/pollApi';
 import { platformAlert } from '@/utils/platformAlert';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type TabType = 'active' | 'history';
 
 function PollsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('active');
   const [polls, setPolls] = useState<Poll[]>([]);
@@ -44,14 +46,17 @@ function PollsPage() {
       ]);
 
       if (activePollsRes.success && activePollsRes.data) {
+        if (!isMounted()) return;
         setPolls(activePollsRes.data.polls);
       }
       if (dailyPollRes.success && dailyPollRes.data) {
+        if (!isMounted()) return;
         setDailyPoll(dailyPollRes.data.poll);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, []);
@@ -120,6 +125,7 @@ function PollsPage() {
     } catch (error: any) {
       platformAlert('Error', 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setVotingPollId(null);
     }
   };
@@ -407,7 +413,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: Spacing.base,
-    paddingBottom: Spacing['3xl'],
+    paddingBottom: 120,
   },
   pollCard: {
     backgroundColor: Colors.background.primary,

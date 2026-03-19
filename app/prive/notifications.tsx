@@ -13,6 +13,7 @@ import priveApi from '@/services/priveApi';
 import { NotificationListSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
 import { catchAndReport } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface NotificationItem {
   id: string;
@@ -43,6 +44,7 @@ function NotificationsScreen() {
     finally { setIsLoading(false); setIsRefreshing(false); }
   }, []);
 
+  const isMounted = useIsMounted();
   useEffect(() => { fetchData(); }, [fetchData]);
   const onRefresh = () => { setIsRefreshing(true); fetchData(); };
 

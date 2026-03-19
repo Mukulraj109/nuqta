@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import serviceBookingApi from '@/services/serviceBookingApi';
 import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface HotelDetails {
   id: string;
@@ -79,6 +80,7 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
   const locale = getLocale();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMounted = useIsMounted();
   
   // Step 1: Dates & Guests
   const [checkInDate, setCheckInDate] = useState(new Date());
@@ -238,6 +240,7 @@ const HotelBookingFlow: React.FC<HotelBookingFlowProps> = ({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to complete booking. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };

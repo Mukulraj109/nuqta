@@ -10,6 +10,7 @@ import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
 import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface RelatedCabsSectionProps {
   currentCabId: string;
@@ -23,6 +24,7 @@ const RelatedCabsSection: React.FC<RelatedCabsSectionProps> = ({ currentCabId })
   const locale = getLocale();
   const [relatedCabs, setRelatedCabs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadRelatedCabs();
@@ -42,11 +44,13 @@ const RelatedCabsSection: React.FC<RelatedCabsSectionProps> = ({ currentCabId })
         const filtered = response.data.services
           .filter((cab: any) => (cab._id || cab.id) !== currentCabId)
           .slice(0, 5);
+        if (!isMounted()) return;
         setRelatedCabs(filtered);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

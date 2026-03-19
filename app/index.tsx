@@ -6,8 +6,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingScreen from '@/components/onboarding/LoadingScreen';
 import { useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { getAuthToken, getUser } from '@/utils/authStorage';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function AppEntry() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const pathname = usePathname();
   const rootNavigationState = useRootNavigationState();
@@ -59,6 +61,7 @@ function AppEntry() {
           safeReplace('/onboarding/location-permission');
         }
 
+        if (!isMounted()) return;
         setIsChecking(false);
         return;
       }
@@ -73,6 +76,7 @@ function AppEntry() {
       if (storedToken && storedUser && authRestoreRetryCountRef.current < 8) {
         authRestoreRetryCountRef.current += 1;
         clearPendingTimer();
+        if (!isMounted()) return;
         pendingTimerRef.current = setTimeout(() => {
           checkAppState();
         }, 400);
@@ -88,9 +92,11 @@ function AppEntry() {
         safeReplace('/onboarding/splash');
       }
 
+      if (!isMounted()) return;
       setIsChecking(false);
     } catch (_error) {
       safeReplace('/onboarding/splash');
+      if (!isMounted()) return;
       setIsChecking(false);
     }
   }, [isAuthenticated, user, clearPendingTimer, pathname, safeReplace]);

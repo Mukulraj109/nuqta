@@ -25,6 +25,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography, Gradients } from '@
 import realOffersApi from '@/services/realOffersApi';
 import { useAuthUser, useIsAuthenticated } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const ZONE_SLUG = 'women';
@@ -62,6 +63,7 @@ const CATEGORIES = [
 ];
 
 function WomenZonePage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const user = useAuthUser();
@@ -104,6 +106,7 @@ function WomenZonePage() {
       if (zonesResponse.success && zonesResponse.data) {
         const zone = zonesResponse.data.find((z: any) => z.slug === ZONE_SLUG);
         if (zone) {
+          if (!isMounted()) return;
           setZoneInfo({
             name: zone.name,
             description: zone.description,
@@ -118,11 +121,14 @@ function WomenZonePage() {
       // Get offers - API returns { zone, offers }
       if (offersResponse.success && offersResponse.data) {
         const offersData = offersResponse.data.offers || offersResponse.data;
+        if (!isMounted()) return;
         setOffers(Array.isArray(offersData) ? offersData : []);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load offers. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

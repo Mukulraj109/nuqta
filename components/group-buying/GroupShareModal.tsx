@@ -32,7 +32,7 @@ function GroupShareModal({
 
   if (!group) return null;
 
-  const shareUrl = `nuqta://group-buy/join?code=${group.code}`;
+  const shareUrl = `rez://group-buy/join?code=${group.code}`;
   const spotsLeft = group.maxMembers - group.currentMemberCount;
 
   const shareMessage = `🎉 Join my group buying deal!

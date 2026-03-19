@@ -21,10 +21,12 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type TabKey = 'active' | 'completed';
 
 function ElectronicsMissionsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -47,6 +49,7 @@ function ElectronicsMissionsPage() {
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -56,6 +59,7 @@ function ElectronicsMissionsPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchMissions();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -88,6 +92,7 @@ function ElectronicsMissionsPage() {
         platformAlertSimple('Error', errorMsg || 'Could not complete mission');
       }
     } finally {
+      if (!isMounted()) return;
       setClaiming(null);
     }
   }, [currencySymbol, fetchMissions]);

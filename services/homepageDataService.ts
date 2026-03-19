@@ -913,7 +913,7 @@ class HomepageDataService {
       this.performanceMetrics.batchSuccesses++;
 
       // Extract userContext if present (backend includes it for authenticated users)
-      const rawData = response.data?.data || response.data;
+      const rawData = response.data;
       if (rawData?.userContext) {
         this._lastUserContext = rawData.userContext;
         this._userContextTimestamp = Date.now();

@@ -27,6 +27,7 @@ import { useOrderHistory, OrderFilterParams } from '@/hooks/useOrderHistory';
 import { OrderFilter } from '@/types/order';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -79,6 +80,7 @@ function dateRangeToISO(dateRange: string): { dateFrom?: string; dateTo?: string
 }
 
 function OrderHistoryPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilterModal, setShowFilterModal] = useState(false);
@@ -121,6 +123,7 @@ function OrderHistoryPage() {
     } catch (err) {
       platformAlertSimple('Error', 'Failed to refresh orders');
     } finally {
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [refresh, selectedFilter, searchQuery, buildServerFilter]);
@@ -376,7 +379,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingHorizontal: Spacing.lg,
-    paddingBottom: Spacing.lg,
+    paddingBottom: 120,
   },
   // Skeleton styles
   skeletonCard: {

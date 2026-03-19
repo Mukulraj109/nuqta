@@ -23,6 +23,7 @@ import apiClient from '@/services/apiClient';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -110,6 +111,7 @@ const timeSlots: BookingSlot[] = [
 ];
 
 function DentalCarePage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [dentists, setDentists] = useState<DentistStore[]>([]);
@@ -131,27 +133,32 @@ function DentalCarePage() {
   const fetchDentists = async () => {
     try {
       setLoading(true);
-      const response = await apiClient.get('/stores?category=healthcare&type=doctor&specialty=dentist');
+      const response = await apiClient.get<{ stores: DentistStore[] }>('/stores?category=healthcare&type=doctor&specialty=dentist');
 
       if (response.success && response.data?.stores) {
+        if (!isMounted()) return;
         setDentists(response.data.stores);
+        if (!isMounted()) return;
         setFilteredDentists(response.data.stores);
       } else {
         // Fallback: fetch all doctors and filter for dentists
-        const fallbackResponse = await apiClient.get('/stores?category=healthcare&type=doctor');
+        const fallbackResponse = await apiClient.get<{ stores: DentistStore[] }>('/stores?category=healthcare&type=doctor');
         if (fallbackResponse.success && fallbackResponse.data?.stores) {
           const dentistStores = fallbackResponse.data.stores.filter((store: DentistStore) =>
             store.metadata?.specialization?.toLowerCase().includes('dent') ||
             store.name.toLowerCase().includes('dental') ||
             store.name.toLowerCase().includes('dentist')
           );
+          if (!isMounted()) return;
           setDentists(dentistStores);
+          if (!isMounted()) return;
           setFilteredDentists(dentistStores);
         }
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load dentists. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -188,6 +195,7 @@ function DentalCarePage() {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchDentists();
+    if (!isMounted()) return;
     setRefreshing(false);
   }, []);
 
@@ -257,6 +265,7 @@ function DentalCarePage() {
     } catch (error: any) {
       platformAlertSimple('Booking Failed', error.message || 'Could not book appointment. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsBooking(false);
     }
   };
@@ -424,6 +433,7 @@ function DentalCarePage() {
       <ScrollView
         style={styles.content}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.brand.cyan]} />
         }

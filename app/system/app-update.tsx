@@ -21,6 +21,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { catchAndReport } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface UpdateInfo {
   currentVersion: string;
@@ -58,6 +59,7 @@ function AppUpdatePage() {
 
   const isForceUpdate = updateInfo.updateType === 'force';
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   const handleUpdateNow = async () => {
     try {

@@ -9,6 +9,7 @@ import {
   Pressable,
   ActivityIndicator,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -18,8 +19,10 @@ import { useUserIdentityStore } from '@/stores/userIdentityStore';
 import * as identityApi from '@/services/identityApi';
 import analyticsService, { IdentityAnalyticsEvents } from '@/services/analyticsService';
 import { platformAlertSimple } from '@/utils/platformAlert';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function CorporateVerifyPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { setIdentity } = useUserIdentityStore();
 
@@ -52,6 +55,7 @@ function CorporateVerifyPage() {
         provisional: result.provisionalUnlock,
       });
 
+      if (!isMounted()) return;
       setIdentity({
         segment: 'verified_employee',
         featureLevel: 2,
@@ -68,9 +72,11 @@ function CorporateVerifyPage() {
       } as any);
     } catch (e: any) {
       const msg = e?.message || 'Verification failed. Please try again.';
+      if (!isMounted()) return;
       setError(msg);
       platformAlertSimple('Error', msg);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [companyName, workEmail, setIdentity, router]);
@@ -93,6 +99,10 @@ function CorporateVerifyPage() {
         </ThemedText>
       </View>
 
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
       <ScrollView
         style={styles.body}
         contentContainerStyle={styles.bodyContent}
@@ -156,6 +166,7 @@ function CorporateVerifyPage() {
         </Pressable>
 
       </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }

@@ -19,6 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import FileUploader from './FileUploader';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 export interface Review {
   id: string;
@@ -95,6 +96,7 @@ function ReviewSystem({
   const [filterBy, setFilterBy] = useState<FilterOption>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showSortModal, setShowSortModal] = useState(false);
+  const isMounted = useIsMounted();
   
   // New review form state
   const [newReview, setNewReview] = useState({
@@ -113,6 +115,7 @@ function ReviewSystem({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   };
@@ -140,6 +143,7 @@ function ReviewSystem({
       });
 
       // Reset form
+      if (!isMounted()) return;
       setNewReview({ rating: 0, title: '', content: '', images: [] });
       setIsWritingReview(false);
       platformAlertSimple('Success', 'Your review has been posted!');

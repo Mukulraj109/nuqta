@@ -23,6 +23,7 @@ import creatorsApi from '@/services/creatorsApi';
 import { platformAlert } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const SOCIAL_PLATFORMS = ['instagram', 'youtube', 'twitter', 'tiktok', 'website'] as const;
 const CREATOR_TAGS = [
@@ -36,6 +37,7 @@ interface SocialLink {
 }
 
 function CreatorEditProfilePage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
@@ -65,6 +67,7 @@ function CreatorEditProfilePage() {
       } catch (err) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -127,6 +130,7 @@ function CreatorEditProfilePage() {
     } catch (err: any) {
       platformAlert('Error', err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setSaving(false);
     }
   }, [displayName, bio, avatar, coverImage, selectedTags, socialLinks, validate, router]);

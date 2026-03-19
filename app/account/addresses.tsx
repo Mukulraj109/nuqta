@@ -27,6 +27,7 @@ import { SectionListSkeleton } from '@/components/skeletons';
 import ScreenSkeleton from '@/components/common/ScreenSkeleton';
 import ScreenError from '@/components/common/ScreenError';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Use same AddressType as API (uppercase)
 type AddressType = 'HOME' | 'OFFICE' | 'OTHER';
@@ -49,6 +50,7 @@ interface Address {
 }
 
 function SavedAddressesPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -85,14 +87,18 @@ function SavedAddressesPage() {
           updatedAt: addr.updatedAt,
         }));
 
+        if (!isMounted()) return;
         setAddresses(transformedAddresses);
       } else {
         throw new Error(response.error || 'Failed to fetch addresses');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError(err instanceof Error ? err.message : 'Failed to fetch addresses');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   }, []);
@@ -142,6 +148,7 @@ function SavedAddressesPage() {
           updatedAt: response.data.updatedAt,
         };
 
+        if (!isMounted()) return;
         setAddresses(prev => [...prev, newAddress]);
         return true;
       }
@@ -159,6 +166,7 @@ function SavedAddressesPage() {
 
       if (response.success && response.data) {
         // Update in list
+        if (!isMounted()) return;
         setAddresses(prev =>
           prev.map(addr =>
             addr.id === id
@@ -196,6 +204,7 @@ function SavedAddressesPage() {
         const response = await addressApi.deleteAddress(address.id);
 
         if (response.success) {
+          if (!isMounted()) return;
           setAddresses(prev => prev.filter(addr => addr.id !== address.id));
           platformAlertSimple('Success', 'Address deleted successfully');
         } else {
@@ -212,6 +221,7 @@ function SavedAddressesPage() {
       const response = await addressApi.setDefaultAddress(address.id);
 
       if (response.success) {
+        if (!isMounted()) return;
         setAddresses(prev =>
           prev.map(addr => ({
             ...addr,

@@ -11,6 +11,7 @@ import { ThemedText } from '@/components/ThemedText';
 import logger from '@/utils/logger';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 /**
  * DeliveryInformation Component
@@ -66,6 +67,7 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
   const [selectedShipping, setSelectedShipping] = useState<string | null>(null);
   const [showOptions, setShowOptions] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   /**
    * Check delivery availability for pin code
@@ -86,6 +88,7 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
       // const response = await deliveryApi.checkAvailability(productId, pinCode);
 
       // Simulated API response
+      if (!isMounted()) return;
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Mock delivery estimate
@@ -132,8 +135,10 @@ export const DeliveryInformation: React.FC<DeliveryInformationProps> = ({
       logger.debug('✅ [DeliveryInfo] Delivery estimate:', estimate);
     } catch (err: any) {
       logger.error('❌ [DeliveryInfo] Error checking delivery:', err);
+      if (!isMounted()) return;
       setError('Unable to check delivery. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsChecking(false);
     }
   };

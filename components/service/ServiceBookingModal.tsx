@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   TextInput,
   KeyboardAvoidingView} from 'react-native';
-import { platformAlertSimple } from '@/utils/platformAlert';
+import { platformAlertSimple, platformAlert } from '@/utils/platformAlert';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import serviceBookingApi, {
@@ -20,6 +20,7 @@ import serviceBookingApi, {
   AvailableSlotsResponse,
 } from '@/services/serviceBookingApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -291,6 +292,7 @@ function ServiceBookingModal({
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [booking, setBooking] = useState(false);
   const [customerNotes, setCustomerNotes] = useState('');
+  const isMounted = useIsMounted();
   const [address, setAddress] = useState<ServiceAddress>({
     street: '',
     apartment: '',
@@ -339,13 +341,16 @@ function ServiceBookingModal({
       );
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setAvailableSlots(response.data.slots || []);
       } else {
         setAvailableSlots([]);
       }
     } catch (error) {
+      if (!isMounted()) return;
       setAvailableSlots([]);
     } finally {
+      if (!isMounted()) return;
       setSlotsLoading(false);
     }
   };
@@ -408,7 +413,7 @@ function ServiceBookingModal({
       const response = await serviceBookingApi.createBooking(bookingData);
 
       if (response.success && response.data) {
-        platformAlertSimple('Booking Confirmed!', `Your service has been booked for ${formatDate(selectedDate).month} ${formatDate(selectedDate).date} at ${selectedSlot.start}`,
+        platformAlert('Booking Confirmed!', `Your service has been booked for ${formatDate(selectedDate).month} ${formatDate(selectedDate).date} at ${selectedSlot.start}`,
           [
             {
               text: 'OK',
@@ -425,6 +430,7 @@ function ServiceBookingModal({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to create booking. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setBooking(false);
     }
   };

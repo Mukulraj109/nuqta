@@ -30,7 +30,9 @@ import BonusCampaignBanner from '@/components/earn/BonusCampaignBanner';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 function PayInStoreScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams<PayInStoreParams & { bonusCampaignSlug?: string }>();
   const isAuthenticated = useIsAuthenticated();
@@ -82,11 +84,14 @@ function PayInStoreScreen() {
         const store = response.data as StorePaymentInfo;
         navigateToEnterAmount(store._id, store.name, store.logo);
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Store not found. Please try again.');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to find store. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -405,6 +410,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingTop: 16,
+    paddingBottom: 120,
   },
   manualSearchButton: {
     flexDirection: 'row',

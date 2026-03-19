@@ -28,10 +28,12 @@ import RedemptionHistory from '@/components/loyalty/RedemptionHistory';
 import PointsExpiryBanner from '@/components/loyalty/PointsExpiryBanner';
 import { RewardItem } from '@/types/loyaltyRedemption.types';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type TabType = 'rewards' | 'history' | 'challenges';
 
 const LoyaltyPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const {
     balance,
@@ -681,6 +683,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: Spacing.lg,
+    paddingBottom: 120,
   },
   tabContent: {
     flex: 1,

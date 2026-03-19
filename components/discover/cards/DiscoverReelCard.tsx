@@ -15,6 +15,7 @@ import { Video, ResizeMode } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import { DiscoverReel } from '@/types/discover.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2; // 2 columns with padding
@@ -39,6 +40,7 @@ function DiscoverReelCard({
   const [isPlaying, setIsPlaying] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [showThumbnail, setShowThumbnail] = useState(true);
+  const isMounted = useIsMounted();
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
   // Cleanup video resources on unmount
@@ -56,10 +58,12 @@ function DiscoverReelCard({
       try {
         if (isVisible && autoPlay && videoLoaded) {
           await videoRef.current.playAsync();
+          if (!isMounted()) return;
           setIsPlaying(true);
           setShowThumbnail(false);
         } else {
           await videoRef.current.pauseAsync();
+          if (!isMounted()) return;
           setIsPlaying(false);
         }
       } catch (error) {

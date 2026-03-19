@@ -17,6 +17,7 @@ import programApi from '../../services/programApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -27,6 +28,7 @@ const SocialImpact = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState<any[]>([]);
+  const isMounted = useIsMounted();
 
   // Fetch social impact events
   useEffect(() => {
@@ -39,6 +41,7 @@ const SocialImpact = () => {
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -182,7 +185,11 @@ const SocialImpact = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: isDark ? colors.text.primary : Colors.background.primary }]}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Header */}
         <View style={[styles.header, { backgroundColor: isDark ? 'rgba(0,0,0,0.95)' : 'rgba(255,255,255,0.95)' }]}>
           <View style={styles.headerContent}>

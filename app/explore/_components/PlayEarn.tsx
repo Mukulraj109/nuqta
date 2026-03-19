@@ -16,6 +16,7 @@ import { useRouter } from 'expo-router';
 import gamificationApi, { GamificationStats } from '@/services/gamificationApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -35,6 +36,7 @@ interface PlayEarnActivity {
 }
 
 const PlayEarn = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -118,11 +120,13 @@ const PlayEarn = () => {
             available: activity.available ?? activity.isAvailable,
             pending: activity.pending || activity.pendingCount,
           }));
+          if (!isMounted()) return;
           setDynamicActivities(transformedActivities);
         }
 
         // Extract stats if included
         if (data.stats) {
+          if (!isMounted()) return;
           setStats(data.stats);
         }
       }
@@ -133,8 +137,10 @@ const PlayEarn = () => {
         setStats(statsResponse.data);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load activities');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

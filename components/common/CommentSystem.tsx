@@ -18,6 +18,7 @@ import { platformAlertSimple, platformAlertDestructive } from '@/utils/platformA
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 export interface Comment {
   id: string;
@@ -74,6 +75,7 @@ function CommentSystem({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [expandedReplies, setExpandedReplies] = useState<Set<string>>(new Set());
+  const isMounted = useIsMounted();
   
   const inputRef = useRef<TextInput>(null);
 
@@ -90,16 +92,20 @@ function CommentSystem({
     try {
       if (editingComment) {
         await onEditComment(editingComment.commentId, content);
+        if (!isMounted()) return;
         setEditingComment(null);
       } else {
         await onAddComment(content, replyTo?.commentId);
+        if (!isMounted()) return;
         setReplyTo(null);
       }
+      if (!isMounted()) return;
       setNewComment('');
       inputRef.current?.blur();
     } catch (error) {
       platformAlertSimple('Error', 'Failed to post comment. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };
@@ -149,6 +155,7 @@ function CommentSystem({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   };

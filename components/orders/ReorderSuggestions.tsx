@@ -17,6 +17,7 @@ import { platformAlert } from '@/utils/platformAlert';
 import SkeletonLoader from '@/components/common/SkeletonLoader';
 import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ReorderSuggestionsProps {
   onAddToCart?: (productId: string, quantity: number) => void;
@@ -28,6 +29,7 @@ function ReorderSuggestions({ onAddToCart }: ReorderSuggestionsProps) {
   const currencySymbol = getCurrencySymbol();
   const actions = useCartActions();
   const [addedItems, setAddedItems] = useState<Set<string>>(new Set());
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     refresh();
@@ -82,8 +84,11 @@ function ReorderSuggestions({ onAddToCart }: ReorderSuggestionsProps) {
         quantity: item.suggestedQuantity || 1,
       });
       const key = `${item.productId}-${item.type}`;
+      if (!isMounted()) return;
       setAddedItems(prev => new Set(prev).add(key));
+      if (!isMounted()) return;
       setTimeout(() => {
+        if (!isMounted()) return;
         setAddedItems(prev => {
           const next = new Set(prev);
           next.delete(key);

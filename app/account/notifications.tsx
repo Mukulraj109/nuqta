@@ -16,6 +16,7 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { NotificationListSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface PushNotifications {
   enabled: boolean;
@@ -64,6 +65,7 @@ interface NotificationSettings {
 }
 
 function NotificationsScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -118,15 +120,19 @@ function NotificationsScreen() {
       const response = await notificationService.getNotificationSettings();
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setSettings(response.data as NotificationSettings);
       } else {
         // Set default settings if none exist
+        if (!isMounted()) return;
         setSettings(getDefaultSettings());
       }
     } catch (error) {
       // Set default settings on error
+      if (!isMounted()) return;
       setSettings(getDefaultSettings());
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -144,17 +150,21 @@ function NotificationsScreen() {
       if (!response.success) {
         platformAlertSimple('Error', 'Failed to update push notification settings. Please try again.');
         // Revert to previous state
+        if (!isMounted()) return;
         setSettings(settings);
       } else {
         // Show success message
+        if (!isMounted()) return;
         setShowSuccessMessage(true);
         setTimeout(() => setShowSuccessMessage(false), 2000);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update push notification settings. Please check your connection and try again.');
       // Revert to previous state
+      if (!isMounted()) return;
       setSettings(settings);
     } finally {
+      if (!isMounted()) return;
       setSaving(false);
     }
   };
@@ -171,15 +181,19 @@ function NotificationsScreen() {
 
       if (!response.success) {
         platformAlertSimple('Error', 'Failed to update email notification settings. Please try again.');
+        if (!isMounted()) return;
         setSettings(settings);
       } else {
+        if (!isMounted()) return;
         setShowSuccessMessage(true);
         setTimeout(() => setShowSuccessMessage(false), 2000);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update email notification settings. Please check your connection and try again.');
+      if (!isMounted()) return;
       setSettings(settings);
     } finally {
+      if (!isMounted()) return;
       setSaving(false);
     }
   };
@@ -196,15 +210,19 @@ function NotificationsScreen() {
 
       if (!response.success) {
         platformAlertSimple('Error', 'Failed to update SMS notification settings. Please try again.');
+        if (!isMounted()) return;
         setSettings(settings);
       } else {
+        if (!isMounted()) return;
         setShowSuccessMessage(true);
         setTimeout(() => setShowSuccessMessage(false), 2000);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update SMS notification settings. Please check your connection and try again.');
+      if (!isMounted()) return;
       setSettings(settings);
     } finally {
+      if (!isMounted()) return;
       setSaving(false);
     }
   };
@@ -221,15 +239,19 @@ function NotificationsScreen() {
 
       if (!response.success) {
         platformAlertSimple('Error', 'Failed to update in-app notification settings. Please try again.');
+        if (!isMounted()) return;
         setSettings(settings);
       } else {
+        if (!isMounted()) return;
         setShowSuccessMessage(true);
         setTimeout(() => setShowSuccessMessage(false), 2000);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update in-app notification settings. Please check your connection and try again.');
+      if (!isMounted()) return;
       setSettings(settings);
     } finally {
+      if (!isMounted()) return;
       setSaving(false);
     }
   };

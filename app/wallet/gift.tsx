@@ -29,6 +29,7 @@ import { generateIdempotencyKey } from '@/utils/idempotencyKey';
 import { handleWalletError, parseWalletError } from '@/utils/walletErrorHandler';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const nuqtaCoinImage = BRAND.COIN_IMAGE;
 
@@ -98,6 +99,7 @@ function GiftPage() {
   const submittingRef = useRef(false);
   const validateTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [successData, setSuccessData] = useState<SuccessData | null>(null);
+  const isMounted = useIsMounted();
 
   // Fetch config on mount (balance comes from WalletContext)
   useEffect(() => {
@@ -105,6 +107,7 @@ function GiftPage() {
       try {
         const configRes = await walletApi.getGiftConfig();
         if (configRes.data) {
+          if (!isMounted()) return;
           const cfg = configRes.data;
           if (cfg.themes?.length) {
             setThemes(cfg.themes);
@@ -117,6 +120,7 @@ function GiftPage() {
       } catch {
         // Use fallback config
       } finally {
+        if (!isMounted()) return;
         setConfigLoaded(true);
       }
     };
@@ -151,6 +155,7 @@ function GiftPage() {
       } catch {
         // Validation failed — allow sending anyway, backend will re-validate
       } finally {
+        if (!isMounted()) return;
         setValidatingRecipient(false);
       }
     }, 600);
@@ -199,6 +204,7 @@ function GiftPage() {
     }
 
     submittingRef.current = true;
+    if (!isMounted()) return;
     setLoading(true);
     try {
       const response = await walletApi.sendGift({
@@ -214,6 +220,7 @@ function GiftPage() {
         // Refresh wallet balance via context FIRST, then regenerate idempotency key
         await refreshWallet();
         const newBalance = response.data.newBalance ?? (walletBalance - Number(amount));
+        if (!isMounted()) return;
         setSuccessData({
           giftId: response.data.giftId,
           recipientName: response.data.recipientName || recipientInfo?.name || recipient,
@@ -223,10 +230,12 @@ function GiftPage() {
           newBalance,
         });
         // Regenerate AFTER success is confirmed and balance refreshed
+        if (!isMounted()) return;
         setIdempotencyKey(generateIdempotencyKey('gift'));
       }
     } catch (error: any) {
       // Only regenerate on non-retriable errors (not network failures)
+      if (!isMounted()) return;
       setIdempotencyKey(generateIdempotencyKey('gift'));
       const parsed = parseWalletError(error);
       if (parsed.code === 'REAUTH_REQUIRED') {
@@ -235,6 +244,7 @@ function GiftPage() {
         handleWalletError(error, 'Gift Failed');
       }
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
       submittingRef.current = false;
     }

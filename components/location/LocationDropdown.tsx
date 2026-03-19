@@ -12,6 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { webLocationService } from '@/services/webLocationService';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface LocationOption {
   id: string;
@@ -42,6 +43,7 @@ function LocationDropdown({
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<LocationOption[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const isMounted = useIsMounted();
 
   // Default location options
   const defaultLocations: LocationOption[] = [
@@ -107,6 +109,7 @@ function LocationDropdown({
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setIsSearching(false);
       }
     }

@@ -19,6 +19,7 @@ import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Visit {
   id: string;
@@ -36,6 +37,7 @@ interface Visit {
 }
 
 function MyVisitsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const isLoading = useAuthLoading();
@@ -91,6 +93,7 @@ function MyVisitsPage() {
           queueNumber: visit.queueNumber,
         }));
 
+        if (!isMounted()) return;
         setVisits(transformedVisits);
         setError(null);
       } else {
@@ -98,9 +101,12 @@ function MyVisitsPage() {
       }
     } catch (error: any) {
       const errorMessage = error.message || 'Unable to load your visits. Please try again.';
+      if (!isMounted()) return;
       setError(errorMessage);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   };
@@ -453,6 +459,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.base,
+    paddingBottom: 120,
   },
   emptyContainer: {
     flex: 1,

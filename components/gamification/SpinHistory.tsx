@@ -13,6 +13,7 @@ import { ThemedView } from '@/components/ThemedView';
 import gamificationAPI from '@/services/gamificationApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface CouponMetadata {
   source?: string;
@@ -51,6 +52,7 @@ function SpinHistory({ limit = 10 }: SpinHistoryProps) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadHistory();
@@ -64,11 +66,14 @@ function SpinHistory({ limit = 10 }: SpinHistoryProps) {
       const response = await gamificationAPI.getSpinWheelHistory(limit);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setHistory(response.data.history);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load history');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -76,6 +81,7 @@ function SpinHistory({ limit = 10 }: SpinHistoryProps) {
   const onRefresh = async () => {
     setRefreshing(true);
     await loadHistory();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

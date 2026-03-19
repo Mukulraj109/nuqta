@@ -11,6 +11,7 @@ import {
   Modal,
   Dimensions,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { CardGridSkeleton } from '@/components/skeletons';
 import CachedImage from '@/components/ui/CachedImage';
@@ -23,6 +24,9 @@ import apiClient from '@/services/apiClient';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { CLOUDINARY_CONFIG, getCloudinaryUploadUrl } from '@/config/cloudinary.config';
+import healthRecordsApi from '@/services/healthRecordsApi';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -102,6 +106,7 @@ const medicineCategories: MedicineCategory[] = [
 ];
 
 function PharmacyPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -129,18 +134,22 @@ function PharmacyPage() {
       // Fetch pharmacies
       const pharmacyResponse = await apiClient.get('/stores?category=healthcare&type=pharmacy');
       if (pharmacyResponse.success && pharmacyResponse.data?.stores) {
+        if (!isMounted()) return;
         setPharmacies(pharmacyResponse.data.stores);
       }
 
       // Fetch medicines/products
       const medicineResponse = await apiClient.get('/products?category=healthcare&type=medicine');
       if (medicineResponse.success && medicineResponse.data?.products) {
+        if (!isMounted()) return;
         setMedicines(medicineResponse.data.products);
+        if (!isMounted()) return;
         setFilteredMedicines(medicineResponse.data.products);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load pharmacy data. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -177,6 +186,7 @@ function PharmacyPage() {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchData();
+    if (!isMounted()) return;
     setRefreshing(false);
   }, []);
 
@@ -254,6 +264,7 @@ function PharmacyPage() {
       }
 
       if (!result.canceled && result.assets[0]) {
+        if (!isMounted()) return;
         setPrescriptionImage(result.assets[0].uri);
       }
     } catch (error) {
@@ -270,16 +281,51 @@ function PharmacyPage() {
     try {
       setIsUploading(true);
 
-      // In a real implementation, upload the image to Cloudinary
-      // and create an order with prescription
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulated delay
+      // 1. Upload the prescription image to Cloudinary
+      const uploadUrl = getCloudinaryUploadUrl('image');
+      const formData = new FormData();
+
+      if (Platform.OS === 'web') {
+        const response = await fetch(prescriptionImage);
+        const blob = await response.blob();
+        formData.append('file', blob, `prescription_${Date.now()}.jpg`);
+      } else {
+        const filename = prescriptionImage.split('/').pop() || `prescription_${Date.now()}.jpg`;
+        const match = /\.(\w+)$/.exec(filename);
+        const type = match ? `image/${match[1]}` : 'image/jpeg';
+        formData.append('file', { uri: prescriptionImage, name: filename, type } as any);
+      }
+
+      formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPresets.images);
+      formData.append('folder', 'images/prescriptions');
+
+      const cloudRes = await fetch(uploadUrl, { method: 'POST', body: formData });
+      if (!cloudRes.ok) {
+        throw new Error('Failed to upload prescription image');
+      }
+      const cloudData = await cloudRes.json();
+
+      // 2. Create health record via API
+      await healthRecordsApi.uploadRecord({
+        recordType: 'prescription',
+        title: 'Pharmacy Prescription',
+        description: prescriptionNotes || undefined,
+        documentUrl: cloudData.secure_url,
+        documentType: 'image',
+        fileSize: cloudData.bytes || 0,
+        originalFileName: cloudData.original_filename || `prescription_${Date.now()}`,
+        tags: ['pharmacy', 'prescription'],
+      });
 
       platformAlertConfirm(
         'Prescription Submitted',
         'Your prescription has been submitted. Our pharmacist will review it and contact you shortly.',
         () => {
+          if (!isMounted()) return;
           setPrescriptionModalVisible(false);
+          if (!isMounted()) return;
           setPrescriptionImage(null);
+          if (!isMounted()) return;
           setPrescriptionNotes('');
         },
         'OK'
@@ -287,6 +333,7 @@ function PharmacyPage() {
     } catch (error) {
       platformAlertSimple('Error', 'Failed to submit prescription. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsUploading(false);
     }
   };
@@ -485,6 +532,7 @@ function PharmacyPage() {
       <ScrollView
         style={styles.content}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.brand.cyan]} />
         }

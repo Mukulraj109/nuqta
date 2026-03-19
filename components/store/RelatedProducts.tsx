@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/useToast';
 import { useRouter } from 'expo-router';
 import { FlashList } from '@shopify/flash-list';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface RelatedProductsProps {
   productId: string;
@@ -37,6 +38,7 @@ function RelatedProducts({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retrying, setRetrying] = useState(false);
+  const isMounted = useIsMounted();
   const { showError } = useToast();
   const router = useRouter();
 
@@ -55,6 +57,7 @@ function RelatedProducts({
       if (response.success && response.data && Array.isArray(response.data)) {
         // Filter out the current product if it's in the results
         const filteredProducts = response.data.filter(p => p.id !== productId);
+        if (!isMounted()) return;
         setProducts(filteredProducts);
         setError(null);
       } else {
@@ -62,12 +65,14 @@ function RelatedProducts({
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load related products';
+      if (!isMounted()) return;
       setError(errorMessage);
 
       if (!isRetry) {
         showError(errorMessage);
       }
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
       setRetrying(false);
     }

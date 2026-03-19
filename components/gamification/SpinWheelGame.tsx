@@ -18,6 +18,7 @@ import gamificationAPI from '@/services/gamificationApi';
 import { useGamification } from '@/contexts/GamificationContext';
 import logger from '@/utils/logger';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface SpinWheelGameProps {
   segments: SpinWheelSegment[];
@@ -43,6 +44,7 @@ function SpinWheelGame({
   const [canSpin, setCanSpin] = useState(false);
   const [eligibilityLoading, setEligibilityLoading] = useState(true);
   const [nextSpinTime, setNextSpinTime] = useState<string | null>(null);
+  const isMounted = useIsMounted();
   const spinValue = useRef(new Animated.Value(0)).current;
   const [currentRotation, setCurrentRotation] = useState(0);
   const { actions: gamificationActions } = useGamification();
@@ -108,6 +110,7 @@ function SpinWheelGame({
         const totalRotation = currentRotation + 360 * 5 + targetAngle;
 
         // Animate the spin
+        if (!isMounted()) return;
         spinValue.setValue(0);
         Animated.timing(spinValue, {
           toValue: 1,
@@ -136,6 +139,7 @@ function SpinWheelGame({
         throw new Error('Failed to spin wheel');
       }
     } catch (error: any) {
+      if (!isMounted()) return;
       setIsSpinning(false);
       logger.error('Error spinning wheel:', error);
 

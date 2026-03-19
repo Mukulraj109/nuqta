@@ -21,11 +21,13 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { platformAlertSimple } from '@/utils/platformAlert';
 import authService from '@/services/authApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type RecoveryMethod = 'phone' | 'email';
 type Step = 'method' | 'input' | 'otp' | 'success';
 
 function AccountRecoveryPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [step, setStep] = useState<Step>('method');
   const [method, setMethod] = useState<RecoveryMethod>('phone');
@@ -57,13 +59,16 @@ function AccountRecoveryPage() {
       if (response.success) {
         setStep('otp');
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Failed to send verification code. Please try again.');
         platformAlertSimple('Error', response.message || 'Failed to send code.');
       }
     } catch (e) {
+      if (!isMounted()) return;
       setError('Something went wrong. Please try again.');
       platformAlertSimple('Error', 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -78,13 +83,16 @@ function AccountRecoveryPage() {
       if (response.success) {
         setStep('success');
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Invalid verification code. Please try again.');
         platformAlertSimple('Verification Failed', response.message || 'Invalid code.');
       }
     } catch (e) {
+      if (!isMounted()) return;
       setError('Something went wrong. Please try again.');
       platformAlertSimple('Error', 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

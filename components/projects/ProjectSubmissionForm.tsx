@@ -18,6 +18,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { uploadProjectFile, uploadMultipleProjectFiles } from '@/services/projectUploadService';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Project {
   _id: string;
@@ -115,6 +116,7 @@ function ProjectSubmissionForm({
   const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(getInitialLocation());
   const [locationName, setLocationName] = useState<string>(existingSubmission?.content.metadata?.locationName || '');
   const [uploading, setUploading] = useState(false);
+  const isMounted = useIsMounted();
 
   // Determine content type based on project type
   const getContentType = (): 'text' | 'image' | 'video' | 'rating' | 'checkin' | 'receipt' => {
@@ -204,6 +206,7 @@ function ProjectSubmissionForm({
 
       if (!result.canceled && result.assets) {
         const imageUris = result.assets.map(asset => asset.uri);
+        if (!isMounted()) return;
         setSelectedImages(prev => [...prev, ...imageUris]);
       }
     } catch (error) {
@@ -228,6 +231,7 @@ function ProjectSubmissionForm({
       });
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
+        if (!isMounted()) return;
         setSelectedVideo(result.assets[0].uri);
       }
     } catch (error) {
@@ -244,12 +248,14 @@ function ProjectSubmissionForm({
         return;
       }
 
+      if (!isMounted()) return;
       setUploading(true);
       const locationResult = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Balanced,
       });
 
       const { latitude, longitude } = locationResult.coords;
+      if (!isMounted()) return;
       setLocation({ latitude, longitude });
 
       // Reverse geocode to get location name
@@ -263,16 +269,19 @@ function ProjectSubmissionForm({
             address.region,
             address.country,
           ].filter(Boolean);
+          if (!isMounted()) return;
           setLocationName(addressParts.join(', ') || 'Current Location');
         } else {
           setLocationName('Current Location');
         }
       } catch (geocodeError) {
+        if (!isMounted()) return;
         setLocationName('Current Location');
       }
     } catch (error) {
       showAlert('Error', 'Failed to get location. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setUploading(false);
     }
   };
@@ -416,6 +425,7 @@ function ProjectSubmissionForm({
     } catch (error) {
       showAlert('Error', 'Failed to submit project. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setUploading(false);
     }
   };

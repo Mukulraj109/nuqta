@@ -18,6 +18,7 @@ import { useRouter } from 'expo-router';
 import categoryMetadataApi, { Vibe } from '@/services/categoryMetadataApi';
 import { getVibesForCategory } from '@/data/categoryDummyData';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ShopByVibeSectionProps {
   categorySlug: string;
@@ -60,6 +61,7 @@ const ShopByVibeSection: React.FC<ShopByVibeSectionProps> = ({
   const [apiVibes, setApiVibes] = useState<Vibe[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (vibes) {
@@ -73,6 +75,7 @@ const ShopByVibeSection: React.FC<ShopByVibeSectionProps> = ({
         setLoading(true);
         const response = await categoryMetadataApi.getVibes(categorySlug);
         if (response.success && response.data?.vibes?.length > 0) {
+          if (!isMounted()) return;
           setApiVibes(response.data.vibes);
           setError(false);
         } else {
@@ -84,9 +87,11 @@ const ShopByVibeSection: React.FC<ShopByVibeSectionProps> = ({
       } catch (err) {
         // Fallback to dummy data on error
         const fallbackVibes = getVibesForCategory(categorySlug);
+        if (!isMounted()) return;
         setApiVibes(fallbackVibes);
         setError(true);
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };

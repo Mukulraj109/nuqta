@@ -30,6 +30,7 @@ import MallLoadingSkeleton from '../../../components/mall/pages/MallLoadingSkele
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -139,6 +140,7 @@ const OfferCard: React.FC<OfferCardProps> = ({ offer, onPress, currencySymbol })
 };
 
 function AllOffersPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -162,18 +164,25 @@ function AllOffersPage() {
       setError(null);
       const result = await mallApi.getOffers(pageNum, LIMIT);
 
+      if (!isMounted()) return;
       setTotal(result.total);
 
       if (append) {
+        if (!isMounted()) return;
         setOffers(prev => [...prev, ...result.offers]);
       } else {
+        if (!isMounted()) return;
         setOffers(result.offers);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load offers');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
+      if (!isMounted()) return;
       setIsLoadingMore(false);
     }
   }, []);
@@ -320,7 +329,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.secondary,
   },
   listContent: {
-    paddingBottom: Spacing.xl,
+    paddingBottom: 120,
   },
   listHeader: {
     marginBottom: Spacing.sm,

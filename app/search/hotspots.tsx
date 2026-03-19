@@ -24,6 +24,7 @@ import { useCurrentLocation } from '@/hooks/useLocation';
 import { apiClient } from '@/utils/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -62,6 +63,7 @@ function HotspotsPage() {
   const [hotspots, setHotspots] = useState<HotspotFromAPI[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   // Fetch hotspots from API
   useEffect(() => {
@@ -79,11 +81,14 @@ function HotspotsPage() {
           const data = Array.isArray(response.data) ? response.data : [];
           setHotspots(data);
         } else {
+          if (!isMounted()) return;
           setHotspots([]);
         }
       } catch (err) {
+        if (!isMounted()) return;
         setError('Failed to load hotspots. Please try again.');
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -382,6 +387,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingBottom: Spacing['2xl'],
     paddingTop: Spacing.md,
+    paddingBottom: 120,
   },
   summaryCard: {
     flexDirection: 'row',

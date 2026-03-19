@@ -18,6 +18,7 @@ import { router } from 'expo-router';
 import { showToast } from '@/components/common/ToastManager';
 import { useRefreshCart, useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ReorderModalProps {
   visible: boolean;
@@ -50,6 +51,7 @@ function ReorderModal({
   const currencySymbol = getCurrencySymbol();
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [selectAll, setSelectAll] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (visible && orderId) {
@@ -137,6 +139,7 @@ function ReorderModal({
       await refreshCart();
 
       // Wait a bit for modal to close
+      if (!isMounted()) return;
       await new Promise(resolve => setTimeout(resolve, 300));
 
       if (success) {

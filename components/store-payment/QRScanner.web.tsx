@@ -29,6 +29,7 @@ import { QRCodeData } from '@/types/storePayment.types';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const SCANNER_SIZE = Math.min(SCREEN_WIDTH * 0.7, 280);
@@ -60,6 +61,7 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
   const [cameraReady, setCameraReady] = useState(false);
   const [showManualEntry, setShowManualEntry] = useState(false);
   const [scannerStatus, setScannerStatus] = useState<'idle' | 'scanning' | 'no-detector' | 'detected'>('idle');
+  const isMounted = useIsMounted();
   const scanLineAnim = useRef(new Animated.Value(0)).current;
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -103,12 +105,14 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
     try {
       const devices = await navigator.mediaDevices.enumerateDevices();
       const hasCamera = devices.some((d) => d.kind === 'videoinput');
+      if (!isMounted()) return;
       setHasWebcam(hasCamera);
 
       if (hasCamera) {
         // Auto-start camera
         startScanning();
       } else {
+        if (!isMounted()) return;
         setShowManualEntry(true);
       }
     } catch {
@@ -146,19 +150,23 @@ export default function QRScanner({ onScan, onClose }: QRScannerProps) {
       streamRef.current = stream;
 
       // Wait for video element to be ready
+      if (!isMounted()) return;
       setTimeout(() => {
         if (videoRef.current && streamRef.current) {
           videoRef.current.srcObject = streamRef.current;
           videoRef.current.play().then(() => {
+            if (!isMounted()) return;
             setCameraReady(true);
             startQRDetection();
           }).catch((err) => {
+            if (!isMounted()) return;
             setError('Failed to start camera. Use manual entry.');
             setShowManualEntry(true);
           });
         }
       }, 100);
     } catch (err: any) {
+      if (!isMounted()) return;
       setError('Camera access denied. Please use manual entry.');
       setIsScanning(false);
       setShowManualEntry(true);

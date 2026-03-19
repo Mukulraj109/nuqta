@@ -22,6 +22,7 @@ import socialImpactApi, { SocialImpactEvent, UserImpactStats } from '@/services/
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 // Nuqta Brand Colors
 // Helper function for event type icon background colors
 const getEventTypeIconBg = (eventType?: string): string => {
@@ -86,6 +87,7 @@ const defaultStats: UserImpactStats = {
 };
 
 function SocialImpactPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('all');
   const [events, setEvents] = useState<SocialImpactEvent[]>([]);
@@ -107,16 +109,21 @@ function SocialImpactPage() {
       ]);
 
       if (eventsResponse.success && eventsResponse.data) {
+        if (!isMounted()) return;
         setEvents(eventsResponse.data);
       }
 
       if (statsResponse.success && statsResponse.data) {
+        if (!isMounted()) return;
         setStats(statsResponse.data);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load data');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, []);
@@ -173,6 +180,7 @@ function SocialImpactPage() {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

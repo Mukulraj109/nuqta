@@ -22,6 +22,7 @@ import reelApi from '@/services/reelApi';
 import { useAuthUser, useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { formatTimeAgo } from '@/utils/timeAgoFormatter';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Comment {
   id: string;
@@ -97,22 +98,31 @@ function CommentsPage() {
       if (response.success && response.data) {
         const rawComments = response.data.comments || [];
         const transformed = rawComments.map(transformComment);
+        if (!isMounted()) return;
         setComments(prev => append ? [...prev, ...transformed] : transformed);
 
         const pagination = response.data.pagination;
+        if (!isMounted()) return;
         setHasMore(pagination?.hasNext ?? transformed.length >= COMMENTS_PER_PAGE);
+        if (!isMounted()) return;
         setPage(pageNum);
+        if (!isMounted()) return;
         setError(null);
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to load comments');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to load comments');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [videoId, authLoading, isAuthenticated]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     fetchComments(1);
@@ -160,6 +170,7 @@ function CommentsPage() {
 
     if (!response.success) {
       // Revert on error
+      if (!isMounted()) return;
       setComments(prev =>
         prev.map(comment => {
           if (comment.id === commentId) {
@@ -218,6 +229,7 @@ function CommentsPage() {
         };
 
         if (replyingTo) {
+          if (!isMounted()) return;
           setComments(prev =>
             prev.map(comment => {
               if (comment.id === replyingTo) {
@@ -230,14 +242,18 @@ function CommentsPage() {
             })
           );
         } else {
+          if (!isMounted()) return;
           setComments(prev => [addedComment, ...prev]);
         }
       }
     } catch {
       // Silently fail — the comment was not added
     } finally {
+      if (!isMounted()) return;
       setNewComment('');
+      if (!isMounted()) return;
       setReplyingTo(null);
+      if (!isMounted()) return;
       setSending(false);
     }
   }, [newComment, videoId, sending, replyingTo, user]);

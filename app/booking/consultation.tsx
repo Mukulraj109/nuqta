@@ -21,6 +21,7 @@ import storesApi, { Store } from '@/services/storesApi';
 import consultationApi from '@/services/consultationApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -43,6 +44,7 @@ interface TimeSlot {
 }
 
 function ConsultationBookingScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { storeId } = useLocalSearchParams<{ storeId: string }>();
 
@@ -81,14 +83,19 @@ function ConsultationBookingScreen() {
         const response = await storesApi.getStoreById(storeId);
 
         if (response.success && response.data) {
+          if (!isMounted()) return;
           setStore(response.data);
+          if (!isMounted()) return;
           setError(null);
         } else {
+          if (!isMounted()) return;
           setError(response.error || 'Failed to load clinic details');
         }
       } catch (err) {
+        if (!isMounted()) return;
         setError('Failed to connect to server');
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };
@@ -247,6 +254,7 @@ function ConsultationBookingScreen() {
     } catch (err: any) {
       platformAlertSimple('Error', err.message || 'Failed to book consultation. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };

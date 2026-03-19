@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import learningApi, { LearningContent } from '@/services/learningApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ============================================
 // EXPLAINER VIDEO CONFIG
@@ -82,17 +83,20 @@ const LearnMaximiseSection = () => {
   const router = useRouter();
   const [content, setContent] = useState<LearningContent[]>([]);
   const [loading, setLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
         const response = await learningApi.getContent();
         if (response?.data?.content) {
+          if (!isMounted()) return;
           setContent(response.data.content);
         }
       } catch (err) {
         // Silent fail - section shows explainer video regardless
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };

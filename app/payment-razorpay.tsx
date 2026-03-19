@@ -31,6 +31,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { platformAlertSimple, platformAlertConfirm, platformAlertDestructive } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Import Razorpay for native support
 let RazorpayCheckout: any = null;
@@ -51,6 +52,7 @@ const STRIPE_ONLY_CURRENCIES = ['AED', 'USD', 'EUR', 'GBP', 'CAD', 'AUD'];
 type PaymentGateway = 'razorpay' | 'stripe';
 
 function PaymentPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -164,11 +166,13 @@ function PaymentPage() {
           ...method,
           gateway: paymentGateway,
         }));
+        if (!isMounted()) return;
         setPaymentMethods(methods);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to load payment methods. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -254,6 +258,7 @@ function PaymentPage() {
           throw new Error('No checkout URL received from Stripe');
         }
 
+        if (!isMounted()) return;
         setStripeSessionId(sessionId);
 
         // Redirect to Stripe Checkout
@@ -277,7 +282,9 @@ function PaymentPage() {
         throw new Error(response.error || 'Failed to create Stripe checkout session');
       }
     } catch (error: any) {
+      if (!isMounted()) return;
       setCurrentStep('methods');
+      if (!isMounted()) return;
       setIsProcessing(false);
       platformAlertSimple(
         'Payment Failed',
@@ -300,7 +307,9 @@ function PaymentPage() {
       }
 
       if (response.success && response.data?.verified) {
+        if (!isMounted()) return;
         setIsProcessing(false);
+        if (!isMounted()) return;
         const t = setTimeout(() => {
           navTimeoutsRef.current.delete(t);
           if (isTravelPayment) {
@@ -312,7 +321,9 @@ function PaymentPage() {
         navTimeoutsRef.current.add(t);
       } else {
         // Payment might not be complete — show retry option
+        if (!isMounted()) return;
         setIsProcessing(false);
+        if (!isMounted()) return;
         setCurrentStep('methods');
         platformAlertConfirm(
           'Payment Incomplete',
@@ -322,7 +333,9 @@ function PaymentPage() {
         );
       }
     } catch (error) {
+      if (!isMounted()) return;
       setIsProcessing(false);
+      if (!isMounted()) return;
       setCurrentStep('methods');
     }
   };
@@ -394,8 +407,11 @@ function PaymentPage() {
     try {
       const orderData = await createRazorpayOrder();
 
+      if (!isMounted()) return;
       setRazorpayOrderId(orderData.razorpayOrderId);
+      if (!isMounted()) return;
       setRazorpayKeyId(orderData.razorpayKeyId);
+      if (!isMounted()) return;
       setOrderCreated(true);
 
       if (RazorpayCheckout) {
@@ -404,7 +420,9 @@ function PaymentPage() {
         openWebRazorpayCheckout(orderData);
       }
     } catch (error: any) {
+      if (!isMounted()) return;
       setCurrentStep('methods');
+      if (!isMounted()) return;
       setIsProcessing(false);
       platformAlertSimple(
         'Payment Failed',
@@ -473,7 +491,9 @@ function PaymentPage() {
       const isVerified = await verifyRazorpayPaymentOnBackend(paymentData);
 
       if (isVerified) {
+        if (!isMounted()) return;
         setIsProcessing(false);
+        if (!isMounted()) return;
         const t = setTimeout(() => {
           navTimeoutsRef.current.delete(t);
           if (isTravelPayment) {
@@ -487,7 +507,9 @@ function PaymentPage() {
         throw new Error('Payment verification failed');
       }
     } catch (error: any) {
+      if (!isMounted()) return;
       setCurrentStep('methods');
+      if (!isMounted()) return;
       setIsProcessing(false);
       platformAlertConfirm(
         'Verification Failed',

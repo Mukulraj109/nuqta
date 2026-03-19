@@ -1,4 +1,5 @@
 import { useReducer, useCallback, useEffect, useRef } from 'react';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import { showToast } from '@/components/common/ToastManager';
 import { showAlert } from '@/components/common/CrossPlatformAlert';
 import apiClient from '@/services/apiClient';
@@ -129,6 +130,8 @@ export function useCheckoutUI({
   router,
 }: UseCheckoutUIParams) {
   const [uiState, dispatch] = useReducer(checkoutUIReducer, checkoutUIInitialState);
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
 
   // Track whether payment was actively processing to detect failure transitions
   const wasProcessingRef = useRef(false);
@@ -154,10 +157,11 @@ export function useCheckoutUI({
 
   // Initialize offer redemption from route params
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (offerRedemptionCode && !uiState.appliedOfferRedemption) {
       validateAndApplyOfferRedemption(offerRedemptionCode);
     }
-  }, [offerRedemptionCode]);
+  }, [offerRedemptionCode, authLoading, isAuthenticated]);
 
   // --- Offer Redemption Validation ---
 
@@ -175,8 +179,9 @@ export function useCheckoutUI({
     dispatch({ type: 'SET_FIELD', field: 'validatingRedemption', value: true });
     try {
       const response = await apiClient.post<any>('/offers/redemptions/validate', { code: trimmedCode });
-      if (response.data?.success && response.data?.data?.valid) {
-        const { offer } = response.data.data;
+      const respData = response.data;
+      if (respData?.success !== false && (respData?.valid || respData?.data?.valid)) {
+        const offer = respData?.offer || respData?.data?.offer;
         const cashbackPercentage = offer?.cashbackPercentage || 0;
         const cartTotal = checkoutState.billSummary?.itemTotal || 0;
         const maxDiscount = offer?.restrictions?.maxDiscountAmount;

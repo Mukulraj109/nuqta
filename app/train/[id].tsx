@@ -35,6 +35,7 @@ import TrainAmenities from '../../components/train/TrainAmenities';
 import TrainCancellationPolicy from '../../components/train/TrainCancellationPolicy';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -131,6 +132,7 @@ function TrainDetailsPage() {
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageError, setImageError] = useState(false);
+  const isMounted = useIsMounted();
 
   // Reviews
   const {
@@ -157,6 +159,7 @@ function TrainDetailsPage() {
       const response = await productsApi.getProductById(id as string);
 
       if (!response.success || !response.data) {
+        if (!isMounted()) return;
         setError('Train not found');
         return;
       }
@@ -352,10 +355,13 @@ function TrainDetailsPage() {
         classOptions: buildClassOptions(),
       };
 
+      if (!isMounted()) return;
       setTrain(trainDetails);
     } catch (error) {
+      if (!isMounted()) return;
       setError('Failed to load train details. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

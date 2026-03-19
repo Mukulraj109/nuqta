@@ -16,13 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { CATEGORY_CONFIGS, SubcategoryItem } from '@/config/categoryConfig';
 import { getSubcategoryIcon } from '@/config/categoryIcons';
-import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
-import { profileMenuSections } from '@/data/profileData';
-import { useAuthUser, useIsAuthenticated } from '@/stores';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
-
-// Eagerly loaded — React.lazy + Suspense(null) causes modal to not appear on Android
-import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const NUM_COLUMNS = 4;
@@ -47,10 +41,6 @@ const CATEGORY_SECTIONS: CategorySection[] = Object.values(CATEGORY_CONFIGS).map
 // ============ MAIN COMPONENT ============
 function CategoriesScreen() {
   const router = useRouter();
-  const { user: profileUser, isModalVisible, showModal, hideModal } = useProfile();
-  const { handleMenuItemPress } = useProfileMenu();
-  const authUser = useAuthUser();
-  const isAuthenticated = useIsAuthenticated();
 
   // Handle wallet press - navigate to WalletScreen
   const handleWalletPress = () => {
@@ -123,18 +113,6 @@ function CategoriesScreen() {
             <Pressable style={styles.headerIcon} onPress={handleWalletPress}>
               <Ionicons name="wallet-outline" size={22} color={Colors.text.primary} />
             </Pressable>
-            <Pressable
-              style={styles.profileAvatar}
-              onPress={showModal}
-             
-            >
-              <ThemedText style={styles.profileText}>
-                {profileUser?.initials ||
-                  (authUser?.profile?.firstName ? authUser.profile.firstName.charAt(0).toUpperCase() :
-                    (isAuthenticated ? 'U' : '?')
-                  )}
-              </ThemedText>
-            </Pressable>
           </View>
         </View>
 
@@ -164,16 +142,6 @@ function CategoriesScreen() {
         {CATEGORY_SECTIONS.map(section => renderCategorySection(section))}
       </ScrollView>
 
-      {/* Profile Menu Modal */}
-      {profileUser && (
-        <ProfileMenuModal
-          visible={isModalVisible}
-          onClose={hideModal}
-          user={profileUser}
-          menuSections={profileMenuSections}
-          onMenuItemPress={handleMenuItemPress}
-        />
-      )}
     </View>
   );
 }

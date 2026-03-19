@@ -20,6 +20,7 @@ import { useRezBalance, useRefreshWallet } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -257,6 +258,7 @@ const MemoryMatch = () => {
         gameApi.getDailyLimits(),
         refreshWallet(),
       ]);
+      const isMounted = useIsMounted();
 
       if (limitsResponse.data) {
         const memoryLimits = limitsResponse.data.memory_match;
@@ -266,8 +268,10 @@ const MemoryMatch = () => {
         }
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load game data. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -336,7 +340,9 @@ const MemoryMatch = () => {
         setSessionId(response.data.sessionId);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setGameState('start');
+      if (!isMounted()) return;
       setError('Failed to start the game. Please try again.');
     }
   };
@@ -377,10 +383,12 @@ const MemoryMatch = () => {
         await gamificationActions.syncCoinsFromWallet();
       } catch (error) {
         // Fallback: increment locally if API fails
+        if (!isMounted()) return;
         setTodayPlays(todayPlays + 1);
       }
     } else {
       // No session - increment locally
+      if (!isMounted()) return;
       setTodayPlays(todayPlays + 1);
     }
   };
@@ -434,7 +442,11 @@ const MemoryMatch = () => {
         )}
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Start Screen */}
         {gameState === 'start' && (
           <View style={styles.content}>
@@ -722,7 +734,6 @@ const MemoryMatch = () => {
               <Pressable
                 onPress={() => router.push('/playandearn' as any)}
                 style={styles.secondaryAction}
-               
               >
                 <Ionicons name="arrow-back" size={18} color={COLORS.textMuted} />
                 <Text style={styles.secondaryActionText}>Back to Games</Text>

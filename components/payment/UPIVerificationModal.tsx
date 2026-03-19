@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import paymentVerificationService from '@/services/paymentVerificationService';
 import type { UPIVerificationResponse } from '@/types/paymentVerification.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface UPIVerificationModalProps {
   visible: boolean;
@@ -38,6 +39,7 @@ function UPIVerificationModal({
   const [verificationData, setVerificationData] = useState<UPIVerificationResponse | null>(null);
   const [testVPA, setTestVPA] = useState(vpa);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (visible) {
@@ -67,14 +69,17 @@ function UPIVerificationModal({
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setVerificationData(response.data);
 
         if (response.data.status === 'VERIFIED' && response.data.vpaValid) {
+          if (!isMounted()) return;
           setTimeout(() => {
             onSuccess();
             onClose();
           }, 2000);
         } else {
+          if (!isMounted()) return;
           setError('UPI ID could not be verified. Please check and try again.');
           onError('UPI ID verification failed');
         }
@@ -82,9 +87,11 @@ function UPIVerificationModal({
         throw new Error(response.error || 'Failed to verify UPI ID');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to verify UPI ID');
       onError(err.message || 'Failed to verify UPI ID');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

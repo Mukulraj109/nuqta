@@ -30,6 +30,7 @@ import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const CameraType = {
   back: 'back' as const,
@@ -39,6 +40,7 @@ const CameraType = {
 type CameraTypeValue = typeof CameraType[keyof typeof CameraType];
 
 function EnhancedBillUploadPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const navigation = useNavigation();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -111,6 +113,7 @@ function EnhancedBillUploadPage() {
       }
     }
 
+    if (!isMounted()) return;
     setShowCamera(true);
   };
 
@@ -122,7 +125,9 @@ function EnhancedBillUploadPage() {
           quality: 0.8,
           base64: false,
         });
+        if (!isMounted()) return;
         setBillImage(photo.uri);
+        if (!isMounted()) return;
         setShowCamera(false);
 
         // Start verification process
@@ -145,6 +150,7 @@ function EnhancedBillUploadPage() {
       });
 
       if (!result.canceled && result.assets[0]) {
+        if (!isMounted()) return;
         setBillImage(result.assets[0].uri);
 
         // Start verification process
@@ -160,6 +166,7 @@ function EnhancedBillUploadPage() {
     if (corrections) {
       await applyManualCorrections(corrections);
     }
+    if (!isMounted()) return;
     setShowPreview(false);
   };
 
@@ -188,6 +195,7 @@ function EnhancedBillUploadPage() {
     } catch (err) {
       platformAlertSimple('Error', 'An error occurred while uploading the bill. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsUploading(false);
     }
   };
@@ -257,7 +265,11 @@ function EnhancedBillUploadPage() {
   return (
     <ErrorBoundary>
       <View style={styles.container}>
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {/* Header */}
         <View style={styles.header}>
           <Pressable onPress={handleGoBack}>
@@ -443,6 +455,7 @@ function EnhancedBillUploadPage() {
           ocrData={workflow.ocrData}
           onSubmit={async (corrections) => {
             await applyManualCorrections(corrections);
+            if (!isMounted()) return;
             setShowCorrectionForm(false);
           }}
         />

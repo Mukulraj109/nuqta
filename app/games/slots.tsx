@@ -369,7 +369,6 @@ function SlotsPage() {
             <Pressable
               onPress={handleBackPress}
               style={styles.headerBackButton}
-             
             >
               <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
             </Pressable>
@@ -400,6 +399,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: 120,
   },
   gradient: {
     flex: 1,

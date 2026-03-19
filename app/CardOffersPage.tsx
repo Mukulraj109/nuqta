@@ -38,10 +38,12 @@ import {
 } from '@/constants/DesignSystem';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
 function CardOffersPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const storeId = (params.storeId as string) || '';
@@ -100,6 +102,7 @@ function CardOffersPage() {
         const discounts = Array.isArray(response.data)
           ? response.data
           : response.data.discounts || [];
+        if (!isMounted()) return;
         setCardOffers(discounts);
 
         // Animate in
@@ -109,13 +112,18 @@ function CardOffersPage() {
           useNativeDriver: true,
         }).start();
       } else {
+        if (!isMounted()) return;
         setCardOffers([]);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError('Failed to load card offers. Please try again.');
+      if (!isMounted()) return;
       setCardOffers([]);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [storeId, currentOrderValue, fadeAnim]);
@@ -204,13 +212,16 @@ function CardOffersPage() {
         orderValue: currentOrderValue,
       });
 
+      if (!isMounted()) return;
       setShowOfferDetails(false);
+      if (!isMounted()) return;
       setSelectedOffer(null);
       setTimeout(() => router.back(), 1000);
     } catch (error: any) {
       triggerNotification('Error');
       platformAlert('Error', error?.message || 'Failed to apply offer.');
     } finally {
+      if (!isMounted()) return;
       setApplyingOffer(false);
     }
   }, [isAuthenticated, currentOrderValue, cartActions, router, storeId]);
@@ -861,6 +872,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.lg,
+    paddingBottom: 120,
   },
 
   // Section Header

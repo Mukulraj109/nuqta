@@ -21,6 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import videosApi, { Video } from '@/services/videosApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 // Container has 16px margin on each side + 16px padding on each side = 64px total
@@ -108,6 +109,7 @@ const UGCSocialProofSection: React.FC<UGCSocialProofSectionProps> = ({
   const [videos, setVideos] = useState<Partial<Video>[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   // Fetch videos by category
   useEffect(() => {
@@ -119,11 +121,13 @@ const UGCSocialProofSection: React.FC<UGCSocialProofSectionProps> = ({
           // Fetch videos by category
           const response = await videosApi.getVideosByCategory(categorySlug, { limit: maxItems });
           if (response.success && response.data?.videos && response.data.videos.length > 0) {
+            if (!isMounted()) return;
             setVideos(response.data.videos.slice(0, maxItems));
           } else {
             // Try trending videos as fallback
             const trendingResponse = await videosApi.getTrendingVideos(maxItems, categorySlug);
             if (trendingResponse.success && trendingResponse.data && trendingResponse.data.length > 0) {
+              if (!isMounted()) return;
               setVideos(trendingResponse.data.slice(0, maxItems));
             }
           }
@@ -131,13 +135,16 @@ const UGCSocialProofSection: React.FC<UGCSocialProofSectionProps> = ({
           // No category, get trending videos
           const response = await videosApi.getTrendingVideos(maxItems);
           if (response.success && response.data && response.data.length > 0) {
+            if (!isMounted()) return;
             setVideos(response.data.slice(0, maxItems));
           }
         }
       } catch (err) {
         // API error - silently use fallback dummy data
+        if (!isMounted()) return;
         setError(null);
       } finally {
+        if (!isMounted()) return;
         setIsLoading(false);
       }
     };
@@ -162,6 +169,7 @@ const UGCSocialProofSection: React.FC<UGCSocialProofSectionProps> = ({
   const handleLike = useCallback(async (videoId: string) => {
     try {
       await videosApi.likeVideo(videoId);
+      if (!isMounted()) return;
       setVideos((prev) =>
         prev.map((item) =>
           item.id === videoId

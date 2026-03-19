@@ -39,6 +39,7 @@ import { LoadingState } from '@/components/common/LoadingState';
 import { financialCategoryData, financialServiceFilters, financialModeFilters, financialQuickActions, ALL_FINANCIAL_SERVICES } from '@/data/category/financialCategoryData';
 import { useGetCurrencySymbol, useSavingsInsights, useTotalBalance, useWalletData } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   primary: colors.tealGreen,
@@ -106,13 +107,16 @@ function FinancialCategoryPage() {
   const [activeServiceFilters, setActiveServiceFilters] = useState<string[]>([]);
   const [activeLifestyleFilters, setActiveLifestyleFilters] = useState<string[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const isMounted = useIsMounted();
 
   const activeModes = [...activeServiceFilters, ...activeLifestyleFilters];
   const hasActiveFilters = activeModes.length > 0;
 
+  if (!isMounted()) return;
   const onRefresh = async () => { setRefreshing(true); await refetch(); setRefreshing(false); };
 
   const toggleServiceFilter = (filterId: string) => {
+    if (!isMounted()) return;
     setActiveServiceFilters(prev =>
       prev.includes(filterId) ? prev.filter(f => f !== filterId) : [...prev, filterId]
     );

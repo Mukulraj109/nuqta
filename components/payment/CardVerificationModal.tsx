@@ -17,6 +17,7 @@ import { WebView } from 'react-native-webview';
 import paymentVerificationService from '@/services/paymentVerificationService';
 import type { CardVerificationResponse } from '@/types/paymentVerification.types';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface CardVerificationModalProps {
   visible: boolean;
@@ -36,6 +37,7 @@ function CardVerificationModal({
   const [isLoading, setIsLoading] = useState(true);
   const [verificationData, setVerificationData] = useState<CardVerificationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (visible && paymentMethodId) {
@@ -50,14 +52,16 @@ function CardVerificationModal({
 
       const response = await paymentVerificationService.initiateCardVerification({
         paymentMethodId,
-        returnUrl: 'nuqta://payment-verification/callback',
+        returnUrl: 'rez://payment-verification/callback',
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setVerificationData(response.data);
 
         // If no authentication required, mark as success
         if (!response.data.requiresAuthentication) {
+          if (!isMounted()) return;
           setTimeout(() => {
             onSuccess();
             onClose();
@@ -67,9 +71,11 @@ function CardVerificationModal({
         throw new Error(response.error || 'Failed to initiate verification');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to verify card');
       onError(err.message || 'Failed to verify card');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

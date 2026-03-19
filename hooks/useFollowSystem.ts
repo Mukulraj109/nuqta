@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { useIsAuthenticated, useAuthLoading } from '@/stores/selectors';
 import * as followApi from '@/services/followApi';
 import type { FollowUser, FollowStatus, FollowCounts, FollowRequest } from '@/services/followApi';
 
@@ -25,6 +26,8 @@ interface FollowSystemState {
 }
 
 export function useFollowSystem(targetUserId?: string, options: UseFollowSystemOptions = {}) {
+  const isAuthenticated = useIsAuthenticated();
+  const authLoading = useAuthLoading();
   const [state, setState] = useState<FollowSystemState>({
     isFollowing: false,
     isFollower: false,
@@ -77,10 +80,11 @@ export function useFollowSystem(targetUserId?: string, options: UseFollowSystemO
 
   // Load follow status on mount
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
     if (targetUserId) {
       loadFollowStatus();
     }
-  }, [targetUserId, loadFollowStatus]);
+  }, [targetUserId, loadFollowStatus, authLoading, isAuthenticated]);
 
   // Follow user with optimistic update
   const follow = useCallback(async (userId: string) => {

@@ -17,6 +17,7 @@ import { useRouter } from 'expo-router';
 import travelApi from '@/services/travelApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Route {
   from: string;
@@ -39,6 +40,7 @@ const RelatedFlightsSection: React.FC<RelatedFlightsSectionProps> = ({
   const currencySymbol = getCurrencySymbol();
   const [relatedFlights, setRelatedFlights] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadRelatedFlights();
@@ -58,11 +60,13 @@ const RelatedFlightsSection: React.FC<RelatedFlightsSectionProps> = ({
         const filtered = (response.data.services || [])
           .filter((flight: any) => flight._id !== currentFlightId && flight.id !== currentFlightId)
           .slice(0, 3);
+        if (!isMounted()) return;
         setRelatedFlights(filtered);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

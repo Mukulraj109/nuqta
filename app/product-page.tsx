@@ -42,6 +42,8 @@ import reviewsService from '@/services/reviewsApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { platformAlertSimple } from '@/utils/platformAlert';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Store {
   _id?: string;
@@ -223,6 +225,7 @@ function StorePage() {
 
   // Get product ID for recommendations
   const productId = useMemo(() => cardData?.id || cardData?._id || (params.cardId as string), [cardData?.id, cardData?._id, params.cardId]);
+  const isMounted = useIsMounted();
 
   // Sync quantity from cart if this product is already in the cart
   useEffect(() => {
@@ -335,6 +338,7 @@ function StorePage() {
           features: (productData as any).features || [],
         };
 
+        if (!isMounted()) return;
         setCardData(updatedCardData);
 
         // Prefetch product images for faster gallery experience
@@ -368,6 +372,7 @@ function StorePage() {
           productsApi.trackProductView(productId),
           productsApi.getProductAnalytics(productId).then(analyticsResponse => {
             if (analyticsResponse.success && analyticsResponse.data) {
+              if (!isMounted()) return;
               setProductAnalytics(analyticsResponse.data);
             }
           }),
@@ -375,11 +380,14 @@ function StorePage() {
 
         // Lock status is checked via useFocusEffect (checkLockStatus)
       } else {
+        if (!isMounted()) return;
         setError(response.message || 'Failed to load product');
       }
     } catch (error) {
+      if (!isMounted()) return;
       setError('Unable to load product. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoadingBackend(false);
     }
   };
@@ -404,6 +412,7 @@ function StorePage() {
         const lockedItem = lockedResponse.data.lockedItems.find(
           (item: any) => item.product?._id === productId || item.product?.id === productId
         );
+        if (!isMounted()) return;
         setIsLocked(!!lockedItem);
       }
     } catch (error) {
@@ -494,6 +503,7 @@ function StorePage() {
             text: review.content || review.comment || review.text || '',
             cashbackEarned: review.metadata?.cashbackEarned || null
           }));
+          if (!isMounted()) return;
           setStoreReviews(formattedReviews);
         }
       } catch (err) {
@@ -531,6 +541,7 @@ function StorePage() {
         // Refresh cart context to update cart badge/count
         await refreshCart();
         // Show the added to cart modal
+        if (!isMounted()) return;
         setShowAddedToCartModal(true);
       } else {
         showAlert('Error', cartResponse.message || 'Failed to add to cart', [{ text: 'OK' }], 'error');
@@ -603,9 +614,24 @@ function StorePage() {
   const handleCloseAddedToCart = useCallback(() => setShowAddedToCartModal(false), []);
   const handleViewCart = useCallback(() => router.push('/cart'), [router]);
   const handleCloseLockModal = useCallback(() => setShowLockPriceModal(false), []);
-  const handleBundleAddToCart = useCallback((_products: any[]) => {
-    // TODO: Implement bundle add to cart
-  }, []);
+  const handleBundleAddToCart = useCallback(async (products: any[]) => {
+    try {
+      for (const product of products) {
+        const productId = product._id || product.id;
+        if (productId) {
+          await cartApi.addToCart({
+            productId,
+            quantity: 1,
+          });
+        }
+      }
+      await refreshCart();
+      if (!isMounted()) return;
+      setShowAddedToCartModal(true);
+    } catch (error) {
+      platformAlertSimple('Error', 'Failed to add bundle to cart. Please try again.');
+    }
+  }, [refreshCart]);
   const handleCardOffersPress = useCallback(() => {
     const storeId = cardData?.store?._id || cardData?.store?.id || cardData?.storeId;
     const storeName = cardData?.store?.name || 'Store';
@@ -970,7 +996,6 @@ function StorePage() {
             <Pressable
               onPress={handleCloseReviewForm}
               style={styles.closeButton}
-
             >
               <Ionicons name="close" size={28} color={Colors.text.primary} />
             </Pressable>

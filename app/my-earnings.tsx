@@ -38,6 +38,7 @@ import analyticsService from '@/services/analyticsService';
 import { Paths, File } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -77,6 +78,7 @@ const SOURCE_DISPLAY: Record<string, { icon: string; color: string }> = {
 };
 
 const MyEarningsPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const authLoading = useAuthLoading();
@@ -112,6 +114,7 @@ const MyEarningsPage = () => {
       });
 
       if (response?.data) {
+        if (!isMounted()) return;
         setData(response.data);
         analyticsService.track('my_earnings_viewed', {
           period: period || selectedPeriod,
@@ -122,9 +125,12 @@ const MyEarningsPage = () => {
         });
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load earnings. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [authLoading, isAuthenticated, selectedPeriod, refreshing]);

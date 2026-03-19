@@ -24,6 +24,7 @@ import { useAuthUser, useCurrentRegionId, useGetCurrencySymbol, useIsAuthenticat
 import { colors } from '@/constants/theme';
 import OfferTile from '@/components/offers/OfferTile';
 import { calculateSaveAmount } from '@/utils/savingsCalculator';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Nuqta Brand Colors
 const COLORS = {
@@ -240,6 +241,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(false);
   const [offerCategories, setOfferCategories] = useState<CategoryCard[]>([]);
+  const isMounted = useIsMounted();
 
   // New state for dynamic data
   const [exclusiveZones, setExclusiveZones] = useState<ExclusiveZoneCard[]>(FALLBACK_EXCLUSIVE_CATEGORIES);
@@ -281,6 +283,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
 
         // Update section config
         if (section) {
+          if (!isMounted()) return;
           setSectionConfig(section);
         }
 
@@ -307,8 +310,10 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
         }
       }
     } catch (error: any) {
+      if (!isMounted()) return;
       setSectionError(error.message || 'Failed to load deals');
     } finally {
+      if (!isMounted()) return;
       setSectionLoading(false);
       setRefreshing(false);
     }
@@ -504,11 +509,13 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
       }
 
       if (zones.length > 0) {
+        if (!isMounted()) return;
         setExclusiveZones(zones);
       }
     } catch (error) {
       // Keep fallback data
     } finally {
+      if (!isMounted()) return;
       setExclusiveLoading(false);
     }
   }, []);
@@ -555,11 +562,13 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
       }
 
       if (cards.length > 0) {
+        if (!isMounted()) return;
         setCashbackData(cards);
       }
     } catch (error) {
       // Keep fallback data
     } finally {
+      if (!isMounted()) return;
       setCashbackLoading(false);
     }
   }, [currencySymbol]);
@@ -576,6 +585,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setOffers(response.data);
 
         // Group offers by category and create category cards
@@ -704,6 +714,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
       }
     } catch (error) {
       // On error, show default categories
+      if (!isMounted()) return;
       setOfferCategories([
         {
           id: 'all',
@@ -716,6 +727,7 @@ const DealsThatSaveMoney: React.FC<DealsThatSaveMoneyProps> = ({ style }) => {
         },
       ]);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [activeTab]);

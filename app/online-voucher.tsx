@@ -233,7 +233,6 @@ function OnlineVoucherPage() {
 
             <Pressable
               style={styles.glassButton}
-             
             >
               <Ionicons name="heart-outline" size={20} color={COLORS.primary} />
             </Pressable>

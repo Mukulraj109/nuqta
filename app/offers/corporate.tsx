@@ -7,10 +7,12 @@ import { ThemedText } from '@/components/ThemedText';
 import { colors, spacing, borderRadius, shadows } from '@/constants/theme';
 import * as identityApi from '@/services/identityApi';
 import CachedImage from '@/components/ui/CachedImage';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const FILTER_CHIPS = ['All', 'Lunch (12-2pm)', 'After Work (5-8pm)'];
 
 function CorporateOffersPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,9 +26,11 @@ function CorporateOffersPage() {
     try {
       setLoading(true);
       const result = await identityApi.getCorporateOffers(1, 50);
+      if (!isMounted()) return;
       setOffers(result.offers);
     } catch {
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

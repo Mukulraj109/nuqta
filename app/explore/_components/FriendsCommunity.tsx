@@ -16,6 +16,7 @@ import { useRouter } from 'expo-router';
 import exploreApi, { CommunityActivity } from '@/services/exploreApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -44,6 +45,7 @@ interface FriendShopping {
 }
 
 const FriendsCommunity = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -80,8 +82,10 @@ const FriendsCommunity = () => {
         setFriendsShopping(friends);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load community activity');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

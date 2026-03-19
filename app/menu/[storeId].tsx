@@ -24,6 +24,7 @@ import menuApi, { MenuCategory as ApiMenuCategory, MenuItem as ApiMenuItem } fro
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface MenuItem {
   id: string;
@@ -54,6 +55,7 @@ interface CartItem {
 }
 
 function MenuPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const storeId = params.storeId as string;
@@ -105,22 +107,29 @@ function MenuPage() {
       const response = await menuApi.getStoreMenu(storeId);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setStoreName(response.data.storeName || 'Restaurant');
         const transformedCategories: MenuCategory[] = (response.data.categories || []).map((cat: ApiMenuCategory) => ({
           id: cat._id,
           name: cat.name,
           items: (cat.items || []).map(transformMenuItem),
         }));
+        if (!isMounted()) return;
         setCategories(transformedCategories);
       } else {
+        if (!isMounted()) return;
         setStoreName('Restaurant');
+        if (!isMounted()) return;
         setCategories([]);
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load menu';
+      if (!isMounted()) return;
       setError(errorMessage);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [storeId]);
@@ -175,6 +184,7 @@ function MenuPage() {
     );
     if (!confirmed) return;
 
+    if (!isMounted()) return;
     setSubmitting(true);
     try {
       const response = await menuApi.createPreOrder({
@@ -190,6 +200,7 @@ function MenuPage() {
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setCart([]);
         platformAlertSimple(
           'Order Placed!',
@@ -211,6 +222,7 @@ function MenuPage() {
     } catch (err: any) {
       platformAlertSimple('Error', err.message || 'Failed to place order');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };

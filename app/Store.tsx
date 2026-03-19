@@ -44,6 +44,7 @@ import { useRezBalance, useWalletLoading, useGetCurrencySymbol } from '@/stores'
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 const CARD_GAP = 14;
@@ -355,6 +356,7 @@ function StoreCard({ item, index }: { item: Store; index: number }) {
 }
 
 function App() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { user: profileUser, isModalVisible, showModal, hideModal } = useProfile();
   const { handleMenuItemPress } = useProfileMenu();
@@ -392,11 +394,13 @@ function App() {
           badge: formatBadgeWithCurrency(store.badge),
           description: store.id === 'budgetFriendly' ? `Everything at ${currencySymbol}1` : store.description,
         }));
+        if (!isMounted()) return;
         setCategories(mappedCategories);
       } else {
         throw new Error('Invalid response format');
       }
     } catch (error) {
+      if (!isMounted()) return;
       setCategoriesError('Failed to load categories');
       // Use fallback categories if API fails - add currency to badges
       const fallbackWithCurrency = FALLBACK_STORES.map(store => ({
@@ -404,8 +408,10 @@ function App() {
         badge: formatBadgeWithCurrency(store.badge),
         description: store.id === 'budgetFriendly' ? `Everything at ${currencySymbol}1` : store.description,
       }));
+      if (!isMounted()) return;
       setCategories(fallbackWithCurrency);
     } finally {
+      if (!isMounted()) return;
       setIsLoadingCategories(false);
     }
   }, [currencySymbol]);

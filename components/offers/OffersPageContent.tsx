@@ -52,6 +52,7 @@ import SkeletonLoader from '@/components/skeletons/SkeletonLoader';
 import HorizontalSkeletonList from '@/components/skeletons/HorizontalSkeletonList';
 import DealCardSkeleton from '@/components/skeletons/DealCardSkeleton';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // New Color Palette
 const PALETTE = {
@@ -94,6 +95,7 @@ export const OffersPageContent: React.FC<OffersPageContentProps> = ({
   const [refreshing, setRefreshing] = useState(false);
   const [selectedBucket, setSelectedBucket] = useState<string | undefined>();
   const [selectedHotspot, setSelectedHotspot] = useState<string | undefined>();
+  const isMounted = useIsMounted();
 
   // Track if we should scroll to a specific section based on URL params
   const [highlightSection, setHighlightSection] = useState<string | undefined>(initialType);
@@ -165,6 +167,7 @@ export const OffersPageContent: React.FC<OffersPageContentProps> = ({
     // Refresh real API data
     refreshData();
     // Small delay for UX
+    if (!isMounted()) return;
     await new Promise((resolve) => setTimeout(resolve, 500));
     setRefreshing(false);
   }, [onRefresh, refreshData]);

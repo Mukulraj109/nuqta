@@ -18,6 +18,7 @@ import { FilterChips } from '@/components/home-delivery/FilterChips';
 import { HomeDeliveryProduct, HomeDeliveryFilters } from '@/types/home-delivery.types';
 import productsApi from '@/services/productsApi';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Section metadata
 const SECTION_CONFIG = {
@@ -34,6 +35,7 @@ const SECTION_CONFIG = {
 };
 
 function SectionDetailPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { sectionId } = useLocalSearchParams<{ sectionId: string }>();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -159,13 +161,18 @@ function SectionDetailPage() {
 
         }
 
+        if (!isMounted()) return;
         setProducts(sectionProducts);
+        if (!isMounted()) return;
         setFilteredProducts(sectionProducts);
       }
 
+      if (!isMounted()) return;
       setLoading(false);
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load products');
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -286,6 +293,7 @@ function SectionDetailPage() {
 
       {/* Products Grid */}
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.content}
         showsVerticalScrollIndicator={false}
       >

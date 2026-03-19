@@ -31,6 +31,7 @@ import priveInviteApi, { InviteStats, InviteCode, LeaderboardEntry } from '@/ser
 import { platformAlertSimple } from '@/utils/platformAlert';
 import usePriveEligibility from '@/hooks/usePriveEligibility';
 import { BRAND } from '@/constants/brand';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const TIER_COLORS: Record<string, string> = {
   entry: colors.brand.goldAccent,
@@ -60,19 +61,24 @@ function PriveInviteDashboard() {
       ]);
 
       if (statsRes.status === 'fulfilled' && statsRes.value.success) {
+        if (!isMounted()) return;
         setStats(statsRes.value.data as InviteStats);
       }
       if (leaderboardRes.status === 'fulfilled' && leaderboardRes.value.success) {
         const data = leaderboardRes.value.data as any;
+        if (!isMounted()) return;
         setLeaderboard(data?.leaderboard || []);
+        if (!isMounted()) return;
         setMyRank(data?.myRank || null);
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, []);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     loadData();
@@ -81,6 +87,7 @@ function PriveInviteDashboard() {
   const onRefresh = async () => {
     setRefreshing(true);
     await loadData();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -95,12 +102,14 @@ function PriveInviteDashboard() {
     } catch (err: any) {
       platformAlertSimple('Error', err.message || 'Failed to generate code');
     } finally {
+      if (!isMounted()) return;
       setGeneratingCode(false);
     }
   };
 
   const handleCopyCode = async (code: string) => {
     await Clipboard.setStringAsync(code);
+    if (!isMounted()) return;
     setCopiedCode(code);
     setTimeout(() => setCopiedCode(null), 2000);
   };

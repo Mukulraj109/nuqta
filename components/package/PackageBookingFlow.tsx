@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import serviceBookingApi from '@/services/serviceBookingApi';
 import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface PackageDetails {
   id: string;
@@ -83,6 +84,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
   const locale = getLocale();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMounted = useIsMounted();
   
   // Step 1: Travel Dates & Travelers
   const [travelDate, setTravelDate] = useState(new Date());
@@ -262,6 +264,7 @@ const PackageBookingFlow: React.FC<PackageBookingFlowProps> = ({
     } catch (error) {
       platformAlertSimple('Error', 'Failed to complete booking. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };

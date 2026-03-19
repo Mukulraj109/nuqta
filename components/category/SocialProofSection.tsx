@@ -16,6 +16,7 @@ import socialProofApi, { CategorySocialProofStats } from '@/services/socialProof
 import { socialProofStats, SocialProofStats } from '@/data/categoryDummyData';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface SocialProofSectionProps {
   stats?: SocialProofStats;
@@ -40,6 +41,7 @@ const SocialProofSection: React.FC<SocialProofSectionProps> = ({
   const currencySymbol = getCurrencySymbol();
   const [apiStats, setApiStats] = useState<SocialProofStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (stats) {
@@ -54,6 +56,7 @@ const SocialProofSection: React.FC<SocialProofSectionProps> = ({
         const response = await socialProofApi.getCategoryStats(categorySlug);
         if (response.success && response.data?.stats) {
           const converted = convertApiToStats(response.data.stats);
+          if (!isMounted()) return;
           setApiStats(converted);
         } else {
           // Fallback to dummy data
@@ -61,8 +64,10 @@ const SocialProofSection: React.FC<SocialProofSectionProps> = ({
         }
       } catch (err) {
         // Fallback to dummy data on error
+        if (!isMounted()) return;
         setApiStats(socialProofStats);
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };

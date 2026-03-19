@@ -24,6 +24,7 @@ import { usePriveEligibility, getEligibilityStatus, getQuickWins } from '@/hooks
 import { ELIGIBILITY_THRESHOLDS, PillarScore, PriveTier } from '@/types/mode.types';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Colors
 const COLORS = {
@@ -218,6 +219,7 @@ function PriveEligibilityScreen() {
   const router = useRouter();
   const { eligibility, isLoading, refresh, tier } = usePriveEligibility();
   const [refreshing, setRefreshing] = useState(false);
+  const isMounted = useIsMounted();
 
   const status = getEligibilityStatus(eligibility);
   const quickWins = getQuickWins(eligibility.pillars);
@@ -225,6 +227,7 @@ function PriveEligibilityScreen() {
   const handleRefresh = async () => {
     setRefreshing(true);
     await refresh();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

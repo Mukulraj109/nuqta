@@ -22,6 +22,7 @@ import walletApi, { TransactionResponse } from '@/services/walletApi';
 import { DetailPageSkeleton } from '@/components/skeletons';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const CATEGORY_CONFIG: Record<string, { icon: string; color: string; label: string }> = {
   earning: { icon: 'arrow-down-circle', color: colors.successScale[400], label: 'Earning' },
@@ -49,6 +50,7 @@ function TransactionDetailPage() {
   const [transaction, setTransaction] = useState<TransactionResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (!id) return;
@@ -63,11 +65,14 @@ function TransactionDetailPage() {
       if (res?.data?.transaction) {
         setTransaction(res.data.transaction);
       } else {
+        if (!isMounted()) return;
         setError('Transaction not found');
       }
     } catch {
+      if (!isMounted()) return;
       setError('Failed to load transaction details');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -308,7 +313,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing['3xl'],
+    paddingBottom: 120,
   },
   amountCard: {
     backgroundColor: Colors.background.primary,

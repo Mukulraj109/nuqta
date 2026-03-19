@@ -2,7 +2,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useState, useCallback } from 'react';
 import {
   View, StyleSheet, StatusBar, ScrollView, TextInput,
-  Pressable, ActivityIndicator, Platform,
+  Pressable, ActivityIndicator, Platform, KeyboardAvoidingView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -12,6 +12,7 @@ import { useUserIdentityStore } from '@/stores/userIdentityStore';
 import * as identityApi from '@/services/identityApi';
 import analyticsService, { IdentityAnalyticsEvents } from '@/services/analyticsService';
 import { platformAlertSimple } from '@/utils/platformAlert';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const DOC_TYPES = [
   { value: 'military_id', label: 'Military ID' },
@@ -30,6 +31,7 @@ const SERVICE_BRANCHES = [
 const ACCENT = colors.successScale[600];
 
 function DefenceVerifyPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { setIdentity } = useUserIdentityStore();
 
@@ -58,6 +60,7 @@ function DefenceVerifyPage() {
         type: 'defence', autoVerified: result.autoVerified, provisional: result.provisionalUnlock,
       });
 
+      if (!isMounted()) return;
       setIdentity({ segment: 'verified_defence', featureLevel: 2, verificationSegment: 'provisional' });
 
       router.push({
@@ -66,9 +69,11 @@ function DefenceVerifyPage() {
       } as any);
     } catch (e: any) {
       const msg = e?.message || 'Verification failed. Please try again.';
+      if (!isMounted()) return;
       setError(msg);
       platformAlertSimple('Error', msg);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   }, [documentType, serviceType, serviceNumber, setIdentity, router]);
@@ -88,6 +93,10 @@ function DefenceVerifyPage() {
         <ThemedText style={styles.headerSubtitle}>Your details are private and never shared</ThemedText>
       </View>
 
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
       <ScrollView style={styles.body} contentContainerStyle={styles.bodyContent} keyboardShouldPersistTaps="handled">
         <View style={styles.inputGroup}>
           <ThemedText style={styles.label}>Document Type</ThemedText>
@@ -162,6 +171,7 @@ function DefenceVerifyPage() {
           )}
         </Pressable>
       </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 }

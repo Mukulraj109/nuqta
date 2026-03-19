@@ -25,6 +25,7 @@ import { useAuthUser, useCurrentRegionId, useIsAuthenticated, useAuthLoading } f
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface Deal {
   store: string;
@@ -71,6 +72,7 @@ interface Store {
 }
 
 function AdminCampaigns() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -97,16 +99,19 @@ function AdminCampaigns() {
       // Load campaigns
       const campaignResponse = await apiClient.get('/campaigns/admin/all');
       const campaignsData = (campaignResponse.data as any)?.campaigns || [];
+      if (!isMounted()) return;
       setCampaigns(campaignsData);
 
       // Load stores for selection
       const storeResponse = await apiClient.get('/stores', { limit: 200 });
       const storesData = (storeResponse.data as any)?.stores || (storeResponse.data as any)?.data || [];
+      if (!isMounted()) return;
       setStores(storesData);
 
     } catch (error: any) {
       platformAlertSimple('Error', 'Failed to load campaigns. ' + (error.response?.data?.message || error.message));
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -129,11 +134,13 @@ function AdminCampaigns() {
       );
 
       platformAlertSimple('Success', 'Store linked successfully!');
+      if (!isMounted()) return;
       setStoreSelectModalVisible(false);
       loadData();
     } catch (error: any) {
       platformAlertSimple('Error', 'Failed to link store. ' + (error.response?.data?.message || error.message));
     } finally {
+      if (!isMounted()) return;
       setActionLoading(false);
     }
   };

@@ -16,6 +16,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   orange: colors.brand.orange,
@@ -125,10 +126,12 @@ function ChallengesPage() {
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
   const [joinedChallenges, setJoinedChallenges] = useState<Set<string>>(new Set());
+  const isMounted = useIsMounted();
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     // Static data - simulate refresh
+    if (!isMounted()) return;
     await new Promise(resolve => setTimeout(resolve, 800));
     setRefreshing(false);
   }, []);

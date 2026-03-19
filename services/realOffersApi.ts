@@ -1554,9 +1554,7 @@ class RealOffersApi {
       const response = await apiClient.get<any[]>('/flash-sales/active', { limit });
 
       if (response.success && response.data) {
-        const flashSales = Array.isArray(response.data)
-          ? response.data
-          : (response.data as Record<string, unknown>).data || [];
+        const flashSales = Array.isArray(response.data) ? response.data : [];
 
         devLog.log(`✅ [OFFERS API] Got ${flashSales.length} flash sales`);
         return {
@@ -1603,9 +1601,7 @@ class RealOffersApi {
       const response = await apiClient.get<any[]>('/offers/new-arrivals', { limit });
 
       if (response.success && response.data) {
-        const offers = Array.isArray(response.data)
-          ? response.data
-          : (response.data as Record<string, unknown>).data || [];
+        const offers = Array.isArray(response.data) ? response.data : [];
 
         devLog.log(`✅ [OFFERS API] Got ${offers.length} new arrivals`);
         return {
@@ -1631,9 +1627,7 @@ class RealOffersApi {
       const response = await apiClient.get<any[]>('/offers/user/recommendations', { limit });
 
       if (response.success && response.data) {
-        const offers = Array.isArray(response.data)
-          ? response.data
-          : (response.data as Record<string, unknown>).data || [];
+        const offers = Array.isArray(response.data) ? response.data : [];
 
         devLog.log(`✅ [OFFERS API] Got ${offers.length} recommended offers`);
         return {
@@ -1659,9 +1653,7 @@ class RealOffersApi {
       const response = await apiClient.get<any[]>('/flash-sales/expiring-soon', { limit, minutes: 1440 });
 
       if (response.success && response.data) {
-        const offers = Array.isArray(response.data)
-          ? response.data
-          : (response.data as Record<string, unknown>).data || [];
+        const offers = Array.isArray(response.data) ? response.data : [];
 
         devLog.log(`✅ [OFFERS API] Got ${offers.length} expiring soon offers`);
         return {
@@ -1687,9 +1679,7 @@ class RealOffersApi {
       const response = await apiClient.get<any[]>('/offers/flash-sales', { limit });
 
       if (response.success && response.data) {
-        const offers = Array.isArray(response.data)
-          ? response.data
-          : (response.data as Record<string, unknown>).data || [];
+        const offers = Array.isArray(response.data) ? response.data : [];
 
         devLog.log(`✅ [OFFERS API] Got ${offers.length} today's offers`);
         return {
@@ -1831,9 +1821,7 @@ class RealOffersApi {
       const response = await apiClient.get<Array<any>>('/flash-sales/purchases');
 
       if (response.success) {
-        const purchases = Array.isArray(response.data)
-          ? response.data
-          : (response.data as Record<string, unknown>)?.data || [];
+        const purchases = Array.isArray(response.data) ? response.data : [];
         devLog.log(`✅ [OFFERS API] Got ${purchases.length} flash sale purchases`);
         return { ...response, data: purchases };
       }

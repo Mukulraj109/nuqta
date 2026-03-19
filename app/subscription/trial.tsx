@@ -20,6 +20,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -50,6 +51,7 @@ function TrialPage() {
       headerShown: false,
     });
   }, [navigation]);
+  const isMounted = useIsMounted();
 
   // Fetch trial stats on mount
   useEffect(() => {
@@ -86,6 +88,7 @@ function TrialPage() {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };
@@ -118,6 +121,7 @@ function TrialPage() {
               error.message || 'Payment processing failed. Please try again.'
             );
           } finally {
+            if (!isMounted()) return;
             setIsSubscribing(false);
           }
         },

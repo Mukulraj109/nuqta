@@ -21,6 +21,7 @@ import supportService from '@/services/supportApi';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, Gradients, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const CATEGORIES = [
   { id: 'payment', label: 'Cashback Not Received', icon: 'wallet-outline' },
@@ -76,6 +77,7 @@ function CreateTicketPage() {
   const [submitting, setSubmitting] = useState(false);
   const [selfResolutionDismissed, setSelfResolutionDismissed] = useState(false);
   const [idempotencyKey] = useState(() => generateIdempotencyKey());
+  const isMounted = useIsMounted();
 
   const selfResolutionTip = selectedLabel ? SELF_RESOLUTION_TIPS[selectedLabel] : null;
   const showSelfResolution = selfResolutionTip && !selfResolutionDismissed;
@@ -107,6 +109,7 @@ function CreateTicketPage() {
     } catch (error) {
       platformAlertSimple('Error', 'Something went wrong. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setSubmitting(false);
     }
   };

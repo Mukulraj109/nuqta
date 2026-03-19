@@ -25,6 +25,7 @@ import realOffersApi from '@/services/realOffersApi';
 import DealsListSkeleton from '@/components/skeletons/DealsListSkeleton';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Premium Glass Design Tokens - Green & Gold Theme
 const GLASS = {
@@ -58,6 +59,7 @@ function WalkInDealsModal({ visible, onClose, deals = [], storeId }: DealModalPr
   const [selectedDeals, setSelectedDeals] = useState<string[]>([]);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedDealForDetails, setSelectedDealForDetails] = useState<Deal | null>(null);
+  const isMounted = useIsMounted();
 
   // API state management
   const [isLoadingDeals, setIsLoadingDeals] = useState(false);
@@ -229,14 +231,17 @@ function WalkInDealsModal({ visible, onClose, deals = [], storeId }: DealModalPr
           };
         });
 
+        if (!isMounted()) return;
         setApiDeals(transformedDeals);
         setDealCount(response.data.totalCount || transformedDeals.length);
       } else {
         setError(response.message || 'Failed to load deals');
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Unable to load deals. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoadingDeals(false);
     }
   }, [storeId, filterType, sortBy]);

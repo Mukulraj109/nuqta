@@ -124,7 +124,7 @@ export function useNavigation(): UseNavigationReturn {
 
   // Deep linking helpers
   const buildDeepLink = useCallback((path: string, params?: NavigationParams) => {
-    const baseUrl = 'nuqta://';
+    const baseUrl = 'rez://';
     let url = baseUrl + path.replace(/^\//, '');
     
     if (params && Object.keys(params).length > 0) {

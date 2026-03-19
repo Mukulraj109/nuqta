@@ -22,6 +22,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const TABS = [
   { id: 'all', label: 'All Deals', icon: 'grid-outline' },
@@ -41,6 +42,7 @@ function getBankGradient(bankName: string): string[] {
 }
 
 function OffersIndexPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -66,19 +68,23 @@ function OffersIndexPage() {
 
       if (bankRes?.success && bankRes.data) {
         const offers = bankRes.data?.offers || (Array.isArray(bankRes.data) ? bankRes.data : []);
+        if (!isMounted()) return;
         setBankOffers(offers);
       }
       if (dealsRes?.success && dealsRes.data) {
         const d = Array.isArray(dealsRes.data) ? dealsRes.data : (dealsRes.data?.offers || []);
+        if (!isMounted()) return;
         setDeals(d);
       }
       if (couponsRes?.success && couponsRes.data) {
         const c = Array.isArray(couponsRes.data) ? couponsRes.data : (couponsRes.data?.coupons || []);
+        if (!isMounted()) return;
         setCoupons(c.filter((cp: any) => cp.status === 'active' || cp.isActive !== false));
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -88,6 +94,7 @@ function OffersIndexPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchOffers();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

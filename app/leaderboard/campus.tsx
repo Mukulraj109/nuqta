@@ -9,8 +9,10 @@ import { useUserIdentityStore } from '@/stores/userIdentityStore';
 import { useAuthUser } from '@/stores';
 import * as identityApi from '@/services/identityApi';
 import analyticsService, { IdentityAnalyticsEvents } from '@/services/analyticsService';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function CampusLeaderboardPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const user = useAuthUser();
   const { instituteName } = useUserIdentityStore();
@@ -24,7 +26,7 @@ function CampusLeaderboardPage() {
     identityApi.getCampusLeaderboard(instituteName)
       .then(setData)
       .catch(() => {})
-      .finally(() => setLoading(false));
+      .finally(() => { if (isMounted()) setLoading(false); });
   }, [instituteName]);
 
   const handleShare = async () => {

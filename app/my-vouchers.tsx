@@ -34,6 +34,7 @@ import logger from '@/utils/logger';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type VoucherStatus = 'all' | 'active' | 'used' | 'expired' | 'partner';
 
@@ -69,6 +70,7 @@ interface UserVoucher {
 }
 
 const MyVouchersPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const navigation = useNavigation();
   const user = useAuthUser();
@@ -206,19 +208,28 @@ const MyVouchersPage = () => {
 
       logger.debug('[MY VOUCHERS] Total vouchers:', allVouchers.length);
       if (append) {
+        if (!isMounted()) return;
         setVouchers(prev => [...prev, ...allVouchers]);
       } else {
+        if (!isMounted()) return;
         setVouchers(allVouchers);
       }
+      if (!isMounted()) return;
       setPage(pageNum);
+      if (!isMounted()) return;
       setHasMore(allVouchers.length >= 20);
     } catch (error) {
       logger.error('Error fetching vouchers:', error);
+      if (!isMounted()) return;
       if (!append) setVouchers([]);
+      if (!isMounted()) return;
       setHasMore(false);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   }, [activeTab, authLoading, isAuthenticated]);
@@ -305,6 +316,7 @@ const MyVouchersPage = () => {
       }
 
       // Copy voucher code to clipboard
+      if (!isMounted()) return;
       await Clipboard.setStringAsync(voucher.code);
 
       // Show confirmation with cashback details
@@ -324,6 +336,7 @@ const MyVouchersPage = () => {
     } catch (error) {
       logger.error('Error validating voucher:', error);
       // Fallback to old behavior - just copy code
+      if (!isMounted()) return;
       await Clipboard.setStringAsync(voucher.code);
       platformAlertConfirm(
         'Voucher Code Copied!',
@@ -410,7 +423,9 @@ const MyVouchersPage = () => {
     try {
       await vouchersService.useVoucher(selectedVoucher.id, {});
       platformAlertSimple('Success!', 'Voucher has been redeemed successfully');
+      if (!isMounted()) return;
       setShowQRModal(false);
+      if (!isMounted()) return;
       setSelectedVoucher(null);
       fetchVouchers(); // Refresh vouchers list
     } catch (error) {

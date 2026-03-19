@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { GroupBuyingProduct, CreateGroupRequest } from '@/types/groupBuying.types';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface GroupCreationModalProps {
   visible: boolean;
@@ -37,6 +38,7 @@ function GroupCreationModal({
   const [quantity, setQuantity] = useState('1');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const isMounted = useIsMounted();
 
   if (!product) return null;
 
@@ -58,6 +60,7 @@ function GroupCreationModal({
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

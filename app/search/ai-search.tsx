@@ -23,6 +23,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { apiClient } from '@/utils/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Nuqta Design System
 const NUQTA = {
@@ -80,12 +81,16 @@ function AISearchPage() {
         setResults(data.results || []);
         setParsedInfo({ keywords: data.parsedKeywords, filters: data.filters });
       } else {
+        if (!isMounted()) return;
         setResults([]);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Search failed. Please check your connection and try again.');
+      if (!isMounted()) return;
       setResults([]);
     } finally {
+      if (!isMounted()) return;
       setSearching(false);
     }
   };
@@ -104,6 +109,7 @@ function AISearchPage() {
       });
     }
   }, [router]);
+  const isMounted = useIsMounted();
 
   const getTypeColor = (type: string) => {
     switch (type) {
@@ -377,7 +383,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing['2xl'],
+    paddingBottom: 120,
   },
   aiInfoCard: {
     backgroundColor: Colors.background.primary,

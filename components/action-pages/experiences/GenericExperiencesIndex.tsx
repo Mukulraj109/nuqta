@@ -18,6 +18,7 @@ import { getCategoryTheme } from '@/config/categoryThemeConfig';
 import { getCategoryConfig } from '@/config/categoryConfig';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function GenericExperiencesIndex() {
   const router = useRouter();
@@ -30,6 +31,7 @@ function GenericExperiencesIndex() {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   const fetchExperiences = useCallback(async () => {
     try {
@@ -37,11 +39,14 @@ function GenericExperiencesIndex() {
       setError(null);
       const res = await experiencesApi.getExperiences({ category: slug, limit: 50 });
       if (res.success && res.data?.experiences) {
+        if (!isMounted()) return;
         setExperiences(res.data.experiences);
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load experiences. Pull down to refresh.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [slug]);
@@ -51,6 +56,7 @@ function GenericExperiencesIndex() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchExperiences();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

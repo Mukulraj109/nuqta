@@ -26,6 +26,7 @@ import apiClient from '@/services/apiClient';
 import { storesApi } from '@/services/storesApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   blue: colors.infoScale[400],
@@ -70,6 +71,7 @@ function CompareDevicesPage() {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
+  const isMounted = useIsMounted();
   const [step, setStep] = useState<'category' | 'select' | 'compare'>(
     params.categoryId ? 'select' : 'category'
   );
@@ -99,6 +101,7 @@ function CompareDevicesPage() {
       });
       if (res.success && res.data) {
         const prods = Array.isArray(res.data) ? res.data : (res.data.products || []);
+        if (!isMounted()) return;
         setProducts(prods);
       }
     } catch (err) {
@@ -120,12 +123,14 @@ function CompareDevicesPage() {
             warranty: s.tags?.find((t: string) => t.toLowerCase().includes('warranty')) || 'Standard',
             deliveryTime: s.operationalInfo?.deliveryTime || 'Standard delivery',
           }));
+          if (!isMounted()) return;
           setProducts(storeItems);
         }
       } catch (err2) {
         // silently handle
       }
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -488,7 +493,6 @@ function CompareDevicesPage() {
           renderItem={renderProductCard}
           contentContainerStyle={styles.productList}
           showsVerticalScrollIndicator={false}
-          estimatedItemSize={220}
         />
       )}
 

@@ -13,6 +13,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { catchAndReport } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type Tab = 'available' | 'active' | 'completed';
 
@@ -39,11 +40,13 @@ function MissionsScreen() {
       if (acRes.success) setActive(acRes.data?.missions || []);
       if (coRes.success) setCompleted(coRes.data?.missions || []);
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err?.message || 'Failed to load missions');
     }
     finally { setIsLoading(false); setIsRefreshing(false); }
   }, []);
 
+  const isMounted = useIsMounted();
   useEffect(() => { fetchData(); }, [fetchData]);
 
   const onRefresh = () => { setIsRefreshing(true); fetchData(); };
@@ -133,6 +136,7 @@ function MissionsScreen() {
       </View>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor={PRIVE_COLORS.gold.primary} />}

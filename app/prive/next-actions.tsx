@@ -13,6 +13,7 @@ import { PriveEmptyState } from '@/components/prive/PriveEmptyState';
 import { CardGridSkeleton } from '@/components/skeletons';
 import priveApi from '@/services/priveApi';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function NextActionsScreen() {
   const router = useRouter();
@@ -29,11 +30,13 @@ function NextActionsScreen() {
         setData(response.data);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err?.message || 'Failed to load actions');
     }
     finally { setIsLoading(false); setIsRefreshing(false); }
   }, []);
 
+  const isMounted = useIsMounted();
   useEffect(() => { fetchData(); }, [fetchData]);
 
   const onRefresh = () => { setIsRefreshing(true); fetchData(); };
@@ -86,6 +89,7 @@ function NextActionsScreen() {
     <View style={styles.container}>
       <LinearGradient colors={[colors.neutral[800], colors.neutral[900], colors.midGrayAlt]} style={StyleSheet.absoluteFill} />
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         style={styles.scroll}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} tintColor={PRIVE_COLORS.gold.primary} />}

@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import serviceBookingApi from '@/services/serviceBookingApi';
 import { useGetCurrencySymbol, useGetLocale } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface FlightDetails {
   id: string;
@@ -88,6 +89,7 @@ const FlightBookingFlow: React.FC<FlightBookingFlowProps> = ({
   const locale = getLocale();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMounted = useIsMounted();
   
   const [tripType, setTripType] = useState<'one-way' | 'round-trip'>('one-way');
   const [departureDate, setDepartureDate] = useState(new Date());
@@ -283,6 +285,7 @@ const FlightBookingFlow: React.FC<FlightBookingFlowProps> = ({
     } catch (error: any) {
       platformAlertSimple('Error', error.message || 'Failed to create booking');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };

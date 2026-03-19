@@ -23,6 +23,7 @@ import apiClient from '@/services/apiClient';
 import CachedImage from '@/components/ui/CachedImage';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -123,6 +124,7 @@ function getFilterParams(filter: FilterType): Record<string, any> {
 // --- Component ---
 
 const ElectronicsPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const isAuthenticated = useIsAuthenticated();
   const authLoading = useAuthLoading();
@@ -142,11 +144,8 @@ const ElectronicsPage: React.FC = () => {
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const isMounted = useRef(true);
 
-  useEffect(() => {
-    return () => { isMounted.current = false; };
-  }, []);
+
 
   // --- Fetch subcategories + stores (once) ---
   useEffect(() => {
@@ -160,7 +159,7 @@ const ElectronicsPage: React.FC = () => {
           apiClient.get<any>('/stores', { category: CATEGORY_SLUG, limit: 5, page: 1, sortBy: 'rating' }),
         ]);
 
-        if (!isMounted.current) return;
+        if (!isMounted()) return;
 
         // Subcategories
         const cats: Subcategory[] = [];
@@ -175,6 +174,7 @@ const ElectronicsPage: React.FC = () => {
             productCount: c.productCount || c.count || 0,
           }));
         }
+        if (!isMounted()) return;
         setSubcategories(cats);
 
         // Stores (top brands)
@@ -191,10 +191,12 @@ const ElectronicsPage: React.FC = () => {
             tags: s.tags,
           }));
         }
+        if (!isMounted()) return;
         setStores(storeList);
 
         // Stats from pagination meta or fallback
         const totalProducts = storeRes.meta?.pagination?.total || 0;
+        if (!isMounted()) return;
         setStats({
           totalProducts,
           maxCashback: storeList.reduce((max, s) => Math.max(max, s.maxCashback || 0), 0),
@@ -203,7 +205,7 @@ const ElectronicsPage: React.FC = () => {
       } catch {
         // Silent fail — empty states will show
       } finally {
-        if (isMounted.current) setLoadingInitial(false);
+        if (isMounted()) setLoadingInitial(false);
       }
     };
 
@@ -223,7 +225,7 @@ const ElectronicsPage: React.FC = () => {
       };
       const res = await apiClient.get<any>('/products', params);
 
-      if (!isMounted.current) return;
+      if (!isMounted()) return;
 
       if (res.success && res.data) {
         const raw = Array.isArray(res.data) ? res.data : res.data.products || [];
@@ -242,8 +244,10 @@ const ElectronicsPage: React.FC = () => {
         }));
 
         if (append) {
+          if (!isMounted()) return;
           setProducts((prev) => [...prev, ...mapped]);
         } else {
+          if (!isMounted()) return;
           setProducts(mapped);
         }
 
@@ -252,22 +256,26 @@ const ElectronicsPage: React.FC = () => {
         if (totalPages) {
           setHasMore(pageNum < totalPages);
         } else {
+          if (!isMounted()) return;
           setHasMore(mapped.length >= PRODUCTS_PER_PAGE);
         }
 
         // Update total products stat if available
         if (res.meta?.pagination?.total && !append) {
+          if (!isMounted()) return;
           setStats((prev) => ({ ...prev, totalProducts: res.meta!.pagination!.total }));
         }
       } else {
         if (!append) setProducts([]);
+        if (!isMounted()) return;
         setHasMore(false);
       }
     } catch {
       if (!append) setProducts([]);
+      if (!isMounted()) return;
       setHasMore(false);
     } finally {
-      if (isMounted.current) setLoadingProducts(false);
+      if (isMounted()) setLoadingProducts(false);
     }
   }, [selectedFilter]);
 
@@ -427,6 +435,7 @@ const ElectronicsPage: React.FC = () => {
           </View>
         ) : (
           <FlashList
+        contentContainerStyle={{ paddingBottom: 120 }}
             data={stores}
             renderItem={renderStoreItem}
             keyExtractor={(item) => item._id}

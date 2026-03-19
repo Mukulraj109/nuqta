@@ -20,6 +20,7 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -51,6 +52,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
   const currencySymbol = getCurrencySymbol();
   const [qrRef, setQrRef] = useState<any>(null);
   const [originalBrightness, setOriginalBrightness] = useState<number | null>(null);
+  const isMounted = useIsMounted();
 
   // Generate QR code data with all voucher information
   const generateQRData = () => {
@@ -76,7 +78,9 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
       const { status } = await Brightness.requestPermissionsAsync();
       if (status === 'granted') {
         const currentBrightness = await Brightness.getBrightnessAsync();
+        if (!isMounted()) return;
         setOriginalBrightness(currentBrightness);
+        if (!isMounted()) return;
         await Brightness.setBrightnessAsync(1); // Max brightness
       }
     } catch (error) {
@@ -88,6 +92,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
   const handleModalClose = async () => {
     try {
       if (originalBrightness !== null) {
+        if (!isMounted()) return;
         await Brightness.setBrightnessAsync(originalBrightness);
       }
     } catch (error) {
@@ -101,6 +106,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
     if (!voucher) return;
 
     try {
+      if (!isMounted()) return;
       await Clipboard.setStringAsync(voucher.code);
       platformAlertSimple('Copied!', 'Voucher code copied to clipboard');
     } catch (error) {
@@ -130,6 +136,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
 
     // For now, just copy the code as downloading requires additional setup
     try {
+      if (!isMounted()) return;
       await Clipboard.setStringAsync(voucher.code);
       platformAlertSimple('Code Copied!', 'Voucher code has been copied to clipboard. You can save it for later use.');
     } catch (error) {

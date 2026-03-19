@@ -22,6 +22,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import reelApi, { Reel } from '@/services/reelApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 const REEL_WIDTH = (width - 48) / 2;
@@ -34,6 +35,7 @@ const tabs = [
 ];
 
 const ExploreReelsPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -69,17 +71,23 @@ const ExploreReelsPage = () => {
 
       if (response?.success) {
         if (activeTab === 'trending') {
+          if (!isMounted()) return;
           setReels(response.data || []);
         } else {
+          if (!isMounted()) return;
           setReels(response.data?.reels || []);
         }
       } else {
+        if (!isMounted()) return;
         setError(response?.error || 'Failed to fetch reels');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [activeTab]);
@@ -375,6 +383,7 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: Spacing.base,
     minHeight: 200,
+    paddingBottom: 120,
   },
   loadingContainer: {
     flex: 1,

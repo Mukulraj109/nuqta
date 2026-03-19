@@ -27,6 +27,7 @@ import { storesApi } from '@/services/storesApi';
 import { useAuthUser } from '@/stores/selectors';
 import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/common/CountryCodePicker';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   amber: colors.warningScale[400],
@@ -66,6 +67,7 @@ function BookServicePage() {
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string; service?: string }>();
   const user = useAuthUser();
 
+  const isMounted = useIsMounted();
   const [step, setStep] = useState<'provider' | 'details' | 'confirm'>(
     params.storeId ? 'details' : 'provider'
   );
@@ -118,11 +120,13 @@ function BookServicePage() {
           s.bookingConfig?.enabled ||
           s.storeVisitConfig?.enabled
         );
+        if (!isMounted()) return;
         setProviders(bookable.length > 0 ? bookable : allStores.slice(0, 20));
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -148,6 +152,7 @@ function BookServicePage() {
           const hour = parseInt(s.time.split(':')[0]);
           return hour >= 7 && hour <= 20;
         });
+        if (!isMounted()) return;
         setTimeSlots(serviceSlots);
         const firstAvailable = serviceSlots.find(s => s.available);
         if (firstAvailable) setSelectedTime(firstAvailable.time);
@@ -158,9 +163,11 @@ function BookServicePage() {
         '12:00', '13:00', '14:00', '15:00', '16:00',
         '17:00', '18:00', '19:00',
       ].map(t => ({ time: t, available: true, remainingCapacity: 10 }));
+      if (!isMounted()) return;
       setTimeSlots(fallback);
       setSelectedTime('09:00');
     } finally {
+      if (!isMounted()) return;
       setIsLoadingAvailability(false);
     }
   }, []);
@@ -219,6 +226,7 @@ function BookServicePage() {
       });
 
       if (res.success) {
+        if (!isMounted()) return;
         setBookingId(res.data?._id || null);
         setBookingNumber(res.data?.bookingNumber || null);
         setStep('confirm');
@@ -228,6 +236,7 @@ function BookServicePage() {
     } catch (err: any) {
       platformAlertSimple('Error', err?.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };
@@ -346,7 +355,6 @@ function BookServicePage() {
             renderItem={renderStoreCard}
             contentContainerStyle={styles.storeList}
             showsVerticalScrollIndicator={false}
-            estimatedItemSize={100}
           />
         )}
       </SafeAreaView>

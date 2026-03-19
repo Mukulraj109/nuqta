@@ -25,6 +25,7 @@ import apiClient from '@/services/apiClient';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const nuqtaCoinImage = BRAND.COIN_IMAGE;
 
@@ -115,6 +116,7 @@ const TOTAL_QUESTIONS = 10;
 type GameState = 'idle' | 'playing' | 'answered' | 'completed';
 
 function TriviaPage() {
+  const isMounted = useIsMounted();
   const [gameState, setGameState] = useState<GameState>('idle');
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -203,6 +205,7 @@ function TriviaPage() {
         difficulty: 'medium',
       });
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setSessionId(response.data.sessionId || response.data._id || '');
       }
     } catch {
@@ -210,15 +213,25 @@ function TriviaPage() {
 
     // Use hardcoded questions
     const shuffled = shuffleQuestions();
+    if (!isMounted()) return;
     setQuestions(shuffled);
+    if (!isMounted()) return;
     setCurrentIndex(0);
+    if (!isMounted()) return;
     setSelectedOption(null);
+    if (!isMounted()) return;
     setScore(0);
+    if (!isMounted()) return;
     setCorrectCount(0);
+    if (!isMounted()) return;
     setCoinsEarned(0);
+    if (!isMounted()) return;
     setTimeLeft(SECONDS_PER_QUESTION);
+    if (!isMounted()) return;
     setAnswers([]);
+    if (!isMounted()) return;
     setGameState('playing');
+    if (!isMounted()) return;
     setLoading(false);
   };
 
@@ -288,6 +301,7 @@ function TriviaPage() {
       });
       if (response.success && response.data) {
         const earned = response.data.coins || response.data.coinsEarned || 0;
+        if (!isMounted()) return;
         setCoinsEarned(earned);
         // Haptic feedback on coins earned
         if (earned > 0) {
@@ -523,7 +537,6 @@ function TriviaPage() {
             <Pressable
               onPress={handleBackPress}
               style={styles.headerBackButton}
-             
             >
               <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
             </Pressable>
@@ -559,6 +572,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: 120,
   },
   gradient: {
     flex: 1,

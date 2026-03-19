@@ -17,6 +17,7 @@ import razorpayService from '@/services/razorpayService';
 import type { RazorpayPaymentData } from '@/types/payment.types';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface RazorpayPaymentFormProps {
   visible: boolean;
@@ -52,6 +53,7 @@ function RazorpayPaymentForm({
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'failed'>('idle');
+  const isMounted = useIsMounted();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
@@ -101,12 +103,14 @@ function RazorpayPaymentForm({
       );
 
       // Payment successful
+      if (!isMounted()) return;
       setPaymentStatus('success');
       setIsProcessing(false);
 
       // Call success callback
       onSuccess(paymentData);
     } catch (error: any) {
+      if (!isMounted()) return;
       setError(error.message || 'Payment failed. Please try again.');
       setPaymentStatus('failed');
       setIsProcessing(false);

@@ -28,7 +28,9 @@ import { useLocation } from '@/contexts/LocationContext';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 const ExperienceDetailPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { type } = useLocalSearchParams<{ type: string }>();
   const { currentLocation } = useLocation();
@@ -59,6 +61,7 @@ const ExperienceDetailPage: React.FC = () => {
           setExperience(expResponse.data);
         } else {
           // Fallback structure using Theme
+          if (!isMounted()) return;
           setExperience({
             _id: type,
             slug: type,
@@ -86,6 +89,7 @@ const ExperienceDetailPage: React.FC = () => {
 
         if (storesResponse.success && storesResponse.data) {
           const fetchedStores = storesResponse.data.stores || [];
+          if (!isMounted()) return;
           setStores(fetchedStores);
 
           // Extract unique categories (only on initial load or if not filtering)
@@ -93,12 +97,14 @@ const ExperienceDetailPage: React.FC = () => {
             const uniqueCategories = Array.from(
               new Set(fetchedStores.map((s: any) => s.category?.name || 'Other'))
             );
+            if (!isMounted()) return;
             setCategories(['all', ...uniqueCategories]);
           }
         }
       } catch (error) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setIsLoading(false);
       }
     };

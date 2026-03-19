@@ -19,6 +19,7 @@ import { SubscriptionTier, TIER_NAMES, TIER_COLORS } from '@/types/subscription.
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type UpgradeTiming = 'immediate' | 'cycle_end';
 
@@ -38,6 +39,7 @@ function UpgradeConfirmationPage() {
   const [creditFromCurrent, setCreditFromCurrent] = useState<number>(0);
   const [upgradeId, setUpgradeId] = useState<string | null>(null);
   const [showStripeModal, setShowStripeModal] = useState(false);
+  const isMounted = useIsMounted();
 
   // Animated arrow
   const arrowAnim = React.useRef(new Animated.Value(0)).current;
@@ -109,14 +111,18 @@ function UpgradeConfirmationPage() {
       );
 
       if (result?.upgradeId) {
+        if (!isMounted()) return;
         setUpgradeId(result.upgradeId);
+        if (!isMounted()) return;
         setProratedAmount(result.proratedAmount);
         // Phase 2: Open payment modal
+        if (!isMounted()) return;
         setShowStripeModal(true);
       }
     } catch (error: any) {
       platformAlertSimple('Upgrade Failed', error.message || 'Failed to process upgrade');
     } finally {
+      if (!isMounted()) return;
       setIsUpgrading(false);
     }
   };
@@ -140,6 +146,7 @@ function UpgradeConfirmationPage() {
       } catch (error: any) {
         platformAlertSimple('Activation Failed', 'Payment received but upgrade activation failed. Please contact support.');
       } finally {
+        if (!isMounted()) return;
         setIsConfirming(false);
       }
     }

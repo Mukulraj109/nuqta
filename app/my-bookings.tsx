@@ -23,6 +23,7 @@ import serviceBookingApi, { ServiceBooking } from '@/services/serviceBookingApi'
 import CashbackStatusBadge from '@/components/travel/CashbackStatusBadge';
 import { useGetCurrencySymbol, useIsAuthenticated } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const TRAVEL_SLUGS = ['flights', 'hotels', 'trains', 'bus', 'cab', 'packages'];
 
@@ -41,6 +42,7 @@ const isTravelBooking = (booking: ServiceBooking): boolean => {
 };
 
 const MyBookingsPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -76,6 +78,7 @@ const MyBookingsPage = () => {
         if (activeTab === 'upcoming') {
           filteredBookings = filteredBookings.filter(booking => {
             const bookingDate = new Date(booking.bookingDate);
+            if (!isMounted()) return;
             bookingDate.setHours(0, 0, 0, 0);
             const isFuture = bookingDate >= today;
             const isActive = booking.status !== 'completed' && booking.status !== 'cancelled' && booking.status !== 'no_show';
@@ -85,6 +88,7 @@ const MyBookingsPage = () => {
         } else {
           filteredBookings = filteredBookings.filter(booking => {
             const bookingDate = new Date(booking.bookingDate);
+            if (!isMounted()) return;
             bookingDate.setHours(0, 0, 0, 0);
             const isPast = bookingDate < today;
             const isCompleted = booking.status === 'completed' || booking.status === 'cancelled' || booking.status === 'no_show';
@@ -93,14 +97,19 @@ const MyBookingsPage = () => {
           filteredBookings.sort((a, b) => new Date(b.bookingDate).getTime() - new Date(a.bookingDate).getTime());
         }
 
+        if (!isMounted()) return;
         setBookings(filteredBookings);
       } else {
+        if (!isMounted()) return;
         setBookings([]);
       }
     } catch (error: any) {
+      if (!isMounted()) return;
       setBookings([]);
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [isAuthenticated, activeTab]);

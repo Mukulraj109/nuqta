@@ -11,7 +11,6 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  Image,
   Platform,
   Dimensions,
   Linking,
@@ -27,6 +26,7 @@ import emergencyApi, { EmergencyContact, EmergencyBooking } from '@/services/eme
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const COLORS = {
@@ -70,6 +70,7 @@ const quickCallNumbers = [
 ];
 
 const EmergencyPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [contacts, setContacts] = useState<EmergencyContact[]>([]);
@@ -96,12 +97,15 @@ const EmergencyPage: React.FC = () => {
       setLoading(true);
       const response = await emergencyApi.getContacts();
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setContacts(response.data.contacts);
+        if (!isMounted()) return;
         setGroupedContacts(response.data.groupedContacts);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -110,6 +114,7 @@ const EmergencyPage: React.FC = () => {
     try {
       const response = await emergencyApi.getActiveBooking();
       if (response.success && response.data?.activeBooking) {
+        if (!isMounted()) return;
         setActiveBooking(response.data.activeBooking);
       }
     } catch (error) {
@@ -150,7 +155,9 @@ const EmergencyPage: React.FC = () => {
       });
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setActiveBooking(response.data);
+        if (!isMounted()) return;
         setShowBookingModal(false);
         platformAlertSimple(
           'Ambulance Booked!',
@@ -160,6 +167,7 @@ const EmergencyPage: React.FC = () => {
     } catch (error: any) {
       platformAlertSimple('Error', error.message || 'Failed to book ambulance. Please call 102 directly.');
     } finally {
+      if (!isMounted()) return;
       setBookingLoading(false);
     }
   };
@@ -302,7 +310,10 @@ const EmergencyPage: React.FC = () => {
             </Pressable>
           </View>
 
-          <ScrollView style={styles.modalBody}>
+          <ScrollView
+        style={styles.modalBody}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
             <View style={styles.formGroup}>
               <Text style={styles.formLabel}>Patient Name *</Text>
               <TextInput

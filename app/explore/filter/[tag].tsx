@@ -20,6 +20,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import exploreApi, { ExploreStore } from '@/services/exploreApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -40,6 +41,7 @@ const filterChips = [
 ];
 
 const TagFilterPage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { tag } = useLocalSearchParams();
   const tagId = tag as string;
@@ -76,14 +78,19 @@ const TagFilterPage = () => {
           });
         }
 
+        if (!isMounted()) return;
         setStores(fetchedStores);
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to fetch stores');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [tagId, selectedFilter]);
@@ -451,6 +458,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingTop: Spacing.sm,
     minHeight: 200,
+    paddingBottom: 120,
   },
   loadingContainer: {
     justifyContent: 'center',

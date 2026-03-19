@@ -22,7 +22,7 @@ interface Props {
   onSeeAll: () => void;
 }
 
-export default function CampusSavingsBoard({
+function CampusSavingsBoard({
   institutionName,
   leaderboard,
   totalSaved,
@@ -44,7 +44,43 @@ export default function CampusSavingsBoard({
     } catch {}
   };
 
-  if (leaderboard.length === 0) return null;
+  if (leaderboard.length === 0) {
+    return (
+      <View style={{
+        margin: 16,
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 16,
+        borderWidth: 0.5,
+        borderColor: '#e8e8e8',
+      }}>
+        <ThemedText style={{
+          fontSize: 15, fontWeight: '700', color: '#1a3a52', marginBottom: 4
+        }}>
+          {institutionName}
+        </ThemedText>
+        <ThemedText style={{
+          fontSize: 13, color: '#6b7280', marginBottom: 12, lineHeight: 18
+        }}>
+          Be one of the first students to save here.{'\n'}
+          The leaderboard starts when 2+ students save.
+        </ThemedText>
+        <Pressable
+          onPress={onSeeAll}
+          style={{
+            backgroundColor: '#7C3AED',
+            paddingVertical: 10,
+            borderRadius: 10,
+            alignItems: 'center',
+          }}
+        >
+          <ThemedText style={{ fontSize: 14, fontWeight: '700', color: '#fff' }}>
+            See Campus Leaderboard
+          </ThemedText>
+        </Pressable>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -109,6 +145,15 @@ export default function CampusSavingsBoard({
     </View>
   );
 }
+
+export default React.memo(CampusSavingsBoard, (prev, next) =>
+  prev.institutionName === next.institutionName &&
+  prev.totalSaved === next.totalSaved &&
+  prev.studentCount === next.studentCount &&
+  prev.currentUserRank === next.currentUserRank &&
+  prev.currentUserId === next.currentUserId &&
+  prev.leaderboard.length === next.leaderboard.length
+);
 
 const styles = StyleSheet.create({
   container: {

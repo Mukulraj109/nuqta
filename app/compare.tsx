@@ -26,6 +26,7 @@ import productComparisonApi from '@/services/productComparisonApi';
 import { ComparisonProduct } from '@/services/productComparisonApi';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   primaryGreen: Colors.gold,
@@ -80,6 +81,7 @@ const transformProductToCompareItem = (product: ComparisonProduct): CompareItem 
 };
 
 function ComparePage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams();
   const isAuthenticated = useIsAuthenticated();
@@ -102,20 +104,27 @@ function ComparePage() {
       if (response.success && response.data?.comparisons && response.data.comparisons.length > 0) {
         // Load the most recent comparison
         const comparison = response.data.comparisons[0];
+        if (!isMounted()) return;
         setCurrentComparisonId(comparison._id || comparison.id || null);
         
         const items = comparison.products.map(transformProductToCompareItem);
+        if (!isMounted()) return;
         setCompareItems(items);
       } else {
         // No comparisons yet - start fresh
+        if (!isMounted()) return;
         setCompareItems([]);
+        if (!isMounted()) return;
         setCurrentComparisonId(null);
       }
     } catch (error) {
+      if (!isMounted()) return;
       setCompareItems([]);
       platformAlertSimple('Error', 'Failed to load comparisons. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setComparisonsLoaded(true);
     }
   }, [isAuthenticated]);
@@ -163,6 +172,7 @@ function ComparePage() {
     } catch (error: any) {
       platformAlertSimple('Error', error.message || 'Failed to add product to comparison');
     } finally {
+      if (!isMounted()) return;
       setIsAddingProduct(false);
     }
   }, [isAuthenticated, currentComparisonId, compareItems.length, router]);
@@ -241,6 +251,7 @@ function ComparePage() {
       platformAlertSimple('Error', error.message || 'Failed to remove product from comparison');
       // Don't update local state on error - keep sync with backend
     } finally {
+      if (!isMounted()) return;
       setIsRemovingProduct(null);
     }
   }, [isAuthenticated, currentComparisonId, compareItems.length, handleDeleteComparison]);
@@ -281,7 +292,11 @@ function ComparePage() {
         </Pressable>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {compareItems.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons name="git-compare-outline" size={64} color={COLORS.textSecondary} />

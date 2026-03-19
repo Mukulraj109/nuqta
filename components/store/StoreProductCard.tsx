@@ -19,6 +19,7 @@ import { hasVariants, createCartItemFromVariant } from '@/utils/variantHelper';
 import { normalizeProductPrice, normalizeProductRating } from '@/utils/productDataNormalizer';
 import { formatPrice } from '@/utils/priceFormatter';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface StoreProductCardProps {
   product: ProductItem;
@@ -46,6 +47,7 @@ function StoreProductCard({
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isTogglingWishlist, setIsTogglingWishlist] = useState(false);
   const [heartScale] = useState(new Animated.Value(1));
+  const isMounted = useIsMounted();
 
   // Get main image or fallback
   const mainImage = product.images?.[0]?.url || product.image || 'https://via.placeholder.com/300';
@@ -107,6 +109,7 @@ function StoreProductCard({
     } catch (error) {
       showError('Failed to add to cart. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsAddingToCart(false);
     }
   };
@@ -165,6 +168,7 @@ function StoreProductCard({
     } catch (error) {
       showError('Failed to add to cart. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsAddingToCart(false);
     }
   };
@@ -227,6 +231,7 @@ function StoreProductCard({
     } catch (error) {
       showError('Failed to update wishlist');
     } finally {
+      if (!isMounted()) return;
       setIsTogglingWishlist(false);
     }
   };

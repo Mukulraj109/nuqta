@@ -27,6 +27,7 @@ import { storesApi } from '@/services/storesApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type SortOption = 'popularity' | 'rating' | 'newest' | 'price-low' | 'price-high';
 
@@ -142,6 +143,7 @@ function StoreCard({ store, currencySymbol, onVisitNow, primaryColor }: { store:
 }
 
 function SharedCategoryPage() {
+  const isMounted = useIsMounted();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const theme = getCategoryTheme(slug || '');
   const categoryConfig = getCategoryConfig(slug || '');
@@ -194,12 +196,15 @@ function SharedCategoryPage() {
         const allStores = Array.isArray(response.data) ? response.data : (response.data.stores || []);
         // Filter for top rated (4.0+)
         const topRated = allStores.filter((s: any) => (s.ratings?.average || 0) >= 4.0);
+        if (!isMounted()) return;
         setStores(topRated);
+        if (!isMounted()) return;
         setFilteredStores(applySorting(topRated, sortBy));
       }
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [applySorting, sortBy]);
@@ -213,6 +218,7 @@ function SharedCategoryPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchStores();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

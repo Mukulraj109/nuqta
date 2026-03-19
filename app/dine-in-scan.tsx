@@ -31,6 +31,7 @@ import { FormPageSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { errorReporter } from '@/utils/errorReporter';
+import { useIsMounted } from '@/hooks/useIsMounted';
 interface ResolvedStore {
   _id: string;
   name: string;
@@ -38,6 +39,7 @@ interface ResolvedStore {
 }
 
 function DineInScanScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const params = useLocalSearchParams<{ storeId?: string; storeName?: string; table?: string }>();
   const cartActions = useCartActions();
@@ -100,11 +102,14 @@ function DineInScanScreen() {
         setResolvedStore(store);
         try { analyticsService.trackDineInScanCompleted({ storeId: store._id, storeName: store.name, scanMethod: 'qr_store' }); } catch {} // Silent: non-critical analytics
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Store not found. Please try again.');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to find store. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);

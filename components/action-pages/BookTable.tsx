@@ -29,6 +29,7 @@ import CountryCodePicker, { CountryCode, COUNTRY_CODES } from '@/components/comm
 import { platformAlertSimple } from '@/utils/platformAlert';
 import SectionErrorBanner from '@/components/common/SectionErrorBanner';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const COLORS = {
   dark: colors.nileBlue,
@@ -59,6 +60,7 @@ function BookTablePage() {
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
 
+  const isMounted = useIsMounted();
   const [step, setStep] = useState<'restaurant' | 'details' | 'confirm'>(
     params.storeId ? 'details' : 'restaurant'
   );
@@ -116,11 +118,14 @@ function BookTablePage() {
           s.bookingConfig?.enabled ||
           s.storeVisitConfig?.enabled
         );
+        if (!isMounted()) return;
         setRestaurants(dineIn.length > 0 ? dineIn : allStores.slice(0, 20));
       }
     } catch (err) {
+      if (!isMounted()) return;
       setError('Failed to load. Pull down to refresh.');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -148,6 +153,7 @@ function BookTablePage() {
           const hour = parseInt(s.time.split(':')[0]);
           return hour >= 11 && hour <= 22;
         });
+        if (!isMounted()) return;
         setTimeSlots(diningSlots);
         // Auto-select first available slot
         const firstAvailable = diningSlots.find(s => s.available);
@@ -160,9 +166,11 @@ function BookTablePage() {
         '14:00', '18:00', '18:30', '19:00', '19:30',
         '20:00', '20:30', '21:00', '21:30',
       ].map(t => ({ time: t, available: true, remainingCapacity: 50 }));
+      if (!isMounted()) return;
       setTimeSlots(fallback);
       setSelectedTime('19:00');
     } finally {
+      if (!isMounted()) return;
       setIsLoadingAvailability(false);
     }
   }, []);
@@ -248,6 +256,7 @@ function BookTablePage() {
       });
 
       if (res.success) {
+        if (!isMounted()) return;
         setBookingId(res.data?._id || null);
         setBookingNumber(res.data?.bookingNumber || null);
         setStep('confirm');
@@ -257,6 +266,7 @@ function BookTablePage() {
     } catch (err: any) {
       platformAlertSimple('Error', err?.message || 'Something went wrong');
     } finally {
+      if (!isMounted()) return;
       setIsSubmitting(false);
     }
   };
@@ -394,7 +404,6 @@ function BookTablePage() {
             renderItem={renderStoreCard}
             contentContainerStyle={styles.storeList}
             showsVerticalScrollIndicator={false}
-            estimatedItemSize={110}
           />
         )}
       </SafeAreaView>

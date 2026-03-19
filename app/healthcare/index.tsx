@@ -27,6 +27,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { catchAndWarn } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const COLORS = {
@@ -84,6 +85,7 @@ interface CategoryStats {
 }
 
 const HealthcarePage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
@@ -109,6 +111,7 @@ const HealthcarePage: React.FC = () => {
       ]);
 
       // Extract counts
+      if (!isMounted()) return;
       setStats({
         doctors: doctorsRes.status === 'fulfilled' ? (doctorsRes.value.data?.total || doctorsRes.value.data?.stores?.length || 30) : 30,
         pharmacies: pharmaciesRes.status === 'fulfilled' ? (pharmaciesRes.value.data?.total || pharmaciesRes.value.data?.stores?.length || 15) : 15,
@@ -118,11 +121,13 @@ const HealthcarePage: React.FC = () => {
 
       // Get featured services/products
       if (productsRes.status === 'fulfilled' && productsRes.value.success && productsRes.value.data?.products) {
+        if (!isMounted()) return;
         setFeaturedServices(productsRes.value.data.products.slice(0, 6));
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -134,6 +139,7 @@ const HealthcarePage: React.FC = () => {
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchData();
+    if (!isMounted()) return;
     setRefreshing(false);
   }, []);
 
@@ -209,6 +215,7 @@ const HealthcarePage: React.FC = () => {
       </LinearGradient>
 
       <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

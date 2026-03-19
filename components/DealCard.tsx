@@ -32,7 +32,6 @@ function DealCard({
   const currencySymbol = getCurrencySymbol();
   const [timeLeft, setTimeLeft] = useState<string>('');
   const [billPreview] = useState<number>(deal.minimumBill);
-  const [showPreview, setShowPreview] = useState(false);
   
   // Animation refs
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -122,8 +121,6 @@ function DealCard({
       }),
     ]).start();
 
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setShowPreview(!showPreview);
   };
 
   // Handle add/remove with animation
@@ -213,7 +210,7 @@ function DealCard({
               {/* Discount Badge */}
               <View style={[styles.discountBadge, badgeStyle]}>
                 <ThemedText style={[styles.discountText, badgeTextStyle]}>
-                  {deal.badge?.text || `Save ${deal.discountValue}%`}
+                  {deal.badge?.text || `Save ${currencySymbol}${savingsAmount.toLocaleString()}`}
                 </ThemedText>
               </View>
 
@@ -242,7 +239,7 @@ function DealCard({
             {/* Discount Badge */}
             <View style={[styles.discountBadge, badgeStyle]}>
               <ThemedText style={[styles.discountText, badgeTextStyle]}>
-                {deal.badge?.text || `Save ${deal.discountValue}%`}
+                {deal.badge?.text || `Save ${currencySymbol}${savingsAmount.toLocaleString()}`}
               </ThemedText>
             </View>
 
@@ -302,45 +299,26 @@ function DealCard({
             </View>
           )}
 
-          {/* Quick Preview Toggle */}
-          <Pressable 
-            style={styles.previewToggle}
-            onPress={() => {
-              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-              setShowPreview(!showPreview);
-            }}
-          >
-            <ThemedText style={styles.previewToggleText}>
-              {showPreview ? 'Hide' : 'Preview'} savings
-            </ThemedText>
-            <Ionicons
-              name={showPreview ? "chevron-up-outline" : "chevron-down-outline"}
-              size={16}
-              color={colors.lightMustard}
-            />
-          </Pressable>
         </View>
 
-        {/* Preview Panel */}
-        {showPreview && (
-          <View style={styles.previewPanel}>
-            <View style={styles.previewContent}>
-              <ThemedText style={styles.previewTitle}>Savings Preview</ThemedText>
-              <View style={styles.previewRow}>
-                <ThemedText style={styles.previewLabel}>Bill Amount:</ThemedText>
-                <ThemedText style={styles.previewValue}>{currencySymbol}{billPreview.toLocaleString()}</ThemedText>
-              </View>
-              <View style={styles.previewRow}>
-                <ThemedText style={styles.previewLabel}>You Save:</ThemedText>
-                <ThemedText style={styles.previewSavings}>{currencySymbol}{savingsAmount.toLocaleString()}</ThemedText>
-              </View>
-              <View style={[styles.previewRow, styles.previewFinal]}>
-                <ThemedText style={styles.previewLabel}>Final Amount:</ThemedText>
-                <ThemedText style={styles.previewFinalAmount}>{currencySymbol}{finalAmount.toLocaleString()}</ThemedText>
-              </View>
+        {/* Savings Preview Panel — always visible */}
+        <View style={styles.previewPanel}>
+          <View style={styles.previewContent}>
+            <ThemedText style={styles.previewTitle}>Savings Preview</ThemedText>
+            <View style={styles.previewRow}>
+              <ThemedText style={styles.previewLabel}>Bill Amount:</ThemedText>
+              <ThemedText style={styles.previewValue}>{currencySymbol}{billPreview.toLocaleString()}</ThemedText>
+            </View>
+            <View style={styles.previewRow}>
+              <ThemedText style={styles.previewLabel}>You Save:</ThemedText>
+              <ThemedText style={styles.previewSavings}>{currencySymbol}{savingsAmount.toLocaleString()}</ThemedText>
+            </View>
+            <View style={[styles.previewRow, styles.previewFinal]}>
+              <ThemedText style={styles.previewLabel}>Final Amount:</ThemedText>
+              <ThemedText style={styles.previewFinalAmount}>{currencySymbol}{finalAmount.toLocaleString()}</ThemedText>
             </View>
           </View>
-        )}
+        </View>
 
         {/* Terms (first 2 only) */}
         <View style={styles.termsContainer}>
@@ -646,19 +624,6 @@ const createStyles = (screenWidth: number) => {
       color: colors.lightMustard,
       marginLeft: 6,
       fontWeight: '500',
-    },
-    previewToggle: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingVertical: 8,
-      marginBottom: 8,
-    },
-    previewToggleText: {
-      fontSize: 13,
-      color: colors.lightMustard,
-      fontWeight: '600',
-      marginRight: 4,
     },
     previewPanel: {
       backgroundColor: colors.tint.coolGray,

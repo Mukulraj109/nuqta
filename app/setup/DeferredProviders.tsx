@@ -29,6 +29,7 @@
  * - DeferredOfflineQueue → offlineQueueStore
  */
 import React from 'react';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 // ── Module-level cache: survives remounts from outer DeferredProviders ──
 const _providerCache = new Map<string, React.ComponentType<{ children: React.ReactNode }>>();
@@ -52,6 +53,7 @@ function DeferredProvider({
   delayMs?: number;
   cacheKey: string;
 }) {
+  const isMounted = useIsMounted();
   // Check module-level cache first — if this provider was loaded before an outer
   // provider caused a remount, use it immediately (no Fragment→Provider switch)
   const [Provider, setProvider] = React.useState<React.ComponentType<{ children: React.ReactNode }> | null>(

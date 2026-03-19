@@ -27,6 +27,7 @@ import lockDealApi, { UserLockDeal, UserLockDealStatus } from '@/services/lockDe
 import { CardGridSkeleton } from '@/components/skeletons';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 type TabKey = 'active' | 'completed' | 'cancelled';
 
 const TABS: { key: TabKey; label: string; statuses: string }[] = [
@@ -36,6 +37,7 @@ const TABS: { key: TabKey; label: string; statuses: string }[] = [
 ];
 
 const MyLocksPage: React.FC = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [locks, setLocks] = useState<UserLockDeal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,12 +57,15 @@ const MyLocksPage: React.FC = () => {
       const response = await lockDealApi.getMyLocks(tab.statuses as any);
 
       if (response?.data) {
-        setLocks(response.data.data || []);
+        if (!isMounted()) return;
+        setLocks(Array.isArray(response.data) ? response.data : response.data.data || []);
       }
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
+      if (!isMounted()) return;
       setIsRefreshing(false);
     }
   };
@@ -79,6 +84,7 @@ const MyLocksPage: React.FC = () => {
     if (!confirmed) return;
 
     try {
+      if (!isMounted()) return;
       setCancellingId(lock._id);
       const response = await lockDealApi.cancelLock(lock._id, 'User cancelled');
 
@@ -92,6 +98,7 @@ const MyLocksPage: React.FC = () => {
     } catch (error: any) {
       platformAlertSimple('Error', error?.message || 'Failed to cancel lock');
     } finally {
+      if (!isMounted()) return;
       setCancellingId(null);
     }
   }, [fetchLocks]);
@@ -363,7 +370,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: Spacing.base,
-    paddingBottom: Spacing.xl,
+    paddingBottom: 120,
   },
 
   // Tabs

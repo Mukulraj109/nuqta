@@ -14,6 +14,7 @@ import { storesApi } from "@/services/storesApi";
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 export interface EarningUser {
   id: string;
@@ -43,6 +44,7 @@ function PeopleEarningSection({
   storeId,
   users: propUsers,
 }: PeopleEarningSectionProps) {
+  const isMounted = useIsMounted();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
   const [users, setUsers] = useState<EarningUser[]>(propUsers || []);
@@ -64,11 +66,13 @@ function PeopleEarningSection({
       const response = await storesApi.getRecentEarnings(storeId);
 
       if (response.success && response.data && response.data.length > 0) {
+        if (!isMounted()) return;
         setUsers(response.data);
       }
     } catch (error: any) {
       // API failed — keep empty state (no fake data fallback)
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };

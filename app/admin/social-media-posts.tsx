@@ -27,6 +27,7 @@ import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { catchAndWarn } from '@/utils/catchAndReport';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface SocialPost {
   _id: string;
@@ -53,6 +54,7 @@ interface Stats {
 }
 
 function AdminSocialMediaPosts() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -101,6 +103,7 @@ function AdminSocialMediaPosts() {
       // Use pagination metadata from backend for stats if on first page
       if (pageNum === 1 && (response.data as any)?.stats) {
         const s = (response.data as any).stats;
+        if (!isMounted()) return;
         setStats({
           total: s.total || 0,
           pending: s.pending || 0,
@@ -121,18 +124,24 @@ function AdminSocialMediaPosts() {
       }
 
       if (pageNum === 1) {
+        if (!isMounted()) return;
         setPosts(postsData);
       } else {
+        if (!isMounted()) return;
         setPosts(prev => [...prev, ...postsData]);
       }
 
+      if (!isMounted()) return;
       setPage(pageNum);
+      if (!isMounted()) return;
       setHasMore(pagination?.hasNextPage ?? postsData.length >= 20);
 
     } catch (error: any) {
       platformAlertSimple('Error', 'Failed to load posts. ' + (error.response?.data?.message || error.message));
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
+      if (!isMounted()) return;
       setLoadingMore(false);
     }
   };
@@ -155,6 +164,7 @@ function AdminSocialMediaPosts() {
     } catch (error: any) {
       platformAlertSimple('Error', 'Failed to approve post. ' + (error.response?.data?.message || error.message));
     } finally {
+      if (!isMounted()) return;
       setActionLoading(null);
     }
   };
@@ -180,14 +190,18 @@ function AdminSocialMediaPosts() {
         rejectionReason: rejectionReason.trim()
       });
 
+      if (!isMounted()) return;
       setRejectionModalVisible(false);
+      if (!isMounted()) return;
       setRejectionReason('');
+      if (!isMounted()) return;
       setSelectedPost(null);
 
       platformAlertConfirm('Success', 'Post rejected successfully!', loadPosts, 'OK');
     } catch (error: any) {
       platformAlertSimple('Error', 'Failed to reject post. ' + (error.response?.data?.message || error.message));
     } finally {
+      if (!isMounted()) return;
       setActionLoading(null);
     }
   };
@@ -208,6 +222,7 @@ function AdminSocialMediaPosts() {
         } catch (error: any) {
           platformAlertSimple('Error', 'Failed to credit cashback. ' + (error.response?.data?.message || error.message));
         } finally {
+          if (!isMounted()) return;
           setActionLoading(null);
         }
       },

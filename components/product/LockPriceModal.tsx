@@ -17,6 +17,7 @@ import cartService, { LockWithPaymentRequest } from '@/services/cartApi';
 import { triggerImpact, triggerNotification } from '@/utils/haptics';
 import { DurationChips, LockDuration, LOCK_FEE_PERCENTAGES, calculateLockFee } from './DurationChips';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface LockPriceModalProps {
   visible: boolean;
@@ -61,6 +62,7 @@ function LockPriceModal({
   const [selectedDuration, setSelectedDuration] = useState<LockDuration>(DEFAULT_DURATION);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
   const totalPrice = productPrice * quantity;
   const lockFee = calculateLockFee(totalPrice, selectedDuration);
@@ -110,13 +112,16 @@ function LockPriceModal({
         });
         onClose();
       } else {
+        if (!isMounted()) return;
         setError(response.error || 'Failed to lock item');
         triggerNotification('Error');
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to lock item. Please try again.');
       triggerNotification('Error');
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, [productId, quantity, variant, selectedDuration, hasEnoughBalance, lockFee, walletBalance, onLockSuccess, onClose, currencySymbol]);

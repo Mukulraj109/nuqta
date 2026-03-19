@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/useToast';
 import storesApi from '@/services/storesApi';
 import { useRouter } from 'expo-router';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface StoreFollowButtonProps {
   storeId: string;
@@ -67,6 +68,7 @@ function StoreFollowButton({
   const [isLoading, setIsLoading] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [hasCheckedStatus, setHasCheckedStatus] = useState(false);
+  const isMounted = useIsMounted();
 
   // Animation values
   const [scaleAnim] = useState(new Animated.Value(1));
@@ -87,6 +89,7 @@ function StoreFollowButton({
       const response = await storesApi.checkFollowStatus(storeId);
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setIsFollowing(response.data.following);
         setHasCheckedStatus(true);
       }
@@ -207,6 +210,7 @@ function StoreFollowButton({
     } catch (error: any) {
 
       // Rollback optimistic update
+      if (!isMounted()) return;
       setIsFollowing(previousFollowing);
       setFollowerCount(previousCount);
       onFollowChange?.(previousFollowing);
@@ -216,6 +220,7 @@ function StoreFollowButton({
       showError(errorMessage);
 
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   };

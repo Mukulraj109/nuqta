@@ -23,6 +23,7 @@ import { useApp } from '@/contexts/AppContext';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 type Language = 'en' | 'hi' | 'te' | 'ta' | 'bn' | 'es' | 'fr' | 'de' | 'zh' | 'ja';
 type Region = 'IN' | 'US' | 'GB' | 'CA' | 'AU' | 'DE' | 'FR' | 'ES' | 'IT' | 'BR' | 'CN' | 'JP';
@@ -73,6 +74,7 @@ const REGION_OPTIONS: RegionOption[] = [
 ];
 
 function LanguageSettingsPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { settings, isLoading, updateGeneralSettings, refetch } = useUserSettings(true);
   const { actions: appActions } = useApp();
@@ -97,6 +99,7 @@ function LanguageSettingsPage() {
   const handleRefresh = async () => {
     setRefreshing(true);
     await refetch();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 
@@ -121,13 +124,16 @@ function LanguageSettingsPage() {
         );
       } else {
         // Revert on failure
+        if (!isMounted()) return;
         setSelectedLanguage(settings?.general.language as Language || 'en');
         platformAlertSimple('Error', 'Failed to update language. Please try again.');
       }
     } catch (error) {
+      if (!isMounted()) return;
       setSelectedLanguage(settings?.general.language as Language || 'en');
       platformAlertSimple('Error', 'Failed to update language. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsUpdating(false);
     }
   };
@@ -157,14 +163,17 @@ function LanguageSettingsPage() {
       } else {
         // Revert on failure
         const currentRegion = REGION_OPTIONS.find(r => r.currency === settings?.general.currency);
+        if (!isMounted()) return;
         setSelectedRegion(currentRegion?.code || 'IN');
         platformAlertSimple('Error', 'Failed to update region. Please try again.');
       }
     } catch (error) {
       const currentRegion = REGION_OPTIONS.find(r => r.currency === settings?.general.currency);
+      if (!isMounted()) return;
       setSelectedRegion(currentRegion?.code || 'IN');
       platformAlertSimple('Error', 'Failed to update region. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsUpdating(false);
     }
   };

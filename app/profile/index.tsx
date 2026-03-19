@@ -36,12 +36,14 @@ import { ShareService } from '@/services/shareService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { getReferralStats } from '@/services/referralApi';
+import { useUserIdentityStore } from '@/stores/userIdentityStore';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function ProfilePage() {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
-  const { goBack } = useSafeNavigation();
+  const { goBack, canGoBack } = useSafeNavigation();
   const { user, completionStatus, refreshCompletionStatus } = useProfile();
   const isAuthenticated = useIsAuthenticated();
   const authLoading = useAuthLoading();
@@ -52,6 +54,8 @@ function ProfilePage() {
   const [refreshing, setRefreshing] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [referralCount, setReferralCount] = useState<number | null>(null);
+  const { segment: identitySegment, verificationSegment, instituteName, companyName } = useUserIdentityStore();
+  const isMounted = useIsMounted();
 
   // Fetch referral stats for "Friends joined" count
   useEffect(() => {
@@ -180,6 +184,7 @@ function ProfilePage() {
     } catch (error) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [authActions, refetchStats, refreshWallet, refreshCompletionStatus]);
@@ -221,6 +226,7 @@ function ProfilePage() {
       });
       if (!result.canceled && result.assets[0]) {
 
+        if (!isMounted()) return;
         setUploadingImage(true);
 
         const uploadResult = await uploadProfileImage(result.assets[0].uri);
@@ -240,6 +246,7 @@ function ProfilePage() {
     } catch (error) {
       platformAlertSimple('Error', error instanceof Error ? error.message : 'An error occurred while uploading the image');
     } finally {
+      if (!isMounted()) return;
       setUploadingImage(false);
     }
   };
@@ -447,11 +454,13 @@ function ProfilePage() {
         style={styles.header}
       >
         <View style={styles.headerContent}>
-          <HeaderBackButton
-            fallbackRoute="/(tabs)"
-            light={true}
-            iconSize={22}
-          />
+          {canGoBack && (
+            <HeaderBackButton
+              fallbackRoute="/(tabs)"
+              light={true}
+              iconSize={22}
+            />
+          )}
 
           <View style={styles.headerTitleSection}>
             <ThemedText style={styles.headerTitle}>My Profile</ThemedText>
@@ -559,6 +568,73 @@ function ProfilePage() {
               )}
             </View>
           </View>
+
+          {/* Identity Status Banner */}
+          {identitySegment !== 'normal' && (
+            <View style={styles.identityBanner}>
+              <View style={[
+                styles.identityBannerInner,
+                {
+                  backgroundColor: verificationSegment === 'verified'
+                    ? colors.successScale[50]
+                    : verificationSegment === 'provisional' || verificationSegment === 'pending'
+                      ? colors.warningScale[50]
+                      : colors.infoScale[50],
+                },
+              ]}>
+                <View style={[
+                  styles.identityIconCircle,
+                  {
+                    backgroundColor: verificationSegment === 'verified'
+                      ? colors.successScale[100]
+                      : verificationSegment === 'provisional' || verificationSegment === 'pending'
+                        ? colors.warningScale[100]
+                        : colors.infoScale[100],
+                  },
+                ]}>
+                  <Ionicons
+                    name={
+                      identitySegment === 'verified_student' ? 'school' :
+                      identitySegment === 'verified_employee' ? 'briefcase' :
+                      'shield-checkmark'
+                    }
+                    size={20}
+                    color={
+                      verificationSegment === 'verified' ? colors.successScale[600] :
+                      verificationSegment === 'provisional' || verificationSegment === 'pending' ? colors.warningScale[600] :
+                      colors.infoScale[600]
+                    }
+                  />
+                </View>
+                <View style={styles.identityTextContainer}>
+                  <ThemedText style={[
+                    styles.identityTitle,
+                    {
+                      color: verificationSegment === 'verified' ? colors.successScale[700] :
+                        verificationSegment === 'provisional' || verificationSegment === 'pending' ? colors.warningScale[700] :
+                        colors.infoScale[700],
+                    },
+                  ]}>
+                    {verificationSegment === 'verified'
+                      ? identitySegment === 'verified_student' ? 'Student Verified'
+                        : identitySegment === 'verified_employee' ? 'Corporate Verified'
+                        : 'Identity Verified'
+                      : verificationSegment === 'provisional' ? 'Provisional Access'
+                      : 'Verification Pending'}
+                  </ThemedText>
+                  <ThemedText style={styles.identitySubtitle}>
+                    {identitySegment === 'verified_student' && instituteName
+                      ? instituteName
+                      : identitySegment === 'verified_employee' && companyName
+                        ? companyName
+                        : verificationSegment === 'verified'
+                          ? 'Exclusive deals unlocked'
+                          : 'Full access after review'}
+                  </ThemedText>
+                </View>
+              </View>
+            </View>
+          )}
 
           {/* Profile Completion Indicator */}
           {profileCompletion < 100 && (
@@ -887,7 +963,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 20,
+    paddingBottom: 120,
   },
   section: {
     marginHorizontal: 20,
@@ -999,6 +1075,37 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: PROFILE_COLORS.success,
     marginLeft: 4,
+  },
+
+  // Identity Status Banner
+  identityBanner: {
+    marginTop: 16,
+  },
+  identityBannerInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: PROFILE_RADIUS.large,
+    padding: PROFILE_SPACING.md,
+    gap: 12,
+  },
+  identityIconCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  identityTextContainer: {
+    flex: 1,
+  },
+  identityTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    marginBottom: 2,
+  },
+  identitySubtitle: {
+    fontSize: 12,
+    color: colors.text.secondary,
   },
 
   // Profile Completion Card

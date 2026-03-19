@@ -22,6 +22,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '@/services/apiClient';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface UGCItem {
   _id: string;
@@ -60,6 +61,7 @@ function TechStoriesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
+  const isMounted = useIsMounted();
 
   const fetchUGC = useCallback(async () => {
     try {
@@ -111,10 +113,12 @@ function TechStoriesPage() {
       }
 
       combined.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      if (!isMounted()) return;
       setItems(combined);
     } catch (err) {
       // silently handle
     } finally {
+      if (!isMounted()) return;
       setIsLoading(false);
     }
   }, []);
@@ -124,6 +128,7 @@ function TechStoriesPage() {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchUGC();
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

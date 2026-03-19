@@ -20,8 +20,10 @@ import apiClient from '@/services/apiClient';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { platformAlertSimple, platformAlertConfirm } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 function OffersDetailPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const { id, slug } = useLocalSearchParams<{ id: string; slug: string }>();
   const theme = getCategoryTheme(slug || 'electronics');
@@ -49,6 +51,7 @@ function OffersDetailPage() {
       } catch (err) {
         // silently handle
       } finally {
+        if (!isMounted()) return;
         setIsLoading(false);
       }
     };
@@ -80,6 +83,7 @@ function OffersDetailPage() {
     } catch (err: any) {
       platformAlertSimple('Error', err?.message || 'Failed to apply offer. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsRedeeming(false);
     }
   };
@@ -136,15 +140,19 @@ function OffersDetailPage() {
         >
           <Text style={styles.heroIcon}>{isBankOffer ? '\u{1F4B3}' : '\u{1F4A1}'}</Text>
           <Text style={styles.heroTitle}>{title}</Text>
-          {discount > 0 && (
+          {discount > 0 && offer.maxDiscount > 0 ? (
+            <>
+              <Text style={styles.heroDiscount}>
+                Save up to {currencySymbol}{offer.maxDiscount.toLocaleString()}
+              </Text>
+              <Text style={styles.heroMax}>{discount}% OFF</Text>
+            </>
+          ) : discount > 0 ? (
             <Text style={styles.heroDiscount}>
               {offer.discountType === 'percentage' || offer.discountPercentage
                 ? `${discount}% OFF` : `${currencySymbol}${discount} OFF`}
             </Text>
-          )}
-          {offer.maxDiscount > 0 && (
-            <Text style={styles.heroMax}>Up to {currencySymbol}{offer.maxDiscount}</Text>
-          )}
+          ) : null}
         </LinearGradient>
 
         {/* Promo Code */}
@@ -282,7 +290,9 @@ function OffersDetailPage() {
                   <>
                     <Ionicons name="gift-outline" size={18} color={SHARED_COLORS.white} />
                     <Text style={styles.applyBtnText}>
-                      {isExpired ? 'Offer Expired' : 'Apply Offer'}
+                      {isExpired ? 'Offer Expired' : offer.maxDiscount > 0
+                        ? `Save up to ${currencySymbol}${offer.maxDiscount.toLocaleString()}`
+                        : discount > 0 ? `Get ${discount}% Off Now` : 'Apply Offer'}
                     </Text>
                   </>
                 )}

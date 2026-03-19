@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 /**
  * StockNotificationModal Component
@@ -44,6 +45,7 @@ export const StockNotificationModal: React.FC<StockNotificationModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [subscribed, setSubscribed] = useState(false);
+  const isMounted = useIsMounted();
 
   /**
    * Validate email format
@@ -88,13 +90,16 @@ export const StockNotificationModal: React.FC<StockNotificationModalProps> = ({
     try {
       setIsSubmitting(true);
       await onSubscribe(email, phone || undefined);
+      if (!isMounted()) return;
       setSubscribed(true);
 
       // Auto-close after 2 seconds on success
+      if (!isMounted()) return;
       setTimeout(() => {
         handleClose();
       }, 2000);
     } catch (err: any) {
+      if (!isMounted()) return;
       setError(err.message || 'Failed to subscribe. Please try again.');
       setIsSubmitting(false);
     }

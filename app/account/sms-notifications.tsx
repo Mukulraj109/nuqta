@@ -16,6 +16,7 @@ import notificationService from '../../services/notificationService';
 import { platformAlertSimple } from '@/utils/platformAlert';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface SMSNotifications {
   enabled: boolean;
@@ -27,6 +28,7 @@ interface SMSNotifications {
 }
 
 function SMSNotificationsScreen() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -43,13 +45,17 @@ function SMSNotificationsScreen() {
       const response = await notificationService.getNotificationSettings();
 
       if (response.success && response.data) {
+        if (!isMounted()) return;
         setSettings(response.data.sms);
       } else {
+        if (!isMounted()) return;
         setSettings(getDefaultSettings());
       }
     } catch (error) {
+      if (!isMounted()) return;
       setSettings(getDefaultSettings());
     } finally {
+      if (!isMounted()) return;
       setLoading(false);
     }
   };
@@ -75,15 +81,19 @@ function SMSNotificationsScreen() {
 
       if (!response.success) {
         platformAlertSimple('Error', 'Failed to update SMS notification settings. Please try again.');
+        if (!isMounted()) return;
         setSettings(settings);
       } else {
+        if (!isMounted()) return;
         setShowSuccessMessage(true);
         setTimeout(() => setShowSuccessMessage(false), 2000);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update SMS notification settings. Please check your connection and try again.');
+      if (!isMounted()) return;
       setSettings(settings);
     } finally {
+      if (!isMounted()) return;
       setSaving(false);
     }
   };
@@ -256,6 +266,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: Spacing.base,
+    paddingBottom: 120,
   },
   section: {
     backgroundColor: Colors.background.primary,

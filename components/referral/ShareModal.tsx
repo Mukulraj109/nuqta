@@ -21,6 +21,7 @@ import type { ShareTemplate } from '@/types/referral.types';
 import analyticsService from '@/services/analyticsService';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 interface ShareModalProps {
   visible: boolean;
@@ -85,9 +86,11 @@ function ShareModal({
   const currencySymbol = getCurrencySymbol();
   const SHARE_PLATFORMS = getSharePlatforms(currencySymbol);
   const [isCopied, setIsCopied] = useState(false);
+  const isMounted = useIsMounted();
 
   // Handle copy code
   const handleCopyCode = async () => {
+    if (!isMounted()) return;
     await Clipboard.setString(referralCode);
     setIsCopied(true);
 
@@ -100,6 +103,7 @@ function ShareModal({
 
   // Handle copy link
   const handleCopyLink = async () => {
+    if (!isMounted()) return;
     await Clipboard.setString(referralLink);
 
     // ✅ Analytics: Track link copy

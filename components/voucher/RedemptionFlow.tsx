@@ -27,6 +27,7 @@ import {
 } from '@/types/voucher-redemption.types';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width } = Dimensions.get('window');
 
@@ -52,6 +53,7 @@ function RedemptionFlow({
   const [isProcessing, setIsProcessing] = useState(false);
   const [redemption, setRedemption] = useState<VoucherRedemption | null>(null);
   const [validation, setValidation] = useState<VoucherValidation | null>(null);
+  const isMounted = useIsMounted();
 
   const totalSteps = 5; // Select, Method, Terms, Confirm, Success
 
@@ -88,11 +90,13 @@ function RedemptionFlow({
     try {
       setIsProcessing(true);
       const result = await onRedeem(selectedVoucher.id, selectedMethod);
+      if (!isMounted()) return;
       setRedemption(result);
       handleNext();
     } catch (error) {
       platformAlertSimple('Error', 'Failed to redeem voucher. Please try again.');
     } finally {
+      if (!isMounted()) return;
       setIsProcessing(false);
     }
   }, [selectedVoucher, selectedMethod, onRedeem, handleNext]);

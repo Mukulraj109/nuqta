@@ -42,6 +42,7 @@ import { useRezBalance, useGetCurrencySymbol } from '@/stores';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 
 const { width } = Dimensions.get('window');
@@ -265,6 +266,7 @@ const getEmojiForCategory = (icon?: string, name?: string): string => {
 
 
 const ExplorePage = () => {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const rezBalance = useRezBalance();
   const getCurrencySymbol = useGetCurrencySymbol();
@@ -427,6 +429,7 @@ const ExplorePage = () => {
     try {
       await fetchAllExploreData(cancelled);
     } finally {
+      if (!isMounted()) return;
       setRefreshing(false);
     }
   }, [fetchAllExploreData]);

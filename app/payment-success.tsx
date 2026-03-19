@@ -24,6 +24,7 @@ import { BRAND } from '@/constants/brand';
 import analytics from '@/services/analytics/AnalyticsService';
 import { ANALYTICS_EVENTS } from '@/services/analytics/events';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -89,6 +90,7 @@ function PaymentSuccessPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const analyticsTrackedRef = useRef(false);
+  const isMounted = useIsMounted();
 
   // Parse multiple order IDs (comma-separated)
   const orderIds = orderId ? orderId.split(',').map(id => id.trim()).filter(Boolean) : [];
@@ -172,6 +174,7 @@ function PaymentSuccessPage() {
 
         // Log summary
 
+        if (!isMounted()) return;
         setOrders(fetchedOrders);
 
         // Track purchase event (once per page visit)
@@ -198,11 +201,14 @@ function PaymentSuccessPage() {
         // Set partial error if some orders failed
         if (failedOrders.length > 0 && fetchedOrders.length > 0) {
         } else if (failedOrders.length > 0 && fetchedOrders.length === 0) {
+          if (!isMounted()) return;
           setError('Could not load order details. Please check your orders page.');
         }
       } catch (err) {
+        if (!isMounted()) return;
         setError('Failed to load order details');
       } finally {
+        if (!isMounted()) return;
         setLoading(false);
       }
     };

@@ -31,6 +31,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { CardGridSkeleton } from '@/components/skeletons';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
+import { useIsMounted } from '@/hooks/useIsMounted';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -62,6 +63,7 @@ interface ProductItem {
 }
 
 function SubcategoryPage() {
+  const isMounted = useIsMounted();
   const router = useRouter();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
@@ -131,14 +133,18 @@ function SubcategoryPage() {
           deliveryTime: store.operationalInfo?.deliveryTime || '30 min',
           isVerified: store.verification?.isVerified || false,
         }));
+        if (!isMounted()) return;
         setStores(formattedStores);
       } else {
+        if (!isMounted()) return;
         setStores([]);
       }
     } catch (err: any) {
       // Even on error, we might want to ensure empty state
+      if (!isMounted()) return;
       setStores([]);
     } finally {
+      if (!isMounted()) return;
       setIsLoadingStores(false);
     }
   }, [subSlug]);
@@ -194,13 +200,17 @@ function SubcategoryPage() {
           cashback: product.cashback?.percentage,
           storeName: product.store?.name,
         }));
+        if (!isMounted()) return;
         setProducts(formattedProducts);
       } else {
+        if (!isMounted()) return;
         setProducts([]);
       }
     } catch (err: any) {
+      if (!isMounted()) return;
       setProducts([]);
     } finally {
+      if (!isMounted()) return;
       setIsLoadingProducts(false);
     }
   }, [subSlug]);
@@ -221,6 +231,7 @@ function SubcategoryPage() {
   const handleRefresh = async () => {
     setRefreshing(true);
     await Promise.all([fetchStores(), fetchProducts()]);
+    if (!isMounted()) return;
     setRefreshing(false);
   };
 

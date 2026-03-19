@@ -159,7 +159,7 @@ class ReferralHandler {
    */
   static generateReferralLink(code: string, platform: 'native' | 'web' = 'native'): string {
     if (platform === 'native') {
-      return `nuqta://ref/${code}`;
+      return `rez://ref/${code}`;
     } else {
       return `https://rez.app/ref/${code}`;
     }
