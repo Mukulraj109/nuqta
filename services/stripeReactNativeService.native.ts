@@ -68,8 +68,8 @@ class StripeReactNativeService {
       if (StripeSDK && StripeSDK.initStripe) {
         await StripeSDK.initStripe({
           publishableKey: this.publishableKey,
-          merchantIdentifier: 'merchant.com.rezapp', // For Apple Pay
-          urlScheme: 'rezapp', // For payment redirects
+          merchantIdentifier: 'merchant.com.rez.app', // For Apple Pay — matches app.config.js
+          urlScheme: 'rez', // For payment redirects — matches app.config.js scheme
         });
 
       }

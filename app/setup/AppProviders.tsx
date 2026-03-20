@@ -25,9 +25,11 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * - DeferredRecommendation → recommendationStore
  */
 import React, { useEffect, useRef } from 'react';
+import { Platform } from 'react-native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import * as Sentry from '@sentry/react-native';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import analytics from '@/services/analytics/AnalyticsService';
@@ -40,6 +42,25 @@ import ToastManager from '@/components/common/ToastManager';
 import { CrossPlatformAlertRenderer } from '@/components/common/CrossPlatformAlert';
 import LocationRegionSync from '@/components/common/LocationRegionSync';
 import OfflineBanner from '@/components/common/OfflineBanner';
+
+// Stripe Provider — native only (web uses @stripe/stripe-js)
+let StripeProvider: React.ComponentType<any> | null = null;
+if (Platform.OS !== 'web') {
+  try {
+    StripeProvider = require('@stripe/stripe-react-native').StripeProvider;
+  } catch {
+    // @stripe/stripe-react-native not available
+  }
+}
+
+// Initialize Sentry for crash reporting
+if (process.env.EXPO_PUBLIC_SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+    environment: process.env.EXPO_PUBLIC_ENVIRONMENT || 'production',
+    tracesSampleRate: 0.2,
+  });
+}
 
 import {
   DeferredSocket,
@@ -96,7 +117,9 @@ function AppProviders({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onQueueSyncError: _onQueueSyncError,
 }: AppProvidersProps) {
-  return (
+  const stripeKey = process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
+
+  const content = (
     <QueryClientProvider client={queryClient}>
     <ErrorBoundary onError={onErrorBoundaryError}>
       <AuthProvider>
@@ -117,6 +140,21 @@ function AppProviders({
     </ErrorBoundary>
     </QueryClientProvider>
   );
+
+  // Wrap with StripeProvider on native platforms only
+  if (StripeProvider && stripeKey) {
+    return (
+      <StripeProvider
+        publishableKey={stripeKey}
+        merchantIdentifier="merchant.com.rez.app"
+        urlScheme="rez"
+      >
+        {content}
+      </StripeProvider>
+    );
+  }
+
+  return content;
 }
 
 /**

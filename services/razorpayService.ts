@@ -150,7 +150,7 @@ class RazorpayService {
     return new Promise((resolve, reject) => {
       const options = {
         description: 'REZ App - Order Payment',
-        image: 'https://your-logo-url.com/logo.png', // Replace with your app logo
+        image: `https://res.cloudinary.com/${process.env.EXPO_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1/rez-logo.png`,
         currency: order.currency,
         key: order.key,
         amount: order.amount, // in paise

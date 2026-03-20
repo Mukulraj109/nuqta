@@ -1,4 +1,4 @@
-package com.nuqta.app
+package com.rez.app
 
 import android.os.Build
 import android.os.Bundle

@@ -17,25 +17,27 @@ module.exports = {
   expo: {
     name: BRAND_NAME,
     slug: 'rez', // App store identifier
-    version: '1.0.0',
+    version: process.env.APP_VERSION || '1.0.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
     scheme: 'rez', // Deep link scheme
     userInterfaceStyle: 'automatic',
     newArchEnabled: false,
     notification: {
-      vapidPublicKey: process.env.EXPO_PUBLIC_VAPID_KEY || 'BKJ7f1ZYHKG3ttcLtHvgpfdQBRqf2uPGhPpGcqx7zDK6Pf6sbaPd7Koev-x-FiazRezdzFquFW3pZuEX1T8zqCk',
+      vapidPublicKey: process.env.EXPO_PUBLIC_VAPID_KEY,
       serviceWorkerPath: '/expo-service-worker.js',
     },
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'com.rez.app', // App Store identifier
-      buildNumber: '1',
+      buildNumber: process.env.BUILD_NUMBER || '1',
       infoPlist: {
         NSCameraUsageDescription: `${BRAND_NAME} needs camera access to scan QR codes for store payments`,
         NSLocationWhenInUseUsageDescription: `${BRAND_NAME} needs your location to show nearby stores and offers`,
         NSPhotoLibraryUsageDescription: `${BRAND_NAME} needs photo access to upload profile pictures and bills`,
         NSLocationAlwaysAndWhenInUseUsageDescription: `${BRAND_NAME} needs your location to show nearby stores and offers`,
+        NSMicrophoneUsageDescription: `${BRAND_NAME} needs microphone access for video features`,
+        NSPhotoLibraryAddUsageDescription: `${BRAND_NAME} needs permission to save media to your photo library`,
       },
     },
     android: {
@@ -46,7 +48,7 @@ module.exports = {
       },
       edgeToEdgeEnabled: false,
       package: 'com.rez.app', // Play Store identifier
-      versionCode: 1,
+      versionCode: parseInt(process.env.VERSION_CODE || '1'),
       permissions: [
         'android.permission.CAMERA',
         'android.permission.ACCESS_FINE_LOCATION',
@@ -54,7 +56,6 @@ module.exports = {
         'android.permission.READ_EXTERNAL_STORAGE',
         'android.permission.WRITE_EXTERNAL_STORAGE',
         'android.permission.VIBRATE',
-        'android.permission.RECEIVE_BOOT_COMPLETED',
         'android.permission.RECORD_AUDIO',
         'android.permission.POST_NOTIFICATIONS',
       ],
