@@ -273,7 +273,7 @@ function CallSupportPage() {
       <View style={styles.headerContent}>
         <Pressable
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           accessibilityLabel="Go back"
           accessibilityRole="button"
         >
@@ -369,7 +369,7 @@ function CallSupportPage() {
           </Pressable>
           <Pressable
             style={styles.doneButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             accessibilityLabel="Done"
             accessibilityRole="button"
           >

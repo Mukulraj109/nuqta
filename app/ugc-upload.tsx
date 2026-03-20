@@ -66,11 +66,11 @@ function UGCUploadScreen() {
         'Yes',
         () => {
           clearVideo();
-          router.back();
+          router.canGoBack() ? router.back() : router.replace('/(tabs)');
         }
       );
     } else {
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     }
   };
 
@@ -98,7 +98,7 @@ function UGCUploadScreen() {
 
     if (success) {
       platformAlertSimple('Success', 'Your video has been uploaded successfully!');
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     }
   };
 

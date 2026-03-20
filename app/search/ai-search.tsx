@@ -174,7 +174,7 @@ function AISearchPage() {
         style={styles.header}
       >
         <View style={styles.headerContent}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>AI Search</ThemedText>

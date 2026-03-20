@@ -122,7 +122,7 @@ function CreatorEditProfilePage() {
 
       if (response.success) {
         platformAlert('Success', 'Profile updated successfully', [
-          { text: 'OK', onPress: () => router.back() },
+          { text: 'OK', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') },
         ]);
       } else {
         platformAlert('Error', response.error || 'Failed to update profile');
@@ -167,7 +167,7 @@ function CreatorEditProfilePage() {
         <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
         <LinearGradient colors={[Colors.nileBlue, '#2d5a7b']} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
             </Pressable>
             <Text style={styles.headerTitle}>Edit Profile</Text>
@@ -188,7 +188,7 @@ function CreatorEditProfilePage() {
       {/* Header */}
       <LinearGradient colors={[Colors.nileBlue, '#2d5a7b']} style={styles.header}>
         <View style={styles.headerContent}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <Text style={styles.headerTitle}>Edit Profile</Text>

@@ -119,7 +119,7 @@ function HotspotDetailPage() {
       {/* Header */}
       <LinearGradient colors={[Colors.nileBlue, Colors.nileBlueLight]} style={styles.header}>
         <View style={styles.headerTop}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <View style={styles.headerTitleContainer}>

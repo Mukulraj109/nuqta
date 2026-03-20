@@ -61,6 +61,9 @@ function PaymentSuccessScreen() {
       nextMilestone: 5,
       milestoneReward: 'Bonus 50 Coins' } };
 
+  // Cashback breakdown (base, subscription multiplier, privé multiplier)
+  const cashbackBreakdown = rawRewards.cashbackBreakdown || null;
+
   const billAmount = parseFloat(amount || '0');
   const coinsRedeemed = parseInt(coinsUsed || '0', 10);
 
@@ -210,6 +213,42 @@ function PaymentSuccessScreen() {
           </Animated.View>
         )}
 
+        {/* Cashback Breakdown */}
+        {cashbackBreakdown && rewards.cashbackEarned > 0 && (
+          <Animated.View style={[styles.cashbackBreakdownCard, contentStyle]}>
+            <View style={styles.cashbackBreakdownHeader}>
+              <Ionicons name="wallet-outline" size={20} color={colors.successScale[600]} />
+              <Text style={styles.cashbackBreakdownTitle}>Cashback Breakdown</Text>
+            </View>
+            {cashbackBreakdown.basePercent > 0 && (
+              <View style={styles.cashbackRow}>
+                <Text style={styles.cashbackLabel}>Base cashback ({cashbackBreakdown.basePercent}%)</Text>
+                <Text style={styles.cashbackValue}>{currencySymbol}{(billAmount * cashbackBreakdown.basePercent / 100).toFixed(2)}</Text>
+              </View>
+            )}
+            {cashbackBreakdown.subscriptionMultiplier > 1 && (
+              <View style={styles.cashbackRow}>
+                <Text style={styles.cashbackLabel}>Subscription bonus ({cashbackBreakdown.subscriptionMultiplier}x)</Text>
+                <Text style={[styles.cashbackValue, { color: colors.primary[600] }]}>
+                  +{currencySymbol}{(billAmount * cashbackBreakdown.basePercent / 100 * (cashbackBreakdown.subscriptionMultiplier - 1)).toFixed(2)}
+                </Text>
+              </View>
+            )}
+            {cashbackBreakdown.priveMultiplier > 1 && (
+              <View style={styles.cashbackRow}>
+                <Text style={styles.cashbackLabel}>Privé bonus ({cashbackBreakdown.priveMultiplier}x)</Text>
+                <Text style={[styles.cashbackValue, { color: colors.secondary[600] }]}>
+                  +{currencySymbol}{(billAmount * cashbackBreakdown.basePercent / 100 * (cashbackBreakdown.priveMultiplier - 1)).toFixed(2)}
+                </Text>
+              </View>
+            )}
+            <View style={[styles.cashbackRow, styles.cashbackTotalRow]}>
+              <Text style={styles.cashbackTotalLabel}>Total cashback</Text>
+              <Text style={styles.cashbackTotalValue}>{currencySymbol}{rewards.cashbackEarned.toFixed(2)}</Text>
+            </View>
+          </Animated.View>
+        )}
+
         {/* Rewards Breakdown Card */}
         <Animated.View
           style={[
@@ -354,6 +393,44 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: colors.background.primary },
+  cashbackBreakdownCard: {
+    width: '100%',
+    backgroundColor: colors.background.primary,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.lg,
+    ...shadows.sm },
+  cashbackBreakdownHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: spacing.md,
+    gap: spacing.sm },
+  cashbackBreakdownTitle: {
+    ...typography.button,
+    color: colors.text.primary },
+  cashbackRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: spacing.xs },
+  cashbackLabel: {
+    ...typography.bodySmall,
+    color: colors.text.secondary },
+  cashbackValue: {
+    ...typography.bodySmall,
+    fontWeight: '600',
+    color: colors.text.primary },
+  cashbackTotalRow: {
+    borderTopWidth: 1,
+    borderTopColor: colors.border.light,
+    marginTop: spacing.sm,
+    paddingTop: spacing.sm },
+  cashbackTotalLabel: {
+    ...typography.button,
+    color: colors.text.primary },
+  cashbackTotalValue: {
+    ...typography.button,
+    color: colors.successScale[600] },
   loyaltyCard: {
     width: '100%',
     backgroundColor: colors.background.primary,

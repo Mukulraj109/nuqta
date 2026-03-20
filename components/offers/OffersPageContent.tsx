@@ -53,6 +53,27 @@ import HorizontalSkeletonList from '@/components/skeletons/HorizontalSkeletonLis
 import DealCardSkeleton from '@/components/skeletons/DealCardSkeleton';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useUserIdentityStore, IdentitySegment } from '@/stores/userIdentityStore';
+
+// Personalised banner config per segment
+const SEGMENT_BANNER: Partial<Record<IdentitySegment, { text: string; route: string; color: string; icon: string }>> = {
+  verified_student:    { text: 'Your student deals are ready',      route: '/offers/student',          color: '#8B5CF6', icon: 'school-outline' },
+  verified_employee:   { text: 'Your work perks are unlocked',      route: '/offers/corporate',        color: '#0EA5E9', icon: 'briefcase-outline' },
+  verified_healthcare: { text: 'Healthcare offers unlocked for you', route: '/offers/zones/healthcare', color: '#2ECC71', icon: 'medkit-outline' },
+  verified_defence:    { text: 'Exclusive defence benefits available', route: '/offers/zones/defence',  color: '#6366F1', icon: 'shield-outline' },
+  verified_teacher:    { text: 'Teacher benefits are live',          route: '/offers/zones/teacher',    color: '#F59E0B', icon: 'book-outline' },
+  verified_senior:     { text: 'Senior benefits unlocked',           route: '/offers/zones/senior',     color: '#EC4899', icon: 'heart-outline' },
+};
+
+// Exclusive tab label per segment
+const SEGMENT_EXCLUSIVE_LABEL: Partial<Record<IdentitySegment, string>> = {
+  verified_student: 'Campus',
+  verified_employee: 'Corporate',
+  verified_healthcare: 'Healthcare',
+  verified_defence: 'Defence',
+  verified_teacher: 'Teacher',
+  verified_senior: 'Senior',
+};
 
 // New Color Palette
 const PALETTE = {
@@ -83,6 +104,9 @@ export const OffersPageContent: React.FC<OffersPageContentProps> = ({
 }) => {
   const { theme, isDark } = useOffersTheme();
   const router = useRouter();
+  const { segment } = useUserIdentityStore();
+  const bannerConfig = SEGMENT_BANNER[segment];
+  const exclusiveTabLabel = SEGMENT_EXCLUSIVE_LABEL[segment] ?? 'Exclusive';
 
   // Determine initial active tab from URL params
   const getInitialTab = (): OffersTabType => {
@@ -374,6 +398,30 @@ export const OffersPageContent: React.FC<OffersPageContentProps> = ({
 
     return (
       <>
+        {/* Personalised segment banner */}
+        {bannerConfig && (
+          <Pressable
+            onPress={() => router.push(bannerConfig.route as any)}
+            style={{
+              margin: 16,
+              padding: 14,
+              backgroundColor: bannerConfig.color + '18',
+              borderRadius: 12,
+              borderLeftWidth: 3,
+              borderLeftColor: bannerConfig.color,
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 10,
+            }}
+          >
+            <Ionicons name={bannerConfig.icon as any} size={20} color={bannerConfig.color} />
+            <Text style={{ flex: 1, fontSize: 14, fontWeight: '600', color: bannerConfig.color }}>
+              {bannerConfig.text}
+            </Text>
+            <Ionicons name="arrow-forward" size={16} color={bannerConfig.color} />
+          </Pressable>
+        )}
+
         {offersData.lightningDeals.length > 0 && (
           <LightningDealsSection
             deals={offersData.lightningDeals}
@@ -618,7 +666,7 @@ export const OffersPageContent: React.FC<OffersPageContentProps> = ({
   return (
     <View style={styles.container}>
       {/* Tabs */}
-      <OffersTabs activeTab={activeTab} onTabChange={setActiveTab} />
+      <OffersTabs activeTab={activeTab} onTabChange={setActiveTab} exclusiveLabel={exclusiveTabLabel} />
 
       {/* Content */}
       <ScrollView

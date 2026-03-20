@@ -70,7 +70,7 @@ function CompanyLeaderboardPage() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={colors.text.primary} />
         </Pressable>
         <ThemedText style={styles.headerTitle}>Company Rankings</ThemedText>
@@ -84,6 +84,10 @@ function CompanyLeaderboardPage() {
         renderItem={renderItem}
         keyExtractor={(item) => item.userId}
         contentContainerStyle={styles.listContent}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={8}
+        windowSize={5}
+        initialNumToRender={6}
         ListHeaderComponent={
           <View style={styles.statsCard}>
             <ThemedText style={styles.companyName}>{companyName}</ThemedText>

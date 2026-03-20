@@ -201,7 +201,7 @@ function DealSuccessPage() {
           <Pressable style={styles.secondaryBtn} onPress={() => router.replace('/my-deals' as any)}>
             <ThemedText style={styles.secondaryBtnText}>Check My Deals</ThemedText>
           </Pressable>
-          <Pressable style={styles.backLink} onPress={() => router.back()}>
+          <Pressable style={styles.backLink} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <ThemedText style={styles.backLinkText}>Go Back</ThemedText>
           </Pressable>
         </View>

@@ -353,7 +353,7 @@ const StoreListPage: React.FC = () => {
 
   // Handle back navigation
   const handleBack = useCallback(() => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   }, [router]);
 
   // Handle product selection

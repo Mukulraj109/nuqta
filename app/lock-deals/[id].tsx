@@ -125,7 +125,7 @@ const LockDealDetailPage: React.FC = () => {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.nileBlue} />
           </Pressable>
           <Text style={styles.headerTitle}>Deal Details</Text>
@@ -140,7 +140,7 @@ const LockDealDetailPage: React.FC = () => {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.nileBlue} />
           </Pressable>
           <Text style={styles.headerTitle}>Deal Not Found</Text>
@@ -172,7 +172,7 @@ const LockDealDetailPage: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={Colors.nileBlue} />
         </Pressable>
         <Text style={styles.headerTitle} numberOfLines={1}>Deal Details</Text>

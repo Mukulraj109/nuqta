@@ -92,7 +92,7 @@ const CreatorPickDetail = () => {
               const response = await creatorsApi.deleteMyPick(id);
               if (response.success) {
                 platformAlert('Success', response.data?.archived ? 'Pick archived' : 'Pick deleted', [
-                  { text: 'OK', onPress: () => router.back() },
+                  { text: 'OK', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') },
                 ]);
               } else {
                 platformAlert('Error', response.error || 'Failed to delete pick');
@@ -190,7 +190,7 @@ const CreatorPickDetail = () => {
 
   const renderHeader = () => (
     <View style={s.headerRow}>
-      <Pressable style={s.headerBtn} onPress={() => router.back()}>
+      <Pressable style={s.headerBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
         <Ionicons name="arrow-back" size={20} color={Colors.text.inverse} />
       </Pressable>
       <View style={s.flex1} />

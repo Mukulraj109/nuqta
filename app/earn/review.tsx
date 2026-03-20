@@ -18,6 +18,7 @@ import CachedImage from '@/components/ui/CachedImage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { BRAND } from '@/constants/brand';
 import { useFocusEffect } from '@react-navigation/native';
 import { getImagePicker } from '@/utils/lazyImports';
 import { ThemedText } from '@/components/ThemedText';
@@ -159,7 +160,7 @@ function ReviewToEarnPage() {
       const response = await apiClient.post('/reviews', payload);
 
       if (response.success) {
-        platformAlert('Review Submitted!', `You earned ${calculateCoins()} coins for your review!`);
+        platformAlert('Review Submitted!', `You earned ${calculateCoins()} ${BRAND.COIN_NAME} for your review! Your review will be moderated before publishing.`);
         if (!isMounted()) return;
         setSelectedItem(null);
         if (!isMounted()) return;
@@ -367,7 +368,7 @@ function ReviewToEarnPage() {
         style={styles.header}
       >
         <View style={styles.headerContent}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Review & Earn</ThemedText>

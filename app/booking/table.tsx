@@ -264,7 +264,7 @@ function TableBookingPage() {
         platformAlertConfirm(
           'Booking Confirmed!',
           `Your table has been booked!\nBooking Number: ${response.data.bookingId || response.data.confirmationCode || 'N/A'}\nDate: ${formatDate(selectedDate)}\nTime: ${selectedTimeSlot?.time}\nParty Size: ${partySize}`,
-          () => router.back(),
+          () => router.canGoBack() ? router.back() : router.replace('/(tabs)'),
           'OK'
         );
       } else {
@@ -286,7 +286,7 @@ function TableBookingPage() {
           colors={[Colors.brand.purple, Colors.brand.purple]}
           style={styles.loadingHeader}
         >
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
         </LinearGradient>
@@ -305,14 +305,14 @@ function TableBookingPage() {
           colors={[Colors.brand.purple, Colors.brand.purple]}
           style={styles.loadingHeader}
         >
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
         </LinearGradient>
         <View style={styles.errorContainer}>
           <Ionicons name="restaurant-outline" size={64} color={Colors.border.default} />
           <ThemedText style={styles.errorText}>Restaurant not found</ThemedText>
-          <Pressable onPress={() => router.back()} style={styles.errorButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.errorButton}>
             <ThemedText style={styles.errorButtonText}>Go Back</ThemedText>
           </Pressable>
         </View>
@@ -336,7 +336,7 @@ function TableBookingPage() {
         style={styles.header}
       >
         <View style={styles.headerTop}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Book a Table</ThemedText>

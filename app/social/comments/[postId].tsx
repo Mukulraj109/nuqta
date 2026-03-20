@@ -327,7 +327,7 @@ function CommentsPage() {
 
       {/* Header */}
       <View style={styles.header}>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
+        <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Ionicons name="close" size={24} color={Colors.text.primary} />
         </Pressable>
         <ThemedText style={styles.headerTitle}>Comments</ThemedText>

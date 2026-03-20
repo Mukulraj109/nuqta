@@ -269,7 +269,7 @@ function StoreVisitPageInner() {
           {
             text: 'Cancel',
             style: 'cancel',
-            onPress: () => router.back(),
+            onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)'),
           },
         ],
         'warning'
@@ -658,7 +658,7 @@ function StoreVisitPageInner() {
               // Reset form
               setSelectedDate(null);
               setSelectedTime('');
-              router.back();
+              router.canGoBack() ? router.back() : router.replace('/(tabs)');
             }
           }],
           'success'
@@ -768,7 +768,7 @@ function StoreVisitPageInner() {
 
   // Loading state - show skeleton screens
   if (loading) {
-    return <StoreVisitLoadingSkeleton onBackPress={() => router.back()} />;
+    return <StoreVisitLoadingSkeleton onBackPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} />;
   }
 
   // Error state
@@ -779,7 +779,7 @@ function StoreVisitPageInner() {
           colors={[Colors.gold, colors.brand.teal]}
           style={styles.header}
         >
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color="white" />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Store Visit</ThemedText>
@@ -807,7 +807,7 @@ function StoreVisitPageInner() {
         style={styles.header}
       >
         <View style={styles.headerTop}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={22} color="white" />
           </Pressable>
           <Text style={styles.headerTitle}>Store Visit</Text>

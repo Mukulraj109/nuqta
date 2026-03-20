@@ -91,6 +91,13 @@ function VerificationSuccessPage() {
       })
       .catch(() => {});
 
+    try {
+      if (typeof router.dismissAll === 'function') {
+        router.dismissAll();
+      } else {
+        while (router.canGoBack()) router.back();
+      }
+    } catch {}
     router.replace('/(tabs)');
   };
 

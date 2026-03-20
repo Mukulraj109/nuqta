@@ -5,17 +5,30 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+const SEGMENT_SAVINGS_LABEL: Record<string, string> = {
+  verified_student: 'Student Savings',
+  verified_employee: 'Work Perks Saved',
+  verified_healthcare: 'Healthcare Savings',
+  verified_defence: 'Defence Savings',
+  verified_teacher: 'Teacher Benefits',
+  verified_senior: 'Senior Benefits',
+  verified_government: 'Govt Benefits',
+};
+
 interface SavingsHeroProps {
   totalSaved: number;
   thisMonth: number;
   currencySymbol: string;
   isHidden: boolean;
+  segment?: string;
 }
 
-function SavingsHero({ totalSaved, thisMonth, currencySymbol, isHidden }: SavingsHeroProps) {
+function SavingsHero({ totalSaved, thisMonth, currencySymbol, isHidden, segment }: SavingsHeroProps) {
+  const savingsLabel = SEGMENT_SAVINGS_LABEL[segment ?? ''] ?? 'Your Total Savings';
+
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Your Total Savings</Text>
+      <Text style={styles.label}>{savingsLabel}</Text>
       <Text style={styles.amount}>
         {currencySymbol}{isHidden ? '****' : totalSaved.toLocaleString()}
       </Text>

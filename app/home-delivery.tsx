@@ -30,11 +30,7 @@ function HomeDeliveryPage() {
   const { state, actions, handlers } = useHomeDeliveryPage();
 
   const handleBack = () => {
-    if (router.canGoBack()) {
-      router.back();
-    } else {
-      router.push('/'); // Fallback to home page
-    }
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleProductPress = (product: HomeDeliveryProduct) => {

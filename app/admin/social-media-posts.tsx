@@ -284,7 +284,7 @@ function AdminSocialMediaPosts() {
       >
         <Pressable
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           accessibilityLabel="Go back"
           accessibilityRole="button"
           accessibilityHint="Returns to previous screen"

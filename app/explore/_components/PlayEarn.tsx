@@ -17,6 +17,7 @@ import gamificationApi, { GamificationStats } from '@/services/gamificationApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 
 const { width } = Dimensions.get('window');
 
@@ -205,6 +206,7 @@ const PlayEarn = () => {
   }
 
   return (
+    <FeatureErrorBoundary featureName="Play & Earn" compact={true}>
     <View style={styles.container}>
       <View style={styles.sectionHeader}>
         <View>
@@ -311,6 +313,7 @@ const PlayEarn = () => {
         </View>
       </View>
     </View>
+    </FeatureErrorBoundary>
   );
 };
 

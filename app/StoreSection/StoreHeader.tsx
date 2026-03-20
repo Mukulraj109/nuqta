@@ -123,7 +123,7 @@ function StoreHeader({
   // Handlers
   const handleBackPress = () => {
     triggerImpact('Medium');
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleSharePress = async () => {

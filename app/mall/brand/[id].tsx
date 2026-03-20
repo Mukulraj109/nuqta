@@ -169,7 +169,7 @@ function BrandDetailPage() {
         <Pressable style={styles.retryButton} onPress={fetchBrand}>
           <Text style={styles.retryButtonText}>Try Again</Text>
         </Pressable>
-        <Pressable style={styles.backLink} onPress={() => router.back()}>
+        <Pressable style={styles.backLink} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Text style={styles.backLinkText}>Go Back</Text>
         </Pressable>
       </View>
@@ -224,7 +224,7 @@ function BrandDetailPage() {
             {/* Back Button */}
             <Pressable
               style={[styles.backButton, { marginTop: 12 }]}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             >
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
             </Pressable>

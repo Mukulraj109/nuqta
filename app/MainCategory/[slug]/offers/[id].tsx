@@ -76,7 +76,7 @@ function OffersDetailPage() {
       setIsRedeeming(true);
       const res = await apiClient.post<any>(`/offers/${id}/redeem`);
       if (res.success) {
-        platformAlertConfirm('Offer Applied!', res.data?.message || 'Your offer has been applied. Use it on your next purchase!', () => router.back(), 'OK');
+        platformAlertConfirm('Offer Applied!', res.data?.message || 'Your offer has been applied. Use it on your next purchase!', () => router.canGoBack() ? router.back() : router.replace('/(tabs)'), 'OK');
       } else {
         platformAlertSimple('Cannot Apply', res.message || 'This offer may have expired or reached its usage limit.');
       }
@@ -100,7 +100,7 @@ function OffersDetailPage() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <Pressable onPress={() => router.back()} style={styles.backBtn}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backBtn}>
             <Ionicons name="arrow-back" size={24} color={SHARED_COLORS.textPrimary} />
           </Pressable>
           <Text style={styles.headerTitle}>Offer Details</Text>
@@ -126,7 +126,7 @@ function OffersDetailPage() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backBtn}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={SHARED_COLORS.textPrimary} />
         </Pressable>
         <Text style={styles.headerTitle}>Offer Details</Text>

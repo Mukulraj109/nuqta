@@ -2,7 +2,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // AI Recommended Offers Page
 // Personalized AI-curated offers
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   StyleSheet,
@@ -182,7 +182,7 @@ function AIRecommendedPage() {
     return Colors.gold;
   };
 
-  const computeStats = useCallback(() => {
+  const computeStats = useMemo(() => {
     if (offers.length === 0) return { count: 0, avgDiscount: 0, totalSavings: 0 };
     const discounts = offers.map(o => o.discountValue);
     const avg = Math.round(discounts.reduce((a, b) => a + b, 0) / discounts.length);
@@ -247,7 +247,7 @@ function AIRecommendedPage() {
       style={styles.header}
     >
       <View style={styles.headerContent}>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
+        <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
         </Pressable>
         <ThemedText style={styles.headerTitle}>For You</ThemedText>
@@ -285,7 +285,7 @@ function AIRecommendedPage() {
     );
   }
 
-  const stats = computeStats();
+  const stats = computeStats;
 
   return (
     <View style={styles.container}>
@@ -297,7 +297,7 @@ function AIRecommendedPage() {
         style={styles.header}
       >
         <View style={styles.headerContent}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>For You</ThemedText>

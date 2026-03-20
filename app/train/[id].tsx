@@ -401,7 +401,7 @@ function TrainDetailsPage() {
   };
 
   const handleBack = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleFavorite = async () => {
@@ -763,7 +763,7 @@ function TrainDetailsPage() {
         visible={showConfirmation}
         animationType="slide"
         presentationStyle="pageSheet"
-        onRequestClose={() => { setShowConfirmation(false); router.back(); }}
+        onRequestClose={() => { setShowConfirmation(false); router.canGoBack() ? router.back() : router.replace('/(tabs)'); }}
       >
         {bookingData && (
           <TrainBookingConfirmation
@@ -771,7 +771,7 @@ function TrainDetailsPage() {
             bookingData={bookingData}
             onClose={() => {
               setShowConfirmation(false);
-              router.back();
+              router.canGoBack() ? router.back() : router.replace('/(tabs)');
             }}
           />
         )}

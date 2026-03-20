@@ -214,7 +214,7 @@ function MenuPage() {
             params: { orderId: response.data._id },
           } as any);
         } else {
-          router.back();
+          router.canGoBack() ? router.back() : router.replace('/(tabs)');
         }
       } else {
         platformAlertSimple('Error', response.error || 'Failed to place order');
@@ -394,7 +394,7 @@ function MenuPage() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Menu</ThemedText>
@@ -419,7 +419,7 @@ function MenuPage() {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
         </Pressable>
         <View style={styles.headerCenter}>

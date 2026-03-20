@@ -14,6 +14,7 @@ import { CardGridSkeleton } from '@/components/skeletons';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 
 import { useIsMounted } from '@/hooks/useIsMounted';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 const { width } = Dimensions.get('window');
 
@@ -120,6 +121,7 @@ const VerifiedReviews = () => {
   }
 
   return (
+    <FeatureErrorBoundary featureName="Verified Reviews" compact={true}>
     <View style={styles.container}>
       {/* Section Header */}
       <View style={styles.sectionHeader}>
@@ -176,6 +178,7 @@ const VerifiedReviews = () => {
         ))}
       </View>
     </View>
+    </FeatureErrorBoundary>
   );
 };
 

@@ -4,6 +4,7 @@
  */
 
 import apiClient, { ApiResponse } from './apiClient';
+import walletApi from './walletApi';
 
 export interface PointsBalance {
   total: number;
@@ -100,7 +101,7 @@ class PointsApiService {
   async getBalance(): Promise<ApiResponse<PointsBalance>> {
     try {
       // Try wallet balance as source of truth (points endpoint doesn't exist on backend)
-      const walletResponse = await apiClient.get('/wallet/balance');
+      const walletResponse = await walletApi.getBalance();
       if (walletResponse.success && walletResponse.data) {
         const w = walletResponse.data;
         return {

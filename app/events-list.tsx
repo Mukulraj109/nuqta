@@ -72,7 +72,7 @@ function EventsListPage() {
 
   // Navigation handlers
   const handleBack = useCallback(() => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   }, [router]);
 
   const handleEventPress = useCallback((event: EventItem) => {

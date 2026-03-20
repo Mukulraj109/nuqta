@@ -255,7 +255,7 @@ function LowestPricePage() {
           <View style={styles.headerTop}>
             <Pressable
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
              
             >
               <View style={styles.backButtonInner}>

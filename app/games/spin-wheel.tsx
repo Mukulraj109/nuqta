@@ -170,7 +170,7 @@ function SpinWheelPage() {
   };
 
   const handleBackPress = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   if (loading) {

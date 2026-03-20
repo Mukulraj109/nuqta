@@ -25,6 +25,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { colors } from '@/constants/theme';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useUserIdentityStore } from '@/stores/userIdentityStore';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -64,6 +65,7 @@ const AllCampaignsPage: React.FC = () => {
   const router = useRouter();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
+  const { segment } = useUserIdentityStore();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -125,9 +127,19 @@ const AllCampaignsPage: React.FC = () => {
     return days;
   };
 
-  const filteredCampaigns = useMemo(() => selectedType === 'all'
-    ? campaigns
-    : campaigns.filter(c => c.type === selectedType), [campaigns, selectedType]);
+  const eligibleCount = useMemo(() =>
+    campaigns.filter(c => c.userEligible && c.exclusiveToProgramSlug).length,
+    [campaigns]);
+
+  const filteredCampaigns = useMemo(() => {
+    const typed = selectedType === 'all' ? campaigns : campaigns.filter(c => c.type === selectedType);
+    // Sort eligible exclusive campaigns first, keep backend priority order otherwise
+    return [...typed].sort((a, b) => {
+      const aElig = a.userEligible && a.exclusiveToProgramSlug ? 1 : 0;
+      const bElig = b.userEligible && b.exclusiveToProgramSlug ? 1 : 0;
+      return bElig - aElig;
+    });
+  }, [campaigns, selectedType]);
 
   if (isLoading) {
     return (
@@ -147,7 +159,7 @@ const AllCampaignsPage: React.FC = () => {
         style={styles.header}
       >
         <View style={styles.headerTop}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={22} color={COLORS.white} />
           </Pressable>
           <View style={styles.headerTitleContainer}>
@@ -173,9 +185,9 @@ const AllCampaignsPage: React.FC = () => {
           <View style={styles.statsDivider} />
           <View style={styles.statsItem}>
             <Text style={styles.statsValue}>
-              {new Set(campaigns.map(c => c.type)).size}
+              {eligibleCount > 0 ? eligibleCount : new Set(campaigns.map(c => c.type)).size}
             </Text>
-            <Text style={styles.statsLabel}>Categories</Text>
+            <Text style={styles.statsLabel}>{eligibleCount > 0 ? 'For You' : 'Categories'}</Text>
           </View>
         </View>
       </LinearGradient>
@@ -254,6 +266,14 @@ const AllCampaignsPage: React.FC = () => {
                       {campaign.badge}
                     </Text>
                   </View>
+
+                  {/* UNLOCKED badge for eligible exclusive campaigns */}
+                  {campaign.userEligible && campaign.exclusiveToProgramSlug && (
+                    <View style={styles.unlockedBadge}>
+                      <Ionicons name="lock-open-outline" size={10} color="#059669" />
+                      <Text style={styles.unlockedBadgeText}>UNLOCKED</Text>
+                    </View>
+                  )}
 
                   {/* Card Content */}
                   <View style={styles.cardContent}>
@@ -656,6 +676,28 @@ const styles = StyleSheet.create({
     ...Typography.body,
     fontWeight: '600',
     color: COLORS.white,
+  },
+
+  // UNLOCKED badge for eligible exclusive campaigns
+  unlockedBadge: {
+    position: 'absolute',
+    top: Spacing.md,
+    left: Spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: '#ECFDF5',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+  },
+  unlockedBadgeText: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#059669',
+    letterSpacing: 0.5,
   },
 });
 

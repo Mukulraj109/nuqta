@@ -598,7 +598,7 @@ function EventPage({ eventId, initialEvent }: EventPageProps = {}) {
     );
   }, [router]);
 
-  const handleBackPress = useCallback(() => router.back(), [router]);
+  const handleBackPress = useCallback(() => router.canGoBack() ? router.back() : router.replace('/(tabs)'), [router]);
 
   useEffect(() => {
     if (!error) return;
@@ -659,7 +659,7 @@ function EventPage({ eventId, initialEvent }: EventPageProps = {}) {
               <View style={styles.notFoundActions}>
                 <Pressable
                   style={styles.notFoundBackButton}
-                  onPress={() => router.back()}
+                  onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
                  
                 >
                   <Ionicons name="arrow-back" size={20} color={colors.background.primary} />

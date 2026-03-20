@@ -5,7 +5,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * Fetches real data from backend API
  */
 
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   ScrollView,
@@ -255,11 +255,11 @@ function LoyaltyRewardsPage() {
   };
 
   // Calculate stats
-  const totalProgress = milestones.length > 0
+  const totalProgress = useMemo(() => milestones.length > 0
     ? milestones.reduce((acc, m) => acc + (m.progress || 0), 0) / milestones.length
-    : 0;
+    : 0, [milestones]);
 
-  const almostDoneCount = milestones.filter(m => (m.progress || 0) >= 70).length;
+  const almostDoneCount = useMemo(() => milestones.filter(m => (m.progress || 0) >= 70).length, [milestones]);
 
   const handleMilestonePress = (milestone: LoyaltyMilestone) => {
     router.push(`/offers/milestone/${milestone._id}` as any);
@@ -353,7 +353,7 @@ function LoyaltyRewardsPage() {
             <View style={styles.headerContent}>
               <Pressable
                 style={styles.backButton}
-                onPress={() => router.back()}
+                onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
                 <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
@@ -393,7 +393,7 @@ function LoyaltyRewardsPage() {
           <View style={styles.headerContent}>
             <Pressable
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <Ionicons name="arrow-back" size={24} color={colors.background.primary} />

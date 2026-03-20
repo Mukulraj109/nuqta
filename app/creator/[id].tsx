@@ -196,7 +196,7 @@ function CreatorProfilePage() {
         <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
         <LinearGradient colors={[Colors.nileBlue, '#2d5a7b']} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
             </Pressable>
             <Text style={styles.headerTitle}>Creator Profile</Text>
@@ -218,7 +218,7 @@ function CreatorProfilePage() {
         <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
         <LinearGradient colors={[Colors.nileBlue, '#2d5a7b']} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
             </Pressable>
             <Text style={styles.headerTitle}>Creator Profile</Text>
@@ -232,7 +232,7 @@ function CreatorProfilePage() {
           <Pressable style={styles.retryButton} onPress={fetchCreatorData}>
             <Text style={styles.retryButtonText}>Try Again</Text>
           </Pressable>
-          <Pressable style={styles.goBackButton} onPress={() => router.back()}>
+          <Pressable style={styles.goBackButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Text style={styles.goBackButtonText}>Go Back</Text>
           </Pressable>
         </View>
@@ -251,7 +251,7 @@ function CreatorProfilePage() {
       {/* Header */}
       <LinearGradient colors={[Colors.nileBlue, '#2d5a7b']} style={styles.header}>
         <View style={styles.headerContent}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <Text style={styles.headerTitle}>{creator.name}</Text>

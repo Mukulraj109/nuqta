@@ -19,6 +19,18 @@ import logger from '@/utils/logger';
 import { useHomeTab } from '@/contexts/HomeTabContext';
 import { useTheme } from '@/hooks/useTheme';
 import { colors } from '@/constants/theme';
+import { useUserIdentityStore } from '@/stores/userIdentityStore';
+
+// Segment-aware Deals tab config — routes verified users to their exclusive offers page
+const SEGMENT_DEALS_TAB: Record<string, { name: string; route: string; icon: string }> = {
+  verified_student:    { name: 'Student',  route: '/offers/student',          icon: 'school-outline' },
+  verified_employee:   { name: 'My Perks', route: '/offers/corporate',        icon: 'briefcase-outline' },
+  verified_healthcare: { name: 'Health',   route: '/offers/zones/healthcare', icon: 'medkit-outline' },
+  verified_defence:    { name: 'Defence',  route: '/offers/zones/defence',    icon: 'shield-outline' },
+  verified_teacher:    { name: 'Teacher',  route: '/offers/zones/teacher',    icon: 'book-outline' },
+  verified_senior:     { name: 'Senior',   route: '/offers/zones/senior',     icon: 'heart-outline' },
+  verified_government: { name: 'Gov',      route: '/offers/zones/government', icon: 'business-outline' },
+};
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -113,6 +125,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { isDark } = useTheme();
+  const { segment, statedIdentity } = useUserIdentityStore();
 
   // Get active home tab from context (with fallback for when context is not available)
   let isRezMallActive = false;
@@ -262,6 +275,17 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
         return 'Save';
       }
 
+      // Check for Deals tab — includes segment-specific offer routes
+      if (
+        normalizedPath === '/deals' ||
+        normalizedPath.startsWith('/deals/') ||
+        normalizedPath === '/offers/student' ||
+        normalizedPath === '/offers/corporate' ||
+        normalizedPath.startsWith('/offers/zones/')
+      ) {
+        return 'Deals';
+      }
+
       // Check for You tab
       if (
         normalizedPath === '/profile' ||
@@ -300,7 +324,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
   };
 
   // Render a regular tab item
-  const renderTab = (tab: { name: string; route: string; icon: string; isActive: boolean }, index?: number) => {
+  const renderTab = (tab: { name: string; route: string; icon: string; isActive: boolean; showBadge?: boolean }, index?: number) => {
     // Theme-aware tab colors
     const activeColor = isPriveActive ? colors.brand.goldAccent : isDark ? colors.lightMustard : colors.secondary[600];
     const inactiveColor = isPriveActive ? '#A0A0A0' : isDark ? colors.neutral[500] : colors.neutral[500];
@@ -310,16 +334,21 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
         key={tab.name}
         style={isCashStoreActive ? styles.cashStoreTab : styles.tab}
         onPress={() => handleTabPress(tab.route)}
-       
+
         accessibilityLabel={`${tab.name} tab`}
         accessibilityRole="tab"
         accessibilityState={{ selected: tab.isActive }}
       >
-        <Ionicons
-          name={tab.icon as any}
-          size={24}
-          color={tab.isActive ? activeColor : inactiveColor}
-        />
+        <View>
+          <Ionicons
+            name={tab.icon as any}
+            size={24}
+            color={tab.isActive ? activeColor : inactiveColor}
+          />
+          {tab.showBadge && (
+            <View style={styles.badgeDot} />
+          )}
+        </View>
         <Text style={[
           styles.tabLabelText,
           { color: tab.isActive ? activeColor : inactiveColor }
@@ -445,9 +474,9 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
           isCenter: true,
         },
         {
-          name: 'Deals',
-          route: '/deals',
-          icon: 'flash-outline',
+          name: SEGMENT_DEALS_TAB[segment]?.name ?? 'Deals',
+          route: SEGMENT_DEALS_TAB[segment]?.route ?? '/deals',
+          icon: SEGMENT_DEALS_TAB[segment]?.icon ?? 'flash-outline',
           isActive: activeTab === 'Deals',
           isCenter: false,
         },
@@ -457,6 +486,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({ style }) => {
           icon: 'person-circle-outline',
           isActive: activeTab === 'You',
           isCenter: false,
+          showBadge: segment === 'normal' && !!statedIdentity && statedIdentity !== 'general',
         },
       ];
 
@@ -662,6 +692,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginTop: 2,
     textAlign: 'center',
+  },
+
+  // Orange badge dot for unverified users on You tab
+  badgeDot: {
+    position: 'absolute',
+    top: -1,
+    right: -3,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#F97316',
   },
 
   // =====================================================

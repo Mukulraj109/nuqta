@@ -151,7 +151,7 @@ function DetailedOrderTrackingPage() {
 
   // Handle navigation
   const handleBackPress = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   // Handle calling store/merchant - Now opens Contact Store Modal

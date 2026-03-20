@@ -246,7 +246,7 @@ function CashbackPage() {
         <StatusBar barStyle="dark-content" />
         <View style={[styles.header, { paddingTop: headerTop }]}>
           <View style={styles.headerContent}>
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
               <Ionicons name="chevron-back" size={20} color={Colors.nileBlue} />
             </Pressable>
             <Text style={styles.headerTitle}>Track Cashback</Text>
@@ -271,7 +271,7 @@ function CashbackPage() {
       {/* Header */}
       <View style={[styles.header, { paddingTop: headerTop }]}>
         <View style={styles.headerContent}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="chevron-back" size={20} color={Colors.nileBlue} />
           </Pressable>
           <Text style={styles.headerTitle}>Track Cashback</Text>

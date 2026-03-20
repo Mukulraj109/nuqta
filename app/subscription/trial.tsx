@@ -87,7 +87,7 @@ function TrialPage() {
   };
 
   const handleGoBack = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleSubscribeNow = async (tier: 'premium' | 'vip' = 'premium') => {
@@ -131,7 +131,7 @@ function TrialPage() {
       'Remind Me Later',
       'We\'ll send you a notification when your trial is about to end.',
       () => {
-        router.back();
+        router.canGoBack() ? router.back() : router.replace('/(tabs)');
       },
       'Set Reminder'
     );

@@ -46,7 +46,7 @@ function PriveOffersScreen() {
   const [isFavorited, setIsFavorited] = useState(false);
 
   const handleBack = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleShare = async () => {

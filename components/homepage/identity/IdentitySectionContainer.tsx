@@ -19,13 +19,7 @@ function IdentitySectionContainer() {
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
   // Guard: wait for auth to be ready before making API calls
-  let authLoading = false;
-  try {
-    const auth = useAuth();
-    authLoading = auth?.loading ?? false;
-  } catch {
-    // useAuth may not be available in all contexts
-  }
+  const { loading: authLoading = false } = useAuth();
 
   const {
     segment,
@@ -189,13 +183,54 @@ function IdentitySectionContainer() {
       segment !== 'verified_student' &&
       segment !== 'verified_employee') {
 
-    const segmentConfig: Record<string, { label: string; dealsRoute: string }> = {
-      verified_defence:      { label: 'Defence Verified',     dealsRoute: '/offers/zones/defence' },
-      verified_healthcare:   { label: 'Healthcare Verified',  dealsRoute: '/offers/zones/healthcare' },
-      verified_teacher:      { label: 'Teacher Verified',     dealsRoute: '/offers/zones/teacher' },
-      verified_government:   { label: 'Government Verified',  dealsRoute: '/offers/zones/government' },
-      verified_senior:       { label: 'Senior Citizen',       dealsRoute: '/offers/zones/senior' },
-      verified_differentlyAbled: { label: 'Verified Member',  dealsRoute: '/offers/zones/differently-abled' },
+    const segmentConfig: Record<string, {
+      label: string;
+      dealsRoute: string;
+      subtitle: string;
+      secondaryLabel?: string;
+      secondaryRoute?: string;
+      accentColor: string;
+    }> = {
+      verified_healthcare: {
+        label: 'Healthcare Verified',
+        dealsRoute: '/offers/zones/healthcare',
+        subtitle: 'Pharmacy, wellness & medical offers unlocked',
+        secondaryLabel: 'Explore Healthcare',
+        secondaryRoute: '/healthcare',
+        accentColor: '#0EA5E9',
+      },
+      verified_defence: {
+        label: 'Defence Verified',
+        dealsRoute: '/offers/zones/defence',
+        subtitle: 'Exclusive defence benefits + fitness deals',
+        secondaryLabel: 'Fitness & Sports',
+        secondaryRoute: '/offers/zones/defence',
+        accentColor: '#6366F1',
+      },
+      verified_teacher: {
+        label: 'Teacher Verified',
+        dealsRoute: '/offers/zones/teacher',
+        subtitle: 'Education, books & stationery deals unlocked',
+        accentColor: '#8B5CF6',
+      },
+      verified_government: {
+        label: 'Government Verified',
+        dealsRoute: '/offers/zones/government',
+        subtitle: 'Government employee benefits unlocked',
+        accentColor: '#2ECC71',
+      },
+      verified_senior: {
+        label: 'Senior Benefits Active',
+        dealsRoute: '/offers/zones/senior',
+        subtitle: 'Healthcare, groceries & essentials at special rates',
+        accentColor: '#F59E0B',
+      },
+      verified_differentlyAbled: {
+        label: 'Accessibility Benefits',
+        dealsRoute: '/offers/zones/differently-abled',
+        subtitle: 'Special assistance & adapted services available',
+        accentColor: '#2ECC71',
+      },
     };
 
     const cfg = segmentConfig[segment];
@@ -207,20 +242,23 @@ function IdentitySectionContainer() {
           borderRadius: 16,
           padding: 16,
           borderLeftWidth: 4,
-          borderLeftColor: '#2ECC71',
+          borderLeftColor: cfg.accentColor,
         }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 }}>
             <ThemedText style={{ fontSize: 12, fontWeight: '600', color: '#166534' }}>
               {cfg.label}
             </ThemedText>
           </View>
-          <ThemedText style={{ fontSize: 14, fontWeight: '700', color: '#1a3a52', marginBottom: 12 }}>
+          <ThemedText style={{ fontSize: 14, fontWeight: '700', color: '#1a3a52', marginBottom: 4 }}>
             Your exclusive deals are unlocked
+          </ThemedText>
+          <ThemedText style={{ fontSize: 13, color: '#6b7280', marginBottom: 12 }}>
+            {cfg.subtitle}
           </ThemedText>
           <Pressable
             onPress={() => router.push(cfg.dealsRoute as any)}
             style={{
-              backgroundColor: '#2ECC71',
+              backgroundColor: cfg.accentColor,
               paddingVertical: 10,
               borderRadius: 10,
               alignItems: 'center',
@@ -230,6 +268,23 @@ function IdentitySectionContainer() {
               See My Deals
             </ThemedText>
           </Pressable>
+          {cfg.secondaryLabel && cfg.secondaryRoute && (
+            <Pressable
+              onPress={() => router.push(cfg.secondaryRoute as any)}
+              style={{
+                marginTop: 8,
+                paddingVertical: 10,
+                borderRadius: 10,
+                alignItems: 'center',
+                borderWidth: 1,
+                borderColor: cfg.accentColor,
+              }}
+            >
+              <ThemedText style={{ fontSize: 14, fontWeight: '700', color: cfg.accentColor }}>
+                {cfg.secondaryLabel}
+              </ThemedText>
+            </Pressable>
+          )}
         </View>
       );
     }

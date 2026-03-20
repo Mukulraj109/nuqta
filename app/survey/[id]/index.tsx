@@ -101,7 +101,7 @@ function SurveyDetailPage() {
         <Stack.Screen options={{ headerShown: false }} />
         <SafeAreaView style={styles.container} edges={['top']}>
           <View style={styles.header}>
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color={colors.deepNavy} />
             </Pressable>
           </View>
@@ -127,7 +127,7 @@ function SurveyDetailPage() {
       <SafeAreaView style={styles.container} edges={['top']}>
         {/* Header */}
         <View style={styles.header}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={colors.deepNavy} />
           </Pressable>
           <Text style={styles.headerTitle}>Survey Details</Text>

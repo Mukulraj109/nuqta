@@ -397,7 +397,7 @@ const GroupBuyPage = () => {
       {/* Header */}
       <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple] as const} style={styles.header}>
         <View style={styles.headerContent}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color="white" />
           </Pressable>
           <View style={styles.headerCenter}>

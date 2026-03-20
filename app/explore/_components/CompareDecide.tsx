@@ -14,6 +14,7 @@ import exploreApi, { FeaturedComparison } from '@/services/exploreApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 
 const { width } = Dimensions.get('window');
 
@@ -111,96 +112,98 @@ const CompareDecide = () => {
   const options = buildOptions();
 
   return (
-    <View style={styles.container}>
-      {/* Section Header */}
-      <View style={styles.sectionHeader}>
-        <View>
-          <Text style={styles.sectionTitle}>Compare & Decide</Text>
-          <Text style={styles.sectionSubtitle}>Same product, best deal</Text>
-        </View>
-        <Pressable onPress={() => navigateTo('/explore/compare')}>
-          <Text style={styles.compareMoreText}>Compare More</Text>
-        </Pressable>
-      </View>
-
-      {/* Compare Card */}
-      <View style={styles.compareCard}>
-        {/* Product Info */}
-        <View style={styles.productRow}>
-          <View style={styles.productImagePlaceholder}>
-            <Ionicons name="layers-outline" size={32} color={Colors.text.tertiary} />
+    <FeatureErrorBoundary featureName="Compare & Decide" compact={true}>
+      <View style={styles.container}>
+        {/* Section Header */}
+        <View style={styles.sectionHeader}>
+          <View>
+            <Text style={styles.sectionTitle}>Compare & Decide</Text>
+            <Text style={styles.sectionSubtitle}>Same product, best deal</Text>
           </View>
-          <View style={styles.productInfo}>
-            <Text style={styles.productName}>{comparison.name}</Text>
-            <Text style={styles.optionsCount}>{comparison.stores.length} options available</Text>
-          </View>
+          <Pressable onPress={() => navigateTo('/explore/compare')}>
+            <Text style={styles.compareMoreText}>Compare More</Text>
+          </Pressable>
         </View>
 
-        {/* Options Table */}
-        <View style={styles.optionsTable}>
-          {options.map((option, index) => (
-            <Pressable
-              key={option.id}
-              style={[
-                styles.optionRow,
-                option.isBest && styles.optionRowBest,
-              ]}
-              onPress={() => navigateTo(`/MainStorePage?storeId=${option.id}`)}
-            >
-              {/* Platform Icon & Name */}
-              <View style={styles.platformCell}>
-                <View style={[
-                  styles.platformIcon,
-                  option.isBest && styles.platformIconBest,
-                ]}>
-                  <Ionicons name="storefront" size={16} color={option.isBest ? Colors.background.primary : Colors.text.tertiary} />
-                </View>
-                <View style={styles.platformDetails}>
-                  <View style={styles.platformNameRow}>
-                    <Text style={[
-                      styles.platformName,
-                      option.isBest && styles.platformNameBest,
-                    ]}>
-                      {option.platform}
-                    </Text>
-                    {option.rating && (
-                      <View style={styles.ratingBadge}>
-                        <Ionicons name="star" size={10} color={Colors.warning} />
-                        <Text style={styles.ratingText}>{option.rating.toFixed(1)}</Text>
-                      </View>
-                    )}
+        {/* Compare Card */}
+        <View style={styles.compareCard}>
+          {/* Product Info */}
+          <View style={styles.productRow}>
+            <View style={styles.productImagePlaceholder}>
+              <Ionicons name="layers-outline" size={32} color={Colors.text.tertiary} />
+            </View>
+            <View style={styles.productInfo}>
+              <Text style={styles.productName}>{comparison.name}</Text>
+              <Text style={styles.optionsCount}>{comparison.stores.length} options available</Text>
+            </View>
+          </View>
+
+          {/* Options Table */}
+          <View style={styles.optionsTable}>
+            {options.map((option, index) => (
+              <Pressable
+                key={option.id}
+                style={[
+                  styles.optionRow,
+                  option.isBest && styles.optionRowBest,
+                ]}
+                onPress={() => navigateTo(`/MainStorePage?storeId=${option.id}`)}
+              >
+                {/* Platform Icon & Name */}
+                <View style={styles.platformCell}>
+                  <View style={[
+                    styles.platformIcon,
+                    option.isBest && styles.platformIconBest,
+                  ]}>
+                    <Ionicons name="storefront" size={16} color={option.isBest ? Colors.background.primary : Colors.text.tertiary} />
                   </View>
-                  <Text style={styles.deliveryText}>{option.delivery}</Text>
+                  <View style={styles.platformDetails}>
+                    <View style={styles.platformNameRow}>
+                      <Text style={[
+                        styles.platformName,
+                        option.isBest && styles.platformNameBest,
+                      ]}>
+                        {option.platform}
+                      </Text>
+                      {option.rating && (
+                        <View style={styles.ratingBadge}>
+                          <Ionicons name="star" size={10} color={Colors.warning} />
+                          <Text style={styles.ratingText}>{option.rating.toFixed(1)}</Text>
+                        </View>
+                      )}
+                    </View>
+                    <Text style={styles.deliveryText}>{option.delivery}</Text>
+                  </View>
                 </View>
-              </View>
 
-              {/* Cashback */}
-              <View style={[
-                styles.cashbackCell,
-                option.isBest && styles.cashbackCellBest,
-                option.cashback === 'No cashback' && styles.cashbackCellNone,
-              ]}>
-                <Text style={[
-                  styles.cashbackText,
-                  option.isBest && styles.cashbackTextBest,
-                  option.cashback === 'No cashback' && styles.cashbackTextNone,
+                {/* Cashback */}
+                <View style={[
+                  styles.cashbackCell,
+                  option.isBest && styles.cashbackCellBest,
+                  option.cashback === 'No cashback' && styles.cashbackCellNone,
                 ]}>
-                  {option.cashback}
-                </Text>
-              </View>
-            </Pressable>
-          ))}
-        </View>
+                  <Text style={[
+                    styles.cashbackText,
+                    option.isBest && styles.cashbackTextBest,
+                    option.cashback === 'No cashback' && styles.cashbackTextNone,
+                  ]}>
+                    {option.cashback}
+                  </Text>
+                </View>
+              </Pressable>
+            ))}
+          </View>
 
-        {/* View All Options Button */}
-        <Pressable
-          style={styles.viewAllButton}
-          onPress={() => navigateTo('/explore/compare')}
-        >
-          <Text style={styles.viewAllText}>View All Options</Text>
-        </Pressable>
+          {/* View All Options Button */}
+          <Pressable
+            style={styles.viewAllButton}
+            onPress={() => navigateTo('/explore/compare')}
+          >
+            <Text style={styles.viewAllText}>View All Options</Text>
+          </Pressable>
+        </View>
       </View>
-    </View>
+    </FeatureErrorBoundary>
   );
 };
 

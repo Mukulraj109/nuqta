@@ -235,7 +235,7 @@ function TransactionsPage() {
   }, []);
 
   const handleBackPress = useCallback(() => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   }, [router]);
 
   const handleFilterChange = useCallback((newFilters: Partial<TransactionFilters>) => {

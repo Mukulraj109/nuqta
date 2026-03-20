@@ -153,7 +153,7 @@ function SurveyTakePage() {
           }));
           await surveysApiService.saveProgress(id, answersArray, currentIndex);
         }
-        router.back();
+        router.canGoBack() ? router.back() : router.replace('/(tabs)');
       },
       'Exit'
     );
@@ -329,7 +329,7 @@ function SurveyTakePage() {
           <View style={styles.errorContainer}>
             <Ionicons name="alert-circle-outline" size={64} color={COLORS.textMuted} />
             <Text style={styles.errorText}>{error || 'No questions found'}</Text>
-            <Pressable style={styles.retryButton} onPress={() => router.back()}>
+            <Pressable style={styles.retryButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Text style={styles.retryText}>Go Back</Text>
             </Pressable>
           </View>

@@ -288,7 +288,7 @@ function ExtraCoinsPage() {
         <StatusBar barStyle="light-content" />
         <LinearGradient colors={['#0F172A', '#1E293B']} style={[styles.skeletonHero, { paddingTop: headerTop + 16 }]}>
           <View style={styles.headerRow}>
-            <Pressable onPress={() => router.back()} style={styles.backBtnDark}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backBtnDark}>
               <Ionicons name="chevron-back" size={20} color={Colors.text.inverse} />
             </Pressable>
             <Text style={styles.headerTitleLight}>{`Extra ${BRAND.COIN_NAME}`}</Text>
@@ -350,7 +350,7 @@ function ExtraCoinsPage() {
 
           {/* Header */}
           <View style={styles.headerRow}>
-            <Pressable onPress={() => router.back()} style={styles.backBtnDark}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backBtnDark}>
               <Ionicons name="chevron-back" size={20} color={Colors.text.inverse} />
             </Pressable>
             <Text style={styles.headerTitleLight}>{`Extra ${BRAND.COIN_NAME}`}</Text>

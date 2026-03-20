@@ -153,7 +153,7 @@ function MemoryPage() {
 
   const handleBackPress = () => {
     if (timerRef.current) clearInterval(timerRef.current);
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const startGame = async () => {

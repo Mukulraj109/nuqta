@@ -76,7 +76,7 @@ function ArticleDetailPage() {
           <View style={styles.headerContent}>
             <Pressable
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
 
             >
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
@@ -104,7 +104,7 @@ function ArticleDetailPage() {
           <View style={styles.headerContent}>
             <Pressable
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
              
             >
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
@@ -122,7 +122,7 @@ function ArticleDetailPage() {
           </ThemedText>
           <Pressable
             style={styles.backToListButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           >
             <LinearGradient
               colors={[colors.brand.purpleLight, colors.brand.purpleMedium]}
@@ -144,7 +144,7 @@ function ArticleDetailPage() {
       {/* Floating Back Button */}
       <Pressable
         style={styles.floatingBackButton}
-        onPress={() => router.back()}
+        onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
        
       >
         <LinearGradient

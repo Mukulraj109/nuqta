@@ -16,6 +16,7 @@ import exploreApi, { HotProduct } from '../../../services/exploreApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2;
 
@@ -91,6 +92,7 @@ const HotRightNow = () => {
   }
 
   return (
+    <FeatureErrorBoundary featureName="Hot Right Now" compact={true}>
     <View style={styles.container}>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>What's Hot Near You</Text>
@@ -132,6 +134,7 @@ const HotRightNow = () => {
         ))}
       </View>
     </View>
+    </FeatureErrorBoundary>
   );
 };
 

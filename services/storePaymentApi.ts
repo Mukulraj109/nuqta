@@ -9,6 +9,7 @@
  */
 
 import apiClient from './apiClient';
+import walletApi from './walletApi';
 import {
   StorePaymentInfo,
   OffersResponse,
@@ -284,7 +285,7 @@ const storePaymentApi = {
     promoCoins: number;
   }> {
     try {
-      const response = await apiClient.get('/wallet/balance');
+      const response = await walletApi.getBalance();
 
       if (!response.success) {
         // Return default values if endpoint fails

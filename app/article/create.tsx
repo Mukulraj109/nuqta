@@ -26,7 +26,7 @@ function CreateArticlePage() {
 
       {/* Header */}
       <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
         </Pressable>
         <ThemedText style={styles.headerTitle}>Create Article</ThemedText>
@@ -43,7 +43,7 @@ function CreateArticlePage() {
           The article creation feature is currently under development. Soon you will
           be able to write and publish articles to share with the community.
         </ThemedText>
-        <Pressable style={styles.backBtn} onPress={() => router.back()}>
+        <Pressable style={styles.backBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <ThemedText style={styles.backBtnText}>Go Back</ThemedText>
         </Pressable>
       </View>

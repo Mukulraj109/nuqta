@@ -45,6 +45,7 @@ import walletApi from '@/services/walletApi';
 import { colors } from '@/constants/theme';
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useUserIdentityStore } from '@/stores/userIdentityStore';
 
 const WalletScreen: React.FC<WalletScreenProps> = ({
   onNavigateBack,
@@ -69,6 +70,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
   const walletRefreshing = useWalletRefreshing();
   const refreshWallet = useRefreshWallet();
 
+  const { segment, statedIdentity } = useUserIdentityStore();
   const { completionStatus, isLoading: profileLoading, error: profileError } = useProfile();
 
   const { referralData, isLoading: referralLoading, error: referralError } = useReferral({
@@ -235,8 +237,30 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
     });
   }, [trackTopupInitiated, router, getCurrency]);
 
+  // Segment-specific shortcut for verified users — shown at top of More For You
+  const segmentShortcut = useMemo(() => {
+    const map: Record<string, { id: string; icon: string; title: string; subtitle: string; route: string }> = {
+      verified_student:    { id: 'student-deals',    icon: 'school-outline',     title: 'Student Deals',     subtitle: 'Exclusive campus offers',       route: '/offers/student' },
+      verified_employee:   { id: 'corporate-deals',  icon: 'briefcase-outline',  title: 'Work Perks',        subtitle: 'Corporate benefits & deals',    route: '/offers/corporate' },
+      verified_healthcare: { id: 'health-deals',     icon: 'medkit-outline',     title: 'Healthcare Offers', subtitle: 'Pharmacy & wellness deals',     route: '/offers/zones/healthcare' },
+      verified_defence:    { id: 'defence-deals',    icon: 'shield-outline',     title: 'Defence Perks',     subtitle: 'Service member deals',          route: '/offers/zones/defence' },
+      verified_teacher:    { id: 'teacher-deals',    icon: 'book-outline',       title: 'Teacher Benefits',  subtitle: 'Education & stationery offers', route: '/offers/zones/teacher' },
+    };
+    const entry = map[segment];
+    if (!entry) return null;
+    return {
+      id: entry.id,
+      icon: entry.icon as any,
+      title: entry.title,
+      subtitle: entry.subtitle,
+      onPress: () => router.push(entry.route as any),
+      badge: 'VERIFIED',
+    };
+  }, [segment, router]);
+
   // "More for You" options — Ring Sizer + Saved Address moved here from main scroll
   const moreForYouOptions = useMemo(() => [
+    ...(segmentShortcut ? [segmentShortcut] : []),
     {
       id: 'profile',
       icon: 'person-outline' as const,
@@ -287,7 +311,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
       subtitle: 'Check your ring size',
       onPress: () => router.push('/ring-sizer'),
     },
-  ], [completionStatus, router]);
+  ], [completionStatus, router, segmentShortcut]);
 
   const styles = useMemo(() => createStyles(screenData), [screenData]);
 
@@ -383,6 +407,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
             thisMonth={walletData?.savingsInsights?.thisMonth ?? 0}
             currencySymbol={currencySymbol}
             isHidden={isBalanceHidden}
+            segment={segment}
           />
         </LinearGradient>
 
@@ -493,7 +518,7 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
           )}
 
           {/* Wallet Insights */}
-          <InsightSection walletData={walletData} currencySymbol={currencySymbol} />
+          <InsightSection walletData={walletData} currencySymbol={currencySymbol} segment={segment} />
 
           {/* Recharge with Discount */}
           <RechargeWalletCard
@@ -516,6 +541,38 @@ const WalletScreen: React.FC<WalletScreenProps> = ({
             compact={true}
             onViewDetails={() => router.push('/explore')}
           />
+
+          {/* Verification CTA for unverified users who stated an identity */}
+          {segment === 'normal' && statedIdentity && statedIdentity !== 'general' && (
+            <Pressable
+              onPress={() => router.push('/onboarding/identity-select' as any)}
+              style={{
+                marginHorizontal: 16,
+                marginVertical: 12,
+                padding: 16,
+                backgroundColor: '#FFF7ED',
+                borderRadius: 14,
+                borderLeftWidth: 3,
+                borderLeftColor: '#F97316',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 12,
+              }}
+            >
+              <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#FFEDD5', justifyContent: 'center', alignItems: 'center' }}>
+                <Ionicons name="lock-open-outline" size={20} color="#F97316" />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 14, fontWeight: '700', color: '#111827', marginBottom: 2 }}>
+                  Unlock exclusive deals
+                </Text>
+                <Text style={{ fontSize: 12, color: '#6B7280' }}>
+                  Verify your identity to access student, corporate & healthcare offers
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={16} color="#F97316" />
+            </Pressable>
+          )}
 
           {/* More For You — collapsible section with profile, scratch card, refer, orders, wishlist, address, ring sizer */}
           <MoreForYouSection options={moreForYouOptions} />

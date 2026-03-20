@@ -106,7 +106,7 @@ function BenefitsPage() {
       {/* Header */}
       <LinearGradient colors={tierGradient as any} style={styles.header}>
         <View style={styles.headerContainer}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Your Benefits</ThemedText>

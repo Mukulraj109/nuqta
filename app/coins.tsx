@@ -39,7 +39,7 @@ function CoinPage() {
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backBtn}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
            
           >
             <Ionicons name="arrow-back" size={20} color={Colors.nileBlue} />

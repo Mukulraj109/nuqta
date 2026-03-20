@@ -252,7 +252,7 @@ function ReviewsPage() {
         <Stack.Screen options={{ headerShown: false }} />
         <View style={styles.container}>
           <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple]} style={styles.gradientHeader}>
-            <Pressable onPress={() => router.back()} style={styles.headerBackButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.headerBackButton}>
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
             </Pressable>
             <ThemedText style={styles.gradientHeaderTitle}>Reviews</ThemedText>
@@ -277,7 +277,7 @@ function ReviewsPage() {
       <View style={styles.container}>
         {/* Gradient Header */}
         <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple]} style={styles.gradientHeader}>
-          <Pressable onPress={() => router.back()} style={styles.headerBackButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.headerBackButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <ThemedText style={styles.gradientHeaderTitle}>Reviews</ThemedText>

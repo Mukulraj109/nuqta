@@ -122,7 +122,7 @@ function SearchPage() {
   // ============================================
 
   const handleBack = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleQueryChange = (text: string) => {

@@ -96,6 +96,10 @@ const MALL_ENDPOINTS = {
 };
 
 class MallApiService {
+  private _homepageCache: { data: MallHomepageBatchResponse; timestamp: number } | null = null;
+  private _homepageInflight: Promise<MallHomepageBatchResponse> | null = null;
+  private readonly HOMEPAGE_CACHE_TTL = 2 * 60_000;
+
   /**
    * Get aggregated mall homepage data
    */
@@ -521,8 +525,27 @@ class MallApiService {
   /**
    * Get ALL mall homepage data in one call (batch endpoint)
    * Returns stores + banners + trending + reward boosters + deals
+   * Uses client-side cache + inflight dedup to avoid redundant calls.
    */
   async getMallHomepageBatch(): Promise<MallHomepageBatchResponse> {
+    if (this._homepageCache && Date.now() - this._homepageCache.timestamp < this.HOMEPAGE_CACHE_TTL) {
+      return this._homepageCache.data;
+    }
+    if (this._homepageInflight) return this._homepageInflight;
+    this._homepageInflight = this._fetchMallHomepageBatch()
+      .then(data => {
+        this._homepageCache = { data, timestamp: Date.now() };
+        this._homepageInflight = null;
+        return data;
+      })
+      .catch(err => {
+        this._homepageInflight = null;
+        throw err;
+      });
+    return this._homepageInflight;
+  }
+
+  private async _fetchMallHomepageBatch(): Promise<MallHomepageBatchResponse> {
     try {
       const response = await apiClient.get(MALL_ENDPOINTS.HOMEPAGE_BATCH);
       return response.data || {

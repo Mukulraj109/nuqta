@@ -634,7 +634,7 @@ const FinancialServiceDetailPage: React.FC<FinancialServiceDetailPageProps> = ()
           <Ionicons name="alert-circle" size={48} color={COLORS.red} />
           <Text style={styles.errorTitle}>Service Not Found</Text>
           <Text style={styles.errorText}>{error || 'The service you are looking for does not exist.'}</Text>
-          <Pressable style={styles.retryButton} onPress={() => router.back()}>
+          <Pressable style={styles.retryButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Text style={styles.retryButtonText}>Go Back</Text>
           </Pressable>
         </View>
@@ -657,7 +657,7 @@ const FinancialServiceDetailPage: React.FC<FinancialServiceDetailPageProps> = ()
         style={styles.header}
       >
         <View style={styles.headerTop}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={COLORS.white} />
           </Pressable>
           <View style={styles.headerTitleContainer}>

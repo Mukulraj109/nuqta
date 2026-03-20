@@ -178,7 +178,7 @@ function ZoneVerifyScreen() {
 
       if (response.success) {
         platformAlertSimple('Verification Submitted', 'Your verification request has been submitted. You will be notified once it is reviewed.');
-        router.back();
+        router.canGoBack() ? router.back() : router.replace('/(tabs)');
       } else {
         if (!isMounted()) return;
         setError(response.message || 'Failed to submit verification');
@@ -221,7 +221,7 @@ function ZoneVerifyScreen() {
           >
             <Text style={styles.loginButtonText}>Login</Text>
           </Pressable>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Text style={styles.backButtonText}>Go Back</Text>
           </Pressable>
         </View>
@@ -243,7 +243,7 @@ function ZoneVerifyScreen() {
             Your verification request for {eligibility.zone.name} is being reviewed.
             You will be notified once it is approved.
           </Text>
-          <Pressable style={styles.primaryButton} onPress={() => router.back()}>
+          <Pressable style={styles.primaryButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Text style={styles.primaryButtonText}>Go Back</Text>
           </Pressable>
         </View>
@@ -271,7 +271,7 @@ function ZoneVerifyScreen() {
           >
             <Text style={styles.primaryButtonText}>Try Again</Text>
           </Pressable>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Text style={styles.backButtonText}>Go Back</Text>
           </Pressable>
         </View>
@@ -289,7 +289,7 @@ function ZoneVerifyScreen() {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Pressable style={styles.headerBackButton} onPress={() => router.back()}>
+          <Pressable style={styles.headerBackButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={COLORS.textDark} />
           </Pressable>
           <Text style={styles.headerTitle}>Verify Your Status</Text>

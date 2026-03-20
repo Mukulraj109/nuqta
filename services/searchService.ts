@@ -233,14 +233,13 @@ class SearchService {
     }
   }
 
-  // Voice search (placeholder for future implementation)
-  async searchByVoice(audioUri: string): Promise<SearchResult> {
-    try {
-      // This would implement voice-to-text and then search
-      throw new Error('Voice search not implemented yet');
-    } catch (error) {
-      throw new Error('Voice search failed. Please try again.');
-    }
+  // Voice search (not yet available — returns empty result gracefully)
+  async searchByVoice(_audioUri: string): Promise<SearchResult> {
+    return {
+      results: [],
+      total: 0,
+      message: 'Voice search will be available soon. Please type your search.',
+    };
   }
 
   // Search history management

@@ -1,5 +1,5 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -344,12 +344,12 @@ function ChallengesPage() {
     }
   };
 
-  const getFilteredChallenges = () => {
+  const filteredChallenges = useMemo(() => {
     if (activeTab === 'completed') {
       return completedChallenges;
     }
     return challenges.filter((c) => c.challenge.type === activeTab);
-  };
+  }, [activeTab, challenges, completedChallenges]);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -507,8 +507,6 @@ function ChallengesPage() {
     return <CardGridSkeleton />;
   }
 
-  const filteredChallenges = getFilteredChallenges();
-
   return (
     <>
       <Stack.Screen
@@ -527,7 +525,7 @@ function ChallengesPage() {
           <View style={styles.headerContent}>
             <Pressable
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
              
             >
               <Ionicons name="arrow-back" size={24} color="white" />

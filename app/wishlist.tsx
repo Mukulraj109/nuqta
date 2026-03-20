@@ -2,7 +2,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
 // Wishlist Page
 // Page for managing user's wishlists with saved deals support
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useFocusEffect } from 'expo-router';
 import {
   View,
@@ -366,7 +366,7 @@ function WishlistPage() {
   }, [fetchWishlists]);
 
   const handleBackPress = useCallback(() => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   }, [router]);
 
   const handleCreateWishlist = useCallback(() => {
@@ -674,7 +674,7 @@ function WishlistPage() {
   };
 
   // Render wishlist card (key is handled by FlatList keyExtractor)
-  const renderWishlist = ({ item: wishlist, index }: { item: WishlistData; index: number }) => {
+  const renderWishlist = useCallback(({ item: wishlist, index }: { item: WishlistData; index: number }) => {
     // Separate items by type
     const deals = wishlist.items.filter(i => i.itemType === 'discount');
     const stores = wishlist.items.filter(i => i.itemType === 'store');
@@ -813,7 +813,7 @@ function WishlistPage() {
         )}
       </View>
     );
-  };
+  }, [handleWishlistPress, handleDeleteWishlist, renderWishlistItem, handleItemPress, handleRemoveItem, currencySymbol]);
 
   // Loading State
   if (isLoading) {

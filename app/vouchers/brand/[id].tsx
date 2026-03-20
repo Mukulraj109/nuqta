@@ -325,7 +325,7 @@ function VoucherBrandDetailPage() {
         <Pressable style={styles.retryButton} onPress={fetchBrand}>
           <Text style={styles.retryText}>Try Again</Text>
         </Pressable>
-        <Pressable style={styles.backLink} onPress={() => router.back()}>
+        <Pressable style={styles.backLink} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Text style={styles.backLinkText}>Go Back</Text>
         </Pressable>
       </View>
@@ -336,7 +336,7 @@ function VoucherBrandDetailPage() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.headerBackButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.headerBackButton}>
           <Ionicons name="arrow-back" size={24} color={COLORS.navy} />
         </Pressable>
         <Text style={styles.headerTitle} numberOfLines={1}>{brand.name}</Text>
@@ -627,7 +627,7 @@ function VoucherBrandDetailPage() {
         onRequestClose={() => {
           if (confirmModal.type === 'success') {
             setConfirmModal(prev => ({ ...prev, visible: false }));
-            router.back();
+            router.canGoBack() ? router.back() : router.replace('/(tabs)');
           } else {
             setConfirmModal(prev => ({ ...prev, visible: false }));
           }
@@ -696,7 +696,7 @@ function VoucherBrandDetailPage() {
                   onPress={() => {
                     setConfirmModal(prev => ({ ...prev, visible: false }));
                     if (confirmModal.type === 'success') {
-                      router.back();
+                      router.canGoBack() ? router.back() : router.replace('/(tabs)');
                     }
                   }}
                  

@@ -1,5 +1,5 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -71,6 +71,12 @@ function NotificationsScreen() {
   const [saving, setSaving] = useState(false);
   const [settings, setSettings] = useState<NotificationSettings | null>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const successTimerRef = useRef<ReturnType<typeof setTimeout>>();
+
+  // Cleanup success timer on unmount
+  useEffect(() => {
+    return () => clearTimeout(successTimerRef.current);
+  }, []);
 
   const getDefaultSettings = (): NotificationSettings => ({
     push: {
@@ -156,7 +162,8 @@ function NotificationsScreen() {
         // Show success message
         if (!isMounted()) return;
         setShowSuccessMessage(true);
-        setTimeout(() => setShowSuccessMessage(false), 2000);
+        clearTimeout(successTimerRef.current);
+        successTimerRef.current = setTimeout(() => { if (isMounted()) setShowSuccessMessage(false); }, 2000);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update push notification settings. Please check your connection and try again.');
@@ -186,7 +193,8 @@ function NotificationsScreen() {
       } else {
         if (!isMounted()) return;
         setShowSuccessMessage(true);
-        setTimeout(() => setShowSuccessMessage(false), 2000);
+        clearTimeout(successTimerRef.current);
+        successTimerRef.current = setTimeout(() => { if (isMounted()) setShowSuccessMessage(false); }, 2000);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update email notification settings. Please check your connection and try again.');
@@ -215,7 +223,8 @@ function NotificationsScreen() {
       } else {
         if (!isMounted()) return;
         setShowSuccessMessage(true);
-        setTimeout(() => setShowSuccessMessage(false), 2000);
+        clearTimeout(successTimerRef.current);
+        successTimerRef.current = setTimeout(() => { if (isMounted()) setShowSuccessMessage(false); }, 2000);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update SMS notification settings. Please check your connection and try again.');
@@ -244,7 +253,8 @@ function NotificationsScreen() {
       } else {
         if (!isMounted()) return;
         setShowSuccessMessage(true);
-        setTimeout(() => setShowSuccessMessage(false), 2000);
+        clearTimeout(successTimerRef.current);
+        successTimerRef.current = setTimeout(() => { if (isMounted()) setShowSuccessMessage(false); }, 2000);
       }
     } catch (error) {
       platformAlertSimple('Error', 'Failed to update in-app notification settings. Please check your connection and try again.');
@@ -321,7 +331,7 @@ function NotificationsScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Pressable
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           style={styles.backButton}
           accessibilityLabel="Go back"
           accessibilityRole="button"

@@ -381,7 +381,7 @@ const CoinSystemPage = () => {
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             accessibilityLabel="Go back"
             accessibilityRole="button"
           >

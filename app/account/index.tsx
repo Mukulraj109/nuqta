@@ -40,6 +40,7 @@ import {
 import analyticsService from '@/services/analyticsService';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
+import { useUserIdentityStore, IdentitySegment } from '@/stores/userIdentityStore';
 
 // ---------------------------------------------------------------------------
 // Section Card Component (memoized)
@@ -84,6 +85,7 @@ function AccountPage() {
   const { sections, loading, error, refreshing, refresh } =
     useAccountData(activeTab);
 
+  const { segment, featureLevel, verificationSegment, statedIdentity } = useUserIdentityStore();
   // Wallet context for dynamic insights
   const rezBalance = useRezBalance();
 
@@ -105,7 +107,7 @@ function AccountPage() {
   // ---------- Handlers ----------
 
   const handleBackPress = useCallback(() => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   }, [router]);
 
   const handleTabChange = useCallback(
@@ -280,6 +282,100 @@ function AccountPage() {
               </ThemedText>
             </View>
           )}
+
+          {/* Identity Verification Section */}
+          {!loading && activeTab === 'SETTINGS' && (() => {
+            const SEGMENT_LABELS: Partial<Record<IdentitySegment, string>> = {
+              verified_student: 'Student', verified_employee: 'Employee', verified_healthcare: 'Healthcare',
+              verified_defence: 'Defence', verified_teacher: 'Teacher', verified_senior: 'Senior',
+              verified_government: 'Government', verified_differentlyAbled: 'Accessibility',
+            };
+            const SEGMENT_ROUTES: Partial<Record<IdentitySegment, string>> = {
+              verified_student: '/offers/student', verified_employee: '/offers/corporate',
+              verified_healthcare: '/offers/zones/healthcare', verified_defence: '/offers/zones/defence',
+              verified_teacher: '/offers/zones/teacher', verified_senior: '/offers/zones/senior',
+              verified_government: '/offers/zones/government',
+            };
+            const verifiedLabel = SEGMENT_LABELS[segment];
+            const isVerified = segment !== 'normal' && verifiedLabel;
+            const isProvisional = verificationSegment === 'provisional';
+            const needsVerification = segment === 'normal' && statedIdentity && statedIdentity !== 'general';
+
+            if (!isVerified && !isProvisional && !needsVerification) return null;
+
+            return (
+              <View style={{ marginBottom: 16, paddingHorizontal: 16 }}>
+                <Pressable
+                  onPress={() => {
+                    if (isVerified) {
+                      const route = SEGMENT_ROUTES[segment];
+                      if (route) router.push(route as any);
+                    } else {
+                      router.push('/onboarding/identity-select' as any);
+                    }
+                  }}
+                  style={{
+                    backgroundColor: isVerified ? '#ECFDF5' : isProvisional ? '#FFF7ED' : '#F0F9FF',
+                    borderRadius: 14,
+                    padding: 16,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 12,
+                    borderWidth: 1,
+                    borderColor: isVerified ? '#A7F3D0' : isProvisional ? '#FED7AA' : '#BAE6FD',
+                  }}
+                >
+                  <View style={{
+                    width: 40, height: 40, borderRadius: 20,
+                    backgroundColor: isVerified ? '#D1FAE5' : isProvisional ? '#FFEDD5' : '#E0F2FE',
+                    justifyContent: 'center', alignItems: 'center',
+                  }}>
+                    <Ionicons
+                      name={isVerified ? 'checkmark-circle' : isProvisional ? 'time-outline' : 'lock-open-outline'}
+                      size={22}
+                      color={isVerified ? '#059669' : isProvisional ? '#EA580C' : '#0284C7'}
+                    />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <ThemedText style={{ fontSize: 14, fontWeight: '700', color: '#111827', marginBottom: 2 }}>
+                      {isVerified
+                        ? `${verifiedLabel} Verified`
+                        : isProvisional
+                          ? 'Verification in review'
+                          : 'Verify your identity'}
+                    </ThemedText>
+                    <ThemedText style={{ fontSize: 12, color: '#6B7280' }}>
+                      {isVerified
+                        ? 'Your exclusive benefits are active'
+                        : isProvisional
+                          ? 'Usually takes 2-4 hours'
+                          : 'Unlock exclusive student, corporate & healthcare offers'}
+                    </ThemedText>
+                  </View>
+                  <Ionicons name="chevron-forward" size={16} color={isVerified ? '#059669' : '#9CA3AF'} />
+                </Pressable>
+
+                {/* Feature Level Progress */}
+                {featureLevel < 5 && (
+                  <View style={{ marginTop: 10, backgroundColor: colors.background.primary, borderRadius: 12, padding: 14, borderWidth: 1, borderColor: 'rgba(0,0,0,0.04)' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                      <ThemedText style={{ fontSize: 12, fontWeight: '600', color: '#6B7280' }}>Level {featureLevel} of 5</ThemedText>
+                      <ThemedText style={{ fontSize: 11, color: '#9CA3AF' }}>{Math.round((featureLevel / 5) * 100)}%</ThemedText>
+                    </View>
+                    <View style={{ height: 6, backgroundColor: '#F3F4F6', borderRadius: 3, overflow: 'hidden' }}>
+                      <View style={{ height: 6, width: `${(featureLevel / 5) * 100}%`, backgroundColor: '#7C3AED', borderRadius: 3 }} />
+                    </View>
+                    <ThemedText style={{ fontSize: 11, color: '#9CA3AF', marginTop: 6 }}>
+                      {featureLevel === 1 && 'Verify identity to unlock streaks + bonus zone'}
+                      {featureLevel === 2 && 'Complete your first order to level up'}
+                      {featureLevel === 3 && '3 orders total to unlock more personalisation'}
+                      {featureLevel === 4 && '10 orders total to unlock all premium features'}
+                    </ThemedText>
+                  </View>
+                )}
+              </View>
+            );
+          })()}
 
           {/* Section Cards */}
           {!loading &&

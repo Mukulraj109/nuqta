@@ -93,6 +93,12 @@ function SubmissionDetailPage() {
     loadSubmission();
   }, [submissionId, projectId]);
 
+  // Deep-link parameter validation guard
+  if (!submissionId || typeof submissionId !== 'string') {
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
+    return null;
+  }
+
   const loadSubmission = async () => {
     try {
       setLoading(true);
@@ -121,18 +127,18 @@ function SubmissionDetailPage() {
             slideAnim.value = withTiming(0, { duration: 500 });
           } else {
             showAlert('Error', 'Submission not found');
-            router.back();
+            router.canGoBack() ? router.back() : router.replace('/(tabs)');
           }
         } else {
           showAlert('Error', 'Submission not found');
-          router.back();
+          router.canGoBack() ? router.back() : router.replace('/(tabs)');
         }
       } else {
         throw new Error('Failed to load submission');
       }
     } catch (error) {
       showAlert('Error', 'Failed to load submission details');
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     } finally {
       if (!isMounted()) return;
       setLoading(false);
@@ -338,7 +344,7 @@ function SubmissionDetailPage() {
         <View style={styles.centerContainer}>
           <Ionicons name="alert-circle-outline" size={48} color={colors.error} />
           <ThemedText style={styles.errorText}>Submission not found</ThemedText>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <ThemedText style={styles.backButtonText}>Go Back</ThemedText>
           </Pressable>
         </View>
@@ -352,7 +358,7 @@ function SubmissionDetailPage() {
       <View style={styles.header}>
         <Pressable
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
         >
           <LinearGradient
             colors={[colors.brand.purpleLight, colors.brand.purple]}

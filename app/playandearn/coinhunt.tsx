@@ -307,7 +307,7 @@ const CoinHunt = () => {
 
       {/* Header */}
       <View style={styles.header}>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
+        <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Ionicons name="chevron-back" size={24} color={COLORS.navy} />
         </Pressable>
 

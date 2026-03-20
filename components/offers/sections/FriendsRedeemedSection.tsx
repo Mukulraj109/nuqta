@@ -156,8 +156,8 @@ export const FriendsRedeemedSection: React.FC<FriendsRedeemedSectionProps> = ({
   return (
     <View style={styles.container}>
       <SectionHeader
-        title="Friends Redeemed"
-        subtitle="See what your friends saved"
+        title="People saving near you"
+        subtitle="What others near you redeemed"
         icon="people"
         iconColor={colors.brand.pink}
         showViewAll={offers.length > 2}

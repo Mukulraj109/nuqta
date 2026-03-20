@@ -121,7 +121,7 @@ function StoreProductsPage() {
 
   const handleBack = useCallback(() => {
     triggerImpact('Medium');
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   }, [router]);
 
   const handleCartPress = useCallback(() => {
@@ -188,6 +188,12 @@ function StoreProductsPage() {
   const handleSuggestionSelect = useCallback((suggestion: string) => {
     data.setSearchQuery(suggestion);
   }, [data]);
+
+  // Deep-link parameter validation guard
+  if (!storeId || typeof storeId !== 'string') {
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
+    return null;
+  }
 
   // ─── Render ───────────────────────────────────────────────────────────────
 

@@ -381,7 +381,7 @@ function CategoryStoresPage() {
         {/* Custom Back Button */}
         <Pressable
           style={[styles.backButton, { top: insets.top + 10 }]}
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
          
         >
           <View style={styles.backButtonInner}>

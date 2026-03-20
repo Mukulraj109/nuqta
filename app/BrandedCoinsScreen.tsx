@@ -37,7 +37,7 @@ function BrandedCoinsScreen() {
         style={styles.headerBg}
       >
         <View style={styles.headerRow}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={22} color={colors.background.primary} />
           </Pressable>
           <Text style={styles.headerTitle}>Branded Coins</Text>

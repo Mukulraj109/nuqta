@@ -4,7 +4,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * Compare prices across different stores
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -151,9 +151,9 @@ const GroceryComparePage: React.FC = () => {
   }, [fetchCompareData]);
 
   // Filter items by search
-  const filteredItems = compareItems.filter(item =>
+  const filteredItems = useMemo(() => compareItems.filter(item =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  ), [compareItems, searchQuery]);
 
   // Render comparison card
   const renderCompareCard = (item: CompareItem) => {
@@ -235,7 +235,7 @@ const GroceryComparePage: React.FC = () => {
         style={styles.header}
       >
         <View style={styles.headerTop}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
           </Pressable>
           <View style={styles.headerTitleContainer}>

@@ -197,6 +197,12 @@ const MissionDetailScreen: React.FC = () => {
     fetchData(true);
   }, [fetchData]);
 
+  // Deep-link parameter validation guard
+  if (!challengeId || typeof challengeId !== 'string') {
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
+    return null;
+  }
+
   const handleClaimReward = async () => {
     if (!progressId || !progress?.completed || progress?.rewardsClaimed) return;
 
@@ -233,7 +239,7 @@ const MissionDetailScreen: React.FC = () => {
         <Stack.Screen options={{ headerShown: false }} />
         <SafeAreaView style={styles.container}>
           <LinearGradient colors={[THEME.purple600, THEME.indigo600]} style={styles.header}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={20} color={colors.background.primary} />
             </Pressable>
             <Text style={styles.headerTitle}>Mission Details</Text>
@@ -263,7 +269,7 @@ const MissionDetailScreen: React.FC = () => {
       <SafeAreaView style={styles.container} edges={['top']}>
         {/* Header */}
         <LinearGradient colors={[THEME.purple600, THEME.indigo600]} style={styles.header}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={20} color={colors.background.primary} />
           </Pressable>
           <Text style={styles.headerTitle}>Mission Details</Text>

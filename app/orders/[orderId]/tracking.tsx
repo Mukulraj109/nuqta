@@ -114,7 +114,7 @@ function OrderTrackingScreen() {
         <Text style={styles.errorText}>Order not found</Text>
         <Pressable
           style={styles.retryButton}
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
         >
           <Text style={styles.retryButtonText}>Go Back</Text>
         </Pressable>

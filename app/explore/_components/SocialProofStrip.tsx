@@ -19,6 +19,7 @@ import { useCurrentLocation } from '@/hooks/useLocation';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { useIsMounted } from '@/hooks/useIsMounted';
 import { Colors, Spacing, BorderRadius, Typography } from '@/constants/DesignSystem';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 
 const { width } = Dimensions.get('window');
 
@@ -170,6 +171,7 @@ const SocialProofStrip = () => {
   }
 
   return (
+    <FeatureErrorBoundary featureName="Social Proof" compact={true}>
     <View style={styles.container}>
       <View style={styles.strip}>
         <View style={styles.liveIndicator}>
@@ -204,6 +206,7 @@ const SocialProofStrip = () => {
         </View>
       </View>
     </View>
+    </FeatureErrorBoundary>
   );
 };
 

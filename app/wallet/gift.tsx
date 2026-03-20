@@ -348,7 +348,7 @@ function GiftPage() {
             <ThemedText style={styles.sendAnotherText}>Send Another Gift</ThemedText>
           </Pressable>
 
-          <Pressable style={styles.doneButton} onPress={() => router.back()}>
+          <Pressable style={styles.doneButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <ThemedText style={styles.doneButtonText}>Done</ThemedText>
           </Pressable>
         </ScrollView>
@@ -367,7 +367,7 @@ function GiftPage() {
         style={styles.header}
       >
         <View style={styles.headerContent}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Gift Coins</ThemedText>

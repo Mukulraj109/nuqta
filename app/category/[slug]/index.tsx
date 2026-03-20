@@ -209,7 +209,7 @@ function CategoryPage() {
   };
 
   const handleBack = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleCarouselItemPress = async (carouselItem: CategoryCarouselItem) => {

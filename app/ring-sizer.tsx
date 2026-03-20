@@ -54,7 +54,7 @@ function RingSizerPage() {
   const [selectedSize, setSelectedSize] = useState<RingSize | null>(null);
 
   const handleBackPress = useCallback(() => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   }, [router]);
 
   const handleMethodSelect = useCallback((method: 'measure' | 'compare' | 'guide') => {

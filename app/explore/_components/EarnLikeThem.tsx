@@ -15,6 +15,7 @@ import exploreApi, { ExploreStatsSummary } from '@/services/exploreApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { BRAND } from '@/constants/brand';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 
 const { width } = Dimensions.get('window');
 
@@ -116,6 +117,7 @@ const EarnLikeThem = () => {
   });
 
   return (
+    <FeatureErrorBoundary featureName="Earn Like Them" compact={true}>
     <View style={styles.container}>
       <LinearGradient
         colors={[Colors.successScale[50], colors.tint.greenLight, colors.tint.green]}
@@ -201,6 +203,7 @@ const EarnLikeThem = () => {
         </View>
       </LinearGradient>
     </View>
+    </FeatureErrorBoundary>
   );
 };
 

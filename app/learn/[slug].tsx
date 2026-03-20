@@ -134,7 +134,7 @@ const LearnDetailPage = () => {
         <Stack.Screen options={{ headerShown: false }} />
         <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
         <Text style={styles.errorText}>{error || 'Content not found'}</Text>
-        <Pressable style={styles.retryButton} onPress={() => router.back()}>
+        <Pressable style={styles.retryButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Text style={styles.retryText}>Go Back</Text>
         </Pressable>
       </SafeAreaView>
@@ -149,7 +149,7 @@ const LearnDetailPage = () => {
 
       {/* Header */}
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
         </Pressable>
         <View style={styles.headerCenter}>

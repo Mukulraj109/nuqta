@@ -173,7 +173,7 @@ function ProjectDetailPage() {
       }
     } catch (error) {
       showAlert('Error', 'Failed to load project details');
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     } finally {
       if (!isMounted()) return;
       setLoading(false);
@@ -271,7 +271,7 @@ function ProjectDetailPage() {
         <View style={styles.centerContainer}>
           <Ionicons name="alert-circle" size={48} color={Colors.error} />
           <ThemedText style={styles.errorText}>Project not found</ThemedText>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <ThemedText style={styles.backButtonText}>Go Back</ThemedText>
           </Pressable>
         </View>
@@ -293,7 +293,7 @@ function ProjectDetailPage() {
           <View style={styles.header}>
             <Pressable
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
              
               accessible={true}
               accessibilityLabel="Go back"

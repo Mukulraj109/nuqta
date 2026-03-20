@@ -87,7 +87,7 @@ function SettingsPage() {
   }, [settings, settingsLoaded]);
 
   const handleBackPress = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleToggleSetting = useCallback((key: string) => {

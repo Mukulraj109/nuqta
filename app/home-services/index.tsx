@@ -79,7 +79,7 @@ const HomeServicesPage: React.FC = () => {
     <View style={styles.container}>
       <LinearGradient colors={[colors.infoScale[400], colors.brand.blue]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
         <View style={styles.headerTop}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}><Ionicons name="arrow-back" size={24} color={Colors.background.primary} /></Pressable>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}><Ionicons name="arrow-back" size={24} color={Colors.background.primary} /></Pressable>
           <View style={styles.headerTitleContainer}>
             <Text style={styles.headerTitle}>Home Services</Text>
             <Text style={styles.headerSubtitle}>Professional services at home</Text>

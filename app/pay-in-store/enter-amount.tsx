@@ -276,7 +276,7 @@ function EnterAmountScreen() {
       <SafeAreaView style={styles.container} edges={['top']}>
         {/* Header */}
         <View style={styles.header}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="chevron-back" size={24} color={Colors.text.primary} />
           </Pressable>
           <View style={styles.headerContent}>

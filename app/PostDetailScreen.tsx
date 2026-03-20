@@ -147,6 +147,12 @@ function PostDetailScreen() {
     }
   }, [addItem]);
 
+  // Deep-link parameter validation guard
+  if (!params.item || typeof params.item !== 'string') {
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
+    return null;
+  }
+
   // Format count
   const formatCount = (num: number): string => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
@@ -179,7 +185,7 @@ function PostDetailScreen() {
         <StatusBar barStyle="dark-content" />
         <Ionicons name="alert-circle-outline" size={64} color={Colors.text.tertiary} />
         <Text style={styles.errorText}>{error || 'Post not found'}</Text>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
+        <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Text style={styles.backButtonText}>Go Back</Text>
         </Pressable>
       </View>
@@ -235,7 +241,7 @@ function PostDetailScreen() {
       <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
         <Pressable
           style={styles.headerButton}
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
          
         >
           <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />

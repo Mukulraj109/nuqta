@@ -139,7 +139,7 @@ function DowngradeConfirmationPage() {
       <LinearGradient colors={[Colors.warning, colors.warningScale[700]] as any} style={styles.header}>
         <View style={styles.headerContainer}>
           <Pressable
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             style={styles.backButton}
             accessibilityLabel="Go back"
             accessibilityRole="button"
@@ -275,7 +275,7 @@ function DowngradeConfirmationPage() {
 
           <Pressable
             style={styles.keepPlanButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             disabled={isDowngrading}
             accessibilityLabel="Keep my current plan"
             accessibilityRole="button"

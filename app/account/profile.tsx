@@ -182,7 +182,7 @@ function AccountProfilePage() {
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             accessibilityLabel="Go back"
             accessibilityRole="button"
             accessibilityHint="Navigate to previous screen"

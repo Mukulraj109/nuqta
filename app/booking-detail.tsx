@@ -206,7 +206,7 @@ function BookingDetailPage() {
         <StatusBar barStyle="light-content" />
         <Ionicons name="alert-circle" size={48} color={Colors.error} />
         <Text style={styles.errorText}>{error || 'Booking not found'}</Text>
-        <Pressable style={styles.retryBtn} onPress={() => router.back()}>
+        <Pressable style={styles.retryBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Text style={styles.retryBtnText}>Go Back</Text>
         </Pressable>
       </View>
@@ -229,7 +229,7 @@ function BookingDetailPage() {
       {/* Header */}
       <LinearGradient colors={[Colors.nileBlue, '#0f2a3d']} style={styles.header}>
         <View style={styles.headerRow}>
-          <Pressable style={styles.backBtn} onPress={() => router.back()}>
+          <Pressable style={styles.backBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <Text style={styles.headerTitle}>Booking Details</Text>

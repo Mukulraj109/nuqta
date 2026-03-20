@@ -391,7 +391,7 @@ function BusDetailsPage() {
   };
 
   const handleBack = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleFavorite = async () => {
@@ -713,7 +713,7 @@ function BusDetailsPage() {
         presentationStyle="pageSheet"
         onRequestClose={() => {
           setShowConfirmation(false);
-          router.back();
+          router.canGoBack() ? router.back() : router.replace('/(tabs)');
         }}
       >
         {bookingData && bus && (
@@ -722,7 +722,7 @@ function BusDetailsPage() {
             bookingData={bookingData}
             onClose={() => {
               setShowConfirmation(false);
-              router.back();
+              router.canGoBack() ? router.back() : router.replace('/(tabs)');
             }}
           />
         )}

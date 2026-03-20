@@ -190,7 +190,7 @@ function UpgradeConfirmationPage() {
       <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple] as any} style={styles.header}>
         <View style={styles.headerContainer}>
           <Pressable
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             style={styles.backButton}
             accessibilityLabel="Go back"
             accessibilityRole="button"
@@ -341,7 +341,7 @@ function UpgradeConfirmationPage() {
 
           <Pressable
             style={styles.cancelButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             disabled={isUpgrading}
             accessibilityLabel="Cancel upgrade"
             accessibilityRole="button"

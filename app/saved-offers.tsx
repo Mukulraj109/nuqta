@@ -81,7 +81,7 @@ function SavedOffersScreen() {
       <SafeAreaView style={styles.container}>
         <Stack.Screen options={{ headerShown: false }} />
         <View style={styles.header}>
-          <Pressable style={styles.headerBtn} onPress={() => router.back()}>
+          <Pressable style={styles.headerBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Save</ThemedText>
@@ -111,7 +111,7 @@ function SavedOffersScreen() {
 
       {/* Header */}
       <View style={styles.header}>
-        <Pressable style={styles.headerBtn} onPress={() => router.back()}>
+        <Pressable style={styles.headerBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
         </Pressable>
         <ThemedText style={styles.headerTitle}>Save</ThemedText>

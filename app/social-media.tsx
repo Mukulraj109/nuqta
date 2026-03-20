@@ -186,12 +186,12 @@ function SocialMediaPage() {
       const selectedOrder = completedOrders.find(o => o._id === selectedOrderId);
       const cashbackAmount = selectedOrder ? Math.round((selectedOrder.totals?.total || 0) * 0.05) : 0;
 
-      let successMessage = `Post submitted successfully! We will review it within ${response.post.estimatedReview}.`;
+      let successMessage = `Your post has been submitted and will be reviewed within 24-48 hours.`;
       if (cashbackAmount > 0) {
         successMessage += `\n\nYou'll earn ${currencySymbol}${cashbackAmount} (5% cashback) once approved!`;
       }
 
-      platformAlertSimple('Success', successMessage);
+      platformAlertSimple('Submitted for Review', successMessage);
 
       // Clear form and reload data
       if (!isMounted()) return;
@@ -254,7 +254,7 @@ function SocialMediaPage() {
         <LinearGradient colors={[colors.brand.green, colors.brand.teal]} style={styles.header}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             accessibilityLabel="Go back"
             accessibilityRole="button"
             accessibilityHint="Returns to previous screen"

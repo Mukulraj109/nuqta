@@ -17,6 +17,7 @@ import exploreApi, { CommunityActivity } from '@/services/exploreApi';
 import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 
 const { width } = Dimensions.get('window');
 
@@ -135,6 +136,7 @@ const FriendsCommunity = () => {
   }
 
   return (
+    <FeatureErrorBoundary featureName="Friends & Community" compact={true}>
     <View style={styles.container}>
       {/* People Shopping Nearby */}
       <View style={styles.friendsSection}>
@@ -251,6 +253,7 @@ const FriendsCommunity = () => {
         )}
       </View>
     </View>
+    </FeatureErrorBoundary>
   );
 };
 

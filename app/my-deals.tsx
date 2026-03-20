@@ -419,7 +419,7 @@ const MyDealsPage: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
+        <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Ionicons name="arrow-back" size={24} color={COLORS.navy} />
         </Pressable>
         <Text style={styles.headerTitle}>My Deals</Text>

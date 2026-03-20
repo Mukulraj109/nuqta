@@ -16,6 +16,7 @@ import exploreApi from '../../../services/exploreApi';
 import apiClient from '@/services/apiClient';
 import { useCurrentLocation } from '@/hooks/useLocation';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 const { width } = Dimensions.get('window');
@@ -148,6 +149,7 @@ const StoresNearYou = () => {
   }
 
   return (
+    <FeatureErrorBoundary featureName="Stores Near You" compact={true}>
     <View style={styles.container}>
       {/* Section Header */}
       <View style={styles.sectionHeader}>
@@ -237,6 +239,7 @@ const StoresNearYou = () => {
         <Ionicons name="arrow-forward" size={16} color={Colors.gold} />
       </Pressable>
     </View>
+    </FeatureErrorBoundary>
   );
 };
 

@@ -286,7 +286,7 @@ function MyReviewsPage() {
         <View style={styles.header}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             accessibilityLabel="Go back"
             accessibilityRole="button"
             accessibilityHint="Returns to previous screen"

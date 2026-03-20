@@ -187,7 +187,7 @@ function CreatorApplyPage() {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
-        <Header onBack={() => router.back()} title="Become a Creator" />
+        <Header onBack={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} title="Become a Creator" />
         <View style={styles.centerContainer}>
           <FormPageSkeleton />
         </View>
@@ -203,7 +203,7 @@ function CreatorApplyPage() {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
-        <Header onBack={() => router.back()} title="Application Status" />
+        <Header onBack={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} title="Application Status" />
         <View style={styles.centerContainer}>
           <View style={styles.statusIcon}>
             <Ionicons name="time-outline" size={48} color={Colors.warning} />
@@ -212,7 +212,7 @@ function CreatorApplyPage() {
           <Text style={styles.statusSubtitle}>
             Your creator application is being reviewed. We'll notify you once a decision is made.
           </Text>
-          <Pressable style={styles.primaryButton} onPress={() => router.back()}>
+          <Pressable style={styles.primaryButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Text style={styles.primaryButtonText}>Go Back</Text>
           </Pressable>
         </View>
@@ -230,7 +230,7 @@ function CreatorApplyPage() {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
-        <Header onBack={() => router.back()} title="Become a Creator" />
+        <Header onBack={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} title="Become a Creator" />
         <ScrollView
         style={styles.content}
         showsVerticalScrollIndicator={false}
@@ -317,7 +317,7 @@ function CreatorApplyPage() {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
-        <Header onBack={() => router.back()} title="Application Submitted" />
+        <Header onBack={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} title="Application Submitted" />
         <View style={styles.centerContainer}>
           <LinearGradient colors={[Colors.brand.purple, colors.brand.pink]} style={styles.successIcon}>
             <Ionicons name="checkmark" size={48} color={Colors.text.inverse} />
@@ -344,7 +344,7 @@ function CreatorApplyPage() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={colors.nileBlue} />
-      <Header onBack={() => step > 1 ? setStep(step - 1) : router.back()} title="Become a Creator" />
+      <Header onBack={() => step > 1 ? setStep(step - 1) : router.canGoBack() ? router.back() : router.replace('/(tabs)')} title="Become a Creator" />
 
       {/* Progress Bar */}
       <View style={styles.progressBar}>

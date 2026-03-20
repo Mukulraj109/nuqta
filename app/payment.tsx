@@ -185,7 +185,7 @@ function PaymentPage() {
       setCurrentStep('methods');
       setSelectedMethod(null);
     } else {
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     }
   }, [currentStep, router, showStripeCardModal]);
 

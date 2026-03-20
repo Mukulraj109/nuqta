@@ -351,6 +351,7 @@ function App() {
   const isLoadingPoints = useWalletLoading();
   const getCurrencySymbol = useGetCurrencySymbol();
   const currencySymbol = getCurrencySymbol();
+  const navTimerRef = React.useRef<ReturnType<typeof setTimeout>>();
   const [showLocationDropdown, setShowLocationDropdown] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [categories, setCategories] = useState<Store[]>([]);
@@ -405,6 +406,11 @@ function App() {
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
+
+  // Cleanup nav timer on unmount
+  useEffect(() => {
+    return () => clearTimeout(navTimerRef.current);
+  }, []);
 
   const handleLocationDropdownToggle = () => {
     setShowLocationDropdown(!showLocationDropdown);
@@ -462,12 +468,13 @@ function App() {
               style={styles.coinsContainer}
               onPress={() => {
                 if (Platform.OS === 'ios') {
-                  setTimeout(() => router.push('/coins'), 50);
+                  clearTimeout(navTimerRef.current);
+                  navTimerRef.current = setTimeout(() => router.push('/coins'), 50);
                 } else {
                   router.push('/coins');
                 }
               }}
-             
+
               delayPressIn={Platform.OS === 'ios' ? 50 : 0}
               accessibilityLabel={`Loyalty points: ${isLoadingPoints ? 'Loading' : (typeof userPoints === 'number' ? userPoints.toLocaleString() : '0')}`}
               accessibilityRole="button"
@@ -483,12 +490,13 @@ function App() {
             <Pressable
               onPress={() => {
                 if (Platform.OS === 'ios') {
-                  setTimeout(() => router.push('/cart'), 50);
+                  clearTimeout(navTimerRef.current);
+                  navTimerRef.current = setTimeout(() => router.push('/cart'), 50);
                 } else {
                   router.push('/cart');
                 }
               }}
-             
+
               delayPressIn={Platform.OS === 'ios' ? 50 : 0}
               accessibilityLabel="Shopping cart"
               accessibilityRole="button"
@@ -501,12 +509,13 @@ function App() {
                         style={styles.profileAvatar}
                         onPress={() => {
                           if (Platform.OS === 'ios') {
-                            setTimeout(() => showModal(), 50);
+                            clearTimeout(navTimerRef.current);
+                            navTimerRef.current = setTimeout(() => showModal(), 50);
                           } else {
                             showModal();
                           }
                         }}
-                       
+
                         delayPressIn={Platform.OS === 'ios' ? 50 : 0}
                         accessibilityLabel="User profile menu"
                         accessibilityRole="button"
@@ -523,7 +532,7 @@ function App() {
         <View style={styles.searchRow}>
           <Pressable
             style={styles.backBtn}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
            
             accessibilityLabel="Go back"
             accessibilityRole="button"

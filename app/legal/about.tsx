@@ -64,7 +64,7 @@ function AboutPage() {
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             accessible={true}
             accessibilityLabel="Go back"
             accessibilityRole="button"

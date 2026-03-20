@@ -4,7 +4,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * Fetches experience data and stores from backend API
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -120,11 +120,11 @@ const ExperienceDetailPage: React.FC = () => {
   const capitalizeLine = (str: string) => str.replace(/\b\w/g, l => l.toUpperCase());
 
   // Filter Logic
-  const filteredStores = stores.filter((store: any) => {
+  const filteredStores = useMemo(() => stores.filter((store: any) => {
     const matchesCategory = selectedFilter === 'all' || (store.category?.name || store.category || 'Other') === selectedFilter;
     const matchesSearch = store.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
-  });
+  }), [stores, selectedFilter, searchQuery]);
 
   const handleStorePress = (store: any) => {
     const storeId = store._id || store.id;
@@ -150,16 +150,19 @@ const ExperienceDetailPage: React.FC = () => {
   const benefits = experience?.benefits && experience.benefits.length > 0 ? experience.benefits : (currentTheme.benefits || []);
 
   // Calculate real stats from stores data
-  const storesWithRating = stores.filter((s: any) => s.rating && s.rating > 0);
-  const avgRating = storesWithRating.length > 0
-    ? (storesWithRating.reduce((sum: number, s: any) => sum + s.rating, 0) / storesWithRating.length).toFixed(1)
-    : null;
+  const { avgRating, avgCashback } = useMemo(() => {
+    const withRating = stores.filter((s: any) => s.rating && s.rating > 0);
+    const rating = withRating.length > 0
+      ? (withRating.reduce((sum: number, s: any) => sum + s.rating, 0) / withRating.length).toFixed(1)
+      : null;
 
-  // Calculate average cashback/savings from stores
-  const storesWithCashback = stores.filter((s: any) => s.cashback && s.cashback > 0);
-  const avgCashback = storesWithCashback.length > 0
-    ? Math.round(storesWithCashback.reduce((sum: number, s: any) => sum + s.cashback, 0) / storesWithCashback.length)
-    : null;
+    const withCashback = stores.filter((s: any) => s.cashback && s.cashback > 0);
+    const cashback = withCashback.length > 0
+      ? Math.round(withCashback.reduce((sum: number, s: any) => sum + s.cashback, 0) / withCashback.length)
+      : null;
+
+    return { avgRating: rating, avgCashback: cashback };
+  }, [stores]);
 
   return (
     <View style={styles.container}>
@@ -175,7 +178,7 @@ const ExperienceDetailPage: React.FC = () => {
           />
         )}
         <View style={styles.headerTop}>
-          <Pressable onPress={() => router.back()} style={styles.iconButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.iconButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.nileBlue} />
           </Pressable>
 

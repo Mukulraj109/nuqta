@@ -159,7 +159,7 @@ function CreatorDashboard() {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor={Colors.nileBlue} />
-        <Header onBack={() => router.back()} />
+        <Header onBack={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} />
         <ProfileSkeleton />
       </View>
     );
@@ -173,7 +173,7 @@ function CreatorDashboard() {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor={Colors.nileBlue} />
-        <Header onBack={() => router.back()} />
+        <Header onBack={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} />
         <View style={styles.centerContainer}>
           <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
           <Text style={styles.errorTitle}>Unable to Load</Text>
@@ -193,7 +193,7 @@ function CreatorDashboard() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.nileBlue} />
-      <Header onBack={() => router.back()} />
+      <Header onBack={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} />
 
       <ScrollView
         style={styles.scrollView}

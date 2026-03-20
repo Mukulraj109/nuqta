@@ -58,6 +58,8 @@ export interface Campaign {
   maxBenefit?: number;
   eligibleCategories?: string[];
   region?: 'bangalore' | 'dubai' | 'china' | 'all';
+  exclusiveToProgramSlug?: string;
+  userEligible?: boolean;
 }
 
 // Deal Category interface (for ExcitingDealsSection)

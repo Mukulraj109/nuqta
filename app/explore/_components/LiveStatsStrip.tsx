@@ -15,6 +15,7 @@ import exploreApi, { ExploreStats } from '@/services/exploreApi';
 
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 const { width } = Dimensions.get('window');
 
 const LiveStatsStrip = () => {
@@ -87,6 +88,7 @@ const LiveStatsStrip = () => {
   }
 
   return (
+    <FeatureErrorBoundary featureName="Live Stats" compact={true}>
     <View style={styles.container}>
       {/* Top Banner */}
       <View style={styles.topBanner}>
@@ -145,6 +147,7 @@ const LiveStatsStrip = () => {
         </View>
       </View>
     </View>
+    </FeatureErrorBoundary>
   );
 };
 

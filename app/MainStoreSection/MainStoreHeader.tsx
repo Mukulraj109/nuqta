@@ -61,7 +61,7 @@ function MainStoreHeader({
   const handleBack = () => {
     triggerImpact('Medium');
     if (onBack) onBack();
-    else router.back();
+    else router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleFavoritePress = () => {

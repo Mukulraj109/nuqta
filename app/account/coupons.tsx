@@ -908,7 +908,7 @@ function CouponsPage() {
       {/* ── HEADER ─────────────────────────────────────────────── */}
       <LinearGradient colors={[C.headerDark, C.headerMid]} style={s.header}>
         <View style={s.headerRow}>
-          <Pressable onPress={() => router.back()} style={s.headerBtn}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={s.headerBtn}>
             <Ionicons name="arrow-back" size={22} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={s.headerTitle}>Coupons</ThemedText>

@@ -9,6 +9,7 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
+import { useUserIdentityStore, IdentitySegment } from '@/stores/userIdentityStore';
 
 // Color themes for each action - Nuqta palette
 const ACTION_THEMES = {
@@ -52,36 +53,74 @@ interface QuickActionItem {
   description: string;
 }
 
-const QUICK_ACTIONS: QuickActionItem[] = [
-  {
-    id: 'voucher',
-    title: 'Voucher',
-    icon: 'ticket-outline',
-    route: '/my-vouchers',
-    description: 'Use & save',
-  },
-  {
-    id: 'wallet',
-    title: 'Wallet',
-    icon: 'wallet-outline',
-    route: '/wallet-screen',
-    description: 'Your rewards',
-  },
-  {
+const SEGMENT_OFFERS_ACTION: Partial<Record<IdentitySegment, QuickActionItem>> = {
+  verified_student: {
     id: 'offers',
-    title: 'Offers',
-    icon: 'pricetag-outline',
-    route: '/offers',
-    description: 'Extra savings',
+    title: 'Student Deals',
+    icon: 'school-outline',
+    route: '/offers/student',
+    description: 'Verified savings',
   },
-  {
-    id: 'store',
-    title: 'Store',
-    icon: 'storefront-outline',
-    route: '/Store',
-    description: 'Nearby',
+  verified_employee: {
+    id: 'offers',
+    title: 'Work Perks',
+    icon: 'briefcase-outline',
+    route: '/offers/corporate',
+    description: 'Corporate deals',
   },
-];
+  verified_healthcare: {
+    id: 'offers',
+    title: 'Health Offers',
+    icon: 'medkit-outline',
+    route: '/offers/zones/heroes',
+    description: 'For you',
+  },
+  verified_defence: {
+    id: 'offers',
+    title: 'Defence Perks',
+    icon: 'shield-outline',
+    route: '/offers/zones/heroes',
+    description: 'Exclusive deals',
+  },
+  verified_teacher: {
+    id: 'offers',
+    title: 'Teacher Deals',
+    icon: 'book-outline',
+    route: '/offers/zones/heroes',
+    description: 'Educator savings',
+  },
+  verified_senior: {
+    id: 'offers',
+    title: 'Senior Perks',
+    icon: 'heart-outline',
+    route: '/offers/zones/senior',
+    description: 'Special offers',
+  },
+  verified_government: {
+    id: 'offers',
+    title: 'Govt Perks',
+    icon: 'ribbon-outline',
+    route: '/offers/zones/heroes',
+    description: 'Exclusive deals',
+  },
+};
+
+const DEFAULT_OFFERS_ACTION: QuickActionItem = {
+  id: 'offers',
+  title: 'Offers',
+  icon: 'pricetag-outline',
+  route: '/offers',
+  description: 'Extra savings',
+};
+
+function getQuickActions(segment: IdentitySegment): QuickActionItem[] {
+  return [
+    { id: 'voucher', title: 'Voucher', icon: 'ticket-outline', route: '/my-vouchers', description: 'Use & save' },
+    { id: 'wallet', title: 'Wallet', icon: 'wallet-outline', route: '/wallet-screen', description: 'Your rewards' },
+    SEGMENT_OFFERS_ACTION[segment] ?? DEFAULT_OFFERS_ACTION,
+    { id: 'store', title: 'Store', icon: 'storefront-outline', route: '/Store', description: 'Nearby' },
+  ];
+}
 
 function QuickActionsSection({
   voucherCount = 0,
@@ -89,6 +128,8 @@ function QuickActionsSection({
   newOffersCount = 0,
 }: QuickActionsSectionProps) {
   const router = useRouter();
+  const { segment } = useUserIdentityStore();
+  const actions = useMemo(() => getQuickActions(segment), [segment]);
 
   const handlePress = useCallback((route: string) => {
     router.push(route as any);
@@ -146,7 +187,7 @@ function QuickActionsSection({
   return (
     <View style={styles.container}>
       <View style={styles.actionsRow}>
-        {QUICK_ACTIONS.map((action) => {
+        {actions.map((action) => {
           const theme = ACTION_THEMES[action.id];
           return (
             <Pressable

@@ -471,7 +471,7 @@ function EarnFromSocialMediaPage() {
   // Handle go back
   const handleGoBack = () => {
     if (currentStep === 'orders_list') {
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     } else if (currentStep === 'url_input' || currentStep === 'media_upload') {
       setCurrentStep('platform_select');
     } else if (currentStep === 'platform_select') {

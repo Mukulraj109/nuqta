@@ -104,7 +104,7 @@ function SlotsPage() {
   }));
 
   const handleBackPress = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleSpin = useCallback(() => {

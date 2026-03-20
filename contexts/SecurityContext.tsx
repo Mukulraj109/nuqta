@@ -3,6 +3,7 @@
 
 import React, { createContext, useContext, useEffect, useState, useMemo, useCallback, useRef, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { safeJsonParse } from '@/utils/safeJson';
 // Import with fallback for when expo-local-authentication is not available
 let LocalAuthentication: any = null;
 try {
@@ -214,13 +215,13 @@ export function SecurityProvider({ children }: SecurityProviderProps) {
       ]);
 
       if (securityStored) {
-        setSecuritySettings(JSON.parse(securityStored));
+        setSecuritySettings(safeJsonParse(securityStored, defaultSecuritySettings));
       } else {
         setSecuritySettings(defaultSecuritySettings);
       }
 
       if (privacyStored) {
-        setPrivacySettings(JSON.parse(privacyStored));
+        setPrivacySettings(safeJsonParse(privacyStored, defaultPrivacySettings));
       } else {
         setPrivacySettings(defaultPrivacySettings);
       }

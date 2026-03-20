@@ -287,7 +287,7 @@ function FlashSaleDetailPage() {
         <Stack.Screen options={{ headerShown: false }} />
         <View style={styles.container}>
           <SafeAreaView style={styles.errorSafeArea}>
-            <Pressable onPress={() => router.back()} style={styles.errorBackButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.errorBackButton}>
               <Ionicons name="chevron-back" size={28} color={colors.darkGray} />
             </Pressable>
             <View style={styles.errorContainer}>
@@ -337,7 +337,7 @@ function FlashSaleDetailPage() {
 
             {/* Header Buttons */}
             <SafeAreaView style={styles.headerOverlay} edges={['top']}>
-              <Pressable onPress={() => router.back()} style={styles.headerButton}>
+              <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.headerButton}>
                 <BlurView intensity={80} tint="light" style={styles.blurButton}>
                   <Ionicons name="chevron-back" size={24} color={colors.darkGray} />
                 </BlurView>

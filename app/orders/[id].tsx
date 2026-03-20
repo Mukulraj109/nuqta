@@ -27,7 +27,7 @@ function OrderDetailsScreen() {
   const handleBackPress = () => {
     // Check if we can go back in navigation stack
     if (navigation.canGoBack()) {
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     } else {
       // If no history, go to tracking page (order history)
       router.replace('/orders');
@@ -83,7 +83,7 @@ function OrderDetailsScreen() {
 
       if (response.success) {
         platformAlertSimple('Success', 'Order cancelled successfully');
-        router.back();
+        router.canGoBack() ? router.back() : router.replace('/(tabs)');
       } else {
         throw new Error(response.message || 'Failed to cancel order');
       }

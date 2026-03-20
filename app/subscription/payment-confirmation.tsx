@@ -99,7 +99,7 @@ function PaymentConfirmationPage() {
         <LinearGradient colors={[Colors.error, Colors.errorScale[700]] as any} style={styles.header}>
           <View style={styles.headerContainer}>
             <Pressable
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
               style={styles.backButton}
               accessibilityLabel="Go back"
               accessibilityRole="button"

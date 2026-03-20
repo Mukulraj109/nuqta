@@ -57,7 +57,7 @@ function CorporateOffersPage() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={colors.text.primary} />
         </Pressable>
         <ThemedText style={styles.headerTitle}>Work Perks Near Office</ThemedText>
@@ -84,6 +84,10 @@ function CorporateOffersPage() {
         renderItem={renderOffer}
         keyExtractor={(item) => item._id}
         contentContainerStyle={styles.listContent}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={8}
+        windowSize={5}
+        initialNumToRender={6}
         ListEmptyComponent={
           loading ? (
             <ActivityIndicator size="large" color={colors.secondary[600]} style={{ marginTop: 40 }} />

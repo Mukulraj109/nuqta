@@ -284,7 +284,7 @@ You will receive a confirmation message at ${customerPhone}${customerEmail ? ` a
         platformAlertConfirm(
           'Appointment Confirmed!',
           successMessage,
-          () => router.back(),
+          () => router.canGoBack() ? router.back() : router.replace('/(tabs)'),
           'OK'
         );
       } else {
@@ -312,7 +312,7 @@ You will receive a confirmation message at ${customerPhone}${customerEmail ? ` a
       <ThemedView style={styles.container}>
         <Stack.Screen options={{ headerShown: false }} />
         <ThemedText style={styles.errorText}>Store not found</ThemedText>
-        <Pressable onPress={() => router.back()} style={styles.backToStoreButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backToStoreButton}>
           <ThemedText style={styles.backToStoreText}>Go Back</ThemedText>
         </Pressable>
       </ThemedView>
@@ -329,7 +329,7 @@ You will receive a confirmation message at ${customerPhone}${customerEmail ? ` a
         style={styles.header}
       >
         <View style={styles.headerTop}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Book Appointment</ThemedText>

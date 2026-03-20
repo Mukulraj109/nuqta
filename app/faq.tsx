@@ -233,7 +233,7 @@ function FAQPage() {
           <View style={styles.headerContent}>
             <Pressable
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
               accessible={true}
               accessibilityLabel="Go back"
               accessibilityRole="button"
@@ -256,7 +256,7 @@ function FAQPage() {
         <StatusBar barStyle="light-content" backgroundColor="#667eea" />
         <LinearGradient colors={['#667eea', '#764ba2'] as const} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>FAQs</ThemedText>
@@ -281,7 +281,7 @@ function FAQPage() {
       {/* Header */}
       <LinearGradient colors={['#667eea', '#764ba2'] as const} style={styles.header}>
         <View style={styles.headerContent}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>FAQs</ThemedText>

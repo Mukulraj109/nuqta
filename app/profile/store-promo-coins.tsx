@@ -131,7 +131,7 @@ function StorePromoCoinsPage() {
       >
         <View style={styles.headerContent}>
           <Pressable
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             style={styles.backButton}
             accessibilityLabel="Go back"
             accessibilityRole="button"

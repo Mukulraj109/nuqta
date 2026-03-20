@@ -144,7 +144,7 @@ function MessagesIndexPage() {
   }, [socket]);
 
   const handleBackPress = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleRefresh = () => {

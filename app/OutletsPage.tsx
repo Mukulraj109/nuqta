@@ -146,7 +146,7 @@ function OutletsPage() {
     >
       <View style={styles.header}>
         <Pressable
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
@@ -338,7 +338,7 @@ function OutletsPage() {
             </Text>
             <Pressable
               style={styles.backToStoreButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
              
             >
               <Ionicons name="arrow-back" size={18} color={colors.successScale[400]} />

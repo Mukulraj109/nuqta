@@ -18,6 +18,7 @@ import mallApi from '@/services/mallApi';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width * 0.75;
 
@@ -116,6 +117,7 @@ const ExclusiveOffers = () => {
   }
 
   return (
+    <FeatureErrorBoundary featureName="Exclusive Offers" compact={true}>
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.headerRow}>
@@ -183,6 +185,7 @@ const ExclusiveOffers = () => {
         </Pressable>
       </ScrollView>
     </View>
+    </FeatureErrorBoundary>
   );
 };
 

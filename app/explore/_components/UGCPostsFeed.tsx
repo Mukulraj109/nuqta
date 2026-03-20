@@ -19,6 +19,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { BRAND } from '@/constants/brand';
 import { useIsMounted } from '@/hooks/useIsMounted';
 import { colors } from '@/constants/theme';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 
 const { width } = Dimensions.get('window');
 
@@ -254,6 +255,7 @@ const UGCPostsFeed = () => {
   }
 
   return (
+    <FeatureErrorBoundary featureName="UGC Posts" compact={true}>
     <View style={styles.container}>
       {/* Section Header */}
       <View style={styles.sectionHeader}>
@@ -365,6 +367,7 @@ const UGCPostsFeed = () => {
         ))}
       </View>
     </View>
+    </FeatureErrorBoundary>
   );
 };
 

@@ -238,7 +238,7 @@ function TransferPage() {
   };
 
   const handleDone = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const numAmount = Number(amount) || 0;
@@ -522,7 +522,7 @@ function TransferPage() {
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
-            onPress={() => step === 'amount' ? setStep('recipient') : step === 'otp' ? setStep('amount') : router.back()}
+            onPress={() => step === 'amount' ? setStep('recipient') : step === 'otp' ? setStep('amount') : router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           >
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>

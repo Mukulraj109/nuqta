@@ -90,7 +90,7 @@ function DisputeDetailScreen() {
       <ScreenError
         error={error || 'Dispute not found'}
         onRetry={loadDispute}
-        onSecondaryAction={() => router.back()}
+        onSecondaryAction={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
       />
     );
   }

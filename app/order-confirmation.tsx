@@ -166,6 +166,12 @@ function OrderConfirmationPage() {
     orderTotal: order?.totals?.total || 0,
     reviewAllowed: isImmediateExperience || isOrderCompleted });
 
+  // Deep-link parameter validation guard
+  if (!orderId || typeof orderId !== 'string') {
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
+    return null;
+  }
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-IN', {

@@ -47,6 +47,7 @@ import { useProfile, useProfileMenu } from '@/contexts/ProfileContext';
 import { useUserIdentityStore } from '@/stores/userIdentityStore';
 
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 import { colors, spacing, borderRadius, shadows, typography } from '@/constants/theme';
 import StickySearchHeader from '@/components/homepage/StickySearchHeader';
 import HeroBanner from '@/components/homepage/HeroBanner';
@@ -54,13 +55,26 @@ import type { TabId } from '@/components/homepage/HomeTabSection';
 import { useHomepage, useHomepageNavigation } from '@/hooks/useHomepage';
 import { useLoyaltySection } from '@/hooks/useLoyaltySection';
 
+function lazyWithRetry<T extends React.ComponentType<any>>(
+  factory: () => Promise<{ default: T }>
+): React.LazyExoticComponent<T> {
+  return React.lazy(() =>
+    factory().catch(
+      () =>
+        new Promise<{ default: T }>(resolve =>
+          setTimeout(() => resolve(factory()), 1500)
+        )
+    )
+  );
+}
+
 // Lazy-loaded tab containers (code-split — prefetched in background after mount)
-const MallSectionContainer = React.lazy(() => import('@/components/mall/MallSectionContainer'));
-const MallHeaderWrapper = React.lazy(() => import('@/components/mall/MallHeaderWrapper'));
-const CashStoreHeaderWrapper = React.lazy(() => import('@/components/cash-store/CashStoreHeaderWrapper'));
-const CashStoreSectionContainer = React.lazy(() => import('@/components/cash-store/CashStoreSectionContainer'));
-const PriveHeaderWrapper = React.lazy(() => import('@/components/prive/PriveHeaderWrapper'));
-const PriveSectionContainer = React.lazy(() =>
+const MallSectionContainer = lazyWithRetry(() => import('@/components/mall/MallSectionContainer'));
+const MallHeaderWrapper = lazyWithRetry(() => import('@/components/mall/MallHeaderWrapper'));
+const CashStoreHeaderWrapper = lazyWithRetry(() => import('@/components/cash-store/CashStoreHeaderWrapper'));
+const CashStoreSectionContainer = lazyWithRetry(() => import('@/components/cash-store/CashStoreSectionContainer'));
+const PriveHeaderWrapper = lazyWithRetry(() => import('@/components/prive/PriveHeaderWrapper'));
+const PriveSectionContainer = lazyWithRetry(() =>
   import('@/components/prive/PriveSectionContainer').then(m => ({ default: m.PriveSectionContainer }))
 );
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
@@ -78,17 +92,19 @@ import WhatsNewBadge from '@/components/common/WhatsNewBadge';
 import CachedImage, { prefetchImages } from '@/components/ui/CachedImage';
 import HomepageSkeleton from '@/components/homepage/HomepageSkeleton';
 import { BRAND } from '@/constants/brand';
+import { queryClient } from '@/lib/queryClient';
+import { queryKeys } from '@/lib/queryKeys';
 
 // ProfileMenuModal eagerly loaded — React.lazy + Suspense(null) causes modal to not appear on Android
 import ProfileMenuModal from '@/components/profile/ProfileMenuModal';
 import { useIsMounted } from '@/hooks/useIsMounted';
 
 // Lazy-loaded components (below-the-fold / modals / secondary content)
-const HomeTabSection = React.lazy(() => import('@/components/homepage/HomeTabSection'));
-const NearUTabContent = React.lazy(() => import('@/components/homepage/NearUTabContent'));
-const LocationPickerModal = React.lazy(() => import('@/components/location/LocationPickerModal'));
-const QuickAccessFAB = React.lazy(() => import('@/components/navigation/QuickAccessFAB'));
-const PushNotificationInitializer = React.lazy(() => import('@/components/common/PushNotificationInitializer'));
+const HomeTabSection = lazyWithRetry(() => import('@/components/homepage/HomeTabSection'));
+const NearUTabContent = lazyWithRetry(() => import('@/components/homepage/NearUTabContent'));
+const LocationPickerModal = lazyWithRetry(() => import('@/components/location/LocationPickerModal'));
+const QuickAccessFAB = lazyWithRetry(() => import('@/components/navigation/QuickAccessFAB'));
+const PushNotificationInitializer = lazyWithRetry(() => import('@/components/common/PushNotificationInitializer'));
 
 // ── Module-level constants ──
 const IS_IOS = Platform.OS === 'ios';
@@ -120,6 +136,19 @@ function prefetchOtherTabs() {
   // Prefetch API data (backend caches in Redis — first call warms it)
   import('@/services/mallApi').then(m => m.mallApi.getMallHomepageBatch().catch(() => {})).catch(() => {});
   import('@/services/cashStoreApi').then(m => m.default.getHomepageData().catch(() => {})).catch(() => {});
+
+  // Seed TanStack Query cache so tab switches are instant
+  queryClient.prefetchQuery({
+    queryKey: queryKeys.cashStore.homepage(),
+    queryFn: () => import('@/services/cashStoreApi').then(m => m.default.getHomepageData()),
+    staleTime: 5 * 60_000,
+  }).catch(() => {});
+
+  queryClient.prefetchQuery({
+    queryKey: queryKeys.categories.list(),
+    queryFn: () => import('@/services/categoriesApi').then(m => m.default.getCategories()),
+    staleTime: 30 * 60_000,
+  }).catch(() => {});
 
   // Prefetch top homepage product/store images into expo-image disk cache
   import('@/services/homepageDataService').then(m => {
@@ -236,6 +265,7 @@ function HomeScreen() {
   const activeHomeTab = useActiveHomeTab();
   const setActiveHomeTab = useSetActiveHomeTab();
   const registerScrollToTop = useRegisterScrollToTop();
+  const navTimerRef = React.useRef<ReturnType<typeof setTimeout>>();
   const [refreshing, setRefreshing] = React.useState(false);
   const [showDetailedLocation, setShowDetailedLocation] = React.useState(false);
   // On web, InteractionManager resolves synchronously — start as true to avoid an extra re-render
@@ -301,6 +331,11 @@ function HomeScreen() {
       scrollViewRef.current?.scrollTo({ y: 0, animated: true });
     });
   }, [registerScrollToTop]);
+
+  // Cleanup nav timer on unmount
+  React.useEffect(() => {
+    return () => clearTimeout(navTimerRef.current);
+  }, []);
 
   // Defer heavy renders until after animations complete, then prefetch other tabs
   React.useEffect(() => {
@@ -468,7 +503,8 @@ function HomeScreen() {
 
   const handleCoinPress = useCallback(() => {
     if (IS_IOS) {
-      setTimeout(() => router.push('/coins'), 50);
+      clearTimeout(navTimerRef.current);
+      navTimerRef.current = setTimeout(() => router.push('/coins'), 50);
     } else {
       router.push('/coins');
     }
@@ -480,7 +516,8 @@ function HomeScreen() {
 
   const handleCartPress = useCallback(() => {
     if (IS_IOS) {
-      setTimeout(() => router.push('/cart'), 50);
+      clearTimeout(navTimerRef.current);
+      navTimerRef.current = setTimeout(() => router.push('/cart'), 50);
     } else {
       router.push('/cart');
     }
@@ -828,29 +865,31 @@ function HomeScreen() {
       ]}>
         {/* Near-U Tab Content - All sections with viewport-based lazy loading */}
         {activeTab === 'near-u' && (
-          <Suspense fallback={<TabContentFallback />}>
-            <NearUTabContent
-              state={state}
-              actions={actions}
-              handleItemPress={handleItemPress}
-              handleAddToCart={handleAddToCart}
-              voucherCount={voucherCount}
-              userPoints={userPoints}
-              newOffersCount={newOffersCount}
-              recentlyViewedItems={recentlyViewedItems}
-              isLoadingRecentlyViewed={isLoadingRecentlyViewed}
-              loyaltyHub={loyaltyHub}
-              featuredLockProduct={featuredLockProduct}
-              trendingService={trendingService}
-              isLoyaltySectionLoading={isLoyaltySectionLoading}
-              scrollY={scrollY}
-              totalSaved={totalSaved}
-              thisMonthSaved={savingsInsights?.thisMonth ?? 0}
-              currencySymbol={currencySymbol}
-              featureLevel={featureLevel}
-              hasCompletedFirstOrder={featureLevel >= 3}
-            />
-          </Suspense>
+          <FeatureErrorBoundary featureName="Near-U" compact={false}>
+            <Suspense fallback={<TabContentFallback />}>
+              <NearUTabContent
+                state={state}
+                actions={actions}
+                handleItemPress={handleItemPress}
+                handleAddToCart={handleAddToCart}
+                voucherCount={voucherCount}
+                userPoints={userPoints}
+                newOffersCount={newOffersCount}
+                recentlyViewedItems={recentlyViewedItems}
+                isLoadingRecentlyViewed={isLoadingRecentlyViewed}
+                loyaltyHub={loyaltyHub}
+                featuredLockProduct={featuredLockProduct}
+                trendingService={trendingService}
+                isLoyaltySectionLoading={isLoyaltySectionLoading}
+                scrollY={scrollY}
+                totalSaved={totalSaved}
+                thisMonthSaved={savingsInsights?.thisMonth ?? 0}
+                currencySymbol={currencySymbol}
+                featureLevel={featureLevel}
+                hasCompletedFirstOrder={featureLevel >= 3}
+              />
+            </Suspense>
+          </FeatureErrorBoundary>
         )}
 
 

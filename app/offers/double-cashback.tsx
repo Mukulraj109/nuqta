@@ -155,7 +155,7 @@ function DoubleCashbackPage() {
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <StatusBar barStyle="light-content" />
         <LinearGradient colors={[colors.nileBlue, '#0f2536']} style={styles.loadingContainer}>
-          <Pressable style={styles.backBtn} onPress={() => router.back()}>
+          <Pressable style={styles.backBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
           </Pressable>
           <CardGridSkeleton />
@@ -170,7 +170,7 @@ function DoubleCashbackPage() {
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <StatusBar barStyle="light-content" />
         <LinearGradient colors={[colors.nileBlue, '#0f2536']} style={styles.loadingContainer}>
-          <Pressable style={styles.backBtn} onPress={() => router.back()}>
+          <Pressable style={styles.backBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
           </Pressable>
           <View style={styles.emptyState}>
@@ -206,7 +206,7 @@ function DoubleCashbackPage() {
         {/* Hero Campaign */}
         <LinearGradient colors={heroGradient} style={styles.hero}>
           <View style={styles.heroHeader}>
-            <Pressable style={styles.backBtn} onPress={() => router.back()}>
+            <Pressable style={styles.backBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
             </Pressable>
             <Text style={styles.heroHeaderTitle}>Double Cashback</Text>

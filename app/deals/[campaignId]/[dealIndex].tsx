@@ -517,7 +517,7 @@ const DealDetailPage: React.FC = () => {
           </View>
           <Text style={styles.errorTitle}>Oops!</Text>
           <Text style={styles.errorText}>{error || 'Deal not found'}</Text>
-          <Pressable style={styles.errorButton} onPress={() => router.back()}>
+          <Pressable style={styles.errorButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={18} color={COLORS.white} />
             <Text style={styles.errorButtonText}>Go Back</Text>
           </Pressable>
@@ -560,7 +560,7 @@ const DealDetailPage: React.FC = () => {
           )}
 
           {/* Navigation */}
-          <Pressable style={styles.backBtn} onPress={() => router.back()}>
+          <Pressable style={styles.backBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={22} color={COLORS.white} />
           </Pressable>
 

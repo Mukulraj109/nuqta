@@ -324,7 +324,7 @@ const LoyaltyPage = () => {
         <StatusBar barStyle="light-content" backgroundColor={Colors.brand.purple} />
         <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple]} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color="white" />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Loyalty Rewards</ThemedText>
@@ -345,7 +345,7 @@ const LoyaltyPage = () => {
         <StatusBar barStyle="light-content" backgroundColor={Colors.brand.purple} />
         <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple]} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color="white" />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Loyalty Rewards</ThemedText>
@@ -369,7 +369,7 @@ const LoyaltyPage = () => {
         <StatusBar barStyle="light-content" backgroundColor={Colors.brand.purple} />
         <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple]} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()} accessibilityRole="button">
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} accessibilityRole="button">
               <Ionicons name="arrow-back" size={24} color="white" />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Loyalty Rewards</ThemedText>
@@ -396,7 +396,7 @@ const LoyaltyPage = () => {
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             accessibilityLabel="Go back"
             accessibilityRole="button"
             accessibilityHint="Double tap to return to previous screen"

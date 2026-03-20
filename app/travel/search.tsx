@@ -133,7 +133,7 @@ function TravelSearchPage() {
       {/* Header */}
       <LinearGradient colors={[Colors.nileBlue, '#0f2a3d']} style={styles.header}>
         <View style={styles.headerRow}>
-          <Pressable style={styles.backBtn} onPress={() => router.back()}>
+          <Pressable style={styles.backBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <Text style={styles.headerTitle}>Search Travel</Text>

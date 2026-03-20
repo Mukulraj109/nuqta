@@ -10,6 +10,27 @@ import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { borderRadius, colors, spacing, typography } from '@/constants/theme';
+import { useUserIdentityStore, IdentitySegment } from '@/stores/userIdentityStore';
+
+const SEGMENT_SAVINGS_LABEL: Partial<Record<IdentitySegment, string>> = {
+  verified_student: 'Student savings this month',
+  verified_employee: 'Work perks saved this month',
+  verified_healthcare: 'Health benefits this month',
+  verified_defence: 'Defence savings this month',
+  verified_teacher: 'Teacher benefits this month',
+  verified_senior: 'Senior savings this month',
+  verified_government: 'Govt benefits this month',
+  verified_differentlyAbled: 'Your savings this month',
+};
+
+const SEGMENT_EMPTY_SUBTITLE: Partial<Record<IdentitySegment, string>> = {
+  verified_student: 'Earn cashback at campus stores and student-friendly shops.',
+  verified_employee: 'Save on meals, wellness & commute through work perks.',
+  verified_healthcare: 'Save on pharmacy, wellness & medical essentials.',
+  verified_defence: 'Unlock exclusive savings for service members.',
+  verified_teacher: 'Earn cashback on books, stationery & educational tools.',
+  verified_senior: 'Special savings on health, grocery & daily essentials.',
+};
 
 interface HomeSavingsSummaryCardProps {
   totalSaved: number;
@@ -28,6 +49,8 @@ const HomeSavingsSummaryCard: React.FC<HomeSavingsSummaryCardProps> = ({
   currencySymbol,
   onPress,
 }) => {
+  const { segment } = useUserIdentityStore();
+  const savingsLabel = SEGMENT_SAVINGS_LABEL[segment] ?? 'You saved this month';
   const isEmptyState = thisMonthSaved === 0 && totalSaved === 0;
 
   return (
@@ -47,13 +70,13 @@ const HomeSavingsSummaryCard: React.FC<HomeSavingsSummaryCardProps> = ({
               </View>
               <Text style={styles.emptyTitle}>Start saving today!</Text>
               <Text style={styles.emptySubtitle}>
-                Shop at nearby stores and earn cashback on every purchase.
+                {SEGMENT_EMPTY_SUBTITLE[segment] ?? 'Shop at nearby stores and earn cashback on every purchase.'}
               </Text>
             </View>
           ) : (
             /* Savings state */
             <>
-              <Text style={styles.label}>You saved this month</Text>
+              <Text style={styles.label}>{savingsLabel}</Text>
               <Text style={styles.amount}>
                 {currencySymbol}{thisMonthSaved.toLocaleString()}
               </Text>
@@ -113,7 +136,7 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#ffcd57',
+    color: '#B45309',
     marginBottom: 6,
   },
   unlockRow: {
@@ -142,7 +165,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: colors.secondary[600],
+    color: colors.text.secondary,
     marginBottom: 4,
   },
   emptySubtitle: {

@@ -133,7 +133,7 @@ function ReviewPage() {
   };
 
   const handleBackPress = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleSubmitReview = async () => {
@@ -157,7 +157,7 @@ function ReviewPage() {
   const handleModalClose = () => {
     hideModal();
     if (isStoreReview) {
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     } else if (fromPrive === 'true') {
       router.replace('/prive/review-earn');
     } else {

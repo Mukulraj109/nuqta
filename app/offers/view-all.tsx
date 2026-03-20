@@ -219,7 +219,7 @@ function ViewAllOffersScreen() {
   }, [page, loadingMore, hasMore, loading, fetchOffers]);
 
   const handleBack = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleShare = async () => {
@@ -406,6 +406,10 @@ function ViewAllOffersScreen() {
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.3}
         showsVerticalScrollIndicator={false}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={8}
+        windowSize={5}
+        initialNumToRender={6}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }

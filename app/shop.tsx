@@ -354,7 +354,7 @@ function ShopPage() {
       </Text>
       <Pressable
         style={styles.browseButton}
-        onPress={() => router.back()}
+        onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
       >
         <Text style={styles.browseButtonText}>Go Back</Text>
       </Pressable>
@@ -380,7 +380,7 @@ function ShopPage() {
         <View style={styles.headerTop}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           >
             <Ionicons name="chevron-back" size={24} color={COLORS.white} />
           </Pressable>

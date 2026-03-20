@@ -252,7 +252,7 @@ function SharedCategoryPage() {
         end={{ x: 1, y: 0 }}
         style={styles.headerGradient}
       >
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={SHARED_COLORS.white} />
         </Pressable>
         <View style={styles.headerTitleContainer}>

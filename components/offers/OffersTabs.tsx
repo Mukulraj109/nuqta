@@ -25,6 +25,7 @@ const PALETTE = {
 interface OffersTabsProps {
   activeTab: OffersTabType;
   onTabChange: (tab: OffersTabType) => void;
+  exclusiveLabel?: string;
 }
 
 interface TabConfig {
@@ -62,8 +63,14 @@ const tabs: TabConfig[] = [
 export const OffersTabs: React.FC<OffersTabsProps> = ({
   activeTab,
   onTabChange,
+  exclusiveLabel,
 }) => {
   const { theme, isDark } = useOffersTheme();
+
+  // Override exclusive tab label if provided
+  const displayTabs = exclusiveLabel
+    ? tabs.map(t => t.id === 'exclusive' ? { ...t, label: exclusiveLabel } : t)
+    : tabs;
 
   const styles = StyleSheet.create({
     container: {
@@ -107,7 +114,7 @@ export const OffersTabs: React.FC<OffersTabsProps> = ({
 
   return (
     <View style={styles.container}>
-      {tabs.map((tab) => {
+      {displayTabs.map((tab) => {
         const isActive = activeTab === tab.id;
         return (
           <Pressable

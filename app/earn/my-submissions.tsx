@@ -338,7 +338,7 @@ function MySubmissionsPage() {
       >
         {/* Nav bar */}
         <View style={styles.navBar}>
-          <Pressable style={styles.backBtn} onPress={() => router.back()}>
+          <Pressable style={styles.backBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={22} color={COLORS.white} />
           </Pressable>
           <Text style={styles.navTitle}>My Submissions</Text>

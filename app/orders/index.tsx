@@ -481,7 +481,7 @@ function OrdersListScreen() {
       {/* Gradient Header */}
       <LinearGradient colors={Gradients.nileBlue as any} style={styles.gradientHeader}>
         <View style={styles.headerContent}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
           </Pressable>
           <Text style={styles.headerTitle}>My Orders</Text>

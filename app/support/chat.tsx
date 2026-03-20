@@ -102,7 +102,7 @@ function SupportChatPage() {
 
     if (!ticket) {
       platformAlertSimple('Error', 'Failed to create support ticket. Please try again.');
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     } else {
       analyticsService.track('support_ticket_created', { category });
       // Persist ticketId in URL so it survives page refresh
@@ -114,7 +114,7 @@ function SupportChatPage() {
   };
 
   const handleBackPress = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleEndChat = () => {

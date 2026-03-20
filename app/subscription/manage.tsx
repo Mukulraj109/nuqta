@@ -26,7 +26,17 @@ import PaymentFailedBanner from '@/components/subscription/PaymentFailedBanner';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useUserIdentityStore, IdentitySegment } from '@/stores/userIdentityStore';
 // StickyCTAContainer available for future use
+
+const SEGMENT_SAVINGS_TITLE: Partial<Record<IdentitySegment, string>> = {
+  verified_student: 'Student Savings',
+  verified_employee: 'Work Perks Saved',
+  verified_healthcare: 'Healthcare Savings',
+  verified_defence: 'Defence Savings',
+  verified_teacher: 'Teacher Benefits',
+  verified_senior: 'Senior Benefits',
+};
 
 function SubscriptionManagePage() {
   const router = useRouter();
@@ -44,6 +54,8 @@ function SubscriptionManagePage() {
   const isAuthenticated = useIsAuthenticated();
   const authLoading = useAuthLoading();
   const isMounted = useIsMounted();
+  const { segment } = useUserIdentityStore();
+  const savingsTitle = SEGMENT_SAVINGS_TITLE[segment] ?? 'Total Savings';
 
   useEffect(() => {
     if (authLoading || !isAuthenticated) return;
@@ -149,7 +161,7 @@ function SubscriptionManagePage() {
       {/* Header */}
       <LinearGradient colors={tierGradient as any} style={styles.header}>
         <View style={styles.headerContainer}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Manage Subscription</ThemedText>
@@ -228,7 +240,7 @@ function SubscriptionManagePage() {
             <ThemedText style={styles.sectionTitle}>Usage Statistics</ThemedText>
             <View style={styles.statsGrid}>
               {renderStatCard(
-                'Total Savings',
+                savingsTitle,
                 `${currencySymbol}${stats.usage?.totalSavings || 0}`,
                 'cash-outline',
                 colors.successScale[400]

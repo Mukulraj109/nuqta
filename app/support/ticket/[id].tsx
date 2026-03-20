@@ -212,7 +212,7 @@ function TicketDetailPage() {
           <StatusBar barStyle="light-content" translucent />
           <LinearGradient colors={Gradients.nileBlue} style={styles.header}>
             <View style={styles.headerContent}>
-              <Pressable style={styles.backButton} onPress={() => router.back()}>
+              <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
                 <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
               </Pressable>
               <View style={styles.headerTitleContainer}>
@@ -245,7 +245,7 @@ function TicketDetailPage() {
           <StatusBar barStyle="light-content" translucent />
           <LinearGradient colors={Gradients.nileBlue} style={styles.header}>
             <View style={styles.headerContent}>
-              <Pressable style={styles.backButton} onPress={() => router.back()}>
+              <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
                 <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
               </Pressable>
               <View style={styles.headerTitleContainer}>
@@ -279,7 +279,7 @@ function TicketDetailPage() {
         {/* Header */}
         <LinearGradient colors={Gradients.nileBlue} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
             <View style={styles.headerTitleContainer}>

@@ -301,7 +301,7 @@ const LockDealsPage: React.FC = () => {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.nileBlue} />
           </Pressable>
           <Text style={styles.headerTitle}>Lock Price Deals</Text>
@@ -316,7 +316,7 @@ const LockDealsPage: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={Colors.nileBlue} />
         </Pressable>
         <Text style={styles.headerTitle}>Lock Price Deals</Text>

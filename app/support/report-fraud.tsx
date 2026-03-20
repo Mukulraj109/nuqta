@@ -155,7 +155,7 @@ function ReportFraudPage() {
           style={styles.header}
         >
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color={Colors.text.white} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Report Fraud</ThemedText>
@@ -194,7 +194,7 @@ function ReportFraudPage() {
               <ThemedText style={styles.stepText}>You'll receive an email with the investigation outcome</ThemedText>
             </View>
           </View>
-          <Pressable style={styles.doneButton} onPress={() => router.back()}>
+          <Pressable style={styles.doneButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <ThemedText style={styles.doneButtonText}>Done</ThemedText>
           </Pressable>
         </View>
@@ -213,7 +213,7 @@ function ReportFraudPage() {
         style={styles.header}
       >
         <View style={styles.headerContent}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.white} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Report Fraud</ThemedText>

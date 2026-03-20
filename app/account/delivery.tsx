@@ -54,7 +54,7 @@ function DeliverySettingsScreen() {
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
 
   const handleBackPress = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleAddAddress = () => {

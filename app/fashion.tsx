@@ -343,7 +343,7 @@ const FashionPage: React.FC = () => {
       <View style={styles.container}>
         <LinearGradient colors={[colors.brand.pink, colors.deepPink]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
           <View style={styles.headerTop}>
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
             </Pressable>
             <View style={styles.headerTitleContainer}>
@@ -371,7 +371,7 @@ const FashionPage: React.FC = () => {
       {/* ── Header ─────────────────────────────────────── */}
       <LinearGradient colors={[colors.brand.pink, colors.deepPink]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
         <View style={styles.headerTop}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
           </Pressable>
           <View style={styles.headerTitleContainer}>

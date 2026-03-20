@@ -160,7 +160,7 @@ function PrivacyPage() {
         <StatusBar barStyle="light-content" backgroundColor={Colors.primary[600]} />
         <LinearGradient colors={[Colors.primary[600], Colors.secondary[700]]} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Privacy Policy</ThemedText>
@@ -186,7 +186,7 @@ function PrivacyPage() {
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             accessible={true}
             accessibilityLabel="Go back"
             accessibilityRole="button"

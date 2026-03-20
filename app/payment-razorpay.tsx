@@ -180,11 +180,11 @@ function PaymentPage() {
         () => {
             setIsProcessing(false);
             setCurrentStep('methods');
-            router.back();
+            router.canGoBack() ? router.back() : router.replace('/(tabs)');
           }
       );
     } else {
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     }
   }, [isProcessing, router]);
 

@@ -152,7 +152,7 @@ function ActivityFeedPage() {
             onPress={() => {
               // Check if we can go back, otherwise navigate to profile
               if (router.canGoBack()) {
-                router.back();
+                router.canGoBack() ? router.back() : router.replace('/(tabs)');
               } else {
                 router.push('/profile');
               }

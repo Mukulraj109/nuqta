@@ -392,7 +392,7 @@ function CabDetailsPage() {
   };
 
   const handleBack = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleFavorite = async () => {
@@ -718,7 +718,7 @@ function CabDetailsPage() {
         presentationStyle="pageSheet"
         onRequestClose={() => {
           setShowConfirmation(false);
-          router.back();
+          router.canGoBack() ? router.back() : router.replace('/(tabs)');
         }}
       >
         {bookingData && cab && (
@@ -727,7 +727,7 @@ function CabDetailsPage() {
             bookingData={bookingData}
             onClose={() => {
               setShowConfirmation(false);
-              router.back();
+              router.canGoBack() ? router.back() : router.replace('/(tabs)');
             }}
           />
         )}

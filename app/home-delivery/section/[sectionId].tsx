@@ -233,7 +233,7 @@ function SectionDetailPage() {
   };
 
   const handleBack = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   if (!sectionConfig) {

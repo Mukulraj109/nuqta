@@ -18,6 +18,7 @@ import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 
 const { width } = Dimensions.get('window');
 
@@ -130,6 +131,7 @@ const SmartPicks = () => {
   }
 
   return (
+    <FeatureErrorBoundary featureName="Smart Picks" compact={true}>
     <View style={styles.container}>
       <View style={styles.sectionHeader}>
         <View>
@@ -219,6 +221,7 @@ const SmartPicks = () => {
         ))}
       </ScrollView>
     </View>
+    </FeatureErrorBoundary>
   );
 };
 

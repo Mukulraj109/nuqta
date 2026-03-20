@@ -7,6 +7,7 @@ import * as Device from 'expo-device';
 import * as Application from 'expo-application';
 import { Platform } from 'react-native';
 import apiClient from './apiClient';
+import { safeJsonParse } from '@/utils/safeJson';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -163,7 +164,8 @@ export const getDeviceFingerprint = async (): Promise<DeviceFingerprint> => {
     const stored = await AsyncStorage.getItem(SECURITY_CONFIG.DEVICE_FINGERPRINT_KEY);
 
     if (stored) {
-      const fingerprint: DeviceFingerprint = JSON.parse(stored);
+      const fingerprint: DeviceFingerprint | null = safeJsonParse<DeviceFingerprint | null>(stored, null);
+      if (!fingerprint) return await generateDeviceFingerprint();
 
       // Check if fingerprint is still valid (not older than 30 days)
       const age = Date.now() - fingerprint.timestamp;
@@ -248,7 +250,7 @@ export const performSecurityCheck = async (): Promise<SecurityCheckResult> => {
     // 4. Check device consistency
     const storedFlags = await AsyncStorage.getItem(SECURITY_CONFIG.SECURITY_FLAGS_KEY);
     if (storedFlags) {
-      const parsedFlags = JSON.parse(storedFlags);
+      const parsedFlags = safeJsonParse(storedFlags, { suspiciousActivityCount: 0 });
 
       if (parsedFlags.suspiciousActivityCount > 0) {
         flags.push(`${parsedFlags.suspiciousActivityCount} suspicious activities detected`);
@@ -347,7 +349,7 @@ export const reportSuspiciousActivity = async (
 
     // Update local flags
     const storedFlags = await AsyncStorage.getItem(SECURITY_CONFIG.SECURITY_FLAGS_KEY);
-    const flags = storedFlags ? JSON.parse(storedFlags) : { suspiciousActivityCount: 0 };
+    const flags = safeJsonParse(storedFlags, { suspiciousActivityCount: 0 });
 
     flags.suspiciousActivityCount += 1;
     flags.lastActivity = Date.now();
@@ -383,7 +385,8 @@ export const isCaptchaRequired = async (failureCount: number = 0): Promise<boole
     const stored = await AsyncStorage.getItem(SECURITY_CONFIG.CAPTCHA_TOKEN_KEY);
     if (!stored) return false;
 
-    const captcha: CaptchaVerification = JSON.parse(stored);
+    const captcha: CaptchaVerification | null = safeJsonParse<CaptchaVerification | null>(stored, null);
+    if (!captcha) return false;
 
     // If captcha expired or not verified, require new one
     if (!captcha.verified || (captcha.expiresAt && captcha.expiresAt < Date.now())) {
@@ -498,7 +501,7 @@ export const getSecurityStats = async (): Promise<{
     const securityCheck = await performSecurityCheck();
 
     const storedFlags = await AsyncStorage.getItem(SECURITY_CONFIG.SECURITY_FLAGS_KEY);
-    const flags = storedFlags ? JSON.parse(storedFlags) : { suspiciousActivityCount: 0 };
+    const flags = safeJsonParse(storedFlags, { suspiciousActivityCount: 0 });
 
     return {
       deviceId: fingerprint.id,

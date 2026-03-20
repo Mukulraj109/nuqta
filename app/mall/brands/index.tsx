@@ -312,7 +312,7 @@ function BrandsListingPage() {
         {/* Back Button */}
         <Pressable
           style={[styles.backButton, isLuxuryTheme && styles.luxuryBackButton]}
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
          
         >
           <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
@@ -449,7 +449,7 @@ function BrandsListingPage() {
             >
               <Pressable
                 style={styles.backButton}
-                onPress={() => router.back()}
+                onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
                
               >
                 <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
@@ -473,7 +473,7 @@ function BrandsListingPage() {
             >
               <Pressable
                 style={styles.backButton}
-                onPress={() => router.back()}
+                onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
                
               >
                 <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />

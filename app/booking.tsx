@@ -154,6 +154,12 @@ function BookingPage() {
     loadDetails();
   }, [storeId, productId]);
 
+  // Deep-link parameter validation guard
+  if (!storeId || typeof storeId !== 'string') {
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
+    return null;
+  }
+
   const loadDetails = async () => {
     try {
       setLoading(true);
@@ -383,7 +389,7 @@ function BookingPage() {
 
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   // Calculate end time based on service duration
@@ -470,7 +476,7 @@ function BookingPage() {
 
   const handleContinueShopping = () => {
     setShowAddedToCartModal(false);
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const getCategoryName = () => {
@@ -496,7 +502,7 @@ function BookingPage() {
         <View style={styles.errorContainer}>
           <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
           <ThemedText style={styles.errorText}>Store not found</ThemedText>
-          <Pressable style={styles.retryButton} onPress={() => router.back()}>
+          <Pressable style={styles.retryButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <ThemedText style={styles.retryText}>Go Back</ThemedText>
           </Pressable>
         </View>
@@ -523,7 +529,7 @@ function BookingPage() {
           style={[styles.header, { paddingTop: Platform.OS === 'ios' ? insets.top + 10 : 40 }]}
         >
           <View style={styles.headerTop}>
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>

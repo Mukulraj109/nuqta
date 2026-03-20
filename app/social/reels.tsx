@@ -457,7 +457,7 @@ function ReelsPage() {
       <View style={styles.headerOverlay}>
         <Pressable
           style={styles.headerButton}
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
         >
           <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
         </Pressable>

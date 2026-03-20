@@ -4,6 +4,7 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiClient from './apiClient';
+import { safeJsonParse } from '@/utils/safeJson';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -214,7 +215,7 @@ const getSubmissionHistory = async (): Promise<SubmissionRecord[]> => {
     const data = await AsyncStorage.getItem(FRAUD_CONFIG.STORAGE_KEY_SUBMISSIONS);
     if (!data) return [];
 
-    const submissions: SubmissionRecord[] = JSON.parse(data);
+    const submissions: SubmissionRecord[] = safeJsonParse(data, []);
 
     // Filter out old submissions (older than cache TTL)
     const cutoffTime = Date.now() - (FRAUD_CONFIG.CACHE_TTL_HOURS * 60 * 60 * 1000);
@@ -268,7 +269,8 @@ const isUserBlocked = async (): Promise<{ blocked: boolean; until?: number; reas
     const data = await AsyncStorage.getItem(FRAUD_CONFIG.STORAGE_KEY_BLOCKED_UNTIL);
     if (!data) return { blocked: false };
 
-    const blockInfo = JSON.parse(data);
+    const blockInfo = safeJsonParse(data, null);
+    if (!blockInfo) return { blocked: false };
     const now = Date.now();
 
     if (blockInfo.until > now) {

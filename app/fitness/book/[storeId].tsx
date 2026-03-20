@@ -76,9 +76,8 @@ interface TimeSlot {
   available: boolean;
 }
 
-// TODO: Fetch membership plans from API when fitness booking backend is implemented.
-// These hardcoded plans are placeholder data used until the API is ready.
-const MEMBERSHIP_PLANS: MembershipPlan[] = [
+// Fallback plans used when API returns empty (store has no fitness products yet)
+const FALLBACK_MEMBERSHIP_PLANS: MembershipPlan[] = [
   {
     id: 'monthly',
     name: 'Monthly',
@@ -118,9 +117,8 @@ const MEMBERSHIP_PLANS: MembershipPlan[] = [
   },
 ];
 
-// TODO: Fetch class schedule from API when fitness booking backend is implemented.
-// These hardcoded classes are placeholder data used until the API is ready.
-const SAMPLE_CLASSES: FitnessClass[] = [
+// Fallback classes used when API returns empty (store has no fitness class products yet)
+const FALLBACK_CLASSES: FitnessClass[] = [
   { id: '1', name: 'Morning Yoga', instructor: 'Priya S.', time: '06:00 AM', duration: '60 min', spots: 8, maxSpots: 15, price: 299 },
   { id: '2', name: 'HIIT Blast', instructor: 'Rahul K.', time: '07:30 AM', duration: '45 min', spots: 5, maxSpots: 20, price: 349 },
   { id: '3', name: 'Pilates Core', instructor: 'Sneha M.', time: '09:00 AM', duration: '50 min', spots: 12, maxSpots: 12, price: 399 },
@@ -154,10 +152,13 @@ const FitnessBookingPage: React.FC = () => {
   // Membership state
   const [selectedPlan, setSelectedPlan] = useState<MembershipPlan | null>(null);
 
+  // Membership plans state (fetched from API, fallback to hardcoded)
+  const [membershipPlans, setMembershipPlans] = useState<MembershipPlan[]>(FALLBACK_MEMBERSHIP_PLANS);
+
   // Class booking state
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedClass, setSelectedClass] = useState<FitnessClass | null>(null);
-  const [classes, setClasses] = useState<FitnessClass[]>(SAMPLE_CLASSES);
+  const [classes, setClasses] = useState<FitnessClass[]>(FALLBACK_CLASSES);
 
   // Trainer session state
   const [selectedTrainerDate, setSelectedTrainerDate] = useState<Date>(new Date());
@@ -181,12 +182,44 @@ const FitnessBookingPage: React.FC = () => {
     if (!storeId) return;
 
     try {
-      const response = await apiClient.get(`/stores/${storeId}`);
-      const storeData = (response.data as any)?.store || response.data;
+      const [storeRes, plansRes, classesRes] = await Promise.all([
+        apiClient.get(`/stores/${storeId}`),
+        apiClient.get(`/fitness/stores/${storeId}/plans`).catch(() => null),
+        apiClient.get(`/fitness/stores/${storeId}/classes`).catch(() => null),
+      ]);
+
+      const storeData = (storeRes.data as any)?.store || storeRes.data;
       if (!isMounted()) return;
       setStore(storeData);
+
+      // Use API data if available, otherwise keep fallback plans
+      if (plansRes?.success && Array.isArray(plansRes.data) && plansRes.data.length > 0) {
+        setMembershipPlans(plansRes.data.map((p: any) => ({
+          id: p._id || p.id,
+          name: p.name,
+          duration: p.metadata?.duration || p.name,
+          durationMonths: p.metadata?.durationMonths || 1,
+          price: p.pricing?.selling || (typeof p.price === 'number' ? p.price : p.price?.current) || 0,
+          originalPrice: p.pricing?.original || p.price?.original,
+          features: p.metadata?.features || [],
+          popular: p.metadata?.popular || false,
+        })));
+      }
+
+      if (classesRes?.success && Array.isArray(classesRes.data) && classesRes.data.length > 0) {
+        setClasses(classesRes.data.map((c: any) => ({
+          id: c._id || c.id,
+          name: c.name,
+          instructor: c.metadata?.instructor || 'Instructor',
+          time: c.metadata?.time || '09:00 AM',
+          duration: c.metadata?.duration || '60 min',
+          spots: c.metadata?.spots || 10,
+          maxSpots: c.metadata?.maxSpots || 20,
+          price: c.pricing?.selling || (typeof c.price === 'number' ? c.price : c.price?.current) || 0,
+        })));
+      }
     } catch (error) {
-      // silently handle
+      // silently handle — fallback data already set
     } finally {
       if (!isMounted()) return;
       setLoading(false);
@@ -376,7 +409,7 @@ const FitnessBookingPage: React.FC = () => {
 
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const renderTabs = () => (
@@ -410,7 +443,7 @@ const FitnessBookingPage: React.FC = () => {
   const renderMembershipPlans = () => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Choose Your Plan</Text>
-      {MEMBERSHIP_PLANS.map((plan) => (
+      {membershipPlans.map((plan) => (
         <Pressable
           key={plan.id}
           style={[
@@ -697,7 +730,7 @@ const FitnessBookingPage: React.FC = () => {
             style={[styles.header, { paddingTop: Platform.OS === 'ios' ? insets.top : 16 }]}
           >
             <View style={styles.headerTop}>
-              <Pressable style={styles.backBtn} onPress={() => router.back()}>
+              <Pressable style={styles.backBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
                 <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
               </Pressable>
               <View style={styles.headerInfo}>

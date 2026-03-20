@@ -519,7 +519,7 @@ function SocialImpactEventDetail() {
         <SafeAreaView style={styles.container} edges={['top']}>
           <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
           <View style={styles.header}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={22} color={COLORS.textDark} />
             </Pressable>
             <View style={styles.headerTextContainer}>
@@ -549,7 +549,7 @@ function SocialImpactEventDetail() {
 
         {/* Header */}
         <View style={styles.header}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={22} color={COLORS.textDark} />
           </Pressable>
           <View style={styles.headerTextContainer}>

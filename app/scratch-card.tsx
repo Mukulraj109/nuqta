@@ -105,7 +105,7 @@ function ScratchCardPage() {
   }, [cardState]);
 
   const handleBackPress = useCallback(() => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   }, [router]);
 
   const formatCooldown = (seconds: number): string => {
@@ -176,7 +176,7 @@ function ScratchCardPage() {
 
   /** Done — go back and refresh eligibility */
   const handleDone = useCallback(() => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   }, [router]);
 
   const handlePlayAgain = useCallback(() => {

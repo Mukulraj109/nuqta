@@ -35,11 +35,11 @@ function QuizPage() {
         'Are you sure you want to quit? Your progress will be lost.',
         [
           { text: 'Cancel', style: 'cancel' },
-          { text: 'Quit', style: 'destructive', onPress: () => router.back() },
+          { text: 'Quit', style: 'destructive', onPress: () => router.canGoBack() ? router.back() : router.replace('/(tabs)') },
         ]
       );
     } else {
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     }
   };
 
@@ -88,7 +88,7 @@ function QuizPage() {
             },
             headerLeft: () => (
               <Pressable
-                onPress={() => router.back()}
+                onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
                 style={styles.backButton}
               >
                 <Ionicons name="arrow-back" size={24} color="white" />

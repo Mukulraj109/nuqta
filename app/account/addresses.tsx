@@ -113,7 +113,7 @@ function SavedAddressesPage() {
   }, [fetchAddresses]);
 
   const handleBackPress = useCallback(() => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   }, [router]);
 
   const handleAddAddress = useCallback(() => {

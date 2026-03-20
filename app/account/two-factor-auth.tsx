@@ -115,7 +115,7 @@ function TwoFactorAuthPage() {
         try {
           const success = await disableTwoFactorAuth();
           if (success) {
-            router.back();
+            router.canGoBack() ? router.back() : router.replace('/(tabs)');
           }
         } catch (error) {
           platformAlertSimple('Error', 'Failed to disable two-factor authentication.');
@@ -139,7 +139,7 @@ function TwoFactorAuthPage() {
         platformAlertConfirm(
           'Verification Successful',
           'Two-factor authentication has been enabled successfully!',
-          () => router.back(),
+          () => router.canGoBack() ? router.back() : router.replace('/(tabs)'),
           'OK'
         );
       } else {
@@ -241,7 +241,7 @@ function TwoFactorAuthPage() {
         <StatusBar barStyle="light-content" backgroundColor={Colors.brand.purpleLight} />
         <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple] as const} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color="white" />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Two-Factor Authentication</ThemedText>
@@ -264,7 +264,7 @@ function TwoFactorAuthPage() {
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             accessibilityLabel="Go back"
             accessibilityRole="button"
             accessibilityHint="Double tap to return to previous screen"

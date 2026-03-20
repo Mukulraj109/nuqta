@@ -207,7 +207,7 @@ const CampaignDetailPage: React.FC = () => {
           </View>
           <Text style={styles.errorTitle}>Oops!</Text>
           <Text style={styles.errorText}>{error || 'Campaign not found'}</Text>
-          <Pressable style={styles.errorButton} onPress={() => router.back()}>
+          <Pressable style={styles.errorButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={18} color={COLORS.white} />
             <Text style={styles.errorButtonText}>Go Back</Text>
           </Pressable>
@@ -261,7 +261,7 @@ const CampaignDetailPage: React.FC = () => {
 
           {/* Back Button */}
           <Pressable
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             style={styles.backButton}
           >
             <Ionicons name="arrow-back" size={22} color={COLORS.white} />

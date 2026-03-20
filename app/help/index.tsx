@@ -52,7 +52,7 @@ function HelpPage() {
   const [expandedFAQ, setExpandedFAQ] = useState<string | null>(null);
 
   const handleBackPress = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleFAQPress = (faqId: string) => {

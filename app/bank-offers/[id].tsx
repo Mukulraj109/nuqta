@@ -88,7 +88,7 @@ function BankOfferDetailScreen() {
         <Stack.Screen options={{ headerShown: false }} />
         <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
         <ThemedText style={styles.errorText}>{error || 'Offer not found'}</ThemedText>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
+        <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <ThemedText style={styles.backButtonText}>Go Back</ThemedText>
         </Pressable>
       </SafeAreaView>
@@ -106,7 +106,7 @@ function BankOfferDetailScreen() {
 
       {/* Header */}
       <View style={styles.header}>
-        <Pressable style={styles.headerBtn} onPress={() => router.back()}>
+        <Pressable style={styles.headerBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Ionicons name="arrow-back" size={24} color={Colors.text.primary} />
         </Pressable>
         <ThemedText style={styles.headerTitle}>Bank Offer</ThemedText>

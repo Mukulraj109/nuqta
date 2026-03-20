@@ -176,7 +176,7 @@ function UGCUploadScreen() {
         ? `\nYou earned ${response.data.coinReward.coinsAwarded} coins!`
         : '';
       platformAlertSimple('Success!', `Your content has been submitted for review.${coinMsg}`);
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     } catch (error: any) {
       const message = error?.message || 'Failed to upload content. Please try again.';
       platformAlertSimple('Upload Failed', message);
@@ -192,10 +192,10 @@ function UGCUploadScreen() {
         'Discard Changes?',
         'Are you sure you want to discard this upload?',
         'Discard',
-        () => router.back()
+        () => router.canGoBack() ? router.back() : router.replace('/(tabs)')
       );
     } else {
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     }
   };
 

@@ -69,7 +69,7 @@ function ReferInstitutePage() {
         <ThemedText style={styles.successBody}>
           We'll contact them. You'll earn coins when they join.
         </ThemedText>
-        <Pressable onPress={() => router.back()} style={styles.ctaButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.ctaButton}>
           <ThemedText style={styles.ctaText}>Explore Deals</ThemedText>
           <Ionicons name="arrow-forward" size={18} color="#fff" />
         </Pressable>
@@ -80,7 +80,7 @@ function ReferInstitutePage() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={colors.text.primary} />
         </Pressable>
         <ThemedText style={styles.headerTitle}>Refer Your Institute</ThemedText>

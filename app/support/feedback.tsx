@@ -154,7 +154,7 @@ function FeedbackPage() {
           style={styles.header}
         >
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color={Colors.text.white} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Feedback</ThemedText>
@@ -171,7 +171,7 @@ function FeedbackPage() {
             Your feedback helps us improve ${BRAND.APP_NAME} for everyone.{'\n'}
             We truly appreciate you taking the time to share your thoughts.
           </ThemedText>
-          <Pressable style={styles.doneButton} onPress={() => router.back()}>
+          <Pressable style={styles.doneButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <ThemedText style={styles.doneButtonText}>Done</ThemedText>
           </Pressable>
         </View>
@@ -190,7 +190,7 @@ function FeedbackPage() {
         style={styles.header}
       >
         <View style={styles.headerContent}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.white} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Feedback</ThemedText>

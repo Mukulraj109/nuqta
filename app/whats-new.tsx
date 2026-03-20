@@ -9,7 +9,7 @@ const WhatsNewPage: React.FC = () => {
   const router = useRouter();
 
   const handleClose = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   return (

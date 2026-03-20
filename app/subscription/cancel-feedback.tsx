@@ -523,7 +523,7 @@ function CancelFeedbackPage() {
       <LinearGradient colors={[colors.error, colors.error]} style={styles.header}>
         <View style={styles.headerContainer}>
           <Pressable
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             style={styles.backButton}
             accessibilityLabel="Cancel and go back"
             accessibilityRole="button"

@@ -394,7 +394,7 @@ const GroceryCategoryPage: React.FC = () => {
       >
         <View style={styles.headerTop}>
           <Pressable
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             style={styles.backButton}
           >
             <Ionicons name="arrow-back" size={24} color={COLORS.white} />

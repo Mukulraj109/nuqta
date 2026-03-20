@@ -130,7 +130,7 @@ function ArticlesPage() {
               {/* Back Button */}
               <Pressable
                 style={styles.backButton}
-                onPress={() => router.back()}
+                onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
                
               >
                 <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
@@ -159,7 +159,7 @@ function ArticlesPage() {
             {/* Back Button */}
             <Pressable
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
              
             >
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />

@@ -432,7 +432,7 @@ function SubmitPickPage() {
 
       {/* Header */}
       <LinearGradient colors={[Colors.nileBlue, '#2d5a7b']} style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backBtn}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
         </Pressable>
         <Text style={styles.headerTitle}>Submit a Pick</Text>

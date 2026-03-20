@@ -155,7 +155,7 @@ const CoinHuntScreen: React.FC = () => {
     if (coinSpawnRef.current) clearInterval(coinSpawnRef.current);
     coinTimeoutsRef.current.forEach(t => clearTimeout(t));
     coinTimeoutsRef.current.clear();
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   return (

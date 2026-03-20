@@ -414,297 +414,6 @@ class UGCApiService {
     }
   }
 
-  /**
-   * Get mock UGC content for store (development fallback)
-   */
-  private getMockStoreContent(storeId: string): UGCMedia[] {
-    const mockUsers = [
-      { _id: 'user1', profile: { firstName: 'Sarah', lastName: 'Johnson', avatar: 'https://i.pravatar.cc/150?img=1' } },
-      { _id: 'user2', profile: { firstName: 'Mike', lastName: 'Chen', avatar: 'https://i.pravatar.cc/150?img=2' } },
-      { _id: 'user3', profile: { firstName: 'Emma', lastName: 'Williams', avatar: 'https://i.pravatar.cc/150?img=3' } },
-      { _id: 'user4', profile: { firstName: 'James', lastName: 'Brown', avatar: 'https://i.pravatar.cc/150?img=4' } },
-      { _id: 'user5', profile: { firstName: 'Lisa', lastName: 'Davis', avatar: 'https://i.pravatar.cc/150?img=5' } },
-    ];
-
-    return [
-      // Video content
-      {
-        _id: `ugc-video-1-${storeId}`,
-        userId: 'user1',
-        user: mockUsers[0],
-        type: 'video',
-        url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        thumbnail: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&h=900&fit=crop',
-        caption: 'Amazing quality products! Love shopping here 😍',
-        tags: ['fashion', 'quality', 'shopping'],
-        relatedProduct: {
-          _id: 'prod1',
-          name: 'Casual Cotton T-Shirt',
-          image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=120&h=120&fit=crop'
-        },
-        relatedStore: {
-          _id: storeId,
-          name: 'Fashion Store',
-          logo: 'https://cdn-icons-png.flaticon.com/512/3048/3048122.png'
-        },
-        likes: 1250,
-        comments: 45,
-        shares: 23,
-        views: 2500,
-        isLiked: false,
-        isBookmarked: false,
-        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      },
-      {
-        _id: `ugc-video-2-${storeId}`,
-        userId: 'user2',
-        user: mockUsers[1],
-        type: 'video',
-        url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-        thumbnail: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=900&fit=crop',
-        caption: 'Perfect fit! Highly recommend this store 👌',
-        tags: ['denim', 'jeans', 'style'],
-        relatedProduct: {
-          _id: 'prod2',
-          name: 'Slim Fit Jeans',
-          image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=120&h=120&fit=crop'
-        },
-        relatedStore: {
-          _id: storeId,
-          name: 'Fashion Store',
-          logo: 'https://cdn-icons-png.flaticon.com/512/3048/3048122.png'
-        },
-        likes: 890,
-        comments: 32,
-        shares: 15,
-        views: 1900,
-        isLiked: true,
-        isBookmarked: false,
-        createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-      },
-      {
-        _id: `ugc-video-3-${storeId}`,
-        userId: 'user3',
-        user: mockUsers[2],
-        type: 'video',
-        url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-        thumbnail: 'https://images.unsplash.com/photo-1520975918318-3a3d3a9a91a0?w=600&h=900&fit=crop',
-        caption: 'Summer vibes with this beautiful dress! 🌸☀️',
-        tags: ['dress', 'summer', 'floral'],
-        relatedProduct: {
-          _id: 'prod3',
-          name: 'Floral Summer Dress',
-          image: 'https://images.unsplash.com/photo-1520975918318-3a3d3a9a91a0?w=120&h=120&fit=crop'
-        },
-        relatedStore: {
-          _id: storeId,
-          name: 'Fashion Store',
-          logo: 'https://cdn-icons-png.flaticon.com/512/3048/3048122.png'
-        },
-        likes: 2340,
-        comments: 78,
-        shares: 45,
-        views: 3100,
-        isLiked: false,
-        isBookmarked: true,
-        createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-      },
-      // Photo content
-      {
-        _id: `ugc-photo-1-${storeId}`,
-        userId: 'user4',
-        user: mockUsers[3],
-        type: 'photo',
-        url: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&h=900&fit=crop',
-        caption: 'Timeless style! This leather jacket is a must-have 🧥',
-        tags: ['leather', 'jacket', 'style'],
-        relatedProduct: {
-          _id: 'prod4',
-          name: 'Classic Leather Jacket',
-          image: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=120&h=120&fit=crop'
-        },
-        relatedStore: {
-          _id: storeId,
-          name: 'Fashion Store',
-          logo: 'https://cdn-icons-png.flaticon.com/512/3048/3048122.png'
-        },
-        likes: 5678,
-        comments: 123,
-        shares: 89,
-        views: 8100,
-        isLiked: false,
-        isBookmarked: false,
-        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-      },
-      {
-        _id: `ugc-photo-2-${storeId}`,
-        userId: 'user5',
-        user: mockUsers[4],
-        type: 'photo',
-        url: 'https://images.unsplash.com/photo-1546456073-92b9f0a8d413?w=600&h=900&fit=crop',
-        caption: 'Traditional meets modern! Love this handwoven kurta 🎨',
-        tags: ['kurta', 'ethnic', 'handwoven'],
-        relatedProduct: {
-          _id: 'prod5',
-          name: 'Handwoven Cotton Kurta',
-          image: 'https://images.unsplash.com/photo-1546456073-92b9f0a8d413?w=120&h=120&fit=crop'
-        },
-        relatedStore: {
-          _id: storeId,
-          name: 'Fashion Store',
-          logo: 'https://cdn-icons-png.flaticon.com/512/3048/3048122.png'
-        },
-        likes: 3456,
-        comments: 67,
-        shares: 34,
-        views: 5400,
-        isLiked: true,
-        isBookmarked: true,
-        createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
-      },
-      // Additional content for variety
-      {
-        _id: `ugc-photo-3-${storeId}`,
-        userId: 'user1',
-        user: mockUsers[0],
-        type: 'photo',
-        url: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=900&fit=crop',
-        caption: 'Perfect for office wear! Professional and stylish 💼',
-        tags: ['formal', 'blazer', 'office'],
-        relatedProduct: {
-          _id: 'prod6',
-          name: 'Professional Blazer',
-          image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=120&h=120&fit=crop'
-        },
-        relatedStore: {
-          _id: storeId,
-          name: 'Fashion Store',
-          logo: 'https://cdn-icons-png.flaticon.com/512/3048/3048122.png'
-        },
-        likes: 4123,
-        comments: 89,
-        shares: 56,
-        views: 6700,
-        isLiked: false,
-        isBookmarked: false,
-        createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
-      },
-      {
-        _id: `ugc-photo-4-${storeId}`,
-        userId: 'user2',
-        user: mockUsers[1],
-        type: 'photo',
-        url: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&h=900&fit=crop',
-        caption: 'Casual Friday essentials! Comfortable and trendy 👕',
-        tags: ['casual', 'friday', 'comfort'],
-        relatedProduct: {
-          _id: 'prod7',
-          name: 'Casual Polo Shirt',
-          image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=120&h=120&fit=crop'
-        },
-        relatedStore: {
-          _id: storeId,
-          name: 'Fashion Store',
-          logo: 'https://cdn-icons-png.flaticon.com/512/3048/3048122.png'
-        },
-        likes: 2789,
-        comments: 45,
-        shares: 28,
-        views: 4200,
-        isLiked: false,
-        isBookmarked: false,
-        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-      },
-      {
-        _id: `ugc-photo-5-${storeId}`,
-        userId: 'user3',
-        user: mockUsers[2],
-        type: 'photo',
-        url: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=900&fit=crop',
-        caption: 'Winter collection is here! Stay warm and stylish 🧣❄️',
-        tags: ['winter', 'coat', 'warm'],
-        relatedProduct: {
-          _id: 'prod8',
-          name: 'Winter Wool Coat',
-          image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=120&h=120&fit=crop'
-        },
-        relatedStore: {
-          _id: storeId,
-          name: 'Fashion Store',
-          logo: 'https://cdn-icons-png.flaticon.com/512/3048/3048122.png'
-        },
-        likes: 6234,
-        comments: 134,
-        shares: 98,
-        views: 9800,
-        isLiked: true,
-        isBookmarked: false,
-        createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
-      },
-      {
-        _id: `ugc-photo-6-${storeId}`,
-        userId: 'user4',
-        user: mockUsers[3],
-        type: 'photo',
-        url: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=900&fit=crop',
-        caption: 'Sneaker game strong! Perfect for everyday wear 👟',
-        tags: ['sneakers', 'shoes', 'casual'],
-        relatedProduct: {
-          _id: 'prod9',
-          name: 'Classic White Sneakers',
-          image: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=120&h=120&fit=crop'
-        },
-        relatedStore: {
-          _id: storeId,
-          name: 'Fashion Store',
-          logo: 'https://cdn-icons-png.flaticon.com/512/3048/3048122.png'
-        },
-        likes: 7890,
-        comments: 156,
-        shares: 112,
-        views: 12300,
-        isLiked: false,
-        isBookmarked: true,
-        createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
-      },
-      {
-        _id: `ugc-photo-7-${storeId}`,
-        userId: 'user5',
-        user: mockUsers[4],
-        type: 'photo',
-        url: 'https://images.unsplash.com/photo-1581791538302-03537b9b97ff?w=600&h=900&fit=crop',
-        caption: 'Gym wear that performs! Great quality and fit 💪',
-        tags: ['gym', 'fitness', 'activewear'],
-        relatedProduct: {
-          _id: 'prod10',
-          name: 'Athletic Performance Tee',
-          image: 'https://images.unsplash.com/photo-1581791538302-03537b9b97ff?w=120&h=120&fit=crop'
-        },
-        relatedStore: {
-          _id: storeId,
-          name: 'Fashion Store',
-          logo: 'https://cdn-icons-png.flaticon.com/512/3048/3048122.png'
-        },
-        likes: 3567,
-        comments: 78,
-        shares: 45,
-        views: 5600,
-        isLiked: false,
-        isBookmarked: false,
-        createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-        updatedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-      },
-    ];
-  }
 
   // ── Reel-specific methods ─────────────────────────
 
@@ -720,6 +429,29 @@ class UGCApiService {
       return { success: false, error: (response as any).message || 'Failed to create reel' };
     } catch (error: any) {
       return { success: false, error: error.message || 'Failed to create reel' };
+    }
+  }
+
+  /**
+   * Create a new UGC post or story (photo-based content)
+   */
+  async createPost(data: {
+    type: 'post' | 'story';
+    imageUrls: string[];
+    caption?: string;
+    tags?: string[];
+    taggedProducts?: string[];
+    taggedStores?: string[];
+    storeId?: string;
+  }): Promise<{ success: boolean; data?: any; message?: string; error?: string }> {
+    try {
+      const response = await apiClient.post('/ugc/create-post', data);
+      if (response.success && response.data) {
+        return { success: true, data: response.data, message: (response as any).message };
+      }
+      return { success: false, error: (response as any).message || 'Failed to create post' };
+    } catch (error: any) {
+      return { success: false, error: error.message || 'Failed to create post' };
     }
   }
 

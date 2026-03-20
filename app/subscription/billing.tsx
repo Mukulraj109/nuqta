@@ -123,7 +123,7 @@ function BillingHistoryPage() {
       <LinearGradient colors={[Colors.brand.purpleLight, Colors.brand.purple]} style={styles.header}>
         <View style={styles.headerContainer}>
           <Pressable
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             style={styles.backButton}
             accessibilityLabel="Go back"
             accessibilityRole="button"

@@ -215,7 +215,7 @@ function CardOffersPage() {
       setShowOfferDetails(false);
       if (!isMounted()) return;
       setSelectedOffer(null);
-      setTimeout(() => router.back(), 1000);
+      setTimeout(() => router.canGoBack() ? router.back() : router.replace('/(tabs)'), 1000);
     } catch (error: any) {
       triggerNotification('Error');
       platformAlert('Error', error?.message || 'Failed to apply offer.');
@@ -399,7 +399,7 @@ function CardOffersPage() {
           <View style={styles.headerTop}>
             <Pressable
               style={styles.backBtn}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <Ionicons name="arrow-back" size={24} color={colors.background.primary} />

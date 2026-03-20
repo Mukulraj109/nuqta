@@ -351,7 +351,7 @@ const ReferralPageContent = () => {
           <View style={styles.headerContent}>
             <Pressable
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             >
               <Ionicons name="arrow-back" size={24} color="white" />
             </Pressable>
@@ -394,7 +394,7 @@ const ReferralPageContent = () => {
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             accessibilityLabel="Go back"
             accessibilityHint="Returns to previous screen"
           >
@@ -622,7 +622,7 @@ const ReferralPage = () => {
       }}
       onReset={() => {
         // Optionally navigate back or refresh
-        router.back();
+        router.canGoBack() ? router.back() : router.replace('/(tabs)');
       }}
     >
       <ReferralPageContent />

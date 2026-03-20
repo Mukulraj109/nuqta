@@ -280,7 +280,7 @@ function SharedCategoryPage() {
     <SafeAreaView style={styles.container}>
       {/* Search Header */}
       <View style={styles.searchHeader}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={SHARED_COLORS.textPrimary} />
         </Pressable>
         <View style={styles.searchInputContainer}>

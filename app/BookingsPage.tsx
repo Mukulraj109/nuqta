@@ -475,7 +475,7 @@ function BookingsPage() {
         <Stack.Screen options={{ headerShown: false }} />
         <StatusBar barStyle="light-content" />
         <LinearGradient colors={[C.primary, C.primaryDark]} style={styles.header}>
-          <Pressable onPress={() => router.back()} style={styles.backBtn}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backBtn}>
             <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
           </Pressable>
           <Text style={styles.headerTitle}>My Bookings</Text>
@@ -749,7 +749,7 @@ function BookingsPage() {
         end={{ x: 1, y: 1 }}
         style={styles.header}
       >
-        <Pressable onPress={() => router.back()} style={styles.backBtn}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
         </Pressable>
         <Text style={styles.headerTitle}>My Bookings</Text>

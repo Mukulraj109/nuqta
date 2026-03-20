@@ -117,7 +117,7 @@ function SharePage() {
       
       // Navigate back after successful share
       setTimeout(() => {
-        router.back();
+        router.canGoBack() ? router.back() : router.replace('/(tabs)');
       }, 500);
     } catch (error: any) {
       // User cancelled or error occurred - don't show error for cancellation
@@ -136,7 +136,7 @@ function SharePage() {
 
       {/* Header */}
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
         </Pressable>
         <Text style={styles.headerTitle}>Share Your Experience</Text>

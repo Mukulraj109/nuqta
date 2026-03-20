@@ -17,6 +17,7 @@ import { useGetCurrencySymbol } from '@/stores/selectors';
 import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/DesignSystem';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import FeatureErrorBoundary from '@/components/common/FeatureErrorBoundary';
 
 const { width } = Dimensions.get('window');
 
@@ -111,6 +112,7 @@ const EarnCTA = () => {
   };
 
   return (
+    <FeatureErrorBoundary featureName="Earn CTA" compact={true}>
     <View style={styles.container}>
       {/* Main CTA Card */}
       <Pressable
@@ -215,6 +217,7 @@ const EarnCTA = () => {
         </View>
       )}
     </View>
+    </FeatureErrorBoundary>
   );
 };
 

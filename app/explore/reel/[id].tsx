@@ -342,7 +342,7 @@ const ReelDetailPage = () => {
             <Pressable style={styles.retryButton} onPress={() => fetchReelData()}>
               <Text style={styles.retryButtonText}>Try Again</Text>
             </Pressable>
-            <Pressable style={styles.backButtonAlt} onPress={() => router.back()}>
+            <Pressable style={styles.backButtonAlt} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Text style={styles.backButtonAltText}>Go Back</Text>
             </Pressable>
           </View>
@@ -392,7 +392,7 @@ const ReelDetailPage = () => {
         <View style={styles.topHeader}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           >
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>

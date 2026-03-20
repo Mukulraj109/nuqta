@@ -178,7 +178,7 @@ const CategoryDetailPage = () => {
         <View style={styles.header}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           >
             <Ionicons name="arrow-back" size={24} color={Colors.nileBlue} />
           </Pressable>
@@ -295,7 +295,7 @@ const CategoryDetailPage = () => {
             <Text style={styles.emptySubtext}>
               No stores are available in this category yet. Check back soon!
             </Text>
-            <Pressable style={styles.emptyButton} onPress={() => router.back()}>
+            <Pressable style={styles.emptyButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Text style={styles.emptyButtonText}>Explore Other Categories</Text>
             </Pressable>
           </View>

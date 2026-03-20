@@ -380,7 +380,7 @@ function FlightDetailsPage() {
           <Pressable style={s.retryBtn} onPress={loadFlightDetails}>
             <Text style={s.retryBtnText}>Try Again</Text>
           </Pressable>
-          <Pressable onPress={() => router.back()} style={{ marginTop: 12 }}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={{ marginTop: 12 }}>
             <Text style={{ color: colors.neutral[500], fontSize: 14 }}>Go back</Text>
           </Pressable>
         </View>
@@ -419,7 +419,7 @@ function FlightDetailsPage() {
 
           {/* Nav bar */}
           <View style={s.heroNav}>
-            <Pressable style={s.navBtn} onPress={() => router.back()}>
+            <Pressable style={s.navBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={22} color={colors.background.primary} />
             </Pressable>
             <View style={s.navRight}>
@@ -710,12 +710,12 @@ function FlightDetailsPage() {
       </Modal>
 
       {/* Booking Confirmation Modal */}
-      <Modal visible={showConfirmation} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => { setShowConfirmation(false); router.back(); }}>
+      <Modal visible={showConfirmation} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => { setShowConfirmation(false); router.canGoBack() ? router.back() : router.replace('/(tabs)'); }}>
         {bookingData && (
           <FlightBookingConfirmation
             flight={flight}
             bookingData={bookingData}
-            onClose={() => { setShowConfirmation(false); router.back(); }}
+            onClose={() => { setShowConfirmation(false); router.canGoBack() ? router.back() : router.replace('/(tabs)'); }}
           />
         )}
       </Modal>

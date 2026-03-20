@@ -315,7 +315,7 @@ function VerificationPage() {
         const message = response.data.verified
           ? 'Your verification is complete. You now have access to exclusive deals!'
           : 'Your verification has been submitted and is under review. We\'ll notify you within 24-48 hours once it\'s approved.';
-        showAlert(title, message, () => router.back());
+        showAlert(title, message, () => router.canGoBack() ? router.back() : router.replace('/(tabs)'));
       } else {
         showAlert('Error', response.error || 'Failed to submit verification');
       }
@@ -346,7 +346,7 @@ function VerificationPage() {
           <StatusBar barStyle="light-content" />
         <LinearGradient colors={[config.color, config.color + 'CC']} style={styles.header}>
           <SafeAreaView edges={['top']}>
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
           </SafeAreaView>
@@ -368,7 +368,7 @@ function VerificationPage() {
           )}
           <Pressable
             style={[styles.primaryButton, { backgroundColor: config.color }]}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           >
             <ThemedText style={styles.primaryButtonText}>Go Back to Offers</ThemedText>
           </Pressable>
@@ -387,7 +387,7 @@ function VerificationPage() {
           <StatusBar barStyle="light-content" />
         <LinearGradient colors={[config.color, config.color + 'CC']} style={styles.header}>
           <SafeAreaView edges={['top']}>
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
           </SafeAreaView>
@@ -409,7 +409,7 @@ function VerificationPage() {
           )}
           <Pressable
             style={[styles.primaryButton, { backgroundColor: config.color }]}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           >
             <ThemedText style={styles.primaryButtonText}>Go Back to Offers</ThemedText>
           </Pressable>
@@ -428,7 +428,7 @@ function VerificationPage() {
           <StatusBar barStyle="light-content" />
         <LinearGradient colors={[config.color, config.color + 'CC']} style={styles.header}>
           <SafeAreaView edges={['top']}>
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
           </SafeAreaView>
@@ -455,7 +455,7 @@ function VerificationPage() {
           </Pressable>
           <Pressable
             style={[styles.secondaryButton]}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           >
             <ThemedText style={styles.secondaryButtonText}>Go Back</ThemedText>
           </Pressable>
@@ -478,7 +478,7 @@ function VerificationPage() {
       <LinearGradient colors={[config.color, config.color + 'CC']} style={styles.header}>
         <SafeAreaView edges={['top']}>
           <View style={styles.headerContent}>
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color={colors.background.primary} />
             </Pressable>
             <View style={styles.headerCenter}>

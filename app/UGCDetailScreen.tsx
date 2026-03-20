@@ -614,6 +614,12 @@ function UGCDetailScreen() {
     return video?.creator?.profile?.avatar || video?.creator?.avatar || defaultAvatarUrl;
   }, [video?.creator, creatorName]);
 
+  // Deep-link parameter validation guard: requires either item (JSON) or id
+  if (!params.item && !params.id) {
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
+    return null;
+  }
+
   // Loading state
   if (loading) {
     return <DetailPageSkeleton />;
@@ -625,7 +631,7 @@ function UGCDetailScreen() {
       <View style={styles.container}>
         <Ionicons name="videocam-off-outline" size={64} color={Colors.text.tertiary} />
         <Text style={styles.errorText}>{error || 'Video not found'}</Text>
-        <Pressable style={styles.retryButton} onPress={() => router.back()}>
+        <Pressable style={styles.retryButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Text style={styles.retryButtonText}>Go Back</Text>
         </Pressable>
       </View>
@@ -780,7 +786,7 @@ function UGCDetailScreen() {
 
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
+        <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
         </Pressable>
 

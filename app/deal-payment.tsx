@@ -55,7 +55,7 @@ const DealPaymentPage: React.FC = () => {
   useEffect(() => {
     if (!checkoutUrl || !sessionId) {
       platformAlertSimple('Error', 'Invalid payment details');
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     }
   }, []);
 
@@ -228,7 +228,7 @@ const DealPaymentPage: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Pressable style={styles.backBtn} onPress={() => router.back()}>
+        <Pressable style={styles.backBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Ionicons name="arrow-back" size={24} color={Colors.nileBlue} />
         </Pressable>
         <Text style={styles.headerTitle}>Complete Purchase</Text>

@@ -1200,7 +1200,7 @@ function BillUploadPage() {
       <View style={styles.header}>
         <HeaderBackButton onPress={() => {
           if (router.canGoBack()) {
-            router.back();
+            router.canGoBack() ? router.back() : router.replace('/(tabs)');
           } else {
             router.replace('/(tabs)/');
           }

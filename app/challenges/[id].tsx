@@ -177,7 +177,7 @@ function ChallengeDetailPage() {
         logger.error('Available challenge IDs:', allChallenges.map((c: any) => c._id).slice(0, 5));
         logger.error('Progress IDs:', allProgress.map((p: any) => p._id).slice(0, 5));
         showAlert('Error', 'Challenge not found', undefined, 'error');
-        router.back();
+        router.canGoBack() ? router.back() : router.replace('/(tabs)');
         return;
       }
 
@@ -189,7 +189,7 @@ function ChallengeDetailPage() {
     } catch (error: any) {
       logger.error('❌ [Challenge Detail] Error loading challenge:', error);
       showAlert('Error', 'Failed to load challenge details', undefined, 'error');
-      router.back();
+      router.canGoBack() ? router.back() : router.replace('/(tabs)');
     } finally {
       if (!isMounted()) return;
       setLoading(false);
@@ -605,7 +605,7 @@ function ChallengeDetailPage() {
           visible={showClaimModal}
           onClose={() => {
             setShowClaimModal(false);
-            router.back();
+            router.canGoBack() ? router.back() : router.replace('/(tabs)');
           }}
           reward={{
             coins: claimData.coins,

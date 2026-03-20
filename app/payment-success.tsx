@@ -1,5 +1,5 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import {
   View,
   StyleSheet,
@@ -290,11 +290,13 @@ function PaymentSuccessPage() {
   const isCod = method === 'cod';
 
   // Calculate totals across all orders for multi-store
-  const totalCoinsUsed = orders.reduce((sum, o) => sum + (o.payment?.coinsUsed?.totalCoinsValue || 0), 0);
-  const totalOrderValue = orders.reduce((sum, o) => sum + (o.totals?.total || 0), 0);
-  const totalPaidAmount = orders.reduce((sum, o) => sum + (o.totals?.paidAmount || o.totals?.total || 0), 0);
-  const totalItemCount = orders.reduce((sum, o) =>
-    sum + (o.items?.reduce((itemSum, item) => itemSum + (item.quantity || 1), 0) || 0), 0);
+  const { totalCoinsUsed, totalOrderValue, totalPaidAmount, totalItemCount } = useMemo(() => ({
+    totalCoinsUsed: orders.reduce((sum, o) => sum + (o.payment?.coinsUsed?.totalCoinsValue || 0), 0),
+    totalOrderValue: orders.reduce((sum, o) => sum + (o.totals?.total || 0), 0),
+    totalPaidAmount: orders.reduce((sum, o) => sum + (o.totals?.paidAmount || o.totals?.total || 0), 0),
+    totalItemCount: orders.reduce((sum, o) =>
+      sum + (o.items?.reduce((itemSum, item) => itemSum + (item.quantity || 1), 0) || 0), 0),
+  }), [orders]);
 
   // For single order, use order values; for multi-store, use aggregated values
   const coinsUsedValue = isMultiStoreOrder ? totalCoinsUsed : (order?.payment?.coinsUsed?.totalCoinsValue || 0);

@@ -122,7 +122,7 @@ const TagFilterPage = () => {
         <View style={styles.header}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
           >
             <Ionicons name="arrow-back" size={24} color={Colors.nileBlue} />
           </Pressable>
@@ -231,7 +231,7 @@ const TagFilterPage = () => {
               <Text style={styles.emptySubtext}>
                 We're working on bringing more {meta.label.toLowerCase()} options near you. Check back soon!
               </Text>
-              <Pressable style={[styles.emptyButton, { backgroundColor: meta.color }]} onPress={() => router.back()}>
+              <Pressable style={[styles.emptyButton, { backgroundColor: meta.color }]} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
                 <Text style={styles.emptyButtonText}>Explore Other Options</Text>
               </Pressable>
             </View>

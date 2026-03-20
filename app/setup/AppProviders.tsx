@@ -103,14 +103,14 @@ function AppProviders({
         <IdentityHydrator />
         <DeferredWallet>
           <DeferredGamification>
-            <DeferredSocket>
-              <LocationProvider>
-                <LocationRegionSync />
+            <LocationProvider>
+              <LocationRegionSync />
+              <DeferredSocket>
                 <DeferredCart>
                   <ThemedNavigation />
                 </DeferredCart>
-              </LocationProvider>
-            </DeferredSocket>
+              </DeferredSocket>
+            </LocationProvider>
           </DeferredGamification>
         </DeferredWallet>
       </AuthProvider>

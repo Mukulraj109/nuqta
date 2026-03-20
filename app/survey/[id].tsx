@@ -162,7 +162,7 @@ function SurveyDetailPage() {
         } catch (error) {
           // silently handle
         }
-        router.back();
+        router.canGoBack() ? router.back() : router.replace('/(tabs)');
       }
     );
   };
@@ -191,7 +191,7 @@ function SurveyDetailPage() {
           <View style={styles.errorContainer}>
             <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
             <Text style={styles.errorText}>Survey not found</Text>
-            <Pressable style={styles.backBtn} onPress={() => router.back()}>
+            <Pressable style={styles.backBtn} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Text style={styles.backBtnText}>Go Back</Text>
             </Pressable>
           </View>
@@ -407,7 +407,7 @@ function SurveyDetailPage() {
 
         {/* Header */}
         <View style={styles.header}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={22} color={Colors.text.primary} />
           </Pressable>
           <Text style={styles.headerTitle}>Survey Details</Text>

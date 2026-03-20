@@ -418,7 +418,7 @@ function CartPage() {
   };
 
   const handleBackPress = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const renderCartItem = useCallback(({ item }: { item: CartItemType }) => {

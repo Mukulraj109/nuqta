@@ -282,7 +282,7 @@ function AccountRecoveryPage() {
         style={styles.header}
       >
         <View style={styles.headerContent}>
-          <Pressable style={styles.closeButton} onPress={() => router.back()}>
+          <Pressable style={styles.closeButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="close" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Account Recovery</ThemedText>

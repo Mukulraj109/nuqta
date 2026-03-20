@@ -98,7 +98,7 @@ function WalletSettingsPage() {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
-        <Header onBack={() => router.back()} />
+        <Header onBack={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} />
         <SectionListSkeleton />
       </View>
     );
@@ -107,7 +107,7 @@ function WalletSettingsPage() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.primary[600]} />
-      <Header onBack={() => router.back()} />
+      <Header onBack={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} />
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Auto Top-up Section */}

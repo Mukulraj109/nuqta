@@ -93,7 +93,7 @@ function DriveThruTrackingScreen() {
     >
       {/* Header */}
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backBtn}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={Colors.nileBlue} />
         </Pressable>
         <View style={{ flex: 1 }}>

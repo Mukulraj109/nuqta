@@ -200,7 +200,7 @@ function UploadPage() {
             ? `Your reel has been submitted for review. You'll earn ${coins} coins once approved!`
             : 'Your reel has been submitted for review.';
           platformAlert('Reel Submitted!', msg);
-          router.back();
+          router.canGoBack() ? router.back() : router.replace('/(tabs)');
         } else {
           platformAlert('Upload Failed', result.error || 'Failed to upload reel. Please try again.');
         }
@@ -213,8 +213,65 @@ function UploadPage() {
       return;
     }
 
-    // Posts/stories upload — coming soon
-    platformAlert('Coming Soon', 'Post and story uploads will be available soon. You can upload reels now!');
+    // Posts/stories upload
+    setUploading(true);
+    setUploadProgress(0);
+    try {
+      // Upload images to Cloudinary
+      const imageUrls: string[] = [];
+      for (let i = 0; i < media.length; i++) {
+        setUploadProgress(Math.round(((i) / media.length) * 80));
+        const formData = new FormData();
+        formData.append('file', { uri: media[i], type: 'image/jpeg', name: `${contentType}_${i}.jpg` } as any);
+        formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPresets.images);
+        formData.append('folder', `images/social/${contentType}s/`);
+
+        const uploadRes = await fetch(getCloudinaryUploadUrl('image'), {
+          method: 'POST',
+          body: formData,
+        });
+        const uploadData = await uploadRes.json();
+        if (uploadData.secure_url) {
+          imageUrls.push(uploadData.secure_url);
+        }
+      }
+
+      if (imageUrls.length === 0) {
+        platformAlert('Upload Failed', 'Could not upload images. Please try again.');
+        return;
+      }
+
+      setUploadProgress(90);
+
+      // Create post/story record in backend
+      const result = await ugcApi.createPost({
+        type: contentType as 'post' | 'story',
+        imageUrls,
+        caption: caption.trim() || undefined,
+        tags: [],
+        taggedProducts: taggedProducts.map(p => p.id),
+        taggedStores: taggedStores.map(s => s.id),
+        storeId: taggedStores.length > 0 ? taggedStores[0].id : undefined,
+      });
+
+      setUploadProgress(100);
+
+      if (result.success) {
+        const coins = result.data?.coinReward?.coinsAwarded;
+        const msg = coins
+          ? `Your ${contentType} has been submitted for review. You'll earn ${coins} coins once approved!`
+          : `Your ${contentType} has been submitted for review.`;
+        platformAlert(`${contentType === 'story' ? 'Story' : 'Post'} Submitted!`, msg);
+        router.canGoBack() ? router.back() : router.replace('/(tabs)');
+      } else {
+        platformAlert('Upload Failed', result.error || `Failed to upload ${contentType}. Please try again.`);
+      }
+    } catch (error: any) {
+      platformAlert('Error', error.message || 'Something went wrong. Please try again.');
+    } finally {
+      if (!isMounted()) return;
+      setUploading(false);
+    }
   };
 
   return (
@@ -226,7 +283,7 @@ function UploadPage() {
         style={styles.header}
       >
         <View style={styles.headerContent}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="close" size={24} color={colors.background.primary} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Create</ThemedText>

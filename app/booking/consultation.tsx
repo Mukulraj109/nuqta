@@ -245,7 +245,7 @@ function ConsultationBookingScreen() {
           `Time: ${selectedTime}\n` +
           `Patient: ${patientName}\n\n` +
           `You will receive a confirmation message shortly.`,
-          () => router.back(),
+          () => router.canGoBack() ? router.back() : router.replace('/(tabs)'),
           'OK'
         );
       } else {
@@ -267,7 +267,7 @@ function ConsultationBookingScreen() {
           colors={[Colors.brand.purpleLight, Colors.brand.purple]}
           style={styles.header}
         >
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Book Consultation</ThemedText>
@@ -287,7 +287,7 @@ function ConsultationBookingScreen() {
           colors={[Colors.brand.purpleLight, Colors.brand.purple]}
           style={styles.header}
         >
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <ThemedText style={styles.headerTitle}>Book Consultation</ThemedText>
@@ -295,7 +295,7 @@ function ConsultationBookingScreen() {
         <View style={styles.errorContainer}>
           <Ionicons name="alert-circle" size={64} color={Colors.error} />
           <ThemedText style={styles.errorText}>{error || 'Clinic not found'}</ThemedText>
-          <Pressable onPress={() => router.back()} style={styles.errorButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.errorButton}>
             <Text style={styles.errorButtonText}>Go Back</Text>
           </Pressable>
         </View>
@@ -312,7 +312,7 @@ function ConsultationBookingScreen() {
         colors={[Colors.brand.purpleLight, Colors.brand.purple]}
         style={styles.header}
       >
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
         </Pressable>
         <View style={styles.headerContent}>

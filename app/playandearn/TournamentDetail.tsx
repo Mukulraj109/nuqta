@@ -201,7 +201,7 @@ const TournamentDetail = () => {
         <View style={styles.errorCard}>
           <Ionicons name="alert-circle-outline" size={48} color={Colors.error} />
           <Text style={styles.errorTitle}>{error || 'Tournament not found'}</Text>
-          <Pressable onPress={() => router.back()} style={styles.errorBtn}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.errorBtn}>
             <Text style={styles.errorBtnText}>Go Back</Text>
           </Pressable>
         </View>
@@ -219,7 +219,7 @@ const TournamentDetail = () => {
           style={styles.hero}
         >
           {/* Back button */}
-          <Pressable onPress={() => router.back()} style={styles.backBtn}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backBtn}>
             <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
           </Pressable>
 

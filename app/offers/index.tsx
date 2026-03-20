@@ -22,6 +22,17 @@ import { platformAlertSimple } from '@/utils/platformAlert';
 import { BRAND } from '@/constants/brand';
 import { colors } from '@/constants/theme';
 import { useIsMounted } from '@/hooks/useIsMounted';
+import { useUserIdentityStore, IdentitySegment } from '@/stores/userIdentityStore';
+
+// Segment-aware hero banner config
+const SEGMENT_HERO: Partial<Record<IdentitySegment, { title: string; subtitle: string; icon: string; color: string }>> = {
+  verified_student:    { title: 'STUDENT OFFERS',    subtitle: 'Exclusive deals for campus life',          icon: 'school',     color: '#8B5CF6' },
+  verified_employee:   { title: 'WORK PERKS',        subtitle: 'Corporate benefits & savings',             icon: 'briefcase',  color: '#0EA5E9' },
+  verified_healthcare: { title: 'HEALTH DEALS',      subtitle: 'Pharmacy, wellness & medical offers',      icon: 'medkit',     color: '#2ECC71' },
+  verified_defence:    { title: 'DEFENCE PERKS',     subtitle: 'Exclusive service member benefits',        icon: 'shield',     color: '#6366F1' },
+  verified_teacher:    { title: 'TEACHER BENEFITS',  subtitle: 'Education & stationery savings',           icon: 'book',       color: '#F59E0B' },
+  verified_senior:     { title: 'SENIOR OFFERS',     subtitle: 'Special benefits for you',                 icon: 'heart',      color: '#EC4899' },
+};
 
 const { width } = Dimensions.get('window');
 
@@ -37,6 +48,8 @@ const PALETTE = {
 function OffersScreen() {
   const isMounted = useIsMounted();
   const router = useRouter();
+  const { segment } = useUserIdentityStore();
+  const heroConfig = SEGMENT_HERO[segment];
   const user = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
   const userCoins = useRezBalance();
@@ -65,7 +78,7 @@ function OffersScreen() {
   const contentRef = useRef<any>(null);
 
   const handleBack = () => {
-    router.back();
+    router.canGoBack() ? router.back() : router.replace('/(tabs)');
   };
 
   const handleShare = async () => {
@@ -140,23 +153,31 @@ function OffersScreen() {
               </View>
             </View>
 
-            {/* Hero Banner - Nile Blue with Mustard accent */}
+            {/* Hero Banner — segment-aware or default */}
             <View style={styles.heroBanner}>
               <LinearGradient
-                colors={[PALETTE.nileBlue, '#234a64', colors.nileBlue]}
+                colors={heroConfig
+                  ? [heroConfig.color, heroConfig.color + 'CC', heroConfig.color + '99']
+                  : [PALETTE.nileBlue, '#234a64', colors.nileBlue]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.heroBannerGradient}
               >
                 <View style={styles.heroBannerContent}>
                   <View style={styles.heroBannerText}>
-                    <ThemedText style={styles.heroTitle}>MEGA OFFERS</ThemedText>
+                    <ThemedText style={styles.heroTitle}>
+                      {heroConfig?.title ?? 'MEGA OFFERS'}
+                    </ThemedText>
                     <ThemedText style={styles.heroSubtitle}>
-                      Up to 50% off + Extra Cashback
+                      {heroConfig?.subtitle ?? 'Up to 50% off + Extra Cashback'}
                     </ThemedText>
                   </View>
                   <View style={styles.heroIconContainer}>
-                    <Ionicons name="gift" size={40} color={PALETTE.lightMustard} />
+                    <Ionicons
+                      name={(heroConfig?.icon ?? 'gift') as any}
+                      size={40}
+                      color={heroConfig ? '#FFFFFF' : PALETTE.lightMustard}
+                    />
                   </View>
                 </View>
                 <View style={styles.heroShine} />

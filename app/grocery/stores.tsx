@@ -254,7 +254,7 @@ const GroceryStoresPage: React.FC = () => {
           style={styles.header}
         >
           <View style={styles.headerTop}>
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
               <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
             </Pressable>
             <View style={styles.headerTitleContainer}>
@@ -278,7 +278,7 @@ const GroceryStoresPage: React.FC = () => {
         style={styles.header}
       >
         <View style={styles.headerTop}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
           </Pressable>
           <View style={styles.headerTitleContainer}>

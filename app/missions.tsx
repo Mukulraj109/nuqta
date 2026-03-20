@@ -5,7 +5,7 @@ import { withErrorBoundary } from '@/utils/withErrorBoundary';
  * Tappable cards navigate to mission detail page
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
   View,
   Text,
@@ -454,9 +454,9 @@ const MissionsScreen: React.FC = () => {
   };
 
   // Filter missions by type
-  const dailyMissions = allMissions.filter(m => m.type === 'daily');
-  const weeklyMissions = allMissions.filter(m => m.type === 'weekly');
-  const specialMissions = allMissions.filter(m => m.type === 'special' || m.type === 'monthly');
+  const dailyMissions = useMemo(() => allMissions.filter(m => m.type === 'daily'), [allMissions]);
+  const weeklyMissions = useMemo(() => allMissions.filter(m => m.type === 'weekly'), [allMissions]);
+  const specialMissions = useMemo(() => allMissions.filter(m => m.type === 'special' || m.type === 'monthly'), [allMissions]);
 
   const getMissions = () => {
     switch (activeTab) {
@@ -488,7 +488,7 @@ const MissionsScreen: React.FC = () => {
           <View style={styles.headerTop}>
             <Pressable
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
              
             >
               <Ionicons name="arrow-back" size={20} color={colors.background.primary} />

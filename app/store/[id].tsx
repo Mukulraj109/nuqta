@@ -367,7 +367,7 @@ const StoreDetailPage: React.FC = () => {
         <Text style={styles.errorDescription}>
           This store may have been removed or is temporarily unavailable.
         </Text>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
+        <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
           <Ionicons name="arrow-back" size={18} color={COLORS.white} />
           <Text style={styles.backButtonText}>Go Back</Text>
         </Pressable>
@@ -393,7 +393,7 @@ const StoreDetailPage: React.FC = () => {
 
           {/* Top Navigation Bar */}
           <View style={styles.topNav}>
-            <Pressable style={styles.navButton} onPress={() => router.back()}>
+            <Pressable style={styles.navButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={22} color={COLORS.white} />
             </Pressable>
             <View style={styles.navRight}>

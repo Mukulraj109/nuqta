@@ -392,7 +392,7 @@ function OfferDetailPage() {
       <View style={styles.container}>
         <SafeAreaView style={styles.safeArea} edges={['top']}>
           <View style={styles.header}>
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
               <Ionicons name="chevron-back" size={28} color={Colors.text.primary} />
             </Pressable>
           </View>
@@ -409,7 +409,7 @@ function OfferDetailPage() {
       <View style={styles.container}>
         <SafeAreaView style={styles.safeArea} edges={['top']}>
           <View style={styles.header}>
-            <Pressable onPress={() => router.back()} style={styles.backButton}>
+            <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
               <Ionicons name="chevron-back" size={28} color={Colors.text.primary} />
             </Pressable>
           </View>
@@ -433,7 +433,7 @@ function OfferDetailPage() {
       <SafeAreaView style={styles.safeArea} edges={['top']}>
         {/* Minimal Header */}
         <View style={styles.header}>
-          <Pressable onPress={() => router.back()} style={styles.backButton}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')} style={styles.backButton}>
             <Ionicons name="chevron-back" size={28} color={Colors.text.primary} />
           </Pressable>
           <View style={styles.headerActions}>

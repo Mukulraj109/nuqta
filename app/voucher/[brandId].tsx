@@ -168,7 +168,7 @@ function BrandDetailPage() {
       <View style={styles.headerContent}>
         <Pressable
           style={styles.glassButton}
-          onPress={() => router.back()}
+          onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
          
         >
           <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
@@ -462,7 +462,7 @@ function BrandDetailPage() {
           style={styles.loadingHeader}
         >
           <View style={styles.headerContent}>
-            <Pressable style={styles.glassButton} onPress={() => router.back()}>
+            <Pressable style={styles.glassButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={22} color={Colors.text.inverse} />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Loading...</ThemedText>
@@ -487,7 +487,7 @@ function BrandDetailPage() {
           <ThemedText style={styles.errorText}>
             This brand may have been removed or is temporarily unavailable.
           </ThemedText>
-          <Pressable onPress={() => router.back()}>
+          <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <LinearGradient
               colors={[Colors.gold, Colors.nileBlue]}
               style={styles.backButton}

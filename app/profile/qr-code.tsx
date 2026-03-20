@@ -64,7 +64,7 @@ const QRCodePage = () => {
             style={styles.backButton} 
             onPress={() => {
               if (router.canGoBack()) {
-                router.back();
+                router.canGoBack() ? router.back() : router.replace('/(tabs)');
               } else {
                 router.push('/profile');
               }

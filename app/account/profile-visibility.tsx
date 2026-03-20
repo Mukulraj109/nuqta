@@ -135,7 +135,7 @@ function ProfileVisibilityPage() {
         <StatusBar barStyle="light-content" backgroundColor={Colors.brand.purple} />
         <LinearGradient colors={[Colors.brand.purple, Colors.brand.purple]} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color="white" />
             </Pressable>
             <ThemedText style={styles.headerTitle}>Profile Visibility</ThemedText>
@@ -158,7 +158,7 @@ function ProfileVisibilityPage() {
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
             accessibilityLabel="Go back"
             accessibilityRole="button"
             accessibilityHint="Double tap to return to previous screen"

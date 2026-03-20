@@ -167,7 +167,7 @@ Balance After: ${transaction.balanceAfter} ${transaction.currency}
         <StatusBar barStyle="light-content" backgroundColor={Colors.gold} />
         <LinearGradient colors={[Colors.gold, Colors.nileBlue]} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
             </Pressable>
             <Text style={styles.headerTitle}>Transaction Details</Text>
@@ -188,7 +188,7 @@ Balance After: ${transaction.balanceAfter} ${transaction.currency}
         <StatusBar barStyle="light-content" backgroundColor={Colors.gold} />
         <LinearGradient colors={[Colors.gold, Colors.nileBlue]} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
             </Pressable>
             <Text style={styles.headerTitle}>Transaction Details</Text>
@@ -218,7 +218,7 @@ Balance After: ${transaction.balanceAfter} ${transaction.currency}
         {/* Header */}
         <LinearGradient colors={[Colors.gold, Colors.nileBlue]} style={styles.header}>
           <View style={styles.headerContent}>
-            <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
               <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
             </Pressable>
             <Text style={styles.headerTitle}>Payment Receipt</Text>
@@ -346,7 +346,7 @@ Balance After: ${transaction.balanceAfter} ${transaction.currency}
       {/* Header */}
       <LinearGradient colors={[Colors.gold, Colors.nileBlue]} style={styles.header}>
         <View style={styles.headerContent}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
+          <Pressable style={styles.backButton} onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}>
             <Ionicons name="arrow-back" size={24} color={Colors.text.inverse} />
           </Pressable>
           <Text style={styles.headerTitle}>Transaction Details</Text>

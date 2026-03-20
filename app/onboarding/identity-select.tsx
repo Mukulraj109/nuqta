@@ -1,5 +1,6 @@
 import { withErrorBoundary } from '@/utils/withErrorBoundary';
 import React, { useEffect } from 'react';
+import { useIsMounted } from '@/hooks/useIsMounted';
 import { View, StyleSheet, StatusBar, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -55,6 +56,7 @@ const IDENTITIES = [
 
 function IdentitySelectPage() {
   const router = useRouter();
+  const isMounted = useIsMounted();
   const { setIdentity } = useUserIdentityStore();
   const user = useAuthUser();
   const actions = useAuthActions();
@@ -96,6 +98,7 @@ function IdentitySelectPage() {
       // Do NOT call completeOnboarding when going to verification screens —
       // setting isOnboarded=true triggers a redirect to /(tabs) from other screens.
       await completeOnboardingIfNeeded();
+      if (!isMounted()) return;
       router.replace('/(tabs)');
     } else {
       // Going to student-verify, corporate-verify, etc.
@@ -110,6 +113,7 @@ function IdentitySelectPage() {
     identityApi.setStatedIdentity('general').catch(() => {});
 
     await completeOnboardingIfNeeded();
+    if (!isMounted()) return;
     router.replace('/(tabs)');
   };
 

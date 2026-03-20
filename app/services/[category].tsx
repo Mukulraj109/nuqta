@@ -243,7 +243,7 @@ function ServiceCategoryPage() {
           <View style={styles.headerContent}>
             <Pressable
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
              
             >
               <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
@@ -273,7 +273,7 @@ function ServiceCategoryPage() {
           <View style={styles.headerContent}>
             <Pressable
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
              
             >
               <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
@@ -309,7 +309,7 @@ function ServiceCategoryPage() {
         <View style={styles.headerContent}>
           <Pressable
             style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.canGoBack() ? router.back() : router.replace('/(tabs)')}
            
           >
             <Ionicons name="arrow-back" size={24} color={Colors.background.primary} />
